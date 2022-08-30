@@ -1,13 +1,9 @@
 import './bootstrap';
 import { createApp } from "vue";
-import App from "./components/App.vue";
-import Axios from "./components/Axios";
+import App from "./component/App.vue";
+import Axios from "./component/Axios.vue";
 
-createApp(App).mount("#app");
+const app = createApp(App);
+app.mount("#app");
 
-const axios = new Vue({
-    el: "#axios",
-    components: {
-        Axios,
-    },
-});
+app.component("axios", Axios);

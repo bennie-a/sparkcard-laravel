@@ -1,6 +1,6 @@
 <?php
 // APIアクセスURL
-$url = 'https://umayadia-apisample.azurewebsites.net/api/persons';
+$url = 'http://whisper.wisdom-guild.net/search.php?name=%E3%82%A2%E3%82%AB%E3%83%87%E3%83%9F%E3%83%BC%E3%81%AE%E5%A3%81';
 
 // ストリームコンテキストのオプションを作成
 $options = array(
@@ -32,7 +32,7 @@ $data = json_decode($raw_data,true);
             <?php foreach($value as $column){ ?>
             <tr>
                 <td><?php echo $column['name']; ?></td>
-                <td><?php echo $column['note']; ?></td>
+                <!-- <td><?php echo $column['note']; ?></td> -->
             </tr>
            <?php } ?>
         <?php } ?>
