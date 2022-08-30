@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use DomDocument;
 class PostController extends Controller
 {
     public function index() {
-        $url = 'https://api.magicthegathering.io/v1/cards/386616';
+        $url = 'http://whisper.wisdom-guild.net/card/Academy+Wall/';
 
         $tag_id = "laravel";
 
@@ -22,8 +23,16 @@ class PostController extends Controller
         $response = $client->request($method, $url);
 
         $posts = $response->getBody()->getContents();
+        $domDocument = new DomDocument();
+        libxml_use_internal_errors( true );
+        $domDocument->loadHTML($posts);
+        $h1 = $domDocument->getElementsByTagName('h1')->item(0);
+        var_dump($h1->textContent);
         $posts = json_decode($posts, true);
-        var_dump($posts);
+        // // 日本語のみ抽出。
+        // $filtered = $posts->filter(function($element) {
+        //     return $element->language == 'Japanese';
+        // });
         return view('index', ['posts' => $posts]);
     }
 }
