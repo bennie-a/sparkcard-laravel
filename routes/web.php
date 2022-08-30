@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TimeShowController;
+use App\Http\Controllers\WisdomGuildController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +15,7 @@ use App\Http\Controllers\TimeShowController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 Route::get('/time', [TimeShowController::class,"timeshow"]);
+Route::get('/axios', [WisdomGuildController::class, "index"]);
