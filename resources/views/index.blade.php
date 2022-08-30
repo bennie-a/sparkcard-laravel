@@ -30,14 +30,6 @@
                             <th>コメント数</th>
                             <th>作成日</th>
                         </tr>
-                        @foreach($posts as $post)
-                        <tr>
-                            <td>{{$post['title']}}</td>
-                            <td>{{$post['likes_count']}}</td>
-                            <td>{{$post['comments_count']}}</td>
-                            <td>{{$post['created_at']}}</td>
-                        </tr>
-                        @endforeach
                     </table>
                 </div>
             </div>
