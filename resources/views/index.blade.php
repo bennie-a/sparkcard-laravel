@@ -23,6 +23,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10">
+                    <button class="btn btn-primary">ボタン</button>
                     <table class="table table-striped table-dark mt-5">
                         <tr>
                             <th>タイトル</th>
