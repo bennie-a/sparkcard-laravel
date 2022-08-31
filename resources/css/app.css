@@ -5,10 +5,6 @@ body {
   font-family: 'Noto Sans JP', sans-serif;
 }
 
-h1 {
-    color: #ff0000;
-}
-
 /* ロゴ */
 a.logo {
   font-size: 1.8em;
