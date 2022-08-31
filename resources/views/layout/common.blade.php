@@ -1,28 +1,20 @@
 <DOCTYPE HTML>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>aaaa</title>
-<!-- <meta name="description" itemprop="description" content="@yield('description')">
-<meta name="keywords" itemprop="keywords" content="@yield('keywords')">
-<link href="/css/star/layout.css" rel="stylesheet">
-@yield('pageCss') -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>SPARKCARD-Laravel</title>
 </head>
 <body>
  
 @yield('header')
- 
-<div class="contents">
-    <!-- コンテンツ -->
-    <div class="main">
+ <main class="container">
         @yield('content')
-    </div>
-    <!-- 共通メニュー -->
-    <div class="sub">
-        @yield('submenu')
-    </div>
-</div>
- 
+</main> 
 @yield('footer')
 </body>
 </html>

@@ -1,37 +1,18 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layout.common')
+@include('layout.header')
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-</head>
-<body>
- <main class="py-4">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <button class="btn btn-primary">ボタン</button>
-                    <table class="table table-striped table-dark mt-5">
-                        <tr>
-                            <th>タイトル</th>
-                            <th>いいね数</th>
-                            <th>コメント数</th>
-                            <th>作成日</th>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+@section('content')
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <table class="table table-striped table-dark mt-5">
+                <tr>
+                    <th>タイトル</th>
+                    <th>いいね数</th>
+                    <th>コメント数</th>
+                    <th>作成日</th>
+                </tr>
+            </table>
         </div>
-    </main></body>
-</html>
+    </div>
+@endsection
+@include('layout.footer')
