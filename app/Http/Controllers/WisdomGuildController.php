@@ -40,14 +40,13 @@ class WisdomGuildController extends Controller
             $href = $xpath->query('//b/a')->item($index);
             $url = $href->getAttribute("href");
             $cardname = $href->nodeValue;
-            $card = new Card($index, $cardname, $url);
+
+            $detailxpath = self::fetchHtml($url);
+            $pricePath = $detailxpath->query('//div[@class="wg-wonder-price-summary margin-right"]/div[@class="contents"]/b');
+            $price = $pricePath->item(0)->nodeValue;
+            $card = new Card($index, $cardname, $url, $price);
             array_push($cardlist, $card);
         }
-        $card = $cardlist[0];
-        $xpath = self::fetchHtml($card->getUrl());
-        // $main = $xpath->query('//div[@class="padding-vertical"]/table[1]/tr/td[@valign="top"]/table');
-        $price = $xpath->query('//div[@class="wg-wonder-price-summary margin-right"]/div[@class="contents"]/b');
-        var_dump($price->item(0)->nodeValue);
         return view('index', ['cardlist' => $cardlist]);
     }
 }
