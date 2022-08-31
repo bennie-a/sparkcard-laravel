@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TimeShowController;
+use App\Http\Controllers\AxiosController;
 use App\Http\Controllers\WisdomGuildController;
-use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +15,5 @@ use App\Http\Controllers\PostController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('index');
-// });
-Route::get('/', [PostController::class, "index"]);
-Route::get('/time', [TimeShowController::class,"timeshow"]);
-Route::get('/axios', [WisdomGuildController::class, "index"]);
+Route::get('/', [WisdomGuildController::class, "index"]);
+Route::get('/axios', [AxiosController::class, "index"]);
