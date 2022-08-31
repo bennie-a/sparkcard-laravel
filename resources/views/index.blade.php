@@ -4,7 +4,7 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col">
-    <h1 class="h3">Wisdom Guildからカード情報を取得する</h1>
+         <h1 class="h3">Wisdom Guildからカード情報を取得する</h1>
             <table class="table table-striped table-bordered mt-3">
                 <thead class="">
                     <tr>
