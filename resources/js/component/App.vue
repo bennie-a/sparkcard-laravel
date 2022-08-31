@@ -1,4 +1,5 @@
 <template>
     <h1>Hello World Laravel9+Vue</h1>
-    <span>動いた</span>
+    <span>テンプレート</span>
+    <button class="btn btn-primary">ボタン</button>
 </template>
