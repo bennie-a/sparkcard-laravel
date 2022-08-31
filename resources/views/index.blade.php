@@ -14,12 +14,14 @@
                         <th scope="col">URL</th>
                     </tr>
                 </thead>
+                @foreach ($cardlist as $index => $card)
                 <tr>
-                    <td>1</td>
+                    <td>{{$card->getIndex()}}</td>
                     <td>{{$card->getName()}}</td>
                     <td>{{$card->getEnname()}}</td>
                     <td>{{$card->getUrl()}}</td>
                 </tr>
+                @endforeach
             </table>
         </div>
     </div>

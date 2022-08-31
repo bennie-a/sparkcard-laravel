@@ -10,8 +10,8 @@ use App\Models\Card;
 class WisdomGuildController extends Controller
 {
     public function index() {
-        // セラの模範のみ取ってくる。
-        $url = 'http://whisper.wisdom-guild.net/search.php?name=Serra Paragon';
+        // DMUの黒カードのみ取ってくる。
+        $url = 'http://whisper.wisdom-guild.net/search.php?&color%5B%5D=black&color_multi=able&set%5B%5D=DMU&sort=eidcid';
         $method = "GET";
 
         //接続
@@ -26,11 +26,15 @@ class WisdomGuildController extends Controller
         libxml_use_internal_errors( true );
         $dom->loadHTML($posts);
         $xpath = new DomXPath($dom);
-        $href = $xpath->query('//div[@id="main"]/div[@id="contents"]/div[@class="card"]/b/a')->item(0);
-        $url = $href->getAttribute("href");
-        $cardname = $href->nodeValue;
-
-        $card = new Card($cardname, $url);
-        return view('index', ['card' => $card]);
+        $cardlist = array();
+        $hreflist = $xpath->query('//div[@id="main"]/div[@id="contents"]/div[@class="card"]');
+        foreach($hreflist as $index => $a) {
+            $href = $xpath->query('//b/a')->item($index);
+            $url = $href->getAttribute("href");
+            $cardname = $href->nodeValue;
+            $card = new Card($index, $cardname, $url);
+            array_push($cardlist, $card);
+        }
+        return view('index', ['cardlist' => $cardlist]);
     }
 }
