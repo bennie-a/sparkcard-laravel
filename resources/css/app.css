@@ -4,3 +4,8 @@ body {
     background: #ccc;
     font-family: "Noto Sans JP", sans-serif;
 }
+
+h1 {
+    border-left: 0.15em solid !important;
+    padding-left: 0.2em;
+}

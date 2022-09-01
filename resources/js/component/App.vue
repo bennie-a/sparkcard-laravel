@@ -3,10 +3,25 @@ import TheHeader from "../pages/component/TheHeader.vue";
 </script>
 <template>
     <TheHeader></TheHeader>
-    <router-view />
-    <router-link class="nav-link" aria-current="page" to="/">Index</router-link>
+    <div class="container">
+        <div class="row">
+            <div class="col-10 offset-md-1">
+                <main>
+                    <!-- <h1 class="h3 mb-1" v-show="$route.meta.title">
+                        {{ $route.meta.title }}
+                    </h1>
+                    <p>{{ $route.meta.description }}</p>
 
-    <router-link class="nav-link" aria-current="page" to="/about"
-        >About</router-link
-    >
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-show="errMessage"
+                    >
+                        {{ errMessage }}
+                    </div> -->
+                    <router-view />
+                </main>
+            </div>
+        </div>
+    </div>
 </template>
