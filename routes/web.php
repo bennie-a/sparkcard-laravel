@@ -16,4 +16,4 @@ use App\Http\Controllers\WisdomGuildController;
 */
 
 // Route::get('/', [WisdomGuildController::class, "index"]);
-Route::get('/', function() {return view('axios');});
+Route::get('/', function() {return view('index');});
