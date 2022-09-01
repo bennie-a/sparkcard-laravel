@@ -13,7 +13,7 @@
 <body>
 axiosを学ぶ
     <div id="app">
-        <span v-text="greeting"></span>
+        
     </div>
 </body>
 </html>

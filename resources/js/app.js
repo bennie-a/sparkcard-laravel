@@ -1,7 +1,11 @@
-import './bootstrap';
+import "./bootstrap";
 import { createApp, ref } from "vue/dist/vue.esm-bundler";
 import App from "./component/App.vue";
-import Axios from "./component/Axios.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
+import router from "./router";
 
-createApp(App).mount("#app");
+const app = createApp(App);
+// ルータをインストール
+app.use(router);
+
+app.mount("#app");
