@@ -1,20 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400&display=swap');
-@import url('http://fonts.googleapis.com/earlyaccess/notosansjp.css');
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400&display=swap");
+@import url("http://fonts.googleapis.com/earlyaccess/notosansjp.css");
 body {
-  background: #fafdff;
-  font-family: 'Noto Sans JP', sans-serif;
-}
-
-/* ロゴ */
-a.logo {
-  font-size: 1.8em;
-  font-family: 'Exo 2', sans-serif;
-  background-image: linear-gradient(to top right, #003f8e 0%, #d43f8d 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  vertical-align: top;
-}
-
-a.logo i {
-    font-size: 0.9em;
+    background: #fafdff;
+    font-family: "Noto Sans JP", sans-serif;
 }

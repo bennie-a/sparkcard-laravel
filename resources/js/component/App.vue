@@ -1,9 +1,9 @@
+<script setup>
+import TheHeader from "../pages/component/TheHeader.vue";
+</script>
 <template>
-    <h1>Hello World Laravel9+Vue</h1>
-    <span>テンプレート</span>
-    <button class="btn btn-primary">ボタン</button>
+    <TheHeader></TheHeader>
     <router-view />
-
     <router-link class="nav-link" aria-current="page" to="/">Index</router-link>
 
     <router-link class="nav-link" aria-current="page" to="/about"
