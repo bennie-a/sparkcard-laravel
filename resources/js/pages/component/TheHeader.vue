@@ -18,14 +18,24 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">リンク</li>
-                        <!-- <li class="nav-item">
+                        <li class="nav-item">
                             <router-link
                                 class="nav-link"
                                 :class="{ active: $route.path === '/' }"
                                 aria-current="page"
                                 to="/"
-                                >BASE用商品データ</router-link
+                                >カード登録</router-link
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <router-link
+                                to="/about"
+                                class="nav-link"
+                                :class="{ active: $route.path === '/about' }"
+                                >リンク</router-link
+                            >
+                        </li>
+                        <!-- <li class="nav-item">
                             >
                         </li>
                         <li class="nav-item">
@@ -77,19 +87,21 @@
 </template>
 
 <style scoped>
+.nav-item {
+    margin-right: 2em;
+}
 .navbar-brand {
     font-size: 1.8em;
     font-family: "Exo 2", sans-serif;
-    background: transparent url("public/diamond.png") no-repeat;
-    background-image: linear-gradient(to top right, #003f8e 0%, #d43f8d 100%);
+    background-image: linear-gradient(to top right, #1e50a2 0%, #d43f8d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     vertical-align: top;
 }
 .nav-link {
-    font-weight: 400;
-    color: #4753a2 !important;
+    font-weight: 500;
     padding-bottom: 2px;
+    color: #999 !important;
 }
 a.navbar-brand i {
     font-size: 0.85em;
@@ -97,6 +109,7 @@ a.navbar-brand i {
 .nav-link.active {
     font-weight: 500;
     border-bottom: solid 3px #4753a2;
+    color: #4753a2 !important;
 }
 </style>
 <script>
