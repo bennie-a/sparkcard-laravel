@@ -47,10 +47,19 @@ class CardController extends Controller
 
         $page = new Page();
         $page->setTitle("名前", "生けるレガシー、カーン");
+
+        $page->setSelect("ステータス", "ロジクラ要登録");
+        $page->setNumber("枚数", 1);
+        $page->setNumber("価格", 900);
+        $page->setSelect("言語", "日本語");
+        $page->setCheckbox("Foil", false);
+        $page->setSelect("色", "無色");
+        $page->setRelation("エキスパンション", ['e72e96b424574e9682a6264d7e7731ec']);
         try {
             $page = $notion->pages()->createInDatabase($testbaseId, $page);
             // ページID
             logger()->info($page->getId());
+            response($page->getId(), Response::HTTP_OK);
         } catch (NotionException $e) {
             logger()->error($e->getMessage());
         }
