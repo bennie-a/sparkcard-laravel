@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WisdomGuildResource;
 use Illuminate\Http\Request;
 use App\Services\WisdomGuildService;
 use Illuminate\Http\Response;
 class WidsomGuildController extends Controller
 {
+    private $service;
+    public function __construct(WisdomGuildService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,10 +20,9 @@ class WidsomGuildController extends Controller
      */
     public function index()
     {
-        $service = new WisdomGuildService();
-        $list = $service->fetch();
-        logger()->debug("Client get");
-        return response()->json($list, Response::HTTP_OK);
+        $cardlist = $this->service->fetch();
+        logger()->info("Card Info get");
+        return WisdomGuildResource::collection($cardlist);
     }
 
     /**

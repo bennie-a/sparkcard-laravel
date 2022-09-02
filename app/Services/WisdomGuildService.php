@@ -5,6 +5,7 @@ use App\Services\ApiWisdomGuildRepository;
 use DomDocument;
 use DomXpath;
 use App\Models\Card;
+use Illuminate\Support\Collection;
 
 class WisdomGuildService {
 
@@ -30,7 +31,7 @@ class WisdomGuildService {
         $hreflist = $xpath->query('//div[@id="main"]/div[@id="contents"]/div[@class="card"]');
         foreach($hreflist as $index => $a) {
             $href = $xpath->query('//b/a')->item($index);
-            $url = $href->getAttribute("href");
+            $url = $href->attributes->getNamedItem("href")->nodeValue;
             $cardname = $href->nodeValue;
 
             $detailContents = $this->repo->getCard($url);

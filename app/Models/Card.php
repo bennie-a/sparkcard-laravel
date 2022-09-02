@@ -19,26 +19,21 @@ class Card extends Model
     private $enname;
     private $price;
 
-    public function getIndex() {
+    public function getIndex():int {
         return $this->index;
     }
 
-    public function getName() {
+    public function getName():string {
         return $this->name;
     }
 
-    public function getEnname() {
+    public function getEnname():string {
         return $this->enname;
     }
 
-    public function getPrice() {
-        return $this->price;
-    }
-
-    protected $visible = ['index', 'name', 'enname', 'price'];
-
-    public function jsonSerialize(): array
-    {
-        return get_object_vars($this);
+    public function getPrice():int {
+        $str_num = str_replace(',', '', $this->price);
+        $int_num = intval($str_num);
+        return $int_num;
     }
 }
