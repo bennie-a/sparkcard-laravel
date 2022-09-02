@@ -24,5 +24,10 @@ class ExpansionRepository extends NotionRepository{
         $p = $pages[0];
         return str_replace('-', '', $p->getId());
     }
+
+    public function findByAttr(string $attr) {
+        $page = $this->findByEquals("略称", $attr);
+        return str_replace('-', '', $page->getId());
+    }
 }
 ?>

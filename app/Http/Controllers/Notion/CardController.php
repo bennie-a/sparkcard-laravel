@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Api\Notion\ExpansionRepository;
+use App\Services\CardBoardService;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
@@ -12,6 +13,12 @@ use Illuminate\Http\Request;
 
 class CardController extends Controller
 {
+    private $service;
+
+    public function __construct(CardBoardService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -39,33 +46,9 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $token = config("notion.token");
-        $notion = new Notion($token);
-        $testbaseId = config("notion.cardboard");
-
-        $page = new Page();
-        $page->setTitle("名前", "生けるレガシー、カーン");
-
-        $page->setSelect("ステータス", "ロジクラ要登録");
-        $page->setNumber("枚数", 1);
-        $page->setNumber("価格", 900);
-        $page->setSelect("言語", "日本語");
-        $page->setCheckbox("Foil", false);
-        $page->setSelect("色", "無色");
-        $expansion = new ExpansionRepository();
-        $expId = $expansion->findIdByName("団結のドミナリア");
-        logger()->debug(gettype($expId));
-        $page->setRelation("エキスパンション",[$expId]);
-        try {
-            $page = $notion->pages()->createInDatabase($testbaseId, $page);
-            // ページID
-            logger()->info($page->getId());
-            response($page->getId(), Response::HTTP_OK);
-        } catch (NotionException $e) {
-            logger()->error($e->getMessage());
-        }
-
+    {   
+        $details = $request->all();
+        $this->service->store($details);
     }
 
     /**
