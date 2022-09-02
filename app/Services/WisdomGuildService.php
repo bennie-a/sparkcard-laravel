@@ -23,6 +23,7 @@ class WisdomGuildService {
         return $xpath;
     }
 
+    // 要ページ対応。
     public function fetch() {
         $contents = $this->repo->getAll();
         $xpath = self::fetchHtml($contents);
