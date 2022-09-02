@@ -12,7 +12,7 @@ class GuzzleClientFactory {
             'mtgdev' => 'https://api.magicthegathering.io/v1/'
         ];
         if (!Arr::exists($urlMap, $path)) {
-          throw new Exception('invalid path');
+          throw new \Exception('invalid path');
         }
         $url = Arr::get($urlMap, $path);
         $client = self::createByUrl($url);
@@ -20,7 +20,7 @@ class GuzzleClientFactory {
     }
 
     public static function createByUrl($url) {
-        $client = new Client(['base_uri' => $url, 'verify' => config_path().'/cacert.pem']);
+        $client = new Client(['base_uri' => $url]);
         return $client;
     }
 }
