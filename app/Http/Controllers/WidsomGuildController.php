@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Services\WisdomGuildService;
+use Illuminate\Http\Response;
 class WidsomGuildController extends Controller
 {
     /**
@@ -13,11 +14,10 @@ class WidsomGuildController extends Controller
      */
     public function index()
     {
-        $response = array(
-            "name" => "あらゆ" ,
-            "gender" => "男" ,
-        );
-        return json_encode($response);
+        $service = new WisdomGuildService();
+        $list = $service->fetch();
+        logger()->debug("Client get");
+        return response()->json($list, Response::HTTP_OK);
     }
 
     /**
