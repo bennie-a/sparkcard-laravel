@@ -1,27 +1,7 @@
-<script setup>
-import axios from "axios";
-// onMounted(async () => {
-// console.log("mounted");
-// // cardList.splice(0);
-// await axios
-//     .get("/api/wisdom")
-//     .then((response) => {
-//         console.log(response);
-//         response.data.forEach((d) => {
-//             cardList.push(d);
-//         });
-//     })
-//     .catch((e) => {
-//         console.error(e);
-//     });
-// });
-import { ref } from "vue";
-// let cards = ref([]);
-</script>
 <script>
 export default {
     data() {
-        return { cards: [{ name: "aaa", enname: "bbb" }] };
+        return { cards: [] };
     },
     methods: {
         async search() {

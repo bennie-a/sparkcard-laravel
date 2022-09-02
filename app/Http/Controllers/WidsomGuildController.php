@@ -22,7 +22,8 @@ class WidsomGuildController extends Controller
     {
         $cardlist = $this->service->fetch();
         logger()->info("Card Info get");
-        return WisdomGuildResource::collection($cardlist);
+        $json = WisdomGuildResource::collection($cardlist);
+        return response()->json($json, Response::HTTP_OK);
     }
 
     /**

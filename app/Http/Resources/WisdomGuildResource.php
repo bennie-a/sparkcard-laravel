@@ -15,12 +15,10 @@ class WisdomGuildResource extends JsonResource
     public function toArray($request)
     {
         return [
-                'data' => [
-                    'index' => $this->getIndex(),
-                    'name' => $this->getName(),
-                    'enname' => $this->getEnname(),
-                    'price' => $this->getPrice()
-                ]
+                'index' => $this->getIndex(),
+                'name' => $this->getName(),
+                'enname' => $this->getEnname(),
+                'price' => $this->getPrice()
             ];
     }
 }
