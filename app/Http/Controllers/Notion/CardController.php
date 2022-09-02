@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
+use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
 use Illuminate\Http\Response;
@@ -40,7 +41,20 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $token = config("notion.token");
+        $notion = new Notion($token);
+        $testbaseId = config("notion.database");
+
+        $page = new Page();
+        $page->setTitle("名前", "生けるレガシー、カーン");
+        try {
+            $page = $notion->pages()->createInDatabase($testbaseId, $page);
+            // ページID
+            logger()->info($page->getId());
+        } catch (NotionException $e) {
+            logger()->error($e->getMessage());
+        }
+
     }
 
     /**
