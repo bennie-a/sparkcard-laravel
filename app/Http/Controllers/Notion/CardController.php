@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Api\Notion\ExpansionRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-
-use function Psy\debug;
 
 class CardController extends Controller
 {
@@ -43,7 +42,7 @@ class CardController extends Controller
     {
         $token = config("notion.token");
         $notion = new Notion($token);
-        $testbaseId = config("notion.database");
+        $testbaseId = config("notion.cardboard");
 
         $page = new Page();
         $page->setTitle("名前", "生けるレガシー、カーン");
@@ -54,7 +53,10 @@ class CardController extends Controller
         $page->setSelect("言語", "日本語");
         $page->setCheckbox("Foil", false);
         $page->setSelect("色", "無色");
-        $page->setRelation("エキスパンション", ['e72e96b424574e9682a6264d7e7731ec']);
+        $expansion = new ExpansionRepository();
+        $expId = $expansion->findIdByName("団結のドミナリア");
+        logger()->debug(gettype($expId));
+        $page->setRelation("エキスパンション",[$expId]);
         try {
             $page = $notion->pages()->createInDatabase($testbaseId, $page);
             // ページID

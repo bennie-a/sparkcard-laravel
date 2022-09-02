@@ -3,7 +3,6 @@
 namespace App\Factory;
 use GuzzleHttp\Client;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 class GuzzleClientFactory {
     public static function create($path) {
