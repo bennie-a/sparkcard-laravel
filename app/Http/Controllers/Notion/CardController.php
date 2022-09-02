@@ -49,6 +49,7 @@ class CardController extends Controller
     {   
         $details = $request->all();
         $this->service->store($details);
+        return Response::HTTP_OK;
     }
 
     /**

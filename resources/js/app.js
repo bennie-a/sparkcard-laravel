@@ -7,5 +7,4 @@ import router from "./router";
 const app = createApp(App);
 // ルータをインストール
 app.use(router);
-
 app.mount("#app");

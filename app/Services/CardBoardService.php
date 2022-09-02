@@ -17,17 +17,17 @@ class CardBoardService {
         $page = new Page();
         $page->setTitle("名前", $details['name']);
         $page->setText("英名", $details['enname']);
-        $page->setSelect("ステータス", "ロジクラ要登録");
+        $page->setSelect("Status", "ロジクラ要登録");
         $page->setNumber("枚数", 0);
         $page->setNumber("価格", $details['price']);
         $page->setNumber("カード番号", $details['index']);
         $page->setSelect("言語", "日本語");
         $page->setCheckbox("Foil", false);
-        $page->setSelect("色", "無色");
+        // $page->setSelect("色", "無色");
         $expansion = new ExpansionRepository();
         logger()->debug($details['attr']);
-        $expId = $expansion->findByAttr($details['attr']);
-        $page->setRelation("エキスパンション",[$expId]);
+        $exp = $expansion->findByAttr($details['attr']);
+        $page->setRelation("エキスパンション",[$exp]);
         try {
             $page = $this->repo->store($page);
             // ページID

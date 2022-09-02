@@ -1,4 +1,6 @@
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return { cards: [], loading: false };
@@ -11,7 +13,10 @@ export default {
             await axios
                 .get("/api/wisdom")
                 .then((response) => {
-                    response.data.forEach((d) => {
+                    let filterd = response.data.filter((d) => {
+                        return d.price > 0;
+                    });
+                    filterd.forEach((d) => {
                         this.cards.push(d);
                     });
                     this.loading = false;
@@ -21,13 +26,39 @@ export default {
                     this.loading = false;
                 });
         },
+        async regist() {
+            console.log("!!!");
+            await Promise.all(
+                this.cards.map(async (c) => {
+                    let query = {
+                        name: c.name,
+                        enname: c.enname,
+                        index: c.index,
+                        price: c.price,
+                        attr: "DMU",
+                    };
+                    await axios
+                        .post("api/notion/card", query)
+                        .then((response) => {
+                            if (response.status == 200) {
+                                console.log("登録完了");
+                            } else {
+                                console.log(response.status);
+                            }
+                        });
+                })
+            );
+        },
     },
 };
 </script>
 
 <template>
     <h1 class="display-6">カード登録</h1>
-    <small class="text-muted">Wisdom Guildからカード情報を持ってきます</small>
+    <small class="text-muted"
+        >Wisdom
+        Guildからカード情報を取得して、Notionの商品管理ボードに登録します。</small
+    >
     <section class="mt-5">
         <button class="btn btn-primary" @click="search">検索する</button>
         <div v-show="loading">
@@ -52,5 +83,10 @@ export default {
                 </tr>
             </tbody>
         </table>
+        <div class="text-center" v-if="cards.length != 0">
+            <button class="btn btn-primary" @click="regist">
+                Notionに登録する
+            </button>
+        </div>
     </section>
 </template>
