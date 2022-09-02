@@ -27,7 +27,7 @@ export default {
                 });
         },
         async regist() {
-            console.log("!!!");
+            console.log("Notion Resist Start");
             await Promise.all(
                 this.cards.map(async (c) => {
                     let query = {
@@ -64,6 +64,13 @@ export default {
         <div v-show="loading">
             <div class="loader"></div>
             <p class="text-center h3">Now loading...</p>
+        </div>
+        <div
+            class="alert alert-success mt-2"
+            role="alert"
+            v-if="cards.length != 0"
+        >
+            {{ cards.length }}件取得しました。
         </div>
         <table v-show="!loading" class="table table-striped mt-3">
             <thead>
