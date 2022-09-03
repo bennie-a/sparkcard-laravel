@@ -1,27 +1,22 @@
 <script setup>
 import TheHeader from "../pages/component/TheHeader.vue";
+import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
     <TheHeader></TheHeader>
-    <div class="container">
-        <div class="row">
-            <div class="col-10 offset-md-1">
-                <main>
-                    <!-- <h1 class="h3 mb-1" v-show="$route.meta.title">
-                        {{ $route.meta.title }}
-                    </h1>
-                    <p>{{ $route.meta.description }}</p>
-
-                    <div
-                        class="alert alert-danger"
-                        role="alert"
-                        v-show="errMessage"
-                    >
-                        {{ errMessage }}
-                    </div> -->
-                    <router-view />
-                </main>
-            </div>
+    <div class="ui grid padded">
+        <div class="three wide column blue">
+            <SideMenu></SideMenu>
         </div>
+        <div class="eleven wide column"><router-view /></div>
     </div>
 </template>
+<style scoped>
+.ui.grid > .blue.column {
+    margin-right: 3em;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: #1e50a2 !important;
+    height: 100vh;
+}
+</style>

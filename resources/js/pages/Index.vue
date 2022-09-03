@@ -60,8 +60,8 @@ export default {
         Guildからカード情報を取得して、Notionの商品管理ボードに登録します。</small
     >
     <section class="mt-5">
-        <button class="btn btn-primary" @click="search">検索する</button>
-        <button class="ui red button">Red</button>
+        <button class="ui purple button" @click="search">検索する</button>
+
         <div v-show="loading">
             <div class="loader"></div>
             <p class="text-center h3">Now loading...</p>
