@@ -25,10 +25,12 @@ class WisdomGuildService {
 
     // 要ページ対応。
     public function fetch() {
-        $contents = $this->repo->getAll();
+        $contents = $this->repo->getAll(1);
         $xpath = self::fetchHtml($contents);
         $cardlist = array();
 
+        $pagingNode = $xpath->query('//ul[@class="owl_pager"][1]/li[not(@class="now")]');
+        logger()->debug($pagingNode->count());
         $hreflist = $xpath->query('//div[@id="main"]/div[@id="contents"]/div[@class="card"]');
         foreach($hreflist as $index => $a) {
             $href = $xpath->query('//b/a')->item($index);

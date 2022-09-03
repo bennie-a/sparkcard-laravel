@@ -3,12 +3,12 @@ namespace App\Services;
 use App\Factory\GuzzleClientFactory;
 class WisdomGuildRepository {
     // public function getAll(): Collection;
-    public function getAll() {
+    public function getAll(int $page) {
         $param = [ 
         'query' => [
             'set' => ['DMU'],
-            'color' => ['black'],
-            'sort'=> 'eidcid'
+            'sort'=> 'eidcid',
+            'page'=> $page
         ]
     ];
         $client = GuzzleClientFactory::create('wisdom');

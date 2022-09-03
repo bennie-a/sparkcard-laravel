@@ -14,7 +14,7 @@ export default {
                 .get("/api/wisdom")
                 .then((response) => {
                     let filterd = response.data.filter((d) => {
-                        return d.price > 0;
+                        return d.price > 50;
                     });
                     filterd.forEach((d) => {
                         this.cards.push(d);
@@ -61,6 +61,7 @@ export default {
     >
     <section class="mt-5">
         <button class="btn btn-primary" @click="search">検索する</button>
+        <button class="ui red button">Red</button>
         <div v-show="loading">
             <div class="loader"></div>
             <p class="text-center h3">Now loading...</p>

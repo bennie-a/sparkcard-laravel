@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@vue/compiler-sfc": "^3.2.38",
+        "semantic-ui-css": "^2.4.1",
         "vue-loader": "^17.0.0",
         "vue-router": "^4.1.5",
         "vue-toasted": "^1.1.28"
