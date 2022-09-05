@@ -31,7 +31,9 @@ class CardRequest extends FormRequest
             'enname' => 'required',
             'price' => 'required',
             'index' => 'required',
-            'attr' => 'required'
+            'attr' => 'required',
+            'color'=>'required',
+            'imageurl'=>'required'
         ];
     }
     /*

@@ -19,6 +19,7 @@ class Card extends Model
     private $enname;
     private $price;
     private $color;
+    private $imageurl;
 
     public function getIndex():int {
         return $this->index;
@@ -44,6 +45,13 @@ class Card extends Model
 
     public function setColor(string $color) {
         $this->color = $color;
+    }
+
+    public function getImageUrl():string {
+        return $this->imageurl;
+    }
+    public function setImageUrl(string $imageurl) {
+        $this->imageurl = $imageurl;
     }
 
 }

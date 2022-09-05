@@ -7,21 +7,11 @@ use App\Services\WisdomGuildRepository;
 class CardGallaryRepository extends WisdomGuildRepository{
 
     private $expansion;
+    private $xpath;
     public function __construct($expansion)
     {
         $this->expansion = $expansion;
-    }
-
-    // カード情報を取得する。
-    public function getCardColor() {
-        $client = GuzzleClientFactory::create("gallary");
-        $response = $client->request('GET', $this->expansion);
-        $htmlSource = $response->getBody()->getContents();
-        $html = mb_convert_encoding($htmlSource, 'UTF-8', 'HTML-ENTITIES');
-        $xpath = $this->toDomXpath($html);
-        $target = $xpath->query("//p[@class='rtecenter']");
-        
-        return $target;
+        $this->xpath = $this->getAllGallary();
     }
 
     public function getAllGallary() {
@@ -31,6 +21,20 @@ class CardGallaryRepository extends WisdomGuildRepository{
         $html = mb_convert_encoding($htmlSource, 'UTF-8', 'HTML-ENTITIES');
         $xpath = $this->toDomXpath($html);
         return $xpath;
+    }
+
+    // 指定したカードの色を取得する。
+    public function getCardColor($name) {
+        $nameQuery = "//p[contains(text(), '".$name."')]";
+        $colorNode = $this->xpath->query($nameQuery."/../../h2/span");
+        return $colorNode->item(0)->nodeValue;
+    }
+
+    // 指定したカード名から画像URLを取得する。
+    public function getImageUrl($name) {
+        $nameQuery = "//p[contains(text(), '".$name."')]";
+        $imgNode = $this->xpath->query($nameQuery."/img/@src");
+        return  $imgNode->item(0)->nodeValue;
     }
 }
 

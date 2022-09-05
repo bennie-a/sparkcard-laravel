@@ -8,7 +8,7 @@ import SideMenu from "../pages/component/SideMenu.vue";
         <div class="three wide column blue">
             <SideMenu></SideMenu>
         </div>
-        <div class="eleven wide column"><router-view /></div>
+        <div class="twelve wide column"><router-view /></div>
     </div>
 </template>
 <style scoped>

@@ -33,12 +33,8 @@ class WisdomGuildService {
             parse_str($parse, $queries);
             array_push($pagings, $queries['page']);
         };
+        // 公式ギャラリー取得クラス
         $gallary = new CardGallaryRepository('dominaria-united');
-        $target = $gallary->getCardColor();
-                    foreach($target as $t) {
-                logger()->debug($t->nodeValue);
-            }
-
 
         $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');
         foreach($hreflist as $index => $a) {
@@ -52,14 +48,11 @@ class WisdomGuildService {
 
             $card = new Card($index, $cardname, $price);
             // 色と画像URLをカードギャラリーから取得
-            if ($target == null) {
-                logger()->info("No Target".$card->getName());
-            }
-                // $color = $target->item(0)->nodeValue;
-                // logger()->debug($card->getName().":".$color);
-                // $card->setColor($color);
-            // $color = $info->item(0)->parent->parent->query('h2/span[text()]')->item();
-            // logger()->debug($color->nodeValue);
+            $color = $gallary->getCardColor($card->getName());
+            $imageurl = $gallary->getImageUrl($card->getName());
+            $card->setColor($color);
+            $card->setImageUrl($imageurl);
+
             array_push($cardlist, $card);
         }
         return $cardlist;

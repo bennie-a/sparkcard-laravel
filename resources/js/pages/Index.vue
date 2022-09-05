@@ -118,6 +118,8 @@ export default {
                     <th>カード番号</th>
                     <th>カード名</th>
                     <th>英語名</th>
+                    <th>色</th>
+                    <th>画像URL</th>
                     <th>価格</th>
                 </tr>
             </thead>
@@ -126,6 +128,8 @@ export default {
                     <td>{{ card.index }}</td>
                     <td>{{ card.name }}</td>
                     <td>{{ card.enname }}</td>
+                    <td>{{ card.color }}</td>
+                    <td>{{ card.imageurl }}</td>
                     <td>{{ card.price }}円</td>
                 </tr>
             </tbody>

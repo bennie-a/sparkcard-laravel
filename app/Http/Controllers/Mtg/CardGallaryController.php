@@ -43,23 +43,10 @@ class CardGallaryController extends Controller
     public function show($name)
     {
         $repo = new CardGallaryRepository('dominaria-united');
-        $xpath = $repo->getAllGallary();
         $code = Response::HTTP_OK;
-        $target = $xpath->query("//p[contains(text(), '".$name."')]");
-        $name = "";
-        $color = "";
-        $url = "";
-        if (!$target) {
-            $code = Response::HTTP_FOUND;
-        } else {
-            $targetItem = $target->item(0);
-            $name = $targetItem->nodeValue;
-            $colorNode = $xpath->query("//p[contains(text(), '".$name."')]/../../h2/span");
-            $color = $colorNode->item(0)->nodeValue;
-            $imgNode = $xpath->query("//p[text() = '".$name."']/img/@src");
-            $url = $imgNode->item(0)->nodeValue;
-        }
-        $json = [$name, $color, $url];
+        $color = $repo->getCardColor($name);
+        $url = $repo->getImageUrl($name);
+        $json = [$color, $url];
         return Response($json, $code);
     }
 
