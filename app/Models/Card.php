@@ -18,6 +18,7 @@ class Card extends Model
     private $name;
     private $enname;
     private $price;
+    private $color;
 
     public function getIndex():int {
         return $this->index;
@@ -36,4 +37,13 @@ class Card extends Model
         $int_num = intval($str_num);
         return $int_num;
     }
+
+    public function getColor():string {
+        return $this->color;
+    }
+
+    public function setColor(string $color) {
+        $this->color = $color;
+    }
+
 }

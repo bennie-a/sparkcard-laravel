@@ -29,7 +29,7 @@ class WisdomGuildRepository {
     }
 
     // HTMLをDOMXPathに変換する。
-    private function toDomXpath($contents) {
+    protected function toDomXpath($contents) {
         $dom = new DOMDocument();
         libxml_use_internal_errors( true );
         $dom->loadHTML($contents);
