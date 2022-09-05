@@ -13,32 +13,28 @@ class WisdomGuildService {
         $this->repo = new WisdomGuildRepository();
     }
 
-            // URLからHTMLを取得する。
-    private static function fetchHtml($contents) {
-        $dom = new DomDocument();
-        libxml_use_internal_errors( true );
-        $dom->loadHTML($contents);
-        $xpath = new DomXPath($dom);
 
-        return $xpath;
-    }
 
     // 要ページ対応。
     public function fetch() {
-        $contents = $this->repo->getAll(1);
-        $xpath = self::fetchHtml($contents);
+        $xpath = $this->repo->getAll(1);
         $cardlist = array();
 
-        $pagingNode = $xpath->query('//ul[@class="owl_pager"][1]/li[not(@class="now")]');
-        logger()->debug($pagingNode->count());
-        $hreflist = $xpath->query('//div[@id="main"]/div[@id="contents"]/div[@class="card"]');
+        // ページ番号を取得
+        $pagingNodeList = $xpath->query('//*[@id="contents"]/div[1]/ul/li[not(@class="now")]/a[not(text()="次へ")]/@href');
+        $pagings = [];
+        foreach($pagingNodeList as $index => $href) {
+            $queries = [];
+            $parse = parse_url($href->nodeValue)['query'];
+            parse_str($parse, $queries);
+            array_push($pagings, $queries['page']);
+        };
+        $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');
         foreach($hreflist as $index => $a) {
-            $href = $xpath->query('//b/a')->item($index);
-            $url = $href->attributes->getNamedItem("href")->nodeValue;
-            $cardname = $href->nodeValue;
+            $url = $a->attributes->getNamedItem("href")->nodeValue;
+            $cardname = $a->nodeValue;
 
-            $detailContents = $this->repo->getCard($url);
-            $detailxpath = self::fetchHtml($detailContents);
+            $detailxpath = $this->repo->getCard($url);
             $pricePath = $detailxpath->query('//div[@class="wg-wonder-price-summary margin-right"]/div[@class="contents"]/b');
             $price = $pricePath->item(0)->nodeValue;
             $card = new Card($index, $cardname, $price);

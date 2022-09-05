@@ -34,7 +34,7 @@
 <style scoped>
 .ui.list > .item .header {
     color: white;
-    font-weight: 200;
+    font-weight: 300;
     margin-left: 0.5em;
 }
 div.item > ul {
@@ -45,9 +45,15 @@ div.item > ul > li {
     list-style: none;
 }
 
+span {
+    text-align: center;
+    display: block;
+}
+
 div.item > ul > li > a {
     padding: 1.5em 1em;
     display: block;
+    color: white;
 }
 div.item > ul > li > a:hover {
     background: #2766cc;
@@ -56,6 +62,6 @@ div.item > ul > li > a:hover {
 div.item > ul > li > a.active {
     font-weight: 500;
     background: #2766cc;
-    border-left: 5px solid #a31f94;
+    border-left: 5px solid #a333c8;
 }
 </style>

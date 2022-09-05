@@ -12,6 +12,10 @@ import SideMenu from "../pages/component/SideMenu.vue";
     </div>
 </template>
 <style scoped>
+.ui.grid {
+    height: 100%;
+    min-height: 100%;
+}
 .ui.grid > .blue.column {
     margin-right: 3em;
     padding-left: 0;
