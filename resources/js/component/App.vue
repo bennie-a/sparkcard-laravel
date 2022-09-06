@@ -5,10 +5,20 @@ import SideMenu from "../pages/component/SideMenu.vue";
 <template>
     <TheHeader></TheHeader>
     <div class="ui grid padded">
-        <div class="three wide column blue">
+        <nav class="three wide column blue">
             <SideMenu></SideMenu>
-        </div>
-        <div class="twelve wide column"><router-view /></div>
+        </nav>
+        <main id="" class="twelve wide column">
+            <h1 class="ui header">
+                {{ $route.meta.title }}
+                <div class="sub header">
+                    {{ $route.meta.description }}
+                </div>
+            </h1>
+            <section class="mt-3">
+                <router-view />
+            </section>
+        </main>
     </div>
 </template>
 <style scoped>

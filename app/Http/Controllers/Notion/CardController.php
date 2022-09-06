@@ -28,7 +28,7 @@ class CardController extends Controller
     {
         $token = config("notion.token");
         $notion = new Notion($token);
-        $testbaseId = config("notion.database");
+        $testbaseId = config("notion.cardboard");
         logger()->debug($testbaseId);
         try {
             $database = $notion->databases()->find($testbaseId);

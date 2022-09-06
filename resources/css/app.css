@@ -5,6 +5,16 @@ body {
     font-family: "Noto Sans JP", sans-serif;
 }
 
+/* 余白 */
+.mt-3 {
+    margin-top: 3rem;
+}
+.mr-2 {
+    margin-right: 2rem;
+}
+.ml-1 {
+    margin-left: 1rem !important;
+}
 /* ロード中のアイコン */
 .loader,
 .loader:after {

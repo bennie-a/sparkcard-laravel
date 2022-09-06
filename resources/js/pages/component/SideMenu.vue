@@ -27,6 +27,21 @@
                 </li>
             </ul>
         </div>
+        <div class="item">
+            <div class="ui small header">商品登録</div>
+            <ul>
+                <li>
+                    <router-link
+                        to="/notion/update/status"
+                        class="nav-link"
+                        :class="{
+                            active: $route.path === '/notion/update/status',
+                        }"
+                        >ステータス一括変更</router-link
+                    >
+                </li>
+            </ul>
+        </div>
         <div class="ui divider"></div>
         <span>ver.1.0.0</span>
     </div>

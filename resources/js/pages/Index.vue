@@ -82,105 +82,83 @@ export default {
 </script>
 
 <template>
-    <h1 class="ui header">
-        カード登録
-        <div class="sub header">
-            Wisdom
-            Guildからカード情報を取得して、Notionの商品管理ボードに登録します。
+    <div class="ui info message" v-if="message != ''">
+        <div class="header">
+            {{ message }}
         </div>
-    </h1>
-    <section class="mt-3">
-        <div class="ui info message" v-if="message != ''">
-            <div class="header">
-                {{ message }}
-            </div>
+    </div>
+    <div>
+        <div class="sample">
+            <input
+                type="radio"
+                name="s3"
+                id="select1"
+                value="white"
+                checked=""
+            />
+            <label for="select1">白</label>
+            <input type="radio" name="s3" id="select2" value="blue" />
+            <label for="select2">青</label>
+            <input type="radio" name="s3" id="select3" value="red" />
+            <label for="select3">赤</label>
+            <input type="radio" name="s3" id="select4" value="black" />
+            <label for="select4">黒</label>
+            <input type="radio" name="s3" id="select5" value="green" />
+            <label for="select5">緑</label>
+            <input type="radio" name="s3" id="select6" value="" />
+            <label for="select6">全て</label>
         </div>
-        <div>
-            <div class="sample">
-                <input
-                    type="radio"
-                    name="s3"
-                    id="select1"
-                    value="white"
-                    checked=""
-                />
-                <label for="select1">白</label>
-                <input type="radio" name="s3" id="select2" value="blue" />
-                <label for="select2">青</label>
-                <input type="radio" name="s3" id="select3" value="red" />
-                <label for="select3">赤</label>
-                <input type="radio" name="s3" id="select4" value="black" />
-                <label for="select4">黒</label>
-                <input type="radio" name="s3" id="select5" value="green" />
-                <label for="select5">緑</label>
-                <input type="radio" name="s3" id="select6" value="" />
-                <label for="select6">全て</label>
-            </div>
-            <button class="ui purple button ml-1" @click="search">
-                検索する
-            </button>
-        </div>
+        <button class="ui purple button ml-1" @click="search">検索する</button>
+    </div>
 
-        <div v-show="loading">
-            <div class="loader"></div>
-            <p class="text-center ui medium">waiting...</p>
-        </div>
-        <table v-show="!loading" class="ui table striped">
-            <thead>
-                <tr>
-                    <th>カード番号</th>
-                    <th>カード名</th>
-                    <th>英語名</th>
-                    <th>色</th>
-                    <th>画像URL</th>
-                    <th>価格</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(card, index) in getCards">
-                    <td>{{ card.index }}</td>
-                    <td>{{ card.name }}</td>
-                    <td>{{ card.enname }}</td>
-                    <td>{{ card.color }}</td>
-                    <td>{{ card.imageurl }}</td>
-                    <td>{{ card.price }}円</td>
-                </tr>
-            </tbody>
-        </table>
-        <paginate
-            :v-model="page"
-            :page-count="getPageCount"
-            :page-range="3"
-            :margin-pages="2"
-            :click-handler="clickCallback"
-            :prev-text="'Prev'"
-            :next-text="'Next'"
-            :prev-class="'page-item'"
-            :next-class="'page-item'"
-            :container-class="'pagenation'"
-            :page-class="'page-item'"
-            v-if="cards.length != 0"
-        >
-        </paginate>
-        <div class="text-center" v-if="cards.length != 0">
-            <button class="ui purple button" @click="regist">
-                Notionに登録する
-            </button>
-        </div>
-    </section>
+    <div v-show="loading">
+        <div class="loader"></div>
+        <p class="text-center ui medium">waiting...</p>
+    </div>
+    <table v-show="!loading" class="ui table striped">
+        <thead>
+            <tr>
+                <th>カード番号</th>
+                <th>カード名</th>
+                <th>英語名</th>
+                <th>色</th>
+                <th>画像URL</th>
+                <th>価格</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(card, index) in getCards">
+                <td>{{ card.index }}</td>
+                <td>{{ card.name }}</td>
+                <td>{{ card.enname }}</td>
+                <td>{{ card.color }}</td>
+                <td>{{ card.imageurl }}</td>
+                <td>{{ card.price }}円</td>
+            </tr>
+        </tbody>
+    </table>
+    <paginate
+        :v-model="page"
+        :page-count="getPageCount"
+        :page-range="3"
+        :margin-pages="2"
+        :click-handler="clickCallback"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :prev-class="'page-item'"
+        :next-class="'page-item'"
+        :container-class="'pagenation'"
+        :page-class="'page-item'"
+        v-if="cards.length != 0"
+    >
+    </paginate>
+    <div class="text-center" v-if="cards.length != 0">
+        <button class="ui purple button" @click="regist">
+            Notionに登録する
+        </button>
+    </div>
 </template>
 <style>
-.mt-3 {
-    margin-top: 3rem;
-}
-
-.mr-2 {
-    margin-right: 2rem;
-}
-.ml-1 {
-    margin-left: 1rem !important;
-}
-
 /* Write your own CSS for pagination */
 .pagenation {
     padding-bottom: 10px;
