@@ -34,15 +34,26 @@ class NotionRepository {
     public function findByEquals(string $prop, string $value) {
         $filters = new Collection();
         $filters->add(Filter::textFilter($prop, Operators::EQUALS, $value));
-        return $this->findbyFilter($filters);
+        return $this->findOnebyFilter($filters);
     }
 
-    protected function findbyFilter(Collection $filters) {
+    protected function findOnebyFilter(Collection $filters) {
         $notion = self::createNotion();
-        $pages = $notion->database($this->databaseId)->filterBy($filters)->query()->asCollection();
+        $pages = $this->findAsCollection($filters);
         $p = $pages[0];
         return $p;
+    }
 
+    protected function findAsCollection(Collection $filters) {
+        $notion = self::createNotion();
+        $pages = $notion->database($this->databaseId)->filterBy($filters)->query()->asCollection();
+        return $pages;
+    }
+
+    protected function createEqualFilter(string $prop, $value) {
+        $filters = new Collection();
+        $filters->add(Filter::textFilter($prop, Operators::EQUALS, $value));
+        return $filters;
     }
 
     // Notionオブジェクトを作成する。

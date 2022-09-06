@@ -11,6 +11,9 @@ class WidsomGuildController extends Controller
     private $service;
     public function __construct(WisdomGuildService $service)
     {
+        ini_set("max_execution_time",180); // タイムアウトを180秒にセット
+        ini_set("max_input_time",180); // パース時間を180秒にセット
+
         $this->service = $service;
     }
     /**

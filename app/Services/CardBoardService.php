@@ -19,16 +19,28 @@ class CardBoardService {
         $page->setText("英名", $details['enname']);
         $page->setSelect("Status", "ロジクラ要登録");
         $page->setNumber("枚数", 0);
-        $page->setNumber("価格", $details['price']);
+        $priceVal = intval($details['price']);
+        $page->setNumber("価格", $priceVal);
         $page->setNumber("カード番号", $details['index']);
         $page->setSelect("言語", "日本語");
         $page->setCheckbox("Foil", false);
-        // $page->setSelect("色", "無色");
+        $page->setSelect("色", $details['color']);
+        $page->setSelect("状態", "NM");
+        $page->setUrl('画像URL', $details['imageurl']);
         $expansion = new ExpansionRepository();
         logger()->debug($details['attr']);
         $exp = $expansion->findByAttr($details['attr']);
         $page->setRelation("エキスパンション",[$exp]);
         $page->setRelation("プラットフォーム",['864fb4c2af7641e5aa4daaaafbf97f51']);
+        // ミニレター
+        $sends = [];
+        if ($priceVal >= 1500) {
+            // クリックポスト
+            array_push($sends, '29c8c95ed21645909cafea172a5dd2f7');
+        } else {
+            array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
+        }
+        $page->setRelation('発送方法', $sends);
         try {
             $page = $this->repo->store($page);
             // ページID
@@ -38,5 +50,12 @@ class CardBoardService {
             logger()->error($e->getMessage());
         }
 
+    }
+
+    public function deleteByExp($name) {
+        $pages = $this->repo->findByExp($name);
+        foreach($pages as $p) {
+            $this->repo->delete($p->getId());
+        }
     }
 }

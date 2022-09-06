@@ -15,7 +15,7 @@ class ExpansionRepository extends NotionRepository{
         parent::__construct($databaseId);
     }
 
-    //　名前からエキスパンション名を取得する。
+    //　名前からエキスパンションIDを取得する。
     public function findIdByName(string $name){
         $notion = parent::createNotion();
         $filters = new Collection();

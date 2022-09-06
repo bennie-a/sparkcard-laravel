@@ -10,5 +10,13 @@ class CardBoardRepository extends NotionRepository{
         $databaseId = config('notion.cardboard');
         parent::__construct($databaseId);
     }
+
+    public function findByExp($name) {
+        $repo = new ExpansionRepository();
+        $expId = $repo->findIdByName($name);
+        $filter =$this->createEqualFilter("エキスパンション", $expId);
+        $result = $this->findAsCollection($filter);
+        return $result;
+    }
 }
 ?>

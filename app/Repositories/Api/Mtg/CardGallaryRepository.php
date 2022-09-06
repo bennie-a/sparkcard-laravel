@@ -27,7 +27,12 @@ class CardGallaryRepository extends WisdomGuildRepository{
     public function getCardColor($name) {
         $nameQuery = "//p[contains(text(), '".$name."')]";
         $colorNode = $this->xpath->query($nameQuery."/../../h2/span");
-        return $colorNode->item(0)->nodeValue;
+        if ($colorNode == null) {
+            logger()->error('Not Found Color:'.$name);
+            return "";
+        } else {
+            return $colorNode->item(0)->nodeValue;
+        }
     }
 
     // 指定したカード名から画像URLを取得する。

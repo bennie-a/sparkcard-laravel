@@ -15,9 +15,9 @@ class WisdomGuildRepository {
         ]
     ];
         $client = GuzzleClientFactory::create('wisdom');
-        logger()->debug("Client get");
         $response = $client->request("GET", 'search.php', $param);
         $contents = $response->getBody()->getContents();
+        logger()->debug("Page".$page." get");
         return $this->toDomXpath($contents);
     }
 

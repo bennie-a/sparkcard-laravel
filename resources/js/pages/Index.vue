@@ -6,7 +6,13 @@ export default {
         paginate: Paginate,
     },
     data() {
-        return { cards: [], loading: false, perPage: 10, currentPage: 1 };
+        return {
+            cards: [],
+            loading: false,
+            perPage: 10,
+            currentPage: 1,
+            message: "",
+        };
     },
     computed: {
         getCards: function () {
@@ -27,12 +33,13 @@ export default {
                 .get("/api/wisdom")
                 .then((response) => {
                     let filterd = response.data.filter((d) => {
-                        return d.price > 50;
+                        return d.price > 0;
                     });
                     filterd.forEach((d) => {
                         this.cards.push(d);
                     });
                     this.loading = false;
+                    this.message = this.cards.length + "件見つかりました。";
                 })
                 .catch((e) => {
                     console.error(e);
@@ -40,6 +47,7 @@ export default {
                 });
         },
         async regist() {
+            this.loading = true;
             console.log("Notion Resist Start");
             await Promise.all(
                 this.cards.map(async (c) => {
@@ -49,18 +57,22 @@ export default {
                         index: c.index,
                         price: c.price,
                         attr: "DMU",
+                        color: c.color,
+                        imageurl: c.imageurl,
                     };
                     await axios
                         .post("api/notion/card", query)
                         .then((response) => {
                             if (response.status == 200) {
-                                console.log("登録完了");
+                                console.log(query.name + ":登録完了");
                             } else {
                                 console.log(response.status);
                             }
                         });
                 })
             );
+            this.loading = false;
+            this.message = "登録が完了しました。";
         },
         clickCallback(pageNum) {
             this.currentPage = Number(pageNum);
@@ -78,9 +90,10 @@ export default {
         </div>
     </h1>
     <section class="mt-3">
-        <div class="ui info message" v-if="cards.length != 0">
-            <i class="close icon"></i>
-            <div class="header">{{ cards.length }}件取得しました。</div>
+        <div class="ui info message" v-if="message != ''">
+            <div class="header">
+                {{ message }}
+            </div>
         </div>
         <div>
             <div class="sample">
@@ -110,7 +123,7 @@ export default {
 
         <div v-show="loading">
             <div class="loader"></div>
-            <p class="text-center h3">Now loading...</p>
+            <p class="text-center ui medium">waiting...</p>
         </div>
         <table v-show="!loading" class="ui table striped">
             <thead>
