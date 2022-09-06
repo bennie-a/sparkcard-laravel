@@ -6,6 +6,7 @@ use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
 use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
 use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
+use FiveamCode\LaravelNotionApi\Query\StartCursor;
 use Illuminate\Support\Collection;
 
 class NotionRepository {
@@ -46,7 +47,13 @@ class NotionRepository {
 
     protected function findAsCollection(Collection $filters) {
         $notion = self::createNotion();
-        $pages = $notion->database($this->databaseId)->filterBy($filters)->query()->asCollection();
+        $pages = $this->findByQuery($filters);
+        return $pages->asCollection();
+    }
+
+    protected function findByQuery(Collection $filters) {
+        $notion = self::createNotion();
+        $pages = $notion->database($this->databaseId)->filterBy($filters)->query();
         return $pages;
     }
 
@@ -54,6 +61,14 @@ class NotionRepository {
         $filters = new Collection();
         $filters->add(Filter::textFilter($prop, Operators::EQUALS, $value));
         return $filters;
+    }
+
+    public function findByNextCursor($nextCursor) {
+        $notion = self::createNotion();
+        $startCursor = new StartCursor($nextCursor);
+        $pages = $notion->database($this->databaseId)->offset($startCursor);
+        return $pages;
+
     }
 
     // Notionオブジェクトを作成する。

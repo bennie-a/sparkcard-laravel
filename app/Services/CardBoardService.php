@@ -1,10 +1,17 @@
 <?php
 namespace App\Services;
+
+use App\Models\Card;
+use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use App\Repositories\Api\Notion\ExpansionRepository;
+use FiveamCode\LaravelNotionApi\Entities\Collections\PageCollection;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
+use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
+use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 
 class CardBoardService {
     
@@ -12,6 +19,22 @@ class CardBoardService {
         $this->repo = new CardBoardRepository();
     }
 
+    public function findByStatus($status) {
+        $pages = $this->repo->findByStatus($status);
+        $resultList = array();
+        if (count($pages) == 0) {
+            $error = ['code' => 1000, 'message'=>'not found'];
+            return $error;
+        }
+        foreach($pages as $page) {
+            $array = $page->toArray();
+            $price = $page->getProperty('価格');
+            $cardarray = ['id'=> $array['id'], 'name' => $array['title'], 'price'=> $price->getContent()];
+            array_push($resultList, $cardarray);
+        }
+        return $resultList;
+    }
+    
     // 入力値をNotionに登録する。
     public function store(array $details) {
         $page = new Page();

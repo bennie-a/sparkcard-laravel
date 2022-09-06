@@ -29,7 +29,7 @@
             </button>
         </div>
     </div>
-    {{ $store.state.isLoad }}
+    <NowLoading></NowLoading>
 </template>
 <style scoped>
 div.flex {
@@ -39,6 +39,7 @@ div.flex {
 }
 </style>
 <script>
+import NowLoading from "../component/NowLoading.vue";
 export default {
     data() {
         return {
@@ -62,5 +63,6 @@ export default {
             this.price = this.price.replace(pattern, "");
         },
     },
+    components: { NowLoading },
 };
 </script>

@@ -20,23 +20,16 @@ class CardController extends Controller
         $this->service = $service;
     }
     /**
-     * Display a listing of the resource.
+     * 指定したステータスに一致するカードを取得する。
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $token = config("notion.token");
-        $notion = new Notion($token);
-        $testbaseId = config("notion.cardboard");
-        logger()->debug($testbaseId);
-        try {
-            $database = $notion->databases()->find($testbaseId);
-            logger()->info($database->getTitle());
-            response($database->getTitle(), Response::HTTP_OK);
-        } catch(NotionException $e) {
-            logger()->error($e);
-        }
+    public function index(Request $request)
+    {   
+        $status = $request->input('status');
+        $results = $this->service->findByStatus($status);
+        logger()->info(count($results).'件取得しました');
+        return response()->json($results, Response::HTTP_OK);
     }
 
     /**

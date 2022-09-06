@@ -8,7 +8,6 @@ export default {
     data() {
         return {
             cards: [],
-            loading: false,
             perPage: 10,
             currentPage: 1,
             message: "",
@@ -26,7 +25,7 @@ export default {
     },
     methods: {
         async search() {
-            this.loading = true;
+            this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
             this.cards.splice(0);
             await axios
@@ -38,16 +37,16 @@ export default {
                     filterd.forEach((d) => {
                         this.cards.push(d);
                     });
-                    this.loading = false;
+                    this.$store.dispatch("setLoad", false);
                     this.message = this.cards.length + "件見つかりました。";
                 })
                 .catch((e) => {
                     console.error(e);
-                    this.loading = false;
+                    this.$store.dispatch("setLoad", false);
                 });
         },
         async regist() {
-            this.loading = true;
+            this.$store.dispatch("setLoad", true);
             console.log("Notion Resist Start");
             await Promise.all(
                 this.cards.map(async (c) => {
@@ -71,7 +70,7 @@ export default {
                         });
                 })
             );
-            this.loading = false;
+            this.$store.dispatch("setLoad", false);
             this.message = "登録が完了しました。";
         },
         clickCallback(pageNum) {
@@ -111,10 +110,7 @@ export default {
         <button class="ui purple button ml-1" @click="search">検索する</button>
     </div>
 
-    <div v-show="loading">
-        <div class="loader"></div>
-        <p class="text-center ui medium">waiting...</p>
-    </div>
+    <NowLoading></NowLoading>
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
