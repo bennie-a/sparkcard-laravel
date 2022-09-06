@@ -1,25 +1,24 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 
-export default new Vuex.Store({
+export const store = createStore({
     state: {
         isLoad: false,
     },
-
+    computed: {
+        isLoad() {
+            return this.store.state.isLoad;
+        },
+    },
     mutations: {
-        setLoad(state, payload) {
-            state.isLoad = payload;
+        setLoad(state, isLoad) {
+            state.isLoad = isLoad;
         },
     },
 
-    getters: {
-        getLoad(state) {
-            return state.isLoad;
-        },
-    },
+    getters: {},
 
-    action: {
-        setAction(context, isLoad) {
+    actions: {
+        setLoad(context, isLoad) {
             context.commit("setLoad", isLoad);
         },
     },
