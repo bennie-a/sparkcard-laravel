@@ -29,11 +29,16 @@
             </button>
         </div>
     </div>
+    <div class="ui info message" v-if="$store.state.msg.success != ''">
+        <div class="header">
+            {{ $store.state.msg.success }}
+        </div>
+    </div>
     <div class="ui negative message" v-if="error != ''">
         <div class="header">
             {{ error }}
         </div>
-        <p>そのオファーは期限が切れている</p>
+        <p></p>
     </div>
     <card-list></card-list>
     <now-loading></now-loading>
@@ -64,6 +69,7 @@ export default {
             console.log("Notion Card Search...");
             console.log(this.status);
             this.$store.dispatch("setLoad", true);
+            this.$store.dispatch("clearCards");
             const task = new AxiosTask(this.$store);
             const query = { status: this.status };
             const success = function (response, $store, query) {
@@ -72,6 +78,10 @@ export default {
                 }
                 console.log("Card Get Count " + results.length);
                 $store.dispatch("setCard", results);
+                $store.dispatch(
+                    "setSuccessMessage",
+                    results.length + "取得しました。"
+                );
             };
             const fail = function (e, $store, query) {
                 const res = e.response;

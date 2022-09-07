@@ -17,16 +17,20 @@
             </tr>
         </tbody>
     </table>
+    <pagination></pagination>
 </template>
 <script>
+import ListPagination from "./ListPagination.vue";
+
 export default {
     computed: {
         loading: function () {
             return this.$store.getters.isload;
         },
         getCards: function () {
-            return this.$store.getters.card;
+            return this.$store.getters.sliceCard;
         },
     },
+    components: { pagination: ListPagination },
 };
 </script>

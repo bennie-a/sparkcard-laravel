@@ -30,11 +30,13 @@ class CardBoardService {
             $array = $page->toArray();
             $price = $page->getProperty('価格');
             $cardIndex = $page->getProperty('カード番号');
+            $color = $page->getProperty('色');
             $card = new NotionCard();
             $card->setId($array['id']);
             $card->setName($array['title']);
             $card->setPrice($price->getContent());
             $card->setIndex($cardIndex->getContent());
+            $card->setColor($color->getName());
             array_push($resultList, $card);
         }
         return $resultList;

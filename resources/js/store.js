@@ -8,6 +8,10 @@ export const store = createStore({
             currentPage: 1,
             perPage: 10,
         },
+        msg: {
+            success: "",
+            error: "",
+        },
     },
     mutations: {
         setLoad(state, isLoad) {
@@ -20,8 +24,14 @@ export const store = createStore({
         setCard(state, cards) {
             state.cards = cards;
         },
+        clearCards(state) {
+            state.cards.splice(0);
+        },
         setCurrentPage(state, page) {
-            state.currentPage = Number(page);
+            state.paging.currentPage = Number(page);
+        },
+        setSuccessMessage(state, msg) {
+            state.msg.success = msg;
         },
     },
 
@@ -35,10 +45,13 @@ export const store = createStore({
         card: function (state) {
             return state.cards;
         },
-        sliceCard: function (state, start) {
-            let current = $state.paging.currentPage * $state.paging.perPage;
-            // let start = current - $state.paging.perPage;
+        sliceCard: function (state) {
+            let current = state.paging.currentPage * state.paging.perPage;
+            let start = current - state.paging.perPage;
             return state.cards.slice(start, current);
+        },
+        getCurrentPage: function (state) {
+            return state.paging.currentPage;
         },
     },
 
@@ -57,6 +70,12 @@ export const store = createStore({
         // 表示中のページ番号
         setCurrentPage(context, page) {
             context.commit("setCurrentPage", page);
+        },
+        clearCards: function (context) {
+            context.commit("clearCards");
+        },
+        setSuccessMessage: function (context, msg) {
+            context.commit("setSuccessMessage", msg);
         },
     },
 });

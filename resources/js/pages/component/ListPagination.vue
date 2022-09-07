@@ -26,16 +26,18 @@ export default {
     data() {
         return {
             perPage: 10,
-            currentPage: 1,
         };
     },
     computed: {
-        getPageCount: function () {
-            return Math.ceil(length() / this.perPage);
+        page: function () {
+            return this.$store.getters.getCurrentPage;
         },
-
         length: function () {
             return this.$store.getters.cardsLength;
+        },
+        getPageCount: function () {
+            const length = this.$store.getters.cardsLength;
+            return Math.ceil(length / this.perPage);
         },
     },
     methods: {

@@ -18,6 +18,7 @@ class NotionCardResource extends JsonResource
                 'id'=>$this->getId(),
                 'index' => $this->getIndex(),
                 'name' => $this->getName(),
+                'color'=>$this->getColor(),
                 'price' => $this->getPrice(),
             ];
     }
