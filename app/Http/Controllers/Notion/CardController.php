@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Notion\NotionCardResource;
 use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Services\CardBoardService;
 use FiveamCode\LaravelNotionApi\Entities\Page;
@@ -26,10 +27,13 @@ class CardController extends Controller
      */
     public function index(Request $request)
     {   
+        logger()->info('get card by status...');
         $status = $request->input('status');
+        logger()->debug($status);
         $results = $this->service->findByStatus($status);
         logger()->info(count($results).'件取得しました');
-        return response()->json($results, Response::HTTP_OK);
+        $json = NotionCardResource::collection($results);
+        return response()->json($json, Response::HTTP_OK);
     }
 
     /**

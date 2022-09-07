@@ -29,7 +29,14 @@
             </button>
         </div>
     </div>
-    <NowLoading></NowLoading>
+    <div class="ui negative message" v-if="error != ''">
+        <div class="header">
+            {{ error }}
+        </div>
+        <p>そのオファーは期限が切れている</p>
+    </div>
+    <card-list></card-list>
+    <now-loading></now-loading>
 </template>
 <style scoped>
 div.flex {
@@ -39,7 +46,9 @@ div.flex {
 }
 </style>
 <script>
+import { AxiosTask } from "../../component/AxiosTask";
 import NowLoading from "../component/NowLoading.vue";
+import CardList from "../component/CardList.vue";
 export default {
     data() {
         return {
@@ -47,14 +56,34 @@ export default {
             status: "ロジクラ要登録",
             price: "",
             isMore: true,
+            error: "",
         };
     },
     methods: {
-        search: function () {
-            console.log(this.price);
+        search() {
+            console.log("Notion Card Search...");
             console.log(this.status);
-            console.log(this.isMore);
-            this.$store.dispatch("setLoad", !this.$store.state.isLoad);
+            this.$store.dispatch("setLoad", true);
+            const task = new AxiosTask(this.$store);
+            const query = { status: this.status };
+            const success = function (response, $store, query) {
+                let results = response.data;
+                if (results.error) {
+                }
+                console.log("Card Get Count " + results.length);
+                $store.dispatch("setCard", results);
+            };
+            const fail = function (e, $store, query) {
+                const res = e.response;
+                this.error = res.code;
+                console.log(res.status);
+            };
+            task.get(
+                "/notion/card?status=ロジクラ要登録",
+                query,
+                success,
+                fail
+            );
         },
     },
     watch: {
@@ -63,6 +92,6 @@ export default {
             this.price = this.price.replace(pattern, "");
         },
     },
-    components: { NowLoading },
+    components: { "now-loading": NowLoading, "card-list": CardList },
 };
 </script>

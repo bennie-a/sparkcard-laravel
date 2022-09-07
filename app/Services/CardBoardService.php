@@ -30,8 +30,12 @@ class CardBoardService {
             $array = $page->toArray();
             $price = $page->getProperty('価格');
             $cardIndex = $page->getProperty('カード番号');
-            $cardarray = ['id'=> $array['id'], 'index'=> $cardIndex->getContent(), 'name' => $array['title'], 'price'=> $price->getContent()];
-            array_push($resultList, $cardarray);
+            $card = new NotionCard();
+            $card->setId($array['id']);
+            $card->setName($array['title']);
+            $card->setPrice($price->getContent());
+            $card->setIndex($cardIndex->getContent());
+            array_push($resultList, $card);
         }
         return $resultList;
     }

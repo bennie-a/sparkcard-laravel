@@ -8,7 +8,7 @@
 export default {
     computed: {
         isLoad: function () {
-            return this.$store.state.isLoad;
+            return this.$store.getters.isLoad;
         },
     },
 };

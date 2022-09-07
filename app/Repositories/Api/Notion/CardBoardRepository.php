@@ -41,7 +41,9 @@ class CardBoardRepository extends NotionRepository{
         if ($pageCollection->hasMoreEntries()) {
             $nextCollection = $database->offsetByResponse($pageCollection)->query();
             $nextPage = $this->getCardCollection($database, $nextCollection, $nextCollection->asCollection());
-            $pages = $pages->collect($nextPage);
+            foreach($nextPage as $next) {
+                $pages->add($next);
+            }
         }
         return $pages;
     }
