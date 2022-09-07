@@ -29,7 +29,8 @@ class CardBoardService {
         foreach($pages as $page) {
             $array = $page->toArray();
             $price = $page->getProperty('価格');
-            $cardarray = ['id'=> $array['id'], 'name' => $array['title'], 'price'=> $price->getContent()];
+            $cardIndex = $page->getProperty('カード番号');
+            $cardarray = ['id'=> $array['id'], 'index'=> $cardIndex->getContent(), 'name' => $array['title'], 'price'=> $price->getContent()];
             array_push($resultList, $cardarray);
         }
         return $resultList;

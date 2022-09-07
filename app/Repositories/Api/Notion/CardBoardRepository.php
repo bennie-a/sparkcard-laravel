@@ -6,6 +6,7 @@ use FiveamCode\LaravelNotionApi\Entities\Collections\PageCollection;
 use FiveamCode\LaravelNotionApi\Notion;
 use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
 use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
+use FiveamCode\LaravelNotionApi\Query\Sorting;
 use Illuminate\Support\Collection;
 
 //Notionのエキスパンションテーブルへの接続
@@ -23,7 +24,11 @@ class CardBoardRepository extends NotionRepository{
         $filter = new Filter("Status", 'select', [Operators::EQUALS => $status]);
         $filters->add($filter);
         $notion = self::createNotion();
-        $database = $notion->database($this->databaseId)->filterBy($filters);
+
+        // ソート順設定
+        $sorting = new Collection();
+        $sorting->add(Sorting::propertySort("カード番号", "ascending"));
+        $database = $notion->database($this->databaseId)->filterBy($filters)->sortBy($sorting);
         $pageCollection = $database->query();
         $pages = $pageCollection->asCollection();
 
@@ -31,13 +36,12 @@ class CardBoardRepository extends NotionRepository{
         return $pages;
     }
     
+    // next_cursorを元に100件目以降のカード情報を取得する。
     private function getCardCollection(Database $database, PageCollection $pageCollection, Collection $pages) {
         if ($pageCollection->hasMoreEntries()) {
             $nextCollection = $database->offsetByResponse($pageCollection)->query();
             $nextPage = $this->getCardCollection($database, $nextCollection, $nextCollection->asCollection());
-            foreach($nextPage as $next) {
-                $pages->push($next);
-            }
+            $pages = $pages->collect($nextPage);
         }
         return $pages;
     }
