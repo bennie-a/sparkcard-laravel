@@ -18,6 +18,13 @@ export class AxiosTask {
                 this.$store.dispatch("setLoad", false);
             });
     }
+    // PATCHメソッドでAPIを呼び出す
+    async patch(url, details) {
+        await axios
+            .patch(this.getApiUrl)
+            .then((response) => {})
+            .catch((e) => {});
+    }
 
     getApiUrl(url) {
         return "/api" + url;

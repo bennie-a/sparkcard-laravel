@@ -179,10 +179,6 @@ li.page-item.active > a {
     color: white;
 }
 
-.text-center {
-    text-align: center;
-}
-
 .sample input {
     display: none;
 }

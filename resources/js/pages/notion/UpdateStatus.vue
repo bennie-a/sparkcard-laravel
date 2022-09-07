@@ -1,34 +1,4 @@
 <template>
-    <div class="ui segment">
-        <h2 class="ui small header">
-            <i class="question circle icon"></i>絞り込み条件
-        </h2>
-        <div class="flex">
-            <select class="ui dropdown" v-model="status">
-                <option value="ロジクラ要登録">ロジクラ要登録</option>
-                <option value="販売保留">販売保留</option>
-            </select>
-            <div class="ui right labeled input">
-                <input
-                    type="text"
-                    placeholder="価格"
-                    v-model="price"
-                    @input="
-                        (event) =>
-                            (value = event.target.value.replace(/[^0-9]/g, ''))
-                    "
-                />
-                <div class="ui basic label">円</div>
-            </div>
-            <select class="ui dropdown" v-model="isMore">
-                <option value="true">以上</option>
-                <option value="false">未満</option>
-            </select>
-            <button class="ui purple button ml-1" @click="search">
-                検索する
-            </button>
-        </div>
-    </div>
     <message-area></message-area>
     <div class="ui negative message" v-if="error != ''">
         <div class="header">
@@ -36,7 +6,76 @@
         </div>
         <p></p>
     </div>
+    <div class="ui form">
+        <h4 class="ui dividing header">
+            <i class="question circle icon"></i>絞り込み条件
+        </h4>
+        <div class="three fields">
+            <div class="field">
+                <label for="">ステータス</label>
+                <select class="ui fluid dropdown" v-model="selectedStatus">
+                    <option
+                        v-for="status in $store.getters.getItemStatus"
+                        v-bind:value="status"
+                    >
+                        {{ status }}
+                    </option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="">価格</label>
+                <div class="two fields">
+                    <div class="field">
+                        <input
+                            type="text"
+                            placeholder="価格"
+                            v-model="price"
+                            @input="
+                                (event) =>
+                                    (value = event.target.value.replace(
+                                        /[^0-9]/g,
+                                        ''
+                                    ))
+                            "
+                        />
+                    </div>
+                    <div>
+                        <select
+                            class="ui fluid search dropdown"
+                            v-model="isMore"
+                        >
+                            <option value="true">以上</option>
+                            <option value="false">未満</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label for="" style="visibility: hidden">ボタン</label>
+                <button class="ui purple button ml-1" @click="search">
+                    検索する
+                </button>
+            </div>
+        </div>
+        <div></div>
+    </div>
+    <div class="ui segment mt-3">
+        <h2 class="ui small header">次のステータスに変更する</h2>
+        <select class="ui dropdown" v-model="updateStatus">
+            <option
+                v-for="status in $store.getters.getItemStatus"
+                v-bind:value="status"
+            >
+                {{ status }}
+            </option>
+        </select>
+
+        <button class="ui purple button" @click="update">
+            ステータスを更新する
+        </button>
+    </div>
     <card-list></card-list>
+
     <now-loading></now-loading>
 </template>
 <style scoped>
@@ -54,26 +93,33 @@ import MessageArea from "../component/MessageArea.vue";
 export default {
     data() {
         return {
-            // cards: [],
-            status: "ロジクラ要登録",
+            selectedStatus: "ロジクラ要登録",
+            updateStatus: "ロジクラ要登録",
             price: "",
             isMore: false,
             error: "",
         };
     },
+    mounted: function () {
+        this.$store.dispatch("clearCards");
+        this.$store.dispatch("clearMessage");
+        console.log("mounted");
+    },
+
     methods: {
         search() {
             console.log("Notion Card Search...");
-            console.log(this.status);
+            console.log(this.selectedStatus);
             this.$store.dispatch("setLoad", true);
             this.$store.dispatch("clearCards");
             const task = new AxiosTask(this.$store);
             const query = {
-                status: this.status,
+                status: this.selectedStatus,
                 price: Number(this.price),
                 isMore: Boolean(this.isMore),
             };
             const success = function (response, $store, query) {
+                console.log(query.status);
                 let results = [];
                 if (results.error) {
                 }
@@ -101,11 +147,14 @@ export default {
                 console.log(res.status);
             };
             task.get(
-                "/notion/card?status=ロジクラ要登録",
+                "/notion/card?status=" + this.selectedStatus,
                 query,
                 success,
                 fail
             );
+        },
+        update() {
+            console.log("Status Update...");
         },
     },
     watch: {

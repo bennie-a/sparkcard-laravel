@@ -15,7 +15,7 @@ import SideMenu from "../pages/component/SideMenu.vue";
                     {{ $route.meta.description }}
                 </div>
             </h1>
-            <section class="mt-3">
+            <section class="mt-2">
                 <router-view />
             </section>
         </main>
@@ -34,3 +34,6 @@ import SideMenu from "../pages/component/SideMenu.vue";
     height: 100vh;
 }
 </style>
+<script>
+export default {};
+</script>

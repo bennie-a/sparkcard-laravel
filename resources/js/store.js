@@ -1,3 +1,4 @@
+import { functionsIn } from "lodash";
 import { createStore } from "vuex";
 
 export const store = createStore({
@@ -11,6 +12,9 @@ export const store = createStore({
         msg: {
             success: "",
             error: "",
+        },
+        form: {
+            itemStatus: ["ロジクラ要登録", "販売保留", "要撮影"],
         },
     },
     mutations: {
@@ -33,6 +37,10 @@ export const store = createStore({
         setSuccessMessage(state, msg) {
             state.msg.success = msg;
         },
+        clearMessage(state) {
+            state.msg.success = "";
+            state.msg.error = "";
+        },
     },
 
     getters: {
@@ -52,6 +60,9 @@ export const store = createStore({
         },
         getCurrentPage: function (state) {
             return state.paging.currentPage;
+        },
+        getItemStatus: function (state) {
+            return state.form.itemStatus;
         },
     },
 
@@ -76,6 +87,9 @@ export const store = createStore({
         },
         setSuccessMessage: function (context, msg) {
             context.commit("setSuccessMessage", msg);
+        },
+        clearMessage: function (context) {
+            context.commit("clearMessage");
         },
     },
 });
