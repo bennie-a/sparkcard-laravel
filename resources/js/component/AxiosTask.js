@@ -7,7 +7,7 @@ export class AxiosTask {
     // GETメソッドでAPIを呼び出す。
     async get(url, query, success, fail) {
         await axios
-            .get(this.getApiUrl(url), { params: { query } })
+            .get(this.getApiUrl(url))
             .then((response) => {
                 success(response, this.store, query);
                 this.store.dispatch("setLoad", false);

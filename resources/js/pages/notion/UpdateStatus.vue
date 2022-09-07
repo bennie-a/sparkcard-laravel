@@ -29,11 +29,7 @@
             </button>
         </div>
     </div>
-    <div class="ui info message" v-if="$store.state.msg.success != ''">
-        <div class="header">
-            {{ $store.state.msg.success }}
-        </div>
-    </div>
+    <message-area></message-area>
     <div class="ui negative message" v-if="error != ''">
         <div class="header">
             {{ error }}
@@ -54,13 +50,14 @@ div.flex {
 import { AxiosTask } from "../../component/AxiosTask";
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
+import MessageArea from "../component/MessageArea.vue";
 export default {
     data() {
         return {
             // cards: [],
             status: "ロジクラ要登録",
             price: "",
-            isMore: true,
+            isMore: false,
             error: "",
         };
     },
@@ -71,16 +68,31 @@ export default {
             this.$store.dispatch("setLoad", true);
             this.$store.dispatch("clearCards");
             const task = new AxiosTask(this.$store);
-            const query = { status: this.status };
+            const query = {
+                status: this.status,
+                price: Number(this.price),
+                isMore: Boolean(this.isMore),
+            };
             const success = function (response, $store, query) {
-                let results = response.data;
+                let results = [];
                 if (results.error) {
+                }
+                if (query.price > 0) {
+                    results = response.data.filter((r) => {
+                        if (query.isMore) {
+                            return r.price >= query.price;
+                        } else {
+                            return r.price < query.price;
+                        }
+                    });
+                } else {
+                    results = response.data;
                 }
                 console.log("Card Get Count " + results.length);
                 $store.dispatch("setCard", results);
                 $store.dispatch(
                     "setSuccessMessage",
-                    results.length + "取得しました。"
+                    results.length + "件取得しました。"
                 );
             };
             const fail = function (e, $store, query) {
@@ -102,6 +114,10 @@ export default {
             this.price = this.price.replace(pattern, "");
         },
     },
-    components: { "now-loading": NowLoading, "card-list": CardList },
+    components: {
+        "now-loading": NowLoading,
+        "card-list": CardList,
+        "message-area": MessageArea,
+    },
 };
 </script>
