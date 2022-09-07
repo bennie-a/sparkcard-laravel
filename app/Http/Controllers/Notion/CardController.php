@@ -68,8 +68,8 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   logger()->debug($id);
+        return response("更新完了", Response::HTTP_OK);
     }
 
     /**

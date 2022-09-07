@@ -7,10 +7,7 @@
         <p></p>
     </div>
     <div class="ui form">
-        <h4 class="ui dividing header">
-            <i class="question circle icon"></i>絞り込み条件
-        </h4>
-        <div class="three fields">
+        <div class="five fields">
             <div class="field">
                 <label for="">ステータス</label>
                 <select class="ui fluid dropdown" v-model="selectedStatus">
@@ -57,22 +54,23 @@
                 </button>
             </div>
         </div>
-        <div></div>
     </div>
     <div class="ui segment mt-3">
-        <h2 class="ui small header">次のステータスに変更する</h2>
-        <select class="ui dropdown" v-model="updateStatus">
-            <option
-                v-for="status in $store.getters.getItemStatus"
-                v-bind:value="status"
-            >
-                {{ status }}
-            </option>
-        </select>
+        <h2 class="ui small header">次のステータスに一括変更する</h2>
+        <div class="flex">
+            <select class="ui dropdown" v-model="updateStatus">
+                <option
+                    v-for="status in $store.getters.getItemStatus"
+                    v-bind:value="status"
+                >
+                    {{ status }}
+                </option>
+            </select>
 
-        <button class="ui purple button" @click="update">
-            ステータスを更新する
-        </button>
+            <button class="ui purple button" @click="update">
+                ステータスを更新する
+            </button>
+        </div>
     </div>
     <card-list></card-list>
 
@@ -155,6 +153,7 @@ export default {
         },
         update() {
             console.log("Status Update...");
+            console.log(this.updateStatus);
         },
     },
     watch: {
