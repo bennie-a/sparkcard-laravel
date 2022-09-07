@@ -101,11 +101,11 @@ export default {
     mounted: function () {
         this.$store.dispatch("clearCards");
         this.$store.dispatch("clearMessage");
-        console.log("mounted");
+        console.log("update status mounted");
     },
 
     methods: {
-        search() {
+        async search() {
             console.log("Notion Card Search...");
             console.log(this.selectedStatus);
             this.$store.dispatch("setLoad", true);
@@ -144,16 +144,24 @@ export default {
                 this.error = res.code;
                 console.log(res.status);
             };
-            task.get(
+            await task.get(
                 "/notion/card?status=" + this.selectedStatus,
                 query,
                 success,
                 fail
             );
         },
-        update() {
+        async update() {
             console.log("Status Update...");
             console.log(this.updateStatus);
+            const task = new AxiosTask(this.$store);
+            const success = function (response, query) {
+                const result = response.data;
+                console.log(result);
+                console.log(response.status);
+            };
+            const fail = function (e, query) {};
+            await task.patch("/notion/card/" + "xxxx", [], success, fail);
         },
     },
     watch: {

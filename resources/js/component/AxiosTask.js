@@ -19,11 +19,17 @@ export class AxiosTask {
             });
     }
     // PATCHメソッドでAPIを呼び出す
-    async patch(url, details) {
+    async patch(url, query, success, fail) {
         await axios
-            .patch(this.getApiUrl)
-            .then((response) => {})
-            .catch((e) => {});
+            .patch(this.getApiUrl(url), query)
+            .then((response) => {
+                success(response, query);
+                this.store.dispatch("setLoad", false);
+            })
+            .catch((e) => {
+                fail(e, query);
+                this.store.dispatch("setLoad", false);
+            });
     }
 
     getApiUrl(url) {
