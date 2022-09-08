@@ -8,6 +8,7 @@ use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
 use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use FiveamCode\LaravelNotionApi\Query\Sorting;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Constraint\Operator;
 
 //Notionのエキスパンションテーブルへの接続
 class CardBoardRepository extends NotionRepository{
@@ -23,14 +24,6 @@ class CardBoardRepository extends NotionRepository{
         $filters = new Collection();
         $filter = new Filter("Status", 'select', [Operators::EQUALS => $status]);
         $filters->add($filter);
-        foreach($details as $key => $value) {
-            if ($key == 'expansion') {
-                $repo = new ExpansionRepository();
-                $expId = $repo->findIdByName($value);
-                $expfilter =$this->createEqualFilter("エキスパンション", $expId);
-                $filters->add($expfilter);
-            }
-        }
 
         $notion = self::createNotion();
 

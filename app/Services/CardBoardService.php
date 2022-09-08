@@ -35,7 +35,7 @@ class CardBoardService {
             $cardIndex = $page->getProperty('カード番号');
             $color = $page->getProperty('色');
             $stock = $page->getProperty('枚数');
-            // $exp = $page->getProperty('エキスパンション');
+            $url = $page->getProperty('画像URL');
             // $expPage = $expRepo->findByPage($exp);
             $card = new NotionCard();
             // $card->setExpansion($expPage->getTitle());
@@ -44,6 +44,9 @@ class CardBoardService {
             $card->setPrice($price->getContent());
             if (!is_null($cardIndex)) {
                 $card->setIndex($cardIndex->getContent());
+            }
+            if (!is_null($url)) {
+                $card->setImageUrl($url->getContent());
             }
             $card->setColor($color->getName());
             $card->setStock(($stock->getContent()));

@@ -32,7 +32,6 @@ class CardController extends Controller
         logger()->info('get card by status...');
         $status = $request->input('status');
         $details = $request->all();
-        logger()->debug($status);
         $results = $this->service->findByStatus($status, $details);
         logger()->info(count($results).'件取得しました');
         $json = NotionCardResource::collection($results);

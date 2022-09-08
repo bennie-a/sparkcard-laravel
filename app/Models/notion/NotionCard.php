@@ -24,6 +24,8 @@ class NotionCard extends Model
 
     private string $expansion;
 
+    private string $imageUrl;
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -79,5 +81,13 @@ class NotionCard extends Model
 
     public function getExpansion() {
         return $this->expansion;
+    }
+
+    public function setImageUrl(string $imageUrl) {
+        $this->imageUrl = $imageUrl;
+    }
+
+    public function getImageUrl() {
+        return $this->imageUrl;
     }
 }

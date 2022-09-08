@@ -5,15 +5,25 @@
             <div class="ui action input field">
                 <input
                     type="text"
-                    placeholder="エキスパンション(完全一致)"
+                    placeholder="エキスパンション(未実装)"
                     v-model="expansion"
                 />
-                <button class="ui primary button">検索</button>
+                <button class="ui primary button" @click="search">検索</button>
             </div>
         </div>
     </div>
-    <div class="mt-3" v-if="$store.getters.cardsLength != 0">
-        <button class="ui purple button" @click="">ダウンロードする</button>
+    <div class="mt-2">
+        <div class="ui toggle checkbox mr-2">
+            <input type="checkbox" name="public" v-model="isPrinting" />
+            <label for="name">画像に「Now Printing」を使用する</label>
+        </div>
+        <div class="ui buttons float right">
+            <button class="ui violet button" @click="downloadLogikura">
+                ロジクラ用CSVをダウンロードする
+            </button>
+            <div class="or"></div>
+            <button class="ui pink button">BASE用CSVをダウンロードする</button>
+        </div>
     </div>
     <card-list></card-list>
     <now-loading></now-loading>
@@ -33,47 +43,30 @@ import MessageArea from "../component/MessageArea.vue";
 export default {
     data() {
         return {
-            selectedStatus: "ロジクラ要登録",
-            updateStatus: "ロジクラ要登録",
             expansion: "",
-            isMore: false,
+            isPrinting: false,
             error: "",
         };
     },
     mounted: function () {
         this.$store.dispatch("clearCards");
         this.$store.dispatch("clearMessage");
-        console.log("update status mounted");
+        console.log("csv mounted");
     },
 
     methods: {
         async search() {
             console.log("Notion Card Search...");
-            console.log(this.selectedStatus);
             this.$store.dispatch("setLoad", true);
             this.$store.dispatch("clearCards");
             const task = new AxiosTask(this.$store);
             const query = {
                 status: this.selectedStatus,
-                price: Number(this.price),
-                isMore: Boolean(this.isMore),
+                expansion: this.expansion,
             };
             const success = function (response, $store, query) {
-                console.log(query.status);
-                let results = [];
-                if (results.error) {
-                }
-                if (query.price > 0) {
-                    results = response.data.filter((r) => {
-                        if (query.isMore) {
-                            return r.price >= query.price;
-                        } else {
-                            return r.price < query.price;
-                        }
-                    });
-                } else {
-                    results = response.data;
-                }
+                console.log(query.expansion);
+                let results = response.data;
                 console.log("Card Get Count " + results.length);
                 $store.dispatch("setCard", results);
                 $store.dispatch(
@@ -87,39 +80,16 @@ export default {
                 console.log(res.status);
             };
             await task.get(
-                "/notion/card?status=" + this.selectedStatus,
+                "/notion/card?status=ロジクラ要登録",
                 query,
                 success,
                 fail
             );
         },
-        async update() {
+        downloadLogikura() {
             this.$store.dispatch("setLoad", true);
-            console.log("Status Update...");
-            console.log(this.updateStatus);
-            const task = new AxiosTask(this.$store);
-            const success = function (response, query) {
-                const result = response.data;
-            };
-            const fail = function (e, query) {
-                console.error(e);
-            };
-            const card = this.$store.getters.card;
-            await Promise.all(
-                card.map(async (c) => {
-                    let url = "/notion/card/" + c.id;
-                    let query = { status: this.updateStatus };
-                    await task.patch(url, query, success, fail);
-                })
-            );
-            this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
-            this.store.dispatch("setLoad", false);
-        },
-    },
-    watch: {
-        price: function () {
-            const pattern = /[a-zA-Z]/g; // 半角英字のみ不可
-            this.price = this.price.replace(pattern, "");
+            console.log(this.isPrinting);
+            this.$store.dispatch("setLoad", false);
         },
     },
     components: {

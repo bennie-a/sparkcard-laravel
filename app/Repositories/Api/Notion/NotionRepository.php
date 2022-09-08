@@ -58,7 +58,6 @@ class NotionRepository {
     }
 
     protected function findAsCollection(Collection $filters) {
-        $notion = self::createNotion();
         $pages = $this->findByQuery($filters);
         return $pages->asCollection();
     }

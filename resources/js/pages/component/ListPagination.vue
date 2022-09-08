@@ -59,6 +59,7 @@ export default {
     border: 1px solid #ccc;
     cursor: pointer;
     padding: 0.6em;
+    background-color: #fff;
 }
 .page-item > a {
     display: inline-block;

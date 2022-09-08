@@ -4,7 +4,7 @@ import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
     <TheHeader></TheHeader>
-    <div class="ui grid padded">
+    <div id="contents" class="ui grid padded">
         <nav class="three wide column blue">
             <SideMenu></SideMenu>
         </nav>
@@ -32,6 +32,10 @@ import SideMenu from "../pages/component/SideMenu.vue";
     padding-right: 0;
     background-color: #1e50a2 !important;
     height: 100vh;
+}
+
+#contents {
+    background-color: whitesmoke;
 }
 </style>
 <script>
