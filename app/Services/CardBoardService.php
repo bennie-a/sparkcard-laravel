@@ -21,8 +21,8 @@ class CardBoardService {
     }
 
     // Statusに一致したカード情報を取得する。
-    public function findByStatus($status) {
-        $pages = $this->repo->findByStatus($status);
+    public function findByStatus($status, $details) {
+        $pages = $this->repo->findByStatus($status, $details);
         $resultList = array();
         if (count($pages) == 0) {
             $error = ['code' => 1000, 'message'=>'not found'];

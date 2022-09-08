@@ -52,7 +52,7 @@ export default {
 .pagenation {
     padding-bottom: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: right;
     list-style-type: none;
 }
 .page-item {

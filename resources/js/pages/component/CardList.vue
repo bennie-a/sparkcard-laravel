@@ -1,4 +1,5 @@
 <template>
+    <pagination></pagination>
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
@@ -27,7 +28,6 @@
             </tr>
         </tbody>
     </table>
-    <pagination></pagination>
 </template>
 <script>
 import ListPagination from "./ListPagination.vue";

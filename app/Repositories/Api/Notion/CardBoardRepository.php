@@ -19,10 +19,19 @@ class CardBoardRepository extends NotionRepository{
     }
 
     // Statusと一致するカード情報を取得する。
-    public function findByStatus($status) {
+    public function findByStatus($status, $details) {
         $filters = new Collection();
         $filter = new Filter("Status", 'select', [Operators::EQUALS => $status]);
         $filters->add($filter);
+        foreach($details as $key => $value) {
+            if ($key == 'expansion') {
+                $repo = new ExpansionRepository();
+                $expId = $repo->findIdByName($value);
+                $expfilter =$this->createEqualFilter("エキスパンション", $expId);
+                $filters->add($expfilter);
+            }
+        }
+
         $notion = self::createNotion();
 
         // ソート順設定
@@ -47,7 +56,6 @@ class CardBoardRepository extends NotionRepository{
         }
         return $pages;
     }
-
 
     public function findByExp($name) {
         $repo = new ExpansionRepository();

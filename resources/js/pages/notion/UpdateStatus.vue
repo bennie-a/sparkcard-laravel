@@ -1,6 +1,6 @@
 <template>
     <message-area></message-area>
-    <div class="ui form">
+    <div class="ui form mt-2">
         <div class="five fields">
             <div class="field">
                 <label for="">ステータス</label>
