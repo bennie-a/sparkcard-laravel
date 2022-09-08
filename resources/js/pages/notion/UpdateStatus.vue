@@ -73,7 +73,6 @@
         </div>
     </div>
     <card-list></card-list>
-
     <now-loading></now-loading>
 </template>
 <style scoped>
@@ -152,16 +151,26 @@ export default {
             );
         },
         async update() {
+            this.$store.dispatch("setLoad", true);
             console.log("Status Update...");
             console.log(this.updateStatus);
             const task = new AxiosTask(this.$store);
             const success = function (response, query) {
                 const result = response.data;
-                console.log(result);
-                console.log(response.status);
             };
-            const fail = function (e, query) {};
-            await task.patch("/notion/card/" + "xxxx", [], success, fail);
+            const fail = function (e, query) {
+                console.error(e);
+            };
+            const card = this.$store.getters.card;
+            await Promise.all(
+                card.map(async (c) => {
+                    let url = "/notion/card/" + c.id;
+                    let query = { status: this.updateStatus };
+                    await task.patch(url, query, success, fail);
+                })
+            );
+            this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
+            this.store.dispatch("setLoad", false);
         },
     },
     watch: {

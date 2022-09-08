@@ -42,7 +42,9 @@ class CardBoardService {
             $card->setId($array['id']);
             $card->setName($array['title']);
             $card->setPrice($price->getContent());
-            $card->setIndex($cardIndex->getContent());
+            if (!is_null($cardIndex)) {
+                $card->setIndex($cardIndex->getContent());
+            }
             $card->setColor($color->getName());
             $card->setStock(($stock->getContent()));
             array_push($resultList, $card);

@@ -16,6 +16,9 @@ export const store = createStore({
         form: {
             itemStatus: ["ロジクラ要登録", "販売保留", "要撮影"],
         },
+        table: {
+            selectedCard: [],
+        },
     },
     mutations: {
         setLoad(state, isLoad) {

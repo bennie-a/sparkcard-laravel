@@ -2,6 +2,7 @@
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
+                <!-- <th></th> -->
                 <th>カード番号</th>
                 <th>カード名</th>
                 <th>枚数</th>
@@ -11,6 +12,13 @@
         </thead>
         <tbody>
             <tr v-for="card in getCards">
+                <!-- <td>
+                    <input
+                        type="checkbox"
+                        v-model="selectedCard"
+                        :value="card.id"
+                    />
+                </td> -->
                 <td>{{ card.index }}</td>
                 <td>{{ card.name }}</td>
                 <td>{{ card.stock }}</td>
@@ -25,6 +33,11 @@
 import ListPagination from "./ListPagination.vue";
 
 export default {
+    data() {
+        return {
+            selectedCard: [],
+        };
+    },
     computed: {
         loading: function () {
             return this.$store.getters.isload;

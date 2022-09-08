@@ -24,11 +24,9 @@ export class AxiosTask {
             .patch(this.getApiUrl(url), query)
             .then((response) => {
                 success(response, query);
-                this.store.dispatch("setLoad", false);
             })
             .catch((e) => {
                 fail(e, query);
-                this.store.dispatch("setLoad", false);
             });
     }
 
