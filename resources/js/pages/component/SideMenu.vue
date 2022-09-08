@@ -15,20 +15,21 @@
             </ul>
         </div>
         <div class="item">
-            <div class="ui small header">商品登録</div>
+            <div class="ui small header">ロジクラ</div>
             <ul>
                 <li>
                     <router-link
-                        to="/about"
+                        to="/logikura/newitem"
                         class="nav-link"
-                        :class="{ active: $route.path === '/about' }"
-                        >リンク</router-link
+                        :class="{ active: $route.path === '/logikura/newitem' }"
+                        ><i class="download icon"></i
+                        >商品登録CSVダウンロード</router-link
                     >
                 </li>
             </ul>
         </div>
         <div class="item">
-            <div class="ui small header">商品登録</div>
+            <div class="ui small header">Notion操作</div>
             <ul>
                 <li>
                     <router-link
@@ -69,6 +70,7 @@ div.item > ul > li > a {
     padding: 1.5em 1em;
     display: block;
     color: white;
+    line-height: 1.6;
 }
 div.item > ul > li > a:hover {
     background: #2766cc;

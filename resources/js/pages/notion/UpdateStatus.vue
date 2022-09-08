@@ -1,11 +1,5 @@
 <template>
     <message-area></message-area>
-    <div class="ui negative message" v-if="error != ''">
-        <div class="header">
-            {{ error }}
-        </div>
-        <p></p>
-    </div>
     <div class="ui form">
         <div class="five fields">
             <div class="field">

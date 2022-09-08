@@ -1,6 +1,6 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import About from "./pages/About.vue";
+import DLItemCSV from "./pages/logikura/DLItemCSV.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -15,7 +15,15 @@ const routes = [
                 "Wisdom Guildからカード情報を取得して、Notionの商品管理ボードに登録します。",
         },
     },
-    { path: "/about", component: About },
+    {
+        path: "/logikura/newitem",
+        component: DLItemCSV,
+        meta: {
+            title: "商品登録CSVダウンロード",
+            description:
+                "Notionの商品管理ボードからロジクラの商品登録用CSVを作成します。",
+        },
+    },
     {
         path: "/notion/update/status",
         component: UpdateStatus,
