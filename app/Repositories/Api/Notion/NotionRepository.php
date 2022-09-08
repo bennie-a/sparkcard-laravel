@@ -17,11 +17,23 @@ class NotionRepository {
         $this->databaseId = $databaseId;
     }
     
+    // 商品管理ボードにカード情報を登録する。
     public function store(Page $page) {
         try {
             $notion = self::createNotion();
             $page = $notion->pages()->createInDatabase($this->databaseId, $page);
             return $page;
+        } catch(NotionException $e) {
+            logger()->error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function update(Page $page) {
+        try {
+            $notion = self::createNotion();
+            $notion->pages()->update($page);
+            logger()->info('更新完了'.$page->getId());
         } catch(NotionException $e) {
             logger()->error($e->getMessage());
             throw $e;
@@ -69,6 +81,13 @@ class NotionRepository {
         $pages = $notion->database($this->databaseId)->offset($startCursor);
         return $pages;
 
+    }
+
+    // idから特定のページを取得する。
+    public function findById($id) {
+        $notion = self::createNotion();
+        $page = $notion->pages()->find($id);
+        return $page;
     }
 
     // Notionオブジェクトを作成する。

@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Notion;
 use App\Repositories\Api\Notion\NotionRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Property;
 use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
 use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Illuminate\Support\Collection;
@@ -28,6 +29,12 @@ class ExpansionRepository extends NotionRepository{
     public function findByAttr(string $attr) {
         $page = $this->findByEquals("略称", $attr);
         return str_replace('-', '', $page->getId());
+    }
+
+    public function findByPage(Property $prop) {
+        $id = $prop->getContent()[0]['id'];
+        $page = $this->findById($id);
+        return $page;
     }
 }
 ?>

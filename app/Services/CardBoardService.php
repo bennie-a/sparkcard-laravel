@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Factory\NotionPageFactory;
 use App\Models\Card;
 use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
@@ -19,6 +20,7 @@ class CardBoardService {
         $this->repo = new CardBoardRepository();
     }
 
+    // Statusに一致したカード情報を取得する。
     public function findByStatus($status) {
         $pages = $this->repo->findByStatus($status);
         $resultList = array();
@@ -26,17 +28,23 @@ class CardBoardService {
             $error = ['code' => 1000, 'message'=>'not found'];
             return $error;
         }
+        $expRepo = new ExpansionRepository();
         foreach($pages as $page) {
             $array = $page->toArray();
             $price = $page->getProperty('価格');
             $cardIndex = $page->getProperty('カード番号');
             $color = $page->getProperty('色');
+            $stock = $page->getProperty('枚数');
+            // $exp = $page->getProperty('エキスパンション');
+            // $expPage = $expRepo->findByPage($exp);
             $card = new NotionCard();
+            // $card->setExpansion($expPage->getTitle());
             $card->setId($array['id']);
             $card->setName($array['title']);
             $card->setPrice($price->getContent());
             $card->setIndex($cardIndex->getContent());
             $card->setColor($color->getName());
+            $card->setStock(($stock->getContent()));
             array_push($resultList, $card);
         }
         return $resultList;
@@ -80,6 +88,16 @@ class CardBoardService {
             logger()->error($e->getMessage());
         }
 
+    }
+
+    public function update($id, $details) {
+        try {
+            $factory = new NotionPageFactory();
+            $page = $factory->create($id, $details);
+            $this->repo->update($page);
+        } catch(NotionException $e) {
+            throw $e;
+        }
     }
 
     public function deleteByExp($name) {

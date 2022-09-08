@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-    <div class="ui segment mt-3">
+    <div class="ui segment mt-3" v-if="$store.getters.cardsLength != 0">
         <h2 class="ui small header">次のステータスに一括変更する</h2>
         <div class="flex">
             <select class="ui dropdown" v-model="updateStatus">

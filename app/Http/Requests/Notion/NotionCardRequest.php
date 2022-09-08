@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Notion;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class NotionCardRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class NotionCardRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,21 @@ class NotionCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'status'=>'required | in:ロジクラ要登録,販売保留'
+            'status'=>'in:ロジクラ要登録,販売保留,要撮影,撮影済み,BASE登録予定'
+        ];
+    }
+
+    protected function failedValidation(Validator $validator) {
+            $res = response()->json([
+                'status' => 400,
+                'errors' => $validator->errors(),
+            ], 400);
+        throw new HttpResponseException($res);
+    }
+
+    public function messages() {
+        return [
+            'status.in' => 'Statusは商品管理ボードのStatusのどれかを入力してください。'
         ];
     }
 }

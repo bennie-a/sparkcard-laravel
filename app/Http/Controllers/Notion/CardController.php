@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Notion\NotionCardRequest;
 use App\Http\Resources\Notion\NotionCardResource;
 use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Services\CardBoardService;
+use Exception;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
@@ -67,9 +69,15 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {   logger()->debug($id);
-        return response("更新完了", Response::HTTP_OK);
+    public function update(NotionCardRequest $request, $id)
+    {
+        try {
+            $details = $request->all();
+            $this->service->update($id, $details);
+            return response("更新完了 ID:".$id, Response::HTTP_OK);
+        } catch(Exception $e) {
+            return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

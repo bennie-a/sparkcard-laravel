@@ -20,6 +20,10 @@ class NotionCard extends Model
 
     private $color;
 
+    private int $stock;
+
+    private string $expansion;
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -61,4 +65,19 @@ class NotionCard extends Model
         $this->color = $color;
     }
 
+    public function getStock():int {
+        return $this->stock;
+    }
+
+    public function setStock(int $stock) {
+        $this->stock = $stock;
+    }
+
+    public function setExpansion(string $expansion) {
+        $this->expansion = $expansion;
+    }
+
+    public function getExpansion() {
+        return $this->expansion;
+    }
 }

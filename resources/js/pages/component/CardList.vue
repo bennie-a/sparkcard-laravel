@@ -4,6 +4,7 @@
             <tr>
                 <th>カード番号</th>
                 <th>カード名</th>
+                <th>枚数</th>
                 <th>色</th>
                 <th>価格</th>
             </tr>
@@ -12,6 +13,7 @@
             <tr v-for="card in getCards">
                 <td>{{ card.index }}</td>
                 <td>{{ card.name }}</td>
+                <td>{{ card.stock }}</td>
                 <td>{{ card.color }}</td>
                 <td>{{ card.price }}円</td>
             </tr>
