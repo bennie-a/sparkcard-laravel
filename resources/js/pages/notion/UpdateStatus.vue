@@ -149,10 +149,11 @@ export default {
             console.log("Status Update...");
             console.log(this.updateStatus);
             const task = new AxiosTask(this.$store);
-            const success = function (response, query) {
+            const success = function (response, store, query) {
                 const result = response.data;
+                store.dispatch("setSuccessMessage", "更新が完了しました。");
             };
-            const fail = function (e, query) {
+            const fail = function (e, store, query) {
                 console.error(e);
             };
             const card = this.$store.getters.card;
@@ -163,8 +164,6 @@ export default {
                     await task.patch(url, query, success, fail);
                 })
             );
-            this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
-            this.store.dispatch("setLoad", false);
         },
     },
     watch: {

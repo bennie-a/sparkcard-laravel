@@ -16,7 +16,12 @@ export const store = createStore({
             error: "",
         },
         form: {
-            itemStatus: ["ロジクラ要登録", "販売保留", "要撮影"],
+            itemStatus: [
+                "ロジクラ要登録",
+                "販売保留",
+                "要撮影",
+                "BASE登録予定",
+            ],
         },
         table: {
             selectedCard: [],

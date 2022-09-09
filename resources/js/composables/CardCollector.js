@@ -24,13 +24,23 @@ export const toItemName = (card) => {
 };
 
 // カードの表面の画像名に変換する。
-export const toSurfaceName = (enName) => {
-    return toImageName(enName) + "-min.jpg";
+export const toSurfaceName = (name) => {
+    return name + "-min.jpg";
 };
 
 // カードの裏面の画像名に変換する。
-export const toRevName = (enName) => {
-    return toImageName(enName) + "-rev-min.jpg";
+export const toRevName = (name) => {
+    return name + "-rev-min.jpg";
+};
+
+export const createTemplate = (card) => {
+    let template =
+        "■商品内容\n商品名：「<商品名>」\n" +
+        "エキスパンション：団結のドミナリア(DMU)\n" +
+        "言語：日本語\n\n■状態\n" +
+        "状態は【NM】です。パック開封直後にスリーブに入れました。";
+    template = template.replace("<商品名>", card.name);
+    return template;
 };
 
 const toImageName = (enName) => {
