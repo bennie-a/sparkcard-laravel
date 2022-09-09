@@ -11,6 +11,7 @@ use Exception;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,11 @@ class CardController extends Controller
         $status = $request->input('status');
         $details = $request->all();
         $results = $this->service->findByStatus($status, $details);
+        if (array_key_exists('status', $results)) {
+            logger()->info('Status:'.$results['status']);
+            $res = response()->json($results, $results['status']);
+            throw new HttpResponseException($res);
+        }
         logger()->info(count($results).'件取得しました');
         $json = NotionCardResource::collection($results);
         return response()->json($json, Response::HTTP_OK);

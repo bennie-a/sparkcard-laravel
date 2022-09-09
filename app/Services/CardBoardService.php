@@ -25,7 +25,7 @@ class CardBoardService {
         $pages = $this->repo->findByStatus($status, $details);
         $resultList = array();
         if (count($pages) == 0) {
-            $error = ['code' => 1000, 'message'=>'not found'];
+            $error = ['status' => 404, 'message'=>'件数は0件です。'];
             return $error;
         }
         $expRepo = new ExpansionRepository();

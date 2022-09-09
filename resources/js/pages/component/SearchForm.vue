@@ -31,19 +31,20 @@ export default {
             const query = {
                 expansion: this.expansion,
             };
-            const success = function (response, $store, query) {
+            const success = function (response, store, query) {
                 let results = response.data;
                 console.log("Card Get Count " + results.length);
-                $store.dispatch("setCard", results);
-                $store.dispatch(
+                store.dispatch("setCard", results);
+                store.dispatch(
                     "setSuccessMessage",
                     results.length + "件取得しました。"
                 );
             };
-            const fail = function (e, $store, query) {
+            const fail = function (e, store, query) {
                 const res = e.response;
-                this.error = res.code;
                 console.log(res.status);
+                console.log(res.data);
+                store.dispatch("message/error", res.data.message);
             };
             const status = this.$store.getters["search/status"];
             await task.get(

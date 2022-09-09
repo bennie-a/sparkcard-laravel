@@ -1,6 +1,6 @@
 // 検索フォームのクラス
 const getDefaultState = () => ({
-    status: "要撮影",
+    status: "",
 });
 
 export default {

@@ -1,8 +1,9 @@
 import { createStore } from "vuex";
 import search from "./vuex/searchForm";
+import message from "./vuex/messageForm";
 
 export const store = createStore({
-    modules: { search },
+    modules: { search, message },
     state: {
         isLoad: false,
         cards: [],
@@ -40,6 +41,9 @@ export const store = createStore({
         },
         setSuccessMessage(state, msg) {
             state.msg.success = msg;
+        },
+        error(state, msg) {
+            state.msg.error = msg;
         },
         clearMessage(state) {
             state.msg.success = "";

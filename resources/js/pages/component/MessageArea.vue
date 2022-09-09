@@ -5,14 +5,20 @@
                 {{ $store.state.msg.success }}
             </div>
         </div>
-        <div class="ui negative message" v-if="$store.state.msg.error != ''">
+        <div
+            class="ui negative message"
+            v-if="this.$store.getters['message/error'] != ''"
+        >
             <div class="header">
-                {{ error }}
+                {{ this.$store.getters["message/error"] }}
             </div>
-            <p></p>
         </div>
     </div>
 </template>
 <script>
-export default {};
+export default {
+    mounted: function () {
+        this.$store.dispatch("message/clear");
+    },
+};
 </script>

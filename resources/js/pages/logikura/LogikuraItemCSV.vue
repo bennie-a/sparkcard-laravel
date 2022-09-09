@@ -2,10 +2,6 @@
     <message-area></message-area>
     <search-form></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <div class="ui toggle checkbox mr-2">
-            <input type="checkbox" name="public" v-model="isPrinting" />
-            <label for="name">画像に「Now Printing」を使用する</label>
-        </div>
         <button class="ui violet button" @click="downloadLogikura">
             ロジクラ用CSVをダウンロードする
         </button>
@@ -13,13 +9,7 @@
     <card-list></card-list>
     <now-loading></now-loading>
 </template>
-<style scoped>
-div.flex {
-    display: flex;
-    align-items: center;
-    column-gap: 1rem;
-}
-</style>
+
 <script>
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";

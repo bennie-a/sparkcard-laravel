@@ -13,9 +13,8 @@ export class AxiosTask {
                 this.store.dispatch("setLoad", false);
             })
             .catch((e) => {
-                console.error(e);
                 fail(e, this.store, query);
-                this.$store.dispatch("setLoad", false);
+                this.store.dispatch("setLoad", false);
             });
     }
     // PATCHメソッドでAPIを呼び出す

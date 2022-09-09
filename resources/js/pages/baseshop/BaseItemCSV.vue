@@ -13,13 +13,6 @@
     <card-list></card-list>
     <now-loading></now-loading>
 </template>
-<style scoped>
-div.flex {
-    display: flex;
-    align-items: center;
-    column-gap: 1rem;
-}
-</style>
 <script>
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
@@ -33,7 +26,7 @@ export default {
         this.$store.dispatch("clearMessage");
         console.log("csv mounted");
 
-        this.$store.dispatch("search/status", "ロジクラ要登録");
+        this.$store.dispatch("search/status", "BASE登録予定");
     },
 
     methods: {
