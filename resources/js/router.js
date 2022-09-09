@@ -1,8 +1,8 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import DLItemCSV from "./pages/logikura/DLItemCSV.vue";
+import LogikuraItemCSV from "./pages/logikura/LogikuraItemCSV.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
-
+import BaseItemCSV from "./pages/baseshop/BaseItemCSV.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -17,11 +17,20 @@ const routes = [
     },
     {
         path: "/logikura/newitem",
-        component: DLItemCSV,
+        component: LogikuraItemCSV,
         meta: {
             title: "商品登録CSVダウンロード",
             description:
                 "Notionの商品管理ボードからロジクラの商品登録用CSVを作成します。",
+        },
+    },
+    {
+        path: "/base/newitem",
+        component: BaseItemCSV,
+        meta: {
+            title: "BASEショップ用CSVダウンロード",
+            description:
+                "Notionの商品管理ボードからBASEの商品登録用CSVを作成します。",
         },
     },
     {

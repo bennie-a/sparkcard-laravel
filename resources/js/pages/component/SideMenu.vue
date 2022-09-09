@@ -29,6 +29,20 @@
             </ul>
         </div>
         <div class="item">
+            <div class="ui small header">BASEショップ</div>
+            <ul>
+                <li>
+                    <router-link
+                        to="/base/newitem"
+                        class="nav-link"
+                        :class="{ active: $route.path === '/base/newitem' }"
+                        ><i class="download icon"></i
+                        >BASE用CSVダウンロード</router-link
+                    >
+                </li>
+            </ul>
+        </div>
+        <div class="item">
             <div class="ui small header">Notion操作</div>
             <ul>
                 <li>
