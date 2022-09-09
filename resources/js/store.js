@@ -1,7 +1,8 @@
-import { functionsIn } from "lodash";
 import { createStore } from "vuex";
+import search from "./vuex/searchForm";
 
 export const store = createStore({
+    modules: { search },
     state: {
         isLoad: false,
         cards: [],
