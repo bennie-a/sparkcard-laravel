@@ -26,6 +26,12 @@ class NotionCard extends Model
 
     private string $imageUrl;
 
+    private string $enname;
+
+    private bool $isFoil;
+
+    private string $lang;
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -89,5 +95,29 @@ class NotionCard extends Model
 
     public function getImageUrl() {
         return $this->imageUrl;
+    }
+
+    public function setEnname($enname) {
+        $this->enname = $enname;
+    }
+
+    public function getEnname() {
+        return $this->enname;
+    }
+
+    public function setFoil($isFoil) {
+        $this->isFoil = $isFoil;
+    }
+
+    public function isFoil() {
+        return $this->isFoil;
+    }
+
+    public function setLang($lang) {
+        $this->lang = $lang;
+    }
+
+    public function getLang() {
+        return $this->lang;
     }
 }

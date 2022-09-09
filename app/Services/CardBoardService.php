@@ -36,6 +36,7 @@ class CardBoardService {
             $color = $page->getProperty('色');
             $stock = $page->getProperty('枚数');
             $url = $page->getProperty('画像URL');
+            $lang = $page->getProperty('言語');
             // $expPage = $expRepo->findByPage($exp);
             $card = new NotionCard();
             // $card->setExpansion($expPage->getTitle());
@@ -48,8 +49,15 @@ class CardBoardService {
             if (!is_null($url)) {
                 $card->setImageUrl($url->getContent());
             }
+            $card->setLang($lang->getName());
             $card->setColor($color->getName());
             $card->setStock(($stock->getContent()));
+
+            // $enname = $page->getProperty('英名');
+            // logger()->debug();
+            // $card->setEnname($enname->getContent());
+            $isFoil = $page->getProperty('Foil');
+            $card->setFoil($isFoil->getContent());
             array_push($resultList, $card);
         }
         return $resultList;
