@@ -14,6 +14,9 @@ class NotionCardResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (is_null($this->getImageUrl())) {
+            $this->setImageUrl("none");
+        }
         return [
                 'id'=>$this->getId(),
                 'index' => $this->getIndex(),

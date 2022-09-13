@@ -151,7 +151,6 @@ export default {
             const task = new AxiosTask(this.$store);
             const success = function (response, store, query) {
                 const result = response.data;
-                store.dispatch("setSuccessMessage", "更新が完了しました。");
             };
             const fail = function (e, store, query) {
                 console.error(e);
@@ -164,6 +163,7 @@ export default {
                     await task.patch(url, query, success, fail);
                 })
             );
+            this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
         },
     },
     watch: {

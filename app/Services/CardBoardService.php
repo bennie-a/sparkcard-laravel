@@ -14,6 +14,8 @@ use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CardBoardService {
     
     public function __construct() {
@@ -47,6 +49,7 @@ class CardBoardService {
                 $card->setIndex($cardIndex->getContent());
             }
             if (!is_null($url)) {
+                logger()->debug($card->getName());
                 $card->setImageUrl($url->getContent());
             }
             $card->setLang($lang->getName());

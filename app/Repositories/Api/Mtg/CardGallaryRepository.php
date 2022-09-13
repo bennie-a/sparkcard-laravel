@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Mtg;
 use App\Factory\GuzzleClientFactory;
 use App\Services\WisdomGuildRepository;
+use ErrorException;
 
 // MTG公式のカードギャラリークラス
 class CardGallaryRepository extends WisdomGuildRepository{
@@ -25,13 +26,18 @@ class CardGallaryRepository extends WisdomGuildRepository{
 
     // 指定したカードの色を取得する。
     public function getCardColor($name) {
-        $nameQuery = "//p[contains(text(), '".$name."')]";
-        $colorNode = $this->xpath->query($nameQuery."/../../h2/span");
-        if ($colorNode == null) {
-            logger()->error('Not Found Color:'.$name);
+        try {
+            $nameQuery = "//p[contains(text(), '".$name."')]";
+            $colorNode = $this->xpath->query($nameQuery."/../../h2/span");
+            if ($colorNode == null) {
+                logger()->error('Not Found Color:'.$name);
+                return "";
+            } else {
+                return $colorNode->item(0)->nodeValue;
+            }
+        } catch(ErrorException $e) {
+            logger()->error('Not Found nodeValue:'.$name);
             return "";
-        } else {
-            return $colorNode->item(0)->nodeValue;
         }
     }
 
