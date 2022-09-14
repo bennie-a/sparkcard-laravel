@@ -3,7 +3,7 @@
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
-                <!-- <th></th> -->
+                <th v-show="$route.path === '/logikura/newitem'">バーコード</th>
                 <th>カード番号</th>
                 <th>カード名</th>
                 <th>枚数</th>
@@ -21,6 +21,9 @@
                         :value="card.id"
                     />
                 </td> -->
+                <td v-show="$route.path === '/logikura/newitem'">
+                    {{ card.barcode }}
+                </td>
                 <td>{{ card.index }}</td>
                 <td>{{ card.name }}</td>
                 <td>{{ card.stock }}</td>

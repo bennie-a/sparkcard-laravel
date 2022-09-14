@@ -21,12 +21,12 @@
         </div>
     </div>
 
-    <button class="ui pink button" @click="toggle">
-        在庫ファイルを作成する
-    </button>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button class="ui violet button" @click="downloadLogikura">
             商品登録用ファイルを作成する
+        </button>
+        <button class="ui pink button" @click="toggle">
+            在庫ファイルを作成する
         </button>
     </div>
     <card-list></card-list>
@@ -43,6 +43,11 @@ import SearchForm from "../component/SearchForm.vue";
 import Encoding from "encoding-japanese";
 import fs from "fs";
 export default {
+    data() {
+        return {
+            barcodeMap: {},
+        };
+    },
     mounted: function () {
         this.$store.dispatch("search/status", "ロジクラ要登録");
     },
@@ -78,9 +83,13 @@ export default {
                 header: true,
                 complete: function (results) {
                     let csvdata = results.data;
-                    console.log(csvdata);
-                },
+                    // const barcodeMap = {};
+                    csvdata.map((line) => {
+                        this.barcodeMap[line["商品名"]] = line["バーコード"];
+                    });
+                }.bind(this),
             });
+            // console.log(this.barcodeMap);
 
             $(".mini.modal").modal("hide");
         },
@@ -117,6 +126,20 @@ export default {
         "card-list": CardList,
         "message-area": MessageArea,
         "search-form": SearchForm,
+    },
+    watch: {
+        barcodeMap: {
+            handler: function () {
+                const card = this.$store.getters.card;
+                card.map((c) => {
+                    let barcode = this.barcodeMap[toItemName(c)];
+                    if (barcode !== undefined) {
+                        c["barcode"] = barcode;
+                    }
+                });
+            },
+            deep: true,
+        },
     },
 };
 </script>
