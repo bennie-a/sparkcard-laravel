@@ -42,10 +42,6 @@ import { toItemName } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
 export default {
     mounted: function () {
-        this.$store.dispatch("clearCards");
-        this.$store.dispatch("clearMessage");
-        console.log("csv mounted");
-
         this.$store.dispatch("search/status", "ロジクラ要登録");
     },
 
@@ -53,8 +49,21 @@ export default {
         toggle: function () {
             $(".mini.modal").modal("show");
         },
-        onFileUpload: function () {
-            console.log("!!!");
+        onFileUpload: function (e) {
+            this.$store.dispatch("message/clear");
+            const file = e.target.files[0];
+            if (file == undefined) {
+                return;
+            }
+            let fileType = file.name.split(".").pop();
+            if (fileType !== "csv") {
+                this.$store.dispatch(
+                    "message/error",
+                    "商品ファイルはCSVファイルを選択してください。"
+                );
+            }
+
+            console.log(file.name);
             $(".mini.modal").modal("hide");
         },
         downloadLogikura: function () {

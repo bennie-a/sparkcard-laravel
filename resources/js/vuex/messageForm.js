@@ -15,7 +15,8 @@ export default {
             state.success = success;
         },
         clear(state) {
-            state = getDefaultState();
+            state.error = "";
+            state.success = "";
         },
     },
     getters: {
