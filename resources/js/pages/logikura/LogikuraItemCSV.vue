@@ -1,9 +1,32 @@
 <template>
     <message-area></message-area>
     <search-form></search-form>
+    <div class="ui mini modal">
+        <i class="close icon"></i>
+        <div class="header">商品ファイルをアップロード</div>
+        <div class="content">
+            <input
+                type="file"
+                class="inputfile"
+                id="embedpollfileinput"
+                @change="onFileUpload"
+            />
+            <label
+                for="embedpollfileinput"
+                class="ui big pink button uploadbutton"
+            >
+                <i class="ui upload icon"></i>
+                商品ファイル読み込み
+            </label>
+        </div>
+    </div>
+
+    <button class="ui pink button" @click="toggle">
+        在庫ファイルを作成する
+    </button>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button class="ui violet button" @click="downloadLogikura">
-            ロジクラ用CSVをダウンロードする
+            商品登録用ファイルを作成する
         </button>
     </div>
     <card-list></card-list>
@@ -27,6 +50,13 @@ export default {
     },
 
     methods: {
+        toggle: function () {
+            $(".mini.modal").modal("show");
+        },
+        onFileUpload: function () {
+            console.log("!!!");
+            $(".mini.modal").modal("hide");
+        },
         downloadLogikura: function () {
             this.$store.dispatch("setLoad", true);
             let header =
@@ -63,3 +93,18 @@ export default {
     },
 };
 </script>
+<style scoped>
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+label.uploadbutton {
+    display: block;
+    margin: 0 auto;
+}
+</style>

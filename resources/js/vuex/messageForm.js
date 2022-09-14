@@ -11,6 +11,9 @@ export default {
         error(state, error) {
             state.error = error;
         },
+        success(state, success) {
+            state.success = success;
+        },
         clear(state) {
             state = getDefaultState();
         },
