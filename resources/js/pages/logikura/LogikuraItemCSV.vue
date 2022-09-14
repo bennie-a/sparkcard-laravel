@@ -40,6 +40,8 @@ import MessageArea from "../component/MessageArea.vue";
 import { writeCsv } from "../../composables/CSVWriter";
 import { toItemName } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
+import Encoding from "encoding-japanese";
+import fs from "fs";
 export default {
     mounted: function () {
         this.$store.dispatch("search/status", "ロジクラ要登録");
@@ -62,8 +64,24 @@ export default {
                     "商品ファイルはCSVファイルを選択してください。"
                 );
             }
+            // let reader = new FileReader();
+            // reader.readAsText(file);
+            // reader.onload = (e) => {
+            //     let encoding = Encoding.detect(e.target.result);
+            //     let unicodestring = Encoding.convert(e.target.result, {
+            //         to: "UTF8",
+            //         from: "ASCII",
+            //         type: "string",
+            //     });
+            // };
+            this.$papa.parse(file, {
+                header: true,
+                complete: function (results) {
+                    let csvdata = results.data;
+                    console.log(csvdata);
+                },
+            });
 
-            console.log(file.name);
             $(".mini.modal").modal("hide");
         },
         downloadLogikura: function () {
