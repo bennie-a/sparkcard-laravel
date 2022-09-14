@@ -1,7 +1,7 @@
 <template>
     <message-area></message-area>
     <search-form></search-form>
-    <div class="ui mini modal">
+    <div id="upload" class="ui mini modal">
         <i class="close icon"></i>
         <div class="header">商品ファイルをアップロード</div>
         <div class="content">
@@ -18,6 +18,18 @@
                 <i class="ui upload icon"></i>
                 商品ファイル読み込み
             </label>
+        </div>
+    </div>
+    <div id="download" class="ui mini modal">
+        <i class="close icon"></i>
+        <div class="header">在庫ファイルをダウンロードしますか?</div>
+        <div class="content text-center">
+            <button class="ui primary button" @click="downloadStockFile">
+                OK
+            </button>
+            <button class="ui button" @click="downloadCancel">
+                キャンセル
+            </button>
         </div>
     </div>
 
@@ -40,8 +52,6 @@ import MessageArea from "../component/MessageArea.vue";
 import { writeCsv } from "../../composables/CSVWriter";
 import { toItemName } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
-import Encoding from "encoding-japanese";
-import fs from "fs";
 export default {
     data() {
         return {
@@ -51,10 +61,14 @@ export default {
     mounted: function () {
         this.$store.dispatch("search/status", "ロジクラ要登録");
     },
-
+    computed: {
+        canStock() {
+            return Object.keys(this.barcodeMap).length > 0;
+        },
+    },
     methods: {
         toggle: function () {
-            $(".mini.modal").modal("show");
+            $("#upload").modal("show");
         },
         onFileUpload: function (e) {
             this.$store.dispatch("message/clear");
@@ -89,9 +103,6 @@ export default {
                     });
                 }.bind(this),
             });
-            // console.log(this.barcodeMap);
-
-            $(".mini.modal").modal("hide");
         },
         downloadLogikura: function () {
             this.$store.dispatch("setLoad", true);
@@ -120,6 +131,27 @@ export default {
 
             this.$store.dispatch("setLoad", false);
         },
+        downloadCancel: function () {
+            $("#download").modal("hide");
+        },
+        downloadStockFile: function () {
+            const card = this.$store.getters.card.filter((c) => {
+                if (c.barcode !== undefined && c.stock > 0) {
+                    return c;
+                }
+            });
+            let header = "バーコード,在庫数\n";
+            let pushfn = (array, c, index) => {
+                array.push(c.barcode);
+                array.push(c.stock);
+            };
+            writeCsv(header, card, "logikura_stock", pushfn);
+            this.$store.dispatch(
+                "setSuccessMessage",
+                "在庫ファイルを作成しました。"
+            );
+            this.downloadCancel();
+        },
     },
     components: {
         "now-loading": NowLoading,
@@ -137,6 +169,8 @@ export default {
                         c["barcode"] = barcode;
                     }
                 });
+                $("#upload").modal("hide");
+                $("#download").modal("show");
             },
             deep: true,
         },
