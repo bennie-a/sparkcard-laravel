@@ -39,5 +39,18 @@ import SideMenu from "../pages/component/SideMenu.vue";
 }
 </style>
 <script>
-export default {};
+export default {
+    mounted: function () {
+        this.$store.dispatch("clearCards");
+        this.$store.dispatch("clearMessage");
+        console.log("mounted");
+    },
+    watch: {
+        $route(to, from) {
+            this.$store.dispatch("clearCards");
+            this.$store.dispatch("clearMessage");
+            this.$store.dispatch("message/clear");
+        },
+    },
+};
 </script>

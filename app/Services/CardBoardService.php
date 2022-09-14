@@ -53,8 +53,16 @@ class CardBoardService {
                 $card->setImageUrl($url->getContent());
             }
             $card->setLang($lang->getName());
-            $card->setColor($color->getName());
-            $card->setStock(($stock->getContent()));
+            if (!is_null($color)) {
+                $card->setColor($color->getName());
+            } else {
+                $card->setColor("不明");
+            }
+            if (!is_null($stock)) {
+                $card->setStock($stock->getContent());
+            } else {
+                $card->setStock("0");
+            }
 
             // $enname = $page->getProperty('英名');
             // logger()->debug();

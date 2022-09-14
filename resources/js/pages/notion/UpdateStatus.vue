@@ -91,11 +91,6 @@ export default {
             error: "",
         };
     },
-    mounted: function () {
-        this.$store.dispatch("clearCards");
-        this.$store.dispatch("clearMessage");
-        console.log("update status mounted");
-    },
 
     methods: {
         async search() {

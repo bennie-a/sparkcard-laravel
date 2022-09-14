@@ -36,10 +36,6 @@ export default {
         };
     },
     mounted: function () {
-        this.$store.dispatch("clearCards");
-        this.$store.dispatch("clearMessage");
-        console.log("csv mounted");
-
         this.$store.dispatch("search/status", "BASE登録予定");
     },
 

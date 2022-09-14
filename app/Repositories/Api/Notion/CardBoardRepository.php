@@ -24,7 +24,6 @@ class CardBoardRepository extends NotionRepository{
         $filters = new Collection();
         $filter = new Filter("Status", 'select', [Operators::EQUALS => $status]);
         $filters->add($filter);
-
         $notion = self::createNotion();
 
         // ソート順設定
