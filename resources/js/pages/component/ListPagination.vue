@@ -7,10 +7,10 @@
         :click-handler="clickCallback"
         :prev-text="'Prev'"
         :next-text="'Next'"
-        :prev-class="'page-item'"
-        :next-class="'page-item'"
-        :container-class="'pagenation'"
-        :page-class="'page-item'"
+        :prev-class="'item'"
+        :next-class="'item'"
+        :container-class="'ui right floated pagination menu'"
+        :page-class="'item'"
         v-if="length != 0"
     >
     </paginate>
@@ -49,27 +49,7 @@ export default {
 </script>
 <style scoped>
 /* Write your own CSS for pagination */
-.pagenation {
-    padding-bottom: 10px;
-    display: flex;
-    justify-content: right;
-    list-style-type: none;
-}
-.page-item {
-    border: 1px solid #ccc;
-    cursor: pointer;
-    padding: 0.6em;
-    background-color: #fff;
-}
-.page-item > a {
-    display: inline-block;
-}
-
-li.page-item.active {
-    background-color: #2766cc;
-}
-
-li.page-item.active > a {
-    color: white;
+.pagination.menu {
+    padding-left: 0;
 }
 </style>
