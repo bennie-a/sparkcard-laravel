@@ -25,7 +25,14 @@
                     {{ card.barcode }}
                 </td>
                 <td>{{ card.index }}</td>
-                <td>{{ card.name }}</td>
+                <td>
+                    {{ card.name
+                    }}<label
+                        class="ui horizontal teal label ml-1"
+                        v-show="card.isFoil"
+                        >Foil</label
+                    >
+                </td>
                 <td>{{ card.stock }}</td>
                 <td>{{ card.color }}</td>
                 <td>{{ card.lang }}</td>

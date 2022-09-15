@@ -1,9 +1,7 @@
 <script setup>
-import TheHeader from "../pages/component/TheHeader.vue";
 import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
-    <TheHeader></TheHeader>
     <div id="contents" class="ui grid padded">
         <nav class="three wide column blue">
             <SideMenu></SideMenu>
@@ -26,12 +24,13 @@ import SideMenu from "../pages/component/SideMenu.vue";
     height: 100%;
     min-height: 100%;
 }
-.ui.grid > .blue.column {
+.ui.grid .blue.column {
     margin-right: 3em;
     padding-left: 0;
     padding-right: 0;
     background-color: #1e50a2 !important;
     height: 100vh;
+    padding-top: 0;
 }
 
 #contents {
