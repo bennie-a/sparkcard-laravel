@@ -38,8 +38,11 @@ export default {
                 await Promise.all(
                     results.map(async (r) => {
                         const doc = await storage.findById(r.expansion);
-                        r["expname"] = doc.name;
-                        r["attr"] = doc.attr;
+                        let exp = {};
+                        exp["name"] = doc.name;
+                        exp["attr"] = doc.attr;
+                        exp["orderId"] = doc.order_id;
+                        r["exp"] = exp;
                     })
                 );
                 console.log("Card Get Count " + results.length);

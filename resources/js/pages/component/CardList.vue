@@ -5,13 +5,13 @@
                 <th class="one wide"></th>
                 <th v-show="$route.path === '/logikura/newitem'">バーコード</th>
                 <th v-show="$route.path === '/base/newitem'">商品ID</th>
-                <th class="two wide">カード番号</th>
-                <th class="three wide">カード名</th>
+                <th>カード番号</th>
+                <th>カード名</th>
                 <th>エキスパンション</th>
-                <th>枚数</th>
-                <th>色</th>
-                <th>言語</th>
-                <th>価格</th>
+                <th class="one wide">枚数</th>
+                <th class="one wide">色</th>
+                <th class="one wide">言語</th>
+                <th class="one wide">価格</th>
             </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
                         >Foil</label
                     >
                 </td>
-                <td>{{ card.expname }}</td>
+                <td>{{ card.exp.name }}</td>
                 <td>{{ card.stock }}</td>
                 <td>{{ card.color }}</td>
                 <td>{{ card.lang }}</td>
@@ -48,7 +48,7 @@
         </tbody>
         <tfoot v-if="this.$store.getters.cardsLength != 0">
             <tr>
-                <th colspan="8">
+                <th colspan="9">
                     <pagination></pagination>
                 </th>
             </tr>

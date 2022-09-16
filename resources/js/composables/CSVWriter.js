@@ -14,7 +14,7 @@ export const toCsv = (lines) => {
 };
 
 // CSVファイルを出力する。
-const write = (contents, filename) => {
+export const write = (contents, filename) => {
     let blob = new Blob([contents], { type: "text/csv" });
     let link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);

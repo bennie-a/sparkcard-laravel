@@ -25,7 +25,7 @@
         <i class="close icon"></i>
         <div class="header">在庫ファイルをダウンロードしますか?</div>
         <div class="content text-center">
-            <button class="ui primary button" @click="">OK</button>
+            <button class="ui primary button" @click="download">OK</button>
             <button class="ui button" @click="downloadCancel">
                 キャンセル
             </button>
@@ -50,7 +50,7 @@ label.uploadbutton {
 
 <script>
 export default {
-    emits: ["upload"],
+    emits: ["upload", "download"],
     methods: {
         toggle: function () {
             $("#upload").modal("show");
@@ -68,9 +68,18 @@ export default {
                     "商品ファイルはCSVファイルを選択してください。"
                 );
             }
+
             this.$emit("upload", file);
             $("#upload").modal("hide");
             $("#download").modal("show");
+        },
+        download: function () {
+            this.$emit("download");
+            this.downloadCancel();
+            this.$store.dispatch(
+                "setSuccessMessage",
+                "CSVのダウンロードが完了しました。"
+            );
         },
         downloadCancel: function () {
             $("#download").modal("hide");

@@ -16,7 +16,7 @@ export const toItemName = (card) => {
         return;
     }
     // エキスパンション略称
-    let attr = "【DMU】";
+    let attr = `【${card.exp.attr}】`;
     let foil = card.isFoil ? "【Foil】" : "";
     let name =
         langFuncs[card.lang](card.name, card.enName) + "[" + card.color + "]";
@@ -30,7 +30,7 @@ export const toSurfaceName = (name) => {
 
 // カードの裏面の画像名に変換する。
 export const toRevName = (name) => {
-    return name + "-rev-min.jpg";
+    return name + "裏-min.jpg";
 };
 
 export const createTemplate = (card) => {
