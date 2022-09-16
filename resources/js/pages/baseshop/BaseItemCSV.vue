@@ -11,10 +11,10 @@
             <label>BASEに公開する</label>
         </div>
         <button class="ui violet button" @click="downloadItem">
-            商品登録用CSVを作成する
+            一括登録・更新用CSVを作成する
         </button>
         <file-upload @upload="csvUpload" @download="updateDownload"
-            >更新用CSVを作成する</file-upload
+            >商品一覧をアップロード</file-upload
         >
     </div>
     <card-list></card-list>
@@ -29,6 +29,7 @@ import {
     toItemName,
     toSurfaceName,
     toRevName,
+    toNoLabelName,
 } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
@@ -45,35 +46,6 @@ export default {
     },
 
     methods: {
-        downloadItem: function () {
-            this.$store.dispatch("setLoad", true);
-            let header =
-                "商品名,説明,価格,税率,在庫数,公開状態,表示順,種類在庫数,画像1,画像2\n";
-            let pushFn = (array, c, index) => {
-                array.push(toItemName(c));
-                array.push("");
-                array.push(c.price);
-                array.push("1");
-                array.push(c.stock);
-                array.push(this.isPublic ? 1 : 0);
-                array.push(index + 1);
-                array.push(c.stock);
-                if (this.isPrinting) {
-                    array.push("Now-Printing.jpg");
-                } else {
-                    array.push(toSurfaceName(c.name));
-                    array.push(toRevName(c.name));
-                }
-            };
-
-            writeCsv(header, this.$store.getters.card, "base-item.csv", pushFn);
-            this.$store.dispatch(
-                "setSuccessMessage",
-                "CSVのダウンロードが完了しました。"
-            );
-
-            this.$store.dispatch("setLoad", false);
-        },
         csvUpload: function (file) {
             this.$papa.parse(file, {
                 header: true,
@@ -93,7 +65,9 @@ export default {
             });
             console.log(file.name);
         },
-        updateDownload: function () {
+        downloadItem: function () {
+            this.$store.dispatch("setLoad", true);
+
             const fields = [
                 "商品ID",
                 "商品名",
@@ -121,14 +95,14 @@ export default {
                     "",
                     "",
                     c.price,
-                    "10",
+                    "1",
                     c.stock,
                     this.isPublic ? 1 : 0,
                     showIndex,
                     "",
-                    toSurfaceName(c.name),
-                    toRevName(c.name),
-                    "",
+                    toSurfaceName(c),
+                    toNoLabelName(c),
+                    toRevName(c),
                     "",
                 ];
                 return json;
@@ -138,7 +112,13 @@ export default {
                 fields: fields,
                 data: JSON.stringify(jsonArray),
             });
-            write(csv, "update-base-item.csv");
+            write(csv, "base-item.csv");
+            this.$store.dispatch(
+                "setSuccessMessage",
+                "CSVのダウンロードが完了しました。"
+            );
+
+            this.$store.dispatch("setLoad", false);
         },
     },
     components: {

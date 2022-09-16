@@ -1,36 +1,14 @@
 <template>
-    <button class="ui pink button" @click="toggle">
+    <input
+        type="file"
+        class="inputfile"
+        id="embedpollfileinput"
+        @change="onFileChange"
+    />
+    <label for="embedpollfileinput" class="ui pink button uploadbutton">
+        <i class="ui upload icon"></i>
         <slot></slot>
-    </button>
-    <div id="upload" class="ui mini modal">
-        <i class="close icon"></i>
-        <div class="header">ファイルをアップロード</div>
-        <div class="content">
-            <input
-                type="file"
-                class="inputfile"
-                id="embedpollfileinput"
-                @change="onFileChange"
-            />
-            <label
-                for="embedpollfileinput"
-                class="ui big pink button uploadbutton"
-            >
-                <i class="ui upload icon"></i>
-                商品ファイル読み込み
-            </label>
-        </div>
-    </div>
-    <div id="download" class="ui mini modal">
-        <i class="close icon"></i>
-        <div class="header">在庫ファイルをダウンロードしますか?</div>
-        <div class="content text-center">
-            <button class="ui primary button" @click="download">OK</button>
-            <button class="ui button" @click="downloadCancel">
-                キャンセル
-            </button>
-        </div>
-    </div>
+    </label>
 </template>
 <style scoped>
 .inputfile {
@@ -43,14 +21,13 @@
 }
 
 label.uploadbutton {
-    display: block;
     margin: 0 auto;
 }
 </style>
 
 <script>
 export default {
-    emits: ["upload", "download"],
+    emits: ["upload"],
     methods: {
         toggle: function () {
             $("#upload").modal("show");
@@ -70,8 +47,6 @@ export default {
             }
 
             this.$emit("upload", file);
-            $("#upload").modal("hide");
-            $("#download").modal("show");
         },
         download: function () {
             this.$emit("download");

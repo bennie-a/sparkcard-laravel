@@ -22,6 +22,7 @@ export const store = createStore({
                 "販売保留",
                 "要撮影",
                 "BASE登録予定",
+                "サムネ作成",
             ],
         },
         table: {

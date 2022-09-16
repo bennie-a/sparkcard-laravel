@@ -81,6 +81,7 @@ import { AxiosTask } from "../../component/AxiosTask";
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
+import ExpansionStorage from "../../firestore/ExpansionStorage";
 export default {
     data() {
         return {
@@ -104,7 +105,7 @@ export default {
                 price: Number(this.price),
                 isMore: Boolean(this.isMore),
             };
-            const success = function (response, $store, query) {
+            const success = async function (response, $store, query) {
                 console.log(query.status);
                 let results = [];
                 if (results.error) {
@@ -120,6 +121,19 @@ export default {
                 } else {
                     results = response.data;
                 }
+
+                const storage = new ExpansionStorage();
+                await Promise.all(
+                    results.map(async (r) => {
+                        const doc = await storage.findById(r.expansion);
+                        let exp = {};
+                        exp["name"] = doc.name;
+                        exp["attr"] = doc.attr;
+                        exp["orderId"] = doc.order_id;
+                        r["exp"] = exp;
+                    })
+                );
+
                 console.log("Card Get Count " + results.length);
                 $store.dispatch("setCard", results);
                 $store.dispatch(

@@ -24,13 +24,28 @@ export const toItemName = (card) => {
 };
 
 // カードの表面の画像名に変換する。
-export const toSurfaceName = (name) => {
+export const toSurfaceName = (card) => {
+    let name = toPhotoName(card);
     return name + "-min.jpg";
 };
 
+export const toNoLabelName = (card) => {
+    let name = toPhotoName(card);
+    return name + "-none-min.jpg";
+};
+
 // カードの裏面の画像名に変換する。
-export const toRevName = (name) => {
+export const toRevName = (card) => {
+    let name = toPhotoName(card);
     return name + "裏-min.jpg";
+};
+
+const toPhotoName = (card) => {
+    let name = card.name;
+    if (card.isFoil) {
+        name += "-Foil";
+    }
+    return name;
 };
 
 export const createTemplate = (card) => {
