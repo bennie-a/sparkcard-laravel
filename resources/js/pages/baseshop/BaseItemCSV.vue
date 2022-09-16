@@ -11,8 +11,9 @@
             <label>BASEに公開する</label>
         </div>
         <button class="ui violet button" @click="downloadItem">
-            商品登録用CSVをダウンロードする
+            商品登録用CSVを作成する
         </button>
+        <file-upload @upload="csvUpload">更新用CSVを作成する</file-upload>
     </div>
     <card-list></card-list>
     <now-loading></now-loading>
@@ -25,14 +26,17 @@ import { writeCsv } from "../../composables/CSVWriter";
 import {
     toItemName,
     toRevName,
-    createTemplate,
+    toSurfaceName,
+    toRevName,
 } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
+import CSVUpload from "../component/CSVUpload.vue";
 export default {
     data() {
         return {
             isPrinting: false,
             isPublic: true,
+            contentMap: {},
         };
     },
     mounted: function () {
@@ -56,8 +60,8 @@ export default {
                 if (this.isPrinting) {
                     array.push("Now-Printing.jpg");
                 } else {
-                    array.push(toSurfaceName(c.enName));
-                    array.push(toRevName(c.enName));
+                    array.push(toSurfaceName(c.name));
+                    array.push(toRevName(c.name));
                 }
             };
 
@@ -69,12 +73,32 @@ export default {
 
             this.$store.dispatch("setLoad", false);
         },
+        csvUpload: function (file) {
+            this.$papa.parse(file, {
+                header: true,
+                complete: function (results) {
+                    let csvdata = results.data;
+                    csvdata.map((line) => {
+                        this.contentMap[line["商品名"]] = line["商品ID"];
+                    });
+                    const card = this.$store.getters.card;
+                    card.map((c) => {
+                        let code = this.contentMap[toItemName(c)];
+                        if (code !== undefined) {
+                            c["baseId"] = code;
+                        }
+                    });
+                }.bind(this),
+            });
+            console.log(file.name);
+        },
     },
     components: {
         "now-loading": NowLoading,
         "card-list": CardList,
         "message-area": MessageArea,
         "search-form": SearchForm,
+        "file-upload": CSVUpload,
     },
 };
 </script>

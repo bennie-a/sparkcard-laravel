@@ -1,38 +1,6 @@
 <template>
     <message-area></message-area>
     <search-form></search-form>
-    <div id="upload" class="ui mini modal">
-        <i class="close icon"></i>
-        <div class="header">商品ファイルをアップロード</div>
-        <div class="content">
-            <input
-                type="file"
-                class="inputfile"
-                id="embedpollfileinput"
-                @change="onFileUpload"
-            />
-            <label
-                for="embedpollfileinput"
-                class="ui big pink button uploadbutton"
-            >
-                <i class="ui upload icon"></i>
-                商品ファイル読み込み
-            </label>
-        </div>
-    </div>
-    <div id="download" class="ui mini modal">
-        <i class="close icon"></i>
-        <div class="header">在庫ファイルをダウンロードしますか?</div>
-        <div class="content text-center">
-            <button class="ui primary button" @click="downloadStockFile">
-                OK
-            </button>
-            <button class="ui button" @click="downloadCancel">
-                キャンセル
-            </button>
-        </div>
-    </div>
-
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button class="ui violet button" @click="downloadLogikura">
             商品登録用ファイルを作成する
@@ -40,6 +8,37 @@
         <button class="ui pink button" @click="toggle">
             在庫ファイルを作成する
         </button>
+        <div id="upload" class="ui mini modal">
+            <i class="close icon"></i>
+            <div class="header">商品ファイルをアップロード</div>
+            <div class="content">
+                <input
+                    type="file"
+                    class="inputfile"
+                    id="embedpollfileinput"
+                    @change="onFileUpload"
+                />
+                <label
+                    for="embedpollfileinput"
+                    class="ui big pink button uploadbutton"
+                >
+                    <i class="ui upload icon"></i>
+                    商品ファイル読み込み
+                </label>
+            </div>
+        </div>
+        <div id="download" class="ui mini modal">
+            <i class="close icon"></i>
+            <div class="header">在庫ファイルをダウンロードしますか?</div>
+            <div class="content text-center">
+                <button class="ui primary button" @click="downloadStockFile">
+                    OK
+                </button>
+                <button class="ui button" @click="downloadCancel">
+                    キャンセル
+                </button>
+            </div>
+        </div>
     </div>
     <card-list></card-list>
     <now-loading></now-loading>

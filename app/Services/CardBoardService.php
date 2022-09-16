@@ -39,9 +39,10 @@ class CardBoardService {
             $stock = $page->getProperty('枚数');
             $url = $page->getProperty('画像URL');
             $lang = $page->getProperty('言語');
-            // $expPage = $expRepo->findByPage($exp);
+            $exp = $page->getProperty('エキスパンション');
+
             $card = new NotionCard();
-            // $card->setExpansion($expPage->getTitle());
+            $card->setExpansion($exp->getRawContent()[0]['id']);
             $card->setId($array['id']);
             $card->setName($array['title']);
             $card->setPrice($price->getContent());

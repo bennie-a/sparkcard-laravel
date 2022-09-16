@@ -22,7 +22,7 @@ class NotionCard extends Model
 
     private int $stock;
 
-    private string $expansion;
+    private string $expansion = "";
 
     private ?string $imageUrl = null;
 
@@ -85,7 +85,7 @@ class NotionCard extends Model
         $this->expansion = $expansion;
     }
 
-    public function getExpansion() {
+    public function getExpansion():string {
         return $this->expansion;
     }
 
