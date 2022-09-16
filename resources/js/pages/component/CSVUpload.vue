@@ -50,6 +50,7 @@ label.uploadbutton {
 
 <script>
 export default {
+    emits: ["upload"],
     methods: {
         toggle: function () {
             $("#upload").modal("show");

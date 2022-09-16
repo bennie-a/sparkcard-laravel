@@ -25,7 +25,6 @@ import MessageArea from "../component/MessageArea.vue";
 import { writeCsv } from "../../composables/CSVWriter";
 import {
     toItemName,
-    toRevName,
     toSurfaceName,
     toRevName,
 } from "../../composables/CardCollector";

@@ -20,8 +20,7 @@
     "dependencies": {
         "@vue/compiler-sfc": "^3.2.38",
         "encoding-japanese": "^2.0.0",
-        "firebase-admin": "^11.0.1",
-        "firebase-functions": "^3.23.0",
+        "firebase": "^9.10.0",
         "semantic-ui-css": "^2.4.1",
         "semantic-ui-vue": "^0.11.0",
         "vue-loader": "^17.0.0",

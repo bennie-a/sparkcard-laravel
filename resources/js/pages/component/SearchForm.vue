@@ -14,6 +14,7 @@
 </template>
 <script>
 import { AxiosTask } from "../../component/AxiosTask";
+import ExpansionStorage from "../../firestore/ExpansionStorage";
 
 export default {
     data() {
@@ -31,8 +32,16 @@ export default {
             const query = {
                 expansion: this.expansion,
             };
-            const success = function (response, store, query) {
+            const success = async function (response, store, query) {
                 let results = response.data;
+                const storage = new ExpansionStorage();
+                await Promise.all(
+                    results.map(async (r) => {
+                        const doc = await storage.findById(r.expansion);
+                        r["expname"] = doc.name;
+                        r["attr"] = doc.attr;
+                    })
+                );
                 console.log("Card Get Count " + results.length);
                 store.dispatch("setCard", results);
                 store.dispatch(
@@ -42,7 +51,7 @@ export default {
             };
             const fail = function (e, store, query) {
                 const res = e.response;
-                console.log(res.status);
+                console.error(e);
                 console.log(res.data);
                 store.dispatch("message/error", res.data.message);
             };

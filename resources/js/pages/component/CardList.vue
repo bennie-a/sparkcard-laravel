@@ -7,6 +7,7 @@
                 <th v-show="$route.path === '/base/newitem'">商品ID</th>
                 <th class="two wide">カード番号</th>
                 <th class="three wide">カード名</th>
+                <th>エキスパンション</th>
                 <th>枚数</th>
                 <th>色</th>
                 <th>言語</th>
@@ -38,6 +39,7 @@
                         >Foil</label
                     >
                 </td>
+                <td>{{ card.expname }}</td>
                 <td>{{ card.stock }}</td>
                 <td>{{ card.color }}</td>
                 <td>{{ card.lang }}</td>
@@ -72,7 +74,7 @@ export default {
     },
     methods: {
         checked: function () {
-            this.$store.dispatch("table/setSelected", this.selectedCard);
+            this.$store.dispatch("csvOption/setSelected", this.selectedCard);
         },
     },
     components: { pagination: ListPagination },

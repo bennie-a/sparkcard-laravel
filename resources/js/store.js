@@ -1,10 +1,10 @@
 import { createStore } from "vuex";
 import search from "./vuex/searchForm";
 import message from "./vuex/messageForm";
-import table from "./vuex/table";
+import csvOption from "./vuex/csvOption";
 
 export const store = createStore({
-    modules: { search, message, table },
+    modules: { search, message, csvOption },
     state: {
         isLoad: false,
         cards: [],
