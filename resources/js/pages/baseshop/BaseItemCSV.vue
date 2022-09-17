@@ -13,6 +13,10 @@
         <button class="ui violet button" @click="downloadItem">
             一括登録・更新用CSVを作成する
         </button>
+        <download-button color="violet"
+            ><i class="download icon"></i
+            >登録・更新用CSVを作成する</download-button
+        >
         <file-upload @upload="csvUpload" @download="updateDownload"
             >商品一覧をアップロード</file-upload
         >
@@ -33,6 +37,9 @@ import {
 } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
+import { CSV_HEADERS } from "../../cost/CsvHeader";
+import DownloadButton from "../component/DownloadButton.vue";
+
 export default {
     data() {
         return {
@@ -68,23 +75,7 @@ export default {
         downloadItem: function () {
             this.$store.dispatch("setLoad", true);
 
-            const fields = [
-                "商品ID",
-                "商品名",
-                "種類ID",
-                "種類名",
-                "説明",
-                "価格",
-                "税率",
-                "在庫数",
-                "公開状態",
-                "表示順",
-                "種類在庫数",
-                "画像1",
-                "画像2",
-                "画像3",
-                "画像4",
-            ];
+            const fields = CSV_HEADERS.base;
             const card = this.$store.getters.card;
             let jsonArray = card.map((c) => {
                 let showIndex = c.exp.orderId * 10 + c.index;
@@ -127,6 +118,7 @@ export default {
         "message-area": MessageArea,
         "search-form": SearchForm,
         "file-upload": CSVUpload,
+        "download-button": DownloadButton,
     },
 };
 </script>
