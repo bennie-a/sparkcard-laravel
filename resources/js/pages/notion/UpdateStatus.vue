@@ -5,10 +5,7 @@
             <div class="field">
                 <label for="">ステータス</label>
                 <select class="ui fluid dropdown" v-model="selectedStatus">
-                    <option
-                        v-for="status in $store.getters.getItemStatus"
-                        v-bind:value="status"
-                    >
+                    <option v-for="status in getStatus" v-bind:value="status">
                         {{ status }}
                     </option>
                 </select>
@@ -53,10 +50,7 @@
         <h2 class="ui small header">次のステータスに一括変更する</h2>
         <div class="flex">
             <select class="ui dropdown" v-model="updateStatus">
-                <option
-                    v-for="status in $store.getters.getItemStatus"
-                    v-bind:value="status"
-                >
+                <option v-for="status in getStatus" v-bind:value="status">
                     {{ status }}
                 </option>
             </select>
@@ -82,17 +76,27 @@ import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
 import ExpansionStorage from "../../firestore/ExpansionStorage";
+import { NOTION_STATUS } from "../../cost/NotionStatus";
+
 export default {
     data() {
         return {
-            selectedStatus: "ロジクラ要登録",
-            updateStatus: "ロジクラ要登録",
+            selectedStatus: NOTION_STATUS.logikura,
+            updateStatus: NOTION_STATUS.logikura,
             price: "",
             isMore: false,
             error: "",
         };
     },
-
+    computed: {
+        getStatus: function () {
+            const status = [];
+            Object.keys(NOTION_STATUS).forEach((key) => {
+                status.push(NOTION_STATUS[key]);
+            });
+            return status;
+        },
+    },
     methods: {
         async search() {
             console.log("Notion Card Search...");

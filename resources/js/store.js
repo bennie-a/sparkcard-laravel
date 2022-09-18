@@ -16,15 +16,7 @@ export const store = createStore({
             success: "",
             error: "",
         },
-        form: {
-            itemStatus: [
-                "ロジクラ要登録",
-                "販売保留",
-                "要撮影",
-                "BASE登録予定",
-                "サムネ作成",
-            ],
-        },
+
         table: {
             selectedCard: [],
         },
