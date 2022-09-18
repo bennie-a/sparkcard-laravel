@@ -10,10 +10,10 @@
             <input type="checkbox" name="public" v-model="isPublic" />
             <label>BASEに公開する</label>
         </div>
-        <button class="ui violet button" @click="downloadItem">
+        <!-- <button class="ui violet button" @click="downloadItem">
             一括登録・更新用CSVを作成する
-        </button>
-        <download-button color="violet"
+        </button> -->
+        <download-button color="violet" filename="base_item" json="downloadItem"
             ><i class="download icon"></i
             >登録・更新用CSVを作成する</download-button
         >
@@ -72,44 +72,26 @@ export default {
             });
             console.log(file.name);
         },
-        downloadItem: function () {
-            this.$store.dispatch("setLoad", true);
-
-            const fields = CSV_HEADERS.base;
-            const card = this.$store.getters.card;
-            let jsonArray = card.map((c) => {
-                let showIndex = c.exp.orderId * 10 + c.index;
-                let json = [
-                    c.baseId,
-                    toItemName(c),
-                    "",
-                    "",
-                    "",
-                    c.price,
-                    "1",
-                    c.stock,
-                    this.isPublic ? 1 : 0,
-                    showIndex,
-                    "",
-                    toSurfaceName(c),
-                    toNoLabelName(c),
-                    toRevName(c),
-                    "",
-                ];
-                return json;
-            });
-
-            const csv = this.$papa.unparse({
-                fields: fields,
-                data: JSON.stringify(jsonArray),
-            });
-            write(csv, "base-item.csv");
-            this.$store.dispatch(
-                "setSuccessMessage",
-                "CSVのダウンロードが完了しました。"
-            );
-
-            this.$store.dispatch("setLoad", false);
+        downloadItem: function (c, jsonArray) {
+            let showIndex = c.exp.orderId * 10 + c.index;
+            let json = [
+                c.baseId,
+                toItemName(c),
+                "",
+                "",
+                "",
+                c.price,
+                "1",
+                c.stock,
+                this.isPublic ? 1 : 0,
+                showIndex,
+                "",
+                toSurfaceName(c),
+                toNoLabelName(c),
+                toRevName(c),
+                "",
+            ];
+            jsonArray.push(json);
         },
     },
     components: {

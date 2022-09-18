@@ -27,7 +27,7 @@ label.uploadbutton {
 
 <script>
 export default {
-    emits: ["upload"],
+    emits: ["upload", "download"],
     methods: {
         toggle: function () {
             $("#upload").modal("show");

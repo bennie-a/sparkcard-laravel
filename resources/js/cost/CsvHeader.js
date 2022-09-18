@@ -1,5 +1,5 @@
 export const CSV_HEADERS = {
-    base: [
+    base_item: [
         "商品ID",
         "商品名",
         "種類ID",
@@ -16,7 +16,7 @@ export const CSV_HEADERS = {
         "画像3",
         "画像4",
     ],
-    logikura: [
+    logikura_item: [
         "カテゴリ",
         "商品名",
         "種類名",
@@ -26,7 +26,7 @@ export const CSV_HEADERS = {
         "税率",
     ],
     logikura_stock: ["バーコード", "在庫数"],
-    mercari: [
+    mercari_item: [
         "商品画像名_1",
         "商品画像名_2",
         "商品画像名_3",
