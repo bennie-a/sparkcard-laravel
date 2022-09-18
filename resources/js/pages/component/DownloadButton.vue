@@ -5,7 +5,6 @@
 </template>
 <script>
 import { write } from "../../composables/CSVWriter";
-import BaseItemContents from "../../csv/BaseItemContents";
 import Contentsfactory from "../../csv/ContentsFactory";
 
 export default {

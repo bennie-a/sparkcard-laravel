@@ -33,15 +33,22 @@ export default {
                 expansion: this.expansion,
             };
             const success = async function (response, store, query) {
+                console.log(response.status);
                 let results = response.data;
                 const storage = new ExpansionStorage();
                 await Promise.all(
                     results.map(async (r) => {
                         const doc = await storage.findById(r.expansion);
                         let exp = {};
-                        exp["name"] = doc.name;
-                        exp["attr"] = doc.attr;
-                        exp["orderId"] = doc.order_id;
+                        if (doc == undefined) {
+                            exp["name"] = "";
+                            exp["attr"] = "";
+                            exp["orderId"] = "";
+                        } else {
+                            exp["name"] = doc.name;
+                            exp["attr"] = doc.attr;
+                            exp["orderId"] = doc.order_id;
+                        }
                         r["exp"] = exp;
                     })
                 );

@@ -34,8 +34,8 @@ import {
 } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
-import { CSV_HEADERS } from "../../cost/CsvHeader";
 import DownloadButton from "../component/DownloadButton.vue";
+import { NOTION_STATUS } from "../../cost/NotionStatus";
 
 export default {
     data() {
@@ -46,7 +46,7 @@ export default {
         };
     },
     mounted: function () {
-        this.$store.dispatch("search/status", "BASE登録予定");
+        this.$store.dispatch("search/status", NOTION_STATUS.tobase);
     },
 
     methods: {
@@ -68,27 +68,6 @@ export default {
                 }.bind(this),
             });
             console.log(file.name);
-        },
-        downloadItem: function (c, jsonArray) {
-            let showIndex = c.exp.orderId * 10 + c.index;
-            let json = [
-                c.baseId,
-                toItemName(c),
-                "",
-                "",
-                "",
-                c.price,
-                "1",
-                c.stock,
-                this.isPublic ? 1 : 0,
-                showIndex,
-                "",
-                toSurfaceName(c),
-                toNoLabelName(c),
-                toRevName(c),
-                "",
-            ];
-            jsonArray.push(json);
         },
     },
     components: {
