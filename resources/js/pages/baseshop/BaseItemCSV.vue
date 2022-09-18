@@ -10,10 +10,7 @@
             <input type="checkbox" name="public" v-model="isPublic" />
             <label>BASEに公開する</label>
         </div>
-        <!-- <button class="ui violet button" @click="downloadItem">
-            一括登録・更新用CSVを作成する
-        </button> -->
-        <download-button color="violet" filename="base_item" json="downloadItem"
+        <download-button color="violet" filename="base_item"
             ><i class="download icon"></i
             >登録・更新用CSVを作成する</download-button
         >
