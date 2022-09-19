@@ -30,6 +30,7 @@ export default () => {
                 toRevName(c),
                 toItemName(c),
                 "",
+                "",
                 c.stock,
                 c.price,
                 "ciU8s59qtDYLpdHVJejT8j",

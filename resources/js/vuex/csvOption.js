@@ -1,7 +1,6 @@
 // 検索結果の操作関連クラス
 const getDefaultState = () => ({
     selectedList: [],
-    isAll: false,
 });
 
 export default {
@@ -13,11 +12,8 @@ export default {
         },
     },
     getters: {
-        selectList: function (state) {
-            return state.seelctList;
-        },
-        isAll: function (state) {
-            return state.isAll;
+        selectedList: function (state) {
+            return state.selectedList;
         },
     },
     actions: {

@@ -19,7 +19,11 @@ export default {
             let contents = Contentsfactory.get(this.filename);
             const header = contents.header;
             const card = this.$store.getters.card;
-            const jsonArray = card.map((c) => contents.contents(c));
+            const checkbox = this.$store.getters["csvOption/selectedList"];
+            const filterd = card.filter((c) => {
+                return checkbox.includes(c.id);
+            });
+            const jsonArray = filterd.map((c) => contents.contents(c));
 
             const csv = this.$papa.unparse({
                 fields: header,

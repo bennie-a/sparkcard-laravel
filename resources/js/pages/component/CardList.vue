@@ -2,7 +2,14 @@
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
-                <th class="one wide"></th>
+                <th class="one wide">
+                    <input
+                        type="checkbox"
+                        id="all"
+                        v-model="isAll"
+                        @change="allChecked"
+                    />
+                </th>
                 <th v-show="$route.path === '/logikura/newitem'">バーコード</th>
                 <th v-show="$route.path === '/base/newitem'">商品ID</th>
                 <th>カード番号</th>
@@ -62,6 +69,7 @@ export default {
     data() {
         return {
             selectedCard: [],
+            isAll: false,
         };
     },
     computed: {
@@ -73,8 +81,22 @@ export default {
         },
     },
     methods: {
+        allChecked: function () {
+            if (this.isAll) {
+                this.$store.getters.card.forEach((c) => {
+                    this.selectedCard.push(c.id);
+                });
+            } else {
+                this.selectedCard.splice(0);
+            }
+        },
         checked: function () {
             this.$store.dispatch("csvOption/setSelected", this.selectedCard);
+            if (this.selectedCard.length === this.$store.getters.cardsLength) {
+                this.isAll = true;
+            } else {
+                this.isAll = false;
+            }
         },
     },
     components: { pagination: ListPagination },

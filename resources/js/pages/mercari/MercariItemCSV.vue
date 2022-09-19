@@ -6,7 +6,7 @@
             <input type="checkbox" name="public" v-model="isPublic" />
             <label>メルカリに公開する</label>
         </div>
-        <download-button color="violet" filename="base_item"
+        <download-button color="violet" filename="mercari_item"
             ><i class="download icon"></i
             >登録・更新用CSVを作成する</download-button
         >
