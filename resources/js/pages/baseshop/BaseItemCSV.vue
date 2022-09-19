@@ -1,6 +1,6 @@
 <template>
     <message-area></message-area>
-    <search-form></search-form>
+    <search-form limitprice="50"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <div class="ui toggle checkbox mr-2">
             <input type="checkbox" name="public" v-model="isPrinting" />

@@ -17,6 +17,7 @@ import { AxiosTask } from "../../component/AxiosTask";
 import ExpansionStorage from "../../firestore/ExpansionStorage";
 
 export default {
+    props: ["limitprice"],
     data() {
         return {
             expansion: "",
@@ -31,17 +32,21 @@ export default {
             console.log(this.$store.getters["search/status"]);
             const query = {
                 expansion: this.expansion,
+                limitprice: this.limitprice,
             };
             const success = async function (response, store, query) {
                 console.log(response.status);
                 let results = response.data;
+                let cards = results.filter((r) => {
+                    return r.price >= query.limitprice;
+                });
                 const storage = new ExpansionStorage();
                 await Promise.all(
-                    results.map(async (r) => {
+                    cards.map(async (r) => {
                         const doc = await storage.findById(r.expansion);
                         let exp = {};
                         if (doc == undefined) {
-                            exp["name"] = "";
+                            exp["name"] = "不明";
                             exp["attr"] = "";
                             exp["orderId"] = "";
                         } else {
@@ -52,8 +57,8 @@ export default {
                         r["exp"] = exp;
                     })
                 );
-                console.log("Card Get Count " + results.length);
-                store.dispatch("setCard", results);
+                console.log("Card Get Count " + cards.length);
+                store.dispatch("setCard", cards);
                 store.dispatch(
                     "setSuccessMessage",
                     results.length + "件取得しました。"

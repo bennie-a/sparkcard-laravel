@@ -21,7 +21,9 @@
                 </ul>
             </div>
             <div class="item">
-                <div class="ui small header">ロジクラ</div>
+                <div class="ui small header">
+                    <i class="bi bi-cloud"></i>ロジクラ
+                </div>
                 <ul>
                     <li>
                         <router-link
@@ -31,21 +33,31 @@
                                 active: $route.path === '/logikura/newitem',
                             }"
                             ><i class="download icon"></i
-                            >商品登録CSVダウンロード</router-link
+                            >商品登録CSV</router-link
                         >
                     </li>
                 </ul>
             </div>
             <div class="item">
-                <div class="ui small header">BASEショップ</div>
+                <div class="ui small header">販売登録</div>
                 <ul>
                     <li>
                         <router-link
                             to="/base/newitem"
                             class="nav-link"
                             :class="{ active: $route.path === '/base/newitem' }"
+                            ><i class="download icon"></i>BASE用CSV</router-link
+                        >
+                    </li>
+                    <li>
+                        <router-link
+                            to="/mercari/newitem"
+                            class="nav-link"
+                            :class="{
+                                active: $route.path === '/mercari/newitem',
+                            }"
                             ><i class="download icon"></i
-                            >BASE用CSVダウンロード</router-link
+                            >メルカリ用CSV</router-link
                         >
                     </li>
                 </ul>

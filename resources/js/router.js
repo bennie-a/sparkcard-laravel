@@ -3,6 +3,7 @@ import Index from "./pages/Index.vue";
 import LogikuraItemCSV from "./pages/logikura/LogikuraItemCSV.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemCSV.vue";
+import MercariItemCSV from "./pages/mercari/MercariItemCSV.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -29,10 +30,19 @@ const routes = [
         component: BaseItemCSV,
         meta: {
             title: "BASEショップ用CSVダウンロード",
-            description:
-                "Notionの商品管理ボードからBASEの商品登録用CSVを作成します。",
+            description: "Notionの商品管理ボードからBASE用CSVを作成します。",
         },
     },
+    {
+        path: "/mercari/newitem",
+        component: MercariItemCSV,
+        meta: {
+            title: "メルカリ用CSVダウンロード",
+            description:
+                "Notionの商品管理ボードからメルカリ用CSVを作成します。※300円未満の商品は除外します。",
+        },
+    },
+
     {
         path: "/notion/update/status",
         component: UpdateStatus,
