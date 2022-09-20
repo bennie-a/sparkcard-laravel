@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 use function PHPUnit\Framework\isEmpty;
+use function Psy\debug;
 
 class CardBoardService {
     
@@ -40,7 +41,8 @@ class CardBoardService {
             $url = $page->getProperty('画像URL');
             $lang = $page->getProperty('言語');
             $exp = $page->getProperty('エキスパンション');
-
+            $properties = $array['rawProperties'];
+            $descArray = $properties['説明文']['rich_text'];
             $card = new NotionCard();
             $card->setExpansion($exp->getRawContent()[0]['id']);
             $card->setId($array['id']);
@@ -63,6 +65,10 @@ class CardBoardService {
                 $card->setStock($stock->getContent());
             } else {
                 $card->setStock("0");
+            }
+
+            if(!empty($descArray)) {
+                $card->setDesc($descArray[0]['plain_text']);
             }
 
             // $enname = $page->getProperty('英名');

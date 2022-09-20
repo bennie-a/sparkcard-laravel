@@ -28,7 +28,8 @@ class NotionCardResource extends JsonResource
                 'image' => $this->getImageUrl(),
                 'isFoil' => $this->isFoil(),
                 'lang' => $this->getLang(),
-                'expansion' => $this->getExpansion()
+                'expansion' => $this->getExpansion(),
+                'desc' => $this->getDesc()
             ];
     }
 }

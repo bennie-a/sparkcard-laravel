@@ -32,6 +32,8 @@ class NotionCard extends Model
 
     private string $lang;
 
+    private string $desc = "";
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -119,5 +121,13 @@ class NotionCard extends Model
 
     public function getLang() {
         return $this->lang;
+    }
+
+    public function getDesc() {
+        return $this->desc;
+    }
+
+    public function setDesc($desc) {
+        $this->desc = $desc;
     }
 }
