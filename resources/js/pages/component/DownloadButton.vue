@@ -2,6 +2,10 @@
     <button class="ui button" @click="download" :class="color">
         <slot></slot>
     </button>
+    <div id="complate" class="ui mini modal">
+        <div class="header">ダウンロードが完了しました。</div>
+        <button id="ok" class="ui purple fluid button" @click="ok">OK</button>
+    </div>
 </template>
 <script>
 import { write } from "../../composables/CSVWriter";
@@ -30,13 +34,17 @@ export default {
                 data: JSON.stringify(jsonArray),
             });
             write(csv, `${this.filename}.csv`);
-            this.$store.dispatch(
-                "setSuccessMessage",
-                "CSVのダウンロードが完了しました。"
-            );
-
             this.$store.dispatch("setLoad", false);
+            $("#complate").modal("show");
+        },
+        ok: function () {
+            $("#complate").modal("hide");
         },
     },
 };
 </script>
+<style scoped>
+#ok {
+    margin: 5px auto;
+}
+</style>

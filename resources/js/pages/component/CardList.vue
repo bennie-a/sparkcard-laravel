@@ -72,6 +72,9 @@ export default {
             isAll: false,
         };
     },
+    mounted: function () {
+        // this.selectedCard = [];
+    },
     computed: {
         loading: function () {
             return this.$store.getters.isload;
