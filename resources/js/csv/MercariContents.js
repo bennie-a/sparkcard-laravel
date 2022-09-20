@@ -31,7 +31,6 @@ export default () => {
                 "",
                 toItemName(c),
                 this.description(c),
-                "",
                 c.stock,
                 c.price,
                 "ciU8s59qtDYLpdHVJejT8j",
