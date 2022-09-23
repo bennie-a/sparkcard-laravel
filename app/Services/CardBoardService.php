@@ -55,7 +55,9 @@ class CardBoardService {
                 logger()->debug($card->getName());
                 $card->setImageUrl($url->getContent());
             }
-            $card->setLang($lang->getName());
+            if (!is_null($lang)) {
+                $card->setLang($lang->getName());
+            }
             if (!is_null($color)) {
                 $card->setColor($color->getName());
             } else {

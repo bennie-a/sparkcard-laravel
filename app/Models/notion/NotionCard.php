@@ -30,7 +30,7 @@ class NotionCard extends Model
 
     private bool $isFoil;
 
-    private string $lang;
+    private string $lang = "";
 
     private string $desc = "";
 

@@ -31,11 +31,11 @@ export default () => {
                 toItemName(c),
                 "",
                 "",
-                "",
+                this.description(c),
                 c.price,
                 "1",
                 c.stock,
-                this.isPublic ? 1 : 0,
+                "1",
                 showIndex,
                 "",
                 toSurfaceName(c),
@@ -44,6 +44,17 @@ export default () => {
                 "",
             ];
             return json;
+        },
+        description: function (c) {
+            let foil = c.isFoil ? "[Foil]" : "";
+            let desc = `■商品内容
+商品名：「${c.name}${foil}」
+エキスパンション：${c.exp.name}(${c.exp.attr})
+言語：${c.lang}
+
+■状態
+${c.desc}`;
+            return desc;
         },
     };
 };

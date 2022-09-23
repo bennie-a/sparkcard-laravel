@@ -169,8 +169,13 @@ export default {
                 console.error(e);
             };
             const card = this.$store.getters.card;
+            const checkbox = this.$store.getters["csvOption/selectedList"];
+            const filterd = card.filter((c) => {
+                return checkbox.includes(c.id);
+            });
+
             await Promise.all(
-                card.map(async (c) => {
+                filterd.map(async (c) => {
                     let url = "/notion/card/" + c.id;
                     let query = { status: this.updateStatus };
                     await task.patch(url, query, success, fail);

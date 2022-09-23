@@ -21,7 +21,15 @@ class WisdomGuildService {
 
     // 要ページ対応。
     public function fetch() {
-        $firstXpath = $this->repo->getAll(1);
+    $param = [ 
+        'query' => [
+            'set' => ['DMU'],
+            'sort'=> 'eidcid',
+            'page'=> 1
+        ]
+    ];
+
+        $firstXpath = $this->repo->getAll($param);
         $xpathList = [$firstXpath];
         $cardlist = array();
 
@@ -31,7 +39,8 @@ class WisdomGuildService {
             $queries = [];
             $parse = parse_url($href->nodeValue)['query'];
             parse_str($parse, $queries);
-            $xpath = $this->repo->getAll(intval($queries['page']));
+            $param['query']['page'] = intval($queries['page']);
+            $xpath = $this->repo->getAll($param);
             array_push($xpathList, $xpath);
         };
         // 公式ギャラリー取得クラス

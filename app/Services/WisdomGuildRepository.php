@@ -6,18 +6,11 @@ use DOMXPath;
 
 class WisdomGuildRepository {
     // public function getAll(): Collection;
-    public function getAll(int $page) {
-        $param = [ 
-        'query' => [
-            'set' => ['DMU'],
-            'sort'=> 'eidcid',
-            'page'=> $page
-        ]
-    ];
+    public function getAll($param) {
         $client = GuzzleClientFactory::create('wisdom');
         $response = $client->request("GET", 'search.php', $param);
         $contents = $response->getBody()->getContents();
-        logger()->debug("Page".$page." get");
+        logger()->debug("Page".$param['query']['page']." get");
         return $this->toDomXpath($contents);
     }
 

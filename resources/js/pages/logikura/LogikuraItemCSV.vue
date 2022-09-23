@@ -1,6 +1,6 @@
 <template>
     <message-area></message-area>
-    <search-form></search-form>
+    <search-form limitprice="0"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <download-button filename="logikura_item"
             ><i class="download icon"></i

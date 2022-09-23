@@ -49,10 +49,12 @@ export default {
                             exp["name"] = "不明";
                             exp["attr"] = "";
                             exp["orderId"] = "";
+                            exp["baseId"] = "";
                         } else {
                             exp["name"] = doc.name;
                             exp["attr"] = doc.attr;
                             exp["orderId"] = doc.order_id;
+                            exp["baseId"] = doc.base_id;
                         }
                         r["exp"] = exp;
                     })

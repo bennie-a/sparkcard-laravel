@@ -16,7 +16,7 @@
                 <th>カード名</th>
                 <th>エキスパンション</th>
                 <th class="one wide">枚数</th>
-                <th class="one wide">色</th>
+                <th>色</th>
                 <th class="one wide">言語</th>
                 <th class="one wide">価格</th>
             </tr>
