@@ -1,3 +1,4 @@
+import BaseCatContents from "./BaseCatContents";
 import BaseItemContents from "./BaseItemContents";
 import LogikuraItemContents from "./LogikuraItemContents";
 import LogikuraStockContents from "./LogikuraStockContents";
@@ -8,6 +9,7 @@ const contents = {
     logikura_item: LogikuraItemContents(),
     logikura_stock: LogikuraStockContents(),
     mercari_item: MercariContents(),
+    base_category: BaseCatContents(),
 };
 
 const ContentsFactory = {

@@ -1,5 +1,9 @@
 <template>
-    <button class="ui button" @click="download" :class="color">
+    <button
+        class="ui button"
+        @click="download"
+        :class="[color, { disabled: isDisabled }]"
+    >
         <slot></slot>
     </button>
     <div id="complate" class="ui mini modal">
@@ -15,6 +19,7 @@ export default {
     props: {
         color: { type: String, default: "purple" },
         filename: { type: String, reqiured: true },
+        isDisabled: { default: false },
     },
     methods: {
         download: function () {

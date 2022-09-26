@@ -42,10 +42,11 @@ export const toRevName = (card) => {
 
 export const toPhotoName = (card) => {
     let name = card.name;
+    let filterdname = name.replace("/^(?=.*[<|>|,|'|、]).*$/g", "");
     if (card.isFoil) {
-        name += "-Foil";
+        filterdname += "-Foil";
     }
-    return name;
+    return filterdname;
 };
 
 export const createTemplate = (card) => {
@@ -58,11 +59,11 @@ export const createTemplate = (card) => {
     return template;
 };
 
-const toImageName = (enName) => {
-    let splits = enName.split(" ");
-    splits = splits.map((s) => {
-        let cha = s.replace(",", "").replace("’", "");
-        return cha.toLowerCase();
-    });
-    return splits.join("_");
-};
+// const toImageName = (enName) => {
+//     let splits = enName.split(" ");
+//     splits = splits.map((s) => {
+//         let cha = s.replace(",", "").replace("’", "");
+//         return cha.toLowerCase();
+//     });
+//     return splits.join("_");
+// };

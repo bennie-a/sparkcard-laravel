@@ -10,13 +10,20 @@
             <input type="checkbox" name="public" v-model="isPublic" />
             <label>BASEに公開する</label>
         </div>
-        <download-button color="violet" filename="base_item"
-            ><i class="download icon"></i
-            >登録・更新用CSVを作成する</download-button
-        >
-        <file-upload @upload="csvUpload" @download="updateDownload"
-            >商品一覧をアップロード</file-upload
-        >
+        <div class="mt-1">
+            <download-button color="violet" filename="base_item"
+                ><i class="download icon"></i
+                >登録・更新用CSVを作成する</download-button
+            >
+            <download-button color="pink" filename="base_category"
+                ><i class="sitemap icon"></i
+                >カテゴリ登録用CSVを作成する</download-button
+            >
+
+            <file-upload @upload="csvUpload"
+                >商品一覧をアップロード</file-upload
+            >
+        </div>
     </div>
     <card-list></card-list>
     <now-loading></now-loading>
@@ -42,6 +49,7 @@ export default {
         return {
             isPrinting: false,
             isPublic: true,
+            canCategory: true,
             contentMap: {},
         };
     },
@@ -65,6 +73,7 @@ export default {
                             c["baseId"] = code;
                         }
                     });
+                    this.canCategory = false;
                 }.bind(this),
             });
             console.log(file.name);

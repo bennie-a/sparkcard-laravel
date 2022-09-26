@@ -140,6 +140,7 @@ export default () => {
         },
         description: function (c) {
             let foil = c.isFoil ? "[Foil]" : "";
+            let delivery = this.getDelivery(c.price);
             let desc = `≪2品以上のお買い上げで割引します♪希望の方は公式Twitter「ベニネコヤ」まで(o^^o)≫
 ■商品内容
 商品名：「${c.name}${foil}」
@@ -149,7 +150,7 @@ export default () => {
 ■状態
 ${c.desc}
 ■発送について
-スリーブに入れた商品をおまけのカードと一緒に透明袋に梱包して【ミニレターorクリックポスト】で発送します。
+スリーブに入れた商品をおまけのカードと一緒に透明袋に梱包して【${delivery}】で発送します。
 おまけカードは基本土地カードに変更OKです。購入後の取引メッセージでご希望の色をお伝えください。
 
 ≪セット割実施中!!≫
@@ -161,6 +162,16 @@ ${c.desc}
 
 #ベニネコヤ　#TCG #トレーディングカード #mtg #MTGシングル #MTGカード トレカ　マジック・ザ・ギャザリング スタンダード`;
             return desc;
+        },
+
+        getDelivery: function (price) {
+            let priceNum = Number(price);
+            if (priceNum >= 10000) {
+                return "簡易書留";
+            } else if (priceNum >= 1500 && priceNum < 10000) {
+                return "クリックポスト";
+            }
+            return "ミニレター";
         },
     };
 };
