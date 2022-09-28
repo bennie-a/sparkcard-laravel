@@ -75,8 +75,8 @@ import { AxiosTask } from "../../component/AxiosTask";
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
-import ExpansionStorage from "../../firestore/ExpansionStorage";
 import { NOTION_STATUS } from "../../cost/NotionStatus";
+import NotionCardProvider from "../../composables/NotionCardProvider";
 
 export default {
     data() {
@@ -99,63 +99,20 @@ export default {
     },
     methods: {
         async search() {
-            console.log("Notion Card Search...");
-            console.log(this.selectedStatus);
-            this.$store.dispatch("setLoad", true);
-            this.$store.dispatch("clearCards");
-            const task = new AxiosTask(this.$store);
+            this.$store.dispatch("search/status", this.selectedStatus);
             const query = {
-                status: this.selectedStatus,
                 price: Number(this.price),
                 isMore: Boolean(this.isMore),
             };
-            const success = async function (response, $store, query) {
-                console.log(query.status);
-                let results = [];
-                if (results.error) {
-                }
-                if (query.price > 0) {
-                    results = response.data.filter((r) => {
-                        if (query.isMore) {
-                            return r.price >= query.price;
-                        } else {
-                            return r.price < query.price;
-                        }
-                    });
+            const filtered = function (r) {
+                if (query.isMore) {
+                    return r.price >= query.price;
                 } else {
-                    results = response.data;
+                    return r.price < query.price;
                 }
-
-                const storage = new ExpansionStorage();
-                await Promise.all(
-                    results.map(async (r) => {
-                        const doc = await storage.findById(r.expansion);
-                        let exp = {};
-                        exp["name"] = doc.name;
-                        exp["attr"] = doc.attr;
-                        exp["orderId"] = doc.order_id;
-                        r["exp"] = exp;
-                    })
-                );
-
-                console.log("Card Get Count " + results.length);
-                $store.dispatch("setCard", results);
-                $store.dispatch(
-                    "setSuccessMessage",
-                    results.length + "件取得しました。"
-                );
             };
-            const fail = function (e, $store, query) {
-                const res = e.response;
-                this.error = res.code;
-                console.log(res.status);
-            };
-            await task.get(
-                "/notion/card?status=" + this.selectedStatus,
-                query,
-                success,
-                fail
-            );
+            const provider = new NotionCardProvider(this.$store);
+            provider.searchByStatus(query, filtered);
         },
         async update() {
             this.$store.dispatch("setLoad", true);
@@ -167,6 +124,7 @@ export default {
             };
             const fail = function (e, store, query) {
                 console.error(e);
+                store.dispatch(["message/error", e.message]);
             };
             const card = this.$store.getters.card;
             const checkbox = this.$store.getters["csvOption/selectedList"];
@@ -181,6 +139,7 @@ export default {
                     await task.patch(url, query, success, fail);
                 })
             );
+            this.$store.dispatch("setLoad", false);
             this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
         },
     },

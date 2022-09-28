@@ -18,12 +18,6 @@
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
-import {
-    toItemName,
-    toSurfaceName,
-    toRevName,
-    toNoLabelName,
-} from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
 import DownloadButton from "../component/DownloadButton.vue";
@@ -39,7 +33,6 @@ export default {
     mounted: function () {
         this.$store.dispatch("search/status", NOTION_STATUS.baseonly);
     },
-
     methods: {},
     components: {
         "now-loading": NowLoading,
