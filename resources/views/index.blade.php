@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>SPARKCARD-Laravel</title>
+    <title>SPARKCARD</title>
 </head>
 
 <body>
