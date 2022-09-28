@@ -42,7 +42,7 @@ export const toRevName = (card) => {
 
 export const toPhotoName = (card) => {
     let name = card.name;
-    let filterdname = name.replace("/^(?=.*[<|>|,|'|、]).*$/g", "");
+    let filterdname = name.replace(/[<|>|、|,\s]/g, "");
     if (card.isFoil) {
         filterdname += "-Foil";
     }
