@@ -1,6 +1,8 @@
 <script>
 import axios from "axios";
 import Paginate from "vuejs-paginate-next";
+import NowLoading from "./component/NowLoading.vue";
+
 export default {
     components: {
         paginate: Paginate,
@@ -27,23 +29,24 @@ export default {
         async search() {
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
-            this.cards.splice(0);
-            await axios
-                .get("/api/wisdom")
-                .then((response) => {
-                    let filterd = response.data.filter((d) => {
-                        return d.price > 0;
-                    });
-                    filterd.forEach((d) => {
-                        this.cards.push(d);
-                    });
-                    this.$store.dispatch("setLoad", false);
-                    this.message = this.cards.length + "件見つかりました。";
-                })
-                .catch((e) => {
-                    console.error(e);
-                    this.$store.dispatch("setLoad", false);
-                });
+            // this.cards.splice(0);
+            // await axios
+            //     .get("/api/wisdom")
+            //     .then((response) => {
+            //         let filterd = response.data.filter((d) => {
+            //             return d.price > 0;
+            //         });
+            //         filterd.forEach((d) => {
+            //             this.cards.push(d);
+            //         });
+            //         this.$store.dispatch("setLoad", false);
+            //         this.message = this.cards.length + "件見つかりました。";
+            //     })
+            //     .catch((e) => {
+            //         console.error(e);
+            //         this.$store.dispatch("setLoad", false);
+            //     });
+            this.$store.dispatch("setLoad", false);
         },
         async regist() {
             this.$store.dispatch("setLoad", true);
@@ -77,6 +80,9 @@ export default {
             this.currentPage = Number(pageNum);
         },
     },
+    components: {
+        "now-loading": NowLoading,
+    },
 };
 </script>
 
@@ -109,8 +115,6 @@ export default {
         </div>
         <button class="ui purple button ml-1" @click="search">検索する</button>
     </div>
-
-    <NowLoading></NowLoading>
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
@@ -133,6 +137,8 @@ export default {
             </tr>
         </tbody>
     </table>
+    <now-loading></now-loading>
+
     <paginate
         :v-model="page"
         :page-count="getPageCount"

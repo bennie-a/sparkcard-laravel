@@ -39,7 +39,7 @@ export default class NotionCardProvider {
             store.dispatch("setCard", cards);
             store.dispatch(
                 "setSuccessMessage",
-                results.length + "件取得しました。"
+                cards.length + "件取得しました。"
             );
         };
         const fail = function (e, store, query) {

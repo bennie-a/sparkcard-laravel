@@ -83,7 +83,7 @@ export default {
         return {
             selectedStatus: NOTION_STATUS.logikura,
             updateStatus: NOTION_STATUS.logikura,
-            price: "",
+            price: 0,
             isMore: false,
             error: "",
         };
@@ -105,6 +105,9 @@ export default {
                 isMore: Boolean(this.isMore),
             };
             const filtered = function (r) {
+                if (query.price == 0) {
+                    return true;
+                }
                 if (query.isMore) {
                     return r.price >= query.price;
                 } else {
