@@ -14,10 +14,12 @@
                 <th v-show="$route.path === '/base/newitem'">商品ID</th>
                 <th>カード番号</th>
                 <th>カード名</th>
-                <th>エキスパンション</th>
-                <th class="one wide">枚数</th>
+                <th v-if="this.exp">エキスパンション</th>
+                <th v-if="!this.isNotion">画像URL</th>
+
+                <th v-if="this.isNotion" class="one wide">枚数</th>
                 <th>色</th>
-                <th class="one wide">言語</th>
+                <th v-if="this.isNotion" class="one wide">言語</th>
                 <th class="one wide">価格</th>
             </tr>
         </thead>
@@ -46,10 +48,12 @@
                         >Foil</label
                     >
                 </td>
-                <td>{{ card.exp.name }}</td>
-                <td>{{ card.stock }}</td>
+                <td v-if="this.exp">{{ card.exp.name }}</td>
+                <td v-if="!this.isNotion">{{ card.imageurl }}</td>
+
+                <td v-if="this.isNotion">{{ card.stock }}</td>
                 <td>{{ card.color }}</td>
-                <td>{{ card.lang }}</td>
+                <td v-if="this.isNotion">{{ card.lang }}</td>
                 <td>{{ card.price }}円</td>
             </tr>
         </tbody>
@@ -66,6 +70,10 @@
 import ListPagination from "./ListPagination.vue";
 
 export default {
+    props: {
+        exp: { type: Boolean, default: false },
+        isNotion: { type: Boolean, default: false },
+    },
     data() {
         return {
             selectedCard: [],

@@ -2,6 +2,7 @@
 import axios from "axios";
 import Paginate from "vuejs-paginate-next";
 import NowLoading from "./component/NowLoading.vue";
+import CardList from "./component/CardList.vue";
 
 export default {
     components: {
@@ -27,26 +28,29 @@ export default {
     },
     methods: {
         async search() {
+            $("#search").addClass("loading disabled");
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
-            // this.cards.splice(0);
-            // await axios
-            //     .get("/api/wisdom")
-            //     .then((response) => {
-            //         let filterd = response.data.filter((d) => {
-            //             return d.price > 0;
-            //         });
-            //         filterd.forEach((d) => {
-            //             this.cards.push(d);
-            //         });
-            //         this.$store.dispatch("setLoad", false);
-            //         this.message = this.cards.length + "件見つかりました。";
-            //     })
-            //     .catch((e) => {
-            //         console.error(e);
-            //         this.$store.dispatch("setLoad", false);
-            //     });
-            this.$store.dispatch("setLoad", false);
+            this.$store.dispatch("clearCards");
+            await axios
+                .get("/api/wisdom")
+                .then((response) => {
+                    let filterd = response.data.filter((d) => {
+                        return d.price > 0;
+                    });
+                    // filterd.forEach((d) => {
+                    //     this.cards.push(d);
+                    // });
+                    this.$store.dispatch("setCard", filterd);
+
+                    this.$store.dispatch("setLoad", false);
+                    this.message = this.cards.length + "件見つかりました。";
+                })
+                .catch((e) => {
+                    console.error(e);
+                    this.$store.dispatch("setLoad", false);
+                });
+            $("#search").removeClass("loading disabled");
         },
         async regist() {
             this.$store.dispatch("setLoad", true);
@@ -82,6 +86,7 @@ export default {
     },
     components: {
         "now-loading": NowLoading,
+        "card-list": CardList,
     },
 };
 </script>
@@ -113,9 +118,12 @@ export default {
             <input type="radio" name="s3" id="select6" value="" />
             <label for="select6">全て</label>
         </div>
-        <button class="ui purple button ml-1" @click="search">検索する</button>
+        <button id="search" class="ui button purple ml-1" @click="search">
+            検索する
+        </button>
     </div>
-    <table v-show="!loading" class="ui table striped">
+
+    <!-- <table class="ui table striped">
         <thead>
             <tr>
                 <th>カード番号</th>
@@ -136,9 +144,10 @@ export default {
                 <td>{{ card.price }}円</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
+    <card-list imgUrl></card-list>
     <now-loading></now-loading>
-
+    <!-- 
     <paginate
         :v-model="page"
         :page-count="getPageCount"
@@ -153,7 +162,7 @@ export default {
         :page-class="'page-item'"
         v-if="cards.length != 0"
     >
-    </paginate>
+    </paginate> -->
     <div class="text-center" v-if="cards.length != 0">
         <button class="ui purple button" @click="regist">
             Notionに登録する

@@ -25,7 +25,7 @@
             >
         </div>
     </div>
-    <card-list></card-list>
+    <card-list exp isNotion></card-list>
     <now-loading></now-loading>
 </template>
 <script>

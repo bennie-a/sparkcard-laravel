@@ -11,7 +11,7 @@
             >登録・更新用CSVを作成する</download-button
         >
     </div>
-    <card-list></card-list>
+    <card-list exp isNotion></card-list>
     <now-loading></now-loading>
 </template>
 <script>
@@ -31,7 +31,7 @@ export default {
         };
     },
     mounted: function () {
-        this.$store.dispatch("search/status", NOTION_STATUS.baseonly);
+        this.$store.dispatch("search/status", NOTION_STATUS.tobase);
     },
     methods: {},
     components: {

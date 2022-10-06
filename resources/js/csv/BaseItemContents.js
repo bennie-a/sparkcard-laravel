@@ -32,7 +32,7 @@ export default () => {
                 "",
                 "",
                 this.description(c),
-                c.price,
+                c.price - 63,
                 "1",
                 c.stock,
                 "1",
