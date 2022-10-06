@@ -126,7 +126,7 @@ export default () => {
                 "",
                 c.price,
                 "ciU8s59qtDYLpdHVJejT8j",
-                "1",
+                this.getCondition(c.condition),
                 "1",
                 "jp27",
                 "1",
@@ -137,6 +137,20 @@ export default () => {
         toPicName: function (c) {
             let name = toPhotoName(c);
             return `${name}_mercari-min.jpg`;
+        },
+        getCondition(condition) {
+            const numbers = {
+                NM: "1",
+                "NM-": "2",
+                "EX+": "3",
+                EX: "4",
+                PLD: "5",
+            };
+            let number = numbers[condition];
+            if (!number) {
+                number = "3";
+            }
+            return number;
         },
         description: function (c) {
             let foil = c.isFoil ? "[Foil]" : "";

@@ -18,6 +18,7 @@
                 <th v-if="!this.isNotion">画像URL</th>
 
                 <th v-if="this.isNotion" class="one wide">枚数</th>
+                <th v-if="this.isNotion" class="one wide">状態</th>
                 <th>色</th>
                 <th v-if="this.isNotion" class="one wide">言語</th>
                 <th class="one wide">価格</th>
@@ -52,6 +53,11 @@
                 <td v-if="!this.isNotion">{{ card.imageurl }}</td>
 
                 <td v-if="this.isNotion">{{ card.stock }}</td>
+                <td v-if="this.isNotion">
+                    <div class="ui label" :class="condiColor(card.condition)">
+                        {{ card.condition }}
+                    </div>
+                </td>
                 <td>{{ card.color }}</td>
                 <td v-if="this.isNotion">{{ card.lang }}</td>
                 <td>{{ card.price }}円</td>
@@ -89,6 +95,17 @@ export default {
         },
         getCards: function () {
             return this.$store.getters.sliceCard;
+        },
+        condiColor: function () {
+            return (condition) => {
+                const colors = {
+                    NM: "olive",
+                    "NM-": "blue",
+                    "EX+": "purple",
+                    EX: "brown",
+                };
+                return colors[condition];
+            };
         },
     },
     methods: {

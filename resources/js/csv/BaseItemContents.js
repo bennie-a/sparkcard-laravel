@@ -32,7 +32,7 @@ export default () => {
                 "",
                 "",
                 this.description(c),
-                c.price - 63,
+                this.price(c.price),
                 "1",
                 c.stock,
                 "1",
@@ -44,6 +44,14 @@ export default () => {
                 "",
             ];
             return json;
+        },
+        price(price) {
+            if (price < 300) {
+                return price;
+            }
+            let num = price / 10;
+            num = Math.round(num - 6.3);
+            return num * 10;
         },
         description: function (c) {
             let foil = c.isFoil ? "[Foil]" : "";
