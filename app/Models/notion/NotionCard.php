@@ -26,13 +26,15 @@ class NotionCard extends Model
 
     private ?string $imageUrl = null;
 
-    private string $enname;
+    private string $enname = "";
 
     private bool $isFoil;
 
     private string $lang = "";
 
     private string $desc = "";
+
+    private string $conditon = "";
 
     public function setId($id) {
         $this->id = $id;
@@ -129,5 +131,13 @@ class NotionCard extends Model
 
     public function setDesc($desc) {
         $this->desc = $desc;
+    }
+
+    public function setCondition(string $conditon) {
+        $this->conditon = $conditon;
+    }
+
+    public function getCondition():string {
+        return $this->conditon;
     }
 }

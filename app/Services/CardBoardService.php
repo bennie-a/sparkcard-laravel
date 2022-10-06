@@ -41,8 +41,10 @@ class CardBoardService {
             $url = $page->getProperty('画像URL');
             $lang = $page->getProperty('言語');
             $exp = $page->getProperty('エキスパンション');
+            $condition = $page->getProperty('状態');
             $properties = $array['rawProperties'];
             $descArray = $properties['説明文']['rich_text'];
+            $ennameArray = $properties['英名']['rich_text'];
             $card = new NotionCard();
             $card->setExpansion($exp->getRawContent()[0]['id']);
             $card->setId($array['id']);
@@ -68,9 +70,15 @@ class CardBoardService {
             } else {
                 $card->setStock("0");
             }
+            if (!is_null($condition)) {
+                $card->setCondition($condition->getName());
+            }
 
             if(!empty($descArray)) {
                 $card->setDesc($descArray[0]['plain_text']);
+            }
+            if(!empty($ennameArray)) {
+                $card->setEnname($ennameArray[0]['plain_text']);
             }
 
             // $enname = $page->getProperty('英名');

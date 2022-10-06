@@ -21,13 +21,14 @@ class NotionCardResource extends JsonResource
                 'id'=>$this->getId(),
                 'index' => $this->getIndex(),
                 'name' => $this->getName(),
-                // 'enname' => $this->getEnname(),
+                'enname' => $this->getEnname(),
                 'color'=>$this->getColor(),
                 'price' => $this->getPrice(),
                 'stock' => $this->getStock(),
                 'image' => $this->getImageUrl(),
                 'isFoil' => $this->isFoil(),
                 'lang' => $this->getLang(),
+                'condition' => $this->getCondition(),
                 'expansion' => $this->getExpansion(),
                 'desc' => $this->getDesc()
             ];
