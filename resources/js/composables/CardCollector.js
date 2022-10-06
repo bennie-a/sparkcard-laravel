@@ -19,19 +19,19 @@ export const toItemName = (card) => {
     let attr = `【${card.exp.attr}】`;
     let foil = card.isFoil ? "【Foil】" : "";
     let name =
-        langFuncs[card.lang](card.name, card.enName) + "[" + card.color + "]";
+        langFuncs[card.lang](card.name, card.enname) + "[" + card.color + "]";
     return attr + foil + name;
 };
 
 // カードの表面の画像名に変換する。
 export const toSurfaceName = (card) => {
     let name = toPhotoName(card);
-    return name + "-min.jpg";
+    return name + "-base-min.jpg";
 };
 
 export const toNoLabelName = (card) => {
     let name = toPhotoName(card);
-    return name + "_none-min.jpg";
+    return name + "-min.jpg";
 };
 
 // カードの裏面の画像名に変換する。
