@@ -16,10 +16,15 @@ import { write } from "../../composables/CSVWriter";
 import Contentsfactory from "../../csv/ContentsFactory";
 
 export default {
+    computed: {
+        isDisabled: function () {
+            const checkbox = this.$store.getters["csvOption/selectedList"];
+            return checkbox.length == 0;
+        },
+    },
     props: {
         color: { type: String, default: "purple" },
         filename: { type: String, reqiured: true },
-        isDisabled: { default: false },
     },
     methods: {
         download: function () {
