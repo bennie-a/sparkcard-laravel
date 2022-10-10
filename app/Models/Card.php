@@ -18,8 +18,8 @@ class Card extends Model
     private $name;
     private $enname;
     private $price;
-    private $color;
-    private $imageurl;
+    private $color = "";
+    private $imageurl = "";
 
     public function getIndex():int {
         return $this->index;

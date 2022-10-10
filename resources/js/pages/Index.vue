@@ -30,11 +30,11 @@ export default {
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
             this.$store.dispatch("clearCards");
-            const query = { expansion: exp };
-            const task = new AxiosTask(this.$store);
-            task.search();
+            const query = { params: { set: this.set } };
+            // const task = new AxiosTask(this.$store);
+            // task.search();
             await axios
-                .get("/api/wisdom")
+                .get("/api/wisdom", query)
                 .then((response) => {
                     let filterd = response.data.filter((d) => {
                         return d.price > 0;
@@ -124,7 +124,12 @@ export default {
             <option value="DMU">団結のドミナリア(DMU)</option>
             <option value="WAR">灯争大戦(WAR)</option>
         </select>
-        <button id="search" class="ui button purple ml-1" @click="search">
+        <button
+            id="search"
+            class="ui button purple ml-1"
+            @click="search"
+            :class="{ disabled: set == '' }"
+        >
             検索する
         </button>
     </div>
