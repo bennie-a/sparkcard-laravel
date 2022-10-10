@@ -99,7 +99,7 @@ export default {
         condiColor: function () {
             return (condition) => {
                 const colors = {
-                    NM: "olive",
+                    NM: "teal",
                     "NM-": "blue",
                     "EX+": "purple",
                     EX: "brown",
