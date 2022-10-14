@@ -20,10 +20,10 @@ class WisdomGuildService {
 
 
     // 要ページ対応。
-    public function fetch() {
+    public function fetch($query) {
     $param = [ 
         'query' => [
-            'set' => ['DMU'],
+            'set' => [$query['set']],
             'sort'=> 'eidcid',
             'page'=> 1
         ]
@@ -57,7 +57,9 @@ class WisdomGuildService {
                 $detailxpath = $this->repo->getCard($url);
                 // 価格
                 $pricePath = $detailxpath->query('//div[@class="wg-wonder-price-summary margin-right"]/div[@class="contents"]/b');
-                $price = $pricePath->item(0)->nodeValue;
+                if ($pricePath->length > 0) {
+                    $price = $pricePath->item(0)->nodeValue;
+                }
                 // カード番号
                 $cardIndex = $xpathIndex * $count + $index;
                 $card = new Card($cardIndex, $cardname, $price);
@@ -66,13 +68,13 @@ class WisdomGuildService {
                 if (strcmp($card->getName(), "残忍な巡礼者、コー追われのエラス") == 0) {
                     continue;
                 }
-                $color = $gallary->getCardColor($card->getName());
-                if ($color == "") {
-                    continue;
-                }
-                $imageurl = $gallary->getImageUrl($card->getName());
-                $card->setColor($color);
-                $card->setImageUrl($imageurl);
+                // $color = $gallary->getCardColor($card->getName());
+                // if ($color == "") {
+                //     continue;
+                // }
+                // $imageurl = $gallary->getImageUrl($card->getName());
+                // $card->setColor($color);
+                // $card->setImageUrl($imageurl);
 
                 array_push($cardlist, $card);
             }

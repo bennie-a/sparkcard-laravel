@@ -21,9 +21,11 @@ class WidsomGuildController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cardlist = $this->service->fetch();
+        $query = $request->all();
+        logger()->debug($query);
+        $cardlist = $this->service->fetch($query);
         logger()->info("Card Info get");
         $json = WisdomGuildResource::collection($cardlist);
         return response()->json($json, Response::HTTP_OK);

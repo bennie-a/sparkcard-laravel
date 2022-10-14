@@ -1,19 +1,17 @@
 <script>
 import axios from "axios";
-import Paginate from "vuejs-paginate-next";
 import NowLoading from "./component/NowLoading.vue";
 import CardList from "./component/CardList.vue";
+import { AxiosTask } from "../component/AxiosTask";
 
 export default {
-    components: {
-        paginate: Paginate,
-    },
     data() {
         return {
             cards: [],
             perPage: 10,
             currentPage: 1,
             message: "",
+            set: "",
         };
     },
     computed: {
@@ -28,12 +26,15 @@ export default {
     },
     methods: {
         async search() {
-            $("#search").addClass("loading disabled");
+            // $("#search").addClass("loading disabled");
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
             this.$store.dispatch("clearCards");
+            const query = { params: { set: this.set } };
+            // const task = new AxiosTask(this.$store);
+            // task.search();
             await axios
-                .get("/api/wisdom")
+                .get("/api/wisdom", query)
                 .then((response) => {
                     let filterd = response.data.filter((d) => {
                         return d.price > 0;
@@ -98,7 +99,7 @@ export default {
         </div>
     </div>
     <div>
-        <div class="sample">
+        <!-- <div class="sample">
             <input
                 type="radio"
                 name="s3"
@@ -117,110 +118,28 @@ export default {
             <label for="select5">緑</label>
             <input type="radio" name="s3" id="select6" value="" />
             <label for="select6">全て</label>
-        </div>
-        <button id="search" class="ui button purple ml-1" @click="search">
+        </div> -->
+        <select v-model="set" class="ui dropdown">
+            <option value="">選択してください</option>
+            <option value="DMU">団結のドミナリア(DMU)</option>
+            <option value="WAR">灯争大戦(WAR)</option>
+        </select>
+        <button
+            id="search"
+            class="ui button purple ml-1"
+            @click="search"
+            :class="{ disabled: set == '' }"
+        >
             検索する
         </button>
     </div>
 
-    <!-- <table class="ui table striped">
-        <thead>
-            <tr>
-                <th>カード番号</th>
-                <th>カード名</th>
-                <th>英語名</th>
-                <th>色</th>
-                <th>画像URL</th>
-                <th>価格</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(card, index) in getCards">
-                <td>{{ card.index }}</td>
-                <td>{{ card.name }}</td>
-                <td>{{ card.enname }}</td>
-                <td>{{ card.color }}</td>
-                <td>{{ card.imageurl }}</td>
-                <td>{{ card.price }}円</td>
-            </tr>
-        </tbody>
-    </table> -->
     <card-list imgUrl></card-list>
     <now-loading></now-loading>
-    <!-- 
-    <paginate
-        :v-model="page"
-        :page-count="getPageCount"
-        :page-range="3"
-        :margin-pages="2"
-        :click-handler="clickCallback"
-        :prev-text="'Prev'"
-        :next-text="'Next'"
-        :prev-class="'page-item'"
-        :next-class="'page-item'"
-        :container-class="'pagenation'"
-        :page-class="'page-item'"
-        v-if="cards.length != 0"
-    >
-    </paginate> -->
     <div class="text-center" v-if="cards.length != 0">
         <button class="ui purple button" @click="regist">
             Notionに登録する
         </button>
     </div>
 </template>
-<style>
-/* Write your own CSS for pagination */
-.pagenation {
-    padding-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    list-style-type: none;
-}
-.page-item {
-    border: 1px solid #ccc;
-    cursor: pointer;
-    padding: 0.6em;
-}
-.page-item > a {
-    display: inline-block;
-}
-
-li.page-item.active {
-    background-color: #2766cc;
-}
-
-li.page-item.active > a {
-    color: white;
-}
-
-.sample input {
-    display: none;
-}
-.sample label {
-    display: block;
-    float: left;
-    cursor: pointer;
-    width: 80px;
-    margin: 0;
-    padding: 11px 5px;
-    border-right: 1px solid #abb2b7;
-    background: #bdc3c7;
-    color: #555e64;
-    font-size: 14px;
-    text-align: center;
-    line-height: 1;
-    transition: 0.2s;
-}
-.sample label:first-of-type {
-    border-radius: 3px 0 0 3px;
-}
-.sample label:last-of-type {
-    border-right: 0px;
-    border-radius: 0 3px 3px 0;
-}
-.sample input[type="radio"]:checked + label {
-    background-color: #a1b91d;
-    color: #fff;
-}
-</style>
+<style></style>
