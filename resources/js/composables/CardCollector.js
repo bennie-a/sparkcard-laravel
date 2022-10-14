@@ -8,6 +8,9 @@ let langFuncs = {
     繁体中国語: (name, enname) => {
         return name + "[CT]";
     },
+    イタリア語: (name, enname) => {
+        return `${name}[IT] `;
+    },
 };
 
 // カード名から商品名に変換する。

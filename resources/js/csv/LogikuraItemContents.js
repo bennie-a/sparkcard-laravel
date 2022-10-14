@@ -1,3 +1,4 @@
+// ロジクラの商品登録用CSVファイルをダウンロードクラス
 import { toItemName } from "../composables/CardCollector";
 
 export default () => {
@@ -15,7 +16,7 @@ export default () => {
             let json = [
                 c.exp.name,
                 toItemName(c),
-                "NM",
+                c.condition,
                 c.image,
                 c.price,
                 "23",
