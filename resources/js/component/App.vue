@@ -3,10 +3,15 @@ import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
     <div id="contents" class="ui grid padded">
-        <nav ref="menu" class="three wide column blue">
+        <nav
+            id="sidebar"
+            ref="sidebar"
+            class="three wide column blue"
+            :style="{ height: higherHeightPx }"
+        >
             <SideMenu></SideMenu>
         </nav>
-        <main id="" class="twelve wide column">
+        <main id="main" ref="main" class="twelve wide column">
             <h1 class="ui header">
                 {{ $route.meta.title }}
                 <div class="sub header">
@@ -41,13 +46,32 @@ import SideMenu from "../pages/component/SideMenu.vue";
 export default {
     data() {
         return {
-            menu: "",
+            sidebarHeight: 0,
+            mainHeight: 0,
+            isMounted: false,
         };
     },
     mounted: function () {
         this.$store.dispatch("clearCards");
         this.$store.dispatch("clearMessage");
-        console.log(this.$refs.menu.clientHeight);
+
+        const main = document.querySelector("#main");
+        const resizeObserver = new ResizeObserver((entries) => {
+            this.mainHeight = this.$refs.main.clientHeight;
+            console.log(`メインの高さ ${this.mainHeight}`);
+            const sidebar = document.querySelector("#sidebar");
+        });
+        resizeObserver.observe(main);
+        this.sidebarHeight = this.$refs.sidebar.clientHeight;
+        this.mainHeight = this.$refs.main.clientHeight;
+        this.isMounted = true;
+    },
+    computed: {
+        higherHeightPx() {
+            return this.isMounted
+                ? Math.max(this.sidebarHeight, this.mainHeight) + "px"
+                : null;
+        },
     },
     watch: {
         $route(to, from) {
