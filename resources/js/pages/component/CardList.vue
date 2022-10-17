@@ -42,12 +42,20 @@
                 </td>
                 <td>{{ card.index }}</td>
                 <td>
-                    {{ card.name
-                    }}<label
-                        class="ui horizontal teal label ml-1"
-                        v-show="card.isFoil"
-                        >Foil</label
-                    >
+                    <button class="ui button" @click="showImage(card.id)">
+                        {{ card.name
+                        }}<label
+                            class="ui horizontal teal label ml-1"
+                            v-show="card.isFoil"
+                            >Foil</label
+                        >
+                    </button>
+                    <div class="ui tiny modal" v-bind:id="card.id">
+                        <i class="close icon"></i>
+                        <div class="image content">
+                            <img v-bind:src="card.image" class="image" />
+                        </div>
+                    </div>
                 </td>
                 <td v-if="this.exp">{{ card.exp.name }}</td>
                 <td v-if="!this.isNotion">{{ card.imageurl }}</td>
@@ -72,6 +80,11 @@
         </tfoot>
     </table>
 </template>
+<style scoped>
+img.image {
+    margin: 0 auto;
+}
+</style>
 <script>
 import ListPagination from "./ListPagination.vue";
 
@@ -125,6 +138,11 @@ export default {
             } else {
                 this.isAll = false;
             }
+        },
+        showImage: function (id) {
+            const selecterId = `#${id}`;
+            console.log(selecterId);
+            $(selecterId).modal("show");
         },
     },
     components: { pagination: ListPagination },

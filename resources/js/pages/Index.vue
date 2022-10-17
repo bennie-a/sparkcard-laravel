@@ -2,7 +2,6 @@
 import axios from "axios";
 import NowLoading from "./component/NowLoading.vue";
 import CardList from "./component/CardList.vue";
-import { AxiosTask } from "../component/AxiosTask";
 
 export default {
     data() {
@@ -45,7 +44,7 @@ export default {
                     this.$store.dispatch("setCard", filterd);
 
                     this.$store.dispatch("setLoad", false);
-                    this.message = this.cards.length + "件見つかりました。";
+                    this.message = this.filterd.length + "件見つかりました。";
                 })
                 .catch((e) => {
                     console.error(e);
