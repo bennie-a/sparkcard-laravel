@@ -46,6 +46,7 @@ import SideMenu from "../pages/component/SideMenu.vue";
 export default {
     data() {
         return {
+            initHeight: 0,
             sidebarHeight: 0,
             mainHeight: 0,
             isMounted: false,
@@ -55,15 +56,16 @@ export default {
         this.$store.dispatch("clearCards");
         this.$store.dispatch("clearMessage");
 
+        // メイン部分のリサイズ検知
         const main = document.querySelector("#main");
         const resizeObserver = new ResizeObserver((entries) => {
             this.mainHeight = this.$refs.main.clientHeight;
             console.log(`メインの高さ ${this.mainHeight}`);
-            const sidebar = document.querySelector("#sidebar");
         });
         resizeObserver.observe(main);
         this.sidebarHeight = this.$refs.sidebar.clientHeight;
         this.mainHeight = this.$refs.main.clientHeight;
+        this.initHeight = this.mainHeight;
         this.isMounted = true;
     },
     computed: {
@@ -78,6 +80,8 @@ export default {
             this.$store.dispatch("clearCards");
             this.$store.dispatch("clearMessage");
             this.$store.dispatch("message/clear");
+            // 画面が替わる度に高さをリセット。
+            this.mainHeight = this.initHeight;
         },
     },
 };
