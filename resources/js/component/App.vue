@@ -4,7 +4,6 @@ import SideMenu from "../pages/component/SideMenu.vue";
 <template>
     <div id="contents" class="ui grid padded">
         <nav
-            id="sidebar"
             ref="sidebar"
             class="three wide column blue"
             :style="{ height: higherHeightPx }"
