@@ -3,7 +3,7 @@ import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
     <div id="contents" class="ui grid padded">
-        <nav class="three wide column blue">
+        <nav ref="menu" class="three wide column blue">
             <SideMenu></SideMenu>
         </nav>
         <main id="" class="twelve wide column">
@@ -39,10 +39,15 @@ import SideMenu from "../pages/component/SideMenu.vue";
 </style>
 <script>
 export default {
+    data() {
+        return {
+            menu: "",
+        };
+    },
     mounted: function () {
         this.$store.dispatch("clearCards");
         this.$store.dispatch("clearMessage");
-        console.log("mounted");
+        console.log(this.$refs.menu.clientHeight);
     },
     watch: {
         $route(to, from) {
