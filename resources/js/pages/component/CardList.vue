@@ -42,7 +42,10 @@
                 </td>
                 <td>{{ card.index }}</td>
                 <td>
-                    <button class="ui button" @click="showImage(card.id)">
+                    <button
+                        class="ui button nocolor"
+                        @click="showImage(card.id)"
+                    >
                         {{ card.name
                         }}<label
                             class="ui horizontal teal label ml-1"
@@ -83,6 +86,15 @@
 <style scoped>
 img.image {
     margin: 0 auto;
+}
+.ui.button.nocolor {
+    background-color: transparent;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    color: #2185d0;
 }
 </style>
 <script>
