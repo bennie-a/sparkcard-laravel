@@ -13,7 +13,6 @@ class MtgDevRepository {
                 'query' => [
                     'name' => $name,
                     'set'=> $exp,
-                    'language'=> 'Japanese'
                 ]
             ];
         $client = GuzzleClientFactory::create("mtgdev");

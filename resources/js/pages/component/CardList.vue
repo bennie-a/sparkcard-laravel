@@ -85,6 +85,9 @@
 img.image {
     margin: 0 auto;
 }
+.ui.pagination.menu .item {
+    cursor: pointer;
+}
 .ui.button.nocolor {
     background-color: transparent;
     font-weight: bold;

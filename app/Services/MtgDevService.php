@@ -1,6 +1,11 @@
 <?php
 namespace App\Services;
+
+use App\Models\mtg\CardColor;
 use App\Repositories\Api\Mtg\MtgDevRepository;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\Enum;
+
 /**
  * MTG Developer.ioのServiceクラス。
  * 
@@ -18,10 +23,12 @@ class MtgDevService {
      */
     public function getCardInfo($name, $exp) {
         $res = $this->repo->getCard($name, $exp);
-        $card = $res["cards"];
-        $foreigns = $card[0]["foreignNames"];
+        $card = $res["cards"][0];
+        // 要無色対応
+        $color = CardColor::match($card);
+        $foreigns = $card["foreignNames"];
         $target = $this->extractCardByLang($foreigns, "Japanese");
-        return ['id' => $target["multiverseid"], 'image' => $target["imageUrl"]];
+        return ['id' => $target["multiverseid"], 'color' => $color->text(), 'image' => $target["imageUrl"]];
     }
 
     /**

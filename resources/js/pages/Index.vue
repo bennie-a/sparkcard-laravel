@@ -11,6 +11,7 @@ export default {
             currentPage: 1,
             message: "",
             set: "",
+            color: "赤",
         };
     },
     computed: {
@@ -29,9 +30,13 @@ export default {
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
             this.$store.dispatch("clearCards");
-            const query = { params: { set: this.set } };
-            // const task = new AxiosTask(this.$store);
-            // task.search();
+            const query = {
+                params: {
+                    set: this.set,
+                    color: [this.color],
+                    color_multi: "not",
+                },
+            };
             await axios
                 .get("/api/wisdom", query)
                 .then((response) => {
@@ -98,30 +103,17 @@ export default {
         </div>
     </div>
     <div>
-        <!-- <div class="sample">
-            <input
-                type="radio"
-                name="s3"
-                id="select1"
-                value="white"
-                checked=""
-            />
-            <label for="select1">白</label>
-            <input type="radio" name="s3" id="select2" value="blue" />
-            <label for="select2">青</label>
-            <input type="radio" name="s3" id="select3" value="red" />
-            <label for="select3">赤</label>
-            <input type="radio" name="s3" id="select4" value="black" />
-            <label for="select4">黒</label>
-            <input type="radio" name="s3" id="select5" value="green" />
-            <label for="select5">緑</label>
-            <input type="radio" name="s3" id="select6" value="" />
-            <label for="select6">全て</label>
-        </div> -->
         <select v-model="set" class="ui dropdown">
             <option value="">選択してください</option>
             <option value="DMU">団結のドミナリア(DMU)</option>
             <option value="WAR">灯争大戦(WAR)</option>
+        </select>
+        <select v-model="color" class="ui dropdown">
+            <option value="red">赤</option>
+            <option value="white">白</option>
+            <option value="black">黒</option>
+            <option value="green">緑</option>
+            <option value="blue">青</option>
         </select>
         <button
             id="search"

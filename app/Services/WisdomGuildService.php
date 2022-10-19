@@ -22,7 +22,9 @@ class WisdomGuildService {
         'query' => [
             'set' => [$query['set']],
             'sort'=> 'eidcid',
-            'page'=> 1
+            'page'=> 1,
+            'color'=>$query['color'],
+            'color_multi' => $query['color_multi']
         ]
     ];
 
@@ -62,7 +64,10 @@ class WisdomGuildService {
                 $card = new Card($cardIndex, $cardname, $price);
                 logger()->info('Card Info Get:'.$card->getName());
 
-                $res = $devService->getCardInfo($card->getName(), $query['set']);
+                $res = $devService->getCardInfo($card->getEnname(), $query['set']);
+                if (!empty($res)) {
+
+                }
                 // カードギャラリーのバグ対応
                 if (strcmp($card->getName(), "残忍な巡礼者、コー追われのエラス") == 0) {
                     continue;
