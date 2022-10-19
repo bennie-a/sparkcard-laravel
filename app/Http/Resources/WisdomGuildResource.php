@@ -20,7 +20,7 @@ class WisdomGuildResource extends JsonResource
                 'enname' => $this->getEnname(),
                 'price' => $this->getPrice(),
                 'color' => $this->getColor(),
-                'imageurl' => $this->getImageUrl()
+                'image' => $this->getImageUrl()
             ];
     }
 }

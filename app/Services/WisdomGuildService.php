@@ -17,9 +17,6 @@ class WisdomGuildService {
         $this->repo = new WisdomGuildRepository();
     }
 
-
-
-    // 要ページ対応。
     public function fetch($query) {
     $param = [ 
         'query' => [
@@ -45,7 +42,7 @@ class WisdomGuildService {
         };
         // 公式ギャラリー取得クラス
         $gallary = new CardGallaryRepository('dominaria-united');
-
+        $devService = new MtgDevService();
         foreach($xpathList as $xpathIndex => $xpath) {
             $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');
             // 1ページ当たりのカードリンク数
@@ -64,6 +61,8 @@ class WisdomGuildService {
                 $cardIndex = $xpathIndex * $count + $index;
                 $card = new Card($cardIndex, $cardname, $price);
                 logger()->info('Card Info Get:'.$card->getName());
+
+                $res = $devService->getCardInfo($card->getName(), $query['set']);
                 // カードギャラリーのバグ対応
                 if (strcmp($card->getName(), "残忍な巡礼者、コー追われのエラス") == 0) {
                     continue;

@@ -15,7 +15,6 @@
                 <th>カード番号</th>
                 <th>カード名</th>
                 <th v-if="this.exp">エキスパンション</th>
-                <th v-if="!this.isNotion">画像URL</th>
 
                 <th v-if="this.isNotion" class="one wide">枚数</th>
                 <th v-if="this.isNotion" class="one wide">状態</th>
@@ -61,7 +60,6 @@
                     </div>
                 </td>
                 <td v-if="this.exp">{{ card.exp.name }}</td>
-                <td v-if="!this.isNotion">{{ card.imageurl }}</td>
 
                 <td v-if="this.isNotion">{{ card.stock }}</td>
                 <td v-if="this.isNotion">
