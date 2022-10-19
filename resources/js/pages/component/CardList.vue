@@ -43,7 +43,7 @@
                 <td>
                     <button
                         class="ui button nocolor"
-                        @click="showImage(card.id)"
+                        @click="showImage(card.index)"
                     >
                         {{ card.name
                         }}<label
@@ -52,7 +52,7 @@
                             >Foil</label
                         >
                     </button>
-                    <div class="ui tiny modal" v-bind:id="card.id">
+                    <div class="ui tiny modal" v-bind:id="card.index">
                         <i class="close icon"></i>
                         <div class="image content">
                             <img v-bind:src="card.image" class="image" />

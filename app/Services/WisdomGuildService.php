@@ -43,13 +43,13 @@ class WisdomGuildService {
             array_push($xpathList, $xpath);
         };
         // 公式ギャラリー取得クラス
-        $gallary = new CardGallaryRepository('dominaria-united');
+        // $gallary = new CardGallaryRepository('dominaria-united');
         $devService = new MtgDevService();
         foreach($xpathList as $xpathIndex => $xpath) {
             $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');
             // 1ページ当たりのカードリンク数
             $count = $hreflist->count();
-            foreach($hreflist as $index => $a) {
+            foreach($hreflist as $a) {
                 $url = $a->attributes->getNamedItem("href")->nodeValue;
                 // カード名
                 $cardname = $a->nodeValue;
@@ -59,27 +59,16 @@ class WisdomGuildService {
                 if ($pricePath->length > 0) {
                     $price = $pricePath->item(0)->nodeValue;
                 }
-                // カード番号
-                $cardIndex = $xpathIndex * $count + $index;
-                $card = new Card($cardIndex, $cardname, $price);
+                $card = new Card($cardname, $price);
                 logger()->info('Card Info Get:'.$card->getName());
 
+                // MTG Developers.ioから取得
                 $res = $devService->getCardInfo($card->getEnname(), $query['set']);
                 if (!empty($res)) {
-
+                    $card->setImageUrl($res["image"]);
+                    $card->setIndex($res["id"]);
+                    $card->setColor($res["color"]);
                 }
-                // カードギャラリーのバグ対応
-                if (strcmp($card->getName(), "残忍な巡礼者、コー追われのエラス") == 0) {
-                    continue;
-                }
-                // $color = $gallary->getCardColor($card->getName());
-                // if ($color == "") {
-                //     continue;
-                // }
-                // $imageurl = $gallary->getImageUrl($card->getName());
-                // $card->setColor($color);
-                // $card->setImageUrl($imageurl);
-
                 array_push($cardlist, $card);
             }
         }

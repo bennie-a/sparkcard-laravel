@@ -33,7 +33,7 @@ enum CardColor:string {
      * 
      */
     public static function match(array $card) {
-        $colorKey = "colorIdentity";
+        $colorKey = "colors";
         $types = $card["types"];
         if (strcmp($types[0], "Artifact") == 0) {
             return CardColor::ARTIFACT;
