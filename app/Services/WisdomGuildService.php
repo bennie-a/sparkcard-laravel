@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use App\Enum\CardColor;
 use App\Services\WisdomGuildRepository;
 use DomDocument;
 use DomXpath;
@@ -18,13 +20,17 @@ class WisdomGuildService {
     }
 
     public function fetch($query) {
+    $color = CardColor::matchByString($query['color']);
     $param = [ 
         'query' => [
             'set' => [$query['set']],
             'sort'=> 'eidcid',
             'page'=> 1,
-            'color'=>$query['color'],
-            'color_multi' => $query['color_multi']
+            'color'=>$color->color(),
+            'color_multi' => $color->colorMulti(),
+            'color_ope' => $color->colorOpe(),
+            'cardtype' => $color->cardtype(),
+            'cardtype_ope' => $color->cardtypeOpe()
         ]
     ];
 
@@ -42,8 +48,6 @@ class WisdomGuildService {
             $xpath = $this->repo->getAll($param);
             array_push($xpathList, $xpath);
         };
-        // 公式ギャラリー取得クラス
-        // $gallary = new CardGallaryRepository('dominaria-united');
         $devService = new MtgDevService();
         foreach($xpathList as $xpathIndex => $xpath) {
             $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');

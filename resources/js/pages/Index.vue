@@ -11,7 +11,7 @@ export default {
             currentPage: 1,
             message: "",
             set: "",
-            color: "赤",
+            color: "red",
         };
     },
     computed: {
@@ -33,8 +33,7 @@ export default {
             const query = {
                 params: {
                     set: this.set,
-                    color: [this.color],
-                    color_multi: "not",
+                    color: this.color,
                 },
             };
             await axios
@@ -43,9 +42,6 @@ export default {
                     let filterd = response.data.filter((d) => {
                         return d.price > 0;
                     });
-                    // filterd.forEach((d) => {
-                    //     this.cards.push(d);
-                    // });
                     this.$store.dispatch("setCard", filterd);
 
                     this.$store.dispatch("setLoad", false);
@@ -114,6 +110,7 @@ export default {
             <option value="black">黒</option>
             <option value="green">緑</option>
             <option value="blue">青</option>
+            <option value="multi">多色</option>
         </select>
         <button
             id="search"

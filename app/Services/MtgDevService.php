@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Models\mtg\CardColor;
+use App\Enum\CardColor;
 use App\Repositories\Api\Mtg\MtgDevRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Enum;
@@ -23,6 +23,7 @@ class MtgDevService {
      */
     public function getCardInfo($name, $exp) {
         $res = $this->repo->getCard($name, $exp);
+        // 0件対応
         $card = $res["cards"][0];
         // 要無色対応
         $color = CardColor::match($card);

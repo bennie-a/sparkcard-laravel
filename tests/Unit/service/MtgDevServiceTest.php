@@ -73,7 +73,7 @@ class MtgDevServiceTest extends TestCase
     }
 
     public function カード情報取得_該当なし() {
-        $card = $this->service->getCardInfo("land", "DMU");
+        $card = $this->service->getCardInfo("Tura Kennerud, Skyknight", "DMU");
         assertNotNull($card, "カード情報の有無");
     }
 }
