@@ -23,13 +23,20 @@ class MtgDevService {
      */
     public function getCardInfo($name, $exp) {
         $res = $this->repo->getCard($name, $exp);
+        $cardArray = $res["cards"];
+        $responseArray = ['id' => -1, 'color' => '', 'image' => ''];
+        if (empty($cardArray)) {
+            return $responseArray;
+        }
         // 0件対応
         $card = $res["cards"][0];
-        // 要無色対応
         $color = CardColor::match($card);
         $foreigns = $card["foreignNames"];
         $target = $this->extractCardByLang($foreigns, "Japanese");
-        return ['id' => $target["multiverseid"], 'color' => $color->text(), 'image' => $target["imageUrl"]];
+        $responseArray['id'] = $target["multiverseid"];
+        $responseArray['color'] = $color->text();
+        $responseArray['image'] = $target["imageUrl"];
+        return $responseArray;
     }
 
     /**

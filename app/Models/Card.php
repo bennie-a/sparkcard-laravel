@@ -13,7 +13,7 @@ class Card extends Model
         $this->enname = $split[1];
         $this->price = $price;
     }
-    private $index;
+    private $index = -1;
     private $name;
     private $enname;
     private $price;

@@ -6,6 +6,7 @@ use App\Services\MtgDevService;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
 
@@ -72,8 +73,14 @@ class MtgDevServiceTest extends TestCase
         assertEquals("http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=576019&type=card", $card["image"], "画像URL");
     }
 
+    /**
+     * @test
+     */
     public function カード情報取得_該当なし() {
         $card = $this->service->getCardInfo("Tura Kennerud, Skyknight", "DMU");
         assertNotNull($card, "カード情報の有無");
+        assertEmpty($card['id'], "ID");
+        assertEmpty($card['color'], "色");
+        assertEmpty($card['image'], "画像URL");
     }
 }

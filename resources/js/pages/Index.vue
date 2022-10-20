@@ -2,6 +2,7 @@
 import axios from "axios";
 import NowLoading from "./component/NowLoading.vue";
 import CardList from "./component/CardList.vue";
+import MessageArea from "./component/MessageArea.vue";
 
 export default {
     data() {
@@ -45,10 +46,17 @@ export default {
                     this.$store.dispatch("setCard", filterd);
 
                     this.$store.dispatch("setLoad", false);
-                    this.message = this.filterd.length + "件見つかりました。";
+                    store.dispatch(
+                        "setSuccessMessage",
+                        filterd.length + "件取得しました。"
+                    );
                 })
                 .catch((e) => {
                     console.error(e);
+                    store.dispatch(
+                        "message/error",
+                        "予期せぬエラーが発生しました。"
+                    );
                     this.$store.dispatch("setLoad", false);
                 });
             $("#search").removeClass("loading disabled");
@@ -88,16 +96,13 @@ export default {
     components: {
         "now-loading": NowLoading,
         "card-list": CardList,
+        "message-area": MessageArea,
     },
 };
 </script>
 
 <template>
-    <div class="ui info message" v-if="message != ''">
-        <div class="header">
-            {{ message }}
-        </div>
-    </div>
+    <message-area></message-area>
     <div>
         <select v-model="set" class="ui dropdown">
             <option value="">選択してください</option>
