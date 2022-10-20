@@ -32,4 +32,14 @@ class CardColorTest extends TestCase
         assertCount(1, $param, "パラメータ(色)の個数");
         assertEquals("non-colorless", $param[0]);
     }
+
+    public function test入力値がartifact() {
+        $color = CardColor::matchByString("artifact");
+        assertEquals(CardColor::ARTIFACT, $color);
+        $param = $color->color();
+        Log::debug($param);
+        assertCount(1, $param, "パラメータ(色)の個数");
+        assertEquals("non-colorless", $param[0]);
+    }
+    
 }

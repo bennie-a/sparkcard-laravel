@@ -26,6 +26,7 @@ class MtgDevService {
         $cardArray = $res["cards"];
         $responseArray = ['id' => -1, 'color' => '', 'image' => ''];
         if (empty($cardArray)) {
+            $responseArray['color'] = CardColor::UNDEFINED->text();
             return $responseArray;
         }
         // 0件対応

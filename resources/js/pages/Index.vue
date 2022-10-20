@@ -116,6 +116,8 @@ export default {
             <option value="green">緑</option>
             <option value="blue">青</option>
             <option value="multi">多色</option>
+            <option value="less">無色</option>
+            <option value="artifact">アーティファクト</option>
         </select>
         <button
             id="search"

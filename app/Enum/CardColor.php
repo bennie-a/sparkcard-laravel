@@ -1,6 +1,7 @@
 <?php
 namespace App\Enum;
 
+use App\Enum\CardColor as EnumCardColor;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -15,6 +16,7 @@ enum CardColor:string {
     case MULTI = "M";
     case LESS = "L";
     case ARTIFACT = "A";
+    case UNDEFINED = "E";
 
     public function text() {
         return match($this) {
@@ -25,7 +27,8 @@ enum CardColor:string {
             self::BLUE => "青",
             self::MULTI => "多色",
             self::LESS => "無色",
-            self::ARTIFACT => "アーティファクト"
+            self::ARTIFACT => "アーティファクト",
+            self::UNDEFINED => "不明"
         };
     }
 
@@ -49,7 +52,7 @@ enum CardColor:string {
                 $color = ["non-colorless"];
                 break;
             case CardColor::ARTIFACT:
-                $color = ["not-white", "not-blue", "not-black", "not-red", "not-green"];
+                $color = [];
                 break;
             case CardColor::LESS:
                 $color = ["not-white", "not-blue", "not-black", "not-red", "not-green"];
@@ -60,10 +63,18 @@ enum CardColor:string {
 
     
     public function colorMulti() {
-        if ($this == CardColor::MULTI) {
-            return "must";
-        }
-        return "not";
+        $ope = "not";
+        switch($this) {
+            case CardColor::MULTI:
+                $ope = "must";
+                break;
+            case CardColor::ARTIFACT:
+                $ope = "able";
+                break;
+            case EnumCardColor::LESS:
+                $ope = "must";
+            }
+        return $ope;
     }
 
     /**
@@ -71,7 +82,7 @@ enum CardColor:string {
      * @return "and"|"or"
      */
     public function colorOpe() {
-        if ($this == CardColor::MULTI) {
+        if ($this == CardColor::MULTI || $this == CardColor::LESS) {
             return "and";
         }
         return "or";
@@ -97,7 +108,7 @@ enum CardColor:string {
      * Wisdom Guild.comの検索パラメータ(カードタイプの論理和)を返す。
      */
     public function cardtypeOpe() {
-        if ($this == CardColor::ARTIFACT) {
+        if ($this == CardColor::LESS) {
             return "nor";
         }
         return "and";

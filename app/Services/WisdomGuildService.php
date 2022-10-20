@@ -34,6 +34,7 @@ class WisdomGuildService {
         ]
     ];
 
+        logger()->debug("検索条件", $param);
         $firstXpath = $this->repo->getAll($param);
         $xpathList = [$firstXpath];
         $cardlist = array();
