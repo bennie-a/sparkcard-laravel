@@ -46,7 +46,7 @@ export default {
                     this.$store.dispatch("setCard", filterd);
 
                     this.$store.dispatch("setLoad", false);
-                    store.dispatch(
+                    this.$store.dispatch(
                         "setSuccessMessage",
                         filterd.length + "件取得しました。"
                     );
@@ -103,7 +103,7 @@ export default {
 
 <template>
     <message-area></message-area>
-    <div>
+    <div class="mt-1">
         <select v-model="set" class="ui dropdown">
             <option value="">選択してください</option>
             <option value="DMU">団結のドミナリア(DMU)</option>
@@ -128,13 +128,12 @@ export default {
             検索する
         </button>
     </div>
-
-    <card-list imgUrl></card-list>
-    <now-loading></now-loading>
-    <div class="text-center" v-if="cards.length != 0">
+    <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button class="ui purple button" @click="regist">
             Notionに登録する
         </button>
     </div>
+    <card-list></card-list>
+    <now-loading></now-loading>
 </template>
 <style></style>
