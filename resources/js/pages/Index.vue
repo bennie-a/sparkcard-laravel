@@ -16,18 +16,13 @@ export default {
         };
     },
     computed: {
-        getCards: function () {
-            let current = this.currentPage * this.perPage;
-            let start = current - this.perPage;
-            return this.cards.slice(start, current);
-        },
-        getPageCount: function () {
-            return Math.ceil(this.cards.length / this.perPage);
+        isDisabled: function () {
+            let selected = this.$store.getters["csvOption/selectedList"];
+            return selected.length == 0;
         },
     },
     methods: {
         async search() {
-            // $("#search").addClass("loading disabled");
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
             this.$store.dispatch("clearCards");
@@ -61,19 +56,29 @@ export default {
                 });
             $("#search").removeClass("loading disabled");
         },
+        showRegist() {
+            $("#regist").modal("show");
+        },
+        // Notionにカード情報を登録する。
         async regist() {
             this.$store.dispatch("setLoad", true);
             console.log("Notion Resist Start");
+            const card = this.$store.getters.card;
+            const checkbox = this.$store.getters["csvOption/selectedList"];
+            console.log(checkbox);
+            const filterd = card.filter((c) => {
+                return checkbox.includes(c.id);
+            });
             await Promise.all(
-                this.cards.map(async (c) => {
+                filterd.map(async (c) => {
                     let query = {
                         name: c.name,
                         enname: c.enname,
                         index: c.index,
                         price: c.price,
-                        attr: "DMU",
+                        attr: this.set,
                         color: c.color,
-                        imageurl: c.imageurl,
+                        imageurl: c.image,
                     };
                     await axios
                         .post("api/notion/card", query)
@@ -87,7 +92,8 @@ export default {
                 })
             );
             this.$store.dispatch("setLoad", false);
-            this.message = "登録が完了しました。";
+            $("#regist").modal("hide");
+            this.$store.dispatch("setSuccessMessage", "登録が完了しました。");
         },
         clickCallback(pageNum) {
             this.currentPage = Number(pageNum);
@@ -130,9 +136,25 @@ export default {
         </button>
     </div>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <button class="ui purple button" @click="regist">
+        <button
+            class="ui purple button"
+            @click="showRegist"
+            :class="{ disabled: isDisabled }"
+        >
             Notionに登録する
         </button>
+        <div id="regist" class="ui tiny modal">
+            <div class="header">Notice</div>
+            <div class="content">登録してもよろしいですか?</div>
+            <div class="actions">
+                <button class="ui cancel button">
+                    <i class="close icon"></i>キャンセル
+                </button>
+                <button class="ui primary button" @click="regist">
+                    <i class="checkmark icon"></i>登録する
+                </button>
+            </div>
+        </div>
     </div>
     <card-list></card-list>
     <now-loading></now-loading>

@@ -53,6 +53,7 @@ class CardController extends Controller
     public function store(Request $request)
     {   
         $details = $request->all();
+        logger()->debug("登録パラメータ", $details);
         $this->service->store($details);
         return Response::HTTP_OK;
     }

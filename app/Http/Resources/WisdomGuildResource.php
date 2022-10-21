@@ -15,6 +15,7 @@ class WisdomGuildResource extends JsonResource
     public function toArray($request)
     {
         return [
+                'id' => $this->getIndex(),
                 'index' => $this->getIndex(),
                 'name' => $this->getName(),
                 'enname' => $this->getEnname(),
