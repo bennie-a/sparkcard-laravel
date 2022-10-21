@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use App\Enum\CardColor;
 use App\Services\WisdomGuildRepository;
 use DomDocument;
 use DomXpath;
@@ -17,18 +19,22 @@ class WisdomGuildService {
         $this->repo = new WisdomGuildRepository();
     }
 
-
-
-    // 要ページ対応。
     public function fetch($query) {
+    $color = CardColor::matchByString($query['color']);
     $param = [ 
         'query' => [
             'set' => [$query['set']],
             'sort'=> 'eidcid',
-            'page'=> 1
+            'page'=> 1,
+            'color'=>$color->color(),
+            'color_multi' => $color->colorMulti(),
+            'color_ope' => $color->colorOpe(),
+            'cardtype' => $color->cardtype(),
+            'cardtype_ope' => $color->cardtypeOpe()
         ]
     ];
 
+        logger()->debug("検索条件", $param);
         $firstXpath = $this->repo->getAll($param);
         $xpathList = [$firstXpath];
         $cardlist = array();
@@ -43,14 +49,12 @@ class WisdomGuildService {
             $xpath = $this->repo->getAll($param);
             array_push($xpathList, $xpath);
         };
-        // 公式ギャラリー取得クラス
-        $gallary = new CardGallaryRepository('dominaria-united');
-
+        $devService = new MtgDevService();
         foreach($xpathList as $xpathIndex => $xpath) {
             $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');
             // 1ページ当たりのカードリンク数
             $count = $hreflist->count();
-            foreach($hreflist as $index => $a) {
+            foreach($hreflist as $a) {
                 $url = $a->attributes->getNamedItem("href")->nodeValue;
                 // カード名
                 $cardname = $a->nodeValue;
@@ -60,22 +64,16 @@ class WisdomGuildService {
                 if ($pricePath->length > 0) {
                     $price = $pricePath->item(0)->nodeValue;
                 }
-                // カード番号
-                $cardIndex = $xpathIndex * $count + $index;
-                $card = new Card($cardIndex, $cardname, $price);
+                $card = new Card($cardname, $price);
                 logger()->info('Card Info Get:'.$card->getName());
-                // カードギャラリーのバグ対応
-                if (strcmp($card->getName(), "残忍な巡礼者、コー追われのエラス") == 0) {
-                    continue;
-                }
-                // $color = $gallary->getCardColor($card->getName());
-                // if ($color == "") {
-                //     continue;
-                // }
-                // $imageurl = $gallary->getImageUrl($card->getName());
-                // $card->setColor($color);
-                // $card->setImageUrl($imageurl);
 
+                // MTG Developers.ioから取得
+                $res = $devService->getCardInfo($card->getEnname(), $query['set']);
+                if (!empty($res)) {
+                    $card->setImageUrl($res["image"]);
+                    $card->setIndex($res["id"]);
+                    $card->setColor($res["color"]);
+                }
                 array_push($cardlist, $card);
             }
         }
