@@ -128,13 +128,12 @@ export default {
             検索する
         </button>
     </div>
-
-    <card-list imgUrl></card-list>
-    <now-loading></now-loading>
-    <div class="text-center" v-if="cards.length != 0">
+    <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button class="ui purple button" @click="regist">
             Notionに登録する
         </button>
     </div>
+    <card-list></card-list>
+    <now-loading></now-loading>
 </template>
 <style></style>
