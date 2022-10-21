@@ -16,6 +16,7 @@ enum CardColor:string {
     case MULTI = "M";
     case LESS = "L";
     case ARTIFACT = "A";
+    case LAND = "Land";
     case UNDEFINED = "E";
 
     public function text() {
@@ -28,6 +29,7 @@ enum CardColor:string {
             self::MULTI => "多色",
             self::LESS => "無色",
             self::ARTIFACT => "アーティファクト",
+            self::LAND => "土地",
             self::UNDEFINED => "不明"
         };
     }
@@ -54,6 +56,9 @@ enum CardColor:string {
             case CardColor::ARTIFACT:
                 $color = [];
                 break;
+            case CardColor::LAND:
+                $color = [];
+                break;
             case CardColor::LESS:
                 $color = ["not-white", "not-blue", "not-black", "not-red", "not-green"];
                 break;
@@ -71,9 +76,12 @@ enum CardColor:string {
             case CardColor::ARTIFACT:
                 $ope = "able";
                 break;
+            case CardColor::LAND:
+                $ope = "able";
+                break;
             case EnumCardColor::LESS:
                 $ope = "must";
-            }
+        }
         return $ope;
     }
 
@@ -100,6 +108,8 @@ enum CardColor:string {
             case CardColor::LESS:
                 $type = ["artifact", "land"];
                 break;
+            case CardColor::LAND:
+                $type = ["land"];
         }
         return $type;
     }
@@ -128,8 +138,14 @@ enum CardColor:string {
     public static function match(array $card) {
         $colorKey = "colors";
         $types = $card["types"];
-        if (strcmp($types[0], "Artifact") == 0) {
+        $cardtype = $types[0];
+        // アーティファクト
+        if (strcmp($cardtype, "Artifact") == 0) {
             return CardColor::ARTIFACT;
+        }
+        // 土地
+        if (strcmp($cardtype, "Land") == 0) {
+            return CardColor::LAND;
         }
 
         // 無色
