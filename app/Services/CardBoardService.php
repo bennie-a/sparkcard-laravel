@@ -110,7 +110,7 @@ class CardBoardService {
         logger()->debug($details['attr']);
         $exp = $expansion->findByAttr($details['attr']);
         $page->setRelation("エキスパンション",[$exp]);
-        $page->setRelation("プラットフォーム",['864fb4c2af7641e5aa4daaaafbf97f51']);
+        $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
         // ミニレター
         $sends = [];
         if ($priceVal >= 1500) {

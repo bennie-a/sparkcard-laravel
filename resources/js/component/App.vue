@@ -59,7 +59,6 @@ export default {
         const main = document.querySelector("#main");
         const resizeObserver = new ResizeObserver((entries) => {
             this.mainHeight = this.$refs.main.clientHeight;
-            console.log(`メインの高さ ${this.mainHeight}`);
         });
         resizeObserver.observe(main);
         this.sidebarHeight = this.$refs.sidebar.clientHeight;
