@@ -4,15 +4,7 @@ namespace App\Services;
 
 use App\Enum\CardColor;
 use App\Services\WisdomGuildRepository;
-use DomDocument;
-use DomXpath;
 use App\Models\Card;
-use App\Repositories\Api\Mtg\CardGallaryRepository;
-use DOMNode;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-
 class WisdomGuildService {
 
     public function __construct() {
@@ -41,7 +33,7 @@ class WisdomGuildService {
 
         // ページ番号を取得
         $pagingNodeList = $firstXpath->query('//*[@id="contents"]/div[1]/ul/li[not(@class="now")]/a[not(text()="次へ")]/@href');
-        foreach($pagingNodeList as $index => $href) {
+        foreach($pagingNodeList as $href) {
             $queries = [];
             $parse = parse_url($href->nodeValue)['query'];
             parse_str($parse, $queries);
@@ -50,7 +42,7 @@ class WisdomGuildService {
             array_push($xpathList, $xpath);
         };
         $devService = new MtgDevService();
-        foreach($xpathList as $xpathIndex => $xpath) {
+        foreach($xpathList as $xpath) {
             $hreflist = $xpath->query('//*[@id="contents"]/div[@class="card"]/b/a');
             // 1ページ当たりのカードリンク数
             $count = $hreflist->count();

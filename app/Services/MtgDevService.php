@@ -24,9 +24,8 @@ class MtgDevService {
     public function getCardInfo($name, $exp) {
         $res = $this->repo->getCard($name, $exp);
         $cardArray = $res["cards"];
-        $responseArray = ['id' => -1, 'color' => '', 'image' => ''];
+        $responseArray = ['id' => -1, 'color' => CardColor::UNDEFINED->text(), 'image' => ''];
         if (empty($cardArray)) {
-            $responseArray['color'] = CardColor::UNDEFINED->text();
             return $responseArray;
         }
         // 0件対応

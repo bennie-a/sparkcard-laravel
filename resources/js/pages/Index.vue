@@ -118,6 +118,7 @@ export default {
             <option value="multi">多色</option>
             <option value="less">無色</option>
             <option value="artifact">アーティファクト</option>
+            <option value="land">土地</option>
         </select>
         <button
             id="search"
