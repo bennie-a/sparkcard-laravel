@@ -16,7 +16,7 @@
                 <th>カード名</th>
                 <th v-if="this.exp">エキスパンション</th>
 
-                <th v-if="this.isNotion" class="one wide">枚数</th>
+                <th class="one wide">枚数</th>
                 <th v-if="this.isNotion" class="one wide">状態</th>
                 <th>色</th>
                 <th v-if="this.isNotion" class="one wide">言語</th>
@@ -61,7 +61,18 @@
                 </td>
                 <td v-if="this.exp">{{ card.exp.name }}</td>
 
-                <td v-if="this.isNotion">{{ card.stock }}</td>
+                <td v-if="this.isNotion">{{ card.stock }}枚</td>
+                <td v-if="this.isNotion == false">
+                    <div class="ui right labeled input one wide">
+                        <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            class="text-stock"
+                        />
+                        <div class="ui basic label">枚</div>
+                    </div>
+                </td>
                 <td v-if="this.isNotion">
                     <div class="ui label" :class="condiColor(card.condition)">
                         {{ card.condition }}
@@ -96,6 +107,10 @@ img.image {
     margin: 0;
     border: 0;
     color: #2185d0;
+}
+
+input.text-stock {
+    width: 6vw;
 }
 </style>
 <script>
