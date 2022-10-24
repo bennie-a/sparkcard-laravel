@@ -79,6 +79,7 @@ export default {
                         attr: this.set,
                         color: c.color,
                         imageurl: c.image,
+                        stock: c.stock,
                     };
                     await axios
                         .post("api/notion/card", query)

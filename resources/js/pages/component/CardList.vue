@@ -63,12 +63,18 @@
 
                 <td v-if="this.isNotion">{{ card.stock }}枚</td>
                 <td v-if="this.isNotion == false">
-                    <div class="ui right labeled input one wide">
+                    <div
+                        class="ui right labeled input one wide"
+                        :class="{
+                            disabled: !this.selectedCard.includes(card.id),
+                        }"
+                    >
                         <input
                             type="number"
                             step="1"
                             min="0"
                             class="text-stock"
+                            v-model="card.stock"
                         />
                         <div class="ui basic label">枚</div>
                     </div>
@@ -147,6 +153,9 @@ export default {
                 };
                 return colors[condition];
             };
+        },
+        isChecked: function ($id) {
+            console.log($id);
         },
     },
     methods: {
