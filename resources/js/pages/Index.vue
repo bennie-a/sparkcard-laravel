@@ -63,12 +63,15 @@ export default {
         async regist() {
             this.$store.dispatch("setLoad", true);
             console.log("Notion Resist Start");
+            this.$store.dispatch("message/clear");
+
             const card = this.$store.getters.card;
             const checkbox = this.$store.getters["csvOption/selectedList"];
             console.log(checkbox);
             const filterd = card.filter((c) => {
                 return checkbox.includes(c.id);
             });
+
             await Promise.all(
                 filterd.map(async (c) => {
                     let query = {
@@ -89,12 +92,19 @@ export default {
                             } else {
                                 console.log(response.status);
                             }
+                            this.$store.dispatch(
+                                "setSuccessMessage",
+                                "登録が完了しました。"
+                            );
+                        })
+                        .catch(({ response }) => {
+                            const data = response.data;
+                            this.$store.dispatch("message/error", data.message);
                         });
                 })
             );
             this.$store.dispatch("setLoad", false);
             $("#regist").modal("hide");
-            this.$store.dispatch("setSuccessMessage", "登録が完了しました。");
         },
         clickCallback(pageNum) {
             this.currentPage = Number(pageNum);
@@ -146,7 +156,10 @@ export default {
         </button>
         <div id="regist" class="ui tiny modal">
             <div class="header">Notice</div>
-            <div class="content">登録してもよろしいですか?</div>
+            <div class="content">
+                登録してもよろしいですか?
+                <now-loading></now-loading>
+            </div>
             <div class="actions">
                 <button class="ui cancel button">
                     <i class="close icon"></i>キャンセル
