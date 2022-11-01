@@ -97,7 +97,7 @@ class CardBoardService {
         $page->setTitle("名前", $details['name']);
         $page->setText("英名", $details['enname']);
         $page->setSelect("Status", "ロジクラ要登録");
-        $page->setNumber("枚数", 0);
+        $page->setNumber("枚数", $details['stock']);
         $priceVal = intval($details['price']);
         $page->setNumber("価格", $priceVal);
         $page->setNumber("カード番号", $details['index']);

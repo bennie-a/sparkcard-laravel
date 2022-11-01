@@ -8,12 +8,10 @@ use App\Http\Resources\Notion\NotionCardResource;
 use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Services\CardBoardService;
 use Exception;
-use FiveamCode\LaravelNotionApi\Entities\Page;
-use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
-use FiveamCode\LaravelNotionApi\Notion;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CardController extends Controller
 {
@@ -51,8 +49,13 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $details = $request->all();
+        $name = '「'.$details['name'].'」';
+        $rules = ['stock' => 'required | integer | min:1'];
+        $msgs = ['stock.required' => $name.'の枚数が入力されていません。',
+            'stock.min' => $name.'の枚数は1枚以上を入力してください。'];
+        Validator::make($details, $rules, $msgs)->validate();
         logger()->debug("登録パラメータ", $details);
         $this->service->store($details);
         return Response::HTTP_OK;
