@@ -156,11 +156,10 @@ export default {
         </button>
         <div id="regist" class="ui tiny modal">
             <div class="header">Notice</div>
-            <div class="content">
+            <div class="content" v-if="this.$store.getters.isLoad == false">
                 登録してもよろしいですか?
-                <now-loading></now-loading>
             </div>
-            <div class="actions">
+            <div class="actions" v-if="this.$store.getters.isLoad == false">
                 <button class="ui cancel button">
                     <i class="close icon"></i>キャンセル
                 </button>
@@ -168,6 +167,7 @@ export default {
                     <i class="checkmark icon"></i>登録する
                 </button>
             </div>
+            <now-loading></now-loading>
         </div>
     </div>
     <card-list></card-list>
