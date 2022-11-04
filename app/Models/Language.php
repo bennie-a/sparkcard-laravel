@@ -9,5 +9,5 @@ class Language extends Model
 {
     use HasFactory;
 
-    protected $table = 'Language';
+    protected $table = 'language';
 }

@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('language', function (Blueprint $table) {
+        Schema::create('shipping', function(Blueprint $table) {
             $table->id()->comment('ID');
-            $table->string('name')->nullable(false)->comment('言語名');
-            $table->unique(['name']);
+            $table->string('notion_id', 32)->nullable(false)->comment('NotionのID');
+            $table->string('name', 100)->nullable(false)->comment('発送方法');
+            $table->integer('price')->nullable(false)->comment('送料');
             $table->timestamps();
 
+            // ユニークキーの追加
+            $table->unique(['notion_id', 'name']);
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('language');
+        Schema::dropIfExists('shipping');
     }
 };
