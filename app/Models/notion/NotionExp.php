@@ -11,6 +11,10 @@ class NotionExp {
     private string $name;
 
     private string $attr = "";
+
+    private int $baseId = 0;
+    
+    private string $relaseAt = "";
     
     /**
      * Get the value of notionId
@@ -68,6 +72,46 @@ class NotionExp {
     public function setAttr($attr)
     {
         $this->attr = $attr;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of relaseAt
+     */ 
+    public function getRelaseAt()
+    {
+        return $this->relaseAt;
+    }
+
+    /**
+     * Set the value of relaseAt
+     *
+     * @return  self
+     */ 
+    public function setRelaseAt($relaseAt)
+    {
+        $this->relaseAt = $relaseAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of baseId
+     */ 
+    public function getBaseId():int
+    {
+        return $this->baseId;
+    }
+
+    /**
+     * Set the value of baseId
+     *
+     * @return  self
+     */ 
+    public function setBaseId(int $baseId)
+    {
+        $this->baseId = $baseId;
 
         return $this;
     }

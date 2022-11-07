@@ -17,7 +17,9 @@ class ExpansionResource extends JsonResource
         return [
                 'id'=>$this->getNotionId(),
                 'name' => $this->getName(),
-                'attr' => $this->getAttr()
+                'attr' => $this->getAttr(),
+                'base_id' => $this->getBaseId(),
+                'release_date' => $this->getRelaseAt()
             ];
     }
 }

@@ -9,7 +9,7 @@ class GuzzleClientFactory {
         $urlMap = [
             'wisdom' => 'http://whisper.wisdom-guild.net',
             'mtgdev' => 'https://api.magicthegathering.io/v1/',
-            'gallary' => 'https://magic.wizards.com/ja/articles/archive/card-image-gallery/'
+            'scryfall' => 'https://api.scryfall.com/'
         ];
         if (!Arr::exists($urlMap, $path)) {
           throw new \Exception('invalid path');
