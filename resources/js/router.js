@@ -4,6 +4,7 @@ import LogikuraItemCSV from "./pages/logikura/LogikuraItemCSV.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemCSV.vue";
 import MercariItemCSV from "./pages/mercari/MercariItemCSV.vue";
+import ExpansionPage from "./pages/settings/ExpansionPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -50,6 +51,14 @@ const routes = [
             title: "ステータス一括変更",
             description:
                 "Notionの商品管理ボードあるカードのステータスを一括で変更します。",
+        },
+    },
+    {
+        path: "/settings/expansion",
+        component: ExpansionPage,
+        meta: {
+            title: "エキスパンション設定",
+            description: "NotionのエキスパンションをDBに一括登録します。",
         },
     },
 ];
