@@ -15,14 +15,13 @@ return new class extends Migration
     {
         //
         Schema::create('expansion', function(Blueprint $table) {
-            $table->id()->comment('ID');
-            $table->string('notion_id', 32)->nullable(false)->comment('NotionのID');
+            $table->string('notion_id', 32)->primary()->comment('NotionのID');
             $table->integer('base_id')->nullable(false)->comment('BASEのID');
             $table->string('name', 60)->nullable(false)->comment('エキスパンション名');
             $table->string('attr', 7)->nullable(false)->comment('略称');
             $table->date('release_date')->nullable(false)->comment('発売日');
 
-            $table->unique(['notion_id', 'base_id', 'name', 'attr']);
+            $table->unique(['base_id', 'name', 'attr']);
         });
     }
 
