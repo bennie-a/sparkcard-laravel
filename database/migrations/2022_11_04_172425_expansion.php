@@ -15,7 +15,7 @@ return new class extends Migration
     {
         //
         Schema::create('expansion', function(Blueprint $table) {
-            $table->string('notion_id', 32)->primary()->comment('NotionのID');
+            $table->string('notion_id', 36)->primary()->comment('NotionのID');
             $table->integer('base_id')->nullable(false)->comment('BASEのID');
             $table->string('name', 60)->nullable(false)->comment('エキスパンション名');
             $table->string('attr', 7)->nullable(false)->comment('略称');

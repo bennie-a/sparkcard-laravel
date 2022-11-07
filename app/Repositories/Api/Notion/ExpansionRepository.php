@@ -16,6 +16,17 @@ class ExpansionRepository extends NotionRepository{
         parent::__construct($databaseId);
     }
 
+    /**
+     * 全エキスパンションを取得する。
+     */
+    public function findAll()
+    {
+       $notion = parent::createNotion();
+       $pages = $notion->database($this->databaseId)->query()->asCollection();
+       $contents = $pages[0];
+       return $pages;
+    }
+
     //　名前からエキスパンションIDを取得する。
     public function findIdByName(string $name){
         $notion = parent::createNotion();

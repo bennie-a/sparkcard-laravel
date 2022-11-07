@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Mtg\CardGallaryController;
 use App\Http\Controllers\Notion\CardController;
+use App\Http\Controllers\Notion\ExpansionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::resource('/wisdom', App\Http\Controllers\WidsomGuildController::class);
 Route::resource('/notion/card', CardController::class);
-Route::resource('/mtg', CardGallaryController::class);
+Route::resource('notion/expansion', ExpansionController::class);

@@ -12,10 +12,6 @@ use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
 use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
-
-use function PHPUnit\Framework\isEmpty;
-use function Psy\debug;
 
 class CardBoardService {
     
@@ -31,7 +27,6 @@ class CardBoardService {
             $error = ['status' => 404, 'message'=>'件数は0件です。'];
             return $error;
         }
-        $expRepo = new ExpansionRepository();
         foreach($pages as $page) {
             $array = $page->toArray();
             $price = $page->getProperty('価格');
