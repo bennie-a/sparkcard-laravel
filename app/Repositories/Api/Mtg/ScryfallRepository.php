@@ -15,7 +15,7 @@ class ScryfallRepository {
      * @return array エキスパンション情報 
      */
     public function getExpansion(string $attr) {
-        if (str_ends_with($attr, '_BF')) {
+        if (str_ends_with($attr, '_BF') || str_ends_with($attr, '_BLK') ) {
             $attr = substr($attr, 0, 3);
         }
         $client = GuzzleClientFactory::create("scryfall");

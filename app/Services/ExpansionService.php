@@ -19,6 +19,7 @@ class ExpansionService {
 
             $exp->setNotionId($array['id']);
             $exp->setName($array['title']);
+            logger()->debug("エキスパンション：".$exp->getName());
 
             $properties = $array['rawProperties'];
 
