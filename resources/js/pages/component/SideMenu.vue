@@ -107,10 +107,14 @@
                 </ul>
             </div>
             <div class="ui divider"></div>
-            <span>ver.1.0.0</span>
+            <span>ver.{{ version }}</span>
         </div>
     </div>
 </template>
+<script setup>
+//package.jsonからバージョンを取得。
+import { version } from "../../../../package";
+</script>
 <style scoped>
 #logo {
     background: white;
