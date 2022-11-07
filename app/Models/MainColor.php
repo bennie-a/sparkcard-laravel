@@ -11,11 +11,11 @@ class MainColor extends Model
 
     protected $table = 'main_color';
 
-    protected $fillable = ['attr', 'name'];
+    public $fillable = ['attr', 'name'];
 
-    protected $primaryKey = 'attr';
+    public $primaryKey = 'attr';
 
-    protected $incrementing = false;
+    public $incrementing = false;
 
-    protected $keyType = 'string';
+    public $keyType = 'string';
 }

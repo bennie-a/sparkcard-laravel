@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(LanguageSeeder::class);
+        $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
         // \App\Models\User::factory(10)->create();
 

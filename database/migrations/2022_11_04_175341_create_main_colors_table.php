@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('main_color', function (Blueprint $table) {
             // $table->id();
-            $table->string('attr', 10)->primary()->comment('略称');
+            $table->string('attr', 4)->primary()->comment('略称');
             $table->string('name', 20)->unique()->comment('色');
             $table->timestamps();
         });
