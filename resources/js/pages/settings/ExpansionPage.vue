@@ -2,7 +2,25 @@
     <section>
         <message-area></message-area>
         <h2>未登録分</h2>
-        <button class="ui button purple" @click="store">DBに登録する</button>
+        <button class="ui button purple" @click="showRegist">
+            DBに登録する
+        </button>
+        <div id="regist" class="ui tiny modal">
+            <div class="header">Notice</div>
+            <div class="content" v-if="this.$store.getters.isLoad == false">
+                登録してもよろしいですか?
+            </div>
+            <div class="actions" v-if="this.$store.getters.isLoad == false">
+                <button class="ui cancel button">
+                    <i class="close icon"></i>キャンセル
+                </button>
+                <button class="ui primary button" @click="store">
+                    <i class="checkmark icon"></i>登録する
+                </button>
+            </div>
+            <now-loading></now-loading>
+        </div>
+
         <table class="ui table striped six column">
             <thead>
                 <tr>
@@ -49,7 +67,13 @@ export default {
         this.$store.dispatch("setLoad", false);
     },
     methods: {
+        showRegist() {
+            $("#regist").modal("show");
+        },
+
         store: async function () {
+            this.$store.dispatch("setLoad", true);
+
             let exp = this.$store.getters["expansion/result"][0];
             let json = {
                 id: exp.id,
@@ -61,6 +85,9 @@ export default {
             const task = new AxiosTask(this.$store);
             const success = function (response, store) {};
             await task.post("/database/exp", json, success);
+            this.$store.dispatch("setLoad", false);
+            $("#regist").modal("hide");
+            this.$store.dispatch("setSuccessMessage", "登録が完了しました。");
         },
     },
     components: {

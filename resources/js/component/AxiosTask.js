@@ -38,7 +38,6 @@ export class AxiosTask {
                 }
             })
             .catch((e) => {});
-        this.$store.dispatch("setSuccessMessage", "登録が完了しました。");
     }
 
     getApiUrl(url) {
