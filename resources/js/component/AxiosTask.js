@@ -29,15 +29,16 @@ export class AxiosTask {
             });
     }
     // POSETメソッドでAPIを呼び出す
-    async store(url, json, success) {
+    async post(url, json, success) {
         await axios
             .post(this.getApiUrl(url), json)
             .then((response) => {
                 if (response.status == 201) {
-                    success(response);
+                    success(response, this.store);
                 }
             })
             .catch((e) => {});
+        this.$store.dispatch("setSuccessMessage", "登録が完了しました。");
     }
 
     getApiUrl(url) {

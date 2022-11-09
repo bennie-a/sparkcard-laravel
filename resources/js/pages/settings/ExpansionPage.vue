@@ -27,6 +27,7 @@
 <script>
 import NowLoading from "../component/NowLoading.vue";
 import { AxiosTask } from "../../component/AxiosTask";
+import MessageArea from "../component/MessageArea.vue";
 
 export default {
     data() {
@@ -35,6 +36,7 @@ export default {
         };
     },
     mounted: async function () {
+        this.$store.dispatch("message/clear");
         this.$store.dispatch("expansion/clear");
         this.$store.dispatch("setLoad", true);
         const task = new AxiosTask(this.$store);
@@ -53,14 +55,17 @@ export default {
                 id: exp.id,
                 name: exp.name,
                 attr: exp.attr,
+                base_id: exp.base_id,
                 release_date: exp.release_date,
             };
-            const success = function (response) {};
-            await task.store("/notion/expansion", json);
+            const task = new AxiosTask(this.$store);
+            const success = function (response, store) {};
+            await task.post("/database/exp", json, success);
         },
     },
     components: {
         "now-loading": NowLoading,
+        "message-area": MessageArea,
     },
 };
 </script>

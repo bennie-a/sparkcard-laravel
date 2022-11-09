@@ -22,9 +22,13 @@ class ExpDBController extends Controller
     public function store(Request $request) {
         $details = $request->all();
         $exp = new Expansion();
+        $baseId = null;
+        if (array_key_exists('base_id', $details)) {
+            $baseId = $details['base_id']; 
+        }
         $releaseDate = new Carbon($details['release_date']);
         $exp->create(['notion_id' => $details['id'],
-        'base_id' => $details['base_id'],
+        'base_id' => $baseId,
         'name' => $details['name'],
         'attr' => $details['attr'],
         'release_date' => $releaseDate]);
