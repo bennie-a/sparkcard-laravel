@@ -1,7 +1,7 @@
 <template>
     <section>
         <message-area></message-area>
-        <h2>未登録分</h2>
+        <h2 class="ui dividing header">未登録分</h2>
         <ModalButton @action="store">DBに登録する</ModalButton>
         <table class="ui table striped six column">
             <thead>
@@ -42,7 +42,6 @@ export default {
         const task = new AxiosTask(this.$store);
         const success = function (response, store, query) {
             store.dispatch("expansion/setResult", response.data);
-            // this.expansions = response.data;
         };
         const fail = function (e, store, query) {};
         await task.get("/notion/expansion/", [], success, fail);
@@ -50,22 +49,25 @@ export default {
     },
     methods: {
         store: async function () {
-            this.$store.dispatch("setLoad", true);
-
-            let exp = this.$store.getters["expansion/result"][0];
-            let json = {
-                id: exp.id,
-                name: exp.name,
-                attr: exp.attr,
-                base_id: exp.base_id,
-                release_date: exp.release_date,
-            };
+            const list = this.$store.getters["expansion/result"];
             const task = new AxiosTask(this.$store);
-            const success = function (response, store) {};
-            await task.post("/database/exp", json, success);
-            this.$store.dispatch("setLoad", false);
-            $("#regist").modal("hide");
-            this.$store.dispatch("setSuccessMessage", "登録が完了しました。");
+            await Promise.all(
+                list.map(async (exp) => {
+                    let json = {
+                        id: exp.id,
+                        name: exp.name,
+                        attr: exp.attr,
+                        base_id: exp.base_id,
+                        release_date: exp.release_date,
+                    };
+                    const success = function (response, store) {};
+                    await task.post("/database/exp", json, success);
+                })
+            );
+            this.$store.dispatch(
+                "setSuccessMessage",
+                `${list.length}件登録が完了しました。`
+            );
         },
     },
     components: {

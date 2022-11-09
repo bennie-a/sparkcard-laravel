@@ -1,5 +1,7 @@
 <?php
 namespace App\Services;
+
+use App\Models\Expansion;
 use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Models\notion\NotionExp;
 use App\Services\ScryfallService;
@@ -17,15 +19,16 @@ class ExpansionService {
         foreach($contents as $page) {
             $array = $page->toArray();
             $id = $array['id'];
-            $isExist = DB::table("expansion")->where('notion_id', $id)->exists();
+            $name = $array['title'];
+            $isExist = Expansion::isExist($name);
             if ($isExist) {
                 continue;
             }
             $exp = new NotionExp();
 
             $exp->setNotionId($id);
-            $exp->setName($array['title']);
-            logger()->debug("エキスパンション：".$exp->getName());
+            $exp->setName($name);
+            logger()->debug("エキスパンション：".$id.":".$exp->getName());
 
             $properties = $array['rawProperties'];
 

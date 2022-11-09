@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('notion_id', 36)->primary()->comment('NotionのID');
             $table->integer('base_id')->nullable(true)->comment('BASEのID');
             $table->string('name', 60)->nullable(false)->comment('エキスパンション名');
-            $table->string('attr', 7)->nullable(false)->comment('略称');
+            $table->string('attr', 10)->nullable(false)->comment('略称');
             $table->date('release_date')->nullable(true)->comment('発売日');
             $table->timestamps();
 

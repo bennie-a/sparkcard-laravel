@@ -36,6 +36,9 @@ export class AxiosTask {
                 if (response.status == 201) {
                     success(response, this.store);
                 }
+                if (response.status == 401) {
+                    console.log(response.data);
+                }
             })
             .catch((e) => {});
     }
