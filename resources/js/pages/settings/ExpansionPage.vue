@@ -1,7 +1,8 @@
 <template>
     <section>
+        <message-area></message-area>
         <h2>未登録分</h2>
-        <button class="ui button purple">登録する</button>
+        <button class="ui button purple" @click="store">DBに登録する</button>
         <table class="ui table striped six column">
             <thead>
                 <tr>
@@ -44,6 +45,19 @@ export default {
         const fail = function (e, store, query) {};
         await task.get("/notion/expansion/", [], success, fail);
         this.$store.dispatch("setLoad", false);
+    },
+    methods: {
+        store: async function () {
+            let exp = this.$store.getters["expansion/result"][0];
+            let json = {
+                id: exp.id,
+                name: exp.name,
+                attr: exp.attr,
+                release_date: exp.release_date,
+            };
+            const success = function (response) {};
+            await task.store("/notion/expansion", json);
+        },
     },
     components: {
         "now-loading": NowLoading,

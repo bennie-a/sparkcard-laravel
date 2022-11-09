@@ -9,10 +9,12 @@ class Expansion extends Model
 {
     use HasFactory;
 
-    protected $incrementing = false;
+    protected $table = 'expansion';
+
+    public $incrementing = false;
 
     protected $keyType = 'string';
 
-    protected $fillable = ['notion_id', 'base_id', 'name', 'attr'];
+    protected $fillable = ['notion_id', 'base_id', 'name', 'attr', 'release_date'];
 
 }

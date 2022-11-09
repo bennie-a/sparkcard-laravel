@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('color_id')->comment('main_colorテーブルの略称');
             $table->foreign('color_id')->references('attr')->on('main_color');
             $table->string('image_url')->nullable(true)->comment('画像URL');
+            $table->timestamps();
         });
     }
 

@@ -28,6 +28,17 @@ export class AxiosTask {
                 fail(e, query);
             });
     }
+    // POSETメソッドでAPIを呼び出す
+    async store(url, json, success) {
+        await axios
+            .post(this.getApiUrl(url), json)
+            .then((response) => {
+                if (response.status == 201) {
+                    success(response);
+                }
+            })
+            .catch((e) => {});
+    }
 
     getApiUrl(url) {
         return "/api" + url;
