@@ -1,9 +1,9 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import LogikuraItemCSV from "./pages/logikura/LogikuraItemCSV.vue";
+import LogikuraItemCSV from "./pages/logikura/LogikuraItemPage.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
-import BaseItemCSV from "./pages/baseshop/BaseItemCSV.vue";
-import MercariItemCSV from "./pages/mercari/MercariItemCSV.vue";
+import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
+import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/settings/ExpansionPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -36,7 +36,7 @@ const routes = [
     },
     {
         path: "/mercari/newitem",
-        component: MercariItemCSV,
+        component: Mercari,
         meta: {
             title: "メルカリ用CSVダウンロード",
             description:

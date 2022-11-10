@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\BaseCategory;
 use App\Models\Shipping;
 use Illuminate\Database\Seeder;
 
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
+        $this->call(BaseCategory::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
