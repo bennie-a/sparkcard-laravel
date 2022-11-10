@@ -3,6 +3,7 @@
 use App\Http\Controllers\DB\ExpDBController;
 use App\Http\Controllers\Notion\CardController;
 use App\Http\Controllers\Notion\ExpansionController;
+use App\Http\Controllers\CardJsonFileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,4 @@ Route::resource('/wisdom', App\Http\Controllers\WidsomGuildController::class);
 Route::resource('/notion/card', CardController::class);
 Route::resource('notion/expansion', ExpansionController::class);
 Route::resource('database/exp', ExpDBController::class);
+Route::post('upload/card', [CardJsonFileController::class, 'upload']);

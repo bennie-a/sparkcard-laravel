@@ -4,19 +4,25 @@
         <file-upload @action="upload" type="json"></file-upload>
         {{ filename }}
     </section>
+    <section>{{ item }}</section>
 </template>
 <script>
 import FileUpload from "../component/FileUpload.vue";
 import MessageArea from "../component/MessageArea.vue";
-
+import axios from "axios";
 export default {
     data() {
-        return { filename: "ファイルを選択してください" };
+        return { filename: "ファイルを選択してください", item: "" };
     },
     methods: {
-        upload: function (file) {
+        upload: async function (file) {
             this.filename = file.name;
-            // console.log(file.name);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+            await axios.post("/api/upload/card", file, config);
         },
     },
     components: {
