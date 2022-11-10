@@ -5,6 +5,7 @@ import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/settings/ExpansionPage.vue";
+import CardInfoPage from "./pages/settings/CardInfoPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -57,8 +58,16 @@ const routes = [
         path: "/settings/expansion",
         component: ExpansionPage,
         meta: {
-            title: "エキスパンション設定",
+            title: "エキスパンション登録",
             description: "NotionのエキスパンションをDBに一括登録します。",
+        },
+    },
+    {
+        path: "/settings/cardinfo",
+        component: CardInfoPage,
+        meta: {
+            title: "カード情報マスタ登録",
+            description: "JSONファイルのカード情報をDBに登録します。",
         },
     },
 ];

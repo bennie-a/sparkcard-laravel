@@ -96,12 +96,17 @@
                             :class="{
                                 active: $route.path === '/settings/expansion',
                             }"
-                            >エキスパンション設定</router-link
+                            >エキスパンション登録</router-link
                         >
                     </li>
                     <li>
-                        <router-link to="" class="nav-link"
-                            >カード情報</router-link
+                        <router-link
+                            to="/settings/cardinfo"
+                            class="nav-link"
+                            :class="{
+                                active: $route.path === '/settings/cardinfo',
+                            }"
+                            >カード情報マスタ登録</router-link
                         >
                     </li>
                 </ul>
