@@ -12,7 +12,7 @@ import MessageArea from "../component/MessageArea.vue";
 import axios from "axios";
 export default {
     data() {
-        return { filename: "ファイルを選択してください", item: "" };
+        return { filename: "ファイルを選択してください", item: [] };
     },
     methods: {
         upload: async function (file) {
@@ -26,13 +26,14 @@ export default {
                 .post("/api/upload/card", file, config)
                 .then((response) => {
                     if (response.status == 201) {
+                        this.item = response.data;
                     } else {
                     }
                 })
                 .catch((e) => {
                     if (e.response.status == 422) {
                         const data = e.response.data;
-                        this.$store.dispatch("message/error", data.message);
+                        this.$store.dispatch("message/error", data.error);
                     }
                 });
         },
