@@ -25,4 +25,4 @@ Route::resource('/wisdom', App\Http\Controllers\WidsomGuildController::class);
 Route::resource('/notion/card', CardController::class);
 Route::resource('notion/expansion', ExpansionController::class);
 Route::resource('database/exp', ExpDBController::class);
-Route::post('upload/card', [CardJsonFileController::class, 'upload']);
+Route::post('upload/card', [CardJsonFileController::class, 'uploadCardFile']);
