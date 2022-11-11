@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CardJsonFileController extends Controller
 {
@@ -15,7 +16,10 @@ class CardJsonFileController extends Controller
      * @return void
      */
     public function uploadCardFile(Request $request) {
-        $json = $request->input("data");
+        $rules = ['data' => 'required'];
+        $messages = ['data.required' => 'JSONにdataオブジェクトがありません'];
+        Validator::make($request->all(), $rules, $messages)->validate();
+        $json = $request->only("data");
         $cards = $json["cards"];
         foreach($cards as $c) {
             logger()->debug($c["name"]);

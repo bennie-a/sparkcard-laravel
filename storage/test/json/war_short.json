@@ -1,0 +1,1188 @@
+{
+    "meta": { "date": "2022-11-01", "version": "5.2.0+20221101" },
+    "data": {
+        "baseSetSize": 264,
+        "block": "Guilds of Ravnica",
+        "booster": {},
+        "cards": [
+            {
+                "artist": "Zezhou Chen",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 5234,
+                "finishes": ["nonfoil", "foil"],
+                "flavorText": "\"We agree that order benefits everyone, but not until you enforce it.\"",
+                "foreignData": [
+                    {
+                        "flavorText": "„Wir sind uns einig, dass Ordnung gut für alle ist, aber dafür muss sie erst einmal durchgesetzt werden.\"",
+                        "language": "German",
+                        "multiverseId": 461197,
+                        "name": "Bund der Disziplin",
+                        "text": "Tappe alle Kreaturen, die deine Gegner kontrollieren. Kreaturen, die du kontrollierst, erhalten Lebensverknüpfung bis zum Ende des Zuges.",
+                        "type": "Hexerei"
+                    },
+                    {
+                        "flavorText": "\"Estamos de acuerdo en que el orden beneficia a todos, pero primero hay que imponerlo\".",
+                        "language": "Spanish",
+                        "multiverseId": 461461,
+                        "name": "Vínculo de disciplina",
+                        "text": "Gira todas las criaturas que controlan tus oponentes. Las criaturas que controlas ganan la habilidad de vínculo vital hasta el final del turno.",
+                        "type": "Conjuro"
+                    },
+                    {
+                        "flavorText": "« Certes, l'ordre profite à tous, mais pas avant que vous ne le fassiez respecter. »",
+                        "language": "French",
+                        "multiverseId": 461725,
+                        "name": "Lien de discipline",
+                        "text": "Engagez toutes les créatures que vos adversaires contrôlent. Les créatures que vous contrôlez acquièrent le lien de vie jusqu'à la fin du tour.",
+                        "type": "Rituel"
+                    },
+                    {
+                        "flavorText": "\"Riconosciamo che l'ordine è un bene per tutti, ma solo se viene fatto rispettare.\"",
+                        "language": "Italian",
+                        "multiverseId": 461989,
+                        "name": "Vincolo di Disciplina",
+                        "text": "TAPpa tutte le creature controllate dai tuoi avversari. Le creature che controlli hanno legame vitale fino alla fine del turno.",
+                        "type": "Stregoneria"
+                    },
+                    {
+                        "flavorText": "「秩序が人々に有益だという点では意見が一致した。では、それを施行しよう。」",
+                        "language": "Japanese",
+                        "multiverseId": 462253,
+                        "name": "規律の絆",
+                        "text": "対戦相手がコントロールしているクリーチャーをすべてタップする。ターン終了時まで、あなたがコントロールしているクリーチャーは絆魂を得る。",
+                        "type": "ソーサリー"
+                    },
+                    {
+                        "flavorText": "\"우리는 질서가 모두에게 이득이 된다는 것에 동의하지만, 그러려면 먼저 질서를 집행해야 한다.\"",
+                        "language": "Korean",
+                        "multiverseId": 462517,
+                        "name": "규율의 유대",
+                        "text": "당신의 상대들이 조종하는 모든 생물을 탭한다. 당신이 조종하는 생물들은 턴종료까지 생명연결을 얻는다.",
+                        "type": "집중마법"
+                    },
+                    {
+                        "flavorText": "\"Concordamos que a ordem beneficia a todos, mas ela precisa ser imposta.\"",
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 462781,
+                        "name": "Elo de Disciplina",
+                        "text": "Vire todas as criaturas que seus oponentes controlam. As criaturas que você controla ganham vínculo com a vida até o final do turno.",
+                        "type": "Feitiço"
+                    },
+                    {
+                        "flavorText": "«Мы согласны, что порядок всем идет на пользу — но лишь когда заставляешь соблюдать его».",
+                        "language": "Russian",
+                        "multiverseId": 463045,
+                        "name": "Узы Дисциплины",
+                        "text": "Поверните все существа под контролем ваших оппонентов. Существа под вашим контролем получают Цепь жизни до конца хода.",
+                        "type": "Волшебство"
+                    },
+                    {
+                        "flavorText": "「我们均同意，制订法条虽能维护秩序，但需切实执行才能惠泽万民。」",
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463309,
+                        "name": "守律璧合",
+                        "text": "横置所有由对手操控的生物。由你操控的生物获得系命异能直到回合结束。",
+                        "type": "法术"
+                    },
+                    {
+                        "flavorText": "「我們均同意，制訂法條雖能維護秩序，但需切實執行才能惠澤萬民。」",
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463573,
+                        "name": "守律璧合",
+                        "text": "橫置所有由對手操控的生物。由你操控的生物獲得繫命異能直到回合結束。",
+                        "type": "巫術"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224526",
+                    "cardKingdomId": "224227",
+                    "cardsphereId": "59095",
+                    "mcmId": "372217",
+                    "mcmMetaId": "269552",
+                    "mtgArenaId": "69457",
+                    "mtgjsonV4Id": "e575062a-dcc4-5101-88be-0c246e15762f",
+                    "mtgoId": "71618",
+                    "multiverseId": "460933",
+                    "scryfallId": "bb7c78bb-9f2a-47a4-adc4-b497bb38f46f",
+                    "scryfallIllustrationId": "43dd6542-b92c-47d2-a5af-787b5705e3cb",
+                    "scryfallOracleId": "00e9957a-5684-4a07-954e-8161925fefe4",
+                    "tcgplayerProductId": "188604"
+                },
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{4}{W}",
+                "manaValue": 5.0,
+                "name": "Bond of Discipline",
+                "number": "6",
+                "originalText": "Tap all creatures your opponents control. Creatures you control gain lifelink until end of turn.",
+                "originalType": "Sorcery",
+                "printings": ["ANB", "WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/e6de12383e6873a2",
+                    "cardKingdomFoil": "https://mtgjson.com/links/95bc34285e2a605b",
+                    "cardmarket": "https://mtgjson.com/links/e918355c507deef4",
+                    "tcgplayer": "https://mtgjson.com/links/7ac050fee79733c0"
+                },
+                "rarity": "uncommon",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "You can cast Bond of Discipline even if your opponents control no creatures or you control no creatures. The creatures that are on the battlefield will be affected as appropriate."
+                    }
+                ],
+                "setCode": "WAR",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Tap all creatures your opponents control. Creatures you control gain lifelink until end of turn.",
+                "type": "Sorcery",
+                "types": ["Sorcery"],
+                "uuid": "50f8a302-b981-5940-823c-e5892ef630ed"
+            },
+            {
+                "artist": "Mike Bierek",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["B"],
+                "colors": ["B"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 14382,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 461269,
+                        "name": "Blutiger Schnitt",
+                        "text": "Bis zu eine Kreatur deiner Wahl erhält -2/-2 bis zum Ende des Zuges. Aufmarsch 2. (Lege zwei +1/+1-Marken auf eine Armee, die du kontrollierst. Falls du keine kontrollierst, erzeuge zuerst einen 0/0 schwarzen Zombie-Armee-Kreaturenspielstein.)",
+                        "type": "Hexerei"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 461533,
+                        "name": "Filo sangriento",
+                        "text": "Hasta una criatura objetivo obtiene -2/-2 hasta el final del turno. Enrola 2. (Pon dos contadores +1/+1 sobre un Ejército que controlas. Si no controlas ninguno, crea primero una ficha de criatura Ejército Zombie negra 0/0.)",
+                        "type": "Conjuro"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 461797,
+                        "name": "Tranchant sanguinolent",
+                        "text": "Jusqu'à une créature ciblée gagne -2/-2 jusqu'à la fin du tour. Amassez 2. (Mettez deux marqueurs +1/+1 sur une armée que vous contrôlez. Si vous n'en contrôlez pas, créez d'abord un jeton de créature 0/0 noire Zombie et Armée.)",
+                        "type": "Rituel"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 462061,
+                        "name": "Lama Sanguinante",
+                        "text": "Fino a una creatura bersaglio prende -2/-2 fino alla fine del turno. Recluta 2. (Metti due segnalini +1/+1 su un Esercito che controlli. Se non ne controlli uno, crea prima una pedina creatura Esercito Zombie 0/0 nera.)",
+                        "type": "Stregoneria"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 462325,
+                        "name": "鮮血の刃先",
+                        "text": "クリーチャー最大１体を対象とする。ターン終了時まで、それは－２/－２の修整を受ける。動員２を行う。（あなたがコントロールしている軍団１体の上に＋１/＋１カウンターを２個置く。あなたが軍団をコントロールしていないなら、その前に、黒の０/０のゾンビ・軍団・クリーチャー・トークンを１体生成する。）",
+                        "type": "ソーサリー"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 462589,
+                        "name": "피 묻은 칼날",
+                        "text": "생물을 최대 한 개까지 목표로 정한다. 그 생물은 턴종료까지 -2/-2를 받는다. 축적 2를 한다. (당신이 조종하는 군대 한 개에 +1/+1 카운터 두 개를 올려놓는다. 당신이 군대를 조종하고 있지 않다면, 먼저 0/0 흑색 좀비 군대 생물 토큰 한 개를 만든다.)",
+                        "type": "집중마법"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 462853,
+                        "name": "Fio Sangrento",
+                        "text": "Até uma criatura alvo recebe -2/-2 até o final do turno. Arregimente 2. (Coloque dois marcadores +1/+1 em um Exército que você controla. Se você não controlar um, crie antes uma ficha de criatura preta 0/0 do tipo Zumbi Exército.)",
+                        "type": "Feitiço"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 463117,
+                        "name": "Кровавое Лезвие",
+                        "text": "Не более одного целевого существа получает -2/-2 до конца хода. Скопище 2. (Положите два жетона +1/+1 на Армию под вашим контролем. Если под вашим контролем нет Армии, то сначала создайте одну фишку существа 0/0 черная Армия Зомби.)",
+                        "type": "Волшебство"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463381,
+                        "name": "刀刃喋血",
+                        "text": "至多一个目标生物得-2/-2直到回合结束。囤兵2。（在一个由你操控的军队上放置两个+1/+1指示物。如果你未操控军队，则先派出一个0/0黑色灵俑／军队衍生物。）",
+                        "type": "法术"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463645,
+                        "name": "刀刃喋血",
+                        "text": "至多一個目標生物得-2/-2直到回合結束。囤兵2。（在一個由你操控的軍隊上放置兩個+1/+1指示物。如果你未操控軍隊，則先派出一個0/0黑色殭屍／軍隊衍生物。）",
+                        "type": "巫術"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224590",
+                    "cardKingdomId": "224320",
+                    "cardsphereId": "59085",
+                    "mcmId": "372530",
+                    "mcmMetaId": "269808",
+                    "mtgArenaId": "69529",
+                    "mtgjsonV4Id": "ba8d233c-e3b8-5847-a71d-8efa9fec268e",
+                    "mtgoId": "71762",
+                    "multiverseId": "461005",
+                    "scryfallId": "ac82422c-8ac8-4fbb-b9b9-d0aa23dded61",
+                    "scryfallIllustrationId": "b1a897f5-704e-462a-9564-64e4d76df496",
+                    "scryfallOracleId": "308e551a-6d60-4a28-9e22-1181995ca068",
+                    "tcgplayerProductId": "188875"
+                },
+                "keywords": ["Amass"],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{1}{B}{B}",
+                "manaValue": 3.0,
+                "name": "Bleeding Edge",
+                "number": "78",
+                "originalText": "Up to one target creature gets -2/-2 until end of turn. Amass 2. (Put two +1/+1 counters on an Army you control. If you don't control one, create a 0/0 black Zombie Army creature token first.)",
+                "originalType": "Sorcery",
+                "printings": ["WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/3b99b18f5a3bde2d",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f0d99cfbc0afb939",
+                    "cardmarket": "https://mtgjson.com/links/f66541e83ebed247",
+                    "tcgplayer": "https://mtgjson.com/links/a60f4e715bd96b4e"
+                },
+                "rarity": "uncommon",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "You may cast Bleeding Edge without choosing a target creature. You’ll just amass 2. However, if you choose a target and that target become illegal before Bleeding Edge resolves, the spell won’t resolve and you won’t amass."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Army is a new creature type. It’s possible to control a nontoken Army (perhaps a creature with the changeling ability) and, through combinations of other cards, it’s possible to control multiple Army tokens. When instructed to amass, you may put +1/+1 counters on any of your Army creatures, and you may choose a different one each time."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If you don’t control an Army, the Zombie Army token that you create enters the battlefield as a 0/0 creature. Any abilities that trigger when a creature with a certain power enters the battlefield, such as that of Mentor of the Meek, will see the token enter as a 0/0 creature before it gets +1/+1 counters."
+                    }
+                ],
+                "setCode": "WAR",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Up to one target creature gets -2/-2 until end of turn. Amass 2. (Put two +1/+1 counters on an Army you control. If you don't control one, create a 0/0 black Zombie Army creature token first.)",
+                "type": "Sorcery",
+                "types": ["Sorcery"],
+                "uuid": "bed79a7b-995f-5103-8b6f-d626053b4203"
+            },
+            {
+                "artist": "Darek Zabrocki",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["deck"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": ["U"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 9727,
+                "finishes": ["nonfoil"],
+                "flavorText": "\"Pardon me if I seem distracted. Part of me is reconnoitering the Tenth District.\"",
+                "foreignData": [
+                    {
+                        "flavorText": "„Entschuldige, wenn ich abgelenkt wirke. Ein Teil von mir kundschaftet gerade den zehnten Distrikt aus.\"",
+                        "language": "German",
+                        "multiverseId": 463850,
+                        "name": "Jaces Projektion",
+                        "text": "Immer wenn du eine Karte ziehst, lege eine +1/+1-Marke auf Jaces Projektion.\n{3}{U}: Lege eine Loyalitätsmarke auf einen Jace-Planeswalker deiner Wahl.",
+                        "type": "Kreatur — Zauberer, Illusion"
+                    },
+                    {
+                        "flavorText": "\"Disculpa si parezco distraído. Parte de mí está patrullando el Distrito Décimo\".",
+                        "language": "Spanish",
+                        "multiverseId": 463861,
+                        "name": "Proyección de Jace",
+                        "text": "Siempre que robes una carta, pon un contador +1/+1 sobre la Proyección de Jace.\n{3}{U}: Pon un contador de lealtad sobre el planeswalker Jace objetivo.",
+                        "type": "Criatura — Ilusión hechicero"
+                    },
+                    {
+                        "flavorText": "« Excusez-moi si j'ai l'air un peu distrait. Une partie de moi est en mission de reconnaissance dans la dixième circonscription. »",
+                        "language": "French",
+                        "multiverseId": 463872,
+                        "name": "Projection de Jace",
+                        "text": "À chaque fois que vous piochez une carte, mettez un marqueur +1/+1 sur la Projection de Jace.\n{3}{U} : Mettez un marqueur « loyauté » sur un planeswalker Jace ciblé.",
+                        "type": "Créature : sorcier et illusion"
+                    },
+                    {
+                        "flavorText": "\"Scusate se sembro distratto. Una parte di me sta perlustrando il Decimo Distretto.\"",
+                        "language": "Italian",
+                        "multiverseId": 463883,
+                        "name": "Proiezione di Jace",
+                        "text": "Ogniqualvolta peschi una carta, metti un segnalino +1/+1 sulla Proiezione di Jace.\n{3}{U}: Metti un segnalino fedeltà su un planeswalker Jace bersaglio.",
+                        "type": "Creatura — Illusione Mago"
+                    },
+                    {
+                        "flavorText": "「上の空に見えるかもしれませんが、ご容赦ください。私の一部は、第10管区を偵察中なのです。」",
+                        "language": "Japanese",
+                        "multiverseId": 463894,
+                        "name": "ジェイスの投影",
+                        "text": "あなたがカードを１枚引くたび、ジェイスの投影の上に＋１/＋１カウンターを１個置く。\n{3}{U}：ジェイス・プレインズウォーカー１体を対象とし、それの上に忠誠カウンターを１個置く。",
+                        "type": "クリーチャー — ウィザード・イリュージョン"
+                    },
+                    {
+                        "flavorText": "\"내가 집중하고 있지 않는 것 같으면 양해를 구하지. 내 정신의 일부분은 10번 구역을 정찰하고 있어.\"",
+                        "language": "Korean",
+                        "multiverseId": 463905,
+                        "name": "제이스의 투영",
+                        "text": "당신이 카드를 뽑을 때마다, 제이스의 투영에 +1/+1 카운터 한 개를 올려놓는다.\n{3}{U}: 제이스 플레인즈워커를 목표로 정한다. 그 플레인즈워커에 충성 카운터 한 개를 올려놓는다.",
+                        "type": "생물 — 마법사 환영"
+                    },
+                    {
+                        "flavorText": "\"Perdoe minha aparente distração. Uma parte de mim está fazendo o reconhecimento do Décimo Distrito.\"",
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 463916,
+                        "name": "Projeção de Jace",
+                        "text": "Toda vez que você comprar um card, coloque um marcador +1/+1 em Projeção de Jace.\n{3}{U}: Coloque um marcador de lealdade no planeswalker Jace alvo.",
+                        "type": "Criatura — Mago Ilusão"
+                    },
+                    {
+                        "flavorText": "«Прошу прощения за то, что могу показаться отстраненным. Частично я сейчас провожу разведку в Десятом округе».",
+                        "language": "Russian",
+                        "multiverseId": 463927,
+                        "name": "Проекция Джейса",
+                        "text": "Каждый раз, когда вы берете карту, положите один жетон +1/+1 на Проекцию Джейса.\n{3}{U}: положите один жетон верности на целевого planeswalker-а Джейса.",
+                        "type": "Существо — Чародей Иллюзия"
+                    },
+                    {
+                        "flavorText": "「如果你觉得我没有全力以赴，还请见谅。因为我还在分心关注第十区的情况。」",
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463938,
+                        "name": "杰斯幻身",
+                        "text": "每当你抓一张牌时，在杰斯幻身上放置一个+1/+1指示物。\n{3}{U}：在目标杰斯鹏洛客上放置一个忠诚指示物。",
+                        "type": "生物 ～法术师／虚影"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": false,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomId": "224257",
+                    "cardsphereId": "59292",
+                    "mcmId": "372246",
+                    "mtgArenaId": "69723",
+                    "mtgjsonV4Id": "41712a5c-c1df-5303-8fc2-89fd14fc9986",
+                    "mtgoId": "72186",
+                    "multiverseId": "463839",
+                    "scryfallId": "c4d35a34-01b7-41e1-8491-a6589175d027",
+                    "scryfallIllustrationId": "875aa0d3-b0f6-40ba-a61d-a2d4ffbd48f9",
+                    "scryfallOracleId": "ff8db8aa-1d5a-42f8-8056-8da0da9846bc",
+                    "tcgplayerProductId": "188641"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "paupercommander": "Restricted",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{2}{U}{U}",
+                "manaValue": 4.0,
+                "name": "Jace's Projection",
+                "number": "272",
+                "originalText": "Whenever you draw a card, put a +1/+1 counter on Jace's Projection.\n{3}{U}: Put a loyalty counter on target Jace planeswalker.",
+                "originalType": "Creature — Wizard Illusion",
+                "power": "2",
+                "printings": ["WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/0263ec18653a54d2",
+                    "tcgplayer": "https://mtgjson.com/links/830c63257be5ccbf"
+                },
+                "rarity": "uncommon",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "If an effect instructs you to draw multiple cards, the triggered ability of Jace’s Projection triggers that many times."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If a spell or ability causes you to put cards into your hand without specifically using the word “draw,” the triggered ability of Jace’s Projection won’t trigger."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Putting a loyalty counter on a Jace planeswalker doesn’t cause any of its activated abilities to become activated."
+                    }
+                ],
+                "setCode": "WAR",
+                "subtypes": ["Wizard", "Illusion"],
+                "supertypes": [],
+                "text": "Whenever you draw a card, put a +1/+1 counter on Jace's Projection.\n{3}{U}: Put a loyalty counter on target Jace planeswalker.",
+                "toughness": "2",
+                "type": "Creature — Wizard Illusion",
+                "types": ["Creature"],
+                "uuid": "3ad0900e-596e-5b9a-8503-7180b6a3cd55"
+            },
+            {
+                "artist": "Yongjae Choi",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["R"],
+                "colors": ["R"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 3826,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 461310,
+                        "name": "Chandra, Feuerformerin",
+                        "text": "Immer wenn eine oder mehrere Loyalitätsmarken von Chandra, Feuerformerin, entfernt werden, fügt sie einem Gegner oder Planeswalker deiner Wahl entsprechend viele Schadenspunkte zu.\n+1: Schicke die oberste Karte deiner Bibliothek ins Exil. Du kannst sie in diesem Zug spielen.\n−7: Schicke die obersten sieben Karten deiner Bibliothek ins Exil. Du kannst sie in diesem Zug spielen.",
+                        "type": "Legendärer Planeswalker — Chandra"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 461574,
+                        "name": "Chandra, artesana del fuego",
+                        "text": "Siempre que uno o más contadores de lealtad se remuevan de Chandra, artesana del fuego, hace esa misma cantidad de daño al oponente o planeswalker objetivo.\n+1: Exilia la primera carta de tu biblioteca. Puedes jugar esa carta este turno.\n−7: Exilia las siete primeras cartas de tu biblioteca. Puedes jugarlas este turno.",
+                        "type": "Planeswalker legendario — Chandra"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 461838,
+                        "name": "Chandra, artisane de feu",
+                        "text": "À chaque fois qu'au moins un marqueur « loyauté » est retiré de Chandra, artisane de feu, elle inflige autant de blessures à une cible, adversaire ou planeswalker.\n+1 : Exilez la carte du dessus de votre bibliothèque. Vous pouvez la jouer ce tour-ci.\n-7 : Exilez les sept cartes du dessus de votre bibliothèque. Vous pouvez les jouer ce tour-ci.",
+                        "type": "Planeswalker légendaire : Chandra"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 462102,
+                        "name": "Chandra, Artigiana del Fuoco",
+                        "text": "Ogniqualvolta uno o più segnalini fedeltà vengono rimossi da Chandra, Artigiana del Fuoco, Chandra infligge altrettanti danni a un avversario o a un planeswalker bersaglio.\n+1: Esilia la prima carta del tuo grimorio. Puoi giocarla in questo turno.\n-7: Esilia le prime sette carte del tuo grimorio. Puoi giocarle in questo turno.",
+                        "type": "Planeswalker Leggendario — Chandra"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 462366,
+                        "name": "炎の職工、チャンドラ",
+                        "text": "炎の職工、チャンドラの上から忠誠カウンターが１個以上取り除かれるたび、対戦相手１人かプレインズウォーカー１体を対象とする。これはそれにその個数に等しい点数のダメージを与える。\n+1：あなたのライブラリーの一番上のカードを追放する。このターン、あなたはそれをプレイしてもよい。\n-7：あなたのライブラリーの一番上からカードを７枚追放する。このターン、あなたはそれらをプレイしてもよい。",
+                        "type": "伝説のプレインズウォーカー — チャンドラ"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 462630,
+                        "name": "화염의 장인, 찬드라",
+                        "text": "화염의 장인, 찬드라에서 충성 카운터가 한 개 이상 제거될 때마다, 상대 또는 플레인즈워커를 목표로 정한다. 찬드라는 그 목표에게 제거된 카운터 수만큼 피해를 입힌다.\n+1: 당신의 서고 맨 위 카드를 추방한다. 당신은 이 턴에 그 카드를 플레이할 수 있다.\n-7: 당신의 서고 맨 위 카드 일곱 장을 추방한다. 당신은 이 턴에 그 카드들을 플레이할 수 있다.",
+                        "type": "전설적 플레인즈워커 — 찬드라"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 462894,
+                        "name": "Chandra, Artesã do Fogo",
+                        "text": "Toda vez que um ou mais marcadores de lealdade são removidos de Chandra, Artesã do Fogo, ela causa aquela quantidade de dano ao oponente ou planeswalker alvo.\n+1: Exile o card do topo de seu grimório. Você pode jogá-lo neste turno.\n−7: Exile os sete cards do topo de seu grimório. Você pode jogá-los neste turno.",
+                        "type": "Planeswalker Lendário — Chandra"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 463158,
+                        "name": "Чандра, Мастерица Пламени",
+                        "text": "Каждый раз, когда с Чандры, Мастерицы Пламени удаляется один или несколько жетонов верности, она наносит столько же повреждений целевому оппоненту или planeswalker-у.\n+1: изгоните верхнюю карту вашей библиотеки. Вы можете разыграть ту карту в этом ходу.\n—7: изгоните семь верхних карт вашей библиотеки. Вы можете разыграть их в этом ходу.",
+                        "type": "Легендарный Planeswalker — Чандра"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463422,
+                        "name": "炎技茜卓",
+                        "text": "每当从炎技茜卓上移去一个或数个忠诚指示物时，她向目标对手或鹏洛客造成等量的伤害。\n+1：放逐你的牌库顶牌。本回合中，你可以使用该牌。\n-7：放逐你牌库顶的七张牌。本回合中，你可以使用这些牌。",
+                        "type": "传奇鹏洛客 ～茜卓"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463686,
+                        "name": "炎技茜卓",
+                        "text": "每當從炎技茜卓上移去一個或數個忠誠指示物時，她向目標對手或鵬洛客造成等量的傷害。\n+1：放逐你的牌庫頂牌。本回合中，你可以使用該牌。\n-7：放逐你牌庫頂的七張牌。本回合中，你可以使用這些牌。",
+                        "type": "傳奇鵬洛客 ～茜卓"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224499",
+                    "cardKingdomId": "224197",
+                    "cardsphereId": "59118",
+                    "mcmId": "372122",
+                    "mcmMetaId": "269483",
+                    "mtgArenaId": "69570",
+                    "mtgjsonV4Id": "1fdb60bd-c30a-5375-b1ac-0d3063c0a252",
+                    "mtgoId": "71844",
+                    "multiverseId": "461046",
+                    "scryfallId": "d21a7b23-8827-49f2-ade4-75a602d17743",
+                    "scryfallIllustrationId": "eb837bcb-aaa6-47a2-bdc2-e659a6b80d22",
+                    "scryfallOracleId": "2867d539-6a63-4fae-aae2-a7fdd4dd9f28",
+                    "tcgplayerProductId": "188348"
+                },
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "loyalty": "4",
+                "manaCost": "{2}{R}{R}",
+                "manaValue": 4.0,
+                "name": "Chandra, Fire Artisan",
+                "number": "119",
+                "originalText": "Whenever one or more loyalty counters are removed from Chandra, Fire Artisan, she deals that much damage to target opponent or planeswalker.\n+1: Exile the top card of your library. You may play it this turn.\n−7: Exile the top seven cards of your library. You may play them this turn.",
+                "originalType": "Legendary Planeswalker — Chandra",
+                "printings": ["PRM", "PWAR", "SLD", "WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/b03840b8a9999719",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f2e22ada03927391",
+                    "cardmarket": "https://mtgjson.com/links/b3a53a93b3ddf704",
+                    "tcgplayer": "https://mtgjson.com/links/3e9df3a2f96d0585"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "Chandra’s first ability triggers if she loses loyalty from being dealt damage, from her last loyalty ability being activated, or because an effect removes loyalty counters from her. If an effect simply causes Chandra to leave the battlefield, no counters were removed and so her ability doesn’t trigger."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If multiple creatures deal combat damage to Chandra at the same time, those counters are all removed at once, and her first ability triggers only once."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If all of Chandra’s loyalty counters are removed, her first ability has her deal damage even though she’s left the battlefield."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Chandra’s loyalty abilities don’t change when you can play the exiled cards. For example, if you exile a sorcery card, you can cast it only during your main phase when the stack is empty. If you exile a land card, you can play it only during your main phase and only if you have an available land play remaining."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Casting an exiled card causes it to leave exile. You can’t cast it multiple times."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "WAR",
+                "subtypes": ["Chandra"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever one or more loyalty counters are removed from Chandra, Fire Artisan, she deals that much damage to target opponent or planeswalker.\n[+1]: Exile the top card of your library. You may play it this turn.\n[−7]: Exile the top seven cards of your library. You may play them this turn.",
+                "type": "Legendary Planeswalker — Chandra",
+                "types": ["Planeswalker"],
+                "uuid": "638fe5e4-2dbe-5aee-9f9a-f7b47ee3275a",
+                "variations": ["29741223-18c8-5ad7-b1fc-0b9a68dbd768"]
+            },
+            {
+                "artist": "D-suzuki",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["G"],
+                "colors": ["G"],
+                "convertedManaCost": 6.0,
+                "edhrecRank": 6573,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "群れの声、アーリン",
+                        "text": "あなたがコントロールしていて狼か狼男である各クリーチャーは、それぞれ＋１/＋１カウンターが追加で１個置かれた状態で戦場に出る。\n-2：緑の２/２の狼・クリーチャー・トークンを１体生成する。",
+                        "type": "伝説のプレインズウォーカー — アーリン"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224667",
+                    "cardKingdomId": "224631",
+                    "cardsphereId": "59731",
+                    "mcmId": "372749",
+                    "mcmMetaId": "269277",
+                    "mtgjsonV4Id": "19b1cdad-4e9d-5dc5-92ea-1ea95f5a0adc",
+                    "scryfallId": "43261927-7655-474b-ac61-dfef9e63f428",
+                    "scryfallIllustrationId": "3e10c542-f87b-41bc-a918-8e7c3c01ce05",
+                    "scryfallOracleId": "a15b83df-91b7-49f0-9bec-5776a3dac8bd",
+                    "tcgplayerProductId": "189015"
+                },
+                "isAlternative": true,
+                "language": "Japanese",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "loyalty": "7",
+                "manaCost": "{4}{G}{G}",
+                "manaValue": 6.0,
+                "name": "Arlinn, Voice of the Pack",
+                "number": "150★",
+                "printings": ["PLIST", "PRM", "PWAR", "SLD", "WAR"],
+                "promoTypes": ["jpwalker"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/d550e17f2120ec32",
+                    "cardKingdomFoil": "https://mtgjson.com/links/414f93ea140e0360",
+                    "cardmarket": "https://mtgjson.com/links/c792557b5a048600",
+                    "tcgplayer": "https://mtgjson.com/links/5c9d411089b3ddd0"
+                },
+                "rarity": "uncommon",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "A creature that’s a Wolf or Werewolf enters the battlefield with one +1/+1 counter if it would otherwise enter with no +1/+1 counters."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "A creature that’s both a Wolf and a Werewolf receives only one additional +1/+1 counter from Arlinn’s ability."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If Arlinn leaves the battlefield before her last ability resolves, most likely because she only had 2 loyalty when you activated the ability, the Wolf token won’t enter the battlefield with a +1/+1 counter."
+                    }
+                ],
+                "setCode": "WAR",
+                "subtypes": ["Arlinn"],
+                "supertypes": ["Legendary"],
+                "text": "Each creature you control that's a Wolf or a Werewolf enters the battlefield with an additional +1/+1 counter on it.\n[−2]: Create a 2/2 green Wolf creature token.",
+                "type": "Legendary Planeswalker — Arlinn",
+                "types": ["Planeswalker"],
+                "uuid": "1804176d-2d08-5cea-b77e-4b442ff376b1",
+                "variations": ["9c2c42d5-6cf3-5298-a7e9-9b14d6503d52"]
+            },
+            {
+                "artist": "Jonas De Ro",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 443,
+                "finishes": ["nonfoil", "foil"],
+                "flavorText": "The Planar Bridge opened over the Chamber of the Guildpact, reducing the symbol of Ravnica's endurance to rubble.",
+                "foreignData": [
+                    {
+                        "flavorText": "Die Weltenbrücke öffnete sich über der Kammer des Gildenbundes und löschte auf einen Schlag das Wahrzeichen für Ravnicas Beständigkeit aus.",
+                        "language": "German",
+                        "multiverseId": 461436,
+                        "name": "Einfallzone",
+                        "text": "{T}: Erzeuge {C}.\n{1}, {T}, opfere die Einfallzone: Du kannst in diesem Zug Zaubersprüche wirken, als ob sie Aufblitzen hätten.",
+                        "type": "Land"
+                    },
+                    {
+                        "flavorText": "El puente entre planos apareció sobre la Cámara del Pacto entre Gremios, lo que redujo a escombros el símbolo de la resistencia de Rávnica.",
+                        "language": "Spanish",
+                        "multiverseId": 461700,
+                        "name": "Zona de emersión",
+                        "text": "{T}: Agrega {C}.\n{1}, {T}, sacrificar la Zona de emersión: Puedes lanzar hechizos este turno como si tuvieran la habilidad de destello.",
+                        "type": "Tierra"
+                    },
+                    {
+                        "flavorText": "Le Pont planaire s'ouvrit au-dessus de la Chambre du Pacte des Guildes, réduisant le symbole de la résistance de Ravnica à l'état de ruine.",
+                        "language": "French",
+                        "multiverseId": 461964,
+                        "name": "Zone d'émergence",
+                        "text": "{T} : Ajoutez {C}.\n{1}, {T}, sacrifiez la Zone d'émergence : Vous pouvez lancer des sorts ce tour-ci comme s'ils avaient le flash.",
+                        "type": "Terrain"
+                    },
+                    {
+                        "flavorText": "Il Ponte Planare si aprì sul Seggio del Patto delle Gilde, riducendo in macerie il simbolo della resistenza di Ravnica.",
+                        "language": "Italian",
+                        "multiverseId": 462228,
+                        "name": "Zona di Manifestazione",
+                        "text": "{T}: Aggiungi {C}.\n{1}, {T}, Sacrifica la Zona di Manifestazione: Puoi lanciare magie in questo turno come se avessero lampo.",
+                        "type": "Terra"
+                    },
+                    {
+                        "flavorText": "次元橋はギルドパクト庁舎のあった場所に口を開け、ラヴニカ存続の象徴は瓦礫と化した。",
+                        "language": "Japanese",
+                        "multiverseId": 462492,
+                        "name": "出現領域",
+                        "text": "{T}：{C}を加える。\n{1}, {T}, 出現領域を生け贄に捧げる：このターン、あなたは呪文を、それが瞬速を持つかのように唱えてもよい。",
+                        "type": "土地"
+                    },
+                    {
+                        "flavorText": "길드팩트 회의소 너머로 차원의 다리가 열렸고, 라브니카의 저항을 상징하는 표상이 돌무더기가 되어 무너져내렸다.",
+                        "language": "Korean",
+                        "multiverseId": 462756,
+                        "name": "출현 지역",
+                        "text": "{T}: {C}를 추가한다.\n{1}, {T}, 출현 지역을 희생한다: 당신은 이번 턴에 주문들이 섬광을 가진 것처럼 발동할 수 있다.",
+                        "type": "대지"
+                    },
+                    {
+                        "flavorText": "A Ponte Planar abriu-se sobre a Câmara do Pacto das Guildas, reduzindo a escombros o símbolo da resistência de Ravnica.",
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 463020,
+                        "name": "Zona de Emergência",
+                        "text": "{T}: Adicione {C}.\n{1}, {T}, sacrifique Zona de Emergência: Você pode conjurar mágicas neste turno como se elas tivessem lampejo.",
+                        "type": "Terreno"
+                    },
+                    {
+                        "flavorText": "Межмировой мост открылся над Палатой Договора Гильдий, превратив в руины символ стойкости Равники.",
+                        "language": "Russian",
+                        "multiverseId": 463284,
+                        "name": "Область Появления",
+                        "text": "{T}: добавьте {C}.\n{1}, {T}, пожертвуйте Область Появления: вы можете разыгрывать заклинания в этом ходу, как будто у них есть Миг.",
+                        "type": "Земля"
+                    },
+                    {
+                        "flavorText": "时空渡桥在十会盟堂正上方打开，将拉尼卡长存象征化作废墟。",
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463548,
+                        "name": "传袭地带",
+                        "text": "{T}：加{C}。\n{1}，{T}，牺牲传袭地带：于本回合中，你可以将咒语视同具有闪现异能地来施放。",
+                        "type": "地"
+                    },
+                    {
+                        "flavorText": "時空渡橋在十會盟堂正上方打開，將拉尼卡長存象徵化作廢墟。",
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463812,
+                        "name": "傳襲地帶",
+                        "text": "{T}：加{C}。\n{1}，{T}，犧牲傳襲地帶：於本回合中，你可以將咒語視同具有閃現異能地來施放。",
+                        "type": "地"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224395",
+                    "cardKingdomId": "224082",
+                    "cardsphereId": "59184",
+                    "mcmId": "371800",
+                    "mcmMetaId": "269254",
+                    "mtgArenaId": "69695",
+                    "mtgjsonV4Id": "b4e3d5df-d688-5172-9432-b5aa730e56af",
+                    "mtgoId": "72096",
+                    "multiverseId": "461172",
+                    "scryfallId": "ab95f6e7-b806-47fe-a071-6c38b3176d94",
+                    "scryfallIllustrationId": "c5989b19-63f7-4b31-8726-f760577e5b91",
+                    "scryfallOracleId": "7536eb66-959d-4dca-9b75-895572ef733c",
+                    "tcgplayerProductId": "187125"
+                },
+                "isStorySpotlight": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Emergence Zone",
+                "number": "245",
+                "originalText": "{T}: Add {C}.\n{1}, {T}, Sacrifice Emergence Zone: You may cast spells this turn as though they had flash.",
+                "originalType": "Land",
+                "printings": ["WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/f34221ec7fbe4895",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f53d7cbfba2c362a",
+                    "cardmarket": "https://mtgjson.com/links/4fd7d21a61fd7e8b",
+                    "tcgplayer": "https://mtgjson.com/links/e83c8d803af3b508"
+                },
+                "rarity": "uncommon",
+                "rulings": [],
+                "setCode": "WAR",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "{T}: Add {C}.\n{1}, {T}, Sacrifice Emergence Zone: You may cast spells this turn as though they had flash.",
+                "type": "Land",
+                "types": ["Land"],
+                "uuid": "b632cecc-63a2-5589-b49d-8b17dad0493f"
+            },
+            {
+                "artist": "Daniel Ljunggren",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": ["U"],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 7632,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 461257,
+                        "name": "Lautloses Tauchboot",
+                        "text": "Immer wenn das Lautlose Tauchboot einem Spieler oder Planeswalker Kampfschaden zufügt, ziehe eine Karte.\nBemannen 2 (Tappe eine beliebige Anzahl an Kreaturen, die du kontrollierst und die zusammen Stärke 2 oder mehr haben: Dieses Fahrzeug wird bis zum Ende des Zuges zu einer Artefaktkreatur.)",
+                        "type": "Artefakt — Fahrzeug"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 461521,
+                        "name": "Submarino silencioso",
+                        "text": "Siempre que el Submarino silencioso haga daño de combate a un jugador o planeswalker, roba una carta.\nTripular 2. (Girar cualquier cantidad de criaturas que controlas con una fuerza total de 2 o más: Este Vehículo se convierte en una criatura artefacto hasta el final del turno.)",
+                        "type": "Artefacto — Vehículo"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 461785,
+                        "name": "Submersible silencieux",
+                        "text": "À chaque fois que le Submersible silencieux inflige des blessures de combat à un joueur ou à un planeswalker, piochez une carte.\nPilotage 2 (Engagez n'importe quel nombre de créatures que vous contrôlez dont la force totale est supérieure ou égale à 2 : Ce véhicule devient une créature-artefact jusqu'à la fin du tour.)",
+                        "type": "Artefact : véhicule"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 462049,
+                        "name": "Sommergibile Silenzioso",
+                        "text": "Ogniqualvolta il Sommergibile Silenzioso infligge danno da combattimento a un giocatore o a un planeswalker, pesca una carta.\nManovrare 2 (TAPpa un qualsiasi numero di creature che controlli con forza totale pari o superiore a 2: Questo Veicolo diventa una creatura artefatto fino alla fine del turno.)",
+                        "type": "Artefatto — Veicolo"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 462313,
+                        "name": "静かな潜水艇",
+                        "text": "静かな潜水艇がプレイヤー１人かプレインズウォーカー１体に戦闘ダメージを与えるたび、カードを１枚引く。\n搭乗２（あなたがコントロールしている望む数のクリーチャーを、パワーの合計が２以上になるように選んでタップする：ターン終了時まで、この機体はアーティファクト・クリーチャーになる。）",
+                        "type": "アーティファクト — 機体"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 462577,
+                        "name": "조용한 잠수정",
+                        "text": "조용한 잠수정이 플레이어 또는 플레인즈워커에게 전투피해를 입힐 때마다, 카드 한 장을 뽑는다.\n탑승 2 (당신이 조종하는 생물을 공격력 총합이 2 이상이 되도록 원하는 수만큼 탭한다: 이 탑승물은 턴종료까지 마법물체 생물이 된다.)",
+                        "type": "마법물체 — 탑승물"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 462841,
+                        "name": "Submersível Silencioso",
+                        "text": "Toda vez que Submersível Silencioso causar dano de combate a um jogador ou planeswalker, compre um card.\nTripular 2 (Vire qualquer número de criaturas que você controla com total de poder igual ou superior a 2: Este Veículo torna-se uma criatura artefato até o final do turno.)",
+                        "type": "Artefato — Veículo"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 463105,
+                        "name": "Бесшумная Субмарина",
+                        "text": "Каждый раз, когда Бесшумная Субмарина наносит боевые повреждения игроку или planeswalker-у, возьмите карту.\nЭкипаж 2 (Поверните любое количество существ под вашим контролем с суммарной силой 2 или более: эта Машина становится артефактом существом до конца хода.)",
+                        "type": "Артефакт — Машина"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463369,
+                        "name": "静航潜水舰",
+                        "text": "每当静航潜水舰对任一牌手或鹏洛客造成战斗伤害时，抓一张牌。\n搭载2（横置任意数量由你操控且力量总和等于或大于2的生物：此载具成为神器生物直到回合结束。）",
+                        "type": "神器 ～载具"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463633,
+                        "name": "靜航潛水艦",
+                        "text": "每當靜航潛水艦對任一玩家或鵬洛客造成戰鬥傷害時，抽一張牌。\n搭載2（橫置任意數量由你操控且力量總和等於或大於2的生物：此載具成為神器生物直到回合結束。）",
+                        "type": "神器 ～載具"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224536",
+                    "cardKingdomId": "224242",
+                    "cardsphereId": "59466",
+                    "mcmId": "372215",
+                    "mcmMetaId": "269550",
+                    "mtgArenaId": "69517",
+                    "mtgjsonV4Id": "8e1a5afa-aa53-54df-8ebd-a3b14dc5ee3d",
+                    "mtgoId": "71738",
+                    "multiverseId": "460993",
+                    "scryfallId": "ae2f3dee-1768-4562-9333-a50b9ee7570f",
+                    "scryfallIllustrationId": "8c125f18-9eaf-4742-8a9f-03a6df12abcc",
+                    "scryfallOracleId": "43257a85-2cbe-4931-9755-106808ab124a",
+                    "tcgplayerProductId": "188515"
+                },
+                "keywords": ["Crew"],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{U}{U}",
+                "manaValue": 2.0,
+                "name": "Silent Submersible",
+                "number": "66",
+                "originalText": "Whenever Silent Submersible deals combat damage to a player or planeswalker, draw a card.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+                "originalType": "Artifact — Vehicle",
+                "power": "2",
+                "printings": ["PWAR", "WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/2fe896a1ec65b0c5",
+                    "cardKingdomFoil": "https://mtgjson.com/links/ba9400d47daa4e4c",
+                    "cardmarket": "https://mtgjson.com/links/3aa52b51160bc375",
+                    "tcgplayer": "https://mtgjson.com/links/29e91951d05a2af9"
+                },
+                "rarity": "rare",
+                "rulings": [],
+                "securityStamp": "oval",
+                "setCode": "WAR",
+                "subtypes": ["Vehicle"],
+                "supertypes": [],
+                "text": "Whenever Silent Submersible deals combat damage to a player or planeswalker, draw a card.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+                "toughness": "3",
+                "type": "Artifact — Vehicle",
+                "types": ["Artifact"],
+                "uuid": "05444e76-0331-53d6-a734-12eaee10b5f3"
+            },
+            {
+                "artist": "Wisnu Tan",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 1167,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 461192,
+                        "name": "Karn, der Große Schöpfer",
+                        "text": "Aktivierte Fähigkeiten von Artefakten, die deine Gegner kontrollieren, können nicht aktiviert werden.\n+1: Bis zu deinem nächsten Zug wird bis zu ein Nichtkreatur-Artefakt deiner Wahl zu einer Artefaktkreatur mit Stärke und Widerstandskraft jeweils gleich ihrer umgewandelten Manakosten.\n−2: Du kannst eine Artefaktkarte bestimmen, die du besitzt und die sich außerhalb der Partie oder im Exil befindet, sie offen vorzeigen und auf deine Hand nehmen.",
+                        "type": "Legendärer Planeswalker — Karn"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 461456,
+                        "name": "Karn, el Gran Creador",
+                        "text": "Las habilidades activadas de los artefactos que controlan tus oponentes no pueden activarse.\n+1: Hasta tu próximo turno, hasta un artefacto objetivo que no sea criatura se convierte en una criatura artefacto con fuerza y resistencia iguales a su coste de maná convertido.\n−2: Puedes elegir una carta de artefacto de fuera del juego o del exilio de la cual eres propietario, mostrar esa carta y ponerla en tu mano.",
+                        "type": "Planeswalker legendario — Karn"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 461720,
+                        "name": "Karn, le grand créateur",
+                        "text": "Les capacités activées des artefacts que vos adversaires contrôlent ne peuvent pas être activées.\n+1 : Jusqu'à votre prochain tour, jusqu'à un artefact non-créature ciblé devient une créature-artefact dont la force et l'endurance sont chacune égales à son coût converti de mana.\n-2 : Vous pouvez choisir une carte d'artefact que vous possédez en dehors de la partie ou en exil, révéler cette carte et la mettre dans votre main.",
+                        "type": "Planeswalker légendaire : Karn"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 461984,
+                        "name": "Karn, il Grande Creatore",
+                        "text": "Le abilità attivate degli artefatti controllati dai tuoi avversari non possono essere attivate.\n+1: Fino al tuo prossimo turno, fino a un artefatto non creatura bersaglio diventa una creatura artefatto con forza e costituzione pari al proprio costo di mana convertito.\n-2: Puoi scegliere una carta artefatto che possiedi al di fuori della partita o in esilio, rivelare quella carta e aggiungerla alla tua mano.",
+                        "type": "Planeswalker Leggendario — Karn"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 462248,
+                        "name": "大いなる創造者、カーン",
+                        "text": "対戦相手がコントロールしているアーティファクトの起動型能力は起動できない。\n+1：クリーチャーでないアーティファクト最大１つを対象とする。あなたの次のターンまで、それはパワーとタフネスがそれぞれそれの点数で見たマナ・コストに等しいアーティファクト・クリーチャーになる。\n-2：あなたは、ゲームの外部か追放領域にありあなたがオーナーであるアーティファクト・カード１枚を選び、そのカードを公開してあなたの手札に加えてもよい。",
+                        "type": "伝説のプレインズウォーカー — カーン"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 462512,
+                        "name": "위대한 창조자, 카른",
+                        "text": "당신의 상대들이 조종하는 마법물체들의 활성화능력은 활성화될 수 없다.\n+1: 생물이 아닌 마법물체를 최대 한 개까지 목표로 정한다. 당신의 다음 턴까지, 그 마법물체는 자신의 전환마나비용과 같은 공격력과 방어력을 가진 마법물체 생물이 된다.\n−2: 당신은 게임 밖 또는 추방 영역에서 당신이 소유한 카드 중 마법물체 카드 한 장을 선택해, 공개한 후, 당신의 손에 넣을 수 있다.",
+                        "type": "전설적 플레인즈워커 — 카른"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 462776,
+                        "name": "Karn, o Grande Criador",
+                        "text": "As habilidades ativadas dos artefatos que seus oponentes controlam não podem ser ativadas.\n+1: Até seu próximo turno, até um artefato alvo que não seja uma criatura se torna uma criatura artefato com poder e resistência iguais ao próprio custo de mana convertido.\n−2: Você pode escolher um card de artefato seu que esteja fora do jogo ou no exílio, revelar aquele card e colocá-lo em sua mão.",
+                        "type": "Planeswalker Lendário — Karn"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 463040,
+                        "name": "Карн, Великий Творец",
+                        "text": "Активируемые способности артефактов под контролем ваших оппонентов не могут быть активированы.\n+1: до вашего следующего хода не более одного целевого не являющегося существом артефакта становится артефактом существом, сила и выносливость которого равны его конвертированной мана-стоимости.\n—2: вы можете выбрать принадлежащую вам карту артефакта вне игры или в изгнании, показать ту карту и положить ее в вашу руку.",
+                        "type": "Легендарный Planeswalker — Карн"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463304,
+                        "name": "万创卡恩",
+                        "text": "由对手操控的神器之起动式异能都不能起动。\n+1：直到你的下一个回合，至多一个目标非生物的神器成为神器生物，其力量和防御力各等同于其总法术力费用。\n−2：你可以从游戏外或放逐区中选择一张由你拥有的神器牌，展示该牌，并将它置于你手上。",
+                        "type": "传奇鹏洛客 ～卡恩"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463568,
+                        "name": "萬創卡恩",
+                        "text": "由對手操控的神器之起動式異能都不能起動。\n+1：直到你的下一個回合，至多一個目標非生物的神器成為神器生物，其力量和防禦力各等同於其總魔法力費用。\n−2：你可以從遊戲外或放逐區中選擇一張由你擁有的神器牌，展示該牌，並將它置於你手上。",
+                        "type": "傳奇鵬洛客 ～卡恩"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224504",
+                    "cardKingdomId": "224202",
+                    "cardsphereId": "59307",
+                    "mcmId": "372131",
+                    "mcmMetaId": "269492",
+                    "mtgArenaId": "69452",
+                    "mtgjsonV4Id": "deed338c-e0fc-5f5e-8278-b291b2953a4e",
+                    "mtgoId": "71608",
+                    "multiverseId": "460928",
+                    "scryfallId": "3ec0c0fb-1a4f-45f4-85b7-346a6d3ce2c5",
+                    "scryfallIllustrationId": "91e727f7-49ac-4159-bb23-76fd8ed60746",
+                    "scryfallOracleId": "a20dd48d-d344-4db1-b0e9-a2b71c3cc9d1",
+                    "tcgplayerProductId": "188386"
+                },
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Restricted"
+                },
+                "loyalty": "5",
+                "manaCost": "{4}",
+                "manaValue": 4.0,
+                "name": "Karn, the Great Creator",
+                "number": "1",
+                "originalText": "Activated abilities of artifacts your opponents control can't be activated.\n+1: Until your next turn, up to one target noncreature artifact becomes an artifact creature with power and toughness each equal to its converted mana cost.\n−2: You may choose an artifact card you own from outside the game or in exile, reveal that card, and put it into your hand.",
+                "originalType": "Legendary Planeswalker — Karn",
+                "printings": ["PRM", "PWAR", "SLD", "WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/878bd1ce7d3b2377",
+                    "cardKingdomFoil": "https://mtgjson.com/links/320796f2209ca047",
+                    "cardmarket": "https://mtgjson.com/links/85cfdcea53f70488",
+                    "tcgplayer": "https://mtgjson.com/links/0fb176241694aef1"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "Activated abilities contain a colon. They’re generally written “[Cost]: [Effect].” Some keyword abilities are activated abilities and will have colons in their reminder text, such as equip. Triggered abilities (starting with “when,” “whenever,” or “at”) are unaffected by Karn."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Karn’s first ability affects only artifacts on the battlefield. Activated abilities that work in other zones can still be activated."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "A noncreature permanent that turns into a creature can attack, and its {T} abilities can be activated, only if its controller has continuously controlled that permanent since the beginning of their most recent turn. It doesn’t matter how long the permanent has been a creature."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If a permanent has {X} in its mana cost, X is considered to be 0."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Karn’s last ability can’t get a face-down card in exile, even if you know it’s an artifact card."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "In a casual game, a card you choose from outside the game comes from your personal collection. In a tournament event, a card you choose from outside the game must come from your sideboard. You may look at your sideboard at any time."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "WAR",
+                "subtypes": ["Karn"],
+                "supertypes": ["Legendary"],
+                "text": "Activated abilities of artifacts your opponents control can't be activated.\n[+1]: Until your next turn, up to one target noncreature artifact becomes an artifact creature with power and toughness each equal to its mana value.\n[−2]: You may reveal an artifact card you own from outside the game or choose a face-up artifact card you own in exile. Put that card into your hand.",
+                "type": "Legendary Planeswalker — Karn",
+                "types": ["Planeswalker"],
+                "uuid": "0a679f46-9f50-5ac1-a6bf-c802c67fc0a0",
+                "variations": ["ba2d7f48-9846-5343-ae02-913b7e6a18d0"]
+            }
+        ],
+        "code": "WAR"
+    }
+}

@@ -41,7 +41,9 @@ export default {
         this.$store.dispatch("setLoad", true);
         const task = new AxiosTask(this.$store);
         const success = function (response, store, query) {
-            store.dispatch("expansion/setResult", response.data);
+            if (response.status == 201) {
+                store.dispatch("expansion/setResult", response.data);
+            }
         };
         const fail = function (e, store, query) {};
         await task.get("/notion/expansion/", [], success, fail);

@@ -18,10 +18,9 @@ class CardJsonFileTest extends TestCase
     public function test_読み込み()
     {
         // $response = $this->get('/');
-        $file = file(storage_path("test/json/test_color.json"));
+        $file = new UploadedFile(storage_path("test/json/test_color.json"), "test_color.json", "application/json", null, false);
         $header = ["Content-Type" => "application/json"];
-        $response = $this->post('api/upload/card', ["data" => $file], $header);
-        ;
+        $response = $this->post('api/upload/card', [$file], $header);
         $response->assertStatus(201);
     }
 }

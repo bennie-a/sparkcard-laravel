@@ -33,9 +33,7 @@ export class AxiosTask {
         await axios
             .post(this.getApiUrl(url), json)
             .then((response) => {
-                if (response.status == 201) {
-                    success(response, this.store);
-                }
+                success(response, this.store);
                 if (response.status == 401) {
                     console.log(response.data);
                 }
