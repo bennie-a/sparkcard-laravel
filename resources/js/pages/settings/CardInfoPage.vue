@@ -32,7 +32,20 @@ export default {
                 .catch((e) => {
                     if (e.response.status == 422) {
                         const errors = e.response.data.errors;
-                        this.$store.dispatch("message/error", errors);
+                        let msgs = "<ul>";
+                        for (let key in errors) {
+                            console.log(key);
+                            let array = errors[key];
+                            array.forEach((msg) => {
+                                msgs += `<li>${msg}</li>`;
+                            });
+                        }
+                        msgs += "</ul>";
+                        // $keys = Object.keys(errors);
+                        // console.log($keys);
+                        // errors.forEach(function (e, key) {
+                        // });
+                        this.$store.dispatch("message/errorhtml", msgs);
                     }
                 });
         },

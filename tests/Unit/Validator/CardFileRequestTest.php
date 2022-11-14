@@ -15,18 +15,43 @@ class CardFileRequestTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_OK()
     {
         $request = new CardFileRequest();
         $rules = $request->rules();
-        // $json = file_get_contents(storage_path("test/json/test_color.json"));
-        // $json_decode = json_decode($json);
-        $validator = Validator::make(['data' => ['cards'=> ['name' => 'aaa'], 'code'=>'BRO']], $rules);
+        $json = file_get_contents(storage_path("test/json/test_color.json"));
+        $json_decode = json_decode($json, true);
+        $validator = Validator::make($json_decode, $rules);
         $isOk = $validator->passes();
         logger()->debug($validator->errors());
         $this->assertTrue($isOk);
-        // $response = $this->get('/');
+    }
 
-        // $response->assertStatus(200);
+    public function test_data_required() 
+    {
+        $request = new CardFileRequest();
+        $rules = $request->rules();
+        $validator = Validator::make(['xxxx' => ['cards'=> [], 'code'=>'BRO']], $rules);
+        $isFail = $validator->fails();
+        $this->assertTrue($isFail);
+    }
+
+
+    public function test_cards_empty() 
+    {
+        $request = new CardFileRequest();
+        $rules = $request->rules();
+        $validator = Validator::make(['data' => ['cards'=> [], 'code'=>'BRO']], $rules);
+        $isFail = $validator->fails();
+        $this->assertTrue($isFail);
+    }
+
+    public function test_code_required()
+    {
+        $request = new CardFileRequest();
+        $rules = $request->rules();
+        $validator = Validator::make(['data' => ['cards'=> ['name' => 'aaaa']]], $rules);
+        $isFail = $validator->fails();
+        $this->assertTrue($isFail);
     }
 }

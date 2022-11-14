@@ -39,23 +39,23 @@ class CardFileRequest extends FormRequest
     {
         return [
             'data.required' => 'dataオブジェクトは必ず入力してください。',
-            'data.cards.required' => ':cardsオブジェクトはdataオブジェクト内に指定してください。',
+            'data.cards.required' => 'cardsオブジェクトはdataオブジェクト内に指定してください。',
             'data.code.required' => 'codeはdataオブジェクト内に指定してください',
         ];
     }
 
-    /**
-     * エラーメッセージを出力
-     * 
-     * @return void
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response['errors'] = $validator->errors()->toArray();
+    // /**
+    //  * エラーメッセージを出力
+    //  * 
+    //  * @return void
+    //  */
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     $response['errors'] = $validator->errors()->toArray();
 
-        throw new HttpResponseException(
-            response()->json($response, 422, [], JSON_UNESCAPED_UNICODE)
-        );
-    }
+    //     throw new HttpResponseException(
+    //         response($response, 422, [])
+    //     );
+    // }
 
 }

@@ -13,6 +13,14 @@
                 {{ this.$store.getters["message/error"] }}
             </div>
         </div>
+        <div
+            class="ui negative message"
+            v-if="this.$store.getters['message/errorhtml'] != ''"
+        >
+            <div class="header">
+                <div v-html="$store.getters['message/errorhtml']"></div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
