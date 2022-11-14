@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CardFileRequest;
 use App\Services\CardJsonFileService;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -20,11 +21,11 @@ class CardJsonFileController extends Controller
      * @param Request $request
      * @return void
      */
-    public function uploadCardFile(Request $request) {
-        $rules = ['data' => 'required'];
-        $messages = [
-            'data.required' => 'JSONファイルにdataオブジェクトがありません'];
-        Validator::make($request->all(), $rules, $messages)->validate();
+    public function uploadCardFile(CardFileRequest $request) {
+        // $rules = ['data' => 'required'];
+        // $messages = [
+        //     'data.required' => 'JSONファイルにdataオブジェクトがありません'];
+        // Validator::make($request->all(), $rules, $messages)->validate();
         $json = $request->input("data");
         // if (!array_key_exists("setCode", $json)) {
         //     return response("JSONファイルにsetCodeがありません。", Response::HTTP_UNPROCESSABLE_ENTITY);

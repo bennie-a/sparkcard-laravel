@@ -498,6 +498,7 @@
                 "types": ["Artifact", "Creature"],
                 "uuid": "5e50d57d-75bd-5617-b0df-b2d2baf82b06"
             }
-        ]
+        ],
+        "code": "BRO"
     }
 }

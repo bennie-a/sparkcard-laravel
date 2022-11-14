@@ -27,13 +27,12 @@ export default {
                 .then((response) => {
                     if (response.status == 201) {
                         this.item = response.data;
-                    } else {
                     }
                 })
                 .catch((e) => {
                     if (e.response.status == 422) {
-                        const data = e.response.data;
-                        this.$store.dispatch("message/error", data.error);
+                        const errors = e.response.data.errors;
+                        this.$store.dispatch("message/error", errors);
                     }
                 });
         },
