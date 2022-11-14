@@ -41,10 +41,6 @@ export default {
                             });
                         }
                         msgs += "</ul>";
-                        // $keys = Object.keys(errors);
-                        // console.log($keys);
-                        // errors.forEach(function (e, key) {
-                        // });
                         this.$store.dispatch("message/errorhtml", msgs);
                     }
                 });

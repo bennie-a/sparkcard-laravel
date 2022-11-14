@@ -22,24 +22,8 @@ class CardJsonFileController extends Controller
      * @return void
      */
     public function uploadCardFile(CardFileRequest $request) {
-        // $rules = ['data' => 'required'];
-        // $messages = [
-        //     'data.required' => 'JSONファイルにdataオブジェクトがありません'];
-        // Validator::make($request->all(), $rules, $messages)->validate();
         $json = $request->input("data");
-        // if (!array_key_exists("setCode", $json)) {
-        //     return response("JSONファイルにsetCodeがありません。", Response::HTTP_UNPROCESSABLE_ENTITY);
-        // }
-        // if (!array_key_exists("cards", $json)) {
-        //     return response("JSONファイルにcardsがありません。", Response::HTTP_UNPROCESSABLE_ENTITY);
-        // }
-        $cards = $json["cards"];
-        $setcode = $json["code"];
-        logger()->debug($setcode);
-        $data = $this->service->build($setcode, $cards);
-        // foreach($cards as $c) {
-        //     logger()->debug($c["name"]);
-        // }
+        $data = $this->service->build($json);
 
         return response($data, Response::HTTP_CREATED);
     }
