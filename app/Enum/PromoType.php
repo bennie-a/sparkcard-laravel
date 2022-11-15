@@ -5,12 +5,14 @@ enum PromoType:string {
     case JPWARKER = 'jpwalker';
     case BOOSTER_FAN = 'boosterfun';
     case DRAFT = 'draft';
+    case BUYABOX = 'buyabox';
     case OTHER = 'other';
 
     public function text() {
         return match($this) {
             self::JPWARKER => '絵違い',
             self::BOOSTER_FAN => 'ブースターファン',
+            self::BUYABOX => 'BOXプロモ特典',
             self::DRAFT => '',
             self::OTHER => 'その他'
         };

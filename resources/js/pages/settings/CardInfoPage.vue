@@ -31,7 +31,13 @@
                                 >
                             </td>
                             <td>{{ card.enname }}</td>
-                            <td>{{ card.color }}</td>
+                            <td>
+                                <label
+                                    class="ui large label"
+                                    :class="colorlabel(card.color)"
+                                    >{{ colortext(card.color) }}</label
+                                >
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot v-if="this.$store.getters.cardsLength != 0">
@@ -60,6 +66,38 @@ export default {
     computed: {
         getCards: function () {
             return this.$store.getters.sliceCard;
+        },
+        colortext: function () {
+            return function (key) {
+                const colors = {
+                    W: "白",
+                    B: "黒",
+                    U: "青",
+                    R: "赤",
+                    G: "緑",
+                    M: "多色",
+                    L: "無色",
+                    A: "アーティファクト",
+                    Land: "土地",
+                };
+                return colors[key];
+            };
+        },
+        colorlabel: function () {
+            return function (key) {
+                const colors = {
+                    W: "",
+                    B: "black",
+                    U: "blue",
+                    R: "red",
+                    G: "green",
+                    M: "orange",
+                    L: "grey",
+                    A: "grey",
+                    Land: "brown",
+                };
+                return colors[key];
+            };
         },
     },
     methods: {
