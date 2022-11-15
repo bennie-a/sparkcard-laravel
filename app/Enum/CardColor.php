@@ -34,6 +34,12 @@ enum CardColor:string {
         };
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param string $color
+     * @return CardColor
+     */
     public static function matchByString(string $color):CardColor {
         $target = array_filter(CardColor::cases(), function($c) use ($color){
             $lower = $c->toLowerCase();
@@ -136,7 +142,7 @@ enum CardColor:string {
      * 
      */
     public static function match(array $card) {
-        $colorKey = "colors";
+        $colorKey = "colorIdentity";
         $types = $card["types"];
         $cardtype = $types[0];
         // アーティファクト
@@ -149,7 +155,7 @@ enum CardColor:string {
         }
 
         // 無色
-        if (!array_key_exists($colorKey, $card)) {
+        if (!array_key_exists($colorKey, $card) || empty($card[$colorKey])) {
             return CardColor::LESS;
         } 
 
@@ -159,6 +165,6 @@ enum CardColor:string {
             return CardColor::MULTI;
         }
         // 単色
-        return CardColor::tryFrom($colorArray[0]);
+        return CardColor::tryFrom(current($colorArray));
     }
 }

@@ -21,7 +21,7 @@ class MainColorSeeder extends Seeder
         MainColor::create(['attr' => "U", 'name' => "青"]);
         MainColor::create(['attr' => "W", 'name' => "白"]);
         MainColor::create(['attr' => "M", 'name' => "多色"]);
-        MainColor::create(['attr' => "L", 'name' => "土地"]);
+        MainColor::create(['attr' => "Land", 'name' => "土地"]);
         MainColor::create(['attr' => "A", 'name' => "アーティファクト"]);
         MainColor::create(['attr' => "CL", 'name' => "無色"]);
         //

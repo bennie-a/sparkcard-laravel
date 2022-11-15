@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\service;
 
+use App\Enum\CardColor;
+use App\Models\MainColor;
 use App\Services\CardJsonFileService;
 use Tests\TestCase;
 
@@ -62,5 +64,56 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("飛空士の騎兵部隊", $card['name'], 'カード名(日本語)');
         assertEmpty($card['multiverseId']);
         assertEmpty($card['scryfallId']);
+    }
+
+    public function test_色判定() {
+        $contents = file_get_contents(storage_path("test/json/war_short.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $colorKey = 'color';
+        // 白
+        $cards = $result['cards'];
+        $white = current($cards);
+        assertEquals('W', $white[$colorKey], '白');
+        // 黒
+        $black = $this->nextCard('鮮血の刃先', $cards);
+        assertEquals('B', $black[$colorKey], '黒');
+        // 青
+        $blue = $this->nextCard('ジェイスの投影', $cards);
+        assertEquals('U', $blue[$colorKey], '青');
+        // 赤
+        $red = $this->nextCard('炎の職工、チャンドラ', $cards);        
+        assertEquals('R', $red[$colorKey], '赤');
+        // 緑
+        $green = $this->nextCard('群れの声、アーリン', $cards);        
+        assertEquals('G', $green[$colorKey], '緑');
+        // 多色
+        $multi = $this->nextCard('龍神、ニコル・ボーラス', $cards);
+        assertEquals('M', $multi[$colorKey], '多色');
+        // 無色
+        $less = $this->nextCard('大いなる創造者、カーン', $cards);
+        assertEquals('L', $less[$colorKey], '無色');
+        // アーティファクト
+        $artifact = $this->nextCard('静かな潜水艇', $cards);
+        assertEquals('A', $artifact[$colorKey], 'アーティファクト');
+        // 土地
+        $land = $this->nextCard('出現領域', $cards);
+        assertEquals('Land', $land[$colorKey], '土地');
+
+
+    }
+
+    /**
+     * 次の配列を取得する。
+     *
+     * @param [type] $cards
+     * @return void
+     */
+    private function nextCard(string $name, $cards) {
+        $target = array_filter($cards, function($c) use($name){
+            return strcmp($name, $c['name']) == 0;
+        });
+        return current($target);
     }
 }

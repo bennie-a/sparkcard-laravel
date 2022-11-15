@@ -1181,6 +1181,184 @@
                 "types": ["Planeswalker"],
                 "uuid": "0a679f46-9f50-5ac1-a6bf-c802c67fc0a0",
                 "variations": ["ba2d7f48-9846-5343-ae02-913b7e6a18d0"]
+            },
+            {
+                "artist": "Raymond Swanland",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R", "U"],
+                "colors": ["B", "R", "U"],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 2523,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 461398,
+                        "name": "Nicol Bolas, Drachengott",
+                        "text": "Nicol Bolas, Drachengott, hat alle Loyalitätsfähigkeiten aller anderen Planeswalker im Spiel.\n+1: Du ziehst eine Karte. Jeder Gegner schickt eine Karte von seiner Hand oder eine bleibende Karte, die er kontrolliert, ins Exil.\n−3: Zerstöre eine Kreatur oder einen Planeswalker deiner Wahl.\n−8: Jeder Gegner, der keine legendäre Kreatur oder keinen legendären Planeswalker kontrolliert, verliert die Partie.",
+                        "type": "Legendärer Planeswalker — Bolas"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 461662,
+                        "name": "Nicol Bolas, Dios Dragón",
+                        "text": "Nicol Bolas, Dios Dragón tiene todas las habilidades de lealtad de todos los demás planeswalkers en el campo de batalla.\n+1: Robas una carta. Cada oponente exilia una carta de su mano o un permanente que controla.\n−3: Destruye la criatura o planeswalker objetivo.\n−8: Cada oponente que no controla una criatura legendaria o un planeswalker legendario pierde el juego.",
+                        "type": "Planeswalker legendario — Bolas"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 461926,
+                        "name": "Nicol Bolas, Dragon-dieu",
+                        "text": "Nicol Bolas, Dragon-dieu a toutes les capacités de loyauté de tous les autres planeswalkers sur le champ de bataille.\n+1 : Vous piochez une carte. Chaque adversaire exile une carte de sa main ou un permanent qu'il contrôle.\n-3 : Détruisez la créature ciblée ou le planeswalker ciblé.\n-8 : Chaque adversaire qui ne contrôle pas une créature légendaire ou un planeswalker légendaire perd la partie.",
+                        "type": "Planeswalker légendaire : Bolas"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 462190,
+                        "name": "Nicol Bolas, Drago Divino",
+                        "text": "Nicol Bolas, Drago Divino ha tutte le abilità di fedeltà di tutti gli altri planeswalker sul campo di battaglia.\n+1: Pesca una carta. Ogni avversario esilia una carta dalla propria mano o un permanente che controlla.\n-3: Distruggi una creatura o un planeswalker bersaglio.\n-8: Ogni avversario che non controlla una creatura o un planeswalker leggendari perde la partita.",
+                        "type": "Planeswalker Leggendario — Bolas"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 462454,
+                        "name": "龍神、ニコル・ボーラス",
+                        "text": "龍神、ニコル・ボーラスは、戦場にある他のプレインズウォーカーすべての忠誠度能力をすべて持つ。\n+1：あなたはカードを１枚引く。各対戦相手はそれぞれ、自分の手札からカード１枚か、自分がコントロールしているパーマネント１つを追放する。\n-3：クリーチャー１体かプレインズウォーカー１体を対象とし、それを破壊する。\n-8：伝説のクリーチャーもプレインズウォーカーもコントロールしていない各対戦相手はそれぞれこのゲームに敗北する。",
+                        "type": "伝説のプレインズウォーカー — ボーラス"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 462718,
+                        "name": "용 신, 니콜 볼라스",
+                        "text": "용 신, 니콜 볼라스는 전장에 있는 다른 모든 플레인즈워커들의 충성 능력을 가진다.\n+1: 당신은 카드 한 장을 뽑는다. 각 상대는 자신의 손에 있는 카드 한 장 또는 자신이 조종하는 지속물 한 개를 추방한다.\n−3: 생물 또는 플레인즈워커를 목표로 정한다. 그 목표를 파괴한다.\n−8: 전설적 생물 또는 플레인즈워커를 조종하지 않는 각 상대는 게임에서 패배한다.",
+                        "type": "전설적 플레인즈워커 — 볼라스"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 462982,
+                        "name": "Nicol Bolas, Dragão-deus",
+                        "text": "Nicol Bolas, Dragão-deus, tem todas as habilidades de lealdade de todos os outros planeswalkers no campo de batalha.\n+1: Você compra um card. Cada oponente exila um card da própria mão ou uma permanente que ele controla.\n−3: Destrua a criatura ou planeswalker alvo.\n−8: Cada oponente que não controla uma criatura lendária nem um planeswalker lendário perde o jogo.",
+                        "type": "Planeswalker Lendário — Nicol Bolas"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 463246,
+                        "name": "Никол Болас, Дракон-Бог",
+                        "text": "Никол Болас, Дракон-Бог имеет все способности верности всех других planeswalker-ов на поле битвы.\n+1: вы берете карту. Каждый оппонент изгоняет карту из своей руки или перманент под своим контролем.\n—3: уничтожьте целевое существо или planeswalker-а.\n—8: каждый оппонент, у которого под контролем нет легендарного существа или planeswalker-а, проигрывает партию.",
+                        "type": "Легендарный Planeswalker — Болас"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 463510,
+                        "name": "龙尊尼可波拉斯",
+                        "text": "龙尊尼可波拉斯具有战场上所有其他鹏洛客的所有忠诚异能。\n+1：你抓一张牌。每位对手各放逐一张手牌或一个由其操控的永久物。\n−3：消灭目标生物或鹏洛客。\n−8：每位未操控传奇生物或传奇鹏洛客的对手各输掉这盘游戏。",
+                        "type": "传奇鹏洛客 ～波拉斯"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 463774,
+                        "name": "龍尊尼可波拉斯",
+                        "text": "龍尊尼可波拉斯具有戰場上所有其他鵬洛客的所有忠誠異能。\n+1：你抽一張牌。每位對手各放逐一張手牌或一個由其操控的永久物。\n−3：消滅目標生物或鵬洛客。\n−8：每位未操控傳奇生物或傳奇鵬洛客的對手各輸掉這盤遊戲。",
+                        "type": "傳奇鵬洛客 ～波拉斯"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "224546",
+                    "cardKingdomId": "224252",
+                    "cardsphereId": "59384",
+                    "mcmId": "372239",
+                    "mcmMetaId": "269570",
+                    "mtgArenaId": "69656",
+                    "mtgjsonV4Id": "dc010d37-1b45-5388-9e41-bea5996cf097",
+                    "mtgoId": "72020",
+                    "multiverseId": "461134",
+                    "scryfallId": "98b68dea-a7be-4f99-8a50-4c8cf0e0f7a9",
+                    "scryfallIllustrationId": "4b8dd521-ee16-4f41-910e-c94db63d03c7",
+                    "scryfallOracleId": "581eedc4-efe4-4ae4-baf2-88071e7e6f6d",
+                    "tcgplayerProductId": "188630"
+                },
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "loyalty": "4",
+                "manaCost": "{U}{B}{B}{B}{R}",
+                "manaValue": 5.0,
+                "name": "Nicol Bolas, Dragon-God",
+                "number": "207",
+                "originalText": "Nicol Bolas, Dragon-God has all loyalty abilities of all other planeswalkers on the battlefield.\n+1: You draw a card. Each opponent exiles a card from their hand or a permanent they control.\n−3: Destroy target creature or planeswalker.\n−8: Each opponent who doesn't control a legendary creature or planeswalker loses the game.",
+                "originalType": "Legendary Planeswalker — Bolas",
+                "printings": ["MED", "PRM", "PS19", "PWAR", "SLD", "WAR"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/7bfd5aa986edb0fe",
+                    "cardKingdomFoil": "https://mtgjson.com/links/2a9e27a0a0e82cd3",
+                    "cardmarket": "https://mtgjson.com/links/042bb1af839847e4",
+                    "tcgplayer": "https://mtgjson.com/links/1df849af9c03dc54"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2019-05-03",
+                        "text": "Nicol Bolas doesn’t remove loyalty abilities from the other planeswalkers."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "Nicol Bolas doesn’t gain any static or triggered abilities of other planeswalkers or any activated abilities they may have that aren’t loyalty abilities."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "While Nicol Bolas may end up with an astonishing number of loyalty abilities, you can still activate only one loyalty ability of Nicol Bolas, Dragon-God each turn."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If a loyalty ability of a planeswalker references the card it’s printed on by name, treat Nicol Bolas’s instance of that ability as though it referenced Nicol Bolas, Dragon-God by name instead. For instance, if Nahiri, Storm of Stone is on the battlefield, Nicol Bolas deals the damage if you activate the ability he gained from her."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If an ability of a planeswalker exiles cards and another loyalty ability of that planeswalker references the exiled cards, those abilities are linked. If Nicol Bolas gains both abilities, the instances he has are similarly linked. Cards exiled by any other abilities Nicol Bolas has (such as his own first loyalty ability) won’t be seen by those linked abilities."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "If any abilities trigger as you draw a card while resolving Nicol Bolas’s first loyalty ability, those abilities don’t resolve until after your opponents have exiled a card or permanent."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "After you draw a card as Nicol Bolas’s first loyalty ability resolves, the next opponent in turn order (or, if it’s somehow an opponent’s turn, that opponent) chooses a permanent they control or chooses a card in hand without revealing that card. Then each other opponent in turn order does the same, knowing the choices made before them. Finally, all of the chosen cards are exiled simultaneously."
+                    },
+                    {
+                        "date": "2019-05-03",
+                        "text": "In a Two-Headed Giant game, if one player on a team loses the game, the entire team loses the game, even if the other player controls a legendary creature or planeswalker."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "WAR",
+                "subtypes": ["Bolas"],
+                "supertypes": ["Legendary"],
+                "text": "Nicol Bolas, Dragon-God has all loyalty abilities of all other planeswalkers on the battlefield.\n[+1]: You draw a card. Each opponent exiles a card from their hand or a permanent they control.\n[−3]: Destroy target creature or planeswalker.\n[−8]: Each opponent who doesn't control a legendary creature or planeswalker loses the game.",
+                "type": "Legendary Planeswalker — Bolas",
+                "types": ["Planeswalker"],
+                "uuid": "ad06d0fe-1d5c-5d62-9134-e97294333d90",
+                "variations": ["4e13c7ce-6811-5d13-9675-3baafa9d3910"]
             }
         ],
         "code": "WAR"
