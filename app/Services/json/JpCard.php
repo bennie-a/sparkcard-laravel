@@ -24,9 +24,9 @@ class JpCard extends AbstractCard
         return $result;
     }
 
-    // public function jpname(string $enname) {
-    //     return $this->jp["name"];        
-    // }
-
+    public function multiverseId()
+    {
+        return $this->jp["multiverseId"];
+    }
 }
 ?>

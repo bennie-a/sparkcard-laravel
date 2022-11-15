@@ -26,8 +26,12 @@ use App\Services\interface\CardInfoInterface;
         return $this->json;        
     }
     
-    public function jpname(string $enname) {
+    public function jpname(string $enname):string {
         return $this->jp["name"];        
+    }
+    public function scryfallId()
+    {
+        return '';
     }
 
  }

@@ -70,6 +70,20 @@ class WisdomGuildService {
             }
         }
         return $cardlist;
+    }
 
+    
+    /**
+     * 英語名から日本語名を取得する。
+     *
+     * @param string $enname 英語名
+     * @return string 日本語名
+     */
+    public function getJpName($enname) {
+        $dom = $this->repo->getSpecificCard($enname);
+        $target = $dom->query('//h1/text()')->item(0);
+        $name = $target->nodeValue;
+        $split = explode('/', $name, 2);
+        return current($split);
     }
 }

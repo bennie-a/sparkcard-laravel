@@ -13,5 +13,16 @@ class JpLimitedCard extends AbstractCard
     {
         
     }
+
+    public function multiverseId()
+    {
+        return '';
+    }
+
+    public function scryfallId()
+    {
+        return $this->json['identifiers']['scryfallId'];
+    }
+
 }
 ?>

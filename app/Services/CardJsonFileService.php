@@ -11,7 +11,8 @@ class CardJsonFileService {
         foreach($cards as $c) {
             $obj = CardInfoFactory::create($c);
             $enname = $c['name'];
-            $afterCard = ['name' => $obj->jpname($enname)];
+            $afterCard = ['name' => $obj->jpname($enname),"enname" => $enname,
+                         'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId()];
             array_push($cardInfo, $afterCard);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];

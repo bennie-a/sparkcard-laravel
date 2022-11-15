@@ -14,7 +14,7 @@ class CardInfoFactory {
             return new JpLimitedCard($json);
         }
         $isForeign = array_key_exists('foreignData', $json);
-        if ($isForeign) {
+        if ($isForeign && empty($json['foreignData']) == false) {
             return new JpCard($json);
         }
         return new NoJpCard($json);
