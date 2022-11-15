@@ -2,7 +2,6 @@
 namespace App\Enum;
 
 use App\Enum\CardColor as EnumCardColor;
-use Illuminate\Support\Facades\Log;
 
 /**
  * カードの色を示すenum

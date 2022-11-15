@@ -5,8 +5,6 @@ namespace App\Services\interface;
  */
 interface CardInfoInterface
 {
-    public function build(string $enname, $json);
-
     /**
      * 英語名から日本語名を取得する。
      *
@@ -18,5 +16,7 @@ interface CardInfoInterface
     public function multiverseId();
 
     public function scryfallId();
+
+    public function number();
 }
 ?>

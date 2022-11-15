@@ -9,21 +9,6 @@ class JpCard extends AbstractCard
         $this->jp = $this->getJp($json);
     }
 
-    public function build(string $enname, $json)
-    {
-        $result = [];
-        $forgienData = $json['foreignData'];
-        $filterd = array_filter($forgienData, function($data) {
-            return strcmp($data['language'], 'Japanese') == 0;
-        });
-        $jp = current($filterd);
-        $result = ['name' => $jp->name, 'enname' => $enname];
-        if (array_key_exists('multiverseId', $jp)) {
-            $result['multiverseId'] = $jp['multiverseId'];
-        }
-        return $result;
-    }
-
     public function multiverseId()
     {
         return $this->jp["multiverseId"];

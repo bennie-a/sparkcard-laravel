@@ -30,7 +30,6 @@ export default {
         // ファイルアップロードイベント
         onFileChange: function (e) {
             this.$store.dispatch("message/clear");
-            this.$store.dispatch("setLoad", true);
 
             const file = e.target.files[0];
             if (file == undefined) {

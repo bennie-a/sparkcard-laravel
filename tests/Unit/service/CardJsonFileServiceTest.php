@@ -41,6 +41,8 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("規律の絆", $card['name']);
         assertEquals("462253", $card['multiverseId']);
         assertEmpty($card['scryfallId']);
+        assertEquals("6", $card['number']);
+        assertEmpty($card['promotype']);
     }
 
     public function test_日本限定カード() {
@@ -52,6 +54,9 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("群れの声、アーリン" ,$card['name']);
         assertEmpty($card['multiverseId']);
         assertEquals('43261927-7655-474b-ac61-dfef9e63f428', $card['scryfallId'], 'scryfallId');
+        assertEquals("150", $card['number']);
+        assertEquals("絵違い", $card['promotype']);
+
     }
 
     public function test_日本語表記なし()
@@ -64,6 +69,16 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("飛空士の騎兵部隊", $card['name'], 'カード名(日本語)');
         assertEmpty($card['multiverseId']);
         assertEmpty($card['scryfallId']);
+        assertEquals("1", $card['number']);
+    }
+
+    public function test_ブースターファン() {
+        $contents = file_get_contents(storage_path("test/json/test_color.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $target = $this->nextCard("Teferi, Temporal Pilgrim", $result["cards"]);
+        assertEquals('ブースターファン', $target['promotype']);
     }
 
     public function test_色判定() {
@@ -112,7 +127,7 @@ class CardJsonFileServiceTest extends TestCase
      */
     private function nextCard(string $name, $cards) {
         $target = array_filter($cards, function($c) use($name){
-            return strcmp($name, $c['name']) == 0;
+            return strcmp($name, $c['name']) == 0 || strcmp($name, $c['enname']) == 0;
         });
         return current($target);
     }

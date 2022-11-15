@@ -1,7 +1,6 @@
 <?php
 namespace App\Services\json;
 
-use App\Services\interface\CardInfoInterface;
 use App\Services\WisdomGuildService;
 
 /**
@@ -9,11 +8,6 @@ use App\Services\WisdomGuildService;
  */
 class NoJpCard extends AbstractCard
 {
-    public function build(string $enname, $json)
-    {
-        
-    }
-
     public function jpname(string $enname):string
     {
         $service = new WisdomGuildService();
@@ -25,6 +19,5 @@ class NoJpCard extends AbstractCard
     {
         return '';
     }
-
 }
 ?>

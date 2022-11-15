@@ -9,11 +9,6 @@ class JpLimitedCard extends AbstractCard
         $this->jp = $this->getJp($json);
     }
 
-    public function build(string $enname, $json)
-    {
-        
-    }
-
     public function multiverseId()
     {
         return '';
@@ -22,6 +17,12 @@ class JpLimitedCard extends AbstractCard
     public function scryfallId()
     {
         return $this->json['identifiers']['scryfallId'];
+    }
+
+    public function number()
+    {
+        $number = parent::number();
+        return str_replace('★', '', $number);
     }
 
 }

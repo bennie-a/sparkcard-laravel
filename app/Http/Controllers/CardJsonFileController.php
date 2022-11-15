@@ -12,6 +12,9 @@ class CardJsonFileController extends Controller
 {
     public function __construct(CardJsonFileService $service)
     {
+        ini_set("max_execution_time",240); // タイムアウトを240秒にセット
+        ini_set("max_input_time",240); // パース時間を240秒にセット
+
         $this->service = $service;
     }
     /**
