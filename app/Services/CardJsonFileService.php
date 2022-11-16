@@ -20,9 +20,10 @@ class CardJsonFileService {
             $color = CardColor::match($c);
             $promo = PromoType::match($c);
             $afterCard = ['setCode'=> $setcode, 'name' => $obj->jpname($enname),"en_name" => $enname,
-                         'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId(),
-                         'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text()
-                        ];
+            'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId(),
+            'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text()
+            ];
+            logger()->info('get card:'.$afterCard['name']);
             array_push($cardInfo, $afterCard);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];

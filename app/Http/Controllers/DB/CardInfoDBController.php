@@ -26,6 +26,7 @@ class CardInfoDBController extends Controller
      */
     public function store(CardInfoDBRequest $request)
     {
+        logger()->info("insert start.");
         $details = $request->all();
         $setCode = $details['setCode'];
         $exp = Expansion::where('attr', $setCode)->get();
@@ -34,6 +35,7 @@ class CardInfoDBController extends Controller
         }
         // card_infoテーブルに登録
         $this->service->post($exp[0], $details);
+        logger()->info("insert end.");
         return response('', Response::HTTP_CREATED);
     }
 }

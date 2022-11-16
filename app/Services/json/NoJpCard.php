@@ -19,5 +19,11 @@ class NoJpCard extends AbstractCard
     {
         return '';
     }
+
+    public function number()
+    {
+        $number = parent::number();
+        return preg_replace('/[a-zA-Z]/', '', $number);
+    }
 }
 ?>

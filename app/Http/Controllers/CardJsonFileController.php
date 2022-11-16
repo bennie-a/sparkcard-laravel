@@ -25,8 +25,10 @@ class CardJsonFileController extends Controller
      * @return void
      */
     public function uploadCardFile(CardFileRequest $request) {
+        logger()->info('upload start');
         $json = $request->input("data");
         $data = $this->service->build($json);
+        logger()->info('upload end');
 
         return response($data, Response::HTTP_CREATED);
     }

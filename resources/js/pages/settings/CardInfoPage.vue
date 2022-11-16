@@ -23,7 +23,10 @@
                     <tbody>
                         <tr v-for="card in getCards">
                             <td>{{ card.number }}</td>
-                            <td>
+                            <td v-if="card.name == 'エラー'">
+                                <input type="text" v-model="card.name" />
+                            </td>
+                            <td v-if="card.name != 'エラー'">
                                 {{ card.name
                                 }}<label v-if="card.promotype != ''"
                                     >≪{{ card.promotype }}≫</label
