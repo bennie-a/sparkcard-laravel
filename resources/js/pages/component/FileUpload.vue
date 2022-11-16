@@ -5,7 +5,7 @@
         class="inputfile"
         @change="onFileChange"
     />
-    <label for="embedpollfileinput" class="ui teal button uploadbutton">
+    <label for="embedpollfileinput" class="ui violet button uploadbutton">
         <i class="file icon"></i>
         ファイルを選択する
     </label>

@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\BaseCategory;
-use App\Models\MainColor;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BaseCategorySeeder extends Seeder

@@ -18,6 +18,11 @@ class Expansion extends Model
 
     protected $fillable = ['notion_id', 'base_id', 'name', 'attr', 'release_date'];
 
+    public function cardinfo()
+    {
+        return $this->hasMany('App\CardInfo');
+    }
+
     public static function isExist($name) {
         return DB::table("expansion")->where('name', $name)->exists();
     }

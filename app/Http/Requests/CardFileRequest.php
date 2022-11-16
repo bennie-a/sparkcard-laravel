@@ -43,19 +43,4 @@ class CardFileRequest extends FormRequest
             'data.code.required' => 'codeはdataオブジェクト内に指定してください',
         ];
     }
-
-    // /**
-    //  * エラーメッセージを出力
-    //  * 
-    //  * @return void
-    //  */
-    // protected function failedValidation(Validator $validator)
-    // {
-    //     $response['errors'] = $validator->errors()->toArray();
-
-    //     throw new HttpResponseException(
-    //         response($response, 422, [])
-    //     );
-    // }
-
 }

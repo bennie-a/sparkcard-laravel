@@ -6,8 +6,8 @@
     </section>
     <section class="wall mt-1">
         <now-loading></now-loading>
-        <form class="ui large form">
-            <h2 class="ui dividing header">登録内容</h2>
+        <ModalButton @action="store">DBに登録する</ModalButton>
+        <form class="ui large form mt-2">
             <div class="inline field">
                 <label>エキスパンション名：</label>{{ setCode }}
             </div>
@@ -30,7 +30,7 @@
                                     >≪{{ card.promotype }}≫</label
                                 >
                             </td>
-                            <td>{{ card.enname }}</td>
+                            <td>{{ card.en_name }}</td>
                             <td>
                                 <label
                                     class="ui large label"
@@ -57,6 +57,7 @@ import NowLoading from "../component/NowLoading.vue";
 import FileUpload from "../component/FileUpload.vue";
 import MessageArea from "../component/MessageArea.vue";
 import ListPagination from "../component/ListPagination.vue";
+import ModalButton from "../component/ModalButton.vue";
 
 import axios from "axios";
 export default {
@@ -137,12 +138,16 @@ export default {
                     this.$store.dispatch("setLoad", false);
                 });
         },
+        store: function () {
+            console.log("store finished.");
+        },
     },
     components: {
         "file-upload": FileUpload,
         "message-area": MessageArea,
         "now-loading": NowLoading,
         pagination: ListPagination,
+        ModalButton: ModalButton,
     },
 };
 </script>

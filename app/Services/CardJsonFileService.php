@@ -15,7 +15,7 @@ class CardJsonFileService {
             $enname = $c['name'];
             $color = CardColor::match($c);
             $promo = PromoType::match($c);
-            $afterCard = ['name' => $obj->jpname($enname),"enname" => $enname,
+            $afterCard = ['setCode'=> $setcode, 'name' => $obj->jpname($enname),"en_name" => $enname,
                          'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId(),
                          'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text()
                         ];
