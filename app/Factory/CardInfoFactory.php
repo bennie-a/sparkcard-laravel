@@ -4,10 +4,14 @@ namespace App\Factory;
 use App\Services\json\JpCard;
 use App\Services\json\JpLimitedCard;
 use App\Services\json\NoJpCard;
+use App\Services\json\OnlineCard;
 
 class CardInfoFactory {
 
     public static function create($json) {
+        if (array_key_exists('isOnlineOnly', $json) && $json['isOnlineOnly'] == 'true') {
+            return new OnlineCard($json);
+        }
         $enname = $json['name'];
         $lang = $json['language'];
         if ($lang == 'Japanese') {

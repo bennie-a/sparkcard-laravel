@@ -27,6 +27,8 @@ class ScryfallService {
         return $this->repo->getImageByMultiverseId($id);
     }
     public function getImageByScryFallId($id)
-    {}
+    {
+        return $this->repo->getImageByScryFallId($id);
+    }
 }
 ?>

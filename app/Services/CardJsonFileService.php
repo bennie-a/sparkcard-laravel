@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Enum\CardColor;
 use App\Enum\PromoType;
 use App\Factory\CardInfoFactory;
+use App\Services\json\OnlineCard;
 
 class CardJsonFileService {
     public function build($json) {
@@ -12,6 +13,9 @@ class CardJsonFileService {
         $cardInfo = [];
         foreach($cards as $c) {
             $obj = CardInfoFactory::create($c);
+            if ($obj instanceof OnlineCard) {
+                continue;
+            }
             $enname = $c['name'];
             $color = CardColor::match($c);
             $promo = PromoType::match($c);

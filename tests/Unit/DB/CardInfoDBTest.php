@@ -11,6 +11,7 @@ use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsInt;
 use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 class CardInfoDBTest extends TestCase
@@ -43,33 +44,39 @@ class CardInfoDBTest extends TestCase
                 'multiverseId' => '462492',
                 'promotype' => '', 'scryfallId' => ''];
         $record = $this->post_ok($data);
+        assertEquals($data['name'], $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
         assertTrue(str_starts_with($record->image_url, 'https://cards.scryfall.io/normal/front/'), '画像URLの一致');
     }
     
     public function test_登録_scryfallIdあり()
     {
-        // 画像URL
+        $data = ['setCode' => 'WAR',
+                'name' => '群れの声、アーリン',
+                'en_name' => 'Arlinn, Voice of the Pack',
+                'color' => 'G',
+                'number'=> '150',
+                'multiverseId' => '',
+                'promotype' => '絵違い', 
+                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428'];
+        $record = $this->post_ok($data);
+        assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
+        assertNotNull($record->image_url, '画像URLの有無');
     }
     
     public function test_登録_multiverseIdとscryfallIdなし()
     {
-        // 画像URL
-    }
-
-    public function test_登録_promotypeが絵違い()
-    {
-        
-    }
-    
-    public function test_登録_promotypeがブースターファン()
-    {
-        
-    }
-    
-    public function test_登録_promotypeがBOXプロモ特典()
-    {
-        
+        $data = ['setCode' => 'WAR',
+                'name' => '飛空士の騎兵部隊',
+                'en_name' => 'Aeronaut Cavalry',
+                'color' => 'W',
+                'number'=> '1',
+                'multiverseId' => '',
+                'promotype' => '', 
+                'scryfallId' => ''];
+        $record = $this->post_ok($data);
+        assertEquals($data['name'], $record->name, 'カード名');
+        assertNull($record->image_url, '画像URLの有無');
     }
     
     private function post_ok($data)
@@ -77,7 +84,6 @@ class CardInfoDBTest extends TestCase
         $this->post('api/database/card', $data)->assertStatus(201);
         $record = CardInfo::first();
         assertNotNull($record, '登録の有無');
-        assertEquals($data['name'], $record->name, 'カード名');
         assertEquals($data['en_name'], $record->en_name, 'カード名(英名)');
         assertEquals($data['color'], $record->color_id, '色');
         assertEquals($data['number'], $record->number, 'カード番号');

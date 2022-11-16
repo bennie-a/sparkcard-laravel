@@ -5,9 +5,8 @@
         {{ filename }}
     </section>
     <section class="wall mt-1">
-        <now-loading></now-loading>
         <ModalButton @action="store">DBに登録する</ModalButton>
-        <form class="ui large form mt-2">
+        <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="inline field">
                 <label>エキスパンション名：</label>{{ setCode }}
             </div>
@@ -50,6 +49,7 @@
                 </table>
             </div>
         </form>
+        <now-loading></now-loading>
     </section>
 </template>
 <script>
@@ -58,11 +58,15 @@ import FileUpload from "../component/FileUpload.vue";
 import MessageArea from "../component/MessageArea.vue";
 import ListPagination from "../component/ListPagination.vue";
 import ModalButton from "../component/ModalButton.vue";
+import { AxiosTask } from "../../component/AxiosTask";
 
 import axios from "axios";
 export default {
     data() {
         return { filename: "ファイルを選択してください", setCode: "" };
+    },
+    mounted: function () {
+        // this.$store.dispatch("setLoad", true);
     },
     computed: {
         getCards: function () {
@@ -138,7 +142,20 @@ export default {
                     this.$store.dispatch("setLoad", false);
                 });
         },
-        store: function () {
+        store: async function () {
+            const task = new AxiosTask(this.$store);
+            const list = this.$store.getters.card;
+            await Promise.all(
+                list.map(async (card) => {
+                    const success = function (response, store) {};
+                    await task.post("/database/card", card, success);
+                })
+            );
+            this.$store.dispatch(
+                "setSuccessMessage",
+                `${list.length}件登録が完了しました。`
+            );
+
             console.log("store finished.");
         },
     },

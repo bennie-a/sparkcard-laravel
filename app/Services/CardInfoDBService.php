@@ -23,7 +23,8 @@ class CardInfoDBService {
      */
     public function post($exp, $details)
     {
-        $name = $details['name'];
+        $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
+        $name = $details['name'].$promotype;
         $number = $details['number'];
         // カード名、エキスパンション略称、カード番号で一意性チェック
         $condition = ['card_info.name' => $name, 'card_info.number' => $number, 'expansion.attr' => $exp->attr];
@@ -31,12 +32,11 @@ class CardInfoDBService {
                         join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->get();
         // 画像URL取得
         $url = $this->getImageUrl($details);
-        $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
         if ($cardList->count() == 0) {
-            logger()->info('新規登録:', [$name]);
+            logger()->info('insert row:', [$name]);
             $record = [
                 'exp_id'=> $exp->notion_id,
-                'name' => $details['name'].$promotype,
+                'name' => $name,
                 'barcode' => $this->barcode(),
                 'en_name' => $details['en_name'],
                 'color_id' => $details['color'],
@@ -45,9 +45,8 @@ class CardInfoDBService {
             ];
             CardInfo::create($record);
         } else {
-            throw new Exception();
+            logger()->info('already exists in card_info:'.$name);
         }
-        // 2.で検索。
         // 無かったら
         // multiverseId or scryfallIDがある⇒画像URLをAPIから取得する。
         // どっちもない⇒画像URLを取得せずに登録する。
@@ -79,8 +78,12 @@ class CardInfoDBService {
     public function getImageUrl($details)
     {
         $multiverseId = $details['multiverseId'];
-        return $this->service->getImageByMultiverseId($multiverseId);
-        // $scryfallId = $details['scryfallId'];
+        $scryfallId = $details['scryfallId'];
+        if (!empty($multiverseId)) {
+            return $this->service->getImageByMultiverseId($multiverseId);
+        } else if (!empty($scryfallId)) {
+            return $this->service->getImageByScryFallId($scryfallId);
+        }
 
         return null;
     }
