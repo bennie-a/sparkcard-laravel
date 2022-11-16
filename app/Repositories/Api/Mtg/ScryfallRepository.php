@@ -26,5 +26,14 @@ class ScryfallRepository {
         $contents = $res->getBody()->getContents();
         return json_decode($contents, true);
     }
+
+    public function getImageByMultiverseId($id)
+    {
+        $client = GuzzleClientFactory::create('scryfall');
+        $response = $client->request('GET', 'cards/multiverse/'.$id);
+        $contents = $response->getBody()->getContents();
+        $json = json_decode($contents, true);
+        return $json['image_uris']['normal'];
+    }
 }
 ?>

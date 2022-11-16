@@ -1,16 +1,19 @@
 <?php
 namespace App\Services;
 
-use App\Enum\PromoType;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use Exception;
-use Illuminate\Http\Exceptions\HttpResponseException;
-
+use App\Services\ScryfallService;
 /**
  * card_infoテーブルのロジッククラス
  */
 class CardInfoDBService {
+    public function __construct()
+    {
+        $this->service = new ScryfallService();
+    }
+
     /**
      * card_infoテーブルにデータを1件登録する。
      *
@@ -75,7 +78,8 @@ class CardInfoDBService {
      */
     public function getImageUrl($details)
     {
-        // $multiverseId = $details['multiverseId'];
+        $multiverseId = $details['multiverseId'];
+        return $this->service->getImageByMultiverseId($multiverseId);
         // $scryfallId = $details['scryfallId'];
 
         return null;

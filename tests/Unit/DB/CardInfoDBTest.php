@@ -11,6 +11,7 @@ use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsInt;
 use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertTrue;
 
 class CardInfoDBTest extends TestCase
 {
@@ -41,18 +42,9 @@ class CardInfoDBTest extends TestCase
                 'number'=> '245',
                 'multiverseId' => '462492',
                 'promotype' => '', 'scryfallId' => ''];
-        $this->post_ok($data);
-        // $this->post('api/database/card', $data)->assertStatus(201);
-        // $record = CardInfo::first();
-        // assertNotNull($record, '登録の有無');
-        // assertEquals($data['name'], $record->name, 'カード名');
-        // assertEquals($data['en_name'], $record->en_name, 'カード名(英名)');
-        // assertEquals($data['color'], $record->color_id, '色');
-        // assertEquals($data['number'], $record->number, 'カード番号');
-        // assertIsInt(16, strlen($record->barcode), 'バーコード');
-
-        // $exp = Expansion::where('attr', $data['setCode'])->first();
-        // assertEquals($exp->notion_id, $record->exp_id, 'エキスパンションID');
+        $record = $this->post_ok($data);
+        assertNotNull($record->image_url, '画像URLの有無');
+        assertTrue(str_starts_with($record->image_url, 'https://cards.scryfall.io/normal/front/'), '画像URLの一致');
     }
     
     public function test_登録_scryfallIdあり()
@@ -93,7 +85,7 @@ class CardInfoDBTest extends TestCase
 
         $exp = Expansion::where('attr', $data['setCode'])->first();
         assertEquals($exp->notion_id, $record->exp_id, 'エキスパンションID');
-
+        return $record;
     }
 
     public function test_setCodeがDBになし() 
