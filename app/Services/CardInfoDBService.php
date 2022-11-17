@@ -14,6 +14,13 @@ class CardInfoDBService {
         $this->service = new ScryfallService();
     }
 
+    public function fetch($details)
+    {
+        $condition = ['card_info.color_id' => $details['color'], 'expansion.attr' => $details['set']];
+        $list = CardInfo::fetchByCondition($condition);
+        return $list;
+    }
+
     /**
      * card_infoテーブルにデータを1件登録する。
      *
@@ -28,11 +35,10 @@ class CardInfoDBService {
         $number = $details['number'];
         // カード名、エキスパンション略称、カード番号で一意性チェック
         $condition = ['card_info.name' => $name, 'card_info.number' => $number, 'expansion.attr' => $exp->attr];
-        $cardList = CardInfo::where($condition)->
-                        join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->get();
+        $cardList = CardInfo::fetchByCondition($condition);
         // 画像URL取得
         $url = $this->getImageUrl($details);
-        if ($cardList->count() == 0) {
+        if (count($cardList) == 0) {
             logger()->info('insert row:', [$name]);
             $record = [
                 'exp_id'=> $exp->notion_id,
@@ -47,11 +53,6 @@ class CardInfoDBService {
         } else {
             logger()->info('already exists in card_info:'.$name);
         }
-        // 無かったら
-        // multiverseId or scryfallIDがある⇒画像URLをAPIから取得する。
-        // どっちもない⇒画像URLを取得せずに登録する。
-        // card_infoテーブルに1件追加。
-        // あった場合
         // 1.画像URLがある⇒スルー
         // 2.画像URLがない⇒
         // ・multiverseId or scryfallIDがある⇒画像URLを取得して更新

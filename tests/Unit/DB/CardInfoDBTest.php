@@ -23,11 +23,9 @@ class CardInfoDBTest extends TestCase
     public function setup():void
     {
         parent::setup();
-        $exp = new Expansion();
-        $exp->create(['notion_id' => '80a7660b-3de0-4ce1-8e51-1e90e123faae',
-        'base_id' => 4261763,
-        'name' => '灯争大戦',
-        'attr' => 'WAR']);
+        $this->war = Expansion::factory()->createOne(['name' => '灯争大戦','attr' => 'WAR']);
+        $this->bro = Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'BRO']);
+        $this->dmu = Expansion::factory()->createOne(['name' => '団結のドミナリア', 'attr' => 'DMU']);
     }
     /**
      * A basic feature test example.
@@ -82,15 +80,16 @@ class CardInfoDBTest extends TestCase
     private function post_ok($data)
     {
         $this->post('api/database/card', $data)->assertStatus(201);
-        $record = CardInfo::first();
-        assertNotNull($record, '登録の有無');
+        $list = CardInfo::where('en_name', $data['en_name'])->get();
+        assertTrue($list->count() == 1, '登録の有無');
+        $record = $list[0];
         assertEquals($data['en_name'], $record->en_name, 'カード名(英名)');
         assertEquals($data['color'], $record->color_id, '色');
         assertEquals($data['number'], $record->number, 'カード番号');
         assertIsInt(16, strlen($record->barcode), 'バーコード');
 
         $exp = Expansion::where('attr', $data['setCode'])->first();
-        assertEquals($exp->notion_id, $record->exp_id, 'エキスパンションID');
+        assertEquals($this->war->notion_id, $record->exp_id, 'エキスパンションID');
         return $record;
     }
 
@@ -104,16 +103,20 @@ class CardInfoDBTest extends TestCase
                 'multiverseId' => '462492',
                 'scryfallId' => '',
                 'promotype' => ''];
-        $response = $this->post('api/database/card', $data)->assertStatus(422);
+        $this->post('api/database/card', $data)->assertStatus(422);
+    }
+
+    public function test_検索() {
+        CardInfo::factory()->count(20)->create(['exp_id' => $this->bro->notion_id]);
+        CardInfo::factory()->count(20)->create(['exp_id' => $this->dmu->notion_id]);
+
+        $condition = ['set' => 'DMU', 'color' => 'W'];
+        $response = $this->json('GET', 'api/database/card', $condition)->assertStatus(200);
     }
     
     public function tearDown():void
     {
-        CardInfo::where('exp_id', '80a7660b-3de0-4ce1-8e51-1e90e123faae')->delete();
-        Expansion::where('name', '灯争大戦')->delete();
-    }
-    
-    public static function tearDownAfterClass(): void
-    {
+        CardInfo::query()->delete();
+        Expansion::query()->delete();
     }
 }

@@ -12,7 +12,7 @@ export default {
             currentPage: 1,
             message: "",
             set: "",
-            color: "red",
+            color: "R",
         };
     },
     computed: {
@@ -33,11 +33,10 @@ export default {
                 },
             };
             await axios
-                .get("/api/wisdom", query)
+                .get("/api/database/card", query)
                 .then((response) => {
-                    let filterd = response.data.filter((d) => {
-                        return d.price > 0;
-                    });
+                    let filterd = response.data;
+                    console.log(filterd);
                     this.$store.dispatch("setCard", filterd);
 
                     this.$store.dispatch("setLoad", false);
@@ -127,15 +126,15 @@ export default {
             <option value="WAR">灯争大戦(WAR)</option>
         </select>
         <select v-model="color" class="ui dropdown">
-            <option value="red">赤</option>
-            <option value="white">白</option>
-            <option value="black">黒</option>
-            <option value="green">緑</option>
-            <option value="blue">青</option>
-            <option value="multi">多色</option>
-            <option value="less">無色</option>
-            <option value="artifact">アーティファクト</option>
-            <option value="land">土地</option>
+            <option value="R">赤</option>
+            <option value="W">白</option>
+            <option value="B">黒</option>
+            <option value="G">緑</option>
+            <option value="U">青</option>
+            <option value="M">多色</option>
+            <option value="L">無色</option>
+            <option value="A">アーティファクト</option>
+            <option value="Land">土地</option>
         </select>
         <button
             id="search"
