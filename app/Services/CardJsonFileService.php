@@ -24,6 +24,7 @@ class CardJsonFileService {
             'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text()
             ];
             logger()->info('get card:'.$afterCard['name']);
+            logger()->debug(get_class($obj).':'.$afterCard['name']);
             array_push($cardInfo, $afterCard);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];

@@ -12,7 +12,7 @@ use App\Services\interface\CardInfoInterface;
      * foreignDataオブジェクトから日本語部分を取得する。
      *
      * @param [type] $json
-     * @return void
+     * @return void 
      */
     protected function getJp($json) {
         $forgienData = $json['foreignData'];

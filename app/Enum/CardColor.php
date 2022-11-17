@@ -144,7 +144,7 @@ enum CardColor:string {
      * 
      */
     public static function match(array $card) {
-        $colorKey = "colorIdentity";
+        $colorKey = "colors";
         $types = $card["types"];
         $cardtype = $types[0];
         // アーティファクト

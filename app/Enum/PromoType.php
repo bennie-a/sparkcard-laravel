@@ -6,7 +6,9 @@ enum PromoType:string {
     case BOOSTER_FAN = 'boosterfun';
     case DRAFT = 'draft';
     case BUYABOX = 'buyabox';
+    case TEXTURED = 'textured';
     case BUNDLE = 'bundle';
+    case PROMOPACK = 'promopack';
     case OTHER = 'other';
 
     public function text() {
@@ -14,8 +16,10 @@ enum PromoType:string {
             self::JPWARKER => '絵違い',
             self::BOOSTER_FAN => 'ブースターファン',
             self::BUYABOX => 'BOXプロモ特典',
+            self::TEXTURED => 'ショーケース',
             self::BUNDLE => 'バンドル',
             self::DRAFT => '',
+            self::PROMOPACK => 'プロモカード',
             self::OTHER => 'その他'
         };
     }
