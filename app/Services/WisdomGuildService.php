@@ -87,10 +87,29 @@ class WisdomGuildService {
      * @return string 日本語名
      */
     public function getJpName($enname) {
-        $dom = $this->repo->getSpecificCard($enname);
-        $target = $dom->query('//h1/text()')->item(0);
-        $name = $target->nodeValue;
+        $name = $this->getInfo($enname, '//h1/text()');
         $split = explode('/', $name, 2);
         return current($split);
+    }
+
+    /** 
+     * 英語名からカードの平均価格を取得する。
+     */
+    public function getPrice($enname) {
+        $price = $this->getInfo($enname, '//div[@class="contents"]/b/text()');
+        return $price;
+    }
+
+    /**
+     * 特定のカード情報からXPathに該当する情報を取得する。
+     *
+     * @param string $enname
+     * @param string $xpath
+     * @return string 
+     */
+    private function getInfo($enname, $xpath) {
+        $dom = $this->repo->getSpecificCard($enname);
+        $target = $dom->query($xpath)->item(0);
+        return $target->nodeValue;
     }
 }

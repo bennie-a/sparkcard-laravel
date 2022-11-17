@@ -20,7 +20,7 @@ class CardInfoResource extends JsonResource
                 'index' => $this->number,
                 'name' => $this->name,
                 'enname' => $this->en_name,
-                // 'price' => $this->getPrice(),
+                'price' => $this->price,
                 'color' => CardColor::tryFrom($this->color_id)->text(),
                 'image' => $this->image_url
             ];

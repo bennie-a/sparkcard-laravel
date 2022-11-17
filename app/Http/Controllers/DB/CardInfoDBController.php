@@ -37,8 +37,6 @@ class CardInfoDBController extends Controller
         }
         $json = CardInfoResource::collection($result);
         return response($json, Response::HTTP_OK);
-        // 検索条件をバリデータ(Set略称：required,半角英数字、色：required, main_colorのキーワード)
-        // DBから検索条件に合ったデータを取得する。
         // for文で回してWisdom Guild.netから平均価格を取得する。
         // output⇒name, en_name, exp.name, exp.id, color, price, image_url
     }

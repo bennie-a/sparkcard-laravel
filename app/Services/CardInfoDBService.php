@@ -3,8 +3,8 @@ namespace App\Services;
 
 use App\Models\CardInfo;
 use App\Models\Expansion;
-use Exception;
 use App\Services\ScryfallService;
+use App\Services\WisdomGuildService;
 /**
  * card_infoテーブルのロジッククラス
  */
@@ -18,6 +18,13 @@ class CardInfoDBService {
     {
         $condition = ['card_info.color_id' => $details['color'], 'expansion.attr' => $details['set']];
         $list = CardInfo::fetchByCondition($condition);
+        $service = new WisdomGuildService();
+
+        foreach ($list as $info) {
+            $price = $service->getPrice($info['en_name']);
+            $info['price'] = $price;
+        }
+
         return $list;
     }
 

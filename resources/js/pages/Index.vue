@@ -25,6 +25,7 @@ export default {
         async search() {
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
+            this.$store.dispatch("message/clear");
             this.$store.dispatch("clearCards");
             const query = {
                 params: {
@@ -35,11 +36,17 @@ export default {
             await axios
                 .get("/api/database/card", query)
                 .then((response) => {
+                    if (response.status == 204) {
+                        this.$store.dispatch(
+                            "message/error",
+                            "検索結果がありません。"
+                        );
+                        return;
+                    }
                     let filterd = response.data;
-                    console.log(filterd);
                     this.$store.dispatch("setCard", filterd);
 
-                    this.$store.dispatch("setLoad", false);
+                    // this.$store.dispatch("setLoad", false);
                     this.$store.dispatch(
                         "setSuccessMessage",
                         filterd.length + "件取得しました。"
@@ -47,10 +54,12 @@ export default {
                 })
                 .catch((e) => {
                     console.error(e);
-                    store.dispatch(
+                    this.$store.dispatch(
                         "message/error",
                         "予期せぬエラーが発生しました。"
                     );
+                })
+                .finally(() => {
                     this.$store.dispatch("setLoad", false);
                 });
             $("#search").removeClass("loading disabled");

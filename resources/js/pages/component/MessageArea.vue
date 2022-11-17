@@ -1,6 +1,6 @@
 <template>
     <div v-if="!$store.getters.isLoad">
-        <div class="ui info message" v-if="$store.state.msg.success != ''">
+        <div class="ui positive message" v-if="$store.state.msg.success != ''">
             <div class="header">
                 {{ $store.state.msg.success }}
             </div>
