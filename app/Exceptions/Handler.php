@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,8 +45,25 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (HttpException $e, $request) {
+            if ($request->is('api/*')) {
+                $title = '';
+                $detail = '';
+
+                switch ($e->getStatusCode()) {
+                    case Response::HTTP_NO_CONTENT:
+                        $title = 'No Contents';
+                        $detail = '検索結果がありません。';
+                    break;
+                }
+            }
+            return response()->json([
+                                'title' => $title,
+                                'status' => $e->getStatusCode(),
+                                'detail' => $detail,
+                            ], $e->getStatusCode(), [
+                                'Content-Type' => 'application/problem+json',
+                            ]);
         });
     }
 }

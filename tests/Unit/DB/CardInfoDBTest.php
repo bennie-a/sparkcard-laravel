@@ -6,6 +6,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
@@ -107,11 +108,29 @@ class CardInfoDBTest extends TestCase
     }
 
     public function test_検索() {
-        CardInfo::factory()->count(20)->create(['exp_id' => $this->bro->notion_id]);
-        CardInfo::factory()->count(20)->create(['exp_id' => $this->dmu->notion_id]);
+        CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id, 'color_id' => 'W']);
+        CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id, 'color_id' => 'U']);
 
-        $condition = ['set' => 'DMU', 'color' => 'W'];
-        $response = $this->json('GET', 'api/database/card', $condition)->assertStatus(200);
+        $condition = ['set' => $this->bro->attr, 'color' => 'W'];
+        $response = $this->json('GET', 'api/database/card', $condition)->assertOk();
+        $response->assertJsonCount(5);
+        $json = $response->baseResponse->getContent();
+        $contents = json_decode($json, true);
+        foreach($contents as $line) {
+            assertTrue(array_key_exists('index', $line), 'index');
+            assertTrue(array_key_exists('name', $line), 'name');
+            assertTrue(array_key_exists('enname', $line), 'enname');
+            assertTrue(array_key_exists('image', $line), 'image');
+            assertTrue(array_key_exists('color', $line), 'color');
+            assertEquals('白', $line['color'], '色の返り値');
+        }
+    }
+
+    public function test_検索_検索結果なし() {
+        CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id, 'color_id' => 'W']);
+        $condition = ['set' => $this->bro->attr, 'color' => 'U'];
+        $response = $this->json('GET', 'api/database/card', $condition)
+                                    ->assertStatus(Response::HTTP_NO_CONTENT);
     }
     
     public function tearDown():void

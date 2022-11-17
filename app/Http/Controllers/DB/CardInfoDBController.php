@@ -4,8 +4,11 @@ namespace App\Http\Controllers\DB;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostCardDBRequest;
+use App\Http\Resources\CardInfoResource;
 use App\Models\Expansion;
 use App\Services\CardInfoDBService;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 /**
@@ -29,7 +32,11 @@ class CardInfoDBController extends Controller
         $condition = $request->only(['set', 'color']);
         logger()->info('search condition:',$condition);
         $result = $this->service->fetch($condition);
-        return response($result, Response::HTTP_OK);
+        if ($result->isEmpty()) {
+            throw new HttpResponseException(response(['message' => '検索結果なし'], Response::HTTP_NO_CONTENT));
+        }
+        $json = CardInfoResource::collection($result);
+        return response($json, Response::HTTP_OK);
         // 検索条件をバリデータ(Set略称：required,半角英数字、色：required, main_colorのキーワード)
         // DBから検索条件に合ったデータを取得する。
         // for文で回してWisdom Guild.netから平均価格を取得する。

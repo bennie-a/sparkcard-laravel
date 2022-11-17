@@ -19,12 +19,10 @@ class CardInfoFactory extends Factory
      */
     public function definition()
     {
-        $colors = ['W', 'B', 'U', 'R', 'G', 'M', 'L', 'A', 'Land'];
         return [
             'barcode' => $this->random(16),
             'name' => $this->faker->realText(10),
             'en_name' => $this->random(10),
-            'color_id' => $colors[rand(0, count($colors) - 1)],
             'number' => rand(1, 400),
             'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16)
         ];

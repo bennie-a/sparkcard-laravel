@@ -25,7 +25,7 @@ class CardInfo extends Model
      */
     public static function fetchByCondition($condition)
     {
-        $columns = ['card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url'];
+        $columns = ['card_info.id', 'card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url'];
         $cardList = self::select($columns)->where($condition)->
                         join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->get();
         return $cardList;

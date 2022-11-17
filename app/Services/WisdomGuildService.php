@@ -11,20 +11,27 @@ class WisdomGuildService {
         $this->repo = new WisdomGuildRepository();
     }
 
+    /**
+     * 検索条件に合ったカード情報を取得する。
+     * 
+     *@deprecated 2.0.0
+     * @param [type] $query
+     * @return void
+     */
     public function fetch($query) {
-    $color = CardColor::matchByString($query['color']);
-    $param = [ 
-        'query' => [
-            'set' => [$query['set']],
-            'sort'=> 'eidcid',
-            'page'=> 1,
-            'color'=>$color->color(),
-            'color_multi' => $color->colorMulti(),
-            'color_ope' => $color->colorOpe(),
-            'cardtype' => $color->cardtype(),
-            'cardtype_ope' => $color->cardtypeOpe()
-        ]
-    ];
+        $color = CardColor::matchByString($query['color']);
+        $param = [ 
+            'query' => [
+                'set' => [$query['set']],
+                'sort'=> 'eidcid',
+                'page'=> 1,
+                'color'=>$color->color(),
+                'color_multi' => $color->colorMulti(),
+                'color_ope' => $color->colorOpe(),
+                'cardtype' => $color->cardtype(),
+                'cardtype_ope' => $color->cardtypeOpe()
+            ]
+        ];
 
         logger()->debug("検索条件", $param);
         $firstXpath = $this->repo->getAll($param);

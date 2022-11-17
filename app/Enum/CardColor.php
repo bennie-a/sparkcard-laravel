@@ -92,6 +92,7 @@ enum CardColor:string {
 
     /**
      * Wisdom Guild.comの検索パラメータ(色の論理和)を返す。
+     * @deprecated 2.0.0
      * @return "and"|"or"
      */
     public function colorOpe() {
@@ -103,6 +104,7 @@ enum CardColor:string {
 
     /**
      * Wisdom Guild.comの検索パラメータ(カードタイプ)を返す。
+     * @deprecated 2.0.0
      */
     public function cardtype() {
         $type = [];
@@ -121,6 +123,7 @@ enum CardColor:string {
 
     /**
      * Wisdom Guild.comの検索パラメータ(カードタイプの論理和)を返す。
+     * @deprecated 2.0.0
      */
     public function cardtypeOpe() {
         if ($this == CardColor::LESS) {
