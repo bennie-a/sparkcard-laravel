@@ -88,9 +88,6 @@ class CardBoardService {
                 $card->setEnname($ennameArray[0]['plain_text']);
             }
 
-            // $enname = $page->getProperty('英名');
-            // logger()->debug();
-            // $card->setEnname($enname->getContent());
             $isFoil = $page->getProperty('Foil');
             $card->setFoil($isFoil->getContent());
             array_push($resultList, $card);
@@ -112,11 +109,12 @@ class CardBoardService {
         $page->setCheckbox("Foil", false);
         $page->setSelect("色", $details['color']);
         $page->setSelect("状態", "NM");
-        $page->setUrl('画像URL', $details['imageurl']);
-        $expansion = new ExpansionRepository();
+        if (array_key_exists('imageUrl', $details)) {
+            $page->setUrl('画像URL', $details['imageurl']);
+        }
+        $expansion = Expansion::where('attr', $details['attr'])->first();
         logger()->debug($details['attr']);
-        $exp = $expansion->findByAttr($details['attr']);
-        $page->setRelation("エキスパンション",[$exp]);
+        $page->setRelation("エキスパンション",[$expansion['notion_id']]);
         $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
         // ミニレター
         $sends = [];
