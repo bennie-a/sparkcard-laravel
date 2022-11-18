@@ -2,15 +2,13 @@
 namespace App\Services;
 
 use App\Factory\NotionPageFactory;
-use App\Models\Card;
+use App\Models\CardInfo;
+use App\Models\Expansion;
 use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use App\Repositories\Api\Notion\ExpansionRepository;
-use FiveamCode\LaravelNotionApi\Entities\Collections\PageCollection;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
-use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
-use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Illuminate\Http\Response;
 
 class CardBoardService {
@@ -24,7 +22,7 @@ class CardBoardService {
         $pages = $this->repo->findByStatus($status, $details);
         $resultList = array();
         if (count($pages) == 0) {
-            $error = ['status' => 404, 'message'=>'件数は0件です。'];
+            $error = ['status' => 204, 'message'=>'件数は0件です。'];
             return $error;
         }
         foreach($pages as $page) {
@@ -41,9 +39,23 @@ class CardBoardService {
             $descArray = $properties['説明文']['rich_text'];
             $ennameArray = $properties['英名']['rich_text'];
             $card = new NotionCard();
-            $card->setExpansion($exp->getRawContent()[0]['id']);
             $card->setId($array['id']);
             $card->setName($array['title']);
+
+            $exp_id = $exp->getRawContent()[0]['id'];
+            $expModel = Expansion::where('notion_id', $exp_id)->first();
+            if (!is_null($expModel)) {
+                $card->setExpansion(['name' => $expModel['name'], 'attr' => $expModel['attr']]);
+                if (!empty($card->getName())) {
+                    $cardInfo = CardInfo::findCard($exp_id, $card->getName());
+                    if (!empty($cardInfo)) {
+                        $card->setBarcode($cardInfo['barcode']);
+                        logger()->debug($card->getBarcode());
+                    }
+                }
+            } else {
+                $card->setExpansion(['name' => '不明', 'attr' => 'undefined']);
+            }
             $card->setPrice($price->getContent());
             if (!is_null($cardIndex)) {
                 $card->setIndex($cardIndex->getContent());

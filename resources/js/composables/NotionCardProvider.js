@@ -1,5 +1,4 @@
 import { AxiosTask } from "../component/AxiosTask";
-import ExpansionStorage from "../firestore/ExpansionStorage";
 
 export default class NotionCardProvider {
     constructor($store) {
@@ -16,25 +15,6 @@ export default class NotionCardProvider {
             console.log(response.status);
             let results = response.data;
             let cards = results.filter((r) => filtered(r));
-            const storage = new ExpansionStorage();
-            await Promise.all(
-                cards.map(async (r) => {
-                    const doc = await storage.findById(r.expansion);
-                    let exp = {};
-                    if (doc == undefined) {
-                        exp["name"] = "不明";
-                        exp["attr"] = "";
-                        exp["orderId"] = "";
-                        exp["baseId"] = "";
-                    } else {
-                        exp["name"] = doc.name;
-                        exp["attr"] = doc.attr;
-                        exp["orderId"] = doc.order_id;
-                        exp["baseId"] = doc.base_id;
-                    }
-                    r["exp"] = exp;
-                })
-            );
             console.log("Card Get Count " + cards.length);
             store.dispatch("setCard", cards);
             store.dispatch(

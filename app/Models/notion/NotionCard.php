@@ -2,6 +2,7 @@
 
 namespace App\Models\notion;
 
+use App\Models\Expansion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,7 @@ class NotionCard extends Model
 
     private $index;
 
-    private $name;
+    private $name = '';
 
     private $price;
 
@@ -22,7 +23,7 @@ class NotionCard extends Model
 
     private int $stock;
 
-    private string $expansion = "";
+    private ?array $expansion;
 
     private ?string $imageUrl = null;
 
@@ -35,6 +36,8 @@ class NotionCard extends Model
     private string $desc = "";
 
     private string $conditon = "";
+
+    private string $barcode = "";
 
     public function setId($id) {
         $this->id = $id;
@@ -85,11 +88,11 @@ class NotionCard extends Model
         $this->stock = $stock;
     }
 
-    public function setExpansion(string $expansion) {
+    public function setExpansion(array $expansion) {
         $this->expansion = $expansion;
     }
 
-    public function getExpansion():string {
+    public function getExpansion():array {
         return $this->expansion;
     }
 
@@ -139,5 +142,25 @@ class NotionCard extends Model
 
     public function getCondition():string {
         return $this->conditon;
+    }
+
+    /**
+     * Get the value of barcode
+     */ 
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * Set the value of barcode
+     *
+     * @return  self
+     */ 
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
+
+        return $this;
     }
 }

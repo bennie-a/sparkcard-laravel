@@ -17,9 +17,11 @@ class NotionCardResource extends JsonResource
         if (is_null($this->getImageUrl())) {
             $this->setImageUrl("none");
         }
+        $set = $this->getExpansion();
         return [
                 'id'=>$this->getId(),
                 'index' => $this->getIndex(),
+                'barcode' => $this->getBarcode(),
                 'name' => $this->getName(),
                 'enname' => $this->getEnname(),
                 'color'=>$this->getColor(),
@@ -29,7 +31,7 @@ class NotionCardResource extends JsonResource
                 'isFoil' => $this->isFoil(),
                 'lang' => $this->getLang(),
                 'condition' => $this->getCondition(),
-                'expansion' => $this->getExpansion(),
+                'exp' => ['name' => $set['name'], 'attr' => $set['attr']],
                 'desc' => $this->getDesc()
             ];
     }

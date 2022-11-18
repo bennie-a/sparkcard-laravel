@@ -29,5 +29,19 @@ class CardInfo extends Model
         $cardList = self::select($columns)->where($condition)->
                         join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->get();
         return $cardList;
-    } 
+    }
+
+    /**
+     * エキスパンションIDとカード名から特定のカード情報を
+     * 取得する。
+     *
+     * @param string $exp_id エキスパンションID
+     * @param [type] $name カード名
+     * @return カード情報
+     */
+    public static function findCard($exp_id, $name) {
+        $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
+        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name])->first();
+        return $info;
+    }
 }

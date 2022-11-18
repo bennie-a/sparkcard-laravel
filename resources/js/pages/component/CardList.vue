@@ -1,11 +1,4 @@
 <template>
-    <div class="mt-1">
-        <div class="ui left transparent icon input">
-            <i class="search icon"></i>
-            <input type="text" placeholder="検索" v-model="keyword" />
-        </div>
-    </div>
-
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
@@ -108,6 +101,7 @@
 <style scoped>
 img.image {
     margin: 0 auto;
+    max-width: 400px;
 }
 .ui.pagination.menu .item {
     cursor: pointer;
@@ -138,8 +132,8 @@ export default {
         return {
             selectedCard: [],
             isAll: false,
-            keyword: "",
-            fullcard: [],
+            // keyword: "",
+            // fullcard: [],
         };
     },
     mounted: function () {
@@ -150,19 +144,19 @@ export default {
             return this.$store.getters.isload;
         },
         getCards: function () {
-            if (this.fullcard.length == 0) {
-                this.fullcard = this.$store.getters.card;
-            }
-            let filterd = [];
-            this.fullcard.forEach((c) => {
-                if (
-                    c.name.indexOf(this.keyword) !== -1 ||
-                    c.enname.indexOf(this.keyword) !== -1
-                ) {
-                    filterd.push(c);
-                }
-            });
-            this.$store.dispatch("setCard", filterd);
+            // if (this.fullcard.length == 0) {
+            //     this.fullcard = this.$store.getters.card;
+            // }
+            // let filterd = [];
+            // this.fullcard.forEach((c) => {
+            //     if (
+            //         c.name.indexOf(this.keyword) !== -1 ||
+            //         c.enname.indexOf(this.keyword) !== -1
+            //     ) {
+            //         filterd.push(c);
+            //     }
+            // });
+            // this.$store.dispatch("setCard", filterd);
             return this.$store.getters.sliceCard;
         },
         condiColor: function () {
