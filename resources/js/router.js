@@ -13,9 +13,8 @@ const routes = [
         path: "/",
         component: Index,
         meta: {
-            title: "新作カード登録",
-            description:
-                "Wisdom Guildからカード情報を取得して、Notionの商品管理ボードに登録します。",
+            title: "カード登録",
+            description: "販売カードをNotionの商品管理ボードに登録します。",
         },
     },
     {
