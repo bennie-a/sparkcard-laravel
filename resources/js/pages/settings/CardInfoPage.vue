@@ -1,10 +1,10 @@
 <template>
     <message-area></message-area>
-    <section class="mt-1">
+    <article class="mt-1 ui segment">
         <file-upload @action="upload" type="json"></file-upload>
         {{ filename }}
-    </section>
-    <section class="wall mt-1">
+    </article>
+    <article class="mt-1">
         <ModalButton @action="store">DBに登録する</ModalButton>
         <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="inline field">
@@ -53,7 +53,7 @@
             </div>
         </form>
         <now-loading></now-loading>
-    </section>
+    </article>
 </template>
 <script>
 import NowLoading from "../component/NowLoading.vue";

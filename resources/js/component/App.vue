@@ -17,7 +17,7 @@ import SideMenu from "../pages/component/SideMenu.vue";
                     {{ $route.meta.description }}
                 </div>
             </h1>
-            <section class="mt-2">
+            <section class="mt-2 ui segment">
                 <router-view />
             </section>
         </main>

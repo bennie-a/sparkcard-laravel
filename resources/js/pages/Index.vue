@@ -7,12 +7,9 @@ import MessageArea from "./component/MessageArea.vue";
 export default {
     data() {
         return {
-            cards: [],
-            perPage: 10,
-            currentPage: 1,
-            message: "",
             set: "",
             color: "R",
+            keyword: "qqq",
         };
     },
     computed: {
@@ -62,8 +59,11 @@ export default {
                 .finally(() => {
                     this.$store.dispatch("setLoad", false);
                 });
-            $("#search").removeClass("loading disabled");
         },
+        filterdCard: function (keyword) {
+            console.log(keyword);
+        },
+
         showRegist() {
             $("#regist").modal("show");
         },
@@ -134,6 +134,7 @@ export default {
             <option value="BRO">兄弟戦争(BRO)</option>
             <option value="DMU">団結のドミナリア(DMU)</option>
             <option value="WAR">灯争大戦(WAR)</option>
+            <option value="PLIST">ザ・リスト</option>
         </select>
         <select v-model="color" class="ui dropdown">
             <option value="R">赤</option>
@@ -155,6 +156,7 @@ export default {
             検索する
         </button>
     </div>
+    <div class="ui divider"></div>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button
             class="ui purple button"
