@@ -5,6 +5,7 @@ export default () => {
     return {
         header: [
             "カテゴリ",
+            "バーコード",
             "商品名",
             "種類名",
             "種類画像",
@@ -15,6 +16,7 @@ export default () => {
         contents: function (c) {
             let json = [
                 c.exp.name,
+                c.barcode,
                 toItemName(c),
                 c.condition,
                 c.image,
