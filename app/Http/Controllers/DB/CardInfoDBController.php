@@ -53,7 +53,8 @@ class CardInfoDBController extends Controller
         $setCode = $details['setCode'];
         $exp = Expansion::where('attr', $setCode)->get();
         if ($exp->count() == 0) {
-            return response($setCode.'がDBに登録されていません', 422);
+            logger()->error('not exist:'.$setCode);
+            throw new HttpResponseException(response($setCode.'がDBに登録されていません', 422));
         }
         // card_infoテーブルに登録
         $this->service->post($exp[0], $details);

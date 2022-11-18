@@ -153,7 +153,9 @@ export default {
                     const success = function (response, store) {};
                     await task.post("/database/card", card, success);
                 })
-            );
+            ).catch(() => {
+                console.error("error");
+            });
             this.$store.dispatch(
                 "setSuccessMessage",
                 `${list.length}件登録が完了しました。`

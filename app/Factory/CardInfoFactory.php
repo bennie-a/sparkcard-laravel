@@ -6,10 +6,25 @@ use App\Services\json\JpLimitedCard;
 use App\Services\json\NoJpCard;
 use App\Services\json\OnlineCard;
 use App\Services\json\PhyrexianCard;
+use App\Services\json\PlistCard;
 
+/**
+ * JSONファイルに記載されたカード情報の形式に沿って
+ * オブジェクトを作成するクラス
+ */
 class CardInfoFactory {
 
+    /**
+     * JSONファイルに記載されたカード情報の形式に沿って
+     * オブジェクトを作成する。
+     *
+     * @param array $json
+     * @return AbstractCard
+     */
     public static function create($json) {
+        if (strcmp($json['setCode'], 'PLIST') == 0) {
+            return new PlistCard($json);
+        }
         if (array_key_exists('isOnlineOnly', $json) && $json['isOnlineOnly'] == 'true') {
             return new OnlineCard($json);
         }

@@ -1,6 +1,7 @@
 <?php
 namespace app\Services\json;
 use App\Services\interface\CardInfoInterface;
+use App\Services\WisdomGuildService;
 
  abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
@@ -25,7 +26,19 @@ use App\Services\interface\CardInfoInterface;
     protected function getJson() {
         return $this->json;        
     }
-    
+
+    /**
+     * Wisdom Guild.netよりカード名(日本語名)を取得する。
+     *
+     * @param string $enname 英語名
+     * @return string カード名(日本語名)
+     */
+    protected function getJpnameByAPI($enname) {
+        $service = new WisdomGuildService();
+        $jpname = $service->getJpName($enname);
+        return $jpname;
+    }
+
     public function jpname(string $enname):string {
         return $this->jp["name"];        
     }

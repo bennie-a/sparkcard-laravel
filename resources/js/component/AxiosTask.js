@@ -38,7 +38,12 @@ export class AxiosTask {
                     console.log(response.data);
                 }
             })
-            .catch((e) => {});
+            .catch((e) => {
+                if (e.response.status == 422) {
+                    console.error(e.response.data);
+                    return;
+                }
+            });
     }
 
     getApiUrl(url) {

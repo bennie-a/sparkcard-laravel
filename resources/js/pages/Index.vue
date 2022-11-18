@@ -131,6 +131,7 @@ export default {
     <div class="mt-1">
         <select v-model="set" class="ui dropdown">
             <option value="">選択してください</option>
+            <option value="BRO">兄弟戦争(BRO)</option>
             <option value="DMU">団結のドミナリア(DMU)</option>
             <option value="WAR">灯争大戦(WAR)</option>
         </select>

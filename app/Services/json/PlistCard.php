@@ -4,9 +4,9 @@ namespace App\Services\json;
 use App\Services\WisdomGuildService;
 
 /**
- * 言語がファイレクシア語版のカード
+ * ザ・リストに収録されているカード
  */
-class PhyrexianCard extends AbstractCard
+class PlistCard extends AbstractCard
 {
     public function multiverseId()
     {
@@ -15,8 +15,7 @@ class PhyrexianCard extends AbstractCard
 
     public function jpname(string $enname): string
     {
-        $jpname = $this->getJpnameByAPI($enname);
-        return $jpname."[ファイレクシア語版]";
+        return $this->getJpnameByAPI($enname);
     }
 
     public function scryfallId()

@@ -109,7 +109,10 @@ class WisdomGuildService {
      */
     private function getInfo($enname, $xpath) {
         $dom = $this->repo->getSpecificCard($enname);
-        $target = $dom->query($xpath)->item(0);
-        return $target->nodeValue;
+        $target = $dom->query($xpath);
+        if ($target->length == 0) {
+            return '';
+        }
+        return $target->item(0)->nodeValue;
     }
 }

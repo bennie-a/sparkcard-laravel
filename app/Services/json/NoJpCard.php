@@ -10,9 +10,7 @@ class NoJpCard extends AbstractCard
 {
     public function jpname(string $enname):string
     {
-        $service = new WisdomGuildService();
-        $jpname = $service->getJpName($enname);
-        return $jpname;
+        return $this->getJpnameByAPI($enname);
     }
 
     public function multiverseId()

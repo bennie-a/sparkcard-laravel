@@ -67,7 +67,8 @@ const routes = [
         component: CardInfoPage,
         meta: {
             title: "カード情報マスタ登録",
-            description: "JSONファイルのカード情報をDBに登録します。",
+            description:
+                "MTGJSONからダウンロードしたファイルのカード情報をDBに登録します。",
         },
     },
 ];
