@@ -25,7 +25,7 @@ export class AxiosTask {
                 success(response, query);
             })
             .catch((e) => {
-                fail(e, query);
+                fail(e, this.store, query);
             });
     }
     // POSETメソッドでAPIを呼び出す

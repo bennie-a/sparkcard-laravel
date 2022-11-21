@@ -60,8 +60,8 @@
             </button>
         </div>
     </div>
-    <card-list exp isNotion></card-list>
     <now-loading></now-loading>
+    <card-list exp isNotion></card-list>
 </template>
 <style scoped>
 div.flex {
@@ -142,6 +142,7 @@ export default {
                     await task.patch(url, query, success, fail);
                 })
             );
+            this.search();
             this.$store.dispatch("setLoad", false);
             this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
         },
