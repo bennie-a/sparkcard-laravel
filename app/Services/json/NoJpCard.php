@@ -23,5 +23,10 @@ class NoJpCard extends AbstractCard
         $number = parent::number();
         return preg_replace('/[a-zA-Z]/', '', $number);
     }
+
+    public function scryfallId()
+    {
+        return $this->json['identifiers']['scryfallId'];
+    }
 }
 ?>

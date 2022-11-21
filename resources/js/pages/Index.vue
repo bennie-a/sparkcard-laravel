@@ -9,7 +9,6 @@ export default {
         return {
             set: "",
             color: "R",
-            keyword: "qqq",
         };
     },
     computed: {
@@ -86,7 +85,7 @@ export default {
                         name: c.name,
                         enname: c.enname,
                         index: c.index,
-                        price: c.price,
+                        price: c.price.replace(",", ""),
                         attr: this.set,
                         color: c.color,
                         imageurl: c.image,
@@ -132,6 +131,7 @@ export default {
         <select v-model="set" class="ui dropdown">
             <option value="">選択してください</option>
             <option value="BRO">兄弟戦争(BRO)</option>
+            <option value="BRR">兄弟戦争設計図(BRR)</option>
             <option value="DMU">団結のドミナリア(DMU)</option>
             <option value="WAR">灯争大戦(WAR)</option>
             <option value="PLIST">ザ・リスト</option>
