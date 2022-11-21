@@ -88,7 +88,7 @@ export default {
                         price: c.price.replace(",", ""),
                         attr: this.set,
                         color: c.color,
-                        imageurl: c.image,
+                        imageUrl: c.image,
                         stock: c.stock,
                     };
                     await axios

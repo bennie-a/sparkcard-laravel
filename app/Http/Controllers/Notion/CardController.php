@@ -12,7 +12,9 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+/**
+ * Notion操作に関するAPIクラス
+ */
 class CardController extends Controller
 {
     private $service;
@@ -43,7 +45,7 @@ class CardController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Notionの商品管理テーブルにカードを1件登録する。
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -52,9 +54,10 @@ class CardController extends Controller
     {
         $details = $request->all();
         $name = '「'.$details['name'].'」';
-        $rules = ['stock' => 'required | integer | min:1'];
+        $rules = ['stock' => 'required | integer | min:1', 'imageUrl' => 'required'];
         $msgs = ['stock.required' => $name.'の枚数が入力されていません。',
-            'stock.min' => $name.'の枚数は1枚以上を入力してください。'];
+            'stock.min' => $name.'の枚数は1枚以上を入力してください。',
+            'imageUrl.required' => $name.'の画像URLを登録してください。できればscryfall.comの画像を使ってほしいです。'];
         Validator::make($details, $rules, $msgs)->validate();
         logger()->debug("登録パラメータ", $details);
         $this->service->store($details);

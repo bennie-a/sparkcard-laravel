@@ -110,7 +110,7 @@ class CardBoardService {
         $page->setSelect("色", $details['color']);
         $page->setSelect("状態", "NM");
         if (array_key_exists('imageUrl', $details)) {
-            $page->setUrl('画像URL', $details['imageurl']);
+            $page->setUrl('画像URL', $details['imageUrl']);
         }
         $expansion = Expansion::where('attr', $details['attr'])->first();
         logger()->debug($details['attr']);
