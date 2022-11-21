@@ -36,9 +36,8 @@ class CardInfoDBController extends Controller
             throw new HttpResponseException(response(['message' => '検索結果なし'], Response::HTTP_NO_CONTENT));
         }
         $json = CardInfoResource::collection($result);
+        logger()->info('search finished.');
         return response($json, Response::HTTP_OK);
-        // for文で回してWisdom Guild.netから平均価格を取得する。
-        // output⇒name, en_name, exp.name, exp.id, color, price, image_url
     }
     /**
      * card_infoテーブルにデータを1件登録する。
