@@ -10,22 +10,28 @@ export class AxiosTask {
             .get(this.getApiUrl(url), query)
             .then((response) => {
                 success(response, this.store, query);
-                this.store.dispatch("setLoad", false);
             })
             .catch((e) => {
                 fail(e, this.store, query);
+            })
+            .finally(() => {
                 this.store.dispatch("setLoad", false);
             });
     }
     // PATCHメソッドでAPIを呼び出す
-    async patch(url, query, success, fail) {
+    async patch(url, query, success) {
         await axios
             .patch(this.getApiUrl(url), query)
             .then((response) => {
                 success(response, query);
+                this.store.dispatch(
+                    "setSuccessMessage",
+                    "更新が完了しました。"
+                );
             })
             .catch((e) => {
-                fail(e, this.store, query);
+                console.log(e);
+                // this.store.dispatch(["message/error", "更新に失敗しました。"]);
             });
     }
     // POSETメソッドでAPIを呼び出す

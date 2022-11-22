@@ -46,9 +46,9 @@
                     >
                         {{ card.name
                         }}<label
-                            class="ui horizontal teal label ml-1"
+                            class="ui horizontal yellow label ml-1"
                             v-show="card.isFoil"
-                            >Foil</label
+                            ><i class="star icon"></i>Foil</label
                         >
                     </button>
                     <div class="ui tiny modal" v-bind:id="card.index">

@@ -86,9 +86,12 @@ class CardController extends Controller
     {
         try {
             $details = $request->all();
+            logger()->debug($details);
+
             $this->service->update($id, $details);
             return response("更新完了 ID:".$id, Response::HTTP_OK);
         } catch(Exception $e) {
+            logger()->error($e);
             return response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

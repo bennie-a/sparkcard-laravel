@@ -8,8 +8,7 @@
         <div class="ui list">
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-file-earmark-plus-fill mr-half"></i
-                    >Notion登録
+                    <i class="bi bi-file-earmark-plus-fill mr-half"></i>Notion
                 </div>
                 <ul>
                     <li>
@@ -18,8 +17,19 @@
                             :class="{ active: $route.path === '/' }"
                             aria-current="page"
                             to="/"
-                            ><i class="bi bi-card-text mr-half"></i
-                            >カード情報</router-link
+                            ><i class="bi bi-file-earmark-plus"></i
+                            >商品管理ボード登録</router-link
+                        >
+                    </li>
+                    <li>
+                        <router-link
+                            to="/notion/update/status"
+                            class="nav-link"
+                            :class="{
+                                active: $route.path === '/notion/update/status',
+                            }"
+                            ><i class="bi bi-kanban"></i
+                            >ステータス一括変更</router-link
                         >
                     </li>
                 </ul>
@@ -36,7 +46,7 @@
                             :class="{
                                 active: $route.path === '/logikura/newitem',
                             }"
-                            ><i class="bi bi-filetype-csv mr-half"></i
+                            ><i class="bi bi-filetype-csv"></i
                             >商品登録CSV</router-link
                         >
                     </li>
@@ -44,7 +54,7 @@
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-basket2-fill mr-half"></i>販売登録
+                    <i class="bi bi-basket2-fill"></i>販売登録
                 </div>
                 <ul>
                     <li>
@@ -52,7 +62,7 @@
                             to="/base/newitem"
                             class="nav-link"
                             :class="{ active: $route.path === '/base/newitem' }"
-                            ><i class="bi bi-filetype-csv mr-half"></i
+                            ><i class="bi bi-filetype-csv"></i
                             >BASE用CSV</router-link
                         >
                     </li>
@@ -63,7 +73,7 @@
                             :class="{
                                 active: $route.path === '/mercari/newitem',
                             }"
-                            ><i class="bi bi-filetype-csv mr-half"></i
+                            ><i class="bi bi-filetype-csv"></i
                             >メルカリ用CSV</router-link
                         >
                     </li>
@@ -71,22 +81,11 @@
             </div>
             <div class="item">
                 <div class="ui small header">Notion操作</div>
-                <ul>
-                    <li>
-                        <router-link
-                            to="/notion/update/status"
-                            class="nav-link"
-                            :class="{
-                                active: $route.path === '/notion/update/status',
-                            }"
-                            >ステータス一括変更</router-link
-                        >
-                    </li>
-                </ul>
+                <ul></ul>
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-gear-fill mr-half"></i>設定
+                    <i class="bi bi-gear-fill"></i>設定
                 </div>
                 <ul>
                     <li>
@@ -169,5 +168,9 @@ div.item > ul > li > a.active {
     font-weight: 500;
     background: #2766cc;
     border-left: 5px solid #a333c8;
+}
+
+i {
+    margin-right: 0.5rem;
 }
 </style>

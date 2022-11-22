@@ -26,7 +26,8 @@ class NotionCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'status'=>'in:ロジクラ要登録,販売保留,要写真撮影,撮影済み,BASE登録予定'
+            'status'=>'in:ロジクラ要登録,販売保留,要写真撮影,撮影済み,BASE登録予定',
+            'name' => 'required'
         ];
     }
 

@@ -125,10 +125,6 @@ export default {
             const success = function (response, store, query) {
                 const result = response.data;
             };
-            const fail = function (e, store, query) {
-                console.error(e);
-                store.dispatch(["message/error", e.message]);
-            };
             const card = this.$store.getters.card;
             const checkbox = this.$store.getters["csvOption/selectedList"];
             const filterd = card.filter((c) => {
@@ -138,13 +134,16 @@ export default {
             await Promise.all(
                 filterd.map(async (c) => {
                     let url = "/notion/card/" + c.id;
-                    let query = { status: this.updateStatus };
-                    await task.patch(url, query, success, fail);
+                    let query = {
+                        name: c.name,
+                        attr: c.exp.attr,
+                        status: this.updateStatus,
+                    };
+                    await task.patch(url, query, success);
                 })
             );
             this.search();
             this.$store.dispatch("setLoad", false);
-            this.$store.dispatch("setSuccessMessage", "更新が完了しました。");
         },
     },
     watch: {

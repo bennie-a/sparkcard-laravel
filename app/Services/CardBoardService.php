@@ -50,7 +50,6 @@ class CardBoardService {
                     $cardInfo = CardInfo::findCard($exp_id, $card->getName());
                     if (!empty($cardInfo)) {
                         $card->setBarcode($cardInfo['barcode']);
-                        logger()->debug($card->getBarcode());
                     }
                 }
             } else {

@@ -45,4 +45,10 @@ class CardInfo extends Model
         $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name])->first();
         return $info;
     }
+
+    public static function findCardByAttr($attr, $name) {
+        $condition = ['expansion.attr' => $attr, 'card_info.name' => $name];
+        $list = self::fetchByCondition($condition);
+        return $list[0];
+    }
 }

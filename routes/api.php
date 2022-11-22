@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('/wisdom', App\Http\Controllers\WidsomGuildController::class);
 Route::resource('/notion/card', CardController::class);
 Route::resource('notion/expansion', ExpansionController::class);
 Route::resource('database/exp', ExpDBController::class);

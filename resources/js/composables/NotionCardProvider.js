@@ -10,7 +10,8 @@ export default class NotionCardProvider {
         this.store.dispatch("setLoad", true);
         this.store.dispatch("clearCards");
         const task = new AxiosTask(this.store);
-        console.log(this.store.getters["search/status"]);
+        const status = this.store.getters["search/status"];
+        console.log(status);
         const success = async function (response, store, query) {
             console.log(response.status);
             let results = response.data;
@@ -28,7 +29,6 @@ export default class NotionCardProvider {
             console.log(res.data);
             store.dispatch("message/error", res.data.message);
         };
-        const status = this.store.getters["search/status"];
         await task.get("/notion/card?status=" + status, query, success, fail);
     }
 }
