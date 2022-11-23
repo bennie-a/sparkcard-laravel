@@ -80,10 +80,6 @@
                 </ul>
             </div>
             <div class="item">
-                <div class="ui small header">Notion操作</div>
-                <ul></ul>
-            </div>
-            <div class="item">
                 <div class="ui small header">
                     <i class="bi bi-gear-fill"></i>設定
                 </div>
