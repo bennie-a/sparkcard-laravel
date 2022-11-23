@@ -57,8 +57,11 @@ class CardInfoDBService {
                 'image_url' => $url
             ];
             CardInfo::create($record);
-        } else {
-            logger()->info('already exists in card_info:'.$name);
+        } else if (!is_null($url)) {
+            logger()->info('update card image url:'.$name);
+            $info = $cardList[0];
+            $info->image_url = $url;
+            $info->update();
         }
         // 1.画像URLがある⇒スルー
         // 2.画像URLがない⇒
