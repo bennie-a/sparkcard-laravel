@@ -3,6 +3,7 @@ import {
     toSurfaceName,
     toRevName,
     toNoLabelName,
+    details,
 } from "../composables/CardCollector";
 
 export default () => {
@@ -59,8 +60,10 @@ export default () => {
 商品名：「${c.name}${foil}」
 エキスパンション：${c.exp.name}(${c.exp.attr})
 言語：${c.lang}
+在庫：${c.stock}点
 
 ■状態
+状態は【${c.condition}】です。${details(c.condition)}
 ${c.desc}`;
             return desc;
         },

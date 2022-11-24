@@ -62,6 +62,16 @@ export const createTemplate = (card) => {
     return template;
 };
 
+export const details = (condition) => {
+    let templates = {
+        NM: "パックから出た直後にスリーブに保管しました。未使用品で初期傷はありません。",
+        "NM-": "ダメージが1～2点だけで、ほぼ美品です。",
+        "EX+": "よく見るとカードの面や縁に細かいダメージが複数ありますが、ゲームには十分使用できるくらい綺麗な状態です。",
+        EX: "一見しただけでカードの面や縁にダメージが複数あります。ゲーム自体には使用できますので、【特価】でご提供いたします。",
+    };
+    return templates[condition];
+};
+
 // const toImageName = (enName) => {
 //     let splits = enName.split(" ");
 //     splits = splits.map((s) => {
