@@ -63,10 +63,6 @@ class CardInfoDBService {
             $info->image_url = $url;
             $info->update();
         }
-        // 1.画像URLがある⇒スルー
-        // 2.画像URLがない⇒
-        // ・multiverseId or scryfallIDがある⇒画像URLを取得して更新
-        // ・multiverseIdもscryfallIDもない⇒スルー
     }
 
     /**

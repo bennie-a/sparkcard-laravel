@@ -29,7 +29,7 @@ export const toItemName = (card) => {
 // カードの表面の画像名に変換する。
 export const toSurfaceName = (card) => {
     let name = toPhotoName(card);
-    return name + "-base-min.jpg";
+    return name + "base-min.jpg";
 };
 
 export const toNoLabelName = (card) => {

@@ -33,7 +33,7 @@ class ScryfallRepository {
         $response = $client->request('GET', 'cards/multiverse/'.$id);
         $contents = $response->getBody()->getContents();
         $json = json_decode($contents, true);
-        return $json['image_uris']['normal'];
+        return $json['image_uris']['png'];
     }
 
     public function getImageByScryFallId($id)
@@ -42,7 +42,7 @@ class ScryfallRepository {
         $response = $client->request('GET', 'cards/'.$id);
         $contents = $response->getBody()->getContents();
         $json = json_decode($contents, true);
-        return $json['image_uris']['normal'];
+        return $json['image_uris']['png'];
     }
 
 }
