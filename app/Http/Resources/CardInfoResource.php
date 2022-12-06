@@ -22,7 +22,8 @@ class CardInfoResource extends JsonResource
                 'enname' => $this->en_name,
                 'price' => $this->price,
                 'color' => CardColor::tryFrom($this->color_id)->text(),
-                'image' => $this->image_url
+                'image' => $this->image_url,
+                'isFoil' => $this->isFoil
             ];
     }
 }

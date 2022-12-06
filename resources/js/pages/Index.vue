@@ -9,6 +9,7 @@ export default {
         return {
             set: "",
             color: "R",
+            isFoil: false,
         };
     },
     computed: {
@@ -27,6 +28,7 @@ export default {
                 params: {
                     set: this.set,
                     color: this.color,
+                    isFoil: this.isFoil,
                 },
             };
             await axios
@@ -127,26 +129,46 @@ export default {
 
 <template>
     <message-area></message-area>
-    <div class="mt-1">
-        <select v-model="set" class="ui dropdown">
-            <option value="">選択してください</option>
-            <option value="BRO">兄弟戦争(BRO)</option>
-            <option value="BRR">兄弟戦争設計図(BRR)</option>
-            <option value="DMU">団結のドミナリア(DMU)</option>
-            <option value="WAR">灯争大戦(WAR)</option>
-            <option value="PLIST">ザ・リスト</option>
-        </select>
-        <select v-model="color" class="ui dropdown">
-            <option value="R">赤</option>
-            <option value="W">白</option>
-            <option value="B">黒</option>
-            <option value="G">緑</option>
-            <option value="U">青</option>
-            <option value="M">多色</option>
-            <option value="L">無色</option>
-            <option value="A">アーティファクト</option>
-            <option value="Land">土地</option>
-        </select>
+    <div class="mt-1 ui form segment">
+        <div class="three fields">
+            <div class="field">
+                <label for="">セット名</label>
+                <select v-model="set" class="ui dropdown">
+                    <option value="">選択してください</option>
+                    <option value="BRO">兄弟戦争(BRO)</option>
+                    <option value="BRR">兄弟戦争設計図(BRR)</option>
+                    <option value="DMU">団結のドミナリア(DMU)</option>
+                    <option value="WAR">灯争大戦(WAR)</option>
+                    <option value="PLIST">ザ・リスト</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>色</label>
+                <select v-model="color" class="ui dropdown">
+                    <option value="R">赤</option>
+                    <option value="W">白</option>
+                    <option value="B">黒</option>
+                    <option value="G">緑</option>
+                    <option value="U">青</option>
+                    <option value="M">多色</option>
+                    <option value="L">無色</option>
+                    <option value="A">アーティファクト</option>
+                    <option value="Land">土地</option>
+                </select>
+            </div>
+        </div>
+        <div class="field">
+            <label for="isFoil">通常/Foil</label>
+            <div class="ui toggle checkbox">
+                <input
+                    type="checkbox"
+                    name="isFoil"
+                    tabindex="0"
+                    v-model="isFoil"
+                />
+                <label>Foil</label>
+            </div>
+        </div>
         <button
             id="search"
             class="ui button purple ml-1"

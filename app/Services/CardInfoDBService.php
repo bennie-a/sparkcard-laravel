@@ -16,7 +16,9 @@ class CardInfoDBService {
 
     public function fetch($details)
     {
-        $condition = ['card_info.color_id' => $details['color'], 'expansion.attr' => $details['set']];
+        $condition = ['card_info.color_id' => $details['color'],
+                    'expansion.attr' => $details['set'],
+                    'card_info.isFoil' => $details['isFoil']];
         $list = CardInfo::fetchByCondition($condition);
         $service = new WisdomGuildService();
 
@@ -48,7 +50,7 @@ class CardInfoDBService {
         // 画像URL取得
         $url = $this->getImageUrl($details);
         if (count($cardList) == 0) {
-            logger()->info('insert row:', ['カード名' => $name, '通常/Foil' => $isFoil]);
+            logger()->info('insert card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
             $record = [
                 'exp_id'=> $exp->notion_id,
                 'name' => $name,
@@ -61,7 +63,7 @@ class CardInfoDBService {
             ];
             CardInfo::create($record);
         } else if (!is_null($url)) {
-            logger()->info('update card:'.$name);
+            logger()->info('update card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
             $info = $cardList[0];
             $info->image_url = $url;
             $info->update();

@@ -29,7 +29,7 @@ class CardInfoDBController extends Controller
      */
     public function index(Request $request)
     {
-        $condition = $request->only(['set', 'color']);
+        $condition = $request->only(['set', 'color', 'isFoil']);
         logger()->info('search condition:',$condition);
         $result = $this->service->fetch($condition);
         if ($result->isEmpty()) {
