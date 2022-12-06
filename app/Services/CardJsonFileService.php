@@ -19,13 +19,19 @@ class CardJsonFileService {
             $enname = $c['name'];
             $color = CardColor::match($c);
             $promo = PromoType::match($c);
-            $afterCard = ['setCode'=> $setcode, 'name' => $obj->jpname($enname),"en_name" => $enname,
+            $newCard = ['setCode'=> $setcode, 'name' => $obj->jpname($enname),"en_name" => $enname,
             'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId(),
-            'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text()
+            'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text(), 'isFoil' => false
             ];
-            logger()->info('get card:'.$afterCard['name']);
-            logger()->debug(get_class($obj).':'.$afterCard['name']);
-            array_push($cardInfo, $afterCard);
+            logger()->info('get card:'.$newCard['name']);
+            logger()->debug(get_class($obj).':'.$newCard['name']);
+            if ($c['hasNonFoil']) {
+                array_push($cardInfo, $newCard);
+            }
+            if ($c['hasFoil']) {
+                $newCard['isFoil'] = true;
+                array_push($cardInfo, $newCard);
+            }
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;
