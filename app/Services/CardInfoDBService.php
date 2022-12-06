@@ -40,8 +40,10 @@ class CardInfoDBService {
         $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
         $name = $details['name'].$promotype;
         $number = $details['number'];
+        $isFoil = $details['isFoil'];
         // カード名、エキスパンション略称、カード番号で一意性チェック
-        $condition = ['card_info.name' => $name, 'card_info.number' => $number, 'expansion.attr' => $exp->attr];
+        $condition = ['card_info.name' => $name, 'card_info.number' => $number,
+                        'expansion.attr' => $exp->attr, 'card_info.isFoil' => $isFoil];
         $cardList = CardInfo::fetchByCondition($condition);
         // 画像URL取得
         $url = $this->getImageUrl($details);
@@ -54,11 +56,12 @@ class CardInfoDBService {
                 'en_name' => $details['en_name'],
                 'color_id' => $details['color'],
                 'number' => $details['number'],
-                'image_url' => $url
+                'image_url' => $url,
+                'isFoil' => $isFoil
             ];
             CardInfo::create($record);
         } else if (!is_null($url)) {
-            logger()->info('update card image url:'.$name);
+            logger()->info('update card:'.$name);
             $info = $cardList[0];
             $info->image_url = $url;
             $info->update();

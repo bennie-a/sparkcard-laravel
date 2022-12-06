@@ -30,9 +30,15 @@
                                 {{ card.name
                                 }}<label v-if="card.promotype != ''"
                                     >≪{{ card.promotype }}≫</label
+                                ><label
+                                    class="ui horizontal yellow label ml-1"
+                                    v-show="card.isFoil"
+                                    ><i class="star icon"></i>Foil</label
                                 >
                             </td>
-                            <td>{{ card.en_name }}</td>
+                            <td>
+                                {{ card.en_name }}
+                            </td>
                             <td>
                                 <label
                                     class="ui large label"

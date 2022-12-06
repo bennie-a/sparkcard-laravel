@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertIsInt;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
@@ -41,11 +42,12 @@ class CardInfoDBTest extends TestCase
                 'color' => 'Land',
                 'number'=> '245',
                 'multiverseId' => '462492',
-                'promotype' => '', 'scryfallId' => ''];
+                'promotype' => '', 'scryfallId' => '', 'isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
-        assertTrue(str_starts_with($record->image_url, 'https://cards.scryfall.io/normal/front/'), '画像URLの一致');
+        assertEquals($record->image_url, 'https://cards.scryfall.io/png/front/4/4/44f182dc-ae39-447a-9979-afd56bed6794.png?1646071757', '画像URLの一致');
+        assertFalse($record->isFoil, '通常版/Foil');
     }
     
     public function test_登録_scryfallIdあり()
@@ -57,10 +59,11 @@ class CardInfoDBTest extends TestCase
                 'number'=> '150',
                 'multiverseId' => '',
                 'promotype' => '絵違い', 
-                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428'];
+                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
+        assertFalse($record->isFoil, '通常版/Foil');
     }
     
     public function test_登録_multiverseIdとscryfallIdなし()
@@ -72,16 +75,35 @@ class CardInfoDBTest extends TestCase
                 'number'=> '1',
                 'multiverseId' => '',
                 'promotype' => '', 
-                'scryfallId' => ''];
+                'scryfallId' => '', 'isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNull($record->image_url, '画像URLの有無');
+        assertFalse($record->isFoil, '通常版/Foil');
     }
     
+    
+    public function test_登録_Foil版()
+    {
+        $data = ['setCode' => 'WAR',
+                'name' => '群れの声、アーリン',
+                'en_name' => 'Arlinn, Voice of the Pack',
+                'color' => 'G',
+                'number'=> '150',
+                'multiverseId' => '',
+                'promotype' => '絵違い', 
+                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => true];
+        $record = $this->post_ok($data);
+        assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
+        assertNotNull($record->image_url, '画像URLの有無');
+        assertTrue($record->isFoil, '通常版/Foil');
+    }
+
+
     private function post_ok($data)
     {
         $this->post('api/database/card', $data)->assertStatus(201);
-        $list = CardInfo::where('en_name', $data['en_name'])->get();
+        $list = CardInfo::where(['en_name' => $data['en_name'], 'isFoil' => $data['isFoil']])->get();
         assertTrue($list->count() == 1, '登録の有無');
         $record = $list[0];
         assertEquals($data['en_name'], $record->en_name, 'カード名(英名)');
@@ -103,7 +125,7 @@ class CardInfoDBTest extends TestCase
                 'number'=> '245',
                 'multiverseId' => '462492',
                 'scryfallId' => '',
-                'promotype' => ''];
+                'promotype' => '', 'isFoil' => false];
         $this->post('api/database/card', $data)->assertStatus(422);
     }
 
