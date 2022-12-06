@@ -47,7 +47,6 @@ class CardInfoDBTest extends TestCase
         assertEquals($data['name'], $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
         assertEquals($record->image_url, 'https://cards.scryfall.io/png/front/4/4/44f182dc-ae39-447a-9979-afd56bed6794.png?1646071757', '画像URLの一致');
-        assertFalse($record->isFoil, '通常版/Foil');
     }
     
     public function test_登録_scryfallIdあり()
@@ -63,7 +62,6 @@ class CardInfoDBTest extends TestCase
         $record = $this->post_ok($data);
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
-        assertFalse($record->isFoil, '通常版/Foil');
     }
     
     public function test_登録_multiverseIdとscryfallIdなし()
@@ -79,7 +77,6 @@ class CardInfoDBTest extends TestCase
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNull($record->image_url, '画像URLの有無');
-        assertFalse($record->isFoil, '通常版/Foil');
     }
     
     
@@ -96,9 +93,24 @@ class CardInfoDBTest extends TestCase
         $record = $this->post_ok($data);
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
-        assertTrue($record->isFoil, '通常版/Foil');
     }
 
+    public function test_登録_Foil版_同名通常版あり() {
+        $exist = ['exp_id' => $this->war->notion_id, 'name' => '群れの声、アーリン', 
+                    'color_id' => 'G', 'number' => '150', 'isFoil' => true];
+        CardInfo::factory()->createOne($exist);
+        $data = ['setCode' => 'WAR',
+                'name' => '群れの声、アーリン',
+                'en_name' => 'Arlinn, Voice of the Pack',
+                'color' => 'G',
+                'number'=> '150',
+                'multiverseId' => '',
+                'promotype' => '絵違い', 
+                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => true];
+        $record = $this->post_ok($data);
+        assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
+        assertNotNull($record->image_url, '画像URLの有無');
+    }
 
     private function post_ok($data)
     {
@@ -110,6 +122,7 @@ class CardInfoDBTest extends TestCase
         assertEquals($data['color'], $record->color_id, '色');
         assertEquals($data['number'], $record->number, 'カード番号');
         assertIsInt(16, strlen($record->barcode), 'バーコード');
+        assertEquals($data['isFoil'], $record->isFoil, '通常版/Foil');
 
         $exp = Expansion::where('attr', $data['setCode'])->first();
         assertEquals($this->war->notion_id, $record->exp_id, 'エキスパンションID');

@@ -48,7 +48,7 @@ class CardInfoDBService {
         // 画像URL取得
         $url = $this->getImageUrl($details);
         if (count($cardList) == 0) {
-            logger()->info('insert row:', [$name]);
+            logger()->info('insert row:', ['カード名' => $name, '通常/Foil' => $isFoil]);
             $record = [
                 'exp_id'=> $exp->notion_id,
                 'name' => $name,
