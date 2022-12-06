@@ -105,7 +105,7 @@ class CardBoardService {
         $page->setNumber("価格", $priceVal);
         $page->setNumber("カード番号", $details['index']);
         $page->setSelect("言語", "日本語");
-        $page->setCheckbox("Foil", false);
+        $page->setCheckbox("Foil", $details['isFoil']);
         $page->setSelect("色", $details['color']);
         $page->setSelect("状態", "NM");
         if (array_key_exists('imageUrl', $details)) {

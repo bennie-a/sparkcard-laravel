@@ -10,6 +10,7 @@ export default {
             set: "",
             color: "R",
             isFoil: false,
+            name: "",
         };
     },
     computed: {
@@ -92,6 +93,7 @@ export default {
                         color: c.color,
                         imageUrl: c.image,
                         stock: c.stock,
+                        isFoil: c.isFoil,
                     };
                     await axios
                         .post("api/notion/card", query)
@@ -157,8 +159,13 @@ export default {
                 </select>
             </div>
         </div>
+        <div class="three fields">
+            <!-- <div class="field">
+                <label>カード名(日本語のみ)</label>
+                <input type="text" v-model="name" />
+            </div> -->
+        </div>
         <div class="field">
-            <label for="isFoil">通常/Foil</label>
             <div class="ui toggle checkbox">
                 <input
                     type="checkbox"
