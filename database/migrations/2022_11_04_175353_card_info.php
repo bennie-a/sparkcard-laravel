@@ -24,6 +24,14 @@ return new class extends Migration
             $table->string('color_id')->comment('main_colorテーブルの略称');
             $table->foreign('color_id')->references('attr')->on('main_color');
             $table->string('image_url')->nullable(true)->comment('画像URL');
+            $table->boolean('isFoil')->nullable(false)->default(false)->comment('通常/Foil');
+            $table->string('standard')->nullable(false)->default('not_legal')->comment('スタンダード使用許可');
+            $table->string('pioneer')->nullable(false)->default('not_legal')->comment('パイオニア使用許可');
+            $table->string('modarn')->nullable(false)->default('not_legal')->comment('モダン使用許可');
+            $table->string('legacy')->nullable(false)->default('not_legal')->comment('レガシー使用許可');
+            $table->string('vintage')->nullable(false)->default('not_legal')->comment('ヴィンテージ使用許可');
+            $table->string('commander')->nullable(false)->default('not_legal')->comment('EDH使用許可');
+            $table->string('pauper')->nullable(false)->default('not_legal')->comment('パウパー使用許可');
             $table->timestamps();
         });
     }
