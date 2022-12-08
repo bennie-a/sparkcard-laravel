@@ -1,6 +1,7 @@
 // 検索結果の操作関連クラス
 const getDefaultState = () => ({
     list: [],
+    suggestions: [],
 });
 
 export default {
@@ -10,13 +11,20 @@ export default {
         setResult: function (state, list) {
             state.list = list;
         },
+        setSuggestions: function (state, suggestions) {
+            state.suggestions = suggestions;
+        },
         clear: function (state) {
             state.list = [];
+            state.suggestions = [];
         },
     },
     getters: {
         result: function (state) {
             return state.list;
+        },
+        suggestions: function (state) {
+            return state.suggestions;
         },
     },
     actions: {
@@ -25,6 +33,9 @@ export default {
         },
         clear(context) {
             context.commit("clear");
+        },
+        setSuggestions(context, suggestions) {
+            context.commit("setSuggestions", suggestions);
         },
     },
 };

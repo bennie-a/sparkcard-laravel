@@ -3,6 +3,7 @@ import axios from "axios";
 import NowLoading from "./component/NowLoading.vue";
 import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
+import { AxiosTask } from "../component/AxiosTask";
 export default {
     data() {
         return {
@@ -10,10 +11,7 @@ export default {
             color: "R",
             isFoil: false,
             name: "",
-            options: [
-                { name: "兄弟戦争(BRO)", id: "BRO" },
-                { name: "団結のドミナリア(DMU)", id: "DMU" },
-            ],
+            options: [],
             selectedSet: "",
         };
     },
@@ -22,8 +20,30 @@ export default {
             let selected = this.$store.getters["csvOption/selectedList"];
             return selected.length == 0;
         },
+        // セット名の候補を取得する。
+        suggestions: function () {
+            return this.$store.getters["expansion/suggestions"];
+        },
     },
     methods: {
+        suggestSet() {
+            if (this.selectedSet == "") {
+                return;
+            }
+            this.$store.dispatch("expansion/clear");
+            this.options = [];
+            console.log(this.selectedSet);
+            const task = new AxiosTask(this.$store);
+            const query = { params: { query: this.selectedSet } };
+            const success = function (response, store, query) {
+                store.dispatch("expansion/setSuggestions", response.data);
+                console.log(response.data);
+            };
+            const fail = function (e, store, query) {
+                console.error(e);
+            };
+            task.get("/database/exp", query, success, fail);
+        },
         async search() {
             this.$store.dispatch("setLoad", true);
             console.log("wisdom guild search");
@@ -170,14 +190,15 @@ export default {
                         autocomplete="on"
                         list="setlist"
                         v-model="selectedSet"
+                        @input="suggestSet"
                     />
                     <datalist id="setlist">
-                        <option v-for="n in options" :key="n">
+                        <option v-for="n in suggestions" :key="n">
                             {{ n.name }}
                         </option>
                     </datalist>
                 </div>
-                <p>{{ selectedSet }}</p>
+                {{ this.selectedSet }}
             </div>
         </div>
         <div class="three fields">

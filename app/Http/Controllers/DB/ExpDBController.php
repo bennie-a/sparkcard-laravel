@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\DB;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExpDBResource;
+use App\Http\Resources\Notion\ExpansionResource;
 use App\Models\Expansion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,6 +15,18 @@ use Illuminate\Http\Response;
  */
 class ExpDBController extends Controller
 {
+    /**
+     * キーワードに部分一致するセット名を最大5件取得する。
+     *
+     * @return void
+     */
+    public function index(Request $request) {
+        $query = $request->input("query");
+        logger()->info('入力パラメータ', [$query]);
+        $list = Expansion::where('name', 'like', '%'.$query.'%')->limit(5)->get();
+        return response()->json($list);
+    }
+
     /**
      * expansionテーブルにデータを1件登録する。
      *
