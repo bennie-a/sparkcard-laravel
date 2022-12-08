@@ -3,7 +3,6 @@ import axios from "axios";
 import NowLoading from "./component/NowLoading.vue";
 import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
-
 export default {
     data() {
         return {
@@ -11,6 +10,11 @@ export default {
             color: "R",
             isFoil: false,
             name: "",
+            options: [
+                { name: "兄弟戦争(BRO)", id: "BRO" },
+                { name: "団結のドミナリア(DMU)", id: "DMU" },
+            ],
+            selectedSet: "",
         };
     },
     computed: {
@@ -158,6 +162,23 @@ export default {
                     <option value="Land">土地</option>
                 </select>
             </div>
+            <div class="field">
+                <label for="">セット名</label>
+                <div class="ui input">
+                    <input
+                        type="text"
+                        autocomplete="on"
+                        list="setlist"
+                        v-model="selectedSet"
+                    />
+                    <datalist id="setlist">
+                        <option v-for="n in options" :key="n">
+                            {{ n.name }}
+                        </option>
+                    </datalist>
+                </div>
+                <p>{{ selectedSet }}</p>
+            </div>
         </div>
         <div class="three fields">
             <!-- <div class="field">
@@ -213,4 +234,3 @@ export default {
     <card-list></card-list>
     <now-loading></now-loading>
 </template>
-<style></style>
