@@ -23,7 +23,7 @@ class ExpDBController extends Controller
     public function index(Request $request) {
         $query = $request->input("query");
         logger()->info('入力パラメータ', [$query]);
-        $list = Expansion::where('name', 'like', '%'.$query.'%')->limit(5)->get();
+        $list = Expansion::where('attr', 'like', '%'.$query.'%')->limit(5)->get();
         return response()->json($list);
     }
 

@@ -7,12 +7,10 @@ import { AxiosTask } from "../component/AxiosTask";
 export default {
     data() {
         return {
-            set: "",
+            selectedSet: "",
             color: "R",
             isFoil: false,
             name: "",
-            options: [],
-            selectedSet: "",
         };
     },
     computed: {
@@ -51,7 +49,7 @@ export default {
             this.$store.dispatch("clearCards");
             const query = {
                 params: {
-                    set: this.set,
+                    set: this.selectedSet,
                     color: this.color,
                     isFoil: this.isFoil,
                 },
@@ -113,7 +111,7 @@ export default {
                         enname: c.enname,
                         index: c.index,
                         price: c.price.replace(",", ""),
-                        attr: this.set,
+                        attr: this.selectedSet,
                         color: c.color,
                         imageUrl: c.image,
                         stock: c.stock,
@@ -159,14 +157,20 @@ export default {
         <div class="three fields">
             <div class="field">
                 <label for="">セット名</label>
-                <select v-model="set" class="ui dropdown">
-                    <option value="">選択してください</option>
-                    <option value="BRO">兄弟戦争(BRO)</option>
-                    <option value="BRR">兄弟戦争設計図(BRR)</option>
-                    <option value="DMU">団結のドミナリア(DMU)</option>
-                    <option value="WAR">灯争大戦(WAR)</option>
-                    <option value="PLIST">ザ・リスト</option>
-                </select>
+                <div class="ui input">
+                    <input
+                        type="text"
+                        autocomplete="on"
+                        list="setlist"
+                        v-model="selectedSet"
+                        @input="suggestSet"
+                    />
+                    <datalist id="setlist">
+                        <option v-for="n in suggestions" :key="n">
+                            {{ n.attr }}
+                        </option>
+                    </datalist>
+                </div>
             </div>
             <div class="field">
                 <label>色</label>
@@ -181,24 +185,6 @@ export default {
                     <option value="A">アーティファクト</option>
                     <option value="Land">土地</option>
                 </select>
-            </div>
-            <div class="field">
-                <label for="">セット名</label>
-                <div class="ui input">
-                    <input
-                        type="text"
-                        autocomplete="on"
-                        list="setlist"
-                        v-model="selectedSet"
-                        @input="suggestSet"
-                    />
-                    <datalist id="setlist">
-                        <option v-for="n in suggestions" :key="n">
-                            {{ n.name }}
-                        </option>
-                    </datalist>
-                </div>
-                {{ this.selectedSet }}
             </div>
         </div>
         <div class="three fields">
@@ -222,7 +208,7 @@ export default {
             id="search"
             class="ui button purple ml-1"
             @click="search"
-            :class="{ disabled: set == '' }"
+            :class="{ disabled: selectedSet == '' }"
         >
             検索する
         </button>
