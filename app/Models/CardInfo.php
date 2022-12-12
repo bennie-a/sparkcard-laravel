@@ -40,9 +40,9 @@ class CardInfo extends Model
      * @param [type] $name カード名
      * @return カード情報
      */
-    public static function findCard($exp_id, $name) {
+    public static function findCard($exp_id, $name, $isFoil) {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
-        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name])->first();
+        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
         return $info;
     }
 

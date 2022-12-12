@@ -8,7 +8,7 @@
         <div class="ui list">
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-file-earmark-plus-fill mr-half"></i>Notion
+                    <i class="bi bi-journal-plus"></i>Notion
                 </div>
                 <ul>
                     <li>

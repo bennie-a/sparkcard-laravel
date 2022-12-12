@@ -41,13 +41,15 @@ class CardBoardService {
             $card = new NotionCard();
             $card->setId($array['id']);
             $card->setName($array['title']);
+            $isFoilProperty = $page->getProperty('Foil');
+            $isFoil = $isFoilProperty->getContent();
 
             $exp_id = $exp->getRawContent()[0]['id'];
             $expModel = Expansion::where('notion_id', $exp_id)->first();
             if (!is_null($expModel)) {
                 $card->setExpansion(['name' => $expModel['name'], 'attr' => $expModel['attr']]);
                 if (!empty($card->getName())) {
-                    $cardInfo = CardInfo::findCard($exp_id, $card->getName());
+                    $cardInfo = CardInfo::findCard($exp_id, $card->getName(), $isFoil);
                     if (!empty($cardInfo)) {
                         $card->setBarcode($cardInfo['barcode']);
                     }
@@ -87,8 +89,7 @@ class CardBoardService {
                 $card->setEnname($ennameArray[0]['plain_text']);
             }
 
-            $isFoil = $page->getProperty('Foil');
-            $card->setFoil($isFoil->getContent());
+            $card->setFoil($isFoil);
             array_push($resultList, $card);
         }
         return $resultList;
