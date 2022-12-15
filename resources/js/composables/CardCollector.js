@@ -8,6 +8,9 @@ let langFuncs = {
     繁体中国語: (name, enname) => {
         return name + "[CT]";
     },
+    簡体中国語: (name, enname) => {
+        return name + "[CS]";
+    },
     イタリア語: (name, enname) => {
         return `${name}[IT] `;
     },
