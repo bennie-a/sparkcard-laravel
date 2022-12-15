@@ -1,12 +1,13 @@
 <?php
 namespace App\Factory;
 
+use App\Services\json\ExcludeCard;
 use App\Services\json\JpCard;
 use App\Services\json\JpLimitedCard;
 use App\Services\json\NoJpCard;
-use App\Services\json\OnlineCard;
 use App\Services\json\PhyrexianCard;
 use App\Services\json\PlistCard;
+use App\Services\json\StarterCard;
 
 /**
  * JSONファイルに記載されたカード情報の形式に沿って
@@ -22,37 +23,89 @@ class CardInfoFactory {
      * @return AbstractCard
      */
     public static function create($json) {
-        if (strcmp($json['setCode'], 'PLIST') == 0) {
+        $lang = $json['language'];
+        $langArray = ['English' => NoJpCard::class, 'Japanese' => JpLimitedCard::class,
+                         'Phyrexian' => PhyrexianCard::class];
+        if (!array_key_exists($lang, $langArray)) {
+            return new ExcludeCard($json);
+        }
+        $class = $langArray[$lang];
+        if ($class != NoJpCard::class) {
+            $obj = new $class($json);
+            return $obj;
+        }
+        $setCode = $json['setCode'];
+        // ザ・リスト
+        if (strcmp($setCode, 'PLIST') == 0) {
             return new PlistCard($json);
         }
-        if (array_key_exists('isOnlineOnly', $json) && $json['isOnlineOnly'] == 'true') {
-            return new OnlineCard($json);
+        // 初期セット
+        if (self::isStarterSet($setCode)) {
+            if (self::hasJp($json)) {
+                return new StarterCard($json);
+            } else {
+                return new ExcludeCard($json);
+            }
         }
-        $enname = $json['name'];
-        $lang = $json['language'];
-        if ($lang == 'Japanese') {
-            return new JpLimitedCard($json);
-        } else if ($lang == 'Phyrexian') {
-            return new PhyrexianCard($json);
+        // オンライン限定カード
+        if (self::isOnlineOnly($json)) {
+            return new ExcludeCard($json);
         }
-        $isForeign = array_key_exists('foreignData', $json);
-        if ($isForeign && !empty($json['foreignData']) && self::hasJp($json['foreignData'])) {
+        // 日本語カード
+        if (self::hasJp($json)) {
             return new JpCard($json);
         }
         return new NoJpCard($json);
     }
 
     /**
-     * foreignDataに日本語が存在するか判定する。
+     * カード情報がオンライン限定か判定する。
+     *
+     * @param array $json
+     * @return boolean
+     */
+    private static function isOnlineOnly($json) {
+        if (!array_key_exists('isOnlineOnly', $json)) {
+            return false;
+        }
+        if ($json['isOnlineOnly'] == 'true') {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * foreignDataに日本語データが存在するか判定する。
      *
      * @param array $foreignData
      * @return boolean
      */
-    private static function hasJp($foreignData) {
+    private static function hasJp($json) {
+        $isForeign = array_key_exists('foreignData', $json);
+        if (!$isForeign) {
+            return false;
+        }
+        $foreignData = $json['foreignData'];
+        if (empty($foreignData)) {
+            return false;
+        }
         $target = array_filter($foreignData, function($f) {
             return $f['language'] == 'Japanese';
         });
         return count($target) != 0;
     }
+
+    /**
+     * セット名が初期セットか判定する。
+     *
+     * @param string $setCode
+     * @return boolean
+     */
+    private static function isStarterSet($setCode) {
+        $starter = ['3ED', '4ED', '4ED', '5ED', '6ED', '7ED', '8ED'];
+        return in_array($setCode, $starter);
+    }
+
+
 }
 ?>
