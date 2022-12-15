@@ -1,6 +1,9 @@
 <?php
 namespace App\Enum;
 
+use app\Libs\JsonUtil;
+use FrameEffects;
+
 enum PromoType:string {
     case JPWARKER = 'jpwalker';
     case BOOSTER_FAN = 'boosterfun';
@@ -9,6 +12,10 @@ enum PromoType:string {
     case TEXTURED = 'textured';
     case BUNDLE = 'bundle';
     case PROMOPACK = 'promopack';
+    case SHOWCASE = "showcase";
+    case EXTENDEDART = "extendedart";
+    case FULLART = "fullart";
+
     case OTHER = 'other';
 
     public function text() {
@@ -20,27 +27,65 @@ enum PromoType:string {
             self::BUNDLE => 'バンドル',
             self::DRAFT => '',
             self::PROMOPACK => 'プロモカード',
+            self::SHOWCASE => "ショーケース",
+            self::EXTENDEDART => "拡張アート",
+            self::FULLART => 'フルアート',
+
             self::OTHER => 'その他'
         };
     }
 
     public static function match($card)
     {
+        $isFullArt = "isFullArt";
+        if (self::hasKey($isFullArt, $card)) {
+            return self::FULLART;            
+        }
         $key = 'promoTypes';
-        if (!array_key_exists($key, $card)) {
+        if (!self::isNotEmpty($key, $card)) {
             return self::DRAFT;
         }
 
         $promoarray = $card[$key];
-        if (empty($promoarray)) {
-            return self::DRAFT;
-        }
-        $beforeType = current($promoarray);
-        $afterType = PromoType::tryFrom($beforeType);
-        if (!is_null($afterType)) {
-            return $afterType;
+        $typeword = self::excludeKeyword(self::TEXTURED->value, $promoarray);
+        $promoType = PromoType::tryFrom(current($typeword));
+        if ($promoType == self::BOOSTER_FAN) {
+            $promoType = self::frameEffect($card);
+        } 
+        if (!is_null($promoType)) {
+            return $promoType;
         }
         return self::OTHER;
+    }
+
+       /**
+     * frameEffectsの内容から拡張アートかショーケースを判別する。
+     *
+     * @param array $card
+     * @return Promotype
+     */
+    private static function frameEffect($card) {
+        $key = 'frameEffects';
+        if (!self::isNotEmpty($key, $card)) {
+            return self::BOOSTER_FAN;
+        }
+        $effects = self::excludeKeyword("legendary", $card[$key]);
+        return PromoType::tryFrom(current($effects));
+    }
+
+    private static function hasKey($key, $card) {
+        return array_key_exists($key, $card);
+    }
+
+    private static function isNotEmpty($key, $card) {
+        return self::hasKey($key, $card) && !empty($card[$key]);
+    }
+
+    private static function excludeKeyword($keyword, $array) {
+        $promoarray = array_filter($array, function($p) use($keyword){
+            return $p != $keyword;
+        });
+        return $promoarray;
     }
 }
 ?>

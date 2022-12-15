@@ -2,6 +2,7 @@
 namespace App\Factory;
 
 use App\Services\json\ExcludeCard;
+use App\Services\json\FullartLand;
 use App\Services\json\JpCard;
 use App\Services\json\JpLimitedCard;
 use App\Services\json\NoJpCard;
@@ -30,6 +31,12 @@ class CardInfoFactory {
             return new ExcludeCard($json);
         }
         $class = $langArray[$lang];
+
+        // カードタイプがフルアートか判別する。
+        $cardtypes = $json["types"];
+        if (self::isTrue("isFullArt", $json) && current($cardtypes) == "Land") {
+            $class = FullartLand::class;
+        }
         if ($class != NoJpCard::class) {
             $obj = new $class($json);
             return $obj;
@@ -65,13 +72,14 @@ class CardInfoFactory {
      * @return boolean
      */
     private static function isOnlineOnly($json) {
-        if (!array_key_exists('isOnlineOnly', $json)) {
+        return self::isTrue('isOnlineOnly', $json);
+    }
+
+    private static function isTrue($key, $json) {
+        if (!array_key_exists($key, $json)) {
             return false;
         }
-        if ($json['isOnlineOnly'] == 'true') {
-            return false;
-        }
-        return true;
+        return $json[$key] == 'true';
     }
 
     /**

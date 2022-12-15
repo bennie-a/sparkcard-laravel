@@ -3,6 +3,7 @@
 namespace Tests\Unit\service;
 
 use App\Enum\CardColor;
+use App\Enum\PromoType;
 use App\Models\MainColor;
 use App\Services\CardJsonFileService;
 use Tests\TestCase;
@@ -10,6 +11,7 @@ use Tests\TestCase;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
+use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
@@ -141,6 +143,50 @@ class CardJsonFileServiceTest extends TestCase
         assertSame(count($nonFoils), 9);
         assertNotEmpty($foils, 'Foil版の有無');
         assertSame(count($foils), 8);
+    }
+
+    public function test_初期セット() {
+        $contents = file_get_contents(storage_path("test/json/4ED.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $cards = $result['cards'];
+        assertNotEmpty($cards);
+        assertTrue(count($cards) > 1);
+    }
+
+    public function test_通常版() {
+        $contents = file_get_contents(storage_path("test/json/war_short.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $cards = $result['cards'];
+
+        $black = $this->nextCard('鮮血の刃先', $cards);
+        assertEmpty($black['promotype'], '通常版はpromotypeは空文字');
+
+
+    }
+
+    public function test_拡張アート() {
+
+    }
+
+    public function test_ショーケース() {
+        
+    }
+
+    public function test_フルアート版土地() {
+        $contents = file_get_contents(storage_path("test/json/neo.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $cards = $result['cards'];
+        assertNotEmpty($cards);
+        $actual = $this->nextCard("平地", $cards);
+        assertNotNull($actual, "土地カードの有無");
+        logger()->debug($actual);
+        assertEquals("フルアート", $actual["promotype"], "フルアート");
     }
 
     /**
