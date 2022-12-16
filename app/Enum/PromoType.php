@@ -77,7 +77,7 @@ enum PromoType:string {
             return is_null($e) == false;
         });
         // $effects = self::excludeKeyword(["etched", "legendary"], $card[$key]);
-        return current($effects);
+        return empty($effects) ? self::BOOSTER_FAN : current($effects);
     }
 
     private static function hasKey($key, $card) {

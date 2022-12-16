@@ -25,7 +25,7 @@ class CardJsonFileService {
             'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text(), 'isFoil' => false,
             'language' => $obj->language()
             ];
-            logger()->info('get card:'.$newCard['name']);
+            logger()->info('get card:',['name' => $newCard['name'], 'number' => $newCard['number']]);
             logger()->debug(get_class($obj).':'.$newCard['name']);
             array_push($cardInfo, $newCard);
             if ($c['hasFoil']) {

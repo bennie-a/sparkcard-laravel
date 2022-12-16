@@ -46,6 +46,9 @@
                                     >{{ colortext(card.color) }}</label
                                 >
                             </td>
+                            <td>
+                                {{ card.language }}
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot v-if="this.$store.getters.cardsLength != 0">

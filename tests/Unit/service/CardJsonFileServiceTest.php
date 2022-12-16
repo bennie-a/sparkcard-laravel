@@ -188,6 +188,13 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("フルアート", $actual["promotype"], "フルアート");
     }
 
+    public function test_framesEffectsに該当なし() {
+        $cards = $this->build("neo.json");
+        $target = $this->getCardByNumber('406', $cards);
+        assertEquals(PromoType::BOOSTER_FAN->text(), $target['promotype'], "プロモタイプ");
+
+    }
+
     public function test_ファイレクシア語() {
         $cards = $this->build("neo.json");
         $target = $this->getCardByNumber('427', $cards);
