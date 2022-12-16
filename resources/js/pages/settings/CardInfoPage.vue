@@ -18,6 +18,7 @@
                             <th class="four wide">カード名</th>
                             <th class="four wide">英名</th>
                             <th class="one wide">色</th>
+                            <th class="one wide">言語</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -1037,7 +1037,807 @@
                     "b384f442-c485-587e-954e-f3bc0962daa1"
                 ]
             },
-
+            {
+                "artist": "Isis",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 548702,
+                        "name": "Hidetsugu, das verschlingende Chaos",
+                        "text": "{B}, opfere eine Kreatur: Hellsicht 2.\n{2}{R}, {T}: Schicke die oberste Karte deiner Bibliothek ins Exil. Du kannst sie in diesem Zug spielen. Wenn du auf diese Weise eine Nichtland-Karte ins Exil schickst, fügt Hidetsugu, das verschlingende Chaos, einem Ziel deiner Wahl Schadenspunkte in Höhe des Manabetrags der ins Exil geschickten Karte zu.",
+                        "type": "Legendäre Kreatur — Oger, Dämon"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 549007,
+                        "name": "Hidetsugu, caos devorador",
+                        "text": "{B}, sacrificar una criatura: Adivina 2.\n{2}{R}, {T}: Exilia la primera carta de tu biblioteca. Puedes jugar esa carta este turno. Cuando exilies una carta que no sea tierra de esta manera, Hidetsugu, caos devorador hace una cantidad de daño igual al valor de maná de la carta exiliada a cualquier objetivo.",
+                        "type": "Criatura legendaria — Demonio ogro"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 549312,
+                        "name": "Hidetsugu, chaos dévorant",
+                        "text": "{B}, sacrifiez une créature : Regard 2.\n{2}{R}, {T} : Exilez la carte du dessus de votre bibliothèque. Vous pouvez jouer cette carte ce tour-ci. Quand vous exilez une carte non-terrain de cette manière, Hidetsugu, chaos dévorant inflige un nombre de blessures égal à la valeur de mana de la carte exilée à n'importe quelle cible.",
+                        "type": "Créature légendaire : ogre et démon"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 549617,
+                        "name": "Hidetsugu, Caos Divoratore",
+                        "text": "{B}, Sacrifica una creatura: Profetizza 2.\n{2}{R}, {T}: Esilia la prima carta del tuo grimorio. Puoi giocare quella carta in questo turno. Quando esili una carta non terra in questo modo, Hidetsugu, Caos Divoratore infligge a un qualsiasi bersaglio danno pari al valore di mana della carta esiliata.",
+                        "type": "Creatura Leggendaria — Demone Ogre"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 549922,
+                        "name": "貪る混沌、碑出告",
+                        "text": "{B}, クリーチャー１体を生け贄に捧げる：占術２を行う。\n{2}{R}, {T}：あなたのライブラリーの一番上にあるカード１枚を追放する。このターン、あなたはそのカードをプレイしてもよい。あなたがこれにより土地でないカード１枚を追放したとき、クリーチャーやプレインズウォーカーやプレイヤーのうち１つを対象とする。貪る混沌、碑出告はそれに追放されたカードのマナ総量に等しい点数のダメージを与える。",
+                        "type": "伝説のクリーチャー — オーガ・デーモン"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 550227,
+                        "name": "집어삼키는 혼돈, 히데츠구",
+                        "text": "{B}, 생물 한 개를 희생한다: 점술 2를 한다.\n{2}{R}, {T}: 당신의 서고 맨 위 카드를 추방한다. 당신은 이 턴에 그 카드를 플레이할 수 있다. 당신이 이런 식으로 대지가 아닌 카드를 추방할 때, 원하는 목표를 정한다. 집어삼키는 혼돈, 히데츠구는 그 목표에게 추방된 카드의 마나 값만큼 피해를 입힌다.",
+                        "type": "전설적 생물 — 오우거 악마"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 550532,
+                        "name": "Hidetsugu, Caos Devorador",
+                        "text": "{B}, sacrifique uma criatura: Use vidência 2.\n{2}{R}, {T}: Exile o card do topo de seu grimório. Você pode jogar aquele card neste turno. Quando você exila um card não de terreno dessa forma, Hidetsugu, Caos Devorador, causa a qualquer alvo dano igual ao valor de mana do card exilado.",
+                        "type": "Criatura Lendária — Ogro Demônio"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 550837,
+                        "name": "Хидецугу, Пожирающий Хаос",
+                        "text": "{B}, пожертвуйте существо: предскажите 2.\n{2}{R}, {T}: изгоните верхнюю карту вашей библиотеки. Вы можете разыграть ту карту в этом ходу. Когда вы изгоняете таким образом не являющуюся землей карту, Хидецугу, Пожирающий Хаос наносит любой цели повреждения, равные мановой ценности изгнанной карты.",
+                        "type": "Легендарное Существо — Огр Демон"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 551142,
+                        "name": "噬生浑魔碑出告",
+                        "text": "{B}，牺牲一个生物：占卜2。\n{2}{R}，{T}：放逐你的牌库顶牌。本回合中，你可以使用该牌。当你以此法放逐一张非地牌时，噬生浑魔碑出告对任意一个目标造成伤害，其数量等同于所放逐之牌的法术力值。",
+                        "type": "传奇生物 ～食人魔／恶魔"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 551447,
+                        "name": "噬生渾魔碑出告",
+                        "text": "{B}，犧牲一個生物：占卜2。\n{2}{R}，{T}：放逐你的牌庫頂牌。本回合中，你可以使用該牌。當你以此法放逐一張非地牌時，噬生渾魔碑出告對任意一個目標造成傷害，其數量等同於所放逐之牌的魔法力值。",
+                        "type": "傳奇生物 ～食人魔／惡魔"
+                    }
+                ],
+                "frameEffects": ["legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "256702",
+                    "cardKingdomId": "256067",
+                    "cardsphereId": "84562",
+                    "mcmId": "605018",
+                    "mcmMetaId": "401196",
+                    "mtgArenaId": "79524",
+                    "mtgjsonV4Id": "02d38897-4459-54ef-9712-3abf72859636",
+                    "mtgoId": "97118",
+                    "multiverseId": "548397",
+                    "scryfallId": "6f4142d3-f7ca-4613-a6e5-528cf1f22383",
+                    "scryfallIllustrationId": "e6bac8b4-0c7b-4ddd-9add-3af65c1e2824",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "257667"
+                },
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "99",
+                "originalText": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "originalType": "Legendary Creature — Ogre Demon",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/be825c7c6dac3de1",
+                    "cardKingdomFoil": "https://mtgjson.com/links/7fce1c69c7ee906d",
+                    "cardmarket": "https://mtgjson.com/links/29c1bdde3a941982",
+                    "tcgplayer": "https://mtgjson.com/links/d3cf24b811042cce"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                "variations": [
+                    "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                    "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                    "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                    "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                    "ca6df049-edea-5e26-ba38-6c0cb4c1807c",
+                    "07320e66-550d-5e2c-989f-49361a8de0f0"
+                ]
+            },
+            {
+                "artist": "SENNSU",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 552295,
+                        "name": "Hidetsugu, das verschlingende Chaos",
+                        "text": "{B}, opfere eine Kreatur: Hellsicht 2.\n{2}{R}, {T}: Schicke die oberste Karte deiner Bibliothek ins Exil. Du kannst sie in diesem Zug spielen. Wenn du auf diese Weise eine Nichtland-Karte ins Exil schickst, fügt Hidetsugu, das verschlingende Chaos, einem Ziel deiner Wahl Schadenspunkte in Höhe des Manabetrags der ins Exil geschickten Karte zu.",
+                        "type": "Legendäre Kreatur — Oger, Dämon"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 552338,
+                        "name": "Hidetsugu, caos devorador",
+                        "text": "{B}, sacrificar una criatura: Adivina 2.\n{2}{R}, {T}: Exilia la primera carta de tu biblioteca. Puedes jugar esa carta este turno. Cuando exilies una carta que no sea tierra de esta manera, Hidetsugu, caos devorador hace una cantidad de daño igual al valor de maná de la carta exiliada a cualquier objetivo.",
+                        "type": "Criatura legendaria — Demonio ogro"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 552381,
+                        "name": "Hidetsugu, chaos dévorant",
+                        "text": "{B}, sacrifiez une créature : Regard 2.\n{2}{R}, {T} : Exilez la carte du dessus de votre bibliothèque. Vous pouvez jouer cette carte ce tour-ci. Quand vous exilez une carte non-terrain de cette manière, Hidetsugu, chaos dévorant inflige un nombre de blessures égal à la valeur de mana de la carte exilée à n'importe quelle cible.",
+                        "type": "Créature légendaire : ogre et démon"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 552424,
+                        "name": "Hidetsugu, Caos Divoratore",
+                        "text": "{B}, Sacrifica una creatura: Profetizza 2.\n{2}{R}, {T}: Esilia la prima carta del tuo grimorio. Puoi giocare quella carta in questo turno. Quando esili una carta non terra in questo modo, Hidetsugu, Caos Divoratore infligge a un qualsiasi bersaglio danno pari al valore di mana della carta esiliata.",
+                        "type": "Creatura Leggendaria — Demone Ogre"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 552467,
+                        "name": "貪る混沌、碑出告",
+                        "text": "{B}, クリーチャー１体を生け贄に捧げる：占術２を行う。\n{2}{R}, {T}：あなたのライブラリーの一番上にあるカード１枚を追放する。このターン、あなたはそのカードをプレイしてもよい。あなたがこれにより土地でないカード１枚を追放したとき、クリーチャーやプレインズウォーカーやプレイヤーのうち１つを対象とする。貪る混沌、碑出告はそれに追放されたカードのマナ総量に等しい点数のダメージを与える。",
+                        "type": "伝説のクリーチャー — オーガ・デーモン"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 552510,
+                        "name": "집어삼키는 혼돈, 히데츠구",
+                        "text": "{B}, 생물 한 개를 희생한다: 점술 2를 한다.\n{2}{R}, {T}: 당신의 서고 맨 위 카드를 추방한다. 당신은 이 턴에 그 카드를 플레이할 수 있다. 당신이 이런 식으로 대지가 아닌 카드를 추방할 때, 원하는 목표를 정한다. 집어삼키는 혼돈, 히데츠구는 그 목표에게 추방된 카드의 마나 값만큼 피해를 입힌다.",
+                        "type": "전설적 생물 — 오우거 악마"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 552553,
+                        "name": "Hidetsugu, Caos Devorador",
+                        "text": "{B}, sacrifique uma criatura: Use vidência 2.\n{2}{R}, {T}: Exile o card do topo de seu grimório. Você pode jogar aquele card neste turno. Quando você exila um card não de terreno dessa forma, Hidetsugu, Caos Devorador, causa a qualquer alvo dano igual ao valor de mana do card exilado.",
+                        "type": "Criatura Lendária — Ogro Demônio"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 552596,
+                        "name": "Хидецугу, Пожирающий Хаос",
+                        "text": "{B}, пожертвуйте существо: предскажите 2.\n{2}{R}, {T}: изгоните верхнюю карту вашей библиотеки. Вы можете разыграть ту карту в этом ходу. Когда вы изгоняете таким образом не являющуюся землей карту, Хидецугу, Пожирающий Хаос наносит любой цели повреждения, равные мановой ценности изгнанной карты.",
+                        "type": "Легендарное Существо — Огр Демон"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 552639,
+                        "name": "噬生浑魔碑出告",
+                        "text": "{B}，牺牲一个生物：占卜2。\n{2}{R}，{T}：放逐你的牌库顶牌。本回合中，你可以使用该牌。当你以此法放逐一张非地牌时，噬生浑魔碑出告对任意一个目标造成伤害，其数量等同于所放逐之牌的法术力值。",
+                        "type": "传奇生物 ～食人魔／恶魔"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 552682,
+                        "name": "噬生渾魔碑出告",
+                        "text": "{B}，犧牲一個生物：占卜2。\n{2}{R}，{T}：放逐你的牌庫頂牌。本回合中，你可以使用該牌。當你以此法放逐一張非地牌時，噬生渾魔碑出告對任意一個目標造成傷害，其數量等同於所放逐之牌的魔法力值。",
+                        "type": "傳奇生物 ～食人魔／惡魔"
+                    }
+                ],
+                "frameEffects": ["showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "257032",
+                    "cardKingdomId": "256088",
+                    "cardsphereId": "85861",
+                    "mcmId": "605022",
+                    "mcmMetaId": "401196",
+                    "mtgArenaId": "79791",
+                    "mtgjsonV4Id": "8fc56953-2fe9-5666-abee-e7754adc3c86",
+                    "multiverseId": "552252",
+                    "scryfallId": "3981fc94-efb5-4256-8adb-4538515a085c",
+                    "scryfallIllustrationId": "aa732f2c-9676-48ed-a45d-1ae3ffef48b4",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "257668"
+                },
+                "isStarter": true,
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "378",
+                "originalText": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "originalType": "Legendary Creature — Ogre Demon",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/33894c126c613b07",
+                    "cardKingdomFoil": "https://mtgjson.com/links/0ccadf9b0e43be91",
+                    "cardmarket": "https://mtgjson.com/links/30c4eecaaeb473b3",
+                    "tcgplayer": "https://mtgjson.com/links/58b462e0571fd620"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                "variations": [
+                    "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                    "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                    "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                    "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                    "ca6df049-edea-5e26-ba38-6c0cb4c1807c",
+                    "07320e66-550d-5e2c-989f-49361a8de0f0"
+                ]
+            },
+            {
+                "artist": "SENNSU",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["foil"],
+                "foreignData": [],
+                "frameEffects": ["showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "256089",
+                    "mcmId": "605024",
+                    "mcmMetaId": "401196",
+                    "mtgjsonV4Id": "a74f1476-f928-52ea-9a7a-dd6eb7b87e12",
+                    "scryfallId": "4826991d-c3c3-45ff-9dfc-4246a84b40e0",
+                    "scryfallIllustrationId": "bee42115-ca17-4106-8e42-6e012f634c32",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "262487"
+                },
+                "isStarter": true,
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "429",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["neonink", "boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/e24d93ca9bdabf1a",
+                    "cardmarket": "https://mtgjson.com/links/f67c5fc18853e3be",
+                    "tcgplayer": "https://mtgjson.com/links/26f760bc41a4d63c"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                "variations": [
+                    "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                    "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                    "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                    "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                    "ca6df049-edea-5e26-ba38-6c0cb4c1807c",
+                    "07320e66-550d-5e2c-989f-49361a8de0f0"
+                ]
+            },
+            {
+                "artist": "SENNSU",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["foil"],
+                "foreignData": [],
+                "frameEffects": ["showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "256090",
+                    "mcmId": "605025",
+                    "mcmMetaId": "401196",
+                    "mtgjsonV4Id": "8efaec91-3b17-5e24-bd37-6ac6ba4a7b28",
+                    "scryfallId": "c046b0b3-05f0-4468-817f-355e87552faf",
+                    "scryfallIllustrationId": "49c2fe34-ddc9-4218-be04-ff10283ded92",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "262489"
+                },
+                "isStarter": true,
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "430",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["neonink", "boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/66f6809d6258522c",
+                    "cardmarket": "https://mtgjson.com/links/b1309d748dedb16e",
+                    "tcgplayer": "https://mtgjson.com/links/b963c3a352b2e39f"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                "variations": [
+                    "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                    "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                    "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                    "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                    "ca6df049-edea-5e26-ba38-6c0cb4c1807c",
+                    "07320e66-550d-5e2c-989f-49361a8de0f0"
+                ]
+            },
+            {
+                "artist": "SENNSU",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["foil"],
+                "foreignData": [],
+                "frameEffects": ["showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "256091",
+                    "mcmId": "605026",
+                    "mcmMetaId": "401196",
+                    "mtgjsonV4Id": "52429a42-9b39-5740-b6fd-3269c8320d5f",
+                    "scryfallId": "92da2c98-afe0-4e7a-9510-5a74cc2cdde4",
+                    "scryfallIllustrationId": "7ba191ba-255d-4abc-99ec-3fda4ca09473",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "262488"
+                },
+                "isStarter": true,
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "431",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["neonink", "boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/73632f337f175f36",
+                    "cardmarket": "https://mtgjson.com/links/e6ea4280e152598f",
+                    "tcgplayer": "https://mtgjson.com/links/41034276b7e00e99"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                "variations": [
+                    "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                    "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                    "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                    "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                    "ca6df049-edea-5e26-ba38-6c0cb4c1807c",
+                    "07320e66-550d-5e2c-989f-49361a8de0f0"
+                ]
+            },
+            {
+                "artist": "SENNSU",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["foil"],
+                "foreignData": [],
+                "frameEffects": ["showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "257443",
+                    "cardsphereId": "85161",
+                    "mcmId": "605027",
+                    "mcmMetaId": "401196",
+                    "mtgjsonV4Id": "0aefe30b-59db-583a-898b-d3fb4c597146",
+                    "scryfallId": "78c0b64b-cade-414d-b893-ac1b633c66d0",
+                    "scryfallIllustrationId": "aa0ec858-7186-4ca3-b881-250758e7fd4d",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "262490"
+                },
+                "isStarter": true,
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "432",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["neonink", "boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/40b80d590d865b6c",
+                    "cardmarket": "https://mtgjson.com/links/5a84a54b55a8cc9a",
+                    "tcgplayer": "https://mtgjson.com/links/bd5f7a9954836b01"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "ca6df049-edea-5e26-ba38-6c0cb4c1807c",
+                "variations": [
+                    "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                    "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                    "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                    "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                    "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                    "07320e66-550d-5e2c-989f-49361a8de0f0"
+                ]
+            },
+            {
+                "artist": "Isis",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B", "R"],
+                "colors": ["B"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 4166,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 551811,
+                        "name": "Hidetsugu, das verschlingende Chaos",
+                        "text": "{B}, opfere eine Kreatur: Hellsicht 2.\n{2}{R}, {T}: Schicke die oberste Karte deiner Bibliothek ins Exil. Du kannst sie in diesem Zug spielen. Wenn du auf diese Weise eine Nichtland-Karte ins Exil schickst, fügt Hidetsugu, das verschlingende Chaos, einem Ziel deiner Wahl Schadenspunkte in Höhe des Manabetrags der ins Exil geschickten Karte zu.",
+                        "type": "Legendäre Kreatur — Oger, Dämon"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 551893,
+                        "name": "Hidetsugu, chaos dévorant",
+                        "text": "{B}, sacrifiez une créature : Regard 2.\n{2}{R}, {T} : Exilez la carte du dessus de votre bibliothèque. Vous pouvez jouer cette carte ce tour-ci. Quand vous exilez une carte non-terrain de cette manière, Hidetsugu, chaos dévorant inflige un nombre de blessures égal à la valeur de mana de la carte exilée à n'importe quelle cible.",
+                        "type": "Créature légendaire : ogre et démon"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 551975,
+                        "name": "貪る混沌、碑出告",
+                        "text": "{B}, クリーチャー１体を生け贄に捧げる：占術２を行う。\n{2}{R}, {T}：あなたのライブラリーの一番上にあるカード１枚を追放する。このターン、あなたはそのカードをプレイしてもよい。あなたがこれにより土地でないカード１枚を追放したとき、クリーチャーやプレインズウォーカーやプレイヤーのうち１つを対象とする。貪る混沌、碑出告はそれに追放されたカードのマナ総量に等しい点数のダメージを与える。",
+                        "type": "伝説のクリーチャー — オーガ・デーモン"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 552057,
+                        "name": "噬生浑魔碑出告",
+                        "text": "{B}，牺牲一个生物：占卜2。\n{2}{R}，{T}：放逐你的牌库顶牌。本回合中，你可以使用该牌。当你以此法放逐一张非地牌时，噬生浑魔碑出告对任意一个目标造成伤害，其数量等同于所放逐之牌的法术力值。",
+                        "type": "传奇生物 ～食人魔／恶魔"
+                    }
+                ],
+                "frameEffects": ["extendedart", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "257027",
+                    "cardKingdomId": "256083",
+                    "cardsphereId": "85353",
+                    "mcmId": "605023",
+                    "mcmMetaId": "401196",
+                    "mtgjsonV4Id": "bf2072a4-34a8-5f69-beff-18c00fc0e738",
+                    "multiverseId": "551729",
+                    "scryfallId": "e9655d9c-d4fb-4ced-b841-543eb4d88d2f",
+                    "scryfallIllustrationId": "e6bac8b4-0c7b-4ddd-9add-3af65c1e2824",
+                    "scryfallOracleId": "d56f24a1-04dc-4769-9941-05bd99508e40",
+                    "tcgplayerProductId": "257669"
+                },
+                "isStarter": true,
+                "keywords": ["Scry"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{B}",
+                "manaValue": 4.0,
+                "name": "Hidetsugu, Devouring Chaos",
+                "number": "454",
+                "originalText": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "originalType": "Legendary Creature — Ogre Demon",
+                "power": "4",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/342044bdd0cffa37",
+                    "cardKingdomFoil": "https://mtgjson.com/links/bb811a029b766e72",
+                    "cardmarket": "https://mtgjson.com/links/c38b8f8d0438afb7",
+                    "tcgplayer": "https://mtgjson.com/links/15774455a446bf75"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "You must still pay all costs and follow all normal timing rules when playing a card this way. For example, you may play a land this way only during one of your own main phases while the stack is empty, and only if you haven't previously played a land this turn."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Ogre", "Demon"],
+                "supertypes": ["Legendary"],
+                "text": "{B}, Sacrifice a creature: Scry 2.\n{2}{R}, {T}: Exile the top card of your library. You may play that card this turn. When you exile a nonland card this way, Hidetsugu, Devouring Chaos deals damage equal to the exiled card's mana value to any target.",
+                "toughness": "4",
+                "type": "Legendary Creature — Ogre Demon",
+                "types": ["Creature"],
+                "uuid": "07320e66-550d-5e2c-989f-49361a8de0f0",
+                "variations": [
+                    "d2d89a9d-ae88-52af-84f1-c0441a9cca03",
+                    "114e3066-b29c-5fad-bb4f-d50fdd4c469f",
+                    "c8e496a3-684c-5c37-a5bb-0475c7fa699c",
+                    "d274e1a6-af18-5ab6-ad23-1b6f070fdd41",
+                    "3dac3f82-0eeb-591b-82f1-08d2fff5ac67",
+                    "ca6df049-edea-5e26-ba38-6c0cb4c1807c"
+                ]
+            },
             {
                 "artist": "Amayagido",
                 "availability": ["arena", "mtgo", "paper"],

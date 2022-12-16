@@ -1,9 +1,6 @@
 <?php
 namespace App\Enum;
 
-use app\Libs\JsonUtil;
-use FrameEffects;
-
 enum PromoType:string {
     case JPWARKER = 'jpwalker';
     case BOOSTER_FAN = 'boosterfun';
@@ -15,7 +12,8 @@ enum PromoType:string {
     case SHOWCASE = "showcase";
     case EXTENDEDART = "extendedart";
     case FULLART = "fullart";
-
+    case FANDFC = 'fandfc';// 両面カード枠
+    case NEONINK = 'neonink';
     case OTHER = 'other';
 
     public function text() {
@@ -30,7 +28,8 @@ enum PromoType:string {
             self::SHOWCASE => "ショーケース",
             self::EXTENDEDART => "拡張アート",
             self::FULLART => 'フルアート',
-
+            self::FANDFC => '',
+            self::NEONINK => 'ネオンインク',
             self::OTHER => 'その他'
         };
     }
@@ -76,7 +75,10 @@ enum PromoType:string {
         $effects = array_filter($effects, function($e) {
             return is_null($e) == false;
         });
-        // $effects = self::excludeKeyword(["etched", "legendary"], $card[$key]);
+        // 両面カード枠が含まれる場合はFANDFCを優先して返す。
+        if (in_array(self::FANDFC, $effects)) {
+            return self::FANDFC;
+        }
         return empty($effects) ? self::BOOSTER_FAN : current($effects);
     }
 

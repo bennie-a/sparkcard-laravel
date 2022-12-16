@@ -3,10 +3,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CardFileRequest;
 use App\Services\CardJsonFileService;
+use Exception;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CardJsonFileController extends Controller
 {
@@ -25,12 +27,17 @@ class CardJsonFileController extends Controller
      * @return void
      */
     public function uploadCardFile(CardFileRequest $request) {
-        logger()->info('upload start');
-        $json = $request->input("data");
-        $data = $this->service->build($json);
-        logger()->info('upload end');
+        try {
+            logger()->info('upload start');
+            $json = $request->input("data");
+            $data = $this->service->build($json);
+            logger()->info('upload end');
+            return response($data, Response::HTTP_CREATED);
 
-        return response($data, Response::HTTP_CREATED);
+        } catch(Exception $e) {
+            return response($e->getMessage(), 410);
+        }
+
     }
 }
 ?>

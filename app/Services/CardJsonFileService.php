@@ -3,9 +3,11 @@ namespace App\Services;
 
 use App\Enum\CardColor;
 use App\Enum\PromoType;
+use App\Exceptions\NoPromoTypeException;
 use App\Factory\CardInfoFactory;
 use app\Libs\JsonUtil;
 use App\Services\json\ExcludeCard;
+use App\Services\json\TransformCard;
 
 class CardJsonFileService {
     public function build($json) {
@@ -17,9 +19,22 @@ class CardJsonFileService {
             if ($obj instanceof ExcludeCard) {
                 continue;
             }
+
+            // 両面カード対応
             $enname = $c['name'];
+            if ($obj instanceof TransformCard) {
+                $lastcard = end($cardInfo);
+                if (strcmp($enname, $lastcard['en_name']) == 0) {
+                    logger()->info('skip transform', ['name' => $enname]);
+                    continue;
+                }
+            }
             $color = CardColor::match($c);
             $promo = PromoType::match($c);
+            if ($promo == PromoType::OTHER) {
+                throw new NoPromoTypeException($obj->jpname($enname), $obj->number());
+            }
+
             $newCard = ['setCode'=> $setcode, 'name' => $obj->jpname($enname),"en_name" => $enname,
             'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId(),
             'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text(), 'isFoil' => false,
@@ -35,13 +50,6 @@ class CardJsonFileService {
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;
-    }
-
-    private static function isTrue($key, $json) {
-        if (!array_key_exists($key, $json)) {
-            return false;
-        }
-        return $json[$key] == 'true';
     }
 
 }?>

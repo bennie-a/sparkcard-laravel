@@ -55,6 +55,9 @@ class Handler extends ExceptionHandler
                         $title = 'No Contents';
                         $detail = '検索結果がありません。';
                     break;
+                    case 410:
+                        $title = 'No Promotype';
+                        $detail = $e->getMessage();
                 }
             }
             return response()->json([
