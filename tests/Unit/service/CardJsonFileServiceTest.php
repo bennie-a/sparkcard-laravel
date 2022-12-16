@@ -80,15 +80,6 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("1", $card['number']);
     }
 
-    public function test_ブースターファン() {
-        $contents = file_get_contents(storage_path("test/json/test_color.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $target = $this->nextCard("Teferi, Temporal Pilgrim", $result["cards"]);
-        assertEquals('ブースターファン', $target['promotype']);
-    }
-
     public function test_色判定() {
         $contents = file_get_contents(storage_path("test/json/war_short.json"));
         $json = json_decode($contents, true);
@@ -164,31 +155,61 @@ class CardJsonFileServiceTest extends TestCase
 
         $black = $this->nextCard('鮮血の刃先', $cards);
         assertEmpty($black['promotype'], '通常版はpromotypeは空文字');
-
+        assertEquals($black['language'], 'JP');
 
     }
 
     public function test_拡張アート() {
-
+        $cards = $this->build("neo.json");
+        $target = $this->getCardByNumber('445', $cards);
+        assertEquals(PromoType::EXTENDEDART->text(), $target['promotype'], "プロモタイプ");
     }
 
     public function test_ショーケース() {
-        
+        $cards = $this->build("neo.json");
+        $target = $this->getCardByNumber('371', $cards);
+        assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
+    }
+
+    public function test_ブースターファン() {
+        $contents = file_get_contents(storage_path("test/json/test_color.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $target = $this->nextCard("Teferi, Temporal Pilgrim", $result["cards"]);
+        assertEquals('ブースターファン', $target['promotype']);
     }
 
     public function test_フルアート版土地() {
-        $contents = file_get_contents(storage_path("test/json/neo.json"));
+        $cards = $this->build("neo.json");
+        assertNotEmpty($cards);
+        $actual = $this->nextCard("平地", $cards);
+        assertNotNull($actual, "土地カードの有無");
+        assertEquals("フルアート", $actual["promotype"], "フルアート");
+    }
+
+    public function test_ファイレクシア語() {
+        $cards = $this->build("neo.json");
+        $target = $this->getCardByNumber('427', $cards);
+        assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
+        assertEquals("PH", $target['language'], "言語");
+    }
+
+    /**
+     * 指定したJSONファイルを読み込む。
+     *
+     *
+     * @param string $file
+     * @return array
+     */
+    private function build($file) {
+        $contents = file_get_contents(storage_path("test/json/".$file));
         $json = json_decode($contents, true);
         $service = new CardJsonFileService();
         $result = $service->build($json['data']);
         $cards = $result['cards'];
-        assertNotEmpty($cards);
-        $actual = $this->nextCard("平地", $cards);
-        assertNotNull($actual, "土地カードの有無");
-        logger()->debug($actual);
-        assertEquals("フルアート", $actual["promotype"], "フルアート");
+        return $cards;
     }
-
     /**
      * 次の配列を取得する。
      *
@@ -200,5 +221,15 @@ class CardJsonFileServiceTest extends TestCase
             return $c['isFoil'] == false && (strcmp($name, $c['name']) == 0 || strcmp($name, $c['en_name']) == 0);
         });
         return current($target);
+    }
+
+    private function getCardByNumber(string $number, $cards) {
+        $filterd = array_filter($cards, function($c) use($number) {
+            return $number == $c['number'] && $c['isFoil'] == false;
+        });
+        logger()->debug($cards);
+        assertNotEmpty($filterd, 'カード情報の有無');
+        assertEquals(1, count($filterd));
+        return current($filterd);
     }
 }

@@ -16,13 +16,18 @@ class PhyrexianCard extends AbstractCard
     public function jpname(string $enname): string
     {
         $jpname = $this->getJpnameByAPI($enname);
-        return $jpname."[ファイレクシア語版]";
+        return $jpname;
     }
 
     public function scryfallId()
     {
         return $this->json['identifiers']['scryfallId'];
     }
+
+    public function language():string {
+        return 'PH';
+    }
+
 
 }
 ?>

@@ -47,7 +47,7 @@ enum PromoType:string {
         }
 
         $promoarray = $card[$key];
-        $typeword = self::excludeKeyword(self::TEXTURED->value, $promoarray);
+        $typeword = self::excludeKeyword([self::TEXTURED->value], $promoarray);
         $promoType = PromoType::tryFrom(current($typeword));
         if ($promoType == self::BOOSTER_FAN) {
             $promoType = self::frameEffect($card);
@@ -69,8 +69,15 @@ enum PromoType:string {
         if (!self::isNotEmpty($key, $card)) {
             return self::BOOSTER_FAN;
         }
-        $effects = self::excludeKeyword("legendary", $card[$key]);
-        return PromoType::tryFrom(current($effects));
+        $effects = array_map(function($f) {
+            $type = PromoType::tryFrom($f);
+            return $type;
+        }, $card[$key]);
+        $effects = array_filter($effects, function($e) {
+            return is_null($e) == false;
+        });
+        // $effects = self::excludeKeyword(["etched", "legendary"], $card[$key]);
+        return current($effects);
     }
 
     private static function hasKey($key, $card) {
@@ -83,7 +90,7 @@ enum PromoType:string {
 
     private static function excludeKeyword($keyword, $array) {
         $promoarray = array_filter($array, function($p) use($keyword){
-            return $p != $keyword;
+            return in_array($p, $keyword) == false;
         });
         return $promoarray;
     }

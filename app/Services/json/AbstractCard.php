@@ -53,5 +53,8 @@ use App\Services\WisdomGuildService;
         return $this->json['number'];
     }
 
+    public function language():string {
+        return 'JP';
+    }
  }
 ?>

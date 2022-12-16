@@ -187,145 +187,6 @@
                 ]
             },
             {
-                "artist": "Chase Stone",
-                "availability": ["arena", "mtgo", "paper"],
-                "borderColor": "black",
-                "colorIdentity": ["U"],
-                "colors": ["U"],
-                "convertedManaCost": 7.0,
-                "edhrecRank": 1120,
-                "finishes": ["nonfoil", "foil"],
-                "foreignData": [
-                    {
-                        "language": "German",
-                        "multiverseId": 551802,
-                        "name": "Jin-Gitaxias, Fortschrittstyrann",
-                        "text": "Immer wenn du einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkst, kopiere jenen Zauberspruch. Du kannst neue Ziele für die Kopie bestimmen. Diese Fähigkeit wird nur einmal pro Zug ausgelöst. (Eine Kopie eines Bleibende-Karte-Zauberspruchs wird zu einem Spielstein.)\nImmer wenn ein Gegner einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkt, neutralisiere jenen Zauberspruch. Diese Fähigkeit wird nur einmal pro Zug ausgelöst.",
-                        "type": "Legendäre Kreatur — Phyrexianer, Prätor"
-                    },
-                    {
-                        "language": "French",
-                        "multiverseId": 551884,
-                        "name": "Jin-Gitaxias, tyran du progrès",
-                        "text": "À chaque fois que vous lancez un sort d'artefact, d'éphémère ou de rituel, copiez ce sort. Vous pouvez choisir de nouvelles cibles pour cette copie. Cette capacité ne se déclenche qu'une seule fois par tour. (Une copie d'un sort de permanent devient un jeton.)\nÀ chaque fois qu'un adversaire lance un sort d'artefact, d'éphémère ou de rituel, contrecarrez ce sort. Cette capacité ne se déclenche qu'une seule fois par tour.",
-                        "type": "Créature légendaire : phyrexian et praetor"
-                    },
-                    {
-                        "language": "Japanese",
-                        "multiverseId": 551966,
-                        "name": "発展の暴君、ジン＝ギタクシアス",
-                        "text": "あなたがアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文をコピーする。あなたはそのコピーの新しい対象を選んでもよい。この能力は、毎ターン１回しか誘発しない。（パーマネント・呪文のコピーはトークンになる。）\n対戦相手がアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文を打ち消す。この能力は、毎ターン１回しか誘発しない。",
-                        "type": "伝説のクリーチャー — ファイレクシアン・法務官"
-                    },
-                    {
-                        "language": "Chinese Simplified",
-                        "multiverseId": 552048,
-                        "name": "进展暴君金吉塔厦",
-                        "text": "每当你施放神器，瞬间或法术咒语时，复制该咒语。你可以为该复制品选择新的目标。此异能每回合只会触发一次。（永久物咒语的复制品会成为衍生物。）\n每当任一对手施放神器，瞬间或法术咒语时，反击该咒语。此异能每回合只会触发一次。",
-                        "type": "传奇生物 ～非瑞人／魔判官"
-                    }
-                ],
-                "frameEffects": ["legendary", "extendedart"],
-                "frameVersion": "2015",
-                "hasFoil": true,
-                "hasNonFoil": true,
-                "identifiers": {
-                    "cardKingdomFoilId": "257072",
-                    "cardKingdomId": "256220",
-                    "cardsphereId": "85373",
-                    "mcmId": "607177",
-                    "mcmMetaId": "401707",
-                    "mtgjsonV4Id": "66e32fe9-a0d6-5a8f-b138-b1708a791d22",
-                    "multiverseId": "551720",
-                    "scryfallId": "729a8bdc-3246-482b-a0b7-1d071247d218",
-                    "scryfallIllustrationId": "0c19fbfd-ffbd-42c4-94c3-e09c847b9938",
-                    "scryfallOracleId": "f5daadc1-98ff-480a-82bb-fe7bfaa7b60e",
-                    "tcgplayerProductId": "262379"
-                },
-                "isStarter": true,
-                "language": "English",
-                "layout": "normal",
-                "leadershipSkills": {
-                    "brawl": true,
-                    "commander": true,
-                    "oathbreaker": false
-                },
-                "legalities": {
-                    "alchemy": "Legal",
-                    "brawl": "Legal",
-                    "commander": "Legal",
-                    "duel": "Legal",
-                    "explorer": "Legal",
-                    "future": "Legal",
-                    "gladiator": "Legal",
-                    "historic": "Legal",
-                    "historicbrawl": "Legal",
-                    "legacy": "Legal",
-                    "modern": "Legal",
-                    "pioneer": "Legal",
-                    "standard": "Legal",
-                    "vintage": "Legal"
-                },
-                "manaCost": "{5}{U}{U}",
-                "manaValue": 7.0,
-                "name": "Jin-Gitaxias, Progress Tyrant",
-                "number": "445",
-                "originalText": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
-                "originalType": "Legendary Creature — Phyrexian Praetor",
-                "power": "5",
-                "printings": ["NEO", "PNEO", "PRM"],
-                "promoTypes": ["boosterfun"],
-                "purchaseUrls": {
-                    "cardKingdom": "https://mtgjson.com/links/a51d9e8ccef75110",
-                    "cardKingdomFoil": "https://mtgjson.com/links/f520462931570abf",
-                    "cardmarket": "https://mtgjson.com/links/a7f5a2a581ac6f7c",
-                    "tcgplayer": "https://mtgjson.com/links/93e89eeb49ff3b0a"
-                },
-                "rarity": "mythic",
-                "rulings": [
-                    {
-                        "date": "2022-02-18",
-                        "text": "If the spell that's copied is modal (that is, it says “Choose one —” or the like), the copy created by Jin-Gitaxias's first ability will have the same mode or modes. You can't choose different ones."
-                    },
-                    {
-                        "date": "2022-02-18",
-                        "text": "If the spell that's copied had damage divided to targets as it was cast, the division can't be changed, although the targets receiving that damage still can. The same is true of spells that distribute counters to targets as it was cast."
-                    },
-                    {
-                        "date": "2022-02-18",
-                        "text": "You can't choose to pay any additional costs for the copy created by Jin-Gitaxias's first ability. However, effects based on any additional costs that were paid for the original spell are copied as though those same costs were paid for the copy too."
-                    },
-                    {
-                        "date": "2022-02-18",
-                        "text": "The copies that Jin-Gitaxias's first ability creates are created on the stack, so they're not “cast.” Abilities that trigger when a player casts a spell won't trigger."
-                    },
-                    {
-                        "date": "2022-02-18",
-                        "text": "A copy is created even if the spell that caused the ability to trigger has been countered by the time that ability resolves. The copy resolves before the original spell."
-                    },
-                    {
-                        "date": "2022-02-18",
-                        "text": "Jin-Gitaxias's last ability triggers once each turn, not once each turn per opponent."
-                    }
-                ],
-                "securityStamp": "oval",
-                "setCode": "NEO",
-                "subtypes": ["Phyrexian", "Praetor"],
-                "supertypes": ["Legendary"],
-                "text": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
-                "toughness": "5",
-                "type": "Legendary Creature — Phyrexian Praetor",
-                "types": ["Creature"],
-                "uuid": "291c02f3-dc12-5ba1-89bc-53a44f9f5c83",
-                "variations": [
-                    "a301bd29-045c-5fd9-afe4-c7e312f8aa36",
-                    "be84b7d9-3a07-5680-90b6-c36c262a093c",
-                    "4dc289a9-6c82-5420-9152-59992c696d71",
-                    "89142f06-23ee-54d7-b0ed-505e335be5f8",
-                    "46a97d70-e73b-5117-80e7-3c1ca286ca51"
-                ]
-            },
-            {
                 "artist": "Ai Nanahira",
                 "availability": ["arena", "mtgo", "paper"],
                 "borderColor": "black",
@@ -653,32 +514,29 @@
                 "colors": ["U"],
                 "convertedManaCost": 7.0,
                 "edhrecRank": 1120,
-                "finishes": ["nonfoil", "foil"],
+                "finishes": ["etched"],
                 "foreignData": [
                     {
                         "language": "Phyrexian",
-                        "multiverseId": 552963,
                         "name": "|aEDn,Gyts BytPt,krwFTrh.",
                         "text": "|besYf,CsYneDh,&EhcMYmL hegpcMYmL,bYBYK co tcYstne%m. |Tu,GFAtcYstne%m gopreptJyst,GgZeBY$. |hu GFAzFvZ,suronzDEEDF,dJFVGt.\n|besYf,FsnUCA,CsYneDh &EhcMYmL,hegpcMYmL,bYBYKv co,gYCOn. |su,GFAzFvZ suronzDEEDF,dJFVGt.",
                         "type": "|MewkfuDs fyrs,psewtr."
                     }
                 ],
-                "frameEffects": ["showcase", "legendary"],
+                "frameEffects": ["etched", "showcase", "legendary"],
                 "frameVersion": "2015",
-                "hasFoil": true,
-                "hasNonFoil": true,
+                "hasFoil": false,
+                "hasNonFoil": false,
                 "identifiers": {
-                    "cardKingdomFoilId": "257044",
-                    "cardKingdomId": "256187",
-                    "mcmId": "606996",
+                    "cardKingdomEtchedId": "257215",
+                    "cardsphereId": "86159",
+                    "mcmId": "609013",
                     "mcmMetaId": "401707",
-                    "mtgArenaId": "81164",
-                    "mtgjsonV4Id": "f46e5599-9aca-5a93-8d52-466d8a856db6",
-                    "multiverseId": "552963",
-                    "scryfallId": "8855ca31-842e-4962-a5f0-163a3f833784",
+                    "mtgjsonV4Id": "74c67a7e-b1a5-5d36-988e-78be80f52979",
+                    "scryfallId": "ffa7cbf8-64b2-428e-8991-d8454d724f9f",
                     "scryfallIllustrationId": "0c19fbfd-ffbd-42c4-94c3-e09c847b9938",
                     "scryfallOracleId": "f5daadc1-98ff-480a-82bb-fe7bfaa7b60e",
-                    "tcgplayerProductId": "262042"
+                    "tcgplayerEtchedProductId": "263238"
                 },
                 "isStarter": true,
                 "language": "Phyrexian",
@@ -707,17 +565,14 @@
                 "manaCost": "{5}{U}{U}",
                 "manaValue": 7.0,
                 "name": "Jin-Gitaxias, Progress Tyrant",
-                "number": "307",
-                "originalText": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
-                "originalType": "Legendary Creature — Phyrexian Praetor",
+                "number": "427",
                 "power": "5",
                 "printings": ["NEO", "PNEO", "PRM"],
                 "promoTypes": ["boosterfun"],
                 "purchaseUrls": {
-                    "cardKingdom": "https://mtgjson.com/links/4c922b49a6802048",
-                    "cardKingdomFoil": "https://mtgjson.com/links/3c4078406465089d",
-                    "cardmarket": "https://mtgjson.com/links/e2a4c23aad5636cf",
-                    "tcgplayer": "https://mtgjson.com/links/ee992d2d03033f1d"
+                    "cardKingdomEtched": "https://mtgjson.com/links/8549a860540d9e56",
+                    "cardmarket": "https://mtgjson.com/links/b7ac3c7a91d2edb0",
+                    "tcgplayerEtched": "https://mtgjson.com/links/3138edc818ad6dc5"
                 },
                 "rarity": "mythic",
                 "rulings": [
@@ -754,107 +609,17 @@
                 "toughness": "5",
                 "type": "Legendary Creature — Phyrexian Praetor",
                 "types": ["Creature"],
-                "uuid": "be84b7d9-3a07-5680-90b6-c36c262a093c",
+                "uuid": "89142f06-23ee-54d7-b0ed-505e335be5f8",
                 "variations": [
                     "a301bd29-045c-5fd9-afe4-c7e312f8aa36",
+                    "be84b7d9-3a07-5680-90b6-c36c262a093c",
                     "4dc289a9-6c82-5420-9152-59992c696d71",
-                    "89142f06-23ee-54d7-b0ed-505e335be5f8",
                     "291c02f3-dc12-5ba1-89bc-53a44f9f5c83",
                     "46a97d70-e73b-5117-80e7-3c1ca286ca51"
                 ],
                 "watermark": "phyrexian"
             },
-            {
-                "artist": "Chris Rahn",
-                "availability": ["arena", "mtgo", "paper"],
-                "borderColor": "black",
-                "colorIdentity": ["G", "U"],
-                "colors": ["G", "U"],
-                "convertedManaCost": 5.0,
-                "edhrecRank": 4644,
-                "finishes": ["nonfoil", "foil"],
-                "foreignData": [
-                    {
-                        "language": "Phyrexian",
-                        "multiverseId": 552964,
-                        "name": "|temDwooD pcEnusL,iOlz.",
-                        "text": "|pcEnusL\n+Ⅰ: |co,fuDs,CsYneDh suFshorskrDEEDF,JysYt,cosF zypm Fc,ne%mCsYPc,GFADeLtEvv GnekRFszypmCpunyApsu,MEFszypum.\n-Ⅹ: |co,fcrSenweLFrZⅪDeLtEvv dcZYCsEvvZFst,JysYt,cosF,AsFtD. |co,ieDEpZtcYstne%m,ne%Om.\n-Ⅶ: |co,temDwooDrYhstuht,ne%Om. |su,MewkFsLopgEhtCsYneDhieDEpuZ. |su,tepuC/ ~MYYmYL,bYhKrSenw,Lur{2}mUzyk ~{T}/co,GvEng,mpreLYv.",
-                        "type": "|MewknmQYpmunt temDwooD."
-                    }
-                ],
-                "frameEffects": ["showcase"],
-                "frameVersion": "2015",
-                "hasFoil": true,
-                "hasNonFoil": true,
-                "identifiers": {
-                    "cardKingdomFoilId": "257038",
-                    "cardKingdomId": "256181",
-                    "mcmId": "606998",
-                    "mcmMetaId": "401708",
-                    "mtgArenaId": "81165",
-                    "mtgjsonV4Id": "73e86b59-ea95-5d52-b2eb-f3727933d502",
-                    "multiverseId": "552964",
-                    "scryfallId": "ce16028f-25d0-4817-b20e-8b390b80ef35",
-                    "scryfallIllustrationId": "bd920712-0fcf-471b-b8a8-a3ea47f4ac13",
-                    "scryfallOracleId": "021b4745-4a15-462c-a6b0-2dee1dc9d196",
-                    "tcgplayerProductId": "262884"
-                },
-                "isStarter": true,
-                "keywords": ["Compleated"],
-                "language": "Phyrexian",
-                "layout": "normal",
-                "leadershipSkills": {
-                    "brawl": true,
-                    "commander": false,
-                    "oathbreaker": true
-                },
-                "legalities": {
-                    "alchemy": "Legal",
-                    "brawl": "Legal",
-                    "commander": "Legal",
-                    "duel": "Legal",
-                    "explorer": "Legal",
-                    "future": "Legal",
-                    "gladiator": "Legal",
-                    "historic": "Legal",
-                    "historicbrawl": "Legal",
-                    "legacy": "Legal",
-                    "modern": "Legal",
-                    "pioneer": "Legal",
-                    "standard": "Legal",
-                    "vintage": "Legal"
-                },
-                "loyalty": "5",
-                "manaCost": "{2}{G}{G/U/P}{U}",
-                "manaValue": 5.0,
-                "name": "Tamiyo, Compleated Sage",
-                "number": "308",
-                "originalText": "Compleated ({Variable} can be paid with {G}, {U}, or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n+1: Tap up to one target artifact or creature. It doesn't untap during its controller's next untap step.\n−X: Exile target nonland permanent card with mana value X from your graveyard. Create a token that's a copy of that card.\n−7: Create Tamiyo's Notebook, a legendary colorless artifact token with \"Spells you cast cost {2} less to cast\" and \"{T}: Draw a card.\"",
-                "originalType": "Legendary Planeswalker — Tamiyo",
-                "printings": ["NEO", "PNEO", "PRM"],
-                "promoTypes": ["boosterfun"],
-                "purchaseUrls": {
-                    "cardKingdom": "https://mtgjson.com/links/2ca80ff42b49c9b3",
-                    "cardKingdomFoil": "https://mtgjson.com/links/be9e38a322e3a8c9",
-                    "cardmarket": "https://mtgjson.com/links/2a491f6bfd4385a4",
-                    "tcgplayer": "https://mtgjson.com/links/dbb0c3e8ad3e9d00"
-                },
-                "rarity": "mythic",
-                "rulings": [],
-                "securityStamp": "oval",
-                "setCode": "NEO",
-                "subtypes": ["Tamiyo"],
-                "supertypes": ["Legendary"],
-                "text": "Compleated ({G/U/P} can be paid with {G}, {U}, or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n[+1]: Tap up to one target artifact or creature. It doesn't untap during its controller's next untap step.\n[−X]: Exile target nonland permanent card with mana value X from your graveyard. Create a token that's a copy of that card.\n[−7]: Create Tamiyo's Notebook, a legendary colorless artifact token with \"Spells you cast cost {2} less to cast\" and \"{T}: Draw a card.\"",
-                "type": "Legendary Planeswalker — Tamiyo",
-                "types": ["Planeswalker"],
-                "uuid": "8f71630d-0a76-5925-9ea2-916d3178cba6",
-                "variations": [
-                    "59c7f473-c87a-5758-90e9-425b454075c1",
-                    "e8e365fb-f5f3-5cc6-9b5e-8fae6cc95fe8",
-                    "6c89aef7-b810-5773-85a2-bec1c98783bb"
-                ]
-            },
+
             {
                 "artist": "Amayagido",
                 "availability": ["arena", "mtgo", "paper"],
