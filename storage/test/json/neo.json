@@ -1,0 +1,1319 @@
+{
+    "meta": { "date": "2022-12-14", "version": "5.2.0+20221214" },
+    "data": {
+        "baseSetSize": 302,
+        "booster": {},
+        "cards": [
+            {
+                "artist": "Chase Stone",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": ["U"],
+                "convertedManaCost": 7.0,
+                "edhrecRank": 1120,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 548661,
+                        "name": "Jin-Gitaxias, Fortschrittstyrann",
+                        "text": "Immer wenn du einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkst, kopiere jenen Zauberspruch. Du kannst neue Ziele für die Kopie bestimmen. Diese Fähigkeit wird nur einmal pro Zug ausgelöst.(Eine Kopie eines Bleibende-Karte-Zauberspruchs wird zu einem Spielstein.)\nImmer wenn ein Gegner einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkt, neutralisiere jenen Zauberspruch. Diese Fähigkeit wird nur einmal pro Zug ausgelöst.",
+                        "type": "Legendäre Kreatur — Phyrexianer, Prätor"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 548966,
+                        "name": "Jin-Gitaxias, tirano del progreso",
+                        "text": "Siempre que lances un hechizo de artefacto, instantáneo o conjuro, cópialo. Puedes elegir nuevos objetivos para la copia. Esta habilidad solo se dispara una vez por turno.(Una copia de un hechizo de permanente se convierte en una ficha.)\nSiempre que un oponente lance un hechizo de artefacto, instantáneo o conjuro, contrarréstalo. Esta habilidad solo se dispara una vez por turno.",
+                        "type": "Criatura legendaria — Magistrado pirexiano"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 549271,
+                        "name": "Jin-Gitaxias, tyran du progrès",
+                        "text": "À chaque fois que vous lancez un sort d'artefact, d'éphémère ou de rituel, copiez ce sort. Vous pouvez choisir de nouvelles cibles pour cette copie. Cette capacité ne se déclenche qu'une seule fois par tour.(Une copie d'un sort de permanent devient un jeton.)\nÀ chaque fois qu'un adversaire lance un sort d'artefact, d'éphémère ou de rituel, contrecarrez ce sort. Cette capacité ne se déclenche qu'une seule fois par tour.",
+                        "type": "Créature légendaire : phyrexian et praetor"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 549576,
+                        "name": "Jin-Gitaxias, Tiranno del Progresso",
+                        "text": "Ogniqualvolta lanci una magia artefatto, istantaneo o stregoneria, copia quella magia. Puoi scegliere nuovi bersagli per la copia. Questa abilità si innesca solo una volta per turno.(Una copia di una magia permanente diventa una pedina.)\nOgniqualvolta un avversario lancia una magia artefatto, istantaneo o stregoneria, neutralizza quella magia. Questa abilità si innesca solo una volta per turno.",
+                        "type": "Creatura Leggendaria — Pretore Phyrexiano"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 549881,
+                        "name": "発展の暴君、ジン＝ギタクシアス",
+                        "text": "あなたがアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文をコピーする。あなたはそのコピーの新しい対象を選んでもよい。この能力は、毎ターン１回しか誘発しない。（パーマネント・呪文のコピーはトークンになる。）\n対戦相手がアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文を打ち消す。この能力は、毎ターン１回しか誘発しない。",
+                        "type": "伝説のクリーチャー — ファイレクシアン・法務官"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 550186,
+                        "name": "진보의 폭군, 진-기탁시아스",
+                        "text": "당신이 마법물체, 순간마법 또는 집중마법 주문을 발동할 때마다, 그 주문을 복사한다. 당신은 그 복사본의 목표를 새로 정할 수 있다. 이 능력은 한 턴에 한 번만 격발한다.(지속물 주문의 복사본은 토큰이 된다.)\n상대가 마법물체, 순간마법 또는 집중마법 주문을 발동할 때마다, 그 주문을 무효화한다. 이 능력은 한 턴에 한 번만 격발한다.",
+                        "type": "전설적 생물 — 피렉시아 총독"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 550491,
+                        "name": "Jin-Gitaxias, Tirano do Progresso",
+                        "text": "Toda vez que você conjurar uma mágica instantânea, um artefato ou um feitiço, copie aquela mágica. Você pode escolher novos alvos para a cópia. Esta habilidade é desencadeada apenas uma vez a cada turno.(Uma cópia de uma mágica de permanente torna-se uma ficha.)\nToda vez que um oponente conjurar uma mágica instantânea, um artefato ou um feitiço, anule aquela mágica. Esta habilidade é desencadeada apenas uma vez a cada turno.",
+                        "type": "Criatura Lendária — Pretor Phyrexiano"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 550796,
+                        "name": "Джин-Джитаксиас, Тиран Прогресса",
+                        "text": "Каждый раз, когда вы разыгрываете заклинание артефакта, волшебства или мгновенное заклинание, скопируйте то заклинание. Вы можете выбрать новые цели для той копии. Эта способность срабатывает только один раз в каждом ходу.(Копия заклинания перманента становится фишкой.)\nКаждый раз, когда оппонент разыгрывает заклинание артефакта, волшебства или мгновенное заклинание, отмените то заклинание. Эта способность срабатывает только один раз в каждом ходу.",
+                        "type": "Легендарное Существо — Фирексиец Претор"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 551101,
+                        "name": "进展暴君金吉塔厦",
+                        "text": "每当你施放神器，瞬间或法术咒语时，复制该咒语。你可以为该复制品选择新的目标。此异能每回合只会触发一次。（永久物咒语的复制品会成为衍生物。）\n每当任一对手施放神器，瞬间或法术咒语时，反击该咒语。此异能每回合只会触发一次。",
+                        "type": "传奇生物 ～非瑞人／魔判官"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 551406,
+                        "name": "進展暴君金吉塔廈",
+                        "text": "每當你施放神器，瞬間或巫術咒語時，複製該咒語。你可以為該複製品選擇新的目標。此異能每回合只會觸發一次。（永久物咒語的複製品會成為衍生物。）\n每當任一對手施放神器，瞬間或巫術咒語時，反擊該咒語。此異能每回合只會觸發一次。",
+                        "type": "傳奇生物 ～非瑞人／魔判官"
+                    }
+                ],
+                "frameEffects": ["legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "256730",
+                    "cardKingdomId": "256151",
+                    "cardsphereId": "84630",
+                    "mcmId": "607031",
+                    "mcmMetaId": "401707",
+                    "mtgArenaId": "79483",
+                    "mtgjsonV4Id": "5887a3e2-5d9c-559d-96af-a175b18b6a82",
+                    "mtgoId": "97036",
+                    "multiverseId": "548356",
+                    "scryfallId": "c57b4876-5387-4f73-b8e2-8e7bdca8b0bc",
+                    "scryfallIllustrationId": "0c19fbfd-ffbd-42c4-94c3-e09c847b9938",
+                    "scryfallOracleId": "f5daadc1-98ff-480a-82bb-fe7bfaa7b60e",
+                    "tcgplayerProductId": "262041"
+                },
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{5}{U}{U}",
+                "manaValue": 7.0,
+                "name": "Jin-Gitaxias, Progress Tyrant",
+                "number": "59",
+                "originalText": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "originalType": "Legendary Creature — Phyrexian Praetor",
+                "power": "5",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/72bbeededfdc6e4f",
+                    "cardKingdomFoil": "https://mtgjson.com/links/ae722f904237fb02",
+                    "cardmarket": "https://mtgjson.com/links/b5c7433e49b83c80",
+                    "tcgplayer": "https://mtgjson.com/links/7bc178264d1b6751"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied is modal (that is, it says “Choose one —” or the like), the copy created by Jin-Gitaxias's first ability will have the same mode or modes. You can't choose different ones."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied had damage divided to targets as it was cast, the division can't be changed, although the targets receiving that damage still can. The same is true of spells that distribute counters to targets as it was cast."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "You can't choose to pay any additional costs for the copy created by Jin-Gitaxias's first ability. However, effects based on any additional costs that were paid for the original spell are copied as though those same costs were paid for the copy too."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The copies that Jin-Gitaxias's first ability creates are created on the stack, so they're not “cast.” Abilities that trigger when a player casts a spell won't trigger."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "A copy is created even if the spell that caused the ability to trigger has been countered by the time that ability resolves. The copy resolves before the original spell."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Jin-Gitaxias's last ability triggers once each turn, not once each turn per opponent."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Phyrexian", "Praetor"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "toughness": "5",
+                "type": "Legendary Creature — Phyrexian Praetor",
+                "types": ["Creature"],
+                "uuid": "a301bd29-045c-5fd9-afe4-c7e312f8aa36",
+                "variations": [
+                    "be84b7d9-3a07-5680-90b6-c36c262a093c",
+                    "4dc289a9-6c82-5420-9152-59992c696d71",
+                    "89142f06-23ee-54d7-b0ed-505e335be5f8",
+                    "291c02f3-dc12-5ba1-89bc-53a44f9f5c83",
+                    "46a97d70-e73b-5117-80e7-3c1ca286ca51"
+                ]
+            },
+            {
+                "artist": "Ai Nanahira",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": ["U"],
+                "convertedManaCost": 7.0,
+                "edhrecRank": 1120,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 552288,
+                        "name": "Jin-Gitaxias, Fortschrittstyrann",
+                        "text": "Immer wenn du einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkst, kopiere jenen Zauberspruch. Du kannst neue Ziele für die Kopie bestimmen. Diese Fähigkeit wird nur einmal pro Zug ausgelöst.\nImmer wenn ein Gegner einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkt, neutralisiere jenen Zauberspruch. Diese Fähigkeit wird nur einmal pro Zug ausgelöst.",
+                        "type": "Legendäre Kreatur — Phyrexianer, Prätor"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 552331,
+                        "name": "Jin-Gitaxias, tirano del progreso",
+                        "text": "Siempre que lances un hechizo de artefacto, instantáneo o conjuro, cópialo. Puedes elegir nuevos objetivos para la copia. Esta habilidad solo se dispara una vez por turno.\nSiempre que un oponente lance un hechizo de artefacto, instantáneo o conjuro, contrarréstalo. Esta habilidad solo se dispara una vez por turno.",
+                        "type": "Criatura legendaria — Magistrado pirexiano"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 552374,
+                        "name": "Jin-Gitaxias, tyran du progrès",
+                        "text": "À chaque fois que vous lancez un sort d'artefact, d'éphémère ou de rituel, copiez ce sort. Vous pouvez choisir de nouvelles cibles pour cette copie. Cette capacité ne se déclenche qu'une seule fois par tour.\nÀ chaque fois qu'un adversaire lance un sort d'artefact, d'éphémère ou de rituel, contrecarrez ce sort. Cette capacité ne se déclenche qu'une seule fois par tour.",
+                        "type": "Créature légendaire : phyrexian et praetor"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 552417,
+                        "name": "Jin-Gitaxias, Tiranno del Progresso",
+                        "text": "Ogniqualvolta lanci una magia artefatto, istantaneo o stregoneria, copia quella magia. Puoi scegliere nuovi bersagli per la copia. Questa abilità si innesca solo una volta per turno.\nOgniqualvolta un avversario lancia una magia artefatto, istantaneo o stregoneria, neutralizza quella magia. Questa abilità si innesca solo una volta per turno.",
+                        "type": "Creatura Leggendaria — Pretore Phyrexiano"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 552460,
+                        "name": "発展の暴君、ジン＝ギタクシアス",
+                        "text": "あなたがアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文をコピーする。あなたはそのコピーの新しい対象を選んでもよい。この能力は、毎ターン１回しか誘発しない。\n対戦相手がアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文を打ち消す。この能力は、毎ターン１回しか誘発しない。",
+                        "type": "伝説のクリーチャー — ファイレクシアン・法務官"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 552503,
+                        "name": "진보의 폭군, 진-기탁시아스",
+                        "text": "당신이 마법물체, 순간마법 또는 집중마법 주문을 발동할 때마다, 그 주문을 복사한다. 당신은 그 복사본의 목표를 새로 정할 수 있다. 이 능력은 한 턴에 한 번만 격발한다.\n상대가 마법물체, 순간마법 또는 집중마법 주문을 발동할 때마다, 그 주문을 무효화한다. 이 능력은 한 턴에 한 번만 격발한다.",
+                        "type": "전설적 생물 — 피렉시아 총독"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 552546,
+                        "name": "Jin-Gitaxias, Tirano do Progresso",
+                        "text": "Toda vez que você conjurar uma mágica instantânea, um artefato ou um feitiço, copie aquela mágica. Você pode escolher novos alvos para a cópia. Esta habilidade é desencadeada apenas uma vez a cada turno.\nToda vez que um oponente conjurar uma mágica instantânea, um artefato ou um feitiço, anule aquela mágica. Esta habilidade é desencadeada apenas uma vez a cada turno.",
+                        "type": "Criatura Lendária — Pretor Phyrexiano"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 552589,
+                        "name": "Джин-Джитаксиас, Тиран Прогресса",
+                        "text": "Каждый раз, когда вы разыгрываете заклинание артефакта, волшебства или мгновенное заклинание, скопируйте то заклинание. Вы можете выбрать новые цели для той копии. Эта способность срабатывает только один раз в каждом ходу.\nКаждый раз, когда оппонент разыгрывает заклинание артефакта, волшебства или мгновенное заклинание, отмените то заклинание. Эта способность срабатывает только один раз в каждом ходу.",
+                        "type": "Легендарное Существо — Фирексиец Претор"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 552632,
+                        "name": "进展暴君金吉塔厦",
+                        "text": "每当你施放神器，瞬间或法术咒语时，复制该咒语。你可以为该复制品选择新的目标。此异能每回合只会触发一次。\n每当任一对手施放神器，瞬间或法术咒语时，反击该咒语。此异能每回合只会触发一次。",
+                        "type": "传奇生物 ～非瑞人／魔判官"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 552675,
+                        "name": "進展暴君金吉塔廈",
+                        "text": "每當你施放神器，瞬間或巫術咒語時，複製該咒語。你可以為該複製品選擇新的目標。此異能每回合只會觸發一次。\n每當任一對手施放神器，瞬間或巫術咒語時，反擊該咒語。此異能每回合只會觸發一次。",
+                        "type": "傳奇生物 ～非瑞人／魔判官"
+                    }
+                ],
+                "frameEffects": ["showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "257048",
+                    "cardKingdomId": "256191",
+                    "mcmId": "607042",
+                    "mcmMetaId": "401707",
+                    "mtgArenaId": "79784",
+                    "mtgjsonV4Id": "31956245-768f-5287-ae20-e3a3c9427fbb",
+                    "multiverseId": "552245",
+                    "scryfallId": "01985566-275b-4bf0-8667-c81eb95ad70c",
+                    "scryfallIllustrationId": "2f1bb917-bf58-4b45-ad87-c97b7ef3d0b6",
+                    "scryfallOracleId": "f5daadc1-98ff-480a-82bb-fe7bfaa7b60e",
+                    "tcgplayerProductId": "262047"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{5}{U}{U}",
+                "manaValue": 7.0,
+                "name": "Jin-Gitaxias, Progress Tyrant",
+                "number": "371",
+                "originalText": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn.\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "originalType": "Legendary Creature — Phyrexian Praetor",
+                "power": "5",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/87c977c8df2c146b",
+                    "cardKingdomFoil": "https://mtgjson.com/links/ccce7366cd7e1f76",
+                    "cardmarket": "https://mtgjson.com/links/5d5664eef746d841",
+                    "tcgplayer": "https://mtgjson.com/links/dd1508e8778eda8d"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied is modal (that is, it says “Choose one —” or the like), the copy created by Jin-Gitaxias's first ability will have the same mode or modes. You can't choose different ones."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied had damage divided to targets as it was cast, the division can't be changed, although the targets receiving that damage still can. The same is true of spells that distribute counters to targets as it was cast."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "You can't choose to pay any additional costs for the copy created by Jin-Gitaxias's first ability. However, effects based on any additional costs that were paid for the original spell are copied as though those same costs were paid for the copy too."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The copies that Jin-Gitaxias's first ability creates are created on the stack, so they're not “cast.” Abilities that trigger when a player casts a spell won't trigger."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "A copy is created even if the spell that caused the ability to trigger has been countered by the time that ability resolves. The copy resolves before the original spell."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Jin-Gitaxias's last ability triggers once each turn, not once each turn per opponent."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Phyrexian", "Praetor"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "toughness": "5",
+                "type": "Legendary Creature — Phyrexian Praetor",
+                "types": ["Creature"],
+                "uuid": "4dc289a9-6c82-5420-9152-59992c696d71",
+                "variations": [
+                    "a301bd29-045c-5fd9-afe4-c7e312f8aa36",
+                    "be84b7d9-3a07-5680-90b6-c36c262a093c",
+                    "89142f06-23ee-54d7-b0ed-505e335be5f8",
+                    "291c02f3-dc12-5ba1-89bc-53a44f9f5c83",
+                    "46a97d70-e73b-5117-80e7-3c1ca286ca51"
+                ]
+            },
+            {
+                "artist": "Chase Stone",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": ["U"],
+                "convertedManaCost": 7.0,
+                "edhrecRank": 1120,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 551802,
+                        "name": "Jin-Gitaxias, Fortschrittstyrann",
+                        "text": "Immer wenn du einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkst, kopiere jenen Zauberspruch. Du kannst neue Ziele für die Kopie bestimmen. Diese Fähigkeit wird nur einmal pro Zug ausgelöst. (Eine Kopie eines Bleibende-Karte-Zauberspruchs wird zu einem Spielstein.)\nImmer wenn ein Gegner einen Artefaktzauber, einen Spontanzauber oder eine Hexerei wirkt, neutralisiere jenen Zauberspruch. Diese Fähigkeit wird nur einmal pro Zug ausgelöst.",
+                        "type": "Legendäre Kreatur — Phyrexianer, Prätor"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 551884,
+                        "name": "Jin-Gitaxias, tyran du progrès",
+                        "text": "À chaque fois que vous lancez un sort d'artefact, d'éphémère ou de rituel, copiez ce sort. Vous pouvez choisir de nouvelles cibles pour cette copie. Cette capacité ne se déclenche qu'une seule fois par tour. (Une copie d'un sort de permanent devient un jeton.)\nÀ chaque fois qu'un adversaire lance un sort d'artefact, d'éphémère ou de rituel, contrecarrez ce sort. Cette capacité ne se déclenche qu'une seule fois par tour.",
+                        "type": "Créature légendaire : phyrexian et praetor"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 551966,
+                        "name": "発展の暴君、ジン＝ギタクシアス",
+                        "text": "あなたがアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文をコピーする。あなたはそのコピーの新しい対象を選んでもよい。この能力は、毎ターン１回しか誘発しない。（パーマネント・呪文のコピーはトークンになる。）\n対戦相手がアーティファクトやインスタントやソーサリーである呪文を唱えるたび、その呪文を打ち消す。この能力は、毎ターン１回しか誘発しない。",
+                        "type": "伝説のクリーチャー — ファイレクシアン・法務官"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 552048,
+                        "name": "进展暴君金吉塔厦",
+                        "text": "每当你施放神器，瞬间或法术咒语时，复制该咒语。你可以为该复制品选择新的目标。此异能每回合只会触发一次。（永久物咒语的复制品会成为衍生物。）\n每当任一对手施放神器，瞬间或法术咒语时，反击该咒语。此异能每回合只会触发一次。",
+                        "type": "传奇生物 ～非瑞人／魔判官"
+                    }
+                ],
+                "frameEffects": ["legendary", "extendedart"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "257072",
+                    "cardKingdomId": "256220",
+                    "cardsphereId": "85373",
+                    "mcmId": "607177",
+                    "mcmMetaId": "401707",
+                    "mtgjsonV4Id": "66e32fe9-a0d6-5a8f-b138-b1708a791d22",
+                    "multiverseId": "551720",
+                    "scryfallId": "729a8bdc-3246-482b-a0b7-1d071247d218",
+                    "scryfallIllustrationId": "0c19fbfd-ffbd-42c4-94c3-e09c847b9938",
+                    "scryfallOracleId": "f5daadc1-98ff-480a-82bb-fe7bfaa7b60e",
+                    "tcgplayerProductId": "262379"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{5}{U}{U}",
+                "manaValue": 7.0,
+                "name": "Jin-Gitaxias, Progress Tyrant",
+                "number": "445",
+                "originalText": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "originalType": "Legendary Creature — Phyrexian Praetor",
+                "power": "5",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/a51d9e8ccef75110",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f520462931570abf",
+                    "cardmarket": "https://mtgjson.com/links/a7f5a2a581ac6f7c",
+                    "tcgplayer": "https://mtgjson.com/links/93e89eeb49ff3b0a"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied is modal (that is, it says “Choose one —” or the like), the copy created by Jin-Gitaxias's first ability will have the same mode or modes. You can't choose different ones."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied had damage divided to targets as it was cast, the division can't be changed, although the targets receiving that damage still can. The same is true of spells that distribute counters to targets as it was cast."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "You can't choose to pay any additional costs for the copy created by Jin-Gitaxias's first ability. However, effects based on any additional costs that were paid for the original spell are copied as though those same costs were paid for the copy too."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The copies that Jin-Gitaxias's first ability creates are created on the stack, so they're not “cast.” Abilities that trigger when a player casts a spell won't trigger."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "A copy is created even if the spell that caused the ability to trigger has been countered by the time that ability resolves. The copy resolves before the original spell."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Jin-Gitaxias's last ability triggers once each turn, not once each turn per opponent."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Phyrexian", "Praetor"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "toughness": "5",
+                "type": "Legendary Creature — Phyrexian Praetor",
+                "types": ["Creature"],
+                "uuid": "291c02f3-dc12-5ba1-89bc-53a44f9f5c83",
+                "variations": [
+                    "a301bd29-045c-5fd9-afe4-c7e312f8aa36",
+                    "be84b7d9-3a07-5680-90b6-c36c262a093c",
+                    "4dc289a9-6c82-5420-9152-59992c696d71",
+                    "89142f06-23ee-54d7-b0ed-505e335be5f8",
+                    "46a97d70-e73b-5117-80e7-3c1ca286ca51"
+                ]
+            },
+            {
+                "artist": "Chase Stone",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": ["U"],
+                "convertedManaCost": 7.0,
+                "edhrecRank": 1120,
+                "finishes": ["etched"],
+                "foreignData": [
+                    {
+                        "language": "Phyrexian",
+                        "name": "|aEDn,Gyts BytPt,krwFTrh.",
+                        "text": "|besYf,CsYneDh,&EhcMYmL hegpcMYmL,bYBYK co tcYstne%m. |Tu,GFAtcYstne%m gopreptJyst,GgZeBY$. |hu GFAzFvZ,suronzDEEDF,dJFVGt.\n|besYf,FsnUCA,CsYneDh &EhcMYmL,hegpcMYmL,bYBYKv co,gYCOn. |su,GFAzFvZ suronzDEEDF,dJFVGt.",
+                        "type": "|MewkfuDs fyrs,psewtr."
+                    }
+                ],
+                "frameEffects": ["etched", "showcase", "legendary"],
+                "frameVersion": "2015",
+                "hasFoil": false,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomEtchedId": "257215",
+                    "cardsphereId": "86159",
+                    "mcmId": "609013",
+                    "mcmMetaId": "401707",
+                    "mtgjsonV4Id": "74c67a7e-b1a5-5d36-988e-78be80f52979",
+                    "scryfallId": "ffa7cbf8-64b2-428e-8991-d8454d724f9f",
+                    "scryfallIllustrationId": "0c19fbfd-ffbd-42c4-94c3-e09c847b9938",
+                    "scryfallOracleId": "f5daadc1-98ff-480a-82bb-fe7bfaa7b60e",
+                    "tcgplayerEtchedProductId": "263238"
+                },
+                "isStarter": true,
+                "language": "Phyrexian",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{5}{U}{U}",
+                "manaValue": 7.0,
+                "name": "Jin-Gitaxias, Progress Tyrant",
+                "number": "427",
+                "power": "5",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomEtched": "https://mtgjson.com/links/8549a860540d9e56",
+                    "cardmarket": "https://mtgjson.com/links/b7ac3c7a91d2edb0",
+                    "tcgplayerEtched": "https://mtgjson.com/links/3138edc818ad6dc5"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied is modal (that is, it says “Choose one —” or the like), the copy created by Jin-Gitaxias's first ability will have the same mode or modes. You can't choose different ones."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the spell that's copied had damage divided to targets as it was cast, the division can't be changed, although the targets receiving that damage still can. The same is true of spells that distribute counters to targets as it was cast."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "You can't choose to pay any additional costs for the copy created by Jin-Gitaxias's first ability. However, effects based on any additional costs that were paid for the original spell are copied as though those same costs were paid for the copy too."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The copies that Jin-Gitaxias's first ability creates are created on the stack, so they're not “cast.” Abilities that trigger when a player casts a spell won't trigger."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "A copy is created even if the spell that caused the ability to trigger has been countered by the time that ability resolves. The copy resolves before the original spell."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Jin-Gitaxias's last ability triggers once each turn, not once each turn per opponent."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Phyrexian", "Praetor"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever you cast an artifact, instant, or sorcery spell, copy that spell. You may choose new targets for the copy. This ability triggers only once each turn. (A copy of a permanent spell becomes a token.)\nWhenever an opponent casts an artifact, instant, or sorcery spell, counter that spell. This ability triggers only once each turn.",
+                "toughness": "5",
+                "type": "Legendary Creature — Phyrexian Praetor",
+                "types": ["Creature"],
+                "uuid": "89142f06-23ee-54d7-b0ed-505e335be5f8",
+                "variations": [
+                    "a301bd29-045c-5fd9-afe4-c7e312f8aa36",
+                    "be84b7d9-3a07-5680-90b6-c36c262a093c",
+                    "4dc289a9-6c82-5420-9152-59992c696d71",
+                    "291c02f3-dc12-5ba1-89bc-53a44f9f5c83",
+                    "46a97d70-e73b-5117-80e7-3c1ca286ca51"
+                ],
+                "watermark": "phyrexian"
+            },
+            {
+                "artist": "Ishikawa Kenta",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "borderless",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 3331,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 552127,
+                        "name": "Ao der Morgenhimmel",
+                        "text": "Fliegend, Wachsamkeit\nWenn Ao der Morgenhimmel stirbt, bestimme eines —\n• Schaue dir die obersten sieben Karten deiner Bibliothek an. Bringe davon eine beliebige Anzahl an bleibenden Karten mit Gesamt-Manabetrag 4 oder weniger, die keine Länder sind, ins Spiel. Lege den Rest in zufälliger Reihenfolge unter deine Bibliothek.\n• Lege auf jede bleibende Karte, die du kontrollierst und die eine Kreatur oder ein Fahrzeug ist, zwei +1/+1-Marken.",
+                        "type": "Legendäre Kreatur — Drache, Geist"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 552138,
+                        "name": "Ao, el Cielo del Alba",
+                        "text": "Vuela, vigilancia.\nCuando Ao, el Cielo del Alba muera, elige uno:\n• Mira las siete primeras cartas de tu biblioteca. Pon en el campo de batalla cualquier cantidad de cartas de permanente que no sean tierra con valor de maná total de 4 o menos de entre ellas. Pon el resto en el fondo de tu biblioteca en un orden aleatorio.\n• Pon dos contadores +1/+1 sobre cada permanente que controlas que sea una criatura o Vehículo.",
+                        "type": "Criatura legendaria — Espíritu dragón"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 552149,
+                        "name": "Ao, le ciel de l'aube",
+                        "text": "Vol, vigilance\nQuand Ao, le ciel de l'aube meurt, choisissez l'un —\n• Regardez les sept cartes du dessus de votre bibliothèque. Parmi elles, mettez sur le champ de bataille n'importe quel nombre de cartes de permanent non-terrain avec une valeur de mana inférieure ou égale à 4. Mettez le reste au-dessous de votre bibliothèque dans un ordre aléatoire.\n• Mettez deux marqueurs +1/+1 sur chaque permanent que vous contrôlez qui est une créature ou un véhicule.",
+                        "type": "Créature légendaire : dragon et esprit"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 552160,
+                        "name": "Ao, il Cielo all'Alba",
+                        "text": "Volare, cautela\nQuando Ao, il Cielo all'Alba muore, scegli uno —\n• Guarda le prime sette carte del tuo grimorio. Metti sul campo di battaglia un qualsiasi numero di carte permanente non terra con valore di mana totale pari o inferiore a 4 scelte tra esse. Metti le altre in fondo al tuo grimorio in ordine casuale.\n• Metti due segnalini +1/+1 su ogni permanente che controlli che è una creatura o un Veicolo.",
+                        "type": "Creatura Leggendaria — Spirito Drago"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 552171,
+                        "name": "夜明けの空、猗旺",
+                        "text": "飛行、警戒\n夜明けの空、猗旺が死亡したとき、以下から１つを選ぶ。\n・あなたのライブラリーの一番上にあるカード７枚を見る。その中から、土地でない望む枚数のパーマネント・カードをマナ総量の合計が４以下になるように選んで戦場に出す。残りをあなたのライブラリーの一番下に無作為の順番で置く。\n・あなたがコントロールしていてクリーチャーや機体である各パーマネントの上にそれぞれ＋１/＋１カウンター２個を置く。",
+                        "type": "伝説のクリーチャー — ドラゴン・スピリット"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 552182,
+                        "name": "새벽 하늘, 아오",
+                        "text": "비행, 경계\n새벽 하늘, 아오가 죽을 때, 하나를 선택한다 —\n• 당신의 서고 맨 위 카드 일곱 장을 본다. 그 카드들 중에서 총 마나 값이 4 이하가 되도록 대지가 아닌 지속물 카드를 원하는 수만큼 전장에 놓는다. 나머지 카드들은 무작위 순서로 당신의 서고 맨 밑에 놓는다.\n• 당신이 조종하며 생물이거나 탑승물인 각 지속물에 +1/+1 카운터를 두 개씩 올려놓는다.",
+                        "type": "전설적 생물 — 용 신령"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 552193,
+                        "name": "Ao, o Céu da Aurora",
+                        "text": "Voar, vigilância\nQuando Ao, o Céu da Aurora, morrer, escolha um —\n• Olhe os sete cards do topo de seu grimório. Coloque qualquer número de cards de permanente não de terreno com valor de mana total igual ou inferior a 4 dentre eles no campo de batalha. Coloque o restante no fundo de seu grimório em ordem aleatória.\n• Coloque dois marcadores +1/+1 em cada permanente que você controla que seja uma criatura ou um Veículo.",
+                        "type": "Criatura Lendária — Dragão Espírito"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 552204,
+                        "name": "Ао, Рассветное Небо",
+                        "text": "Полет, Бдительность\nКогда Ао, Рассветное Небо умирает, выберите одно —\n• Посмотрите семь верхних карт вашей библиотеки. Положите на поле битвы любое количество находящихся среди них карт не являющихся землями перманентов с суммарной мановой ценностью не более 4. Положите остальные карты в низ вашей библиотеки в случайном порядке.\n• Положите по два жетона +1/+1 на каждый перманент под вашим контролем, который является существом или Машиной.",
+                        "type": "Легендарное Существо — Дракон Дух"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 552215,
+                        "name": "澄穹猗旺",
+                        "text": "飞行，警戒\n当澄穹猗旺死去时，选择一项～\n•检视你牌库顶的七张牌。将其中任意数量的非地永久物牌放进战场，且这些牌的法术力值总和须等于或小于4。将其余的牌以随机顺序置于你的牌库底。\n•在每个由你操控的生物或载具永久物上各放置两个+1/+1指示物。",
+                        "type": "传奇生物 ～龙／精怪"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 552226,
+                        "name": "澄穹猗旺",
+                        "text": "飛行，警戒\n當澄穹猗旺死去時，選擇一項～\n•檢視你牌庫頂的七張牌。將其中任意數量的非地永久物牌放進戰場，且這些牌的魔法力值總和須等於或小於4。將其餘的牌以隨機順序置於你的牌庫底。\n•在每個由你操控的生物或載具永久物上各放置兩個+1/+1指示物。",
+                        "type": "傳奇生物 ～龍／精靈"
+                    }
+                ],
+                "frameEffects": ["legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "257062",
+                    "cardKingdomId": "256205",
+                    "cardsphereId": "85141",
+                    "mcmId": "607045",
+                    "mcmMetaId": "401726",
+                    "mtgArenaId": "79765",
+                    "mtgjsonV4Id": "d4c72f31-99ad-5384-8f3b-8d2d072ea3ac",
+                    "multiverseId": "552116",
+                    "scryfallId": "5d7d1c2d-d3be-4647-a260-15ce85e69eea",
+                    "scryfallIllustrationId": "bba6c0aa-c1cf-4f27-9bdf-4b5aea06596c",
+                    "scryfallOracleId": "697ac261-263b-4879-bf45-6d10d23312ae",
+                    "tcgplayerProductId": "262034"
+                },
+                "isStarter": true,
+                "keywords": ["Flying", "Vigilance"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{3}{W}{W}",
+                "manaValue": 5.0,
+                "name": "Ao, the Dawn Sky",
+                "number": "406",
+                "originalText": "Flying, vigilance\nWhen Ao, the Dawn Sky dies, choose one —\n• Look at the top seven cards of your library. Put any number of nonland permanent cards with total mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.\n• Put two +1/+1 counters on each permanent you control that's a creature or Vehicle.",
+                "originalType": "Legendary Creature — Dragon Spirit",
+                "power": "5",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/817ac684cfec2f0c",
+                    "cardKingdomFoil": "https://mtgjson.com/links/a8dbe370134d66c9",
+                    "cardmarket": "https://mtgjson.com/links/8d685428a9b928c3",
+                    "tcgplayer": "https://mtgjson.com/links/8ea0dba03976c8d2"
+                },
+                "rarity": "mythic",
+                "rulings": [],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "subtypes": ["Dragon", "Spirit"],
+                "supertypes": ["Legendary"],
+                "text": "Flying, vigilance\nWhen Ao, the Dawn Sky dies, choose one —\n• Look at the top seven cards of your library. Put any number of nonland permanent cards with total mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.\n• Put two +1/+1 counters on each permanent you control that's a creature or Vehicle.",
+                "toughness": "4",
+                "type": "Legendary Creature — Dragon Spirit",
+                "types": ["Creature"],
+                "uuid": "6ecde099-bc5d-5537-8846-8b5a15a4ebf2",
+                "variations": [
+                    "df076713-0b94-56fd-91cf-4e588ce5641c",
+                    "5c185426-0557-53dd-bb04-3e1535ef2e0f"
+                ]
+            },
+            {
+                "artist": "Joseph Meehan",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["R"],
+                "colors": ["R"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 2036,
+                "faceConvertedManaCost": 3.0,
+                "faceManaValue": 3.0,
+                "faceName": "Fable of the Mirror-Breaker",
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [],
+                "frameEffects": ["extendedart", "fandfc"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "257115",
+                    "cardKingdomId": "256318",
+                    "cardsphereId": "85412",
+                    "mcmId": "607391",
+                    "mcmMetaId": "401893",
+                    "mtgjsonV4Id": "4fd76de8-8873-5288-a362-03d6c06d1a3c",
+                    "multiverseId": "551741",
+                    "scryfallId": "6dee0388-a78d-4b3c-a0c5-25655e14115e",
+                    "scryfallIllustrationId": "85479010-4db6-4128-b357-e39064d50b84",
+                    "scryfallOracleId": "c0957e5e-c71b-439c-931c-9f55d2f76ace",
+                    "tcgplayerProductId": "262225"
+                },
+                "isStarter": true,
+                "keywords": ["Transform"],
+                "language": "English",
+                "layout": "transform",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{2}{R}",
+                "manaValue": 3.0,
+                "name": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+                "number": "465",
+                "originalText": "I — Create a 2/2 red Goblin Shaman creature token with \"Whenever this creature attacks, create a Treasure token.\"\nII — You may discard up to two cards. If you do, draw that many cards.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
+                "originalType": "Enchantment — Saga",
+                "otherFaceIds": ["f71fe9b3-8915-5c5d-b736-633995e0c5bf"],
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/6e9a651b3e54de5f",
+                    "cardKingdomFoil": "https://mtgjson.com/links/6ebe2c19dd3a1414",
+                    "cardmarket": "https://mtgjson.com/links/5bf15932cac86110",
+                    "tcgplayer": "https://mtgjson.com/links/822fab44c3c65ecf"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "The token created by Reflection of Kiki-Jiki copies exactly what was printed on the original creature (except that the copy also has haste) and nothing else (unless it's copying a creature that's a token or that's copying something else; see below). It doesn't copy whether the creature is tapped or untapped, whether it has any counters on it or Auras and/or Equipment attached to it, or any non-copy effects that changed its power, toughness, types, color, and so on. Most notably, if the target creature isn't normally a creature, the copy won't be a creature."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the copied creature has {X} in its mana cost, X is 0."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If a copied creature is copying something else, the token you create will use the copiable values of the target creature. In most cases, it will just be a copy of whatever that creature is copying."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If a copied creature is a token that isn't a copy of something else, the copy copies the original characteristics of that token as stated by the effect that created it."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Any enters-the-battlefield abilities of the copied creature will trigger when the token enters the battlefield. Any “as [this permanent] enters the battlefield” or “[this permanent] enters the battlefield with” abilities of the copied creature card will also work."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If another creature becomes a copy of, or enters the battlefield as a copy of, the token, that creature will copy the creature card the token is copying, except it will also have haste. However, you won't sacrifice the new copy at the beginning of the next end step."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If Reflection of Kiki-Jiki's ability creates multiple tokens due to a replacement effect (such as the one Doubling Season creates), you'll sacrifice each of them."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Each face of a transforming double-faced card has its own set of characteristics: name, types, subtypes, abilities, and so on. While a transforming double-faced permanent is on the battlefield, consider only the characteristics of the face that's currently up. The other set of characteristics is ignored."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Each transforming double-faced card in this set is cast face up. In every zone other than the battlefield, consider only the characteristics of its front face. If it is on the battlefield, consider only the characteristics of the face that's up; the other face's characteristics are ignored."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The mana value of a transforming double-faced card is the mana value of its front face, no matter which face is up."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The back face of a transforming double-faced card usually has a color indicator that defines its color."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "A transforming double-faced card enters the battlefield with its front face up by default, unless a spell or ability instructs you to put it onto the battlefield transformed or you cast it transformed, in which case it enters with its back face up."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If you are instructed to put a card that isn't a double-faced card onto the battlefield transformed, it will not enter the battlefield at all. In that case, it stays in the zone it was previously in. For example, if a single-faced card is a copy of Azusa's Many Journeys, the chapter III ability will cause it to be exiled and then remain in exile."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "side": "a",
+                "subtypes": ["Saga"],
+                "supertypes": [],
+                "text": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Create a 2/2 red Goblin Shaman creature token with \"Whenever this creature attacks, create a Treasure token.\"\nII — You may discard up to two cards. If you do, draw that many cards.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
+                "type": "Enchantment — Saga",
+                "types": ["Enchantment"],
+                "uuid": "1e03fdfd-e583-5b65-bec9-091dde849bf0",
+                "variations": [
+                    "e54871ca-b187-5a71-b8eb-9e9c5322f4a4",
+                    "48c2413e-30a2-5fa9-85aa-9f8305d7f4f6"
+                ]
+            },
+            {
+                "artist": "Joseph Meehan",
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["R"],
+                "colorIndicator": ["R"],
+                "colors": ["R"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 2036,
+                "faceConvertedManaCost": 0.0,
+                "faceManaValue": 0.0,
+                "faceName": "Reflection of Kiki-Jiki",
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [],
+                "frameEffects": ["extendedart", "fandfc"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardsphereId": "85412",
+                    "mcmId": "607391",
+                    "mtgjsonV4Id": "dcca96eb-445a-5ef3-8a23-b3cd13a6ddd3",
+                    "multiverseId": "551742",
+                    "scryfallId": "6dee0388-a78d-4b3c-a0c5-25655e14115e",
+                    "scryfallIllustrationId": "15488154-8383-41af-9d38-1f3b8087b5b9",
+                    "scryfallOracleId": "c0957e5e-c71b-439c-931c-9f55d2f76ace",
+                    "tcgplayerProductId": "262225"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "transform",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 3.0,
+                "name": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+                "number": "465",
+                "originalText": "{1}, {T}: Create a token that's a copy of another target nonlegendary creature you control, except it has haste. Sacrifice it at the beginning of the next end step.",
+                "originalType": "Enchantment Creature — Goblin Shaman",
+                "otherFaceIds": ["1e03fdfd-e583-5b65-bec9-091dde849bf0"],
+                "power": "2",
+                "printings": ["NEO", "PNEO", "PRM"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/30155c9a52fa3be8"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2022-02-18",
+                        "text": "The token created by Reflection of Kiki-Jiki copies exactly what was printed on the original creature (except that the copy also has haste) and nothing else (unless it's copying a creature that's a token or that's copying something else; see below). It doesn't copy whether the creature is tapped or untapped, whether it has any counters on it or Auras and/or Equipment attached to it, or any non-copy effects that changed its power, toughness, types, color, and so on. Most notably, if the target creature isn't normally a creature, the copy won't be a creature."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If the copied creature has {X} in its mana cost, X is 0."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If a copied creature is copying something else, the token you create will use the copiable values of the target creature. In most cases, it will just be a copy of whatever that creature is copying."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If a copied creature is a token that isn't a copy of something else, the copy copies the original characteristics of that token as stated by the effect that created it."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Any enters-the-battlefield abilities of the copied creature will trigger when the token enters the battlefield. Any “as [this permanent] enters the battlefield” or “[this permanent] enters the battlefield with” abilities of the copied creature card will also work."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If another creature becomes a copy of, or enters the battlefield as a copy of, the token, that creature will copy the creature card the token is copying, except it will also have haste. However, you won't sacrifice the new copy at the beginning of the next end step."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If Reflection of Kiki-Jiki's ability creates multiple tokens due to a replacement effect (such as the one Doubling Season creates), you'll sacrifice each of them."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Each face of a transforming double-faced card has its own set of characteristics: name, types, subtypes, abilities, and so on. While a transforming double-faced permanent is on the battlefield, consider only the characteristics of the face that's currently up. The other set of characteristics is ignored."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "Each transforming double-faced card in this set is cast face up. In every zone other than the battlefield, consider only the characteristics of its front face. If it is on the battlefield, consider only the characteristics of the face that's up; the other face's characteristics are ignored."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The mana value of a transforming double-faced card is the mana value of its front face, no matter which face is up."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "The back face of a transforming double-faced card usually has a color indicator that defines its color."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "A transforming double-faced card enters the battlefield with its front face up by default, unless a spell or ability instructs you to put it onto the battlefield transformed or you cast it transformed, in which case it enters with its back face up."
+                    },
+                    {
+                        "date": "2022-02-18",
+                        "text": "If you are instructed to put a card that isn't a double-faced card onto the battlefield transformed, it will not enter the battlefield at all. In that case, it stays in the zone it was previously in. For example, if a single-faced card is a copy of Azusa's Many Journeys, the chapter III ability will cause it to be exiled and then remain in exile."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "NEO",
+                "side": "b",
+                "subtypes": ["Goblin", "Shaman"],
+                "supertypes": [],
+                "text": "{1}, {T}: Create a token that's a copy of another target nonlegendary creature you control, except it has haste. Sacrifice it at the beginning of the next end step.",
+                "toughness": "2",
+                "type": "Enchantment Creature — Goblin Shaman",
+                "types": ["Enchantment", "Creature"],
+                "uuid": "f71fe9b3-8915-5c5d-b736-633995e0c5bf",
+                "variations": [
+                    "ff6bdac8-48f6-51e1-a8bc-9db0a5b2dee7",
+                    "b384f442-c485-587e-954e-f3bc0962daa1"
+                ]
+            },
+
+            {
+                "artist": "Amayagido",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [],
+                "frameEffects": ["fullart"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "256706",
+                    "cardKingdomId": "256071",
+                    "mcmId": "605034",
+                    "mcmMetaId": "4251",
+                    "mtgArenaId": "79733",
+                    "mtgjsonV4Id": "104737a4-7823-5ff3-810c-fe52690963b6",
+                    "mtgoId": "96832",
+                    "multiverseId": "553570",
+                    "scryfallId": "ca8fb179-7e81-4b20-8b81-ea1aa97afe58",
+                    "scryfallIllustrationId": "3e99a5b2-941e-4edd-84ad-b13039388367",
+                    "scryfallOracleId": "bc71ebf6-2056-41f7-be35-b2e5c34afa99",
+                    "tcgplayerProductId": "257676"
+                },
+                "isFullArt": true,
+                "isReprint": true,
+                "language": "Japanese",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "premodern": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Plains",
+                "number": "293",
+                "originalText": "W",
+                "originalType": "Basic Land — Plains",
+                "printings": [
+                    "10E",
+                    "2ED",
+                    "2XM",
+                    "30A",
+                    "3ED",
+                    "40K",
+                    "4BB",
+                    "4ED",
+                    "5ED",
+                    "6ED",
+                    "7ED",
+                    "8ED",
+                    "9ED",
+                    "AFR",
+                    "AKH",
+                    "AKR",
+                    "ALA",
+                    "ANA",
+                    "ANB",
+                    "ARC",
+                    "ATH",
+                    "AVR",
+                    "BBD",
+                    "BFZ",
+                    "BRB",
+                    "BRC",
+                    "BRO",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "C19",
+                    "CED",
+                    "CEI",
+                    "CHK",
+                    "CLB",
+                    "CM2",
+                    "CMA",
+                    "CMD",
+                    "CMR",
+                    "CST",
+                    "DDC",
+                    "DDE",
+                    "DDF",
+                    "DDG",
+                    "DDH",
+                    "DDI",
+                    "DDK",
+                    "DDL",
+                    "DDN",
+                    "DDO",
+                    "DDP",
+                    "DDQ",
+                    "DMR",
+                    "DMU",
+                    "DOM",
+                    "DTK",
+                    "DVD",
+                    "E01",
+                    "ELD",
+                    "FBB",
+                    "FRF",
+                    "G17",
+                    "GK1",
+                    "GK2",
+                    "GN2",
+                    "GN3",
+                    "GNT",
+                    "GRN",
+                    "GS1",
+                    "H09",
+                    "HBG",
+                    "HOP",
+                    "HOU",
+                    "ICE",
+                    "IKO",
+                    "INV",
+                    "ISD",
+                    "ITP",
+                    "J14",
+                    "J22",
+                    "JMP",
+                    "KHM",
+                    "KLD",
+                    "KLR",
+                    "KTK",
+                    "LEA",
+                    "LEB",
+                    "LRW",
+                    "M10",
+                    "M11",
+                    "M12",
+                    "M13",
+                    "M14",
+                    "M15",
+                    "M19",
+                    "M20",
+                    "M21",
+                    "MBS",
+                    "MD1",
+                    "ME1",
+                    "ME3",
+                    "MH2",
+                    "MID",
+                    "MIR",
+                    "MMQ",
+                    "MRD",
+                    "NEO",
+                    "NPH",
+                    "ODY",
+                    "OLEP",
+                    "ONE",
+                    "ONS",
+                    "ORI",
+                    "P02",
+                    "PAL00",
+                    "PAL01",
+                    "PAL03",
+                    "PAL04",
+                    "PAL05",
+                    "PAL06",
+                    "PAL99",
+                    "PALP",
+                    "PANA",
+                    "PARL",
+                    "PC2",
+                    "PCA",
+                    "PDGM",
+                    "PELP",
+                    "PF19",
+                    "PF20",
+                    "PGPX",
+                    "PGRU",
+                    "PLIST",
+                    "PMPS",
+                    "PMPS06",
+                    "PMPS07",
+                    "PMPS08",
+                    "PMPS09",
+                    "PMPS10",
+                    "PMPS11",
+                    "POR",
+                    "PPP1",
+                    "PRM",
+                    "PRW2",
+                    "PRWK",
+                    "PS11",
+                    "PSAL",
+                    "PSS2",
+                    "PSS3",
+                    "PTC",
+                    "PTK",
+                    "PZ2",
+                    "RAV",
+                    "RIX",
+                    "RNA",
+                    "ROE",
+                    "RQS",
+                    "RTR",
+                    "S99",
+                    "SCD",
+                    "SHM",
+                    "SLD",
+                    "SNC",
+                    "SOI",
+                    "SOM",
+                    "STX",
+                    "SUM",
+                    "TD0",
+                    "TD2",
+                    "THB",
+                    "THS",
+                    "TMP",
+                    "TPR",
+                    "TSP",
+                    "UGL",
+                    "UND",
+                    "UNF",
+                    "UNH",
+                    "USG",
+                    "UST",
+                    "VOW",
+                    "WAR",
+                    "WC00",
+                    "WC02",
+                    "WC03",
+                    "WC04",
+                    "WC97",
+                    "WC98",
+                    "XANA",
+                    "XLN",
+                    "ZEN",
+                    "ZNR"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/cc9c1d05e453b2e3",
+                    "cardKingdomFoil": "https://mtgjson.com/links/67a0d84f3a746d35",
+                    "cardmarket": "https://mtgjson.com/links/2fc702372650b0d2",
+                    "tcgplayer": "https://mtgjson.com/links/578711038575b750"
+                },
+                "rarity": "common",
+                "rulings": [],
+                "setCode": "NEO",
+                "subtypes": ["Plains"],
+                "supertypes": ["Basic"],
+                "text": "({T}: Add {W}.)",
+                "type": "Basic Land — Plains",
+                "types": ["Land"],
+                "uuid": "822705d0-4c39-5701-919a-bd0f74d59f4e",
+                "variations": [
+                    "a8902146-7c93-5751-82fa-c6b173148645",
+                    "684d2321-ac91-5441-a82a-7f5e7a99fcdf",
+                    "fa297a82-aff5-51af-b12f-617697a59dc8"
+                ]
+            }
+        ],
+        "code": "NEO"
+    }
+}

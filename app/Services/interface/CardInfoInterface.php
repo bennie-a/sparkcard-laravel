@@ -18,5 +18,7 @@ interface CardInfoInterface
     public function scryfallId();
 
     public function number();
+
+    public function language():string;
 }
 ?>
