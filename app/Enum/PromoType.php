@@ -13,7 +13,7 @@ enum PromoType:string {
     case EXTENDEDART = "extendedart";
     case FULLART = "fullart";
     case FANDFC = 'fandfc';// 両面カード枠
-
+    case NEONINK = 'neonink';
     case OTHER = 'other';
 
     public function text() {
@@ -29,6 +29,7 @@ enum PromoType:string {
             self::EXTENDEDART => "拡張アート",
             self::FULLART => 'フルアート',
             self::FANDFC => '',
+            self::NEONINK => 'ネオンインク',
             self::OTHER => 'その他'
         };
     }

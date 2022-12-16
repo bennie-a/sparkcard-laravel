@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Enum\CardColor;
 use App\Enum\PromoType;
+use App\Exceptions\NoPromoTypeException;
 use App\Factory\CardInfoFactory;
 use app\Libs\JsonUtil;
 use App\Services\json\ExcludeCard;
@@ -30,6 +31,10 @@ class CardJsonFileService {
             }
             $color = CardColor::match($c);
             $promo = PromoType::match($c);
+            if ($promo == PromoType::OTHER) {
+                throw new NoPromoTypeException($obj->jpname($enname), $obj->number());
+            }
+
             $newCard = ['setCode'=> $setcode, 'name' => $obj->jpname($enname),"en_name" => $enname,
             'multiverseId' => $obj->multiverseId(), 'scryfallId' => $obj->scryfallId(),
             'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text(), 'isFoil' => false,

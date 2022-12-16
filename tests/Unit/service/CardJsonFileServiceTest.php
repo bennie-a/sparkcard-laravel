@@ -208,6 +208,13 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals(PromoType::FANDFC->text(), $target['promotype'], "プロモタイプ");
     }
 
+    public function test_ネオンインク版() {
+        $cards = $this->build("neo.json");
+        // 貪る混沌、碑出告
+        $target = $this->getCardByNumber('432', $cards);
+        assertEquals(PromoType::NEONINK->text(), $target['promotype'], "プロモタイプ");
+    }
+
     /**
      * 指定したJSONファイルを読み込む。
      *
