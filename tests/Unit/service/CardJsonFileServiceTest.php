@@ -202,6 +202,12 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("PH", $target['language'], "言語");
     }
 
+    public function test_両面カード() {
+        $cards = $this->build("neo.json");
+        $target = $this->getCardByNumber('465', $cards);
+        assertEquals(PromoType::FANDFC->text(), $target['promotype'], "プロモタイプ");
+    }
+
     /**
      * 指定したJSONファイルを読み込む。
      *
