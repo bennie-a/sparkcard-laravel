@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('card_info', function (Blueprint $table) {
-            $table->string('language', 10)->nullable(false)->default('Japanese')->comment('言語');
+            $table->string('language', 10)->nullable(false)->default('JP')->comment('言語');
         });
     }
 

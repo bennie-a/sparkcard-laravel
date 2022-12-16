@@ -59,7 +59,8 @@ class CardInfoDBService {
                 'color_id' => $details['color'],
                 'number' => $details['number'],
                 'image_url' => $url,
-                'isFoil' => $isFoil
+                'isFoil' => $isFoil,
+                'language' => $details['language']
             ];
             CardInfo::create($record);
         } else if (!is_null($url)) {
