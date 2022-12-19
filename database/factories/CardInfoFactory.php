@@ -24,7 +24,7 @@ class CardInfoFactory extends Factory
             'name' => $this->faker->realText(10),
             'en_name' => $this->random(10),
             'number' => rand(1, 400),
-            'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16)
+            'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16),
         ];
     }
 

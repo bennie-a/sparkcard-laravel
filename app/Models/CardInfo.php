@@ -15,7 +15,7 @@ class CardInfo extends Model
         return $this->belongsTo('App\Expansion');
     }
 
-    protected $fillable = ['exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil'];
+    protected $fillable = ['exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
 
     /**
      * 検索条件に該当するデータを取得する。

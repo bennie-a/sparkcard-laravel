@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Api\Mtg;
 use App\Factory\GuzzleClientFactory;
+use App\Libs\MtgJsonUtil;
 use Illuminate\Http\Response;
 
 /**
@@ -23,26 +24,44 @@ class ScryfallRepository {
         if ($res->getStatusCode() == Response::HTTP_NOT_FOUND) {
             return ['released_at' => ''];
         }
-        $contents = $res->getBody()->getContents();
-        return json_decode($contents, true);
+        return $this->getContents($$res);
     }
 
-    public function getImageByMultiverseId($id)
+    /**
+     * multiverseidからカード情報を取得する。
+     *
+     * @param string $id multiverseid
+     * @return array
+     */
+    public function getCardByMultiverseId($id)
     {
         $client = GuzzleClientFactory::create('scryfall');
         $response = $client->request('GET', 'cards/multiverse/'.$id);
-        $contents = $response->getBody()->getContents();
-        $json = json_decode($contents, true);
-        return $json['image_uris']['png'];
+        return $this->getContents($response);
     }
 
-    public function getImageByScryFallId($id)
+    /**
+     * scryfallidからカード情報を取得する。
+     *
+     * @param string $id scryfallid
+     * @return array
+     */
+    public function getCardByScryFallId($id)
     {
         $client = GuzzleClientFactory::create('scryfall');
         $response = $client->request('GET', 'cards/'.$id);
+        return $this->getContents($response);
+    }
+
+    /**
+     * レスポンスからJSON情報を取得する。
+     *
+     * @param Response $response
+     * @return array JSON情報
+     */
+    private function getContents($response) {
         $contents = $response->getBody()->getContents();
-        $json = json_decode($contents, true);
-        return $json['image_uris']['png'];
+        return json_decode($contents, true);
     }
 
 }

@@ -26,17 +26,17 @@ class CardInfoFactory {
      * @return AbstractCard
      */
     public static function create($json) {
+        $lang = $json['language'];
+        $langArray = ['English' => NoJpCard::class, 'Japanese' => JpLimitedCard::class,
+                         'Phyrexian' => PhyrexianCard::class];
+        if (!MtgJsonUtil::hasKey($lang, $langArray) || self::isOnlineOnly($json)) {
+            return new ExcludeCard($json);
+        }
         $layout = $json["layout"];
         if (strcmp($layout, "transform") == 0) {
             return new TransformCard($json);
         }
 
-        $lang = $json['language'];
-        $langArray = ['English' => NoJpCard::class, 'Japanese' => JpLimitedCard::class,
-                         'Phyrexian' => PhyrexianCard::class];
-        if (!array_key_exists($lang, $langArray)) {
-            return new ExcludeCard($json);
-        }
         $class = $langArray[$lang];
 
         // カードタイプがフルアートか判別する。
@@ -60,10 +60,6 @@ class CardInfoFactory {
             } else {
                 return new ExcludeCard($json);
             }
-        }
-        // オンライン限定カード
-        if (self::isOnlineOnly($json)) {
-            return new ExcludeCard($json);
         }
         // 日本語カード
         if (self::hasJp($json)) {
