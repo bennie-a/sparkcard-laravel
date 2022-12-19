@@ -25,6 +25,7 @@ class CardInfoDBTest extends TestCase
         $this->war = Expansion::factory()->createOne(['name' => '灯争大戦','attr' => 'WAR']);
         $this->bro = Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'BRO']);
         $this->dmu = Expansion::factory()->createOne(['name' => '団結のドミナリア', 'attr' => 'DMU']);
+        $this->neo = Expansion::factory()->createOne(['name' => '神河：輝ける世界', 'attr' => 'NEO']);
     }
     /**
      * A basic feature test example.
@@ -114,8 +115,27 @@ class CardInfoDBTest extends TestCase
         assertEquals('JP', $record['language'], "言語");
     }
 
+    public function test_両面カード() {
+                $data = ['setCode' => 'NEO',
+                'name' => '永岩城の修繕',
+                'en_name' => 'The Restoration of Eiganjo // Architect of Restoration',
+                'color' => 'W',
+                'number'=> '442',
+                'multiverseId' => '551715',
+                'promotype' => '', 
+                'scryfallId' => '','isFoil' => false,
+            'language' => 'JP'];
+        $record = $this->post_execute($this->neo, $data);
+        assertEquals("https://cards.scryfall.io/png/front/0/7/070d6344-ee01-4e27-a513-467d8775a853.png?1657724945",
+                     $record['image_url'], "画像");
+    }
+
     private function post_ok($data)
     {
+        return $this->post_execute($this->war, $data);
+    }
+
+    private function post_execute($exp, $data) {
         $this->post('api/database/card', $data)->assertStatus(201);
         $list = CardInfo::where(['en_name' => $data['en_name'], 'isFoil' => $data['isFoil']])->get();
         assertTrue($list->count() == 1, '登録の有無');
@@ -128,7 +148,7 @@ class CardInfoDBTest extends TestCase
         assertEquals($data['language'], 'JP', '言語');
 
         $exp = Expansion::where('attr', $data['setCode'])->first();
-        assertEquals($this->war->notion_id, $record->exp_id, 'エキスパンションID');
+        assertEquals($exp->notion_id, $record->exp_id, 'エキスパンションID');
         return $record;
     }
 

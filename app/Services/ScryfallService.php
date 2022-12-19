@@ -1,5 +1,7 @@
 <?php
 namespace App\Services;
+
+use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
 
 /**
@@ -22,13 +24,31 @@ class ScryfallService {
         return $res['released_at'];
     }
 
-    public function getImageByMultiverseId($id)
+        /**
+     * 画像URLを取得する。
+     *
+     * @param array $details JSONファイルから読み込んだカード情報1件
+     * @return string 画像URL
+     */
+    public function getImageUrl($details)
     {
-        return $this->repo->getImageByMultiverseId($id);
-    }
-    public function getImageByScryFallId($id)
-    {
-        return $this->repo->getImageByScryFallId($id);
+        $multiverseId = $details['multiverseId'];
+        $scryfallId = $details['scryfallId'];
+        $json = [];
+        if (!empty($multiverseId)) {
+            $json = $this->repo->getCardByMultiverseId($multiverseId);
+        } else if (!empty($scryfallId)) {
+            $json = $this->repo->getCardByScryFallId($scryfallId);
+        } else {
+            return null;
+        }
+        $layout = $json['layout'];
+        if ($layout == 'transform') {
+            // 両面カードの場合は表面のカードを取得する。
+            $json = current($json['card_faces']);
+        }
+        $images = $json['image_uris'];
+        return $images['png'];
     }
 }
 ?>

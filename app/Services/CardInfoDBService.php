@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Libs\MtgJsonUtil;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Services\ScryfallService;
@@ -48,7 +49,7 @@ class CardInfoDBService {
                         'expansion.attr' => $exp->attr, 'card_info.isFoil' => $isFoil];
         $cardList = CardInfo::fetchByCondition($condition);
         // 画像URL取得
-        $url = $this->getImageUrl($details);
+        $url = $this->service->getImageUrl($details);
         if (count($cardList) == 0) {
             logger()->info('insert card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
             $record = [
@@ -80,25 +81,6 @@ class CardInfoDBService {
         // str_shuffle関数
         $barcode = substr(str_shuffle("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789"), 0, 16);
         return $barcode;
-    }
-    /**
-     * 画像URLを取得する。
-     *
-     * @param string $multiverseId
-     * @param string $scryfallId
-     * @return string 画像URL(multiverseIdもscryfallIdの無かったらNULL)
-     */
-    public function getImageUrl($details)
-    {
-        $multiverseId = $details['multiverseId'];
-        $scryfallId = $details['scryfallId'];
-        if (!empty($multiverseId)) {
-            return $this->service->getImageByMultiverseId($multiverseId);
-        } else if (!empty($scryfallId)) {
-            return $this->service->getImageByScryFallId($scryfallId);
-        }
-
-        return null;
     }
 }
 ?>
