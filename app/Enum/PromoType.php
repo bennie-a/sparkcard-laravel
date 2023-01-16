@@ -15,6 +15,7 @@ enum PromoType:string {
     case FANDFC = 'fandfc';// 両面カード枠
     case NEONINK = 'neonink';
     case OTHER = 'other';
+    case THEMEPACK = 'themepack';
 
     public function text() {
         return match($this) {
@@ -30,7 +31,8 @@ enum PromoType:string {
             self::FULLART => 'フルアート',
             self::FANDFC => '',
             self::NEONINK => 'ネオンインク',
-            self::OTHER => 'その他'
+            self::OTHER => 'その他',
+            self::THEMEPACK => 'テーマブースター限定',
         };
     }
 
