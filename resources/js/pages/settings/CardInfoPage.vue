@@ -137,7 +137,13 @@ export default {
                     }
                 })
                 .catch((e) => {
-                    if (e.response.status == 422) {
+                    let status = e.response.status;
+                    if (status == 410) {
+                        const msgs = e.response.data;
+                        console.log(msgs);
+                        this.$store.dispatch("message/errorhtml", msgs);
+                    }
+                    if (status == 422) {
                         const errors = e.response.data.errors;
                         let msgs = "<ul>";
                         for (let key in errors) {

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 class CardController extends Controller
 {
     private $service;
+    
 
     public function __construct(CardBoardService $service)
     {
