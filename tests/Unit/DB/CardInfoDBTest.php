@@ -104,7 +104,7 @@ class CardInfoDBTest extends TestCase
                 'name' => '群れの声、アーリン',
                 'en_name' => 'Arlinn, Voice of the Pack',
                 'color' => 'G',
-                'number'=> '150',
+                'number'=> '150★',
                 'multiverseId' => '',
                 'promotype' => '絵違い', 
                 'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => true,
