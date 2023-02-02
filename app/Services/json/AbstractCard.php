@@ -56,5 +56,9 @@ use App\Services\WisdomGuildService;
     public function language():string {
         return 'JP';
     }
+
+    public function getIdentifiers() {
+        return $this->json['identifiers'];
+    }
  }
 ?>
