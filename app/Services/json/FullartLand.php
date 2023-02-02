@@ -14,7 +14,7 @@ class FullartLand extends AbstractCard
 
     public function multiverseId()
     {
-        return $this->json["identifiers"]["multiverseId"];
+        return parent::getEnMultiverseId();
     }
 
     public function scryfallId()

@@ -1,5 +1,7 @@
 <?php
 namespace app\Services\json;
+
+use App\Libs\MtgJsonUtil;
 use App\Services\interface\CardInfoInterface;
 use App\Services\WisdomGuildService;
 
@@ -57,7 +59,16 @@ use App\Services\WisdomGuildService;
         return 'JP';
     }
 
-    public function getIdentifiers() {
+    protected function getEnMultiverseId() {
+        return $this->getIdentifiersValue("multiverseId");
+    }
+
+    private function getIdentifiersValue($key){
+        $identifiers = $this->getIdentifiers();
+        return MtgJsonUtil::hasKey($key, $identifiers) ? $identifiers[$key] : '';
+    }
+
+    protected function getIdentifiers() {
         return $this->json['identifiers'];
     }
  }
