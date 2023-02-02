@@ -1,6 +1,8 @@
 <?php
 namespace App\Services\json;
 
+use App\Libs\MtgJsonUtil;
+
 class JpCard extends AbstractCard
 {
     public function __construct($json)
@@ -10,8 +12,13 @@ class JpCard extends AbstractCard
     }
 
     public function multiverseId()
-    {
-        return $this->jp["multiverseId"];
+    {   $id = 'multiverseId';
+
+        return MtgJsonUtil::hasKey($id, $this->getJpData()) ? $this->getJpData()[$id] : parent::getIdentifiers()[$id];
+    }
+
+    public function getJpData() {
+        return $this->jp;
     }
 }
 ?>

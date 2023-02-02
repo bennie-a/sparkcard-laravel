@@ -49,6 +49,18 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals("6", $card['number']);
         assertEmpty($card['promotype']);
     }
+    
+    public function test_日本語表記あり_multiverseIdなし() {
+        $contents = file_get_contents(storage_path("test/json/mir.json"));
+        $json = json_decode($contents, true);
+        $service = new CardJsonFileService();
+        $result = $service->build($json['data']);
+        $card = current($result["cards"]);
+        assertEquals("死後の生命", $card['name']);
+        assertEquals("3476", $card['multiverseId']);
+        assertEmpty($card['scryfallId']);
+        assertEquals("1", $card['number']);
+    }
 
     public function test_日本限定カード() {
         $contents = file_get_contents(storage_path("test/json/war_short.json"));

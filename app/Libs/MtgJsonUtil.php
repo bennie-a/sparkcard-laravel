@@ -33,5 +33,12 @@ class MtgJsonUtil {
     public static function isNotEmpty($key, $json) {
         return self::hasKey($key, $json) && !empty($json[$key]);
     }
+
+    public static function extractJp($json) {
+        $target = array_filter($json, function($f) {
+            return $f['language'] == 'Japanese';
+        });
+        return $target;
+    }
 }
 ?>

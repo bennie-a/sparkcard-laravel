@@ -1,0 +1,85 @@
+{
+    "meta": { "date": "2023-01-16", "version": "5.2.0+20230116" },
+    "data": {
+        "baseSetSize": 350,
+        "block": "Mirage",
+        "cards": [
+            {
+                "artist": "Pete Venters",
+                "availability": ["mtgo", "paper"],
+                "boosterTypes": ["draft"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 10737,
+                "finishes": ["nonfoil"],
+                "flavorText": "Facets of life, reflections of the soul.",
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "name": "Seelenwandlung",
+                        "text": "Begrabe eine Kreatur Deiner Wahl und bringe einen Identitäts-Spielstein unter der Kontrolle des Beherrschers dieser Kreatur ins Spiel. Behandle diesen Spielstein wie eine 1/1 weiße fliegende Kreatur.",
+                        "type": "Spontanzauber"
+                    },
+                    { "language": "Spanish", "name": "Vestigio de vida" },
+                    { "language": "French", "name": "Destin posthume" },
+                    { "language": "Italian", "name": "Aldilà" },
+                    { "language": "Japanese", "name": "死後の生命" },
+                    { "language": "Portuguese (Brazil)", "name": "Pós-vida" }
+                ],
+                "frameVersion": "1997",
+                "hasFoil": false,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomId": "22003",
+                    "cardsphereId": "30113",
+                    "mcmId": "8256",
+                    "mcmMetaId": "68",
+                    "mtgjsonV4Id": "9b0f0eef-6bfb-5f59-9123-61116d796a11",
+                    "mtgoFoilId": "6768",
+                    "mtgoId": "6767",
+                    "multiverseId": "3476",
+                    "scryfallId": "4644694d-52e6-4d00-8cad-748899eeea84",
+                    "scryfallIllustrationId": "3e3e0482-86db-482c-adb5-8fc9791219f2",
+                    "scryfallOracleId": "4c13e2b5-961a-4031-84b1-15bd19b94286",
+                    "tcgplayerProductId": "4961"
+                },
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "legacy": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "premodern": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{2}{W}",
+                "manaValue": 3.0,
+                "name": "Afterlife",
+                "number": "1",
+                "originalText": "Bury target creature and put an Essence token into play under the control of that creature's controller. Treat this token as a 1/1 white creature with flying.",
+                "originalType": "Instant",
+                "printings": ["C14", "CMD", "MIR", "MMQ", "VMA"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/2bc8b0c9b23c9fb4",
+                    "cardmarket": "https://mtgjson.com/links/4d943976aa90c863",
+                    "tcgplayer": "https://mtgjson.com/links/a832606f58124a5e"
+                },
+                "rarity": "uncommon",
+                "rulings": [],
+                "setCode": "MIR",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Destroy target creature. It can't be regenerated. Its controller creates a 1/1 white Spirit creature token with flying.",
+                "type": "Instant",
+                "types": ["Instant"],
+                "uuid": "5476b4a0-5ce9-5b16-9272-5d2be623c26f"
+            }
+        ],
+        "code": "MIR"
+    }
+}

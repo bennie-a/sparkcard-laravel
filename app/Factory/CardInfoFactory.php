@@ -6,6 +6,7 @@ use App\Services\json\ExcludeCard;
 use App\Services\json\FullartLand;
 use App\Services\json\JpCard;
 use App\Services\json\JpLimitedCard;
+use App\Services\json\JpNoMultiIdCard;
 use App\Services\json\NoJpCard;
 use App\Services\json\PhyrexianCard;
 use App\Services\json\PlistCard;
@@ -61,7 +62,7 @@ class CardInfoFactory {
                 return new ExcludeCard($json);
             }
         }
-        // 日本語カード
+        // 日本語版の検索
         if (self::hasJp($json)) {
             return new JpCard($json);
         }
@@ -86,14 +87,23 @@ class CardInfoFactory {
      * @return boolean
      */
     private static function hasJp($json) {
-        if (MtgJsonUtil::isEmpty('foreignData', $json)) {
+        $foreignData = self::foreignData($json);
+        if (is_null($foreignData)) {
             return false;
         }
-        $foreignData = $json['foreignData'];
-        $target = array_filter($foreignData, function($f) {
-            return $f['language'] == 'Japanese';
-        });
+        $target = MtgJsonUtil::extractJp($foreignData);
         return count($target) != 0;
+    }
+
+    /**
+     * json内の'foreignData'のデータを取得する。
+     *
+     * @param array $json
+     * @return array or null
+     */
+    private static function foreignData($json) {
+        $key = 'foreignData';
+        return MtgJsonUtil::isEmpty($key, $json) ? null : $json[$key];
     }
 
     /**
