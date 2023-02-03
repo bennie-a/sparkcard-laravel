@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('frame_effects', function (Blueprint $table) {
+            $table->id()->comment('ID');
+            $table->string('attr', 20)->nullable(false)->unique(true)->comment('略称');
+            $table->string('name', 60)->nullable(false)->comment('枠名');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('frame_effects');
+    }
+};
