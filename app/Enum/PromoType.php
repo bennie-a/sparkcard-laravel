@@ -36,7 +36,7 @@ enum PromoType:string {
             self::NEONINK => 'ネオンインク',
             self::OTHER => 'その他',
             self::THEMEPACK => 'テーマブースター限定',
-            self::OILSLICK => 'ボーダレス「胆液」ショーケース',
+            self::OILSLICK => 'オイリスリックFoil',
             self::CONCEPT => 'コンセプトアート',
             self::STEPANDCOMPLEAT => 'S&C'
         };

@@ -6,6 +6,7 @@ use App\Enum\PromoType;
 use App\Exceptions\NoPromoTypeException;
 use App\Factory\CardInfoFactory;
 use app\Libs\JsonUtil;
+use App\Libs\MtgJsonUtil;
 use App\Services\json\ExcludeCard;
 use App\Services\json\TransformCard;
 
@@ -42,7 +43,9 @@ class CardJsonFileService {
             ];
             logger()->info('get card:',['name' => $newCard['name'], 'number' => $newCard['number']]);
             logger()->debug(get_class($obj).':'.$newCard['name']);
-            array_push($cardInfo, $newCard);
+            if (!MtgJsonUtil::hasKey('hasNonFoil', $c) || (MtgJsonUtil::hasKey('hasNonFoil', $c) && $c['hasNonFoil'] == true)) {
+                array_push($cardInfo, $newCard);
+            }
             if ($c['hasFoil']) {
                 $newCard['isFoil'] = true;
                 array_push($cardInfo, $newCard);
