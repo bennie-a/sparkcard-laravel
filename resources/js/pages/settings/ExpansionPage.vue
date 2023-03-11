@@ -14,11 +14,44 @@
             <div
                 class="six wide right floated column right aligned bottom aligned content"
             >
-                <button class="ui teal basic button">新しく登録する</button>
+                <button class="ui teal basic button" @click="show">
+                    新しく登録する
+                </button>
+                <div id="insertForm" class="ui tiny modal">
+                    <div class="header">エキスパンション登録</div>
+                    <div class="content ui form">
+                        <div class="field">
+                            <label for="">名称</label>
+                            <input type="text" />
+                        </div>
+                        <div class="field">
+                            <label for="">略称</label>
+                            <input type="text" />
+                        </div>
+                        <div class="field">
+                            <label for="">BASE ID</label>
+                            <input type="number" />
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div class="ui cancel button">
+                            <i class="close icon"></i>キャンセル
+                        </div>
+                        <button class="ui teal button">
+                            <i class="checkmark icon"></i>登録する
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="ui divider"></div>
-        <table class="ui table striped six column">
+        <div
+            class="ui divider"
+            v-if="$store.getters['expansion/result'].length != 0"
+        ></div>
+        <table
+            class="ui table striped six column"
+            v-if="$store.getters['expansion/result'].length != 0"
+        >
             <thead>
                 <tr>
                     <th class="six wide">名称</th>
@@ -65,6 +98,9 @@ export default {
         // this.$store.dispatch("setLoad", false);
     },
     methods: {
+        show: function () {
+            $("#insertForm").modal("show");
+        },
         store: async function () {
             const list = this.$store.getters["expansion/result"];
             const task = new AxiosTask(this.$store);

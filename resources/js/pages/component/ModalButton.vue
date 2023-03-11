@@ -9,7 +9,7 @@
             <button class="ui cancel button">
                 <i class="close icon"></i>キャンセル
             </button>
-            <button class="ui primary button" @click="execute">
+            <button class="ui teal button" @click="execute">
                 <i class="checkmark icon"></i>登録する
             </button>
         </div>
