@@ -227,6 +227,27 @@ class CardJsonFileServiceTest extends TestCase
         assertEquals(PromoType::NEONINK->text(), $target['promotype'], "プロモタイプ");
     }
 
+    public function test_胆液版() {
+        $cards = $this->build("one.json");
+        $target = $this->getCardByNumber('345', $cards);
+        assertEquals(PromoType::OILSLICK->text(), $target['promotype'], "プロモタイプ");
+    }
+
+    public function test_コンセプトアート() {
+        $cards = $this->build("one.json");
+        $target = $this->getCardByNumber('416', $cards);
+        assertEquals(PromoType::CONCEPT->text(), $target['promotype'], "プロモタイプ");
+    }
+
+    public function test_ステップアンドコンプリート() {
+        $cards = $this->build("one.json");
+        $target = $this->getCardByNumber('422', $cards);
+        assertEquals(PromoType::STEPANDCOMPLEAT->text(), $target['promotype'], "プロモタイプ");
+
+    }
+
+
+
     /**
      * 指定したJSONファイルを読み込む。
      *
