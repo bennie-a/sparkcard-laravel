@@ -57,8 +57,8 @@ const routes = [
         path: "/settings/expansion",
         component: ExpansionPage,
         meta: {
-            title: "エキスパンション登録",
-            description: "NotionのエキスパンションをDBに一括登録します。",
+            title: "エキスパンション一覧",
+            description: "エキスパンションの登録・編集を行います。",
         },
     },
     {

@@ -40,7 +40,7 @@
             </div>
             <div class="field">
                 <label for="" style="visibility: hidden">ボタン</label>
-                <button class="ui purple button ml-1" @click="search">
+                <button class="ui teal button ml-1" @click="search">
                     検索する
                 </button>
             </div>

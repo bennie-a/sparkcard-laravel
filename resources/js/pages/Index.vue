@@ -206,17 +206,16 @@ export default {
         </div>
         <button
             id="search"
-            class="ui button purple ml-1"
+            class="ui button teal ml-1"
             @click="search"
             :class="{ disabled: selectedSet == '' }"
         >
             検索する
         </button>
     </div>
-    <div class="ui divider"></div>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button
-            class="ui purple button"
+            class="ui teal button"
             @click="showRegist"
             :class="{ disabled: isDisabled }"
         >

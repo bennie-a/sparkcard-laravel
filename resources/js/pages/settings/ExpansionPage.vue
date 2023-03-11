@@ -1,12 +1,27 @@
 <template>
     <section>
         <message-area></message-area>
-        <h2 class="ui dividing header">未登録分</h2>
-        <ModalButton @action="store">DBに登録する</ModalButton>
+        <div class="ui grid">
+            <div class="six wide left floated column mt-1 ui form">
+                <div class="field">
+                    <label for="">名称or略称(一部でもOK)</label>
+                    <div class="ui action input">
+                        <input type="text" />
+                        <button class="ui teal button">検索</button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="six wide right floated column right aligned bottom aligned content"
+            >
+                <button class="ui teal basic button">新しく登録する</button>
+            </div>
+        </div>
+        <div class="ui divider"></div>
         <table class="ui table striped six column">
             <thead>
                 <tr>
-                    <th>名称</th>
+                    <th class="six wide">名称</th>
                     <th>略称</th>
                     <th>BASEID</th>
                     <th>リリース日</th>
@@ -38,16 +53,16 @@ export default {
     mounted: async function () {
         this.$store.dispatch("message/clear");
         this.$store.dispatch("expansion/clear");
-        this.$store.dispatch("setLoad", true);
-        const task = new AxiosTask(this.$store);
-        const success = function (response, store, query) {
-            if (response.status == 201) {
-                store.dispatch("expansion/setResult", response.data);
-            }
-        };
-        const fail = function (e, store, query) {};
-        await task.get("/notion/expansion/", [], success, fail);
-        this.$store.dispatch("setLoad", false);
+        // this.$store.dispatch("setLoad", true);
+        // const task = new AxiosTask(this.$store);
+        // const success = function (response, store, query) {
+        //     if (response.status == 201) {
+        //         store.dispatch("expansion/setResult", response.data);
+        //     }
+        // };
+        // const fail = function (e, store, query) {};
+        // await task.get("/notion/expansion/", [], success, fail);
+        // this.$store.dispatch("setLoad", false);
     },
     methods: {
         store: async function () {
