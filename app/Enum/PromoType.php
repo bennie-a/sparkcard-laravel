@@ -19,6 +19,8 @@ enum PromoType:string {
     case OILSLICK = 'oilslick';
     case CONCEPT = 'concept';
     case STEPANDCOMPLEAT = 'stepandcompleat';
+    case INTROPACK = 'intropack';
+    case BRAWLDECK = 'brawldeck';
 
     public function text() {
         return match($this) {
@@ -38,7 +40,9 @@ enum PromoType:string {
             self::THEMEPACK => 'テーマブースター限定',
             self::OILSLICK => 'オイリスリックFoil',
             self::CONCEPT => 'コンセプトアート',
-            self::STEPANDCOMPLEAT => 'S&C'
+            self::STEPANDCOMPLEAT => 'S&C',
+            self::INTROPACK => 'エントリーセット',
+            self::BRAWLDECK => 'ブロールデッキ'
         };
     }
 
