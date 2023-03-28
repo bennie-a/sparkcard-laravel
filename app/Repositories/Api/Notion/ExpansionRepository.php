@@ -37,6 +37,12 @@ class ExpansionRepository extends NotionRepository{
         return str_replace('-', '', $p->getId());
     }
 
+    /**
+     * 略称に該当するエキスパンションのIDを取得する。
+     *
+     * @param string $attr 略称
+     * @return string 
+     */
     public function findByAttr(string $attr) {
         $page = $this->findByEquals("略称", $attr);
         return str_replace('-', '', $page->getId());

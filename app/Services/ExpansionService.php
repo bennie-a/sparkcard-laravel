@@ -6,7 +6,12 @@ use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Models\notion\NotionExp;
 use App\Services\ScryfallService;
 use Illuminate\Support\Facades\DB;
+use FiveamCode\LaravelNotionApi\Entities\Page;
 
+
+/**
+ * Notionのエキスパンション一覧を操作するクラス
+ */
 class ExpansionService {
     public function __construct() {
         $this->repo = new ExpansionRepository();
@@ -49,6 +54,24 @@ class ExpansionService {
             array_push($resultList, $exp);
         }
         return $resultList;
+    }
+
+    /**
+     * エキスパンションを1件登録する。
+     *
+     * @return void
+     */
+    public function store(array $details) {
+        // 重複チェック。
+        // エラーなら例外発生
+        // Notionに登録
+        $page = new Page();
+        $page->setTitle('名前', $details['name']);
+        $page->setText('略称', $details['attr']);
+        $page->setNumber('BASEID',  11223);
+        $page->setSelect('ブロック', 'sss');
+        $page->setSelect('フォーマット', 'ddd');
+        $this->repo->store($page);
     }
 }
 ?>

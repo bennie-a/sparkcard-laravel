@@ -16,9 +16,9 @@ use Illuminate\Http\Response;
 class ExpDBController extends Controller
 {
     /**
-     * キーワードに部分一致するセット名を最大5件取得する。
+     * 略称と部分一致するエキスパンション名を最大5件取得する。
      *
-     * @return void
+     * @return エキスパンション情報(ID,名称,略称,BASE_ID,リリース日)
      */
     public function index(Request $request) {
         $query = $request->input("query");
@@ -41,6 +41,7 @@ class ExpDBController extends Controller
         if ($isExist) {
             return response($details['attr'].' is duplicate', Response::HTTP_BAD_REQUEST);
         }
+        // Notionのエキスパンション一覧に登録する。
         $exp = new Expansion();
         $baseId = null;
         if (array_key_exists('base_id', $details)) {
