@@ -27,14 +27,5 @@ class ExpansionController extends Controller
         $json = ExpansionResource::collection($result);
         return response()->json($json, Response::HTTP_OK);
     }
-
-    /**
-     * エキスパンションを1件Notionに登録する。 
-     * 
-     * */
-    public function store(Request $request) {
-        $details = $request->only(['attr', 'name', 'format']);
-        $this->service->store($details);
-    }
 }
 ?>

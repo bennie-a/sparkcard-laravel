@@ -9,12 +9,18 @@ use App\Models\Expansion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\ExpansionService;
 
 /**
  * DBのエキスパンション用コントローラークラス
  */
 class ExpDBController extends Controller
+
 {
+    public function __construct (ExpansionService $service) {
+        $this->service = $service;
+    }
+
     /**
      * 略称と部分一致するエキスパンション名を最大5件取得する。
      *
@@ -35,24 +41,27 @@ class ExpDBController extends Controller
      */
     public function store(Request $request) {
         $details = $request->all();
-        $id = $details['id'];
+        $attr = $details['attr'];
         $name = $details['name'];
         $isExist = Expansion::isExist($name);
         if ($isExist) {
-            return response($details['attr'].' is duplicate', Response::HTTP_BAD_REQUEST);
+            return response($name.' is duplicate', Response::HTTP_BAD_REQUEST);
         }
         // Notionのエキスパンション一覧に登録する。
-        $exp = new Expansion();
-        $baseId = null;
-        if (array_key_exists('base_id', $details)) {
-            $baseId = $details['base_id']; 
-        }
-        $releaseDate = new Carbon($details['release_date']);
-        $exp->create(['notion_id' => $id,
-        'base_id' => $baseId,
-        'name' => $name,
-        'attr' => $details['attr'],
-        'release_date' => $releaseDate]);
+        $this->service->store($details);
+
+        // DBにエキスパンション一覧を登録する。
+        // $exp = new Expansion();
+        // $baseId = null;
+        // if (array_key_exists('base_id', $details)) {
+        //     $baseId = $details['base_id']; 
+        // }
+        // $releaseDate = new Carbon($details['release_date']);
+        // $exp->create(['notion_id' => $id,
+        // 'base_id' => $baseId,
+        // 'name' => $name,
+        // 'attr' => $details['attr'],
+        // 'release_date' => $releaseDate]);
         return response($details['attr'].' insert ok', Response::HTTP_CREATED);
     }
 }

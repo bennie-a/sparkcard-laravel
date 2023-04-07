@@ -8,7 +8,6 @@ use App\Services\ScryfallService;
 use Illuminate\Support\Facades\DB;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 
-
 /**
  * Notionのエキスパンション一覧を操作するクラス
  */
@@ -71,7 +70,8 @@ class ExpansionService {
         $page->setNumber('BASEID',  11223);
         $page->setSelect('ブロック', 'sss');
         $page->setSelect('フォーマット', 'ddd');
-        $this->repo->store($page);
+        $page = $this->repo->store($page);
+        logger()->debug($page->getId());
     }
 }
 ?>
