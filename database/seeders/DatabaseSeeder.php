@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
-        $this->call(BaseCategory::class);
-        $this->call(PromotypeSeeder::class);
-        $this->call(FrameEffectsSeeder::class);
+        // $this->call(BaseCategory::class);
+        // $this->call(PromotypeSeeder::class);
+        // $this->call(FrameEffectsSeeder::class);
     }
 }

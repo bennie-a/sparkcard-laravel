@@ -58,7 +58,7 @@ class ExpansionService {
     /**
      * エキスパンションを1件登録する。
      *
-     * @return void
+     * @return stirng エキスパンションID
      */
     public function store(array $details) {
         // 重複チェック。
@@ -67,11 +67,11 @@ class ExpansionService {
         $page = new Page();
         $page->setTitle('名前', $details['name']);
         $page->setText('略称', $details['attr']);
-        $page->setNumber('BASEID',  11223);
         $page->setSelect('ブロック', 'sss');
         $page->setSelect('フォーマット', 'ddd');
         $page = $this->repo->store($page);
-        logger()->debug($page->getId());
+        logger()->debug('ID:'.$page->getId());
+        return $page->getId();
     }
 }
 ?>

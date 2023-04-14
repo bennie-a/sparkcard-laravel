@@ -27,7 +27,12 @@ class ExpansionRepository extends NotionRepository{
        return $pages;
     }
 
-    //　名前からエキスパンションIDを取得する。
+    /**
+     * 名前からエキスパンションIDを取得する。
+     *
+     * @param string $name
+     * @return string エキスパンションID
+     */
     public function findIdByName(string $name){
         $notion = parent::createNotion();
         $filters = new Collection();

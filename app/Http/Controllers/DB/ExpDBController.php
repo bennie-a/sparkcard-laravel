@@ -34,7 +34,7 @@ class ExpDBController extends Controller
     }
 
     /**
-     * expansionテーブルにデータを1件登録する。
+     * expansionテーブルとNotionのエキスパンション一覧にデータを1件登録する。
      *
      * @param Request $request
      * @return void
@@ -48,20 +48,20 @@ class ExpDBController extends Controller
             return response($name.' is duplicate', Response::HTTP_BAD_REQUEST);
         }
         // Notionのエキスパンション一覧に登録する。
-        $this->service->store($details);
+        $id = $this->service->store($details);
 
         // DBにエキスパンション一覧を登録する。
-        // $exp = new Expansion();
-        // $baseId = null;
-        // if (array_key_exists('base_id', $details)) {
-        //     $baseId = $details['base_id']; 
-        // }
-        // $releaseDate = new Carbon($details['release_date']);
-        // $exp->create(['notion_id' => $id,
-        // 'base_id' => $baseId,
-        // 'name' => $name,
-        // 'attr' => $details['attr'],
-        // 'release_date' => $releaseDate]);
+        $exp = new Expansion();
+        $baseId = null;
+        if (array_key_exists('base_id', $details)) {
+            $baseId = $details['base_id']; 
+        }
+        $releaseDate = new Carbon($details['release_date']);
+        $exp->create(['notion_id' => $id,
+        'base_id' => $baseId,
+        'name' => $name,
+        'attr' => $details['attr'],
+        'release_date' => $releaseDate]);
         return response($details['attr'].' insert ok', Response::HTTP_CREATED);
     }
 }
