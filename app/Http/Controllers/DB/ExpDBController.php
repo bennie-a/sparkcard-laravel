@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DB;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostExRequest;
 use App\Http\Resources\ExpDBResource;
 use App\Http\Resources\Notion\ExpansionResource;
 use App\Models\Expansion;
@@ -36,10 +37,10 @@ class ExpDBController extends Controller
     /**
      * expansionテーブルとNotionのエキスパンション一覧にデータを1件登録する。
      *
-     * @param Request $request
+     * @param PostExRequest $request
      * @return void
      */
-    public function store(Request $request) {
+    public function store(PostExRequest $request) {
         $details = $request->all();
         $attr = $details['attr'];
         $name = $details['name'];

@@ -67,8 +67,8 @@ class ExpansionService {
         $page = new Page();
         $page->setTitle('名前', $details['name']);
         $page->setText('略称', $details['attr']);
-        $page->setSelect('ブロック', 'sss');
-        $page->setSelect('フォーマット', 'ddd');
+        $page->setSelect('ブロック', $details['block']);
+        $page->setSelect('フォーマット', $details['format']);
         $page = $this->repo->store($page);
         logger()->debug('ID:'.$page->getId());
         return $page->getId();

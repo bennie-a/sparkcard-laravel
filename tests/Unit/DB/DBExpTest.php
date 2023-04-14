@@ -28,30 +28,22 @@ class DBExpTest extends TestCase
         $storeData = [
          'name'=>'コールドスナップ',
          'attr' => 'CSP',
-        'base_id' => 4517385,
+        'block' => 'アイスエイジ',
+        'format' => 'モダン',
         'release_date' => '2006-07-21'];
         $this->execute($storeData);
-        // $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
-
-        // DBからデータ取得
-        $dbactual = Expansion::where('attr', $storeData['attr'])->first();
-        assertNotNull($dbactual, 'DB登録の有無');
-        assertEquals($dbactual->name, $storeData['name'], '名称');
-        assertEquals($dbactual->attr, $storeData['attr'], '略称');
-        assertEquals($dbactual->base_id, $storeData['base_id'], 'BASE_ID');
-        assertEquals($dbactual->release_date, $storeData['release_date'], 'リリース日');
     }
 
-    public function test_BASEIDが0()
-    {
-        $storeData = [
-         'name'=>'コールドスナップ',
-         'attr' => 'CSP',
-        'base_id' => 0,
-        'release_date' => '2006-07-21'];
-        $this->execute($storeData);
-        // $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
-    }
+    // public function test_BASEIDが0()
+    // {
+    //     $storeData = [
+    //      'name'=>'コールドスナップ',
+    //      'attr' => 'CSP',
+    //     'base_id' => 0,
+    //     'release_date' => '2006-07-21'];
+    //     $this->execute($storeData);
+    //     // $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
+    // }
 
     // /**
     //  * test
@@ -73,7 +65,6 @@ class DBExpTest extends TestCase
         assertNotNull($dbactual, 'DB登録の有無');
         assertEquals($dbactual->name, $storeData['name'], '名称');
         assertEquals($dbactual->attr, $storeData['attr'], '略称');
-        assertEquals($dbactual->base_id, $storeData['base_id'], 'BASE_ID');
         assertEquals($dbactual->release_date, $storeData['release_date'], 'リリース日');
 
         $repo = new ExpansionRepository();
@@ -83,7 +74,7 @@ class DBExpTest extends TestCase
         assertEquals($storeData['name'], $array['title'] , '名称');
         $attr = $actualPage->getProperty('略称')->getRawContent()[0]['plain_text'];
         assertEquals($storeData['attr'], $attr,  '略称');
-        // assertEquals($dbactual->base_id, $storeData['base_id'], 'BASE_ID');
-        // assertEquals($dbactual->release_date, $storeData['release_date'], 'リリース日');
+        assertEquals($storeData['block'], $actualPage->getProperty('ブロック')->getRawContent()['name'],  'ブロック');
+        assertEquals($storeData['format'], $actualPage->getProperty('フォーマット')->getRawContent()['name'],  'フォーマット');
     }
 }
