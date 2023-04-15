@@ -30,19 +30,19 @@ class PostExRequest extends FormRequest
             'name' => 'required',
             'attr' => 'required',
             'block' => 'required',
-            'format' => ['required', 'regex:/^[スタンダード|パイオニア|モダン|レガシー]+$/u'],
-            'release_date' => 'required | date'
+            'format' => ['required', 'regex:/^[スタンダード|パイオニア|モダン|レガシー|統率者|マスターピース|その他]+$/u'],
+            'release_date' => 'date'
         ];
     }
 
     public function attributes()
     {
         return [
-        //  'name' => '名称',
-        // 'attr' => '略称',
-        // 'block' => 'ブロック',
-        // 'format' => 'フォーマット',
-        // 'release_date' => 'リリース日'
+         'name' => '名称',
+        'attr' => '略称',
+        'block' => 'ブロック',
+        'format' => 'フォーマット',
+        'release_date' => 'リリース日'
     ];
     }
 }
