@@ -5,6 +5,8 @@ use App\Http\Requests\PostExRequest;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+use function Psy\debug;
+
 class PostExRequestTest extends TestCase {
 
     /**
@@ -17,9 +19,16 @@ class PostExRequestTest extends TestCase {
     public function testPostRequest(array $data, bool $expected) {
         $request = new PostExRequest();
         $rules = $request->rules();
-        $validator = Validator::make($data, $rules);
+        $validator = Validator::make($data, $rules, $request->messages(), $request->attributes());
         $result = $validator->passes();
         $this->assertEquals($expected, $result);
+
+        if (!$expected) {
+            $actualmessage = $validator->messages()->get($data['error_key']);
+            logger()->debug($actualmessage);
+            $expectedmessage = $data['msg'];
+            $this->assertSame($expectedmessage, current($actualmessage), 'エラーメッセージ');
+        }
     }
 
     public function dataprovider() {
@@ -40,7 +49,9 @@ class PostExRequestTest extends TestCase {
                     'attr'=>'CSP',
                     'block'=>'アイスエイジ',
                     'format'=>'モダン',
-                    'release_date'=>'2006-07-21'
+                    'release_date'=>'2006-07-21',
+                    'error_key' => 'name',
+                    'msg' => '名称を入力してください。'
                 ],
                 false
             ],
@@ -50,7 +61,9 @@ class PostExRequestTest extends TestCase {
                     'attr'=>'',
                     'block'=>'アイスエイジ',
                     'format'=>'モダン',
-                    'release_date'=>'2006-07-21'
+                    'release_date'=>'2006-07-21',
+                    'error_key' => 'attr',
+                    'msg' => '略称を入力してください。'
                 ],
                 false
             ],
@@ -60,7 +73,10 @@ class PostExRequestTest extends TestCase {
                     'attr'=>'CSP',
                     'block'=>'',
                     'format'=>'モダン',
-                    'release_date'=>'2006-07-21'
+                    'release_date'=>'2006-07-21',
+                    'error_key' => 'block',
+                    'msg' => 'ブロックを入力してください。'
+
                 ],
                 false
             ],
@@ -70,7 +86,9 @@ class PostExRequestTest extends TestCase {
                     'attr'=>'CSP',
                     'block'=>'アイスエイジ',
                     'format'=>'',
-                    'release_date'=>'2006-07-21'
+                    'release_date'=>'2006-07-21',
+                    'error_key' => 'format',
+                    'msg' => 'フォーマットはスタンダード、パイオニア、モダン、レガシー、統率者、マスターピース、その他のどれかを入力してください。'
                 ],
                 false
             ],
@@ -160,7 +178,9 @@ class PostExRequestTest extends TestCase {
                     'attr'=>'MOM',
                     'block'=>'ファイレクシア',
                     'format'=>'EDH',
-                    'release_date'=>'2006-07-21'
+                    'release_date'=>'2006-07-21',
+                    'error_key' => 'format',
+                    'msg' => 'フォーマットはスタンダード、パイオニア、モダン、レガシー、統率者、マスターピース、その他のどれかを入力してください。'
                 ],
                 false
             ],
