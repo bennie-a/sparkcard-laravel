@@ -23,16 +23,16 @@ class DBExpTest extends TestCase
         DB::table('expansion')->truncate();
     }
 
-    public function test_全項目入力()
-    {
-        $storeData = [
-         'name'=>'コールドスナップ',
-         'attr' => 'CSP',
-        'block' => 'アイスエイジ',
-        'format' => 'モダン',
-        'release_date' => '2006-07-21'];
-        $this->execute($storeData);
-    }
+    // public function test_全項目入力()
+    // {
+    //     $storeData = [
+    //      'name'=>'コールドスナップ',
+    //      'attr' => 'CSP',
+    //     'block' => 'アイスエイジ',
+    //     'format' => 'モダン',
+    //     'release_date' => '2006-07-21'];
+    //     $this->execute($storeData);
+    // }
 
     // public function test_BASEIDが0()
     // {
@@ -56,9 +56,15 @@ class DBExpTest extends TestCase
     //     'release_date' => '2006-7-21'];
     //     $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
     // }
-
-    private function execute($storeData) {
-        $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
+    /**
+     * Undocumented function
+    *
+    * @param [type] $storeData
+    * @return void
+    *  @dataProvider dataprovider
+    */
+    public function testExecute(array $storeData, int $code) {
+        $this->post('api/database/exp', $storeData)->assertStatus($code);
 
         // DBからデータ取得
         $dbactual = Expansion::where('attr', $storeData['attr'])->first();
@@ -76,5 +82,31 @@ class DBExpTest extends TestCase
         assertEquals($storeData['attr'], $attr,  '略称');
         assertEquals($storeData['block'], $actualPage->getProperty('ブロック')->getRawContent()['name'],  'ブロック');
         assertEquals($storeData['format'], $actualPage->getProperty('フォーマット')->getRawContent()['name'],  'フォーマット');
+    }
+
+    public function dataprovider() {
+        return [
+            'リリース日あり' => [
+                    [
+                        'name' => 'コールドスナップ',
+                        'attr'=>'CSP',
+                        'block'=>'アイスエイジ',
+                        'format'=>'モダン',
+                        'release_date'=>'2006-07-21'
+                    ],
+                    Response::HTTP_CREATED
+                ],
+                'リリース日なし' => [
+                    [
+                        'name' => 'コールドスナップ',
+                        'attr'=>'CSP',
+                        'block'=>'アイスエイジ',
+                        'format'=>'モダン',
+                        'release_date'=>''
+                    ],
+                    Response::HTTP_CREATED
+                ],
+
+            ];
     }
 }

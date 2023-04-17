@@ -34,7 +34,7 @@ class PostExRequest extends FormRequest
             'attr' => 'required',
             'block' => 'required',
             'format' => ['required', 'regex:/^[スタンダード|パイオニア|モダン|レガシー|統率者|マスターピース|その他]+$/u'],
-            'release_date' => 'date'
+            'release_date' => 'nullable | date'
         ];
     }
 

@@ -41,8 +41,11 @@ class ExpDBController extends Controller
      * @return void
      */
     public function store(PostExRequest $request) {
-        $details = $request->all();
-        $attr = $details['attr'];
+        $details = ['name' => $request->input('name'),
+                         'attr' => $request->input('attr'),
+                         'block' => $request->input('block'),
+                         'format' => $request->input('format'),
+                          'release_date' => $request->input('release_date')];
         $name = $details['name'];
         $isExist = Expansion::isExist($name);
         if ($isExist) {
@@ -54,9 +57,9 @@ class ExpDBController extends Controller
         // DBにエキスパンション一覧を登録する。
         $exp = new Expansion();
         $baseId = null;
-        if (array_key_exists('base_id', $details)) {
-            $baseId = $details['base_id']; 
-        }
+        // if (array_key_exists('base_id', $details)) {
+        //     $baseId = $details['base_id']; 
+        // }
         $releaseDate = new Carbon($details['release_date']);
         $exp->create(['notion_id' => $id,
         'base_id' => $baseId,

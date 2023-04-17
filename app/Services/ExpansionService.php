@@ -42,10 +42,10 @@ class ExpansionService {
             $exp->setAttr($attr);
 
             //BASE_ID
-            $baseId = $page->getProperty("BASEID");
-            if (!is_null($baseId)) {
-                $exp->setBaseId($baseId->getContent());
-            } 
+            // $baseId = $page->getProperty("BASEID");
+            // if (!is_null($baseId)) {
+            //     $exp->setBaseId($baseId->getContent());
+            // } 
 
             // リリース日
             $release = $scryfallService->getReleaseDate($attr);
