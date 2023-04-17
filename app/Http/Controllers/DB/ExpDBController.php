@@ -7,10 +7,12 @@ use App\Http\Requests\PostExRequest;
 use App\Http\Resources\ExpDBResource;
 use App\Http\Resources\Notion\ExpansionResource;
 use App\Models\Expansion;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\ExpansionService;
+use Exception;
+
+use function Spatie\Ignition\ErrorPage\report;
 
 /**
  * DBのエキスパンション用コントローラークラス
@@ -46,26 +48,8 @@ class ExpDBController extends Controller
                          'block' => $request->input('block'),
                          'format' => $request->input('format'),
                           'release_date' => $request->input('release_date')];
-        $name = $details['name'];
-        $isExist = Expansion::isExist($name);
-        if ($isExist) {
-            return response($name.' is duplicate', Response::HTTP_BAD_REQUEST);
-        }
-        // Notionのエキスパンション一覧に登録する。
-        $id = $this->service->store($details);
-
-        // DBにエキスパンション一覧を登録する。
-        $exp = new Expansion();
-        $baseId = null;
-        // if (array_key_exists('base_id', $details)) {
-        //     $baseId = $details['base_id']; 
-        // }
-        $releaseDate = new Carbon($details['release_date']);
-        $exp->create(['notion_id' => $id,
-        'base_id' => $baseId,
-        'name' => $name,
-        'attr' => $details['attr'],
-        'release_date' => $releaseDate]);
+        // エキスパンション一覧に登録する。
+        $this->service->store($details);
         return response($details['attr'].' insert ok', Response::HTTP_CREATED);
     }
 }

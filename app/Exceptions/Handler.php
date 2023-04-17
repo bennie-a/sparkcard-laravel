@@ -7,6 +7,8 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
+use function Symfony\Component\HttpKernel\DataCollector\getMessage;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -25,6 +27,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
+        ConflictException::class
     ];
 
     /**
@@ -45,7 +48,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (HttpException $e, $request) {
+        $this->renderable(function (HttpException  $e, $request) {
             if ($request->is('api/*')) {
                 $title = '';
                 $detail = '';
@@ -55,9 +58,14 @@ class Handler extends ExceptionHandler
                         $title = 'No Contents';
                         $detail = '検索結果がありません。';
                     break;
+                    case Response::HTTP_CONFLICT:
+                        $title = 'Conflict';
+                        $detail = $e->getMessage();
+                    break;
                     case 410:
                         $title = 'No Promotype';
                         $detail = $e->getMessage();
+                    break;
                 }
             }
             return response()->json([

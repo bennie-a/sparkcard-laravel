@@ -24,7 +24,7 @@ class ScryfallRepository {
         if ($res->getStatusCode() == Response::HTTP_NOT_FOUND) {
             return ['released_at' => ''];
         }
-        return $this->getContents($$res);
+        return $this->getContents($res);
     }
 
     /**
