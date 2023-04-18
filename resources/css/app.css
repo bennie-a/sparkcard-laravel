@@ -36,6 +36,9 @@ body {
 .text-center {
     text-align: center;
 }
+.pl-2 {
+    padding-left: 2em !important;
+}
 
 /* ロード中のアイコン */
 .loader,

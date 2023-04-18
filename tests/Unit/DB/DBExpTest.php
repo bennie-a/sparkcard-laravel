@@ -25,43 +25,10 @@ class DBExpTest extends TestCase
          Expansion::factory()->createOne(['name' => '灯争大戦', 'attr' => 'WAR']);
     }
 
-    // public function test_全項目入力()
-    // {
-    //     $storeData = [
-    //      'name'=>'コールドスナップ',
-    //      'attr' => 'CSP',
-    //     'block' => 'アイスエイジ',
-    //     'format' => 'モダン',
-    //     'release_date' => '2006-07-21'];
-    //     $this->execute($storeData);
-    // }
-
-    // public function test_BASEIDが0()
-    // {
-    //     $storeData = [
-    //      'name'=>'コールドスナップ',
-    //      'attr' => 'CSP',
-    //     'base_id' => 0,
-    //     'release_date' => '2006-07-21'];
-    //     $this->execute($storeData);
-    //     // $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
-    // }
-
-    // /**
-    //  * test
-    //  */
-    // public function test_BASEIDが未入力()
-    // {
-    //     $storeData = ['id' => '008b0ade-0521-462a-b1b3-93c7e8c8406c',
-    //      'name'=>'コールドスナップ',
-    //      'attr' => 'CSP',
-    //     'release_date' => '2006-7-21'];
-    //     $this->post('api/database/exp', $storeData)->assertStatus(Response::HTTP_CREATED);
-    // }
     /**
      * Undocumented function
     *
-    * @param [type] $storeData
+    * @param array $storeData
     * @return void
     *  @dataProvider dataprovider
     */
@@ -133,16 +100,6 @@ class DBExpTest extends TestCase
                     Response::HTTP_CONFLICT,
                     '灯争大戦は既に登録されています。'
             ],
-                // 'リリース日なし' => [
-                //     [
-                //         'name' => 'コールドスナップ',
-                //         'attr'=>'CSP',
-                //         'block'=>'アイスエイジ',
-                //         'format'=>'モダン',
-                //         'release_date'=>''
-                //     ],
-                //     Response::HTTP_CREATED
-                // ],
-            ];
+        ];
     }
 }

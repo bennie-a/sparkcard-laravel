@@ -17,31 +17,6 @@
                 <button class="ui teal basic button" @click="show">
                     新しく登録する
                 </button>
-                <div id="insertForm" class="ui tiny modal">
-                    <div class="header">エキスパンション登録</div>
-                    <div class="content ui form">
-                        <div class="field">
-                            <label for="">名称</label>
-                            <input type="text" />
-                        </div>
-                        <div class="field">
-                            <label for="">略称</label>
-                            <input type="text" />
-                        </div>
-                        <div class="field">
-                            <label for="">BASE ID</label>
-                            <input type="number" />
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <div class="ui cancel button">
-                            <i class="close icon"></i>キャンセル
-                        </div>
-                        <button class="ui teal button">
-                            <i class="checkmark icon"></i>登録する
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
         <div
@@ -76,11 +51,12 @@
 import NowLoading from "../component/NowLoading.vue";
 import { AxiosTask } from "../../component/AxiosTask";
 import MessageArea from "../component/MessageArea.vue";
-import ModalButton from "../component/ModalButton.vue";
+
 export default {
     data() {
         return {
             expansions: null,
+            release_date: new Date(),
         };
     },
     mounted: async function () {
@@ -99,7 +75,7 @@ export default {
     },
     methods: {
         show: function () {
-            $("#insertForm").modal("show");
+            this.$router.push("/settings/expansion/post");
         },
         store: async function () {
             const list = this.$store.getters["expansion/result"];
@@ -126,7 +102,6 @@ export default {
     components: {
         "now-loading": NowLoading,
         "message-area": MessageArea,
-        ModalButton: ModalButton,
     },
 };
 </script>
