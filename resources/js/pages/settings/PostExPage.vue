@@ -1,30 +1,33 @@
 <template>
     <section class="ui grids">
         <message-area></message-area>
-        <form class="content ui form">
+        <router-link to="/settings/expansion"
+            ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
+        >
+        <div class="mt-1 content ui form">
             <div class="two fields">
                 <div class="required six wide field">
                     <label for="">名称</label>
-                    <input type="text" />
+                    <input type="text" v-model="name" />
                 </div>
                 <div class="required two wide field">
                     <label for="">略称</label>
-                    <input type="text" />
+                    <input type="text" v-model="attr" />
                 </div>
             </div>
             <div class="two fields">
                 <div class="required four wide field">
                     <label for="">ブロック</label>
                     <select v-model="block" class="ui search dropdown">
-                        <option value="">ミラディン</option>
-                        <option value="">神河</option>
-                        <option value="">ドミナリア</option>
-                        <option value="">ゼンディカー</option>
-                        <option value="">イコリア</option>
-                        <option value="">エルドレイン</option>
-                        <option value="">カラデシュ</option>
-                        <option value="">基本セット</option>
-                        <option value="">その他</option>
+                        <option>ミラディン/ファイレクシア</option>
+                        <option>神河</option>
+                        <option>ドミナリア</option>
+                        <option>ゼンディカー</option>
+                        <option>イコリア</option>
+                        <option>エルドレイン</option>
+                        <option>カラデシュ</option>
+                        <option>基本セット</option>
+                        <option>その他</option>
                     </select>
                 </div>
                 <div class="required four wide field">
@@ -51,24 +54,24 @@
                     :enable-time-picker="false"
                 ></Datepicker>
             </div>
-            <button class="ui teal button">
-                <i class="checkmark icon"></i>登録する
-            </button>
-        </form>
-        <div class="actions"></div>
+            <ModalButton @action="store"
+                ><i class="checkmark icon"></i>登録する</ModalButton
+            >
+        </div>
     </section>
 </template>
 <script>
 import { AxiosTask } from "../../component/AxiosTask";
 import MessageArea from "../component/MessageArea.vue";
 import Datepicker from "@vuepic/vue-datepicker";
+import ModalButton from "../component/ModalButton.vue";
 
 export default {
     data() {
         return {
             name: "",
             attr: "",
-            block: "",
+            block: "ミラディン/ファイレクシア",
             format: "スタンダード",
             release_date: null,
         };
@@ -80,31 +83,32 @@ export default {
             const year = date.getFullYear();
             return `${year}/${month}/${day}`;
         },
-        store: async function () {
-            const list = this.$store.getters["expansion/result"];
+        back: function () {
+            this.$router.push("/settings/expansion");
+        },
+        store: function () {
             const task = new AxiosTask(this.$store);
-            await Promise.all(
-                list.map(async (exp) => {
-                    let json = {
-                        name: this.name,
-                        attr: this.attr,
-                        block: this.block,
-                        format: this.format,
-                        release_date: this.release_date,
-                    };
-                    const success = function (response, store) {};
-                    await task.post("/database/exp", json, success);
-                })
-            );
+            let json = {
+                name: this.name,
+                attr: this.attr,
+                block: this.block,
+                format: this.format,
+                release_date: this.release_date,
+            };
+            const success = function (response, store) {
+                // this.back();
+            };
+            task.post("/database/exp", json, success);
             this.$store.dispatch(
                 "setSuccessMessage",
-                `${list.length}件登録が完了しました。`
+                `${this.name}を登録しました！`
             );
         },
     },
     components: {
         "message-area": MessageArea,
         Datepicker: Datepicker,
+        ModalButton: ModalButton,
     },
 };
 </script>

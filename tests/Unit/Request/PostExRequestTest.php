@@ -33,13 +33,13 @@ class PostExRequestTest extends TestCase {
 
     public function dataprovider() {
         return [
-            '正常' => [
+            '全項目入力' => [
                     [
                         'name' => 'コールドスナップ',
                         'attr'=>'CSP',
                         'block'=>'アイスエイジ',
                         'format'=>'モダン',
-                        'release_date'=>'2006-07-21'
+                        'release_date'=>'2006/07/21'
                     ],
                     true
                 ],

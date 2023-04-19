@@ -49,15 +49,19 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (HttpException  $e, $request) {
+            $title = 'Error';
+            $detail = '';
+            logger()->debug($e);
             if ($request->is('api/*')) {
-                $title = '';
-                $detail = '';
 
                 switch ($e->getStatusCode()) {
                     case Response::HTTP_NO_CONTENT:
                         $title = 'No Contents';
                         $detail = '検索結果がありません。';
                     break;
+                    case Response::HTTP_NOT_FOUND:
+                        $title = 'Not Found';
+                        $detail = $e->getMessage();
                     case Response::HTTP_CONFLICT:
                         $title = 'Conflict';
                         $detail = $e->getMessage();

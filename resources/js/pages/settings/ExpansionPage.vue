@@ -77,27 +77,6 @@ export default {
         show: function () {
             this.$router.push("/settings/expansion/post");
         },
-        store: async function () {
-            const list = this.$store.getters["expansion/result"];
-            const task = new AxiosTask(this.$store);
-            await Promise.all(
-                list.map(async (exp) => {
-                    let json = {
-                        id: exp.id,
-                        name: exp.name,
-                        attr: exp.attr,
-                        base_id: exp.base_id,
-                        release_date: exp.release_date,
-                    };
-                    const success = function (response, store) {};
-                    await task.post("/database/exp", json, success);
-                })
-            );
-            this.$store.dispatch(
-                "setSuccessMessage",
-                `${list.length}件登録が完了しました。`
-            );
-        },
     },
     components: {
         "now-loading": NowLoading,
