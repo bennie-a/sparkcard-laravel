@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import search from "./vuex/searchForm";
 import message from "./vuex/messageForm";
 import csvOption from "./vuex/csvOption";
-import expansion from "./vuex/expansion";
+import expansion from "./vuex/expansion.js";
 
 export const store = createStore({
     modules: { search, message, csvOption, expansion },

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostExRequest;
 use App\Http\Resources\ExpDBResource;
 use App\Http\Resources\Notion\ExpansionResource;
+use App\Models\CardInfo;
 use App\Models\Expansion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,6 +34,11 @@ class ExpDBController extends Controller
         $query = $request->input("query");
         logger()->info('入力パラメータ', [$query]);
         $list = Expansion::where('attr', 'like', '%'.$query.'%')->limit(5)->get();
+        foreach($list as $exp) {
+            logger()->debug($exp->notion_id);
+            $isExist = CardInfo::where('exp_id', $exp->notion_id)->exists();
+            $exp['is_exist'] = $isExist;
+        }
         return response()->json($list);
     }
 
