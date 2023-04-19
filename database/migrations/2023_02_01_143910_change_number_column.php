@@ -27,6 +27,7 @@ return new class extends Migration
     {
         Schema::table('card_info', function (Blueprint $table) {
              $table->integer('number')->change();
+            //  $table->dropColumn('number');
         });
     }
 };

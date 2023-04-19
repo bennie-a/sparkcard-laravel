@@ -7,7 +7,7 @@
                     placeholder="エキスパンション(未実装)"
                     v-model="expansion"
                 />
-                <button class="ui primary button" @click="search">検索</button>
+                <button class="ui teal button" @click="search">検索</button>
             </div>
         </div>
     </div>

@@ -27,7 +27,12 @@ class ExpansionRepository extends NotionRepository{
        return $pages;
     }
 
-    //　名前からエキスパンションIDを取得する。
+    /**
+     * 名前からエキスパンションIDを取得する。
+     *
+     * @param string $name
+     * @return string エキスパンションID
+     */
     public function findIdByName(string $name){
         $notion = parent::createNotion();
         $filters = new Collection();
@@ -37,6 +42,12 @@ class ExpansionRepository extends NotionRepository{
         return str_replace('-', '', $p->getId());
     }
 
+    /**
+     * 略称に該当するエキスパンションのIDを取得する。
+     *
+     * @param string $attr 略称
+     * @return string 
+     */
     public function findByAttr(string $attr) {
         $page = $this->findByEquals("略称", $attr);
         return str_replace('-', '', $page->getId());

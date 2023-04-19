@@ -8,6 +8,8 @@ import VuePapaParse from "vue-papa-parse";
 const app = createApp(App);
 import { store } from "./store.js";
 import Encoding from "encoding-japanese";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 // ルータをインストール
 app.use(router);
@@ -15,4 +17,5 @@ app.use(Paginate);
 app.use(store);
 app.use(VuePapaParse);
 app.use(Encoding);
+app.use(Datepicker);
 app.mount("#app");

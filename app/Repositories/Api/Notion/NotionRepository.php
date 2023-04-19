@@ -17,7 +17,12 @@ class NotionRepository {
         $this->databaseId = $databaseId;
     }
     
-    // 商品管理ボードにカード情報を登録する。
+    /**
+     * Notionのページ情報を1件登録する。
+     *
+     * @param Page $page
+     * @return $page 登録後のカード情報(IDとURLが取得できる)
+     */
     public function store(Page $page) {
         try {
             $notion = self::createNotion();

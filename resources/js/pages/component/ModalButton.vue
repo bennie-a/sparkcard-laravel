@@ -1,5 +1,5 @@
 <template>
-    <button class="ui button purple" @click="show"><slot></slot></button>
+    <button class="ui teal button" @click="show"><slot></slot></button>
     <div id="confirm" class="ui tiny modal">
         <div class="header">Notice</div>
         <div class="content" v-if="this.$store.getters.isLoad == false">
@@ -9,7 +9,7 @@
             <button class="ui cancel button">
                 <i class="close icon"></i>キャンセル
             </button>
-            <button class="ui primary button" @click="execute">
+            <button class="ui teal button" @click="execute">
                 <i class="checkmark icon"></i>登録する
             </button>
         </div>

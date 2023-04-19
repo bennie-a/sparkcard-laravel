@@ -6,6 +6,7 @@ import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/settings/ExpansionPage.vue";
 import CardInfoPage from "./pages/settings/CardInfoPage.vue";
+import PostExPage from "./pages/settings/PostExPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -57,8 +58,16 @@ const routes = [
         path: "/settings/expansion",
         component: ExpansionPage,
         meta: {
+            title: "エキスパンション一覧",
+            description: "エキスパンション一覧表示を行います。",
+        },
+    },
+    {
+        path: "/settings/expansion/post",
+        component: PostExPage,
+        meta: {
             title: "エキスパンション登録",
-            description: "NotionのエキスパンションをDBに一括登録します。",
+            description: "エキスパンションの登録・編集を行います。",
         },
     },
     {

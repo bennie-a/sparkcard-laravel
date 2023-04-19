@@ -28,3 +28,4 @@ class ExpansionController extends Controller
         return response()->json($json, Response::HTTP_OK);
     }
 }
+?>
