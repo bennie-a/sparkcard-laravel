@@ -31,7 +31,7 @@
                     <th class="six wide">名称</th>
                     <th>略称</th>
                     <th>リリース日</th>
-                    <th>カード登録</th>
+                    <th class="center aligned">カード登録</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +39,12 @@
                     <td>{{ ex.name }}</td>
                     <td>{{ ex.attr }}</td>
                     <td>{{ ex.release_date }}</td>
-                    <td>{{ ex.is_exist }}</td>
+                    <td v-if="ex.is_exist" class="positive center aligned">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </td>
+                    <td v-else class="negative center aligned">
+                        <i class="bi bi-x-square-fill"></i>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -91,3 +96,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+i {
+    font-size: 1.5rem;
+}
+</style>
