@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\json;
 /**
- * オンラインのみ使用するカード。このクラスのカードは対象外。
+ * 対象外カード。このクラスのカード情報は返さない。
  */
 class ExcludeCard extends AbstractCard
 {
@@ -10,5 +10,15 @@ class ExcludeCard extends AbstractCard
     {
         return '';
     }
+
+    /**
+     * 除外したいカード情報の条件式
+     * @override AbstractCard
+     * @return boolean
+     */
+    public function isExclude($json, array $cardInfo) {
+        return true;
+    }
+
 }
 ?>

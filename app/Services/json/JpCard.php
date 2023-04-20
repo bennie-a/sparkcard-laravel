@@ -12,8 +12,9 @@ class JpCard extends AbstractCard
     }
 
     public function multiverseId()
-    {   $id = 'multiverseId';
-        return MtgJsonUtil::hasKey($id, $this->getJpData()) ? $this->getJpData()[$id] : parent::getEnMultiverseId();
+    {
+        return MtgJsonUtil::hasKey(self::MULTIVERSEID, $this->getJpData()) ?
+                 $this->getJpData()[self::MULTIVERSEID] : parent::getEnMultiverseId();
     }
 
     public function getJpData() {

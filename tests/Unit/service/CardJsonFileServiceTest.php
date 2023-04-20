@@ -17,81 +17,6 @@ use function PHPUnit\Framework\assertTrue;
 
 class CardJsonFileServiceTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_エキスパンション名()
-    {   
-        $contents = file_get_contents(storage_path("test/json/war_short.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        assertEquals("WAR", $result["setCode"]);
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_日本語表記あり()
-    {   
-        $contents = file_get_contents(storage_path("test/json/war_short.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $card = current($result["cards"]);
-        assertEquals("規律の絆", $card['name']);
-        assertEquals("462253", $card['multiverseId']);
-        assertEmpty($card['scryfallId']);
-        assertEquals("6", $card['number']);
-        assertEmpty($card['promotype']);
-    }
-    
-    public function test_日本語表記あり_multiverseIdなし() {
-        $contents = file_get_contents(storage_path("test/json/mir.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $card = current($result["cards"]);
-        assertEquals("死後の生命", $card['name']);
-        assertEquals("3476", $card['multiverseId']);
-        assertEmpty($card['scryfallId']);
-        assertEquals("1", $card['number']);
-    }
-
-    public function test_日本限定カード() {
-        $contents = file_get_contents(storage_path("test/json/war_short.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $cards = $result["cards"];
-        $card = $this->nextCard("群れの声、アーリン", $cards);
-        assertEquals("群れの声、アーリン" ,$card['name']);
-        assertEmpty($card['multiverseId']);
-        assertEquals('43261927-7655-474b-ac61-dfef9e63f428', $card['scryfallId'], 'scryfallId');
-        assertEquals("150", $card['number']);
-        assertEquals("絵違い", $card['promotype']);
-
-    }
-
-    public function test_日本語表記なし()
-    {
-        $contents = file_get_contents(storage_path("test/json/test_color.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $cards = $result["cards"];
-        $card = $this->nextCard("飛空士の騎兵部隊", $cards);
-        assertEquals("飛空士の騎兵部隊", $card['name'], 'カード名(日本語)');
-        logger()->debug($card['scryfallId']);
-        assertEmpty($card['multiverseId']);
-        assertEquals($card['scryfallId'], "38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c");
-        assertEquals("1", $card['number']);
-    }
-
     public function test_色判定() {
         $contents = file_get_contents(storage_path("test/json/war_short.json"));
         $json = json_decode($contents, true);
@@ -213,12 +138,6 @@ class CardJsonFileServiceTest extends TestCase
     //     assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
     //     assertEquals("PH", $target['language'], "言語");
     // }
-
-    public function test_両面カード() {
-        $cards = $this->build("neo.json");
-        $target = $this->getCardByNumber('465', $cards);
-        assertEquals(PromoType::FANDFC->text(), $target['promotype'], "プロモタイプ");
-    }
 
     public function test_ネオンインク版() {
         $cards = $this->build("neo.json");

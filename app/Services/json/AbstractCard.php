@@ -2,7 +2,7 @@
 namespace app\Services\json;
 
 use App\Libs\MtgJsonUtil;
-use App\Services\interface\CardInfoInterface;
+use App\Services\interfaces\CardInfoInterface;
 use App\Services\WisdomGuildService;
 
  abstract class AbstractCard implements CardInfoInterface {
@@ -10,6 +10,16 @@ use App\Services\WisdomGuildService;
     {
         $this->json = $json;
     }
+
+    const NAME = 'name';
+
+    const EN_NAME = 'en_name';
+
+    const MULTIVERSEID = 'multiverseId';
+
+    const IDENTIFER = 'identifiers';
+
+    const SCRYFALLID = 'scryfallId';
 
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
@@ -42,7 +52,7 @@ use App\Services\WisdomGuildService;
     }
 
     public function jpname(string $enname):string {
-        return $this->jp["name"];        
+        return $this->jp[self::NAME];        
     }
 
     public function scryfallId()
@@ -59,10 +69,22 @@ use App\Services\WisdomGuildService;
         return 'JP';
     }
 
-    protected function getEnMultiverseId() {
-        return $this->getIdentifiersValue("multiverseId");
+    /**
+     * 除外したいカード情報の条件式
+     *
+     * @return boolean 除外したい場合はtrue, そうでない場合はfalse
+     */
+    public function isExclude($json, array $cardInfo) {
+        return false;
     }
 
+    protected function getEnMultiverseId() {
+        return $this->getIdentifiersValue(self::MULTIVERSEID);
+    }
+
+    protected function getEnScryfallId () {
+        return $this->getIdentifiersValue(self::SCRYFALLID);
+    }
     private function getIdentifiersValue($key){
         $identifiers = $this->getIdentifiers();
         return MtgJsonUtil::hasKey($key, $identifiers) ? $identifiers[$key] : '';
