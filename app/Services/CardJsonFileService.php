@@ -41,7 +41,6 @@ class CardJsonFileService {
             'color' => $color->value, 'number' => $obj->number(), 'promotype' => $promo->text(), 'isFoil' => false,
             'language' => $obj->language()
             ];
-            logger()->info('get card:',['name' => $newCard['name'], 'number' => $newCard['number']]);
             logger()->debug(get_class($obj).':'.$newCard['name']);
             if (!MtgJsonUtil::hasKey('hasNonFoil', $c) || (MtgJsonUtil::hasKey('hasNonFoil', $c) && $c['hasNonFoil'] == true)) {
                 array_push($cardInfo, $newCard);
@@ -50,6 +49,7 @@ class CardJsonFileService {
                 $newCard['isFoil'] = true;
                 array_push($cardInfo, $newCard);
             }
+            logger()->info('get card:',['name' => $newCard['name'], 'number' => $newCard['number'], 'isFoil' => $newCard['isFoil']]);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;

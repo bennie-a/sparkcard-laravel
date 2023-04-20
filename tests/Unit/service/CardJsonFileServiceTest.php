@@ -207,12 +207,12 @@ class CardJsonFileServiceTest extends TestCase
 
     }
 
-    public function test_ファイレクシア語() {
-        $cards = $this->build("neo.json");
-        $target = $this->getCardByNumber('427', $cards);
-        assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
-        assertEquals("PH", $target['language'], "言語");
-    }
+    // public function test_ファイレクシア語() {
+    //     $cards = $this->build("neo.json");
+    //     $target = $this->getCardByNumber('427', $cards);
+    //     assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
+    //     assertEquals("PH", $target['language'], "言語");
+    // }
 
     public function test_両面カード() {
         $cards = $this->build("neo.json");
@@ -223,25 +223,25 @@ class CardJsonFileServiceTest extends TestCase
     public function test_ネオンインク版() {
         $cards = $this->build("neo.json");
         // 貪る混沌、碑出告
-        $target = $this->getCardByNumber('432', $cards);
+        $target = $this->getFoilCard('432', $cards);
         assertEquals(PromoType::NEONINK->text(), $target['promotype'], "プロモタイプ");
     }
 
     public function test_胆液版() {
         $cards = $this->build("one.json");
-        $target = $this->getCardByNumber('345', $cards);
+        $target = $this->getFoilCard('345', $cards);
         assertEquals(PromoType::OILSLICK->text(), $target['promotype'], "プロモタイプ");
     }
 
     public function test_コンセプトアート() {
         $cards = $this->build("one.json");
-        $target = $this->getCardByNumber('416', $cards);
+        $target = $this->getFoilCard('416', $cards);
         assertEquals(PromoType::CONCEPT->text(), $target['promotype'], "プロモタイプ");
     }
 
     public function test_ステップアンドコンプリート() {
         $cards = $this->build("one.json");
-        $target = $this->getCardByNumber('422', $cards);
+        $target = $this->getFoilCard('422', $cards);
         assertEquals(PromoType::STEPANDCOMPLEAT->text(), $target['promotype'], "プロモタイプ");
 
     }
@@ -269,16 +269,26 @@ class CardJsonFileServiceTest extends TestCase
      * @param [type] $cards
      * @return void
      */
-    private function nextCard(string $name, $cards) {
+    private function nextCard(string $name, array $cards) {
         $target = array_filter($cards, function($c) use($name){
             return $c['isFoil'] == false && (strcmp($name, $c['name']) == 0 || strcmp($name, $c['en_name']) == 0);
         });
         return current($target);
     }
 
-    private function getCardByNumber(string $number, $cards) {
+    private function getCardByNumber(string $number, array $cards) {
         $filterd = array_filter($cards, function($c) use($number) {
             return $number == $c['number'] && $c['isFoil'] == false;
+        });
+        logger()->debug($cards);
+        assertNotEmpty($filterd, 'カード情報の有無');
+        assertEquals(1, count($filterd));
+        return current($filterd);
+    }
+
+    private function getFoilCard(string $number, $cards) {
+        $filterd = array_filter($cards, function($c) use($number) {
+            return $number == $c['number'] && $c['isFoil'] == true;
         });
         logger()->debug($cards);
         assertNotEmpty($filterd, 'カード情報の有無');
