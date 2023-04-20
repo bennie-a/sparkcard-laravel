@@ -1,7 +1,10 @@
 <?php
 namespace App\Enum;
 
-enum PromoType:string {
+/**
+ * 
+ */
+enum PromoTypeEnum:string {
     case JPWARKER = 'jpwalker';
     case BOOSTER_FAN = 'boosterfun';
     case DRAFT = 'draft';
@@ -59,7 +62,7 @@ enum PromoType:string {
 
         $promoarray = $card[$key];
         $typeword = self::excludeKeyword([self::TEXTURED->value], $promoarray);
-        $promoType = PromoType::tryFrom(current($typeword));
+        $promoType = PromoTypeEnum::tryFrom(current($typeword));
         if ($promoType == self::BOOSTER_FAN) {
             $promoType = self::frameEffect($card);
         } 
@@ -81,7 +84,7 @@ enum PromoType:string {
             return self::BOOSTER_FAN;
         }
         $effects = array_map(function($f) {
-            $type = PromoType::tryFrom($f);
+            $type = PromoTypeEnum::tryFrom($f);
             return $type;
         }, $card[$key]);
         $effects = array_filter($effects, function($e) {

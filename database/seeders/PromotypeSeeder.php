@@ -29,6 +29,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース']);
         Promotype::create(['attr' => 'concept', 'name' => 'コンセプトアート']);
         Promotype::create(['attr' => 'stepandcompleat', 'name' => 'S&C']);
-        
+        Promotype::create(['attr' => 'halofoil', 'name' => 'ハロー・Foil']);
     }
 }

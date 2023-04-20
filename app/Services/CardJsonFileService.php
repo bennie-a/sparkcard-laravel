@@ -2,13 +2,11 @@
 namespace App\Services;
 
 use App\Enum\CardColor;
-use App\Enum\PromoType;
+use App\Enum\PromoTypeEnum;
 use App\Exceptions\NoPromoTypeException;
 use App\Factory\CardInfoFactory;
 use app\Libs\JsonUtil;
 use App\Libs\MtgJsonUtil;
-use App\Services\json\ExcludeCard;
-use App\Services\json\TransformCard;
 
 class CardJsonFileService {
     public function build($json) {
@@ -25,8 +23,8 @@ class CardJsonFileService {
             // 両面カード対応
             $enname = $c['name'];
             $color = CardColor::match($c);
-            $promo = PromoType::match($c);
-            if ($promo == PromoType::OTHER) {
+            $promo = PromoTypeEnum::match($c);
+            if ($promo == PromoTypeEnum::OTHER) {
                 throw new NoPromoTypeException($cardtype->jpname($enname), $cardtype->number());
             }
 
