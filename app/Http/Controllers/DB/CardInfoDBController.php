@@ -32,7 +32,7 @@ class CardInfoDBController extends Controller
         ini_set("max_execution_time",180); // タイムアウトを180秒にセット
         ini_set("max_input_time",180); // パース時間を180秒にセット
 
-        $condition = $request->only(['set', 'color', 'isFoil']);
+        $condition = $request->only(['name', 'set', 'color', 'isFoil']);
         logger()->info('search condition:',$condition);
         $result = $this->service->fetch($condition);
         if ($result->isEmpty()) {
