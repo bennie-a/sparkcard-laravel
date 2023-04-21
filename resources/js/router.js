@@ -19,12 +19,12 @@ const routes = [
         },
     },
     {
-        path: "/logikura/newitem",
+        path: "/zaiko/newitem",
         component: LogikuraItemCSV,
         meta: {
-            title: "商品登録CSVダウンロード",
+            title: "在庫登録CSVダウンロード",
             description:
-                "Notionの商品管理ボードからロジクラの商品登録用CSVを作成します。",
+                "Notionの商品管理ボードからZAIKOの商品登録用CSVを作成します。",
         },
     },
     {

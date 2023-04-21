@@ -36,15 +36,15 @@
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-cloud mr-half"></i>ロジクラ
+                    <i class="bi bi-cloud mr-half"></i>ZAIKO
                 </div>
                 <ul>
                     <li>
                         <router-link
-                            to="/logikura/newitem"
+                            to="/zaiko/newitem"
                             class="nav-link"
                             :class="{
-                                active: $route.path === '/logikura/newitem',
+                                active: $route.path === '/zaiko/newitem',
                             }"
                             ><i class="bi bi-filetype-csv"></i
                             >商品登録CSV</router-link
@@ -91,7 +91,7 @@
                             :class="{
                                 active: $route.path === '/settings/expansion',
                             }"
-                            >エキスパンション登録</router-link
+                            >エキスパンション一覧</router-link
                         >
                     </li>
                     <li>
