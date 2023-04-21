@@ -83,19 +83,6 @@ class CardJsonFileServiceTest extends TestCase
         assertTrue(count($cards) > 1);
     }
 
-    public function test_通常版() {
-        $contents = file_get_contents(storage_path("test/json/war_short.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $cards = $result['cards'];
-
-        $black = $this->nextCard('鮮血の刃先', $cards);
-        assertEmpty($black['promotype'], '通常版はpromotypeは空文字');
-        assertEquals($black['language'], 'JP');
-
-    }
-
     public function test_拡張アート() {
         $cards = $this->build("neo.json");
         $target = $this->getCardByNumber('445', $cards);

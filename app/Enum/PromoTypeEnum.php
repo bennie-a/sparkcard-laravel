@@ -5,9 +5,7 @@ namespace App\Enum;
  * 
  */
 enum PromoTypeEnum:string {
-    case JPWARKER = 'jpwalker';
     case BOOSTER_FAN = 'boosterfun';
-    case DRAFT = 'draft';
     case BUYABOX = 'buyabox';
     case TEXTURED = 'textured';
     case BUNDLE = 'bundle';
@@ -27,7 +25,6 @@ enum PromoTypeEnum:string {
 
     public function text() {
         return match($this) {
-            self::JPWARKER => '絵違い',
             self::BOOSTER_FAN => 'ブースターファン',
             self::BUYABOX => 'BOXプロモ特典',
             self::TEXTURED => 'ショーケース',

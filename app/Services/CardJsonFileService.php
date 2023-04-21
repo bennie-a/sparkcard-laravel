@@ -7,6 +7,7 @@ use App\Exceptions\NoPromoTypeException;
 use App\Factory\CardInfoFactory;
 use app\Libs\JsonUtil;
 use App\Libs\MtgJsonUtil;
+use App\Models\Promotype;
 
 class CardJsonFileService {
     public function build($json) {
@@ -20,17 +21,13 @@ class CardJsonFileService {
             if ($cardtype->isExclude($c, $cardInfo)) {
                 continue;
             }
-            // 両面カード対応
             $enname = $c['name'];
             $color = CardColor::match($c);
-            $promo = PromoTypeEnum::match($c);
-            if ($promo == PromoTypeEnum::OTHER) {
-                throw new NoPromoTypeException($cardtype->jpname($enname), $cardtype->number());
-            }
+            $promoType = \Promo::find($c);
 
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname),"en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
-            'color' => $color->value, 'number' => $cardtype->number(), 'promotype' => $promo->text(), 'isFoil' => false,
+            'color' => $color->value, 'number' => $cardtype->number(), 'promotype' => $promoType, 'isFoil' => false,
             'language' => $cardtype->language()
             ];
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
@@ -47,4 +44,4 @@ class CardJsonFileService {
         return $array;
     }
 
-}?>
+}
