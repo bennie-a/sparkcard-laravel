@@ -2,15 +2,31 @@
 namespace app\Services\json;
 
 use App\Libs\MtgJsonUtil;
-use App\Services\interface\CardInfoInterface;
+use App\Services\interfaces\CardInfoInterface;
 use App\Services\WisdomGuildService;
+use Closure;
 
- abstract class AbstractCard implements CardInfoInterface {
+abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
     {
         $this->json = $json;
     }
 
+    const NAME = 'name';
+
+    const EN_NAME = 'en_name';
+
+    const MULTIVERSEID = 'multiverseId';
+
+    const IDENTIFER = 'identifiers';
+
+    const SCRYFALLID = 'scryfallId';
+
+    const PROMOTYPE = 'promoTypes';
+
+    const FRAME_EFFECTS = 'frameEffects';
+
+    const IS_FULLART = 'isFullArt';
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
      *
@@ -42,7 +58,7 @@ use App\Services\WisdomGuildService;
     }
 
     public function jpname(string $enname):string {
-        return $this->jp["name"];        
+        return $this->jp[self::NAME];        
     }
 
     public function scryfallId()
@@ -59,10 +75,57 @@ use App\Services\WisdomGuildService;
         return 'JP';
     }
 
-    protected function getEnMultiverseId() {
-        return $this->getIdentifiersValue("multiverseId");
+    public function promotype() {
+        if (MtgJsonUtil::hasKey(self::IS_FULLART, $this->json)) {
+            return 'fullart';
+        }
+
+        if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json)) {
+            return 'draft';
+        }
+        $filterd = function($f) {
+            return $f != 'textured';
+        };
+        return $this->filtering(self::PROMOTYPE, $filterd);
     }
 
+    public function frameEffects() {
+        if (!MtgJsonUtil::hasKey(self::FRAME_EFFECTS, $this->json)) {
+            return 'boosterfun';
+        }
+        $filterd = function($f) {
+            return $f != 'legendary' && $f != 'etched';
+        };
+        $filterd = $this->filtering(self::FRAME_EFFECTS, $filterd);
+        if ($filterd == false) {
+            return 'boosterfun';
+        }
+        return $filterd;
+    }
+
+    private function filtering($keyword, Closure $filterd) {
+        $frames = $this->json[$keyword];
+        $filterd = array_filter($frames, $filterd);
+        return current($filterd);
+    }
+
+
+    /**
+     * 除外したいカード情報の条件式
+     *
+     * @return boolean 除外したい場合はtrue, そうでない場合はfalse
+     */
+    public function isExclude($json, array $cardInfo) {
+        return false;
+    }
+
+    protected function getEnMultiverseId() {
+        return $this->getIdentifiersValue(self::MULTIVERSEID);
+    }
+
+    protected function getEnScryfallId () {
+        return $this->getIdentifiersValue(self::SCRYFALLID);
+    }
     private function getIdentifiersValue($key){
         $identifiers = $this->getIdentifiers();
         return MtgJsonUtil::hasKey($key, $identifiers) ? $identifiers[$key] : '';

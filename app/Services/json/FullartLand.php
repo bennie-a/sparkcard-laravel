@@ -17,9 +17,5 @@ class FullartLand extends AbstractCard
         return parent::getEnMultiverseId();
     }
 
-    public function scryfallId()
-    {
-        return '';
-    }
 }
 ?>

@@ -17,7 +17,7 @@ class PromotypeSeeder extends Seeder
     {
         Promotype::create(['attr' => 'jpwalker', 'name' => '絵違い']);
         Promotype::create(['attr' => 'boosterfun', 'name' => 'ブースターファン']);
-        Promotype::create(['attr' => 'draft', 'name' => '通常版']);
+        Promotype::create(['attr' => 'draft', 'name' => '']);
         Promotype::create(['attr' => 'buyabox', 'name' => 'BOXプロモ特典']);
         Promotype::create(['attr' => 'textured', 'name' => 'テクスチャー']);
         Promotype::create(['attr' => 'bundle', 'name' => 'バンドル']);
@@ -29,6 +29,9 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース']);
         Promotype::create(['attr' => 'concept', 'name' => 'コンセプトアート']);
         Promotype::create(['attr' => 'stepandcompleat', 'name' => 'S&C']);
-        
+        Promotype::create(['attr' => 'halofoil', 'name' => 'ハロー・Foil']);
+        Promotype::create(['attr' => 'intropack', 'name' => 'エントリーセット']);
+        Promotype::create(['attr' => 'brawldeck', 'name' => 'ブロールデッキ']);
+        Promotype::create(['attr' => 'fullart', 'name' => 'フルアート']);
     }
 }

@@ -1,0 +1,94 @@
+{
+    "data": {
+        "baseSetSize": 291,
+        "booster": {},
+        "cards": [
+            {
+                "artist": "Domenico Cava",
+                "availability": ["paper"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 3191,
+                "edhrecSaltiness": 0.11,
+                "finishes": ["foil"],
+                "flavorText": "The Machine Legion coveted her strength, but a spirit of sand, sun, and memory could never be *compleated*.",
+                "foreignData": [],
+                "frameEffects": ["legendary", "showcase", "inverted"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "276340",
+                    "mcmId": "705008",
+                    "mcmMetaId": "211198",
+                    "mtgjsonV4Id": "751eaed4-1f8c-5472-8933-cd85d083d044",
+                    "scryfallId": "262ebc87-fcf5-4893-8357-dcb985a9ba60",
+                    "scryfallIllustrationId": "9247ed0e-7689-49eb-b92d-07cedaed6dc9",
+                    "scryfallOracleId": "f7fa6ac0-70db-4586-b881-5a19db644dfb",
+                    "tcgplayerProductId": "491834"
+                },
+                "isAlternative": true,
+                "isReprint": true,
+                "isStarter": true,
+                "keywords": ["Bolster"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "gladiator": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{W}{W}",
+                "manaValue": 2.0,
+                "name": "Anafenza, Kin-Tree Spirit",
+                "number": "131",
+                "power": "2",
+                "printings": ["DMC", "DTK", "MUL", "PDTK"],
+                "promoTypes": ["halofoil"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/eadca7211e08793f",
+                    "cardmarket": "https://mtgjson.com/links/88f0c0e413a066d5",
+                    "tcgplayer": "https://mtgjson.com/links/e8e954746f2dfbbe"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2015-02-25",
+                        "text": "Bolster itself doesn't target any creature, though some spells and abilities that bolster may have other effects that target creatures. For example, you could put counters on a creature with protection from white with Aven Tactician's bolster ability."
+                    },
+                    {
+                        "date": "2015-02-25",
+                        "text": "You determine which creature to put counters on as the spell or ability that instructs you to bolster resolves. That could be the creature with the bolster ability, if it's still under your control and has the least toughness."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "MUL",
+                "subtypes": ["Spirit", "Soldier"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever another nontoken creature enters the battlefield under your control, bolster 1. (Choose a creature with the least toughness among creatures you control and put a +1/+1 counter on it.)",
+                "toughness": "2",
+                "type": "Legendary Creature — Spirit Soldier",
+                "types": ["Creature"],
+                "uuid": "81b524b7-dc2f-50d9-8906-d9d63a2c3256",
+                "variations": [
+                    "7496ad08-1898-5a29-8a52-5db8956d6186",
+                    "9d34171e-8236-5c97-a316-541c12a88a8a"
+                ]
+            }
+        ],
+        "code": "MUL"
+    }
+}
