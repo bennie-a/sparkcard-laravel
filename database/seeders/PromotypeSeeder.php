@@ -30,5 +30,8 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'concept', 'name' => 'コンセプトアート']);
         Promotype::create(['attr' => 'stepandcompleat', 'name' => 'S&C']);
         Promotype::create(['attr' => 'halofoil', 'name' => 'ハロー・Foil']);
+        Promotype::create(['attr' => 'intropack', 'name' => 'エントリーセット']);
+        Promotype::create(['attr' => 'brawldeck', 'name' => 'ブロールデッキ']);
+        Promotype::create(['attr' => 'fullart', 'name' => 'フルアート']);
     }
 }

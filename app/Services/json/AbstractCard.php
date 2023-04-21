@@ -4,8 +4,9 @@ namespace app\Services\json;
 use App\Libs\MtgJsonUtil;
 use App\Services\interfaces\CardInfoInterface;
 use App\Services\WisdomGuildService;
+use Closure;
 
- abstract class AbstractCard implements CardInfoInterface {
+abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
     {
         $this->json = $json;
@@ -21,6 +22,11 @@ use App\Services\WisdomGuildService;
 
     const SCRYFALLID = 'scryfallId';
 
+    const PROMOTYPE = 'promoTypes';
+
+    const FRAME_EFFECTS = 'frameEffects';
+
+    const IS_FULLART = 'isFullArt';
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
      *
@@ -68,6 +74,41 @@ use App\Services\WisdomGuildService;
     public function language():string {
         return 'JP';
     }
+
+    public function promotype() {
+        if (MtgJsonUtil::hasKey(self::IS_FULLART, $this->json)) {
+            return 'fullart';
+        }
+
+        if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json)) {
+            return 'draft';
+        }
+        $filterd = function($f) {
+            return $f != 'textured';
+        };
+        return $this->filtering(self::PROMOTYPE, $filterd);
+    }
+
+    public function frameEffects() {
+        if (!MtgJsonUtil::hasKey(self::FRAME_EFFECTS, $this->json)) {
+            return 'boosterfun';
+        }
+        $filterd = function($f) {
+            return $f != 'legendary' && $f != 'etched';
+        };
+        $filterd = $this->filtering(self::FRAME_EFFECTS, $filterd);
+        if ($filterd == false) {
+            return 'boosterfun';
+        }
+        return $filterd;
+    }
+
+    private function filtering($keyword, Closure $filterd) {
+        $frames = $this->json[$keyword];
+        $filterd = array_filter($frames, $filterd);
+        return current($filterd);
+    }
+
 
     /**
      * 除外したいカード情報の条件式

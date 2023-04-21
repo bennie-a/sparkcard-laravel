@@ -83,76 +83,12 @@ class CardJsonFileServiceTest extends TestCase
         assertTrue(count($cards) > 1);
     }
 
-    public function test_拡張アート() {
-        $cards = $this->build("neo.json");
-        $target = $this->getCardByNumber('445', $cards);
-        assertEquals(PromoType::EXTENDEDART->text(), $target['promotype'], "プロモタイプ");
-    }
-
-    public function test_ショーケース() {
-        $cards = $this->build("neo.json");
-        $target = $this->getCardByNumber('371', $cards);
-        assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
-    }
-
-    public function test_ブースターファン() {
-        $contents = file_get_contents(storage_path("test/json/test_color.json"));
-        $json = json_decode($contents, true);
-        $service = new CardJsonFileService();
-        $result = $service->build($json['data']);
-        $target = $this->nextCard("Teferi, Temporal Pilgrim", $result["cards"]);
-        assertEquals('ブースターファン', $target['promotype']);
-    }
-
-    public function test_フルアート版土地() {
-        $cards = $this->build("neo.json");
-        assertNotEmpty($cards);
-        $actual = $this->nextCard("平地", $cards);
-        assertNotNull($actual, "土地カードの有無");
-        assertEquals("フルアート", $actual["promotype"], "フルアート");
-    }
-
-    public function test_framesEffectsに該当なし() {
-        $cards = $this->build("neo.json");
-        $target = $this->getCardByNumber('406', $cards);
-        assertEquals(PromoType::BOOSTER_FAN->text(), $target['promotype'], "プロモタイプ");
-
-    }
-
     // public function test_ファイレクシア語() {
     //     $cards = $this->build("neo.json");
     //     $target = $this->getCardByNumber('427', $cards);
     //     assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
     //     assertEquals("PH", $target['language'], "言語");
     // }
-
-    public function test_ネオンインク版() {
-        $cards = $this->build("neo.json");
-        // 貪る混沌、碑出告
-        $target = $this->getFoilCard('432', $cards);
-        assertEquals(PromoType::NEONINK->text(), $target['promotype'], "プロモタイプ");
-    }
-
-    public function test_胆液版() {
-        $cards = $this->build("one.json");
-        $target = $this->getFoilCard('345', $cards);
-        assertEquals(PromoType::OILSLICK->text(), $target['promotype'], "プロモタイプ");
-    }
-
-    public function test_コンセプトアート() {
-        $cards = $this->build("one.json");
-        $target = $this->getFoilCard('416', $cards);
-        assertEquals(PromoType::CONCEPT->text(), $target['promotype'], "プロモタイプ");
-    }
-
-    public function test_ステップアンドコンプリート() {
-        $cards = $this->build("one.json");
-        $target = $this->getFoilCard('422', $cards);
-        assertEquals(PromoType::STEPANDCOMPLEAT->text(), $target['promotype'], "プロモタイプ");
-
-    }
-
-
 
     /**
      * 指定したJSONファイルを読み込む。

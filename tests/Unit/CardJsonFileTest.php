@@ -24,7 +24,7 @@ class CardJsonFileTest extends TestCase
      */
     public function test_通常版(string $filename, array $expected)
     {
-        $this->markTestSkipped('一時的にスキップ');
+        $this->markTestSkipped("一時的に停止");
         $result = $this->execute($filename, $expected);
         $expectedname = $expected[self::NAME];
         $filterd = array_filter($result, function($a) use($expectedname){
@@ -40,6 +40,7 @@ class CardJsonFileTest extends TestCase
     }
 
     /**
+     * 特別版の特定に関するテスト
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
@@ -111,6 +112,14 @@ class CardJsonFileTest extends TestCase
             '通常版' => ['war_short.json', [self::NAME => '鮮血の刃先', self::PROMOTYPE => '']],
             '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', self::PROMOTYPE => '絵違い']],
             '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => '拡張アート']],
+            'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', self::PROMOTYPE => 'ブースターファン']],
+            'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => 'ショーケース']],
+            'フルアート' =>  ['neo.json', [self::NAME =>  '平地', self::PROMOTYPE => 'フルアート']],
+            'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', self::PROMOTYPE => 'ネオンインク']],
+            'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
+            'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
+            'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
+            'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
         ];
     }
 }

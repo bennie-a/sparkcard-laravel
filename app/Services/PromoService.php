@@ -3,40 +3,37 @@ namespace App\Services;
 
 use App\Libs\MtgJsonUtil;
 use App\Models\Promotype;
+use app\Services\json\AbstractCard;
 
 /**
  * 特別版カードの仕様を特定するクラス
  */
 class PromoService {
-    public function find($card) {
-        $promo = Promotype::findCardByAttr(self::getPromoValue($card));
+    public function find(AbstractCard $cardtype) {
+        $promoValue = $cardtype->promotype();
         // boosterfanの場合はframeeffectを取得する。
+        if (strcmp($promoValue, 'boosterfun') == 0) {
+            $promoValue = $cardtype->frameEffects();
+        }
+        $promo = Promotype::findCardByAttr($promoValue);
         if (empty($promo)) {
-            $promoEnum = PromoTypeEnum::match($card);
-            if ($promoEnum == PromoTypeEnum::OTHER) {
-                throw new NoPromoTypeException(($card['name']), json['number']);
-            }
-            return $promoEnum->text();
+                throw new NoPromoTypeException($cardtype->getJson()['name'], $cardtype->number());
         }
         return $promo->name;
     }
 
  /**
      * 
-     * 要別クラス化
+     * jsonの'promoTypes'の最初の項目を取得する。
      *
      * @param [type] $c
      * @return string
      */
-    private function getPromoValue($c) {
-        $promokey = 'promoTypes';
-        if (!MtgJsonUtil::hasKey($promokey, $c)) {
-            return 'draft';
-        };
-        $promoarray = array_filter($c[$promokey], function($p) {
+    private function getPromoValue($promoarray) {
+        $filterd = array_filter($promoarray, function($p) {
             return $p != 'textured';
             // return in_array($p, PromoTypeEnum::TEXTURED->value()) == false;
         });
-        return current($promoarray);
+        return current($filterd);
     }
 }

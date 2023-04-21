@@ -2,12 +2,8 @@
 namespace App\Services;
 
 use App\Enum\CardColor;
-use App\Enum\PromoTypeEnum;
-use App\Exceptions\NoPromoTypeException;
 use App\Factory\CardInfoFactory;
-use app\Libs\JsonUtil;
 use App\Libs\MtgJsonUtil;
-use App\Models\Promotype;
 
 class CardJsonFileService {
     public function build($json) {
@@ -23,7 +19,7 @@ class CardJsonFileService {
             }
             $enname = $c['name'];
             $color = CardColor::match($c);
-            $promoType = \Promo::find($c);
+            $promoType = \Promo::find($cardtype);
 
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname),"en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
