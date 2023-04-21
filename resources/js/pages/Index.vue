@@ -8,7 +8,7 @@ export default {
     data() {
         return {
             selectedSet: "",
-            color: "R",
+            color: "",
             isFoil: false,
             name: "",
         };
@@ -49,6 +49,7 @@ export default {
             this.$store.dispatch("clearCards");
             const query = {
                 params: {
+                    name: this.name,
                     set: this.selectedSet,
                     color: this.color,
                     isFoil: this.isFoil,
@@ -154,8 +155,13 @@ export default {
 <template>
     <message-area></message-area>
     <div class="mt-1 ui form segment">
-        <div class="three fields">
+        <div class="five fields">
             <div class="field">
+                <label>カード名(一部)</label>
+                <input type="text" v-model="name" />
+            </div>
+
+            <div class="three wide column field">
                 <label for="">セット名</label>
                 <div class="ui input">
                     <input
@@ -172,9 +178,10 @@ export default {
                     </datalist>
                 </div>
             </div>
-            <div class="field">
+            <div class="two wide column field">
                 <label>色</label>
                 <select v-model="color" class="ui dropdown">
+                    <option value=""></option>
                     <option value="R">赤</option>
                     <option value="W">白</option>
                     <option value="B">黒</option>
@@ -186,29 +193,24 @@ export default {
                     <option value="Land">土地</option>
                 </select>
             </div>
-        </div>
-        <div class="three fields">
-            <!-- <div class="field">
-                <label>カード名(日本語のみ)</label>
-                <input type="text" v-model="name" />
-            </div> -->
-        </div>
-        <div class="field">
-            <div class="ui toggle checkbox">
-                <input
-                    type="checkbox"
-                    name="isFoil"
-                    tabindex="0"
-                    v-model="isFoil"
-                />
-                <label>Foil</label>
+            <div class="field">
+                <label for="">通常版orFoil</label>
+                <div class="ui toggle checkbox">
+                    <input
+                        type="checkbox"
+                        name="isFoil"
+                        tabindex="0"
+                        v-model="isFoil"
+                    />
+                    <label>Foil</label>
+                </div>
             </div>
         </div>
         <button
             id="search"
             class="ui button teal ml-1"
             @click="search"
-            :class="{ disabled: selectedSet == '' }"
+            :class="{ disabled: selectedSet == '' && name == '' }"
         >
             検索する
         </button>

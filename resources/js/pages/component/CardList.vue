@@ -15,11 +15,11 @@
                 <th>カード番号</th>
                 <th>カード名</th>
                 <th class="one wide">枚数</th>
-                <th v-if="this.exp">エキスパンション</th>
+                <th>エキスパンション</th>
                 <th v-if="this.isNotion" class="one wide">状態</th>
                 <th>色</th>
                 <th v-if="this.isNotion" class="one wide">言語</th>
-                <th class="one wide">価格</th>
+                <th class="">価格</th>
             </tr>
         </thead>
         <tbody>
@@ -77,7 +77,7 @@
                         <div class="ui basic label">枚</div>
                     </div>
                 </td>
-                <td v-if="this.exp">{{ card.exp.name }}</td>
+                <td>{{ card.exp.name }}</td>
                 <td v-if="this.isNotion">
                     <div class="ui label" :class="condiColor(card.condition)">
                         {{ card.condition }}

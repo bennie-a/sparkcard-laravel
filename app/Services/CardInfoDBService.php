@@ -17,7 +17,9 @@ class CardInfoDBService {
 
     public function fetch($details)
     {
-        $condition = ['card_info.color_id' => $details['color'],
+        $condition = [
+                    'card_info.name' => $details['name'],
+                    'card_info.color_id' => $details['color'],
                     'expansion.attr' => $details['set'],
                     'card_info.isFoil' => $details['isFoil']];
         $list = CardInfo::fetchByCondition($condition);

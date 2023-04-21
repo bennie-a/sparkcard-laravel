@@ -12,10 +12,10 @@ class CardInfo extends Model
 
     public function expansion()
     {
-        return $this->belongsTo('App\Expansion');
+        return $this->belongsTo('App\Models\Expansion');
     }
 
-    protected $fillable = ['exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
+    protected $fillable = ['expansion.name', 'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
 
     /**
      * 検索条件に該当するデータを取得する。
@@ -25,9 +25,21 @@ class CardInfo extends Model
      */
     public static function fetchByCondition($condition)
     {
-        $columns = ['card_info.id', 'card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil'];
-        $cardList = self::select($columns)->where($condition)->
-                        join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->
+        $columns = ['expansion.name as exp_name', 'card_info.id', 'card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil'];
+        $name = $condition['card_info.name'];
+        $query = self::select($columns);
+        if (!empty($name)) {
+            $query = $query->where('card_info.name', 'like', '%'.$name.'%');
+        }
+        foreach($condition as $key => $value) {
+            if (strcmp('card_info.name', $key) == 0) {
+                continue;
+            }
+            if (!empty($value)) {
+                $query = $query->where($key, $value);
+            }
+        }
+        $cardList = $query->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->
                         orderBy('card_info.number', 'asc')->get();
         return $cardList;
     }
