@@ -2,13 +2,9 @@
     <message-area></message-area>
     <search-form limitprice="0"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <download-button filename="logikura_item"
+        <download-button color="teal" filename="zaiko_item"
             ><i class="download icon"></i
-            >商品登録用ファイルを作成する</download-button
-        >
-        <download-button color="pink" filename="logikura_stock"
-            ><i class="download icon"></i
-            >在庫ファイルを作成する</download-button
+            >在庫登録ファイルを作成する</download-button
         >
     </div>
     <card-list exp isNotion></card-list>

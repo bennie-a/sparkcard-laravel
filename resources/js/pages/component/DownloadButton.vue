@@ -8,7 +8,7 @@
     </button>
     <div id="complate" class="ui mini modal">
         <div class="header">ダウンロードが完了しました。</div>
-        <button id="ok" class="ui purple fluid button" @click="ok">OK</button>
+        <button id="ok" class="ui teal fluid button" @click="ok">OK</button>
     </div>
 </template>
 <script>
@@ -23,7 +23,7 @@ export default {
         },
     },
     props: {
-        color: { type: String, default: "purple" },
+        color: { type: String, default: "teal" },
         filename: { type: String, reqiured: true },
     },
     methods: {
