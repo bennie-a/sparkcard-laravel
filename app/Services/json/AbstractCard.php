@@ -41,7 +41,7 @@ abstract class AbstractCard implements CardInfoInterface {
         return current($filterd);
     }
 
-    protected function getJson() {
+    public function getJson() {
         return $this->json;        
     }
 
@@ -94,7 +94,7 @@ abstract class AbstractCard implements CardInfoInterface {
             return 'boosterfun';
         }
         $filterd = function($f) {
-            return $f != 'legendary' && $f != 'etched';
+            return $f != 'legendary' && $f != 'etched' && $f != 'inverted';
         };
         $filterd = $this->filtering(self::FRAME_EFFECTS, $filterd);
         if ($filterd == false) {

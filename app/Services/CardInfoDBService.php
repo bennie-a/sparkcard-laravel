@@ -49,10 +49,10 @@ class CardInfoDBService {
         // カード名、エキスパンション略称、カード番号で一意性チェック
         $condition = ['card_info.number' => $number,
                         'expansion.attr' => $exp->attr, 'card_info.isFoil' => $isFoil];
-        $cardList = CardInfo::fetchByCondition($condition);
+        $info = CardInfo::findCard($exp->id, $name, $isFoil);
         // 画像URL取得
         $url = $this->service->getImageUrl($details);
-        if (count($cardList) == 0) {
+        if (empty($info)) {
             logger()->info('insert card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
             $record = [
                 'exp_id'=> $exp->notion_id,
@@ -68,7 +68,6 @@ class CardInfoDBService {
             CardInfo::create($record);
         } else if (!is_null($url)) {
             logger()->info('update card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
-            $info = $cardList[0];
             $info->image_url = $url;
             $info->update();
         }

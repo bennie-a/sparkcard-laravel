@@ -112,7 +112,7 @@ export default {
                         enname: c.enname,
                         index: c.index,
                         price: c.price.replace(",", ""),
-                        attr: this.selectedSet,
+                        attr: c.exp.attr,
                         color: c.color,
                         imageUrl: c.image,
                         stock: c.stock,
@@ -121,7 +121,7 @@ export default {
                     await axios
                         .post("api/notion/card", query)
                         .then((response) => {
-                            if (response.status == 200) {
+                            if (response.status == 201) {
                                 console.log(query.name + ":登録完了");
                             } else {
                                 console.log(response.status);

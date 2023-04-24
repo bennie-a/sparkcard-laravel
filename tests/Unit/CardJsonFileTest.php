@@ -12,20 +12,23 @@ use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
 use function Spatie\Ignition\ErrorPage\config;
 
+/**
+ * カード情報ファイルアップロードのテスト
+ */
 class CardJsonFileTest extends TestCase
 {
     const NAME = 'name';
 
     const PROMOTYPE = 'promotype';
     /**
-     * テスト実行
+     * 通常版カードのテスト
      *
      * @dataProvider dataprovider
      */
     public function test_通常版(string $filename, array $expected)
     {
         $this->markTestSkipped("一時的に停止");
-        $result = $this->execute($filename, $expected);
+        $result = $this->execute($filename);
         $expectedname = $expected[self::NAME];
         $filterd = array_filter($result, function($a) use($expectedname){
             if ($a[self::NAME] == $expectedname && $a['isFoil'] == false) {
@@ -44,7 +47,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
-        $result = $this->execute($filename, $expected);
+        $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
                 return $a;
@@ -54,7 +57,35 @@ class CardJsonFileTest extends TestCase
         assertNotEmpty($actualcard, '該当カードの有無');
     }
 
-    private function execute(string $filename, array $expected) {
+    /**
+     * Undocumented function
+     *
+     * @param string $filename
+     * @param integer $expectedCode
+     * @param string $expectedMsg
+     * @dataProvider errorprovider
+     */
+    public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
+        $this->markTestSkipped("一時的に停止");
+
+        $header = [
+            'headers' => [
+                "Content-Type" => "application/json",
+            ]
+        ];
+        $json = $this->json_decode($filename);
+        $cards = $json['data']['cards'];
+        $data = [
+            'data' => [
+                'cards' => $cards,
+                'code' => $json['data']['code']
+            ]
+        ];
+        $response = $this->post('/api/upload/card', $data, $header);
+        $response->assertStatus($expectedCode);
+    }
+
+    private function execute(string $filename) {
         $header = [
             'headers' => [
                 "Content-Type" => "application/json",
@@ -120,6 +151,12 @@ class CardJsonFileTest extends TestCase
             'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
             'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
             'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
+        ];
+    }
+
+    public function errorprovider() {
+        return [
+            'エキスパンションが存在しない' => ['not_found_ex.json', 441, 'NFDが登録されていません。'],
         ];
     }
 }

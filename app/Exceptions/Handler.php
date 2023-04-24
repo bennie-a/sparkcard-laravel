@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Response\CustomResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -51,24 +52,28 @@ class Handler extends ExceptionHandler
         $this->renderable(function (HttpException  $e, $request) {
             $title = 'Error';
             $detail = '';
-            logger()->debug($e);
+            // logger()->debug($e);
             if ($request->is('api/*')) {
+                if ($e->getStatusCode() == Response::HTTP_NO_CONTENT) {
+                    $detail = '検索結果がありません。';
+                } else {
+                    $detail = $e->getMessage();
+                }
 
                 switch ($e->getStatusCode()) {
                     case Response::HTTP_NO_CONTENT:
                         $title = 'No Contents';
-                        $detail = '検索結果がありません。';
                     break;
                     case Response::HTTP_NOT_FOUND:
                         $title = 'Not Found';
-                        $detail = $e->getMessage();
                     case Response::HTTP_CONFLICT:
                         $title = 'Conflict';
-                        $detail = $e->getMessage();
                     break;
-                    case 410:
+                    case CustomResponse::HTTP_NO_PROMOTYPE:
                         $title = 'No Promotype';
-                        $detail = $e->getMessage();
+                    break;
+                    case CustomResponse::HTTP_NOT_FOUND_EXPANSION:
+                        $title = 'Not Found Expansion';
                     break;
                 }
             }

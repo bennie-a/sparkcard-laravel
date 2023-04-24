@@ -2,13 +2,20 @@
 namespace App\Services;
 
 use App\Enum\CardColor;
+use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
 use App\Libs\MtgJsonUtil;
+use App\Http\Response\CustomResponse;
 
 class CardJsonFileService {
     public function build($json) {
         $cards = $json["cards"];
         $setcode = $json["code"];
+        
+        // エキスパンション登録チェック
+        // if (\ExService::isExistByAttr($setcode) == false) {
+        //     throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_EXPANSION, $setcode.'が登録されていません。');
+        // }
         $cardInfo = [];
         foreach($cards as $c) {
             $cardtype = CardInfoFactory::create($c);

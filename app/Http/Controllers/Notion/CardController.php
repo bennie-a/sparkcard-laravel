@@ -62,7 +62,7 @@ class CardController extends Controller
         Validator::make($details, $rules, $msgs)->validate();
         logger()->debug("登録パラメータ", $details);
         $this->service->store($details);
-        return Response::HTTP_OK;
+        return Response::HTTP_CREATED;
     }
 
     /**
