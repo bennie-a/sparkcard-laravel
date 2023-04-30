@@ -22,7 +22,7 @@ class CardInfoFactory extends Factory
         return [
             'barcode' => $this->random(16),
             'name' => $this->faker->realText(10),
-            'en_name' => $this->random(10),
+            // 'en_name' => $this->random(10),
             'number' => $this->random(3),
             'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16),
         ];

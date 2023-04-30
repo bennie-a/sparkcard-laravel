@@ -1,6 +1,6 @@
 <template>
     <button
-        class="ui button"
+        class="ui button basic"
         @click="download"
         :class="[color, { disabled: isDisabled }]"
     >

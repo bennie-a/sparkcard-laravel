@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CardInfo extends Model
 {
@@ -62,5 +63,20 @@ class CardInfo extends Model
         $condition = ['expansion.attr' => $attr, 'card_info.name' => $name];
         $list = self::fetchByCondition($condition);
         return $list[0];
+    }
+
+    /**
+     * 特定のカード情報を取得する。
+     *
+     * @param [type] $exp_id
+     * @param [type] $name
+     * @param [type] $isFoil
+     * @return カード情報
+     */
+    public static function findSpecificCard($exp_id, $name, $isFoil)
+    {
+        $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
+        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
+        return $info;
     }
 }

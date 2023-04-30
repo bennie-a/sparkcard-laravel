@@ -193,27 +193,26 @@ export default {
                     <option value="Land">土地</option>
                 </select>
             </div>
-            <div class="field">
+            <div class="three wide column field">
                 <label for="">通常版orFoil</label>
                 <div class="ui toggle checkbox">
-                    <input
-                        type="checkbox"
-                        name="isFoil"
-                        tabindex="0"
-                        v-model="isFoil"
-                    />
-                    <label>Foil</label>
+                    <input type="checkbox" name="isFoil" v-model="isFoil" />
+                    <label for="isFoil">Foilのみ検索する</label>
                 </div>
             </div>
+            <div class="field">
+                <label for="" style="visibility: hidden">検索ボタン</label>
+                <button
+                    id="search"
+                    class="ui button teal ml-1"
+                    @click="search"
+                    :class="{ disabled: selectedSet == '' && name == '' }"
+                    style=""
+                >
+                    検索する
+                </button>
+            </div>
         </div>
-        <button
-            id="search"
-            class="ui button teal ml-1"
-            @click="search"
-            :class="{ disabled: selectedSet == '' && name == '' }"
-        >
-            検索する
-        </button>
     </div>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <button

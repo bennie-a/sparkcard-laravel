@@ -47,9 +47,9 @@ class CardInfoDBService {
         $number = $details['number'];
         $isFoil = $details['isFoil'];
         // カード名、エキスパンション略称、カード番号で一意性チェック
-        $condition = ['card_info.number' => $number,
-                        'expansion.attr' => $exp->attr, 'card_info.isFoil' => $isFoil];
-        $info = CardInfo::findCard($exp->id, $name, $isFoil);
+        // $condition = ['card_info.number' => $number,
+        //                 'expansion.attr' => $exp->attr, 'card_info.isFoil' => $isFoil];
+        $info = CardInfo::findSpecificCard($exp->notion_id, $name, $isFoil);
         // 画像URL取得
         $url = $this->service->getImageUrl($details);
         if (empty($info)) {

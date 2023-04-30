@@ -53,13 +53,13 @@ class CardInfoDBController extends Controller
         logger()->info("insert start.");
         $details = $request->all();
         $setCode = $details['setCode'];
-        $exp = Expansion::where('attr', $setCode)->get();
-        if ($exp->count() == 0) {
+        $exp = Expansion::where('attr', $setCode)->first();
+        if (\is_null($exp)) {
             logger()->error('not exist:'.$setCode);
             throw new HttpResponseException(response($setCode.'がDBに登録されていません', 422));
         }
         // card_infoテーブルに登録
-        $this->service->post($exp[0], $details);
+        $this->service->post($exp, $details);
         logger()->info("insert end.");
         return response('', Response::HTTP_CREATED);
     }

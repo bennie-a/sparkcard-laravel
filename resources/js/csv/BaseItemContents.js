@@ -26,7 +26,6 @@ export default () => {
             "画像4",
         ],
         contents: function (c) {
-            let showIndex = c.exp.orderId * 10 + c.index;
             let json = [
                 c.baseId,
                 toItemName(c),
@@ -37,7 +36,7 @@ export default () => {
                 "1",
                 c.stock,
                 "1",
-                showIndex,
+                c.index,
                 "",
                 toSurfaceName(c),
                 toNoLabelName(c),
