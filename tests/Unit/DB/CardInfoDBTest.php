@@ -166,7 +166,7 @@ class CardInfoDBTest extends TestCase
                 'scryfallId' => '',
                 'promotype' => '', 'isFoil' => false,
             'language' => 'JP'];
-        $this->post('api/database/card', $data)->assertStatus(422);
+        $response = $this->post('api/database/card', $data)->assertStatus(441);
     }
 
     public function test_検索() {

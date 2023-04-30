@@ -1,11 +1,15 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
+use App\Http\Response\CustomResponse;
 use App\Libs\MtgJsonUtil;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Services\ScryfallService;
 use App\Services\WisdomGuildService;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 /**
  * card_infoテーブルのロジッククラス
  */
@@ -40,15 +44,17 @@ class CardInfoDBService {
      * @param array $details Requestで受信したjsonデータ
      * @return void
      */
-    public function post($exp, $details)
+    public function post($setCode, $details)
     {
+        $exp = Expansion::where('attr', $setCode)->first();
+        if (\is_null($exp)) {
+            logger()->error('not exist:'.$setCode);
+            throw new HttpResponseException(response($setCode.'がDBに登録されていません', CustomResponse::HTTP_NOT_FOUND_EXPANSION));
+        }
         $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
         $name = $details['name'].$promotype;
-        $number = $details['number'];
         $isFoil = $details['isFoil'];
         // カード名、エキスパンション略称、カード番号で一意性チェック
-        // $condition = ['card_info.number' => $number,
-        //                 'expansion.attr' => $exp->attr, 'card_info.isFoil' => $isFoil];
         $info = CardInfo::findSpecificCard($exp->notion_id, $name, $isFoil);
         // 画像URL取得
         $url = $this->service->getImageUrl($details);
