@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Libs\MtgJsonUtil;
+use App\Exceptions\NoPromoTypeException;
 use App\Models\Promotype;
 use app\Services\json\AbstractCard;
 
@@ -17,23 +17,8 @@ class PromoService {
         }
         $promo = Promotype::findCardByAttr($promoValue);
         if (empty($promo)) {
-                throw new NoPromoTypeException($cardtype->getJson()['name'], $cardtype->number());
+                throw new NoPromoTypeException($cardtype->getJson()['name'], $cardtype->number(), $promoValue);
         }
         return $promo->name;
-    }
-
- /**
-     * 
-     * jsonの'promoTypes'の最初の項目を取得する。
-     *
-     * @param [type] $c
-     * @return string
-     */
-    private function getPromoValue($promoarray) {
-        $filterd = array_filter($promoarray, function($p) {
-            return $p != 'textured';
-            // return in_array($p, PromoTypeEnum::TEXTURED->value()) == false;
-        });
-        return current($filterd);
     }
 }

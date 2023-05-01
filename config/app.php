@@ -1,6 +1,7 @@
 <?php
 
 use App\Facades\PromotypeFacade;
+use App\Providers\ExServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -200,6 +201,7 @@ return [
          *追加クラス 
          */
         App\Providers\PromotypeProvider::class,
+        App\Providers\ExServiceProvider::class,
 
     ],
 
@@ -215,7 +217,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Promo' => App\Facades\Promo::class
+        'Promo' => App\Facades\Promo::class,
+        'ExService' => App\Facades\ExService::class
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

@@ -5,7 +5,9 @@
         {{ filename }}
     </article>
     <article class="mt-1">
-        <ModalButton @action="store">DBに登録する</ModalButton>
+        <div v-if="getCards.length != 0">
+            <ModalButton @action="store">DBに登録する</ModalButton>
+        </div>
         <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="inline field">
                 <label>エキスパンション名：</label>{{ setCode }}
@@ -14,7 +16,7 @@
                 <table class="ui table striped six column">
                     <thead>
                         <tr>
-                            <th class="one wide">カード番号</th>
+                            <th class="two wide">カード番号</th>
                             <th class="four wide">カード名</th>
                             <th class="four wide">英名</th>
                             <th class="one wide">色</th>
@@ -138,8 +140,8 @@ export default {
                 })
                 .catch((e) => {
                     let status = e.response.status;
-                    if (status == 410) {
-                        const msgs = e.response.data;
+                    if (status == 440) {
+                        const msgs = e.response.data.detail;
                         console.log(msgs);
                         this.$store.dispatch("message/errorhtml", msgs);
                     }

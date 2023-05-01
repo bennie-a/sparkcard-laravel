@@ -17,7 +17,7 @@ class CardInfoResource extends JsonResource
     {
         return [
                 'id' => $this->id,
-                'exp' => ['name' => $this->exp_name],
+                'exp' => ['name' => $this->exp_name, 'attr' => $this->exp_attr],
                 'index' => $this->number,
                 'name' => $this->name,
                 'enname' => $this->en_name,

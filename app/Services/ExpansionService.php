@@ -57,6 +57,10 @@ class ExpansionService {
         return $resultList;
     }
 
+    public function isExistByAttr(string $attr) {
+        return \ExService::isExistByAttr($attr);
+    }
+
     /**
      * エキスパンションを1件登録する。
      *

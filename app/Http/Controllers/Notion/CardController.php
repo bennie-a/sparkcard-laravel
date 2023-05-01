@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Notion\NotionCardRequest;
+use App\Http\Requests\PostNotionCardRequest;
 use App\Http\Resources\Notion\NotionCardResource;
-use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Services\CardBoardService;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -48,21 +48,21 @@ class CardController extends Controller
     /**
      * Notionの商品管理テーブルにカードを1件登録する。
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PostNotionCardRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $details = $request->all();
-        $name = '「'.$details['name'].'」';
-        $rules = ['stock' => 'required | integer | min:1', 'imageUrl' => 'required'];
-        $msgs = ['stock.required' => $name.'の枚数が入力されていません。',
-            'stock.min' => $name.'の枚数は1枚以上を入力してください。',
-            'imageUrl.required' => $name.'の画像URLを登録してください。できればscryfall.comの画像を使ってほしいです。'];
-        Validator::make($details, $rules, $msgs)->validate();
+        // $name = '「'.$details['name'].'」';
+        // $rules = ['stock' => 'required | integer | min:1', 'imageUrl' => 'required'];
+        // $msgs = ['stock.required' => $name.'の枚数が入力されていません。',
+        //     'stock.min' => $name.'の枚数は1枚以上を入力してください。',
+        //     'imageUrl.required' => $name.'の画像URLを登録してください。できればscryfall.comの画像を使ってほしいです。'];
+        // Validator::make($details, $rules, $msgs)->validate();
         logger()->debug("登録パラメータ", $details);
         $this->service->store($details);
-        return Response::HTTP_OK;
+        return Response::HTTP_CREATED;
     }
 
     /**

@@ -4,10 +4,10 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * Promoクラス用のFacadeクラス
- * 処理自体はPromoServiceクラスを参照。
+ * ExServiceクラス用のFacadeクラス
+ * 処理自体はExpansionServiceクラスを参照。
  */
-class Promo extends Facade {
+class ExService extends Facade {
 
     /**
      * Get the registered name of the component.
@@ -16,6 +16,6 @@ class Promo extends Facade {
      */
     protected static function getFacadeAccessor()
     {
-        return 'Promo';
+        return 'ExService';
     }
 }

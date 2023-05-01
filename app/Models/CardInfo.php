@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CardInfo extends Model
 {
@@ -15,7 +16,7 @@ class CardInfo extends Model
         return $this->belongsTo('App\Models\Expansion');
     }
 
-    protected $fillable = ['expansion.name', 'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
+    protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
 
     /**
      * 検索条件に該当するデータを取得する。
@@ -25,7 +26,7 @@ class CardInfo extends Model
      */
     public static function fetchByCondition($condition)
     {
-        $columns = ['expansion.name as exp_name', 'card_info.id', 'card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil'];
+        $columns = ['expansion.name as exp_name', 'expansion.attr as exp_attr', 'card_info.id', 'card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil'];
         $name = $condition['card_info.name'];
         $query = self::select($columns);
         if (!empty($name)) {
@@ -53,7 +54,7 @@ class CardInfo extends Model
      * @return カード情報
      */
     public static function findCard($exp_id, $name, $isFoil) {
-        $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
+        $columns = ['card_info.name', 'card_info.barcode', 'card_info.number', 'card_info.image_url'];
         $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
         return $info;
     }
@@ -62,5 +63,20 @@ class CardInfo extends Model
         $condition = ['expansion.attr' => $attr, 'card_info.name' => $name];
         $list = self::fetchByCondition($condition);
         return $list[0];
+    }
+
+    /**
+     * 特定のカード情報を取得する。
+     *
+     * @param [type] $exp_id
+     * @param [type] $name
+     * @param [type] $isFoil
+     * @return カード情報
+     */
+    public static function findSpecificCard($exp_id, $name, $isFoil)
+    {
+        $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
+        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
+        return $info;
     }
 }

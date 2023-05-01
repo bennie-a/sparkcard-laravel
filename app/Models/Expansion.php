@@ -27,4 +27,8 @@ class Expansion extends Model
         return DB::table("expansion")->where('name', $name)->exists();
     }
 
+    public static function isExistByAttr(string $attr) {
+        Expansion::where('attr', $attr)->exists();
+    }
+
 }

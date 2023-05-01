@@ -11,15 +11,10 @@
             <label>BASEに公開する</label>
         </div>
         <div class="mt-1">
-            <download-button color="violet" filename="base_item"
+            <download-button filename="base_item"
                 ><i class="download icon"></i
                 >登録・更新用CSVを作成する</download-button
             >
-            <download-button color="pink" filename="base_category"
-                ><i class="sitemap icon"></i
-                >カテゴリ登録用CSVを作成する</download-button
-            >
-
             <file-upload @upload="csvUpload"
                 >商品一覧をアップロード</file-upload
             >
