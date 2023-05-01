@@ -43,7 +43,7 @@ export const toNoLabelName = (card) => {
 // カードの裏面の画像名に変換する。
 export const toRevName = (card) => {
     let name = toPhotoName(card);
-    return name + "裏-min.jpg";
+    return name + "-rev-min.jpg";
 };
 
 export const toPhotoName = (card) => {
