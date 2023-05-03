@@ -54,7 +54,7 @@
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-basket2-fill"></i>販売登録
+                    <i class="bi bi-cart2"></i>ショップ登録
                 </div>
                 <ul>
                     <li>
@@ -75,6 +75,24 @@
                             }"
                             ><i class="bi bi-filetype-csv"></i
                             >メルカリ用CSV</router-link
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="item">
+                <div class="ui small header">
+                    <i class="bi bi-box2-heart"></i>出荷
+                </div>
+                <ul>
+                    <li>
+                        <router-link
+                            to="/zaiko/newitem"
+                            class="nav-link"
+                            :class="{
+                                active: $route.path === '/zaiko/newitem',
+                            }"
+                            ><i class="bi bi-filetype-txt"></i
+                            >宛先ラベル作成</router-link
                         >
                     </li>
                 </ul>
@@ -120,15 +138,6 @@ import { version } from "../../../../package";
     background: white;
     padding: 1rem 0.5rem;
 }
-.navbar-brand {
-    font-size: 1.8em;
-    font-family: "Exo 2", sans-serif;
-    background-image: linear-gradient(to top right, #1e50a2 0%, #d43f8d 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    vertical-align: top;
-}
-
 #sidemenu {
     padding-top: 2rem;
 }
