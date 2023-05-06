@@ -1,9 +1,4 @@
 <template>
-    <div id="logo" class="three column row white">
-        <router-link to="/" class="navbar-brand"
-            ><i class="bi bi-gem"></i> SPARKCARD</router-link
-        >
-    </div>
     <div id="sidemenu" class="three column row">
         <div class="ui list">
             <div class="item">
@@ -93,33 +88,6 @@
                             }"
                             ><i class="bi bi-filetype-txt"></i
                             >宛先ラベル作成</router-link
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div class="item">
-                <div class="ui small header">
-                    <i class="bi bi-gear-fill"></i>設定
-                </div>
-                <ul>
-                    <li>
-                        <router-link
-                            to="/settings/expansion"
-                            class="nav-link"
-                            :class="{
-                                active: $route.path === '/settings/expansion',
-                            }"
-                            >エキスパンション一覧</router-link
-                        >
-                    </li>
-                    <li>
-                        <router-link
-                            to="/settings/cardinfo"
-                            class="nav-link"
-                            :class="{
-                                active: $route.path === '/settings/cardinfo',
-                            }"
-                            >カード情報マスタ登録</router-link
                         >
                     </li>
                 </ul>
