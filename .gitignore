@@ -17,3 +17,4 @@ yarn-error.log
 .env.testing
 package-lock.json
 composer.lock
+*.testing
