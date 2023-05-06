@@ -5,6 +5,20 @@ body {
     font-family: "Noto Sans JP", sans-serif !important;
 }
 
+/* ヘッダー */
+.ui.menu .item {
+    padding-block: 0.8rem !important;
+}
+
+.navbar-brand {
+    font-size: 1.6rem;
+    font-family: "Exo 2", sans-serif;
+    background-image: linear-gradient(to top right, #1e50a2 0%, #d43f8d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    vertical-align: top;
+    font-weight: 400;
+}
 .ui .header {
     font-family: "Noto Sans JP", sans-serif !important;
 }

@@ -2,6 +2,33 @@
 import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
+    <header>
+        <div class="ui menu">
+            <div class="header item navbar-brand">
+                <router-link to="/" class="navbar-brand"
+                    ><i class="bi bi-gem"></i> SPARKCARD</router-link
+                >
+            </div>
+            <div class="right menu">
+                <router-link
+                    to="/settings/expansion"
+                    class="item"
+                    :class="{
+                        active: $route.path === '/settings/expansion',
+                    }"
+                    >エキスパンション一覧</router-link
+                >
+                <router-link
+                    to="/settings/cardinfo"
+                    class="item"
+                    :class="{
+                        active: $route.path === '/settings/cardinfo',
+                    }"
+                    >カード情報マスタ登録</router-link
+                >
+            </div>
+        </div>
+    </header>
     <div id="contents" class="ui grid padded">
         <nav
             ref="sidebar"
