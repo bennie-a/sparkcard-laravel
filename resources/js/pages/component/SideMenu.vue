@@ -31,7 +31,7 @@
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-cloud mr-half"></i>ZAIKO
+                    <i class="bi bi-inboxes"></i>入荷
                 </div>
                 <ul>
                     <li>
@@ -81,10 +81,10 @@
                 <ul>
                     <li>
                         <router-link
-                            to="/zaiko/newitem"
+                            to="/packing/"
                             class="nav-link"
                             :class="{
-                                active: $route.path === '/zaiko/newitem',
+                                active: $route.path === '/packing/',
                             }"
                             ><i class="bi bi-filetype-txt"></i
                             >宛先ラベル作成</router-link

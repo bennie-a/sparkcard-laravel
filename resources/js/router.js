@@ -1,12 +1,13 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import LogikuraItemCSV from "./pages/logikura/LogikuraItemPage.vue";
+import LogikuraItemCSV from "./pages/zaiko/LogikuraItemPage.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/settings/ExpansionPage.vue";
 import CardInfoPage from "./pages/settings/CardInfoPage.vue";
 import PostExPage from "./pages/settings/PostExPage.vue";
+import Packing from "./pages/packing/Packing.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -77,6 +78,14 @@ const routes = [
             title: "カード情報マスタ登録",
             description:
                 "MTGJSONからダウンロードしたファイルのカード情報をDBに登録します。",
+        },
+    },
+    {
+        path: "/packing/",
+        component: Packing,
+        meta: {
+            title: "宛名ラベル作成",
+            description: "注文情報CSVファイルから宛名ラベルを作成します。",
         },
     },
 ];

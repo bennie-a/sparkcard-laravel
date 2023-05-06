@@ -3,8 +3,8 @@ import SideMenu from "../pages/component/SideMenu.vue";
 </script>
 <template>
     <header>
-        <div class="ui menu">
-            <div class="header item navbar-brand">
+        <div class="ui pointing menu">
+            <div class="header navbar-brand">
                 <router-link to="/" class="navbar-brand"
                     ><i class="bi bi-gem"></i> SPARKCARD</router-link
                 >

@@ -5,7 +5,7 @@
         id="embedpollfileinput"
         @change="onFileChange"
     />
-    <label for="embedpollfileinput" class="ui pink button uploadbutton">
+    <label for="embedpollfileinput" class="ui teal button uploadbutton">
         <i class="file icon"></i>
         <slot></slot>
     </label>
