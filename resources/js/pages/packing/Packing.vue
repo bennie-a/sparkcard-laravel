@@ -6,6 +6,9 @@
     <csv-upload @upload="orderUpload">アップロード</csv-upload
     ><label class="ml-1">{{ filename }}</label>
     <div class="mt-2">
+        <button class="ui button basic teal">
+            <i class="bi bi-clipboard-fill mr-half"></i>宛先をコピーする
+        </button>
         <table class="ui table striped definition" v-for="o in orders">
             <tr>
                 <td>注文番号</td>
@@ -20,12 +23,13 @@
                 </td>
             </tr>
             <tr>
-                <td>住所</td>
-                <td>{{ o.address }}</td>
-            </tr>
-            <tr>
-                <td>氏名</td>
-                <td>{{ o.name }}様</td>
+                <td>宛先</td>
+                <td class="address">
+                    <span>{{ o.postcode }}</span>
+                    <span>{{ o.address1 }}</span>
+                    <span>{{ o.address2 }}</span>
+                    <span>{{ o.name }}様</span>
+                </td>
             </tr>
         </table>
     </div>
@@ -60,8 +64,12 @@ export default {
                             order["items"] = [line["product_name"]];
                             order[idKey] = line[idKey];
                             order[
-                                "address"
-                            ] = `〒${line["shipping_postal_code"]} ${line["shipping_state"]}${line["shipping_city"]}${line["shipping_address_1"]} ${line["shipping_address_2"]}`;
+                                "postcode"
+                            ] = `〒${line["shipping_postal_code"]}`;
+                            order[
+                                "address1"
+                            ] = ` ${line["shipping_state"]}${line["shipping_city"]}${line["shipping_address_1"]}`;
+                            order["address2"] = line["shipping_address_2"];
                             order["name"] = name;
                             this.orders.push(order);
                         }
@@ -77,3 +85,8 @@ export default {
     components: { "csv-upload": CSVUpload, "message-area": MessageArea },
 };
 </script>
+<style>
+td.address > span {
+    display: block;
+}
+</style>

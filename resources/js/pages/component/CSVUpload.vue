@@ -6,7 +6,7 @@
         @change="onFileChange"
     />
     <label for="embedpollfileinput" class="ui teal button uploadbutton">
-        <i class="file icon"></i>
+        <i class="bi bi-cloud-upload-fill mr-half"></i>
         <slot></slot>
     </label>
 </template>
