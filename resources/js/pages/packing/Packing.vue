@@ -6,9 +6,16 @@
     <csv-upload @upload="orderUpload">アップロード</csv-upload
     ><label class="ml-1">{{ filename }}</label>
     <div class="mt-2">
-        <button class="ui button basic teal">
+        <button
+            v-show="orders.length != 0"
+            class="ui button basic teal"
+            @click="copyPacking"
+        >
             <i class="bi bi-clipboard-fill mr-half"></i>宛先をコピーする
         </button>
+        <div v-if="isCopyed" class="ui left pointing blue label">
+            コピーしました
+        </div>
         <table class="ui table striped definition" v-for="o in orders">
             <tr>
                 <td>注文番号</td>
@@ -41,6 +48,7 @@ import CSVUpload from "../component/CSVUpload.vue";
 export default {
     data() {
         return {
+            isCopyed: false,
             filename: "",
             orders: [],
         };
@@ -74,12 +82,25 @@ export default {
                             this.orders.push(order);
                         }
                     });
-                    // console.log(line["order_id"]);
-                    // this.contentMap[] = line["商品ID"];
-                    // });
                 }.bind(this),
             });
-            console.log("OK");
+        },
+        // 商品と宛先をコピーする
+        copyPacking: function () {
+            let copytext = "";
+            this.orders.forEach(function (order) {
+                let items = order.items.join(",");
+                copytext += `${items}\n${order.postcode}\n${order.address1}\n`;
+                if (order.address2 != "") {
+                    copytext += `${order.address2}\n`;
+                }
+                copytext += `${order.name}様\n`;
+            });
+            navigator.clipboard.writeText(copytext);
+            this.isCopyed = true;
+            setTimeout(() => {
+                this.isCopyed = false;
+            }, 2000);
         },
     },
     components: { "csv-upload": CSVUpload, "message-area": MessageArea },
