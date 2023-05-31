@@ -4,9 +4,10 @@ import vue from "@vitejs/plugin-vue";
 import path from "path";
 
 export default defineConfig({
+    base: "./",
     plugins: [
         laravel({
-            input: ["resources/sass/app.scss", "resources/js/app.js"],
+            input: ["resources/css/app.css", "resources/js/app.js"],
             refresh: true,
         }),
         vue(),
@@ -17,6 +18,8 @@ export default defineConfig({
         },
     },
     server: {
+        port: 8082,
+        host: true,
         hmr: {
             host: "localhost",
         },

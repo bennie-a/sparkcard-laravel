@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "doctrine/dbal": "^3.6",
         "fiveam-code/laravel-notion-api": "^0.8.0",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
