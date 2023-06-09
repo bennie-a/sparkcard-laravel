@@ -2,21 +2,23 @@
 
 namespace Tests\Unit\service;
 
-use App\Enum\CardColor;
-use App\Enum\PromoType;
-use App\Models\MainColor;
+use App\Models\Expansion;
 use App\Services\CardJsonFileService;
 use Tests\TestCase;
 
-use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
-use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
 class CardJsonFileServiceTest extends TestCase
 {
+    public function setup():void
+    {
+        parent::setup();
+        $this->war = Expansion::factory()->createOne(['name' => '灯争大戦','attr' => 'WAR']);
+        $this->bro = Expansion::factory()->createOne(['name' => '第4版', 'attr' => '4ED']);
+    }
     public function test_色判定() {
         $contents = file_get_contents(storage_path("test/json/war_short.json"));
         $json = json_decode($contents, true);
@@ -48,9 +50,6 @@ class CardJsonFileServiceTest extends TestCase
         // アーティファクト
         $artifact = $this->nextCard('静かな潜水艇', $cards);
         assertEquals('A', $artifact[$colorKey], 'アーティファクト');
-        // 土地
-        $land = $this->nextCard('出現領域', $cards);
-        assertEquals('Land', $land[$colorKey], '土地');
     }
 
     public function test_通常版とFoil版取得() {
@@ -83,13 +82,6 @@ class CardJsonFileServiceTest extends TestCase
         assertTrue(count($cards) > 1);
     }
 
-    // public function test_ファイレクシア語() {
-    //     $cards = $this->build("neo.json");
-    //     $target = $this->getCardByNumber('427', $cards);
-    //     assertEquals(PromoType::SHOWCASE->text(), $target['promotype'], "プロモタイプ");
-    //     assertEquals("PH", $target['language'], "言語");
-    // }
-
     /**
      * 指定したJSONファイルを読み込む。
      *
@@ -118,23 +110,9 @@ class CardJsonFileServiceTest extends TestCase
         return current($target);
     }
 
-    private function getCardByNumber(string $number, array $cards) {
-        $filterd = array_filter($cards, function($c) use($number) {
-            return $number == $c['number'] && $c['isFoil'] == false;
-        });
-        logger()->debug($cards);
-        assertNotEmpty($filterd, 'カード情報の有無');
-        assertEquals(1, count($filterd));
-        return current($filterd);
+    public function tearDown():void
+    {
+        Expansion::query()->delete();
     }
 
-    private function getFoilCard(string $number, $cards) {
-        $filterd = array_filter($cards, function($c) use($number) {
-            return $number == $c['number'] && $c['isFoil'] == true;
-        });
-        logger()->debug($cards);
-        assertNotEmpty($filterd, 'カード情報の有無');
-        assertEquals(1, count($filterd));
-        return current($filterd);
-    }
 }

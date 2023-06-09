@@ -40,10 +40,15 @@ class CardInfoFactory {
 
         $class = $langArray[$lang];
 
-        // カードタイプがフルアートか判別する。
+        // カードタイプがフルアート基本土地か判別する。
         $cardtypes = $json["types"];
-        if (MtgJsonUtil::isTrue("isFullArt", $json) && current($cardtypes) == "Land") {
-            $class = FullartLand::class;
+        if (in_array('Land',  $cardtypes)) {
+            $superTypes = $json["supertypes"];
+            if (in_array('Snow', $superTypes)) {
+                $class = JpCard::class;
+            } else if (MtgJsonUtil::isTrue("isFullArt", $json) ) {
+                $class = FullartLand::class;
+            }
         }
         if ($class != NoJpCard::class) {
             $obj = new $class($json);

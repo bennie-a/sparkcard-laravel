@@ -9,6 +9,7 @@ use Tests\TestCase;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
+use function PHPUnit\Framework\assertNotNull;
 
 /**
  * カード情報ファイルアップロードのテスト
@@ -36,16 +37,15 @@ class CardJsonFileTest extends TestCase
         Expansion::factory()->createOne(['name' => '機械兵団の進軍', 'attr' => 'MOM']);
     }
 
-
     /**
-     * 通常版カードのテスト
+     * カードの言語別テスト
      *
      * @dataProvider dataprovider
      */
     public function test_通常版(string $filename, array $expected)
     {
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
-        // $expectedname = $expected[self::NAME];
         $exMultiverseId = $expected[self::MULTIVERSEID];
         $exScryId = $expected[self::SCRYFALLID];
         $filterd = array_filter($result, function($a) use($exMultiverseId, $exScryId){
@@ -66,10 +66,22 @@ class CardJsonFileTest extends TestCase
     }   
 
     /**
+     * カードタイプのテスト
+     * @dataProvider cardtypeProvider
+     */
+    public function test_カードタイプ(string $filename, array $expected) {
+        $result = $this->execute($filename);
+        $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
+        assertNotEmpty($actualcard, '結果の有無');
+        assertEquals($expected[self::NAME], $actualcard[self::NAME], 'カード名');
+    }
+
+    /**
      * 特別版の特定に関するテスト
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
@@ -107,6 +119,28 @@ class CardJsonFileTest extends TestCase
         $response->assertStatus($expectedCode);
     }
 
+    /**
+     * mutiverseIdかscryfallIdに該当するカード情報を取得する。
+     *
+     * @param array $result
+     * @param string $multiId
+     * @param string $scryId
+     * @return array
+     */
+    private function findCard($result, string $multiId, string $scryId) {
+        $filterd = array_filter($result, function($a) use($multiId, $scryId){
+            if (!empty($multiId)) {
+                if ($a[self::MULTIVERSEID] == $multiId) {
+                    return $a;
+                }   
+            } else if ($a[self::SCRYFALLID] == $scryId) {
+                return $a;
+            }
+        });
+        $actualcard = current($filterd);
+        return $actualcard;
+
+    }
     private function execute(string $filename) {
         $header = [
             'headers' => [
@@ -153,6 +187,20 @@ class CardJsonFileTest extends TestCase
             '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => '', 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
             '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => '',  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
             'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => '',  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']]
+        ];
+    }
+
+    /**
+     * カードタイプ別のテストデータ
+     *
+     * @return void
+     */
+    public function cardtypeProvider() {
+        return [
+            '基本土地' => ['land.json', ['name' => '島', self::MULTIVERSEID => '604650']],
+            '特殊土地' => ['land.json', ['name' => 'やせた原野', self::MULTIVERSEID => '465455']],
+            'フルアート版土地' => ['land.json', ['name' => '平地', self::MULTIVERSEID => '604624']],
+            '冠雪土地' => ['land.json', ['name' => '冠雪の島', self::MULTIVERSEID => '465470']]
         ];
     }
 
