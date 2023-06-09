@@ -140,11 +140,6 @@ export default {
                 })
                 .catch((e) => {
                     let status = e.response.status;
-                    if (status == 440) {
-                        const msgs = e.response.data.detail;
-                        console.log(msgs);
-                        this.$store.dispatch("message/errorhtml", msgs);
-                    }
                     if (status == 422) {
                         const errors = e.response.data.errors;
                         let msgs = "<ul>";
@@ -156,6 +151,10 @@ export default {
                             });
                         }
                         msgs += "</ul>";
+                        this.$store.dispatch("message/errorhtml", msgs);
+                    } else {
+                        const msgs = e.response.data.detail;
+                        console.log(msgs);
                         this.$store.dispatch("message/errorhtml", msgs);
                     }
                 })
