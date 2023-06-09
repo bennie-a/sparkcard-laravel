@@ -10,4 +10,15 @@ class NotFoundException extends HttpException
         $this->statusCode = $statusCode;
         $this->message = $message;
     }
+
+      /**
+   * @version 2.2.0
+   * @override HttpException
+   * @return integer
+   */
+  public function getStatusCode(): int
+  {
+      return $this->statusCode;
+  }
+
 }

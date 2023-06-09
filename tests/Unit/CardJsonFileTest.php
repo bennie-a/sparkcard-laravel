@@ -2,15 +2,13 @@
 
 namespace Tests\Feature\Unit;
 
+use App\Models\Expansion;
 use Illuminate\Http\Client\Response;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
-use function PHPUnit\Framework\assertNotNull;
-use function PHPUnit\Framework\assertNull;
-use function Spatie\Ignition\ErrorPage\config;
 
 /**
  * カード情報ファイルアップロードのテスト
@@ -20,6 +18,25 @@ class CardJsonFileTest extends TestCase
     const NAME = 'name';
 
     const PROMOTYPE = 'promotype';
+
+    const MULTIVERSEID = 'multiverseId';
+
+    const SCRYFALLID = 'scryfallId';
+
+    public function setup():void
+    {
+        parent::setup();
+        $this->war = Expansion::factory()->createOne(['name' => '灯争大戦','attr' => 'WAR']);
+        $this->bro = Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'BRO']);
+        $this->dmu = Expansion::factory()->createOne(['name' => '団結のドミナリア', 'attr' => 'DMU']);
+        $this->neo = Expansion::factory()->createOne(['name' => '神河：輝ける世界', 'attr' => 'NEO']);
+        Expansion::factory()->createOne(['name' => 'ミラージュ', 'attr' => 'MIR']);
+        Expansion::factory()->createOne(['name' => 'ファイレクシア：完全なる統一', 'attr' => 'ONE']);
+        Expansion::factory()->createOne(['name' => '機械兵団の進軍_多元宇宙の伝説', 'attr' => 'MUL']);
+        Expansion::factory()->createOne(['name' => '機械兵団の進軍', 'attr' => 'MOM']);
+    }
+
+
     /**
      * 通常版カードのテスト
      *
@@ -27,20 +44,26 @@ class CardJsonFileTest extends TestCase
      */
     public function test_通常版(string $filename, array $expected)
     {
-        $this->markTestSkipped("一時的に停止");
         $result = $this->execute($filename);
-        $expectedname = $expected[self::NAME];
-        $filterd = array_filter($result, function($a) use($expectedname){
-            if ($a[self::NAME] == $expectedname && $a['isFoil'] == false) {
+        // $expectedname = $expected[self::NAME];
+        $exMultiverseId = $expected[self::MULTIVERSEID];
+        $exScryId = $expected[self::SCRYFALLID];
+        $filterd = array_filter($result, function($a) use($exMultiverseId, $exScryId){
+            if (!empty($exMultiverseId)) {
+                if ($a[self::MULTIVERSEID] == $exMultiverseId) {
+                    return $a;
+                }   
+            } else if ($a[self::SCRYFALLID] == $exScryId) {
                 return $a;
             }
         });
         $actualcard = current($filterd);
         assertNotEmpty($actualcard, '該当カードの有無');
-
-        assertEquals($expected['multiverseId'], $actualcard['multiverseId'], 'multiverseId');
-        assertEquals($expected['scryfallId'], $actualcard['scryfallId'], 'scryfallId');
-    }
+        assertEquals($expected[self::NAME], $actualcard[self::NAME], 'カード名');
+        assertEquals($expected[self::MULTIVERSEID], $actualcard[self::MULTIVERSEID], 'multiverseId');
+        assertEquals($expected[self::SCRYFALLID], $actualcard[self::SCRYFALLID], 'scryfallId');
+        assertEquals($expected['language'], $actualcard['language'], '言語');
+    }   
 
     /**
      * 特別版の特定に関するテスト
@@ -66,7 +89,6 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
-        $this->markTestSkipped("一時的に停止");
 
         $header = [
             'headers' => [
@@ -126,10 +148,11 @@ class CardJsonFileTest extends TestCase
      */
     public function dataprovider() {
         return [
-            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => '463894', 'scryfallId' => '']],
-            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => '3476', 'scryfallId' => '']],
-            '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => '', 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c']],
-            '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => '',  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc']]
+            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => '463894', 'scryfallId' => '', 'language' => 'JP']],
+            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => '3476', 'scryfallId' => '', 'language' => 'JP']],
+            '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => '', 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
+            '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => '',  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
+            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => '',  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']]
         ];
     }
 
@@ -158,5 +181,10 @@ class CardJsonFileTest extends TestCase
         return [
             'エキスパンションが存在しない' => ['not_found_ex.json', 441, 'NFDが登録されていません。'],
         ];
+    }
+
+    public function tearDown():void
+    {
+        Expansion::query()->delete();
     }
 }
