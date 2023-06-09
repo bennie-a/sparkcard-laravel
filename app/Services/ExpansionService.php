@@ -58,7 +58,7 @@ class ExpansionService {
     }
 
     public function isExistByAttr(string $attr) {
-        return \ExService::isExistByAttr($attr);
+        return Expansion::isExistByAttr($attr);
     }
 
     /**

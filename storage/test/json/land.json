@@ -1,0 +1,587 @@
+{
+    "data": {
+        "baseSetSize": 302,
+        "booster": {},
+        "cards": [
+            {
+                "artist": "Titus Lunter",
+                "availability": ["mtgo", "paper"],
+                "boosterTypes": ["default"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecSaltiness": 0.35,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 464454,
+                        "name": "Verschneite Insel",
+                        "type": "Verschneites Standardland — Insel"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 464708,
+                        "name": "Isla nevada",
+                        "type": "Tierra básica nevada — Isla"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 464962,
+                        "name": "Île enneigée",
+                        "type": "Terrain neigeux de base : île"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 465216,
+                        "name": "Isola Innevata",
+                        "type": "Terra Neve Base — Isola"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 465470,
+                        "name": "冠雪の島",
+                        "type": "基本氷雪土地 — 島"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 465724,
+                        "name": "눈덮인 섬",
+                        "type": "기본 눈 대지 — 섬"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 465978,
+                        "name": "Ilha da Neve",
+                        "type": "Terreno da Neve Básico — Ilha"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 466232,
+                        "name": "Заснеженный Остров",
+                        "type": "Базовая Снежная Земля — Остров"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 466486,
+                        "name": "覆雪海岛",
+                        "type": "雪境基本地 ～海岛"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 466740,
+                        "name": "覆雪海島",
+                        "type": "雪境基本地 ～海島"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "225186",
+                    "cardKingdomId": "224881",
+                    "cardsphereId": "60171",
+                    "mcmId": "374409",
+                    "mcmMetaId": "5351",
+                    "mtgjsonV4Id": "1ef5c7e7-125d-538c-930c-dd4bdf568382",
+                    "mtgoId": "72874",
+                    "multiverseId": "464200",
+                    "scryfallId": "8ac1fceb-8427-409c-98a4-9a5c1ff980b4",
+                    "scryfallIllustrationId": "6addb616-fada-4e62-a628-6c5aabfbc047",
+                    "scryfallOracleId": "5b2460a5-6ae5-4cad-ba94-1a9e98e6e4c0",
+                    "tcgplayerProductId": "190649"
+                },
+                "isFullArt": true,
+                "isReprint": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "pioneer": "Legal",
+                    "predh": "Legal",
+                    "premodern": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Snow-Covered Island",
+                "number": "251",
+                "originalText": "U",
+                "originalType": "Basic Snow Land — Island",
+                "printings": [
+                    "CSP",
+                    "ICE",
+                    "J22",
+                    "KHM",
+                    "ME2",
+                    "MH1",
+                    "PANA",
+                    "SLD"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/96a013b842efd134",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f51384376c9f4ac0",
+                    "cardmarket": "https://mtgjson.com/links/a31b30819c1ca286",
+                    "tcgplayer": "https://mtgjson.com/links/3f0284dcfec74e45"
+                },
+                "rarity": "common",
+                "rulings": [
+                    {
+                        "date": "2021-02-05",
+                        "text": "Snow is a supertype, not a card type. It has no rules meaning or function by itself, but spells and abilities may refer to it."
+                    },
+                    {
+                        "date": "2021-02-05",
+                        "text": "The {S} symbol is a generic mana symbol. It represents a cost that can be paid by one mana that was produced by a snow source. That mana can be any color or colorless."
+                    },
+                    {
+                        "date": "2021-02-05",
+                        "text": "Snow isn’t a type of mana. If an effect says you may spend mana as though it were any type, you can’t pay for {S} using mana that wasn’t produced by a snow source."
+                    },
+                    {
+                        "date": "2021-02-05",
+                        "text": "Some cards have additional effects for each {S} spent to cast them. You can cast these spells even if you don’t spend any snow mana to cast them; their additional effects simply won’t do anything."
+                    },
+                    {
+                        "date": "2021-02-05",
+                        "text": "The Kaldheim set doesn’t have any cards with mana costs that include {S}, but some previous sets do. If an effect says such a spell costs {1} less to cast, that reduction doesn’t apply to any {S} costs. This is also true for activated abilities that include {S} in their activation costs and effects that reduce those costs."
+                    },
+                    {
+                        "date": "2021-02-05",
+                        "text": "In a Limited event (usually Booster Draft or Sealed Deck), you can’t add basic snow lands to your card pool as you would other basic lands. You can play with basic snow lands only if you open them in your sealed deck or draft them."
+                    }
+                ],
+                "setCode": "MH1",
+                "subtypes": ["Island"],
+                "supertypes": ["Basic", "Snow"],
+                "text": "({T}: Add {U}.)",
+                "type": "Basic Snow Land — Island",
+                "types": ["Land"],
+                "uuid": "8808be9a-ae34-5460-a66a-205cf2046b47"
+            },
+            {
+                "artist": "Noah Bradley",
+                "availability": ["mtgo", "paper"],
+                "boosterTypes": ["default"],
+                "borderColor": "black",
+                "colorIdentity": ["B"],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 573,
+                "edhrecSaltiness": 0.06,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 464439,
+                        "name": "Ödes Moor",
+                        "text": "Das Öde Moor kommt getappt ins Spiel.\n{T}: Erzeuge {B}.\nUmwandlung {B} ({B}, wirf diese Karte ab: Ziehe eine Karte.)",
+                        "type": "Land"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 464693,
+                        "name": "Páramo estéril",
+                        "text": "El Páramo estéril entra al campo de batalla girado.\n{T}: Agrega {B}.\nCiclo {B}. ({B}, descartar esta carta: Roba una carta.)",
+                        "type": "Tierra"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 464947,
+                        "name": "Lande stérile",
+                        "text": "La Lande stérile arrive sur le champ de bataille engagée.\n{T} : Ajoutez {B}.\nRecyclage {B} ({B}, défaussez-vous de cette carte : Piochez une carte.)",
+                        "type": "Terrain"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 465201,
+                        "name": "Brughiera Brulla",
+                        "text": "La Brughiera Brulla entra nel campo di battaglia TAPpata.\n{T}: Aggiungi {B}.\nCiclo {B} ({B}, Scarta questa carta: Pesca una carta.)",
+                        "type": "Terra"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 465455,
+                        "name": "やせた原野",
+                        "text": "やせた原野はタップ状態で戦場に出る。\n{T}：{B}を加える。\nサイクリング{B}（{B}, このカードを捨てる：カードを１枚引く。）",
+                        "type": "土地"
+                    },
+                    {
+                        "language": "Korean",
+                        "multiverseId": 465709,
+                        "name": "척박한 황야",
+                        "text": "척박한 황야는 탭된 채로 전장에 들어온다.\n{T}: {B}를 추가한다.\n순환 {B} ({B}, 이 카드를 버린다: 카드 한 장을 뽑는다.)",
+                        "type": "대지"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 465963,
+                        "name": "Charneca Estéril",
+                        "text": "Charneca Estéril entra no campo de batalha virada.\n{T}: Adicione {B}.\nReciclar {B} ({B}, descarte este card: Compre um card.)",
+                        "type": "Terreno"
+                    },
+                    {
+                        "language": "Russian",
+                        "multiverseId": 466217,
+                        "name": "Бесплодная Топь",
+                        "text": "Бесплодная Топь выходит на поле битвы повернутой.\n{T}: добавьте {B}.\nЦикл {B} ({B}, сбросьте эту карту: возьмите карту.)",
+                        "type": "Земля"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 466471,
+                        "name": "贫瘠湿地",
+                        "text": "贫瘠湿地须横置进战场。\n{T}：加{B}。\n循环{B}（{B}，弃掉此牌：抓一张牌。）",
+                        "type": "地"
+                    },
+                    {
+                        "language": "Chinese Traditional",
+                        "multiverseId": 466725,
+                        "name": "貧瘠濕地",
+                        "text": "貧瘠濕地須橫置進戰場。\n{T}：加{B}。\n循環{B}（{B}，棄掉此牌：抽一張牌。）",
+                        "type": "地"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "225317",
+                    "cardKingdomId": "225041",
+                    "cardsphereId": "59822",
+                    "mcmId": "375345",
+                    "mcmMetaId": "460",
+                    "mtgjsonV4Id": "8d98cc4b-5e0c-50f6-a612-90592b4b024f",
+                    "mtgoId": "72844",
+                    "multiverseId": "464185",
+                    "scryfallId": "de4d8706-1b2f-41e9-8329-d0186b401227",
+                    "scryfallIllustrationId": "68653bf2-3f13-4b50-b2e6-526f67300c7b",
+                    "scryfallOracleId": "326ba371-124c-4949-a048-3a0c8962e567",
+                    "tcgplayerProductId": "191288"
+                },
+                "isReprint": true,
+                "keywords": ["Cycling"],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "predh": "Legal",
+                    "premodern": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Barren Moor",
+                "number": "236",
+                "originalText": "Barren Moor enters the battlefield tapped.\n{T}: Add {B}.\nCycling {B} ({B}, Discard this card: Draw a card.)",
+                "originalType": "Land",
+                "printings": [
+                    "40K",
+                    "ARC",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C18",
+                    "C19",
+                    "C21",
+                    "CM2",
+                    "CMA",
+                    "CMD",
+                    "DDC",
+                    "DDJ",
+                    "DVD",
+                    "HA2",
+                    "MH1",
+                    "ONS",
+                    "TD0",
+                    "VMA",
+                    "WC03"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/8245c50947a36edd",
+                    "cardKingdomFoil": "https://mtgjson.com/links/d9b17429a264b31f",
+                    "cardmarket": "https://mtgjson.com/links/09c27b0832e55518",
+                    "tcgplayer": "https://mtgjson.com/links/12f2bb17774ea9f3"
+                },
+                "rarity": "uncommon",
+                "rulings": [
+                    {
+                        "date": "2008-10-01",
+                        "text": "Cycling is an activated ability. Effects that interact with activated abilities (such as Stifle or Rings of Brighthearth) will interact with cycling. Effects that interact with spells (such as Remove Soul or Faerie Tauntings) will not."
+                    }
+                ],
+                "setCode": "MH1",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Barren Moor enters the battlefield tapped.\n{T}: Add {B}.\nCycling {B} ({B}, Discard this card: Draw a card.)",
+                "type": "Land",
+                "types": ["Land"],
+                "uuid": "83e9c3bd-df91-5c34-937e-380802388916"
+            },
+            {
+                "artist": "Alayna Danner",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["default"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecSaltiness": 0.31,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 604629,
+                        "name": "Ebene",
+                        "type": "Standardland — Ebene"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 604634,
+                        "name": "Llanura",
+                        "type": "Tierra básica — Llanura"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 604639,
+                        "name": "Plaine",
+                        "type": "Terrain de base : plaine"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 604644,
+                        "name": "Pianura",
+                        "type": "Terra Base — Pianura"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 604649,
+                        "name": "平地",
+                        "type": "基本土地 — 平地"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 604654,
+                        "name": "Planície",
+                        "type": "Terreno Básico — Planície"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 604659,
+                        "name": "平原",
+                        "type": "基本地 ～平原"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "273844",
+                    "cardKingdomId": "273153",
+                    "cardsphereId": "99477",
+                    "mcmId": "689725",
+                    "mcmMetaId": "4251",
+                    "mtgArenaId": "83972",
+                    "mtgjsonV4Id": "3d91a28c-ae6e-57fc-957e-e703680297a8",
+                    "mtgoId": "106759",
+                    "multiverseId": "604624",
+                    "scryfallId": "50958c6e-9555-42ad-9bb3-2da9faa5cb52",
+                    "scryfallIllustrationId": "9f657c70-8286-41d6-a38e-f723fcec637e",
+                    "scryfallOracleId": "bc71ebf6-2056-41f7-be35-b2e5c34afa99",
+                    "tcgplayerProductId": "475503"
+                },
+                "isFullArt": true,
+                "isReprint": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "predh": "Legal",
+                    "premodern": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Plains",
+                "number": "262",
+                "originalType": "Basic Land — Plains",
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/40bb13c09ee07f9e",
+                    "cardKingdomFoil": "https://mtgjson.com/links/ee2442937e807514",
+                    "cardmarket": "https://mtgjson.com/links/170cdcac2176b465",
+                    "tcgplayer": "https://mtgjson.com/links/633dc4f26ab91c7f"
+                },
+                "rarity": "common",
+                "setCode": "ONE",
+                "subtypes": ["Plains"],
+                "supertypes": ["Basic"],
+                "text": "({T}: Add {W}.)",
+                "type": "Basic Land — Plains",
+                "types": ["Land"],
+                "uuid": "033b1a64-bdc0-59ec-8c1d-7fdbabd65956",
+                "variations": [
+                    "e823b2cd-efe1-55dc-b04f-bcb81dbdaea3",
+                    "5aeb8a6b-f2dd-5201-a315-fa37f04c3b55",
+                    "8a41f21f-6cea-5957-8ecc-0a10389141d2"
+                ]
+            },
+            {
+                "artist": "Alayna Danner",
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["default"],
+                "borderColor": "black",
+                "colorIdentity": ["U"],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecSaltiness": 0.73,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "German",
+                        "multiverseId": 604630,
+                        "name": "Insel",
+                        "type": "Standardland — Insel"
+                    },
+                    {
+                        "language": "Spanish",
+                        "multiverseId": 604635,
+                        "name": "Isla",
+                        "type": "Tierra básica — Isla"
+                    },
+                    {
+                        "language": "French",
+                        "multiverseId": 604640,
+                        "name": "Île",
+                        "type": "Terrain de base : île"
+                    },
+                    {
+                        "language": "Italian",
+                        "multiverseId": 604645,
+                        "name": "Isola",
+                        "type": "Terra Base — Isola"
+                    },
+                    {
+                        "language": "Japanese",
+                        "multiverseId": 604650,
+                        "name": "島",
+                        "type": "基本土地 — 島"
+                    },
+                    {
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 604655,
+                        "name": "Ilha",
+                        "type": "Terreno Básico — Ilha"
+                    },
+                    {
+                        "language": "Chinese Simplified",
+                        "multiverseId": 604660,
+                        "name": "海岛",
+                        "type": "基本地 ～海岛"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "273845",
+                    "cardKingdomId": "273154",
+                    "cardsphereId": "99470",
+                    "mcmId": "689726",
+                    "mcmMetaId": "2923",
+                    "mtgArenaId": "83973",
+                    "mtgjsonV4Id": "0fe4f3f3-5505-501a-bd27-7e4af9d48911",
+                    "mtgoId": "106761",
+                    "multiverseId": "604625",
+                    "scryfallId": "5c6322d4-52bf-471a-a5b2-8329ef4be39a",
+                    "scryfallIllustrationId": "c9a53303-98f9-49b8-a76b-8ad21b6119f9",
+                    "scryfallOracleId": "b2c6aa39-2d2a-459c-a555-fb48ba993373",
+                    "tcgplayerProductId": "475500"
+                },
+                "isReprint": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "predh": "Legal",
+                    "premodern": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Island",
+                "number": "263",
+                "originalType": "Basic Land — Island",
+
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/40ca4790d1585b8e",
+                    "cardKingdomFoil": "https://mtgjson.com/links/2278cb2891b19a1b",
+                    "cardmarket": "https://mtgjson.com/links/c25f7e5bd61dd2ca",
+                    "tcgplayer": "https://mtgjson.com/links/c748f3dc9baf02a9"
+                },
+                "rarity": "common",
+                "setCode": "ONE",
+                "subtypes": ["Island"],
+                "supertypes": ["Basic"],
+                "text": "({T}: Add {U}.)",
+                "type": "Basic Land — Island",
+                "types": ["Land"],
+                "uuid": "2a6ab51e-424f-5487-85ec-943339e2dc2a",
+                "variations": [
+                    "ed09057a-b976-56a7-a80b-b6fac64c0f93",
+                    "479243a5-f674-5b21-ba5e-00ebf23c9cff",
+                    "1ada23b6-f837-5c93-8be4-256481515379"
+                ]
+            }
+        ],
+        "code": "BRO"
+    }
+}
