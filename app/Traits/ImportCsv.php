@@ -14,7 +14,8 @@ trait ImportCsv {
 
     public function import(CsvImportRequest $request) {
         $path = $request->input('path');
-        logger('ファイルパス', [$path]);
+        // CSVファイル読み込み
+        $this->service->import($path);
         return response('import ok', Response::HTTP_CREATED);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CsvImportRequest;
+use App\Services\stock\StockpileService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,5 +13,8 @@ use Illuminate\Http\Response;
  */
 class StockpileController extends Controller
 {
+    public function __construct(StockpileService $service) {
+        $this->service = $service;
+    }
     use ImportCsv;
 }
