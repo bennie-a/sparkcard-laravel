@@ -1,7 +1,8 @@
 <?php
 namespace App\Traits;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CsvFilePathRequest;
+use App\Http\Requests\CsvImportRequest;
 use Illuminate\Http\Response;
 
 /**
@@ -11,7 +12,9 @@ trait ImportCsv {
 
     public $service;
 
-    public function import(Request $request) {
+    public function import(CsvImportRequest $request) {
+        $path = $request->input('path');
+        logger('ファイルパス', [$path]);
         return response('import ok', Response::HTTP_CREATED);
     }
 }
