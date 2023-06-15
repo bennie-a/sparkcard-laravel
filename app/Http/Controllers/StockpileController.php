@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\stock\StockpileService;
+use App\Services\Stock\StockpileService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

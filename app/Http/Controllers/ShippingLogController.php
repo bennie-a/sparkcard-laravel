@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\stock\ShippingLogService;
+use App\Services\Stock\ShippingLogService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 /**

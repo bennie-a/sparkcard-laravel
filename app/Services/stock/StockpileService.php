@@ -1,30 +1,21 @@
 <?php
-namespace App\Services\stock;
+namespace App\Services\Stock;
 
 use App\Files\CsvReader;
+use App\Files\Stock\StockpileCsvReader;
 
 /**
  * 在庫管理機能のサービスクラス
  */
-class StockpileService {
+class StockpileService extends AbstractSmsService{
 
     /**
-     * CSVファイルの内容をDBに登録する。
-     *
-     * @param string $path ファイルパス
-     * @return void
+     * 出荷ログ用のCSV読み込みクラスを取得する。
+     * @see CsvReader::csvReader
+     * @return StockpileCsvReader
      */
-    public function import(string $path) {
-        logger()->info('在庫管理ファイル読み込み開始', [$path]);
-
-        // $reader = new CsvReader($this->csvHeaders());
-        // $records = $reader->read($path);
+    protected function csvReader() {
+        return new StockpileCsvReader();
     }
 
-    /** 
-     * CSVファイルのヘッダーを指定する。
-     */
-    protected function csvHeaders() {
-        return ['setcode','name','lang','condition','quantity'];
-    }
 }
