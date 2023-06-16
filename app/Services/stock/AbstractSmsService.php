@@ -39,20 +39,8 @@ abstract class AbstractSmsService {
     }
 
     private function validateCsv(array $records) {
-        $rules = [
-            'setcode' => 'required|alpha_num',
-            'name' => 'required',
-            'lang' => 'required|in:JP,EN,IT,CT,CS',
-            'condition' => 'required|in:NM,NM-,EX+,EX,PLD',
-            'quantity' => 'required|numeric',
-        ];
-        $attributes = [
-            'setcode' => 'セット略称',
-            'name' => '商品名',
-            'lang' => '言語',
-            'condition' => '保存状態',
-            'quantity' => '数量'
-        ];
+        $rules = $this->validationRules();
+        $attributes = $this->attributes();
 
         $errors = [];
         foreach($records as $key => $value) {
@@ -73,5 +61,19 @@ abstract class AbstractSmsService {
      * @return CsvReader
      */
     protected abstract function csvReader();
+
+    /**
+     * CSVデータ1行分のバリデーションルールを取得する。
+     *
+     * @return array
+     */
+    protected abstract function validationRules():array;
+
+    /**
+     * CSVデータのバリデーションチェックに使う項目名を取得する。
+     *
+     * @return array
+     */
+    protected abstract function attributes():array;
 
 }

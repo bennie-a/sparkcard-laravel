@@ -8,10 +8,13 @@ use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
 
+/**
+ * 在庫管理CSVの入力値テスト
+ */
 class StockpileCsvDataTest extends TestCase
 {
     /**
-     * A basic feature test example.
+     * ｒA basic feature test example.
      *
      * @return void
      * @dataProvider dataprovider
