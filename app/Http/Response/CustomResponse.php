@@ -8,4 +8,7 @@ class CustomResponse {
 
     /** エキスパンションが見つからない時のステータスコード */
     const HTTP_NOT_FOUND_EXPANSION = 441;
+
+    /**CSVデータにバリデーションエラーが発生した時のステータスコード */
+    const HTTP_CSV_VALIDATION = 442;
 }

@@ -75,6 +75,9 @@ class Handler extends ExceptionHandler
                     case CustomResponse::HTTP_NOT_FOUND_EXPANSION:
                         $title = 'Not Found Expansion';
                     break;
+                    case CustomResponse::HTTP_CSV_VALIDATION:
+                        $title = 'CSV Validation Error';
+                    break;
                 }
             }
             return response()->json([

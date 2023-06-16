@@ -6,13 +6,13 @@ use League\Csv\Reader;
  * CSVファイル読み込みクラス
  */
 abstract class CsvReader {
-    // private $headers;
 
-    // public function __construct($headers)
-    // {
-    //     $this->headers = $headers;
-    // }
-
+    /**
+     * ファイル読み込み処理を行う。
+     *
+     * @param string $path
+     * @return array
+     */
     public function read(string $path)
     {
         // ファイルが存在するかチェック

@@ -14,6 +14,8 @@ use Illuminate\Http\Response;
 class StockpileController extends Controller
 {
     public function __construct(StockpileService $service) {
+        ini_set("max_execution_time",300); // タイムアウトを240秒にセット
+        ini_set("max_input_time",300); // パース時間を240秒にセット
         $this->service = $service;
     }
     use ImportCsv;

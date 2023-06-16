@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits;
 
-use App\Http\Requests\CsvFilePathRequest;
+use App\Exceptions\CsvValidationException;
 use App\Http\Requests\CsvImportRequest;
 use Illuminate\Http\Response;
 
@@ -14,8 +14,7 @@ trait ImportCsv {
 
     public function import(CsvImportRequest $request) {
         $path = $request->input('path');
-        // CSVファイル読み込み
-        $this->service->import($path);
-        return response('import ok', Response::HTTP_CREATED);
+        $result = $this->service->import($path);
+        return response()->json($result, Response::HTTP_CREATED);
     }
 }
