@@ -4,6 +4,7 @@ namespace App\Services\Stock;
 use App\Exceptions\CsvValidationException;
 use App\Files\CsvReader;
 use App\Http\Response\CustomResponse;
+use App\Models\CardInfo;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
@@ -52,8 +53,7 @@ abstract class AbstractSmsService {
         return $errors;
     }
 
-    public function store($records) {
-
+    protected function store(array $records) {
     }
 
     /**

@@ -30,6 +30,7 @@ class StockpileService extends AbstractSmsService{
             'lang' => 'required|in:JP,EN,IT,CT,CS',
             'condition' => 'required|in:NM,NM-,EX+,EX,PLD',
             'quantity' => 'required|numeric',
+            'isFoil' => 'nullable|in:true,false',
         ];
     }
 
@@ -44,7 +45,8 @@ class StockpileService extends AbstractSmsService{
             'name' => '商品名',
             'lang' => '言語',
             'condition' => '保存状態',
-            'quantity' => '数量'
+            'quantity' => '数量',
+            'isFoil' => 'Foilフラグ'
         ];
     }
 
