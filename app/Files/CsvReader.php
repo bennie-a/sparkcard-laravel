@@ -1,5 +1,8 @@
 <?php
 namespace App\Files;
+
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 use League\Csv\Reader;
 
 /**
@@ -17,7 +20,11 @@ abstract class CsvReader {
     {
         // ファイルが存在するかチェック
         if (!file_exists($path)) {
-            throw new \Exception('File not found.');
+            $response = response()->json([
+                'status' => 'File Not Found',
+                'error' => 'ファイルが存在しません。'
+            ], Response::HTTP_BAD_REQUEST);
+            throw new HttpResponseException($response);
         }
 
         // 文字コードがUTF-8であるかチェック
