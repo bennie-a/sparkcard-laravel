@@ -65,6 +65,12 @@ class CardInfo extends Model
         return $list[0];
     }
 
+    public static function findSingleCard($setcode, $name, $isFoil) {
+        $conditions = ['expansion.attr' => $setcode, 'card_info.name' => $name, 'card_info.isFoil' => $isFoil];
+        $info = CardInfo::where($conditions)->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->first();
+        return $info;
+    }
+
     /**
      * 特定のカード情報を取得する。
      *

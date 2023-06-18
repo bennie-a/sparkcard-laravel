@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Validator;
  */
 abstract class AbstractSmsService {
 
-        /**
+    private $success = [];
+
+    private $ignore = [];
+
+    private $error = [];
+
+    /**
      * CSVファイルの内容をDBに登録する。
      *
      * @param string $path ファイルパス
@@ -34,8 +40,11 @@ abstract class AbstractSmsService {
         }
 
         // DB登録
-        $this->store($records);
-        $result = ["row"=>count($records)];
+        foreach($records as $key => $row) {
+            $this->store($key, $row);
+        }
+        $result = ["row"=>count($records), 'success' => count($this->success), 
+                                    'ignore' => count($this->ignore), 'error' => count($this->error), 'details' => $this->error];
         return $result;
     }
 
@@ -53,8 +62,25 @@ abstract class AbstractSmsService {
         return $errors;
     }
 
-    protected function store(array $records) {
+    /**
+     * 登録成功結果を設定する。
+     *
+     * @param integer $number 行数
+     * @return void
+     */
+    protected function addSuccess(int $number) {
+        $this->success[] = $number;
     }
+
+    protected function addIgnore(array $judge) {
+        $this->ignore[] = $judge;
+    }
+
+    protected function addError(array $judge) {
+        $this->error[] = $judge;
+    }
+
+    protected abstract function store(int $key, array $row);
 
     /**
      * 機能に応じたCsvReaderクラスを呼び出す。
