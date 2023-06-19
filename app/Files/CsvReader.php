@@ -52,7 +52,6 @@ abstract class CsvReader {
         $csv->setHeaderOffset(0);
         $records = [];
         foreach ($csv as $row) {
-            logger()->info($row);
             $records[] = $row;
         }
 

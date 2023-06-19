@@ -62,11 +62,13 @@ class StockpileService extends AbstractSmsService{
 
     protected function store(int $key, array $row) {
             $number = $key + 2;
-            $isFoil = empty($row[self::IS_FOIL]) ? filter_var($row[self::IS_FOIL], FILTER_VALIDATE_BOOLEAN) : false;
+            logger()->info('登録開始', ['number' => $number]);
+
+            $isFoil = !empty($row[self::IS_FOIL]) ? filter_var($row[self::IS_FOIL], FILTER_VALIDATE_BOOLEAN) : false;
             // カード情報を取得する
             $info = CardInfo::findSingleCard($row[self::SETCODE], $row[self::NAME], $isFoil);
             if (empty($info)) {
-                parent::addError([$number => 'カードマスタ情報なし']);
+                parent::addError($number, 'カードマスタ情報なし');
                 return;
             }
             $lang = $row[self::LANG];
@@ -74,7 +76,7 @@ class StockpileService extends AbstractSmsService{
             // 在庫情報の重複チェック
             $isExists = Stockpile::isExists($info->id, $lang, $condition);
             if ($isExists == true) {
-                parent::addIgnore([$number => '在庫情報が登録済み']);
+                parent::addSkip($number, '在庫情報が登録済み');
                 return;
             }
             Stockpile::create(['card_id' => $info->id, 'language' => $lang,

@@ -40,8 +40,7 @@ class CardInfoDBTest extends TestCase
                 'color' => 'Land',
                 'number'=> '245',
                 'multiverseId' => '462492',
-                'promotype' => '', 'scryfallId' => '', 'isFoil' => false,
-            'language' => 'JP'];
+                'promotype' => '', 'scryfallId' => '', 'isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
@@ -57,8 +56,7 @@ class CardInfoDBTest extends TestCase
                 'number'=> '150',
                 'multiverseId' => '',
                 'promotype' => '絵違い', 
-                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => false,
-                'language' => 'JP'];
+                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
@@ -73,7 +71,7 @@ class CardInfoDBTest extends TestCase
                 'number'=> '1',
                 'multiverseId' => '',
                 'promotype' => '', 
-                'scryfallId' => '', 'isFoil' => false,'language' => 'JP'];
+                'scryfallId' => '', 'isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNull($record->image_url, '画像URLの有無');

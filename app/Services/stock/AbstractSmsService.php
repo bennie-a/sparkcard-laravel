@@ -1,10 +1,8 @@
 <?php
 namespace App\Services\Stock;
 
-use App\Exceptions\CsvValidationException;
 use App\Files\CsvReader;
 use App\Http\Response\CustomResponse;
-use App\Models\CardInfo;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
@@ -44,7 +42,7 @@ abstract class AbstractSmsService {
             $this->store($key, $row);
         }
         $result = ["row"=>count($records), 'success' => count($this->success), 
-                                    'ignore' => count($this->ignore), 'error' => count($this->error), 'details' => $this->error];
+                                    'skip' => count($this->ignore), 'error' => count($this->error), 'details' => $this->error];
         return $result;
     }
 
@@ -69,15 +67,18 @@ abstract class AbstractSmsService {
      * @return void
      */
     protected function addSuccess(int $number) {
+        logger()->info('success', ['number' => $number]);
         $this->success[] = $number;
     }
 
-    protected function addIgnore(array $judge) {
+    protected function addSkip(int $number, string $judge) {
+        logger()->info('skip', [$number, $judge]);
         $this->ignore[] = $judge;
     }
 
-    protected function addError(array $judge) {
-        $this->error[] = $judge;
+    protected function addError(int $number, string $judge) {
+        logger()->info('error', [$number , $judge]);
+        $this->error[$number] = $judge;
     }
 
     protected abstract function store(int $key, array $row);
