@@ -75,6 +75,10 @@ abstract class AbstractCard implements CardInfoInterface {
         return 'JP';
     }
 
+    public function setcode():string {
+        return $this->json['setCode'];
+    }
+
     public function promotype() {
         if (MtgJsonUtil::hasKey(self::IS_FULLART, $this->json)) {
             return 'fullart';
@@ -82,6 +86,10 @@ abstract class AbstractCard implements CardInfoInterface {
 
         if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json)) {
             return 'draft';
+        }
+        // STA日本画対応
+        if (strcmp($this->setcode(), 'STA')) {
+            return 'jprinting';
         }
         $filterd = function($f) {
             return $f != 'textured';
