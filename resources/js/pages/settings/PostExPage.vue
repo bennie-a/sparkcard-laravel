@@ -25,6 +25,9 @@
                         <option>ゼンディカー</option>
                         <option>イコリア</option>
                         <option>エルドレイン</option>
+                        <option>イクサラン</option>
+                        <option>ストリクスヘイヴン</option>
+                        <option>イニストラード</option>
                         <option>カラデシュ</option>
                         <option>基本セット</option>
                         <option>その他</option>

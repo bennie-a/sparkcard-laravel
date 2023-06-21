@@ -35,5 +35,7 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'fullart', 'name' => 'フルアート']);
         Promotype::create(['attr' => 'gameday', 'name' => 'ゲームデー']);
         Promotype::create(['attr' => 'datestamped', 'name' => '日付入りプロモカード']);
+        Promotype::create(['attr' => 'tourney', 'name' => 'トーナメント景品']);
+
     }
 }
