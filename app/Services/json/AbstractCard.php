@@ -87,10 +87,6 @@ abstract class AbstractCard implements CardInfoInterface {
         if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json)) {
             return 'draft';
         }
-        // STA日本画対応
-        if (strcmp($this->setcode(), 'STA')) {
-            return 'jprinting';
-        }
         $filterd = function($f) {
             return $f != 'textured';
         };

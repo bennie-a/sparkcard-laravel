@@ -11,18 +11,18 @@ import SideMenu from "../pages/component/SideMenu.vue";
             </div>
             <div class="right menu">
                 <router-link
-                    to="/settings/expansion"
+                    to="/config/expansion"
                     class="item"
                     :class="{
-                        active: $route.path === '/settings/expansion',
+                        active: $route.path === '/config/expansion',
                     }"
                     >エキスパンション一覧</router-link
                 >
                 <router-link
-                    to="/settings/cardinfo"
+                    to="/config/cardinfo/csv"
                     class="item"
                     :class="{
-                        active: $route.path === '/settings/cardinfo',
+                        active: $route.path === '/config/cardinfo/csv',
                     }"
                     >カード情報マスタ登録</router-link
                 >

@@ -31,7 +31,8 @@
                     <th class="six wide">名称</th>
                     <th>略称</th>
                     <th>リリース日</th>
-                    <th class="center aligned">カード登録</th>
+                    <th class="center aligned">カード登録状況</th>
+                    <th class="">カード追加</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +45,14 @@
                     </td>
                     <td v-else class="negative center aligned">
                         <i class="bi bi-x-square-fill"></i>
+                    </td>
+                    <td>
+                        <button
+                            class="ui button teal basic"
+                            @click="toPostCardPage(ex.name, ex.attr)"
+                        >
+                            追加する
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -70,6 +79,13 @@ export default {
     methods: {
         show: function () {
             this.$router.push("/settings/expansion/post");
+        },
+        toPostCardPage: function (setname, attr) {
+            console.log(attr);
+            this.$router.push({
+                name: "PostCardInfo",
+                params: { setname: setname, attr: attr },
+            });
         },
         search: async function () {
             console.log(this.keyword);

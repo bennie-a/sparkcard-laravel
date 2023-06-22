@@ -37,8 +37,8 @@ class StockpileService extends AbstractSmsService{
         return [
             self::SETCODE => 'required|alpha_num',
             self::NAME => 'required',
-            self::LANG => 'required|in:JP,EN,IT,CT,CS',
-            self::CONDITION => 'required|in:NM,NM-,EX+,EX,PLD',
+            self::LANG => 'nullable|in:JP,EN,IT,CT,CS',
+            self::CONDITION => 'nullable|in:NM,NM-,EX+,EX,PLD',
             self::QUANTITY => 'required|numeric',
             self::IS_FOIL => 'nullable|in:true,false',
         ];
@@ -71,8 +71,8 @@ class StockpileService extends AbstractSmsService{
                 parent::addError($number, 'カードマスタ情報なし');
                 return;
             }
-            $lang = $row[self::LANG];
-            $condition = $row[self::CONDITION];
+            $lang = !empty($row[self::LANG]) ? $row[self::LANG] : 'JP';
+            $condition = !empty($row[self::CONDITION]) ? $row[self::CONDITION]  : 'EX+';
             // 在庫情報の重複チェック
             $isExists = Stockpile::isExists($info->id, $lang, $condition);
             if ($isExists == true) {
