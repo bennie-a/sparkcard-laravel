@@ -2,10 +2,11 @@
 namespace App\Services;
 
 use App\Facades\Promo;
-use App\Factory\CardInfoFactory;
 use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
 use app\Services\json\AbstractCard;
+use App\Enum\CardColor;
+
 
 /**
  * scryfall.comのAPIサービスクラス
@@ -57,7 +58,11 @@ class ScryfallService {
     public function getCardInfoByNumber(string $setcode, int $number) {
         $contents = $this->repo->getCardInfoByNumber($setcode, $number);
         // $card = CardInfoFactory::create($contents);
-        return $contents;
+        $color = CardColor::findColor($contents['colors'], $contents['type_line']);
+        return ['name' => $contents['printed_name'], 
+                    'multiverse_id' => current($contents['multiverse_ids']),
+                    'enname' => $contents['name'],
+                    'color' => $color->value];
     }
 }
 ?>

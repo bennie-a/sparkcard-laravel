@@ -16,7 +16,6 @@ class ScryfallController extends Controller
     }
     public function index(ScryfallRequest $request) {
         $card = $this->service->getCardInfoByNumber($request->input("setcode"), $request->input("number"));
-        logger()->debug($card);
-        return response()->json(['multiverse_id' => '111111'], Response::HTTP_OK);
+        return response()->json($card, Response::HTTP_OK);
     }
 }

@@ -26,29 +26,32 @@
                     <label for="cardName">カード名</label>
                     <input type="text" id="cardName" v-model="name" />
                 </div>
-            </div>
-            <!-- <div class="two fields">
                 <div class="require four wide field">
-                    <label for="promotype">プロモタイプ</label>
-                    <select id="promotype" v-model="promotype">
-                        <option value="">通常</option>
-                        <option value="ブースターファン">
-                            ブースターファン
-                        </option>
-                        <option value="トーナメント景品">
-                            トーナメント景品
-                        </option>
-                        <option value="ショーケース">ショーケース</option>
-                    </select>
+                    <label for="enName">英名</label>
+                    <input type="text" id="cardName" v-model="enname" />
                 </div>
-                <div class="six wide field">
+            </div>
+            <div class="four fields">
+                <div class="two wide field">
+                    <label for="color">色</label>
+                    <span>{{ color }}</span>
+                </div>
+                <div class="two wide field">
+                    <label for="multiverse_id">Multiverse ID</label>
+                    <span>{{ multiverse_id }}</span>
+                </div>
+                <div class="two wide field">
                     <label for="">通常 or Foil</label>
                     <div class="ui toggle checkbox">
                         <input type="checkbox" name="foil" v-model="isFoil" />
                         <label for="foil">Foil</label>
                     </div>
                 </div>
-            </div> -->
+                <div class="two wide field">
+                    <label for="promotype">プロモタイプ</label>
+                    <span>{{ multiverse_id }}</span>
+                </div>
+            </div>
             <ModalButton @action="store"
                 ><i class="checkmark icon"></i>登録する</ModalButton
             >
@@ -59,6 +62,7 @@
 import { AxiosTask } from "../../component/AxiosTask";
 import MessageArea from "../component/MessageArea.vue";
 import ModalButton from "../component/ModalButton.vue";
+import axios from "axios";
 
 export default {
     data() {
@@ -66,13 +70,17 @@ export default {
             setname: this.$route.params.setname,
             attr: this.$route.params.attr,
             name: "",
+            enname: "",
             isFoil: false,
             promotype: "",
             number: "",
+            multiverse_id: "",
+            color: "",
         };
     },
     methods: {
         search: async function () {
+            this.$store.dispatch("message/clear");
             const task = new AxiosTask(this.$store);
             const query = {
                 params: {
@@ -80,18 +88,28 @@ export default {
                     number: this.number,
                 },
             };
-
-            const success = function (response, store, query) {
-                let data = response.data;
-                console.log(data["multiverse_id"]);
-            };
-            const fail = function (e, store, query) {
-                console.error(e);
-                if (e.response.status == 422) {
-                    store.dispatch("message/error", e.response.data.message);
-                }
-            };
-            await task.get("/scryfall", query, success, fail);
+            this.$store.dispatch("setLoad", false);
+            await axios
+                .get("/api/scryfall", query)
+                .then((response) => {
+                    let data = response.data;
+                    this.name = data["name"];
+                    this.enname = data["enname"];
+                    this.multiverse_id = data["multiverse_id"];
+                    this.color = data["color"];
+                })
+                .catch((e) => {
+                    console.error(e);
+                    if (e.response.status != 200) {
+                        this.$store.dispatch(
+                            "message/error",
+                            e.response.data.message
+                        );
+                    }
+                })
+                .finally(() => {
+                    this.$store.dispatch("setLoad", false);
+                });
         },
         store: function () {
             const task = new AxiosTask(this.$store);
