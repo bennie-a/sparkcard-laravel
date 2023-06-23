@@ -49,7 +49,14 @@
                 </div>
                 <div class="two wide field">
                     <label for="promotype">プロモタイプ</label>
-                    <span>{{ multiverse_id }}</span>
+                    <span
+                        v-if="promotype != ''"
+                        class="ui large orange label"
+                        >{{ promotype }}</span
+                    >
+                    <span v-if="promotype == ''" class="ui large label"
+                        >通常</span
+                    >
                 </div>
             </div>
             <ModalButton @action="store"
@@ -97,6 +104,7 @@ export default {
                     this.enname = data["enname"];
                     this.multiverse_id = data["multiverse_id"];
                     this.color = data["color"];
+                    this.promotype = data["promotype"];
                 })
                 .catch((e) => {
                     console.error(e);
