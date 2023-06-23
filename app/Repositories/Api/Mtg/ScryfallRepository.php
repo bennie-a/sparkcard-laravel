@@ -54,6 +54,20 @@ class ScryfallRepository {
     }
 
     /**
+     * セット略称とカード番号から情報を取得する。
+     *
+     * @param string $setCode
+     * @param integer $number
+     * @return void
+     */
+    public function getCardInfoByNumber(string $setCode, int $number) {
+        $client = GuzzleClientFactory::create('scryfall');
+        $rowerCode = \mb_strtolower($setCode);
+        $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/ja');
+        return $this->getContents($response);
+    }
+
+    /**
      * レスポンスからJSON情報を取得する。
      *
      * @param Response $response

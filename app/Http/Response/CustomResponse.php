@@ -11,4 +11,7 @@ class CustomResponse {
 
     /**CSVデータにバリデーションエラーが発生した時のステータスコード */
     const HTTP_CSV_VALIDATION = 442;
+
+    /** カード情報がAPIに見つからなかった時のステータスコード */
+    const HTTP_NOT_FOUND_CARD = 443;
 }

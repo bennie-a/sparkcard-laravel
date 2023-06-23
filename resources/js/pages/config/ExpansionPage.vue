@@ -78,7 +78,7 @@ export default {
     },
     methods: {
         show: function () {
-            this.$router.push("/settings/expansion/post");
+            this.$router.push("/config/expansion/post");
         },
         toPostCardPage: function (setname, attr) {
             console.log(attr);

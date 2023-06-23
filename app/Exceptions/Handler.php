@@ -78,6 +78,9 @@ class Handler extends ExceptionHandler
                     case CustomResponse::HTTP_CSV_VALIDATION:
                         $title = 'CSV Validation Error';
                     break;
+                    case CustomResponse::HTTP_NOT_FOUND_CARD:
+                        $title = 'Not Found Card in API';
+                    break;
                 }
             }
             return response()->json([

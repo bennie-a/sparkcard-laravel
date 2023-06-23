@@ -1,8 +1,11 @@
 <?php
 namespace App\Services;
 
+use App\Facades\Promo;
+use App\Factory\CardInfoFactory;
 use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
+use app\Services\json\AbstractCard;
 
 /**
  * scryfall.comのAPIサービスクラス
@@ -24,7 +27,7 @@ class ScryfallService {
         return $res['released_at'];
     }
 
-        /**
+     /**
      * 画像URLを取得する。
      *
      * @param array $details JSONファイルから読み込んだカード情報1件
@@ -49,6 +52,12 @@ class ScryfallService {
         }
         $images = $json['image_uris'];
         return $images['png'];
+    }
+
+    public function getCardInfoByNumber(string $setcode, int $number) {
+        $contents = $this->repo->getCardInfoByNumber($setcode, $number);
+        // $card = CardInfoFactory::create($contents);
+        return $contents;
     }
 }
 ?>

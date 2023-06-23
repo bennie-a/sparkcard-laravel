@@ -2,6 +2,8 @@
 namespace App\Services;
 
 use App\Enum\CardColor;
+use App\Exceptions\NotFoundException;
+use App\Http\Response\CustomResponse;
 use App\Repositories\Api\Mtg\MtgDevRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Enum;
@@ -24,12 +26,11 @@ class MtgDevService {
     public function getCardInfo($name, $exp) {
         $res = $this->repo->getCard($name, $exp);
         $cardArray = $res["cards"];
-        $responseArray = ['id' => -1, 'color' => CardColor::UNDEFINED->text(), 'image' => ''];
-        if (empty($cardArray)) {
-            return $responseArray;
-        }
         // 0件対応
-        $card = $res["cards"][0];
+        if (empty($cardArray)) {
+            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_CARD, $name.'がAPIにありません。');
+        }
+        $card = current($res["cards"]);
         $color = CardColor::match($card);
         $foreigns = $card["foreignNames"];
         $target = $this->extractCardByLang($foreigns, "Japanese");
@@ -50,7 +51,7 @@ class MtgDevService {
             return strcmp($card['language'], $language) == 0;
         });
         $keys = array_keys($target);
-        return $target[$keys[0]];
+        return $target[current($keys)];
     }
 }
 ?>
