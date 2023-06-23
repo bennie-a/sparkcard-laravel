@@ -37,7 +37,7 @@ class ScryfallService {
     public function getImageUrl($details)
     {
         $multiverseId = $details['multiverseId'];
-        $scryfallId = $details['scryfallId'];
+        $scryfallId = MtgJsonUtil::hasKey('scryfallId',$details) ? $details['multiverseId'] : '';
         $json = [];
         if (!empty($multiverseId)) {
             $json = $this->repo->getCardByMultiverseId($multiverseId);

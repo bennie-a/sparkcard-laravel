@@ -28,7 +28,7 @@
         >
             <thead>
                 <tr>
-                    <th class="six wide">名称</th>
+                    <th class="five wide">名称</th>
                     <th>略称</th>
                     <th>リリース日</th>
                     <th class="center aligned">カード登録状況</th>

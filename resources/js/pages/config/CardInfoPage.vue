@@ -126,16 +126,17 @@ export default {
                 name: this.name,
                 isFoil: this.isFoil,
                 promotype: this.promotype,
+                multiverseId: this.multiverse_id,
+                en_name: this.enname,
+                color: this.color,
                 number: this.number,
             };
             const success = function (response, store) {
                 // this.back();
+                console.log(response.status);
+                store.dispatch("setSuccessMessage", `登録しました！`);
             };
-            task.post("database/card", json, success);
-            this.$store.dispatch(
-                "setSuccessMessage",
-                `${this.name}を登録しました！`
-            );
+            task.post("/database/card", json, success);
         },
     },
     components: {
