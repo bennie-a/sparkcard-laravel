@@ -37,7 +37,7 @@ class ScryfallCard extends AbstractCard {
      * @return array
      */
     public function colors():array {
-        return $this->getJson()['colors'];
+        return $this->getJson()['color_identity'];
     }
 
     public function cardtype():string {

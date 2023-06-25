@@ -22,6 +22,7 @@
                         <option>ミラディン/ファイレクシア</option>
                         <option>神河</option>
                         <option>ドミナリア</option>
+                        <option>ラヴニカ</option>
                         <option>ゼンディカー</option>
                         <option>イコリア</option>
                         <option>エルドレイン</option>

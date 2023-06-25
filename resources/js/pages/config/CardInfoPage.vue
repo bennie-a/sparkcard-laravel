@@ -1,68 +1,89 @@
 <template>
-    <section class="ui grids">
-        <message-area></message-area>
-        <router-link to="/config/expansion"
-            ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
-        >
-
-        <div class="mt-1 content ui form">
-            <div class="two fields">
-                <div class="three wide field">
-                    <label for="">セット名</label>
-                    {{ setname }}({{ attr }})
-                </div>
-                <div class="require three wide field">
-                    <label for="number">カード番号</label>
-                    <div class="ui action input">
-                        <input type="text" v-model="number" />
-                        <button class="ui button" @click="search">
-                            <i class="search icon"></i>
-                        </button>
+    <message-area></message-area>
+    <router-link to="/config/expansion"
+        ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
+    >
+    <section class="ui grid">
+        <div class="eight wide column">
+            <div class="ui form">
+                <div class="two fields">
+                    <div class="seven wide field">
+                        <label for="">セット名</label>
+                        {{ setname }}({{ attr }})
+                    </div>
+                    <div class="require six wide field">
+                        <label for="number">カード番号</label>
+                        <div class="ui action input">
+                            <input type="text" v-model="number" />
+                            <button class="ui button" @click="search">
+                                <i class="search icon"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="two fields">
-                <div class="require four wide field">
-                    <label for="cardName">カード名</label>
-                    <input type="text" id="cardName" v-model="name" />
-                </div>
-                <div class="require four wide field">
-                    <label for="enName">英名</label>
-                    <input type="text" id="cardName" v-model="enname" />
-                </div>
-            </div>
-            <div class="four fields">
-                <div class="two wide field">
-                    <label for="color">色</label>
-                    <span>{{ color }}</span>
-                </div>
-                <div class="two wide field">
-                    <label for="multiverse_id">Multiverse ID</label>
-                    <span>{{ multiverse_id }}</span>
-                </div>
-                <div class="two wide field">
-                    <label for="">通常 or Foil</label>
-                    <div class="ui toggle checkbox">
-                        <input type="checkbox" name="foil" v-model="isFoil" />
-                        <label for="foil">Foil</label>
+                <div class="two fields">
+                    <div class="require eight wide field">
+                        <label for="cardName">カード名</label>
+                        <input type="text" id="cardName" v-model="name" />
+                    </div>
+                    <div class="require eight wide field">
+                        <label for="enName">英名</label>
+                        <input type="text" id="cardName" v-model="enname" />
                     </div>
                 </div>
-                <div class="two wide field">
-                    <label for="promotype">プロモタイプ</label>
-                    <span
-                        v-if="promotype != ''"
-                        class="ui large orange label"
-                        >{{ promotype }}</span
-                    >
-                    <span v-if="promotype == ''" class="ui large label"
-                        >通常</span
-                    >
+                <div class="three fields">
+                    <div class="eight wide field">
+                        <label for="color">色</label>
+                        <select v-model="color" class="ui dropdown">
+                            <option value="W">白</option>
+                            <option value="U">青</option>
+                            <option value="R">赤</option>
+                            <option value="B">黒</option>
+                            <option value="G">緑</option>
+                            <option value="M">多色</option>
+                            <option value="A">アーティファクト</option>
+                            <option value="Land">土地</option>
+                        </select>
+                    </div>
+                    <div class="eight wide field">
+                        <label for="promotype">プロモタイプ</label>
+                        <select class="ui dropdown" v-model="promotype">
+                            <option value="">通常</option>
+                            <option value="フルアート">フルアート</option>
+                            <option value="ボーダレス">ボーダレス</option>
+                        </select>
+                    </div>
                 </div>
+                <div class="two fields">
+                    <div class="six wide field">
+                        <label for="">通常 or Foil</label>
+                        <div class="ui toggle checkbox">
+                            <input
+                                type="checkbox"
+                                name="foil"
+                                v-model="isFoil"
+                            />
+                            <label for="foil">Foil</label>
+                        </div>
+                    </div>
+                    <div class="four wide field">
+                        <label for="multiverse_id">Multiverse ID</label>
+                        <span>{{ multiverse_id }}</span>
+                    </div>
+                </div>
+                <ModalButton @action="store"
+                    ><i class="checkmark icon"></i>登録する</ModalButton
+                >
             </div>
-            <ModalButton @action="store"
-                ><i class="checkmark icon"></i>登録する</ModalButton
-            >
         </div>
+        <div class="four wide column">
+            <img
+                src="https://cards.scryfall.io/large/front/1/a/1a02a6bf-98f2-442d-9ff6-8d67f066fd71.jpg?1646241075"
+                alt=""
+            />
+        </div>
+
+        <div class=""></div>
     </section>
 </template>
 <script>
@@ -145,4 +166,8 @@ export default {
     },
 };
 </script>
-<style></style>
+<style scoped>
+img {
+    width: 100%;
+}
+</style>
