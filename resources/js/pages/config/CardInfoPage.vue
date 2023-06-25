@@ -77,13 +77,8 @@
             </div>
         </div>
         <div class="four wide column">
-            <img
-                src="https://cards.scryfall.io/large/front/1/a/1a02a6bf-98f2-442d-9ff6-8d67f066fd71.jpg?1646241075"
-                alt=""
-            />
+            <img :src="imageurl" :alt="name" />
         </div>
-
-        <div class=""></div>
     </section>
 </template>
 <script>
@@ -104,6 +99,7 @@ export default {
             number: "",
             multiverse_id: "",
             color: "",
+            imageurl: "",
         };
     },
     methods: {
@@ -126,6 +122,7 @@ export default {
                     this.multiverse_id = data["multiverse_id"];
                     this.color = data["color"];
                     this.promotype = data["promotype"];
+                    this.imageurl = data["imageurl"];
                 })
                 .catch((e) => {
                     console.error(e);

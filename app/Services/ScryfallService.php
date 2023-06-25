@@ -66,7 +66,8 @@ class ScryfallService {
                     'multiverse_id' => $card->multiverseId(),
                     'enname' => $card->enname(),
                     'color' => $color->value,
-                    'promotype'=>$promotype
+                    'promotype'=>$promotype,
+                    'imageurl' => $card->imageurl()
             ];
     }
 }
