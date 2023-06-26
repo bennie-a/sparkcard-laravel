@@ -31,7 +31,7 @@
                     <th class="five wide">名称</th>
                     <th>略称</th>
                     <th>リリース日</th>
-                    <th class="center aligned">カード登録状況</th>
+                    <th class="center aligned">カード登録件数</th>
                     <th class="">カード追加</th>
                 </tr>
             </thead>
@@ -40,11 +40,11 @@
                     <td>{{ ex.name }}</td>
                     <td>{{ ex.attr }}</td>
                     <td>{{ ex.release_date }}</td>
-                    <td v-if="ex.is_exist" class="positive center aligned">
-                        <i class="bi bi-check-circle-fill"></i>
+                    <td v-if="ex.count != 0" class="positive center aligned">
+                        {{ ex.count }}
                     </td>
                     <td v-else class="negative center aligned">
-                        <i class="bi bi-x-square-fill"></i>
+                        {{ ex.count }}
                     </td>
                     <td>
                         <button
@@ -97,8 +97,8 @@ export default {
                 // store.dispatch("expansion/result", response.data);
             };
             const fail = function (e, store, query) {
-                console.error(e);
-                store.dispatch("message/error", "検索結果がありません。");
+                const data = e.response.data;
+                store.dispatch("message/error", data.detail);
             };
             const task = new AxiosTask(this.$store);
             await task.get("/database/exp", query, success, fail);

@@ -28,9 +28,10 @@ class PostCardDBRequest extends FormRequest
             'name'=>'required',
             'en_name'=>'required',
             'color'=>'required',
-            'multiverseId' => 'required_without:scryfallId|integer',
-            'scryfallId' => 'required_without:multiverseId|string',
-            'number' => 'required|alpha_num'
+            'multiverseId' => 'required_without:scryfallId,imageurl|integer',
+            'scryfallId' => 'required_without:multiverseId,imageurl|string',
+            'number' => 'required|alpha_num',
+            'imageurl' => 'required_without:multiverseId,scryfallId'
         ];
     }
 

@@ -36,6 +36,9 @@ class ScryfallService {
      */
     public function getImageUrl($details)
     {
+        if (MtgJsonUtil::hasKey('imageurl', $details)) {
+            return $details['imageurl'];
+        }
         $multiverseId = $details['multiverseId'];
         $scryfallId = MtgJsonUtil::hasKey('scryfallId',$details) ? $details['multiverseId'] : '';
         $json = [];
