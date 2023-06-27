@@ -3,24 +3,59 @@
     <router-link to="/config/expansion"
         ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
     >
-    <section class="ui grid">
-        <div class="eight wide column">
-            <div class="ui form">
-                <div class="two fields">
-                    <div class="seven wide field">
-                        <label for="">セット名</label>
-                        {{ setname }}({{ attr }})
+    <div class="mt-1 ui form segment">
+        <div class="two fields">
+            <div class="three wide field">
+                <label for="">セット名</label>
+                {{ setname }}({{ attr }})
+            </div>
+            <div class="three wide field">
+                <label for="">言語</label>
+                <div class="inline fields">
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input
+                                id="jp"
+                                type="radio"
+                                name="frequency"
+                                v-model="language"
+                                value="jp"
+                            />
+                            <label for="jp">日本語</label>
+                        </div>
                     </div>
-                    <div class="require six wide field">
-                        <label for="number">カード番号</label>
-                        <div class="ui action input">
-                            <input type="text" v-model="number" />
-                            <button class="ui button" @click="search">
-                                <i class="search icon"></i>
-                            </button>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input
+                                type="radio"
+                                name="frequency"
+                                v-model="language"
+                                value="en"
+                                id="en"
+                            />
+                            <label for="en">英語</label>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="three wide field">
+                <label for="number">カード番号</label>
+                <div class="ui action input">
+                    <input
+                        type="text"
+                        v-model="number"
+                        class="two wide columns"
+                    />
+                    <button class="ui button" @click="search">
+                        <i class="search icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ui grid">
+        <div class="eight wide column">
+            <div class="ui form">
                 <div class="two fields">
                     <div class="require eight wide field">
                         <label for="cardName">カード名</label>
@@ -100,6 +135,7 @@ export default {
             multiverse_id: "",
             color: "",
             imageurl: "",
+            language: "jp",
         };
     },
     methods: {
@@ -110,6 +146,7 @@ export default {
                 params: {
                     setcode: this.attr,
                     number: this.number,
+                    language: this.language,
                 },
             };
             this.$store.dispatch("setLoad", false);
@@ -138,6 +175,7 @@ export default {
                 });
         },
         store: function () {
+            this.$store.dispatch("message/clear");
             const task = new AxiosTask(this.$store);
             let json = {
                 setCode: this.attr,
@@ -154,6 +192,7 @@ export default {
                 console.log(response.status);
                 store.dispatch("setSuccessMessage", `登録しました！`);
             };
+            const fail = function () {};
             task.post("/database/card", json, success);
         },
     },
@@ -166,5 +205,8 @@ export default {
 <style scoped>
 img {
     width: 100%;
+}
+label {
+    cursor: hand;
 }
 </style>

@@ -47,6 +47,8 @@ export class AxiosTask {
             .catch((e) => {
                 if (e.response.status == 422) {
                     console.error(e.response.data);
+                    const data = e.response.data;
+                    this.store.dispatch("message/error", data.message);
                     return;
                 }
             });

@@ -58,8 +58,11 @@ class ScryfallService {
         return $images['png'];
     }
 
-    public function getCardInfoByNumber(string $setcode, int $number) {
-        $contents = $this->repo->getCardInfoByNumber($setcode, $number);
+    public function getCardInfoByNumber(array $details) {
+        $setcode = $details["setcode"];
+        $number = $details["number"];
+        $language = $details["language"];
+        $contents = $this->repo->getCardInfoByNumber($setcode, $number, $language);
         // $card = CardInfoFactory::create($contents);
         $card = new ScryfallCard($contents);
         $color = CardColor::findColor($card->colors(), $card->cardtype());

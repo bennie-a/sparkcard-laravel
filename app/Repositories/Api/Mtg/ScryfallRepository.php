@@ -60,10 +60,10 @@ class ScryfallRepository {
      * @param integer $number
      * @return void
      */
-    public function getCardInfoByNumber(string $setCode, int $number) {
+    public function getCardInfoByNumber(string $setCode, int $number, string $language) {
         $client = GuzzleClientFactory::create('scryfall');
         $rowerCode = \mb_strtolower($setCode);
-        $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/ja');
+        $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
         return $this->getContents($response);
     }
 

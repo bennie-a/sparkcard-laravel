@@ -15,7 +15,9 @@ class ScryfallController extends Controller
      $this->service = $service;   
     }
     public function index(ScryfallRequest $request) {
-        $card = $this->service->getCardInfoByNumber($request->input("setcode"), $request->input("number"));
+        $request->input(["setcode", "number","language"]);
+        $card = $this->service->getCardInfoByNumber(
+                $request->input(), $request->input("number"), $request->input("language"));
         return response()->json($card, Response::HTTP_OK);
     }
 }

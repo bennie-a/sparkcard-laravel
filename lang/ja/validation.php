@@ -140,6 +140,8 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+    /**追加バリデーション */
+    'halfsize' => ':attributeは半角英数字と記号を入力してください。',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

@@ -19,6 +19,9 @@ class ScryfallCard extends AbstractCard {
      * @return string
      */
     public function name():string {
+        if (!MtgJsonUtil::hasKey('printed_name', $this->getJson())) {
+            return "";
+        }
         return $this->getJson()['printed_name'];
     }
 
