@@ -2,6 +2,7 @@
 
 use App\Facades\PromotypeFacade;
 use App\Providers\ExServiceProvider;
+use App\Providers\MtgDevProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -202,6 +203,9 @@ return [
          */
         App\Providers\PromotypeProvider::class,
         App\Providers\ExServiceProvider::class,
+        App\Providers\MtgDevProvider::class,
+        App\Providers\CardInfoServProvider::class,
+        App\Providers\ScryfallProvider::class
 
     ],
 
@@ -218,7 +222,10 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Promo' => App\Facades\Promo::class,
-        'ExService' => App\Facades\ExService::class
+        'ExService' => App\Facades\ExService::class,
+        'MtgDev' => App\Facades\MtgDev::class,
+        'CardInfoServ' => App\Facades\CardInfoServ::class,
+        'ScryfallServ' => App\Facades\ScryfallServ::class
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

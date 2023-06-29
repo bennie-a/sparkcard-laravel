@@ -28,6 +28,11 @@ class ScryfallService {
         return $res['released_at'];
     }
 
+    public function findSet(string $attr) {
+        $res = $this->repo->getExpansion($attr);
+        return $res;
+    }
+
      /**
      * 画像URLを取得する。
      *
@@ -52,29 +57,57 @@ class ScryfallService {
         $layout = $json['layout'];
         if ($layout == 'transform') {
             // 両面カードの場合は表面のカードを取得する。
-            $json = current($json['card_faces']);
+            return $json = current($json['card_faces']);
+        } else {
+            $images = $json['image_uris'];
+            return $images['png'];
         }
-        $images = $json['image_uris'];
-        return $images['png'];
     }
 
+    public function getCardInfoByName(string $setcode, string $name) {
+        $contents = $this->repo->getCardInfoByName($setcode, $name);
+        return $this->toArray($contents);
+    }
+    /**
+     * /cards/:code/:numberで情報を取得する。
+     * 
+     * @param array $details
+     * @return void
+     */
     public function getCardInfoByNumber(array $details) {
         $setcode = $details["setcode"];
         $number = $details["number"];
         $language = $details["language"];
         $contents = $this->repo->getCardInfoByNumber($setcode, $number, $language);
         // $card = CardInfoFactory::create($contents);
+        return $this->toArray($contents);
+        // $card = new ScryfallCard($contents);
+        // $color = CardColor::findColor($card->colors(), $card->cardtype());
+        // $promotype = \Promo::find($card);
+        // logger()->info($promotype);
+        // return ['name' => $card->name(), 
+        //             'multiverse_id' => $card->multiverseId(),
+        //             'enname' => $card->enname(),
+        //             'color' => $color->value,
+        //             'promotype'=>$promotype,
+        //             'imageurl' => $card->imageurl()
+        //     ];
+    }
+
+    protected function toArray(array $contents) {
         $card = new ScryfallCard($contents);
         $color = CardColor::findColor($card->colors(), $card->cardtype());
         $promotype = \Promo::find($card);
         logger()->info($promotype);
         return ['name' => $card->name(), 
                     'multiverse_id' => $card->multiverseId(),
-                    'enname' => $card->enname(),
+                    'en_name' => $card->enname(),
                     'color' => $color->value,
                     'promotype'=>$promotype,
-                    'imageurl' => $card->imageurl()
+                    'imageurl' => $card->imageurl(),
+                    'number' => $card->number()
             ];
     }
+
 }
 ?>

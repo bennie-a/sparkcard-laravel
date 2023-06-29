@@ -6,6 +6,10 @@
     </article>
     <article class="mt-1">
         <div v-if="getCards.length != 0">
+            <div class="mr-1 ui toggle checkbox">
+                <input type="checkbox" id="isSkip" v-model="isSkip" />
+                <label for="isSkip">情報の更新を行わない</label>
+            </div>
             <ModalButton @action="store">DBに登録する</ModalButton>
         </div>
         <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
@@ -78,7 +82,11 @@ import { AxiosTask } from "../../component/AxiosTask";
 import axios from "axios";
 export default {
     data() {
-        return { filename: "ファイルを選択してください", setCode: "" };
+        return {
+            filename: "ファイルを選択してください",
+            setCode: "",
+            isSkip: false,
+        };
     },
     mounted: function () {
         // this.$store.dispatch("setLoad", true);
@@ -168,6 +176,7 @@ export default {
             await Promise.all(
                 list.map(async (card) => {
                     const success = function (response, store) {};
+                    card["isSkip"] = this.isSkip;
                     await task.post("/database/card", card, success);
                 })
             ).catch(() => {

@@ -10,7 +10,7 @@ class StockpileCsvReader extends CsvReader {
      * @return array
      */
     protected function csvHeaders() {
-        return ['setcode','name','lang','condition','quantity', 'isFoil'];
+        return ['setcode','name','lang','condition','quantity', 'isFoil', 'en_name'];
     }
 
 }

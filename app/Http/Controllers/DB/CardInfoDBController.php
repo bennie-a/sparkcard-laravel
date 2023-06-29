@@ -50,12 +50,10 @@ class CardInfoDBController extends Controller
      */
     public function store(PostCardDBRequest $request)
     {
-        logger()->info("insert start.");
         $details = $request->all();
         $setCode = $details['setCode'];
         // card_infoテーブルに登録
         $this->service->post($setCode, $details);
-        logger()->info("insert end.");
         return response('', Response::HTTP_CREATED);
     }
 }

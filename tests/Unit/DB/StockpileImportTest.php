@@ -30,6 +30,10 @@ class StockpileImportTest extends TestCase
           'en_name' => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', 'number' => '59',
            'isFoil' => true, 'image_url' => ''];
         CardInfo::factory()->createOne($foil);
+        $specific = ['exp_id' => $this->neo->notion_id, 'name' => '告別≪ショーケース≫',
+        'en_name' => 'Farewell', 'color_id' => 'W', 'number' => '365',
+         'isFoil' => true, 'image_url' => ''];
+         CardInfo::factory()->createOne($specific);
     }
 
     /**
@@ -55,11 +59,18 @@ class StockpileImportTest extends TestCase
 
     public function dataprovider() {
         return [
-            '全件成功_通常版' => ['stockpile_success.csv', 1, 0, 0, []],
-            '全件成功_Foilカード' => ['stockpile_foil.csv', 1, 0, 0,  []],
-            '一部スキップ_在庫情報が重複' => ['stockpile_duplicate.csv', 1, 1, 0, []],
-            '一部エラー_カード情報がない' => ['stockpile_no_card_info.csv', 1, 0, 1, [3 => 'カードマスタ情報なし']],
-            // '一部エラー_エキスパンションが登録されていない' => ['stockpile_not_found_setcode.csv', 0, 0, 1, []],
+            '成功_カード情報あり_通常版' => ['stockpile_success.csv', 1, 0, 0, []],
+            '成功_カード情報あり_Foilカード' => ['stockpile_foil.csv', 1, 0, 0,  []],
+            '成功_カード情報あり_特別カード' => ['stockpile_specific.csv', 1, 0, 0,  []],
+            '成功_セット情報あり_カード情報なし_APIにあり' => ['stockpile_nocard_apiok.csv', 1, 0, 0,  []],
+            // 'エラー_セット情報あり_カード情報なしAPIになし' => [],
+            // 'エラー_セット情報あり_カード情報なし_カードが特別版' => [],
+            // '成功_セット情報とカード情報なし_APIに両方あり' => [],
+            // 'エラー_エキスパンションなし_APIになし' => [],
+            // '登録スキップ_在庫情報が重複' => ['stockpile_duplicate.csv', 1, 1, 0, []],
+
+            // 廃止予定
+            // 'エラー_カード情報がない' => ['stockpile_no_card_info.csv', 1, 0, 1, [3 => 'カードマスタ情報なし']],
     ];
     }
 

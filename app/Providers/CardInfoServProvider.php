@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class ScryfallProvider extends ServiceProvider
+class CardInfoServProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -13,7 +13,7 @@ class ScryfallProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('ScryfallServ', 'App\Services\ScryfallService');
+        $this->app->bind('CardInfoServ', 'App\Services\CardInfoDBService');
     }
 
     /**

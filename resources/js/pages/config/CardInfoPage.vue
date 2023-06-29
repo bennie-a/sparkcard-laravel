@@ -186,6 +186,7 @@ export default {
                 en_name: this.enname,
                 color: this.color,
                 number: this.number,
+                isSkip: false,
             };
             const success = function (response, store) {
                 // this.back();

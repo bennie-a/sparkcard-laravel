@@ -4,10 +4,10 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * Promoクラス用のFacadeクラス
- * 処理自体はPromoServiceクラスを参照。
+ * MtgDevクラス用のFacadeクラス
+ * 処理自体はMtgDevServiceクラスを参照。
  */
-class Scryfall extends Facade {
+class CardInfoServ extends Facade {
 
     /**
      * Get the registered name of the component.
@@ -16,6 +16,6 @@ class Scryfall extends Facade {
      */
     protected static function getFacadeAccessor()
     {
-        return 'Scryfall';
+        return 'CardInfoServ';
     }
 }

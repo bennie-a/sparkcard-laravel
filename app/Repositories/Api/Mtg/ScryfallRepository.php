@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Mtg;
 use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Response;
 
 /**
@@ -61,10 +62,26 @@ class ScryfallRepository {
      * @return void
      */
     public function getCardInfoByNumber(string $setCode, int $number, string $language) {
-        $client = GuzzleClientFactory::create('scryfall');
+        $client = $this->client();
         $rowerCode = \mb_strtolower($setCode);
         $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
         return $this->getContents($response);
+    }
+
+    public function getCardInfoByName(string $setcode, string $name) {
+        try {
+            $param = [ 
+                'query' => [
+                    'exact' => $name,
+                    'set'=> strtolower($setcode)
+                ]
+            ];
+            $response = $this->client()->request('GET', 'cards/named', $param);
+            return $this->getContents($response);
+        } catch(ClientException $e) {
+            logger()->debug($e);
+            return [];
+        }
     }
 
     /**
@@ -78,5 +95,8 @@ class ScryfallRepository {
         return json_decode($contents, true);
     }
 
+    private function client() {
+        return GuzzleClientFactory::create('scryfall');
+    }
 }
 ?>

@@ -62,6 +62,22 @@ class ExpansionService {
     }
 
     /**
+     * セット略称を元にScryfallで検索してDBに登録する。
+     *
+     * @param string $setcode
+     * @param string $format
+     * @return void
+     */
+    public function storeByScryfall(string $setcode, string $format) {
+            // エキスパンション登録
+            $contents = \ScryfallServ::findSet($setcode);
+            $details = ['attr' => $setcode, 'name' => $contents['name'],
+                                    'block' => $contents['block'], 'format' => $format,
+                                    'release_date' => $contents['released_at']];
+            \ExService::store($details);
+
+    }
+    /**
      * エキスパンションを1件登録する。
      *
      * @return stirng エキスパンションID

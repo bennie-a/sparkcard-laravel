@@ -76,4 +76,8 @@ class ScryfallCard extends AbstractCard {
         return parent::frameEffects();
     }
 
+    public function number()
+    {
+        return $this->json['collector_number'];
+    }
 }

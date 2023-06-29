@@ -32,7 +32,8 @@ class PostCardDBRequest extends FormRequest
             'multiverseId' => 'required_without_all:scryfallId,imageurl|integer',
             'scryfallId' => ['required_without_all:multiverseId,imageurl', new Halfsize],
             'number' => 'required|alpha_num',
-            'imageurl' => 'required_without_all:multiverseId,scryfallId'
+            'imageurl' => 'required_without_all:multiverseId,scryfallId',
+            'isSkip' => 'nullable|boolean'
         ];
     }
 

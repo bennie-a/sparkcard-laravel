@@ -1,6 +1,12 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Exceptions\NotFoundException;
+use App\Facades\ScryfallServ;
+
+use App\Facades\CardInfoServ;
+use App\Facades\ExService;
+use App\Facades\MtgDev;
 use App\Files\CsvReader;
 use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
@@ -61,15 +67,26 @@ class StockpileService extends AbstractSmsService{
     }
 
     protected function store(int $key, array $row) {
+        try {
+
             $number = $key + 2;
-            logger()->info('登録開始', ['number' => $number]);
+            logger()->info('Start Import', ['number' => $number]);
+            $setcode = $row[self::SETCODE];
+            if(\ExService::isExistByAttr($setcode) == false) {
+                \ExService::storeByScryfall($setcode, 'レガシー');
+            }
 
             $isFoil = !empty($row[self::IS_FOIL]) ? filter_var($row[self::IS_FOIL], FILTER_VALIDATE_BOOLEAN) : false;
             // カード情報を取得する
-            $info = CardInfo::findSingleCard($row[self::SETCODE], $row[self::NAME], $isFoil);
+            $cardname = $row[self::NAME];
+            $info = CardInfo::findSingleCard($setcode, $cardname, $isFoil);
+            // カード情報なし⇒新たに登録する。
             if (empty($info)) {
-                parent::addError($number, 'カードマスタ情報なし');
-                return;
+                if (preg_match('/^≪.+≫$/', $cardname)) {
+                    $this->addError($number, '特別版はマスタ登録できません。');
+                    return;
+                }
+                $info = \CardInfoServ::postByScryfall($setcode, $row, $isFoil);
             }
             $lang = !empty($row[self::LANG]) ? $row[self::LANG] : 'JP';
             $condition = !empty($row[self::CONDITION]) ? $row[self::CONDITION]  : 'EX+';
@@ -82,5 +99,9 @@ class StockpileService extends AbstractSmsService{
             Stockpile::create(['card_id' => $info->id, 'language' => $lang,
                      self::CONDITION => $condition, self::QUANTITY => $row[self::QUANTITY]]);
             parent::addSuccess($number);
+        } catch (NotFoundException $e) {
+            $this->addError($number, $e->getMessage());
+        }
     }
+
 }

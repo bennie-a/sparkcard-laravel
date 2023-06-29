@@ -9,6 +9,9 @@ use App\Models\Expansion;
 use App\Services\ScryfallService;
 use App\Services\WisdomGuildService;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Facades\ScryfallServ;
+use App\Enum\CardColor;
+use Illuminate\Http\Response;
 
 /**
  * card_infoテーブルのロジッククラス
@@ -46,14 +49,15 @@ class CardInfoDBService {
      */
     public function post($setCode, $details)
     {
+        $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
+        $name = $details['name'].$promotype;
+        $isFoil = $details['isFoil'];
+        logger()->info("import start.",['カード名' => $name, '通常/Foil' => $isFoil]);
         $exp = Expansion::where('attr', $setCode)->first();
         if (\is_null($exp)) {
             logger()->error('not exist:'.$setCode);
             throw new HttpResponseException(response($setCode.'がDBに登録されていません', CustomResponse::HTTP_NOT_FOUND_EXPANSION));
         }
-        $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
-        $name = $details['name'].$promotype;
-        $isFoil = $details['isFoil'];
         // カード名、エキスパンション略称、カード番号で一意性チェック
         $info = CardInfo::findSpecificCard($exp->notion_id, $name, $isFoil);
         // 画像URL取得
@@ -70,12 +74,39 @@ class CardInfoDBService {
                 'image_url' => $url,
                 'isFoil' => $isFoil
             ];
-            CardInfo::create($record);
-        } else if (!is_null($url)) {
+            $record = CardInfo::create($record);
+            return $record;
+        } else if (!is_null($url) && boolval($details['isSkip']) !== true) {
             logger()->info('update card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
             $info->image_url = $url;
             $info->update();
+        } else {
+            logger()->info('skip card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
         }
+        logger()->info("import end.");
+    }
+
+    
+    /**
+     * Scryfallからカード情報を取得して、DBに登録する。
+     *
+     * @param [type] $setcode セット略称
+     * @param [type] $cardname カード名(英語)
+     * @return void
+     */
+    public function postByScryfall($setcode, array $row, $isFoil) {
+        $name = $row['name'];
+        $enname = $row['en_name'];
+        logger()->info('Retrieve info from Scryfall', [$setcode, $name]);
+        $details = \ScryfallServ::getCardInfoByName($setcode, $enname);
+        if (empty($details)) {
+            throw new NotFoundException(Response::HTTP_NOT_FOUND, 'APIに該当カードなし');
+        }
+        $details['name'] = $name;
+        $details['isFoil'] = $isFoil;
+        logger()->info('Post Info', [$setcode, $name]);
+        $record = $this->post($setcode, $details);
+        return $record;
     }
 
     /**
