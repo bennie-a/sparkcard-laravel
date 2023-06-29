@@ -79,7 +79,7 @@ class ScryfallRepository {
             $response = $this->client()->request('GET', 'cards/named', $param);
             return $this->getContents($response);
         } catch(ClientException $e) {
-            logger()->debug($e);
+            logger()->info('Not Found in Scryfall');
             return [];
         }
     }

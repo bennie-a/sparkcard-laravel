@@ -66,6 +66,9 @@ class ScryfallService {
 
     public function getCardInfoByName(string $setcode, string $name) {
         $contents = $this->repo->getCardInfoByName($setcode, $name);
+        if (empty($contents)) {
+            return [];
+        }
         return $this->toArray($contents);
     }
     /**

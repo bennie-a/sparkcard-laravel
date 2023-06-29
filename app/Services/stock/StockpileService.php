@@ -68,7 +68,6 @@ class StockpileService extends AbstractSmsService{
 
     protected function store(int $key, array $row) {
         try {
-
             $number = $key + 2;
             logger()->info('Start Import', ['number' => $number]);
             $setcode = $row[self::SETCODE];
