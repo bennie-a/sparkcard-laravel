@@ -68,8 +68,7 @@ class StockpileImportTest extends TestCase
             '登録スキップ_在庫情報が重複' => ['stockpile_duplicate.csv', 1, 1, 0, []],
             'エラー_セット情報あり_カード情報なしAPIになし' => ['stockpile_no_card_info.csv', 0, 0, 1, [2 => 'APIに該当カードなし']],
             'エラー_セット情報あり_カード情報なし_カードが特別版' => ['stockpile_error_nocard_specific.csv', 0, 0, 1, [2 => '特別版はマスタ登録できません']],
-            // // 'エラー_CSVにセット名なし_英語カード名あり_APIに複数件あり' => [],
-            // 'エラー_エキスパンションなし_APIになし' => [],
+            'エラー_エキスパンションなし_APIになし' => ['stockpile_noset_aping.csv', 0, 0, 1, [2 => 'APIに該当セットなし']],
         ];
     }
 

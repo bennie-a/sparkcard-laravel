@@ -17,15 +17,19 @@ class ScryfallRepository {
      * @return array エキスパンション情報 
      */
     public function getExpansion(string $attr) {
-        if (str_ends_with($attr, '_BF') || str_ends_with($attr, '_BLK') ) {
-            $attr = substr($attr, 0, 3);
+        try {
+            if (str_ends_with($attr, '_BF') || str_ends_with($attr, '_BLK') ) {
+                $attr = substr($attr, 0, 3);
+            }
+            $client = GuzzleClientFactory::create("scryfall");
+            $res = $client->request("GET", 'sets/'.$attr, ['http_errors' => false]);
+            if ($res->getStatusCode() == Response::HTTP_NOT_FOUND) {
+                return ['released_at' => ''];
+            }
+            return $this->getContents($res);
+        } catch (ClientException $e) {
+            return [];
         }
-        $client = GuzzleClientFactory::create("scryfall");
-        $res = $client->request("GET", 'sets/'.$attr, ['http_errors' => false]);
-        if ($res->getStatusCode() == Response::HTTP_NOT_FOUND) {
-            return ['released_at' => ''];
-        }
-        return $this->getContents($res);
     }
 
     /**

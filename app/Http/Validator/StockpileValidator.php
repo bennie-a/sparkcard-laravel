@@ -16,7 +16,7 @@ class StockpileValidator extends AbstractCsvValidator {
         StockpileHeader::CONDITION => 'nullable|in:NM,NM-,EX+,EX,PLD',
         StockpileHeader::QUANTITY => 'required|numeric',
         StockpileHeader::IS_FOIL => 'nullable|in:true,false',
-        StockpileHeader::EN_NAME => ['nullable', new Halfsize()]
+        StockpileHeader::EN_NAME => ['required', new Halfsize()]
     ];
    }
 

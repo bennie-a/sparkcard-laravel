@@ -33,6 +33,9 @@ class ScryfallService {
 
     public function findSet(string $attr) {
         $res = $this->repo->getExpansion($attr);
+        if (empty($res['released_at'])) {
+            throw new NotFoundException(Response::HTTP_NOT_FOUND, 'APIに該当セットなし');
+        }
         return $res;
     }
 
