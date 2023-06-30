@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Exceptions\ConflictException;
+use App\Libs\MtgJsonUtil;
 use App\Models\Expansion;
 use App\Repositories\Api\Notion\ExpansionRepository;
 use App\Models\notion\NotionExp;
@@ -71,8 +72,9 @@ class ExpansionService {
     public function storeByScryfall(string $setcode, string $format) {
             // エキスパンション登録
             $contents = \ScryfallServ::findSet($setcode);
+            $block = MtgJsonUtil::hasKey('block', $contents) ? $contents['block'] : 'その他';
             $details = ['attr' => $setcode, 'name' => $contents['name'],
-                                    'block' => $contents['block'], 'format' => $format,
+                                    'block' => $block, 'format' => $format,
                                     'release_date' => $contents['released_at']];
             \ExService::store($details);
 

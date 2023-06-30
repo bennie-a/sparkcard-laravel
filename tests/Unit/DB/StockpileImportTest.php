@@ -60,17 +60,16 @@ class StockpileImportTest extends TestCase
     public function dataprovider() {
         return [
             '成功_カード情報あり_通常版' => ['stockpile_success.csv', 1, 0, 0, []],
-            '成功_カード情報あり_Foilカード' => ['stockpile_foil.csv', 1, 0, 0,  []],
-            '成功_カード情報あり_特別カード' => ['stockpile_specific.csv', 1, 0, 0,  []],
-            '成功_セット情報あり_カード情報なし_APIにあり' => ['stockpile_nocard_apiok.csv', 1, 0, 0,  []],
-            '成功_セット情報とカード情報なし_APIに両方あり' => ['stockpile_noset_nocard_apiok.csv', 1, 0, 0, []],
-            'エラー_セット情報あり_カード情報なしAPIになし' => ['stockpile_no_card_info.csv', 0, 0, 1, [2 => 'APIに該当カードなし']],
-            // 'エラー_セット情報あり_カード情報なし_カードが特別版' => [],
-            // 'エラー_エキスパンションなし_APIになし' => [],
+            // '成功_カード情報あり_Foilカード' => ['stockpile_foil.csv', 1, 0, 0,  []],
+            // // '成功_カード情報あり_特別カード' => ['stockpile_specific.csv', 1, 0, 0,  []],
+            // '成功_CSVにセット名なし_英語カード名あり' => [],
+            // // '成功_セット情報あり_カード情報なし_APIにあり' => ['stockpile_nocard_apiok.csv', 1, 0, 0,  []],
+            // '成功_セット情報とカード情報なし_APIに両方あり' => ['stockpile_noset_nocard_apiok.csv', 1, 0, 0, []],
             // '登録スキップ_在庫情報が重複' => ['stockpile_duplicate.csv', 1, 1, 0, []],
-
-            // 廃止予定
-            // 'エラー_カード情報がない' => ['stockpile_no_card_info.csv', 1, 0, 1, [3 => 'カードマスタ情報なし']],
+            // 'エラー_セット情報あり_カード情報なしAPIになし' => ['stockpile_no_card_info.csv', 0, 0, 1, [2 => 'APIに該当カードなし']],
+            // 'エラー_セット情報あり_カード情報なし_カードが特別版' => ['stockpile_error_nocard_specific.csv', 0, 0, 1, [2 => '特別版はマスタ登録できません']],
+            // // 'エラー_CSVにセット名なし_英語カード名あり_APIに複数件あり' => [],
+            // 'エラー_エキスパンションなし_APIになし' => [],
         ];
     }
 

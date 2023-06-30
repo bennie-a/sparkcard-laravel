@@ -183,7 +183,7 @@ export default {
                 isFoil: this.isFoil,
                 promotype: this.promotype,
                 multiverseId: this.multiverse_id,
-                en_name: this.enname,
+                en_name: this.en_name,
                 color: this.color,
                 number: this.number,
                 isSkip: false,

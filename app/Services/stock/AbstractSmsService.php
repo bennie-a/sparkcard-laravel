@@ -28,7 +28,8 @@ abstract class AbstractSmsService {
         $reader = $this->csvReader();
         $records = $reader->read($path);
         // CSVデータの入力値チェック
-        $errors = $this->validateCsv($records);
+        $validator = $this->getValidator();
+        $errors = $validator->validateCsv($records);
         if (!empty($errors)) {
             $response = response()->json([
                 'status' => 'validation error',
@@ -46,7 +47,7 @@ abstract class AbstractSmsService {
         return $result;
     }
 
-    private function validateCsv(array $records) {
+    public function validateCsv(array $records) {
         $rules = $this->validationRules();
         $attributes = $this->attributes();
 
@@ -81,6 +82,8 @@ abstract class AbstractSmsService {
         $this->error[$number] = $judge;
     }
 
+    protected abstract function getValidator();
+
     protected abstract function store(int $key, array $row);
 
     /**
@@ -91,14 +94,14 @@ abstract class AbstractSmsService {
 
     /**
      * CSVデータ1行分のバリデーションルールを取得する。
-     *
+     * @deprecated
      * @return array
      */
     protected abstract function validationRules():array;
 
     /**
      * CSVデータのバリデーションチェックに使う項目名を取得する。
-     *
+     *@deprecated 
      * @return array
      */
     protected abstract function attributes():array;

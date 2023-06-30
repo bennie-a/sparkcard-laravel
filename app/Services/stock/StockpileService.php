@@ -12,6 +12,9 @@ use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Stockpile;
+use App\Rules\Halfsize;
+use App\Services\Constant\StockpileHeader;
+use App\Http\Validator\StockpileValidator;
 
 /**
  * 在庫管理機能のサービスクラス
@@ -34,42 +37,47 @@ class StockpileService extends AbstractSmsService{
         return new StockpileCsvReader();
     }
 
-    /**
-     * 
-     *@see AbstractSmsService::validationRules
-     * @return array
-     */
-    protected function validationRules():array {
-        return [
-            self::SETCODE => 'required|alpha_num',
-            self::NAME => 'required',
-            self::LANG => 'nullable|in:JP,EN,IT,CT,CS',
-            self::CONDITION => 'nullable|in:NM,NM-,EX+,EX,PLD',
-            self::QUANTITY => 'required|numeric',
-            self::IS_FOIL => 'nullable|in:true,false',
-        ];
-    }
+    // /**
+    //  * 
+    //  *@see AbstractSmsService::validationRules
+    //  * @return array
+    //  */
+    // protected function validationRules():array {
+    //     return [
+    //         StockpileHeader::SETCODE => 'nullable|alpha_num',
+    //         StockpileHeader::NAME => 'required',
+    //         StockpileHeader::LANG => 'nullable|in:JP,EN,IT,CT,CS',
+    //         StockpileHeader::CONDITION => 'nullable|in:NM,NM-,EX+,EX,PLD',
+    //         StockpileHeader::QUANTITY => 'required|numeric',
+    //         StockpileHeader::IS_FOIL => 'nullable|in:true,false',
+    //         StockpileHeader::EN_NAME => ['nullable', new Halfsize()]
+    //     ];
+    // }
 
-    /**
-     * 
-     * @see AbstractSmsService::attributes
-     * @return array
-     */
-    protected function attributes():array {
-        return [
-            self::SETCODE => 'セット略称',
-            self::NAME => '商品名',
-            self::LANG => '言語',
-            self::CONDITION => '保存状態',
-            self::QUANTITY => '数量',
-            self::IS_FOIL => 'Foilフラグ'
-        ];
-    }
+    // /**
+    //  * 
+    //  * @see AbstractSmsService::attributes
+    //  * @return array
+    //  */
+    // protected function attributes():array {
+    //     return [
+    //         StockpileHeader::SETCODE => 'セット略称',
+    //         StockpileHeader::NAME => '商品名',
+    //         StockpileHeader::LANG => '言語',
+    //         StockpileHeader::CONDITION => '保存状態',
+    //         StockpileHeader::QUANTITY => '数量',
+    //         StockpileHeader::IS_FOIL => 'Foilフラグ',
+    //         StockpileHeader::EN_NAME => '英語カード名'
+    //     ];
+    // }
 
     protected function store(int $key, array $row) {
         try {
             $number = $key + 2;
             logger()->info('Start Import', ['number' => $number]);
+            // APIで検索
+            // 件数が0件、もしくは2件以上ならエラー
+            // エキスパンションをDBで存在チェック
             $setcode = $row[self::SETCODE];
             if(\ExService::isExistByAttr($setcode) == false) {
                 \ExService::storeByScryfall($setcode, 'レガシー');
@@ -79,10 +87,11 @@ class StockpileService extends AbstractSmsService{
             // カード情報を取得する
             $cardname = $row[self::NAME];
             $info = CardInfo::findSingleCard($setcode, $cardname, $isFoil);
+
             // カード情報なし⇒新たに登録する。
             if (empty($info)) {
-                if (preg_match('/^≪.+≫$/', $cardname)) {
-                    $this->addError($number, '特別版はマスタ登録できません。');
+                if (preg_match('/.*≪(.+?)≫$/', $cardname) == 1) {
+                    $this->addError($number, '特別版はマスタ登録できません');
                     return;
                 }
                 $info = \CardInfoServ::postByScryfall($setcode, $row, $isFoil);
@@ -102,5 +111,10 @@ class StockpileService extends AbstractSmsService{
             $this->addError($number, $e->getMessage());
         }
     }
+
+    protected function getValidator() {
+        return new StockpileValidator();
+    }
+
 
 }

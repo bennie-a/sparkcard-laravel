@@ -1,4 +1,4 @@
-setcode,name,lang,condition,quantity,isFoil
+setcode,name,lang,condition,quantity,isFoil,en_name
 MH1,聖列のタリスマン,JP,NM,1
 MH1,聖列のタリスマン,JP,NM-,1
 MH1,聖列のタリスマン,JP,EX+,1
