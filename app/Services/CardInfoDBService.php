@@ -94,17 +94,12 @@ class CardInfoDBService {
      * @param [type] $cardname カード名(英語)
      * @return void
      */
-    public function postByScryfall($setcode, array $row, $isFoil) {
-        $name = $row['name'];
-        $enname = $row['en_name'];
+    public function postByScryfall($setcode, string $name, string $enname, $isFoil) {
         logger()->info('Retrieve info from Scryfall', [$setcode, $name]);
         $details = \ScryfallServ::getCardInfoByName($setcode, $enname);
-        if (empty($details)) {
-            throw new NotFoundException(Response::HTTP_NOT_FOUND, 'APIに該当カードなし');
-        }
         $details['name'] = $name;
         $details['isFoil'] = $isFoil;
-        logger()->info('Post Info', [$setcode, $name]);
+        logger()->info('Post Info', [$details['setcode'], $name]);
         $record = $this->post($setcode, $details);
         return $record;
     }

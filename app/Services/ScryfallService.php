@@ -5,6 +5,8 @@ use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
 use app\Services\json\AbstractCard;
 use App\Enum\CardColor;
+use App\Exceptions\ConflictException;
+use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
 use App\Services\json\ScryfallCard;
 
@@ -67,7 +69,7 @@ class ScryfallService {
     public function getCardInfoByName(string $setcode, string $name) {
         $contents = $this->repo->getCardInfoByName($setcode, $name);
         if (empty($contents)) {
-            return [];
+            throw new NotFoundException(Response::HTTP_NOT_FOUND, 'APIに該当カードなし');
         }
         return $this->toArray($contents);
     }
@@ -108,7 +110,9 @@ class ScryfallService {
                     'color' => $color->value,
                     'promotype'=>$promotype,
                     'imageurl' => $card->imageurl(),
-                    'number' => $card->number()
+                    'number' => $card->number(),
+                    'setcode' => $card->setcode(),
+                    'reprint' => $card->reprint()
             ];
     }
 

@@ -4,7 +4,7 @@ namespace App\Services\Stock;
 use App\Files\CsvReader;
 use App\Http\Response\CustomResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Validator;
+use App\Services\Stock\StockpileRow;
 
 /**
  * 在庫管理機能(Stock Management Service:SMS)の抽象クラス
@@ -29,7 +29,7 @@ abstract class AbstractSmsService {
         $records = $reader->read($path);
         // CSVデータの入力値チェック
         $validator = $this->getValidator();
-        $errors = $validator->validateCsv($records);
+        $errors = $validator->validate($records);
         if (!empty($errors)) {
             $response = response()->json([
                 'status' => 'validation error',
@@ -40,25 +40,12 @@ abstract class AbstractSmsService {
 
         // DB登録
         foreach($records as $key => $row) {
-            $this->store($key, $row);
+            $rowobj = $this->createRow($key, $row);
+            $this->store($rowobj);
         }
         $result = ["row"=>count($records), 'success' => count($this->success), 
                                     'skip' => count($this->ignore), 'error' => count($this->error), 'details' => $this->error];
         return $result;
-    }
-
-    public function validateCsv(array $records) {
-        $rules = $this->validationRules();
-        $attributes = $this->attributes();
-
-        $errors = [];
-        foreach($records as $key => $value) {
-            $validator = Validator::make($value, $rules, __('validation'), $attributes);
-            if ($validator->fails()) {
-                $errors[] = [$key + 2 => $validator->errors()->all()];
-            }
-        }
-        return $errors;
     }
 
     /**
@@ -84,7 +71,7 @@ abstract class AbstractSmsService {
 
     protected abstract function getValidator();
 
-    protected abstract function store(int $key, array $row);
+    protected abstract function store(StockpileRow $row);
 
     /**
      * 機能に応じたCsvReaderクラスを呼び出す。
@@ -93,17 +80,12 @@ abstract class AbstractSmsService {
     protected abstract function csvReader();
 
     /**
-     * CSVデータ1行分のバリデーションルールを取得する。
-     * @deprecated
-     * @return array
+     * CSVファイル1行分のオブジェクトを作成する。 
+     *
+     * @param integer $index
+     * @param array $row
+     * @return object
      */
-    protected abstract function validationRules():array;
-
-    /**
-     * CSVデータのバリデーションチェックに使う項目名を取得する。
-     *@deprecated 
-     * @return array
-     */
-    protected abstract function attributes():array;
+    protected abstract function createRow(int $index, array $row);
 
 }

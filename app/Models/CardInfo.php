@@ -66,9 +66,17 @@ class CardInfo extends Model
     }
 
     public static function findSingleCard($setcode, $name, $isFoil) {
+        return self::findSingleQuery($setcode, $name, $isFoil)->first();
+    }
+
+    public static function isExist($setcode, $name, $isFoil):bool {
+        $query = self::findSingleQuery($setcode, $name, $isFoil);
+        return $query->exists();
+    }
+
+    private static function findSingleQuery($setcode, $name, $isFoil) {
         $conditions = ['expansion.attr' => $setcode, 'card_info.name' => $name, 'card_info.isFoil' => $isFoil];
-        $info = CardInfo::where($conditions)->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->first();
-        return $info;
+        return  CardInfo::where($conditions)->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id');
     }
 
     /**

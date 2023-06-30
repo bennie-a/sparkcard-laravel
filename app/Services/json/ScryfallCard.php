@@ -80,4 +80,12 @@ class ScryfallCard extends AbstractCard {
     {
         return $this->json['collector_number'];
     }
+
+    public function setcode():string {
+        return \strtoupper($this->getJson()['set']);
+    }
+
+    public function reprint() {
+        return $this->getJson()['reprint'];
+    }
 }

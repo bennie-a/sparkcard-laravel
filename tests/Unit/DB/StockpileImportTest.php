@@ -60,10 +60,10 @@ class StockpileImportTest extends TestCase
     public function dataprovider() {
         return [
             '成功_カード情報あり_通常版' => ['stockpile_success.csv', 1, 0, 0, []],
-            // '成功_カード情報あり_Foilカード' => ['stockpile_foil.csv', 1, 0, 0,  []],
-            // // '成功_カード情報あり_特別カード' => ['stockpile_specific.csv', 1, 0, 0,  []],
+            '成功_カード情報あり_Foilカード' => ['stockpile_foil.csv', 1, 0, 0,  []],
+            '成功_カード情報あり_特別カード' => ['stockpile_specific.csv', 1, 0, 0,  []],
             // '成功_CSVにセット名なし_英語カード名あり' => [],
-            // // '成功_セット情報あり_カード情報なし_APIにあり' => ['stockpile_nocard_apiok.csv', 1, 0, 0,  []],
+            '成功_セット情報あり_カード情報なし_APIにあり' => ['stockpile_nocard_apiok.csv', 1, 0, 0,  []],
             // '成功_セット情報とカード情報なし_APIに両方あり' => ['stockpile_noset_nocard_apiok.csv', 1, 0, 0, []],
             // '登録スキップ_在庫情報が重複' => ['stockpile_duplicate.csv', 1, 1, 0, []],
             // 'エラー_セット情報あり_カード情報なしAPIになし' => ['stockpile_no_card_info.csv', 0, 0, 1, [2 => 'APIに該当カードなし']],

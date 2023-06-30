@@ -73,7 +73,7 @@ class ExpansionService {
             // エキスパンション登録
             $contents = \ScryfallServ::findSet($setcode);
             $block = MtgJsonUtil::hasKey('block', $contents) ? $contents['block'] : 'その他';
-            $details = ['attr' => $setcode, 'name' => $contents['name'],
+            $details = ['attr' => strtoupper($setcode), 'name' => $contents['name'],
                                     'block' => $block, 'format' => $format,
                                     'release_date' => $contents['released_at']];
             \ExService::store($details);

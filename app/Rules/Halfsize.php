@@ -31,7 +31,7 @@ class Halfsize implements Rule
         if (empty($value)) {
             return true;
         }
-        return \preg_match('/^[a-zA-Z0-9!-\/:-@\[-`{-~]+$/', $value);
+        return \preg_match('/^[a-zA-Z0-9!-\/:-@ \[-`{-~]+$/', $value);
     }
 
     /**
