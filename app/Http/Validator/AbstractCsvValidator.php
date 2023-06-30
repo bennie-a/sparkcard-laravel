@@ -12,7 +12,7 @@ abstract class AbstractCsvValidator {
      * CSVの内容をバリエーションチェックする。
      *
      * @param array $records CSVファイルの内容
-     * @return void
+     * @return array
      */
     public function validate(array $records) {
         $rules = $this->validationRules();

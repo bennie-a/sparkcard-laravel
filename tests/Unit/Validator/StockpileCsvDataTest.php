@@ -8,6 +8,7 @@ use App\Services\Stock\StockpileService;
 use App\Http\Validator\StockpileValidator;
 use Tests\TestCase;
 
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
@@ -18,25 +19,46 @@ use function PHPUnit\Framework\assertNotNull;
 class StockpileCsvDataTest extends TestCase
 {
     /**
-     * ｒA basic feature test example.
+     * OKパターン
+     *
+     * @dataProvider okprovider
+     * @param string $file
+     * @return void
+     */
+    public function test_ok(string $file) {
+        $errors = $this->execute($file);
+        assertEmpty($errors);
+    }
+    /**
+     * A basic feature test example.
      *
      * @return void
      * @dataProvider dataprovider
      */
-    public function test_ok(string $file, int $number, string $exError)
+    public function test_ng(string $file, int $number, string $exError)
     {
-        $dir = dirname(__FILE__, 4).'\storage\test\sms\\';
-        $reader = new StockpileCsvReader();
-        $rows = $reader->read($dir.$file);
-        $validator = new StockpileValidator();
-
-        $errors = $validator->validate($rows);
+        $errors = $this->execute($file);
         assertNotEmpty($errors);
         $actual = current($errors);
         $msg = $actual[$number];
         assertNotNull($msg);
         assertEquals($exError, current($msg));
         logger()->debug($actual);
+    }
+
+    private function execute(string $file) {
+        $dir = dirname(__FILE__, 4).'\storage\test\sms\\';
+        $reader = new StockpileCsvReader();
+        $rows = $reader->read($dir.$file);
+        $validator = new StockpileValidator();
+        $errors = $validator->validate($rows);
+        return $errors;
+    }
+
+    public function okprovider() {
+        return [
+            'セット略称なし' => ['setcode.csv']
+        ];
     }
 
     public function dataprovider() {
