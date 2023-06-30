@@ -9,6 +9,7 @@ use App\Exceptions\ConflictException;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
 use App\Services\json\ScryfallCard;
+use Illuminate\Http\Response;
 
 /**
  * scryfall.comのAPIサービスクラス
