@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DB;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CsvFileRequest;
 use App\Http\Requests\PostCardDBRequest;
 use App\Http\Resources\CardInfoResource;
 use App\Models\Expansion;
