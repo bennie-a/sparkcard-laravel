@@ -1,6 +1,7 @@
 <?php
 namespace App\Files;
 
+use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use League\Csv\Reader;
@@ -54,7 +55,7 @@ abstract class CsvReader {
         foreach ($csv as $row) {
             $records[] = $row;
         }
-
+        $this->validate($records);
         return $records;
     }
 
@@ -63,4 +64,23 @@ abstract class CsvReader {
      * @return  array
      */
     protected abstract function csvHeaders();
+
+    protected abstract function validator();
+
+    /**
+     * CSVファイルの入力チェックを行う。
+     * 
+     */
+    private function validate(array $records) {
+        // CSVデータの入力値チェック
+        $errors = $this->validator()->validate($records);
+        if (!empty($errors)) {
+            $response = response()->json([
+                'status' => 'validation error',
+                'errors' => $errors
+            ], CustomResponse::HTTP_CSV_VALIDATION);
+            throw new HttpResponseException($response);
+        }
+    
+    }
 }

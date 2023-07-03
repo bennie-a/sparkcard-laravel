@@ -6,6 +6,8 @@ use App\Http\Response\CustomResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Services\Stock\StockpileRow;
 
+use function Symfony\Component\Mailer\Command\execute;
+
 /**
  * 在庫管理機能(Stock Management Service:SMS)の抽象クラス
  */
@@ -24,28 +26,45 @@ abstract class AbstractSmsService {
      * @return void
      */
     public function import(string $path) {
-        logger()->info('読み込み開始', [$path]);
-        $reader = $this->csvReader();
-        $records = $reader->read($path);
-        // CSVデータの入力値チェック
-        $validator = $this->getValidator();
-        $errors = $validator->validate($records);
-        if (!empty($errors)) {
-            $response = response()->json([
-                'status' => 'validation error',
-                'errors' => $errors
-            ], CustomResponse::HTTP_CSV_VALIDATION);
-            throw new HttpResponseException($response);
-        }
-
+        $records = $this->read($path);
+        // foreach($records as $key => $row) {
+            //     $rowobj = $this->createRow($key, $row);
+            //     $number = $rowobj->number();
+            //     logger()->info('Start Import', ['number' => $number]);
+            //     $this->store($rowobj);
+            // }
         // DB登録
-        foreach($records as $key => $row) {
-            $rowobj = $this->createRow($key, $row);
-            $this->store($rowobj);
-        }
+        $callback = function($row) {
+            $this->store($row);
+        };
+        
+        $this->execute($records, $callback);
         $result = ["row"=>count($records), 'success' => count($this->success), 
                                     'skip' => count($this->ignore), 'error' => count($this->error), 'details' => $this->error];
         return $result;
+    }
+
+    private function read(string $path) {
+        logger()->info('読み込み開始', [$path]);
+        $reader = $this->csvReader();
+        $records = $reader->read($path);
+        return $records;
+    }
+
+    /**
+     * CSVデータに対して処理を実行する。
+     *
+     * @param [type] $records
+     * @param [type] $callback
+     * @return void
+     */
+    protected function execute($records, $callback) {
+        foreach($records as $key => $row) {
+            $rowobj = $this->createRow($key, $row);
+            $number = $rowobj->number();
+            logger()->info('Start', ['number' => $number]);
+            $callback($rowobj);
+        }
     }
 
     /**
@@ -68,8 +87,6 @@ abstract class AbstractSmsService {
         logger()->info('error', [$number , $judge]);
         $this->error[$number] = $judge;
     }
-
-    protected abstract function getValidator();
 
     protected abstract function store(StockpileRow $row);
 

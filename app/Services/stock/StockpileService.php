@@ -3,19 +3,10 @@ namespace App\Services\Stock;
 
 use App\Exceptions\ConflictException;
 use App\Exceptions\NotFoundException;
-use App\Facades\ScryfallServ;
-
-use App\Facades\CardInfoServ;
-use App\Facades\ExService;
-use App\Facades\MtgDev;
-use App\Files\CsvReader;
 use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
-use App\Models\Expansion;
 use App\Models\Stockpile;
-use App\Rules\Halfsize;
 use App\Services\Constant\StockpileHeader as Header;
-use App\Http\Validator\StockpileValidator;
 use App\Services\Stock\StockpileRow;
 
 /**
@@ -40,8 +31,6 @@ class StockpileService extends AbstractSmsService{
     protected function store(StockpileRow $row) {
         try {
             $number = $row->number();
-            logger()->info('Start Import', ['number' => $number]);
-
             $strategy = $row->strategy();
             $setcode = $strategy->getSetCode($row);
             if(\ExService::isExistByAttr($setcode) == false) {
@@ -76,10 +65,6 @@ class StockpileService extends AbstractSmsService{
         } catch (NotFoundException | ConflictException $e) {
             $this->addError($number, $e->getMessage());
         }
-    }
-
-    protected function getValidator() {
-        return new StockpileValidator();
     }
 
     /**

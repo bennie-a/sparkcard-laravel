@@ -11,6 +11,7 @@ use App\Services\WisdomGuildService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Facades\ScryfallServ;
 use App\Enum\CardColor;
+use App\Files\Stock\StockpileCsvReader;
 use Illuminate\Http\Response;
 
 /**
@@ -113,6 +114,21 @@ class CardInfoDBService {
         // str_shuffle関数
         $barcode = substr(str_shuffle("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789"), 0, 16);
         return $barcode;
+    }
+
+    public function getEnCard(string $path) : array {
+        $reader = StockpileCsvReader();
+        $records = $reader->read($path);
+        foreach($records as $key => $row) {
+            $rowobj = $this->createRow($key, $row);
+            $number = $rowobj->number();
+            logger()->info('Start Import', ['number' => $number]);
+        }
+        return [];
+    }
+
+    private function createRow(int $index, array $row) {
+        return new StockpileRow($index, $row);
     }
 }
 ?>
