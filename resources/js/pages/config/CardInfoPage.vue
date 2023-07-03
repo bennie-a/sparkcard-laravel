@@ -63,7 +63,7 @@
                     </div>
                     <div class="require eight wide field">
                         <label for="enName">英名</label>
-                        <input type="text" id="cardName" v-model="enname" />
+                        <input type="text" id="cardName" v-model="en_name" />
                     </div>
                 </div>
                 <div class="three fields">
@@ -85,7 +85,14 @@
                         <select class="ui dropdown" v-model="promotype">
                             <option value="">通常</option>
                             <option value="フルアート">フルアート</option>
+                            <option value="プレリリース">プレリリース</option>
+                            <option value="トーナメント景品">
+                                トーナメント景品
+                            </option>
                             <option value="ボーダレス">ボーダレス</option>
+                            <option value="Bring-a-Friend">
+                                Bring-a-Friend
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -128,7 +135,7 @@ export default {
             setname: this.$route.params.setname,
             attr: this.$route.params.attr,
             name: "",
-            enname: "",
+            en_name: "",
             isFoil: false,
             promotype: "",
             number: "",
@@ -155,7 +162,7 @@ export default {
                 .then((response) => {
                     let data = response.data;
                     this.name = data["name"];
-                    this.enname = data["enname"];
+                    this.en_name = data["en_name"];
                     this.multiverse_id = data["multiverse_id"];
                     this.color = data["color"];
                     this.promotype = data["promotype"];

@@ -10,7 +10,11 @@ class ScryfallCard extends AbstractCard {
      *@inheritDoc AbstractCard multiverseId
      */
     public function multiverseId(){
-        return current($this->getJson()['multiverse_ids']);
+        $ids = $this->getJson()['multiverse_ids'];
+        if (empty($ids)) {
+            return 0;
+        }
+        return current($ids);
     }
 
     /**

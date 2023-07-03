@@ -90,17 +90,6 @@ class ScryfallService {
         $contents = $this->repo->getCardInfoByNumber($setcode, $number, $language);
         // $card = CardInfoFactory::create($contents);
         return $this->toArray($contents);
-        // $card = new ScryfallCard($contents);
-        // $color = CardColor::findColor($card->colors(), $card->cardtype());
-        // $promotype = \Promo::find($card);
-        // logger()->info($promotype);
-        // return ['name' => $card->name(), 
-        //             'multiverse_id' => $card->multiverseId(),
-        //             'enname' => $card->enname(),
-        //             'color' => $color->value,
-        //             'promotype'=>$promotype,
-        //             'imageurl' => $card->imageurl()
-        //     ];
     }
 
     protected function toArray(array $contents) {

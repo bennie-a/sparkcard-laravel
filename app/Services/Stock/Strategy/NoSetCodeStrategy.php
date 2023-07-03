@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Stock\Strategy;
 
+use App\Exceptions\ConflictException;
 use App\Services\Stock\StockpileRow;
 
 class NoSetCodeStrategy implements ImportStrategy {

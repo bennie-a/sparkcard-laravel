@@ -1,6 +1,7 @@
 <?php
 namespace App\Files;
 
+use App\Http\Response\CustomResponse;
 use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
