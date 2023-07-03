@@ -93,4 +93,9 @@ class CardInfo extends Model
         $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
         return $info;
     }
+
+    public static function findEnCard($name) {
+        $info = self::select('en_name')->where(['name' => $name])->first();
+        return $info;
+    }
 }

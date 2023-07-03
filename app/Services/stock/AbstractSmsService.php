@@ -44,7 +44,7 @@ abstract class AbstractSmsService {
         return $result;
     }
 
-    private function read(string $path) {
+    protected function read(string $path) {
         logger()->info('読み込み開始', [$path]);
         $reader = $this->csvReader();
         $records = $reader->read($path);
@@ -59,12 +59,17 @@ abstract class AbstractSmsService {
      * @return void
      */
     protected function execute($records, $callback) {
+        $results = [];
         foreach($records as $key => $row) {
             $rowobj = $this->createRow($key, $row);
             $number = $rowobj->number();
             logger()->info('Start', ['number' => $number]);
-            $callback($rowobj);
+            $result = $callback($rowobj);
+            if (!empty($result)) {
+                $results[] = $result;
+            }
         }
+        return $results;
     }
 
     /**

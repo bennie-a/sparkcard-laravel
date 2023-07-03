@@ -67,6 +67,22 @@ class StockpileService extends AbstractSmsService{
         }
     }
 
+
+    public function getEnCard(string $path) {
+        $records = $this->read($path);
+        $callback = function($row) {
+            $info = CardInfo::findEnCard($row->name());
+            $en_name = '';
+            if(!empty($info)) {
+                $en_name = $info['en_name'];
+            }
+            return [$row->number() => $en_name];
+        };
+        $results = $this->execute($records, $callback);
+        return $results;
+    }
+
+
     /**
      * 
      * @see AbstractSmsService::createRow
