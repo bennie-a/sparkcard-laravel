@@ -238,6 +238,113 @@ export default {
             <now-loading></now-loading>
         </div>
     </div>
+    <div class="ui four cards">
+        <!-- (div[class='card']>div[class='image']div[class='content'])*3    -->
+        <div class="card">
+            <div class="ui small image">
+                <img
+                    class=""
+                    src="https://cards.scryfall.io/png/front/1/a/1ab640f0-72cf-4659-98fd-20d0bb787e40.png?1561929916"
+                />
+            </div>
+            <div class="content">
+                <div class="header">グリセルブランド≪トーナメント景品≫</div>
+                <div class="meta">Grand Prix Promos</div>
+            </div>
+        </div>
+        <div class="card gallery">
+            <div class="image">
+                <img
+                    class=""
+                    src="https://cards.scryfall.io/png/front/1/a/1ab640f0-72cf-4659-98fd-20d0bb787e40.png?1561929916"
+                />
+            </div>
+            <div class="content">
+                <div class="header">グリセルブランド≪トーナメント景品≫</div>
+                <div class="meta">Grand Prix Promos</div>
+                <div class="description ui right floated">
+                    平均価格:<span class="price">&yen2623</span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="ui icon buttons" style="width: 100%">
+                    <button class="ui button">JP</button>
+                    <button class="ui button">EN</button>
+                    <button class="ui button">IT</button>
+                    <button class="ui button">CT</button>
+                    <button class="ui button">CS</button>
+                </div>
+                <div class="mt-1 left floated">
+                    <select class="ui fluid dropdown">
+                        <option value="NM">NM</option>
+                        <option value="NM-">NM-</option>
+                        <option value="EX+">EX+</option>
+                        <option value="EX">EX</option>
+                        <option value="PLD">PLD</option>
+                    </select>
+                </div>
+
+                <div class="mt-1 right floated">
+                    <div class="ui middle input">
+                        <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            class="text-stock"
+                        />
+                    </div>
+                    枚
+                </div>
+            </div>
+            <div class=""></div>
+        </div>
+        <div class="card">
+            <div class="content">
+                <div class="meta"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="content">
+                <div class="meta"></div>
+            </div>
+        </div>
+    </div>
     <card-list></card-list>
     <now-loading></now-loading>
 </template>
+<style scoped>
+div.card > .image {
+    height: 120px !important;
+    overflow: hidden;
+    /* height: min-content; */
+}
+div.image img {
+    width: fit-content;
+    height: 100% !important;
+    object-position: 50% 20%;
+    object-fit: cover;
+}
+
+div.gallery div.header {
+    font-size: 1rem !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0rem;
+}
+div.gallery span.price {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+div.increment {
+    text-align: center;
+}
+div.increment > .stock {
+    text-align: center;
+    display: inline-block;
+    width: 60%;
+}
+
+input.text-stock {
+    width: 6vw;
+}
+</style>

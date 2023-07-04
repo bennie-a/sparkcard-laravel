@@ -2,7 +2,7 @@
     <table v-show="!loading" class="ui table striped">
         <thead>
             <tr>
-                <th class="one wide">
+                <th class="">
                     <input
                         type="checkbox"
                         id="all"
@@ -12,12 +12,12 @@
                 </th>
                 <th v-show="$route.path === '/logikura/newitem'">バーコード</th>
                 <th v-show="$route.path === '/base/newitem'">商品ID</th>
-                <th>カード番号</th>
+                <th class="one wide">No.</th>
                 <th>カード名</th>
-                <th class="one wide">枚数</th>
-                <th>エキスパンション</th>
+                <th>枚数</th>
+                <th>セット名</th>
                 <th v-if="this.isNotion" class="one wide">状態</th>
-                <th>色</th>
+                <th class="one wide">色</th>
                 <th v-if="this.isNotion" class="one wide">言語</th>
                 <th class="">価格</th>
             </tr>
