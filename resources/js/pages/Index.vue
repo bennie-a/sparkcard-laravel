@@ -5,6 +5,7 @@ import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
 import ListPagination from "./component/ListPagination.vue";
+import ModalButton from "./component/ModalButton.vue";
 export default {
     data() {
         return {
@@ -90,25 +91,21 @@ export default {
             console.log(keyword);
         },
 
-        showRegist() {
-            $("#regist").modal("show");
-        },
         // Notionにカード情報を登録する。
         async regist() {
             this.$store.dispatch("setLoad", true);
-            console.log("Notion Resist Start");
+            console.log("Arrival Start");
             this.$store.dispatch("message/clear");
 
             const card = this.$store.getters.card;
-            const checkbox = this.$store.getters["csvOption/selectedList"];
-            console.log(checkbox);
             const filterd = card.filter((c) => {
-                return checkbox.includes(c.id);
+                return c.quantity != null && c.quantity > 0;
             });
 
             await Promise.all(
                 filterd.map(async (c) => {
                     let query = {
+                        id: c.id,
                         name: c.name,
                         enname: c.enname,
                         index: c.index,
@@ -116,11 +113,13 @@ export default {
                         attr: c.exp.attr,
                         color: c.color,
                         imageUrl: c.image,
-                        stock: c.stock,
+                        quantity: c.quantity,
                         isFoil: c.isFoil,
+                        language: c.language,
+                        condition: c.condition,
                     };
                     await axios
-                        .post("api/notion/card", query)
+                        .post("api/arrival", query)
                         .then((response) => {
                             if (response.status == 201) {
                                 console.log(query.name + ":登録完了");
@@ -152,6 +151,7 @@ export default {
         "card-list": CardList,
         "message-area": MessageArea,
         pagination: ListPagination,
+        ModalButton: ModalButton,
     },
 };
 </script>
@@ -219,28 +219,9 @@ export default {
         </div>
     </div>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <button
-            class="ui teal button"
-            @click="showRegist"
-            :class="{ disabled: isDisabled }"
+        <ModalButton @action="regist"
+            ><i class="checkmark icon"></i>入荷登録する</ModalButton
         >
-            Notionに登録する
-        </button>
-        <div id="regist" class="ui tiny modal">
-            <div class="header">Notice</div>
-            <div class="content" v-if="this.$store.getters.isLoad == false">
-                登録してもよろしいですか?
-            </div>
-            <div class="actions" v-if="this.$store.getters.isLoad == false">
-                <button class="ui cancel button">
-                    <i class="close icon"></i>キャンセル
-                </button>
-                <button class="ui primary button" @click="regist">
-                    <i class="checkmark icon"></i>登録する
-                </button>
-            </div>
-            <now-loading></now-loading>
-        </div>
     </div>
     <div class="mt-1 ui four cards">
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
@@ -307,7 +288,10 @@ export default {
                     <div class="two fields">
                         <div class="eight wide field">
                             <label for="">状態</label>
-                            <select class="ui fluid dropdown">
+                            <select
+                                class="ui fluid dropdown"
+                                v-model="card.condition"
+                            >
                                 <option value="NM">NM</option>
                                 <option value="NM-">NM-</option>
                                 <option value="EX+">EX+</option>

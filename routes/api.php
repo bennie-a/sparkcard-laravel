@@ -11,6 +11,7 @@ use App\Http\Controllers\StockpileController;
 use App\Http\Controllers\TranslateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArrivalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,4 @@ Route::resource('scryfall', ScryfallController::class);
 Route::post('stockpile/import', [StockpileController::class, 'import']);
 Route::post('shipping/import', [ShippingLogController::class, 'import']);
 Route::resource('translate', TranslateController::class);
+Route::apiResource('arrival', ArrivalController::class);
