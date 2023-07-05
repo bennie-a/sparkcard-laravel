@@ -9,7 +9,7 @@
         :next-text="'Next'"
         :prev-class="'item'"
         :next-class="'item'"
-        :container-class="'ui right floated pagination menu'"
+        :container-class="'ui pagination menu'"
         :page-class="'item'"
         v-if="length != 0"
     >

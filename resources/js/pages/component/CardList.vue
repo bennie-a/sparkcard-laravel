@@ -88,10 +88,12 @@
                 <td>{{ card.price }}円</td>
             </tr>
         </tbody>
-        <tfoot v-if="this.$store.getters.cardsLength != 0">
+        <tfoot class="full-width" v-if="this.$store.getters.cardsLength != 0">
             <tr>
-                <th colspan="9">
-                    <pagination></pagination>
+                <th colspan="10">
+                    <div class="right aligned">
+                        <pagination></pagination>
+                    </div>
                 </th>
             </tr>
         </tfoot>
@@ -143,19 +145,6 @@ export default {
             return this.$store.getters.isload;
         },
         getCards: function () {
-            // if (this.fullcard.length == 0) {
-            //     this.fullcard = this.$store.getters.card;
-            // }
-            // let filterd = [];
-            // this.fullcard.forEach((c) => {
-            //     if (
-            //         c.name.indexOf(this.keyword) !== -1 ||
-            //         c.enname.indexOf(this.keyword) !== -1
-            //     ) {
-            //         filterd.push(c);
-            //     }
-            // });
-            // this.$store.dispatch("setCard", filterd);
             return this.$store.getters.sliceCard;
         },
         condiColor: function () {

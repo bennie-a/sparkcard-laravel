@@ -4,6 +4,7 @@ import NowLoading from "./component/NowLoading.vue";
 import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
+import ListPagination from "./component/ListPagination.vue";
 export default {
     data() {
         return {
@@ -151,6 +152,7 @@ export default {
         "now-loading": NowLoading,
         "card-list": CardList,
         "message-area": MessageArea,
+        pagination: ListPagination,
     },
 };
 </script>
@@ -320,6 +322,11 @@ export default {
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="ui grid">
+        <div class="four wide column row right floated">
+            <pagination></pagination>
         </div>
     </div>
     <now-loading></now-loading>

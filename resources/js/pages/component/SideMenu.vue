@@ -3,7 +3,7 @@
         <div class="ui list">
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-journal-plus"></i>Notion
+                    <i class="bi bi-box-seam"></i>在庫管理
                 </div>
                 <ul>
                     <li>
@@ -12,8 +12,8 @@
                             :class="{ active: $route.path === '/' }"
                             aria-current="page"
                             to="/"
-                            ><i class="bi bi-file-earmark-plus"></i
-                            >商品管理ボード登録</router-link
+                            ><i class="bi bi-inboxes-fill"></i
+                            >入荷手続き</router-link
                         >
                     </li>
                     <li>
