@@ -53,7 +53,6 @@ export default {
                     set: this.selectedSet,
                     color: this.color,
                     isFoil: this.isFoil,
-                    language: "JP",
                 },
             };
             await axios
@@ -262,6 +261,7 @@ export default {
                                 type="radio"
                                 value="JP"
                                 v-model="card.language"
+                                checked
                             /><span>JP</span></label
                         >
                         <label
@@ -293,31 +293,33 @@ export default {
                             /><span>CT</span></label
                         >
                     </div>
-                </div>
-                <div class="mt-1 left floated">
-                    <select class="ui fluid dropdown">
-                        <option value="NM">NM</option>
-                        <option value="NM-">NM-</option>
-                        <option value="EX+">EX+</option>
-                        <option value="EX">EX</option>
-                        <option value="PLD">PLD</option>
-                    </select>
-                </div>
-
-                <div class="mt-1 right floated">
-                    <div class="ui middle input">
-                        <input
-                            type="number"
-                            step="1"
-                            min="0"
-                            class="text-stock"
-                            v-model="card.quantity"
-                        />
+                    <div class="two fields">
+                        <div class="eight wide field">
+                            <label for="">状態</label>
+                            <select class="ui fluid dropdown">
+                                <option value="NM">NM</option>
+                                <option value="NM-">NM-</option>
+                                <option value="EX+">EX+</option>
+                                <option value="EX">EX</option>
+                                <option value="PLD">PLD</option>
+                            </select>
+                        </div>
+                        <div class="seven wide field">
+                            <label for="">枚数</label>
+                            <div class="ui middle right labeled input">
+                                <input
+                                    type="number"
+                                    step="1"
+                                    min="0"
+                                    class="text-stock"
+                                    v-model="card.quantity"
+                                />
+                                <div class="ui basic label">枚</div>
+                            </div>
+                        </div>
                     </div>
-                    枚
                 </div>
             </div>
-            <div class=""></div>
         </div>
     </div>
     <now-loading></now-loading>
