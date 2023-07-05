@@ -141,11 +141,10 @@ export default {
             this.$store.dispatch("setLoad", false);
             $("#regist").modal("hide");
         },
-        clickCallback(pageNum) {
-            this.currentPage = Number(pageNum);
-        },
-        clickLanguage(e) {
-            console.log(e.target.value);
+        showImage: function (id) {
+            const selecterId = `#${id}`;
+            console.log(selecterId);
+            $(selecterId).modal("show");
         },
     },
     components: {
@@ -246,8 +245,12 @@ export default {
     <div class="mt-1 ui four cards">
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
             <div class="image">
-                <img class="" v-bind:src="card.image" />
-                <div class="ui tiny modal" v-bind:id="card.index">
+                <img
+                    class=""
+                    v-bind:src="card.image"
+                    @click="showImage(card.id)"
+                />
+                <div class="ui tiny modal" v-bind:id="card.id">
                     <i class="close icon"></i>
                     <div class="image content">
                         <img v-bind:src="card.image" class="image" />
@@ -312,7 +315,7 @@ export default {
                                 <option value="PLD">PLD</option>
                             </select>
                         </div>
-                        <div class="seven wide field">
+                        <div class="eight wide field">
                             <label for="">枚数</label>
                             <div class="ui middle right labeled input">
                                 <input
@@ -348,6 +351,7 @@ div.image img {
     height: 100% !important;
     object-position: 50% 20%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 div.gallery div.header {
