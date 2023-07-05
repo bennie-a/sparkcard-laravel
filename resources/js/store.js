@@ -49,6 +49,9 @@ export const store = createStore({
             state.msg.success = "";
             state.msg.error = "";
         },
+        setPerPage(state, count) {
+            state.paging.perPage = count;
+        },
     },
 
     getters: {
@@ -98,6 +101,9 @@ export const store = createStore({
         },
         clearMessage: function (context) {
             context.commit("clearMessage");
+        },
+        perPage: function (context, count) {
+            context.commit("setPerPage", count);
         },
     },
 });

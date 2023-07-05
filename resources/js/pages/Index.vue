@@ -247,6 +247,12 @@ export default {
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
             <div class="image">
                 <img class="" v-bind:src="card.image" />
+                <div class="ui tiny modal" v-bind:id="card.index">
+                    <i class="close icon"></i>
+                    <div class="image content">
+                        <img v-bind:src="card.image" class="image" />
+                    </div>
+                </div>
             </div>
             <div class="content">
                 <div class="header">{{ card.name }}</div>
@@ -326,7 +332,7 @@ export default {
     </div>
     <div class="ui grid">
         <div class="four wide column row right floated">
-            <pagination></pagination>
+            <pagination :count="Number(12)"></pagination>
         </div>
     </div>
     <now-loading></now-loading>
