@@ -53,6 +53,7 @@ export default {
                     set: this.selectedSet,
                     color: this.color,
                     isFoil: this.isFoil,
+                    language: "JP",
                 },
             };
             await axios
@@ -142,6 +143,9 @@ export default {
         },
         clickCallback(pageNum) {
             this.currentPage = Number(pageNum);
+        },
+        clickLanguage(e) {
+            console.log(e.target.value);
         },
     },
     components: {
@@ -238,41 +242,57 @@ export default {
             <now-loading></now-loading>
         </div>
     </div>
-    <div class="ui four cards">
-        <!-- (div[class='card']>div[class='image']div[class='content'])*3    -->
-        <div class="card">
-            <div class="ui small image">
-                <img
-                    class=""
-                    src="https://cards.scryfall.io/png/front/1/a/1ab640f0-72cf-4659-98fd-20d0bb787e40.png?1561929916"
-                />
-            </div>
-            <div class="content">
-                <div class="header">グリセルブランド≪トーナメント景品≫</div>
-                <div class="meta">Grand Prix Promos</div>
-            </div>
-        </div>
-        <div class="card gallery">
+    <div class="mt-1 ui four cards">
+        <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
             <div class="image">
-                <img
-                    class=""
-                    src="https://cards.scryfall.io/png/front/1/a/1ab640f0-72cf-4659-98fd-20d0bb787e40.png?1561929916"
-                />
+                <img class="" v-bind:src="card.image" />
             </div>
             <div class="content">
-                <div class="header">グリセルブランド≪トーナメント景品≫</div>
-                <div class="meta">Grand Prix Promos</div>
+                <div class="header">{{ card.name }}</div>
+                <div class="meta">{{ card.exp.name }}</div>
                 <div class="description ui right floated">
-                    平均価格:<span class="price">&yen2623</span>
+                    平均価格:<span class="price">&yen{{ card.price }}</span>
                 </div>
             </div>
             <div class="content">
-                <div class="ui icon buttons" style="width: 100%">
-                    <button class="ui button">JP</button>
-                    <button class="ui button">EN</button>
-                    <button class="ui button">IT</button>
-                    <button class="ui button">CT</button>
-                    <button class="ui button">CS</button>
+                <div class="ui form">
+                    <div class="inline field radio-button">
+                        <label
+                            ><input
+                                type="radio"
+                                value="JP"
+                                v-model="card.language"
+                            /><span>JP</span></label
+                        >
+                        <label
+                            ><input
+                                type="radio"
+                                value="EN"
+                                v-model="card.language"
+                            /><span>EN</span></label
+                        >
+                        <label
+                            ><input
+                                type="radio"
+                                value="IT"
+                                v-model="card.language"
+                            /><span>IT</span></label
+                        >
+                        <label
+                            ><input
+                                type="radio"
+                                value="CS"
+                                v-model="card.language"
+                            /><span>CS</span></label
+                        >
+                        <label
+                            ><input
+                                type="radio"
+                                value="CT"
+                                v-model="card.language"
+                            /><span>CT</span></label
+                        >
+                    </div>
                 </div>
                 <div class="mt-1 left floated">
                     <select class="ui fluid dropdown">
@@ -291,6 +311,7 @@ export default {
                             step="1"
                             min="0"
                             class="text-stock"
+                            v-model="card.quantity"
                         />
                     </div>
                     枚
@@ -298,18 +319,7 @@ export default {
             </div>
             <div class=""></div>
         </div>
-        <div class="card">
-            <div class="content">
-                <div class="meta"></div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="content">
-                <div class="meta"></div>
-            </div>
-        </div>
     </div>
-    <card-list></card-list>
     <now-loading></now-loading>
 </template>
 <style scoped>
@@ -332,19 +342,39 @@ div.gallery div.header {
 }
 div.gallery span.price {
     font-weight: 700;
-    font-size: 1.5rem;
-}
-
-div.increment {
-    text-align: center;
-}
-div.increment > .stock {
-    text-align: center;
-    display: inline-block;
-    width: 60%;
+    font-size: 1.3rem;
 }
 
 input.text-stock {
     width: 6vw;
+}
+
+.radio-button > :first-child,
+.radio-button > label span {
+    margin-right: 0.5rem !important;
+
+    cursor: pointer;
+}
+
+.ui.form .inline.field > :first-child {
+    margin-right: 0 !important;
+}
+.radio-button {
+    line-height: 3;
+}
+.radio-button > label input {
+    display: none; /* デフォルトのinputは非表示にする */
+}
+.radio-button > label span {
+    padding: 5px 10px !important; /* 上下左右に余白をトル */
+    border-radius: 5px;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+}
+
+label input:checked + span {
+    color: #fff; /* 文字色を白に */
+    background: var(--teal); /* 背景色を薄い赤に */
+    border: 0;
 }
 </style>
