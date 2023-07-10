@@ -27,12 +27,6 @@ abstract class AbstractSmsService {
      */
     public function import(string $path) {
         $records = $this->read($path);
-        // foreach($records as $key => $row) {
-            //     $rowobj = $this->createRow($key, $row);
-            //     $number = $rowobj->number();
-            //     logger()->info('Start Import', ['number' => $number]);
-            //     $this->store($rowobj);
-            // }
         // DB登録
         $callback = function($row) {
             $this->store($row);
@@ -93,7 +87,7 @@ abstract class AbstractSmsService {
         $this->error[$number] = $judge;
     }
 
-    protected abstract function store(StockpileRow $row);
+    protected abstract function store($row);
 
     /**
      * 機能に応じたCsvReaderクラスを呼び出す。

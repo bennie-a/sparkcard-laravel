@@ -2,7 +2,8 @@
 namespace App\Files\Stock;
 
 use App\Files\CsvReader;
-
+use App\Http\Validator\ShippingValidator;
+use App\Services\Constant\StockpileHeader as Header;
 class ShippingLogCsvReader extends CsvReader {
     /**
      * 出荷ログファイルのヘッダーを取得する。
@@ -10,7 +11,12 @@ class ShippingLogCsvReader extends CsvReader {
      * @return array
      */
     protected function csvHeaders() {
-        return ["name", "zipcode", "address", "setcode", "item_name", "quantity", "single_price", "lang", "shipping_date"];
+        return Header::shippinglog_constants();
+    }
+
+    protected function validator()
+    {
+        return new ShippingValidator();
     }
 
 }

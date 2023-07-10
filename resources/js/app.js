@@ -10,6 +10,7 @@ import { store } from "./store.js";
 import Encoding from "encoding-japanese";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import Draggable from "vuedraggable";
 
 // ルータをインストール
 app.use(router);
@@ -18,4 +19,5 @@ app.use(store);
 app.use(VuePapaParse);
 app.use(Encoding);
 app.use(Datepicker);
+app.use(Draggable);
 app.mount("#app");

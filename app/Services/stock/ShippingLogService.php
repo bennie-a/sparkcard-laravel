@@ -18,4 +18,18 @@ class ShippingLogService extends AbstractSmsService{
         return new ShippingLogCsvReader();
     }
 
+        /**
+     * @see AbstractSmsService::store
+     * @param StockpileRow $row
+     * @return void
+     */
+    protected function store($row) {
+        logger()->info([$row->card_name(), $row->setcode(), $row->language(), $row->isFoil()]);
+    }
+
+    protected function createRow(int $index, array $row) {
+        return new ShippingRow($index, $row);
+    }
+
+
 }

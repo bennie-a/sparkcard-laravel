@@ -51,6 +51,7 @@ export default {
             isCopyed: false,
             filename: "",
             orders: [],
+            notions: [],
         };
     },
     methods: {

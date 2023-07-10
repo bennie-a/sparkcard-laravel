@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\CardBoard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class ArrivalController extends Controller
     public function store(ArrivalRequest $request)
     {
         $details = $request->only(['id', 'name','enname','index','price','attr','color','imageUrl','quantity','isFoil','language','condition']);
+        \CardBoard::store($details);
         logger()->info($details);
         return response(Response::HTTP_OK);
     }

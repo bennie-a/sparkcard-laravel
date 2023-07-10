@@ -11,6 +11,9 @@ use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use Illuminate\Http\Response;
 
+/**
+ * Notionの販売管理ボードに関するServiceクラス
+ */
 class CardBoardService {
     
     public function __construct() {
@@ -76,7 +79,7 @@ class CardBoardService {
             if (!is_null($stock)) {
                 $card->setStock($stock->getContent());
             } else {
-                $card->setStock("0");
+                $card->setStock(0);
             }
             if (!is_null($condition)) {
                 $card->setCondition($condition->getName());

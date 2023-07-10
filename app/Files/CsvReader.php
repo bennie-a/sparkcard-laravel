@@ -40,16 +40,19 @@ abstract class CsvReader {
         // 指定したヘッダーがファイルに存在するかチェック
         $fileHeaders = $csv->fetchOne();
         $exHeaders = $this->csvHeaders();
-        if (count($fileHeaders) !== count($exHeaders)) {
-            throw new \Exception('Header is invalid.');
-        }
+        // if (count($fileHeaders) !== count($exHeaders)) {
+        //     throw new \Exception('Header is invalid.');
+        // }
 
+        $count = 0;
         foreach($fileHeaders as $h) {
-            if(!in_array($h, $exHeaders)) {
-                throw new \Exception('Header is not included.');
+            if(in_array($h, $exHeaders)) {
+                $count++;
             }
         }
-
+        if (count($exHeaders) !== $count) {
+            throw new \Exception('Header is not included.');
+        }
         // ヘッダーを除いて1行ずつ配列にする
         $csv->setHeaderOffset(0);
         $records = [];
