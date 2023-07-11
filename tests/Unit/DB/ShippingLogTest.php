@@ -45,6 +45,7 @@ class ShippingLogTest extends TestCase
         $response = $this->post('/api/shipping/import', ['path' => $dir.'shipping_log.csv']);
 
         $response->assertStatus(201);
+        $response->assertJson(['row' => 4, 'success' => 2, 'skip' => 0, 'error' => 2, 'details' => [2 => '在庫情報なし', 5 => '在庫が0枚です']]);
         logger()->debug($response->json());
     }
 
