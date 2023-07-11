@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Constant\StockpileHeader as Header;
 
+/**
+ * stockpileテーブルのModelクラス
+ */
 class Stockpile extends Model
 {
     use HasFactory;
@@ -12,6 +16,21 @@ class Stockpile extends Model
     protected $table = 'stockpile';
 
     protected $fillable = ['card_id', 'language',  'condition', 'quantity'];
+
+    public function cardinfo() {
+        return $this->belongsTo('App\Models\CardInfo');
+    }
+
+    public static function find(string $cardname, string $condition, string $language, bool $isFoil)  {
+        $columns = ['c.name as cardname', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
+        $query = self::select($columns)->from('stockpile as s');
+        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id');
+        // $stock = $query->where([['cinfo.name', '=',  $cardname], ['sinfo.isFoil', '=', $isFoil],  ['s.condition', '=', $condition],
+        //                  ['s.language', '=', $language]])->first();
+        $stock = $query->where(['c.name' => $cardname, 'c.isFoil' => $isFoil,
+                                             's.condition' => $condition, 's.language' => $language])->first();
+        return $stock;
+    }
 
     /**
      * 在庫情報が存在するか判定する。

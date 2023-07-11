@@ -13,9 +13,6 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('card_info', function (Blueprint $table) {
-            $table->string('number')->change();
-        });
     }
 
     /**
@@ -25,9 +22,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('card_info', function (Blueprint $table) {
-             $table->integer('number')->change();
-            //  $table->dropColumn('number');
-        });
+        Schema::dropIfExists('shipping_detail');
     }
 };

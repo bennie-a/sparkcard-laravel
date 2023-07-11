@@ -66,7 +66,7 @@ export default {
                     data.map((line, index) => {
                         let order = {};
                         let name = line["shipping_name"];
-                        let beforeOrder = this.orders[index - 1];
+                        let beforeOrder = this.orders[this.orders.length - 1];
                         if (index > 0 && name == beforeOrder["name"]) {
                             beforeOrder["items"].push(line["product_name"]);
                         } else {

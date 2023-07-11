@@ -16,6 +16,10 @@ class CardInfo extends Model
         return $this->belongsTo('App\Models\Expansion');
     }
 
+    public function stockpile() {
+        return $this->hasMany('App\Models\Stockpile');
+    }
+
     protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
 
     /**
