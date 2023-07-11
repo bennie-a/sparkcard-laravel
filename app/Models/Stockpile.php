@@ -22,7 +22,7 @@ class Stockpile extends Model
     }
 
     public static function find(string $cardname, string $condition, string $language, bool $isFoil)  {
-        $columns = ['c.name as cardname', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
+        $columns = ['s.id', 'c.name as cardname', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id');
         // $stock = $query->where([['cinfo.name', '=',  $cardname], ['sinfo.isFoil', '=', $isFoil],  ['s.condition', '=', $condition],

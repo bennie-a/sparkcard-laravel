@@ -3,6 +3,7 @@ namespace App\Services\Stock;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\Strategy\NoSetCodeStrategy;
 use App\Services\Stock\Strategy\DefaultRowStrategy;
+use Carbon\Carbon;
 
 /**
  * 出荷CSV1件分のクラス
@@ -16,7 +17,8 @@ class ShippingRow extends StockpileRow {
     }
 
     public function shipping_date() {
-        return $this->row[Header::SHIPPING_DATE];
+        $carbon = new Carbon($this->row[Header::SHIPPING_DATE]);
+        return $carbon;
     }
 
     public function buyer() {
@@ -46,9 +48,12 @@ class ShippingRow extends StockpileRow {
      * @return string
      */
     public function card_name():string {
-        $start = mb_strrpos($this->product_name(), "】") + 1;
-        $length = mb_strpos($this->product_name(), "[") - $start;
-        return mb_substr($this->product_name(), $start, $length, 'UTF-8');
+        if (empty($this->cardname)) {
+            $start = mb_strrpos($this->product_name(), "】") + 1;
+            $length = mb_strpos($this->product_name(), "[") - $start;
+            $this->cardname = mb_substr($this->product_name(), $start, $length, 'UTF-8');
+        }
+        return $this->cardname;
     }
 
     public function isFoil():bool {
@@ -64,8 +69,23 @@ class ShippingRow extends StockpileRow {
     }
     
     public function address() {
-        $address = [$this->row[Header::BILLING_STATE],$this->row[Header::BILLING_CITY], 
-                        $this->row[Header::BILLING_ADDRESS_1], " ", $this->row[Header::BILLING_ADDRESS_2]];
-        return array_merge($address);
+        $address = $this->row[Header::BILLING_STATE].$this->row[Header::BILLING_CITY]. 
+                        $this->row[Header::BILLING_ADDRESS_1];
+        if (!empty($this->row[Header::BILLING_ADDRESS_2])) {
+            $address.= " ". $this->row[Header::BILLING_ADDRESS_2];
+        }
+        return $address;
+    }
+
+    public function product_price() {
+        return $this->row[Header::PRODUCT_PRICE];
+    }
+
+    public function total_price() {
+        return $this->product_price() * $this->quantity();
+    }
+
+    public function order_id() {
+        return $this->row[Header::ORDER_ID];
     }
 }

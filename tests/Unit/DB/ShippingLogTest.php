@@ -4,6 +4,7 @@ namespace Tests\Feature\tests\Unit\DB;
 
 use App\Models\CardInfo;
 use App\Models\Expansion;
+use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -26,7 +27,13 @@ class ShippingLogTest extends TestCase
          'isFoil' => true, 'image_url' => ''];
          $foilinfo = CardInfo::factory()->createOne($foil);
          Stockpile::factory()->createOne(['card_id' => $foilinfo->id, 'condition' => 'NM-', 'quantity' => 3, 'language' => 'JP']);
-    }
+
+         $stockzero = ['exp_id' => $this->bro->notion_id, 'name' => 'ドラゴンの運命',
+         'en_name' => 'Draconic Destiny', 'color_id' => 'R', 'number' => '130',
+          'isFoil' => false, 'image_url' => ''];
+          $zeroinfo = CardInfo::factory()->createOne($stockzero);
+          Stockpile::factory()->createOne(['card_id' => $zeroinfo->id, 'condition' => 'NM-', 'quantity' => 0, 'language' => 'JP']);
+     }
     /**
      * A basic feature test example.
      *
@@ -34,23 +41,18 @@ class ShippingLogTest extends TestCase
      */
     public function test_import()
     {
-        $stock = Stockpile::find('ファイレクシアのドラゴン・エンジン', 'NM-', 'JP', true);
-        logger()->debug($stock['cardname']);
-        // $response = $this->get('/');
+        $dir = dirname(__FILE__, 4).'\storage\test\sms\\';
+        $response = $this->post('/api/shipping/import', ['path' => $dir.'shipping_log.csv']);
 
-        // $response->assertStatus(200);
-    }
-
-    public function importprovider() {
-        return [
-            '通常版'
-        ];
+        $response->assertStatus(201);
+        logger()->debug($response->json());
     }
 
     public function tearDown():void
     {
+        ShippingLog::query()->delete();
+        Stockpile::query()->delete();
         CardInfo::query()->delete();
         Expansion::query()->delete();
-        Stockpile::query()->delete();
     }
 }

@@ -21,7 +21,6 @@ class StockpileHeader {
     public const BILLING_CITY = "billing_city";
     public const BILLING_ADDRESS_1 = "billing_address_1";
     public const BILLING_ADDRESS_2  = "billing_address_2";
-
     
     /**
      * 定数一覧を取得する。

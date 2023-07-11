@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('order_id')->notNull();
             $table->string('name')->notNull();
-            $table->string('zip_code', 7)->notNull();
+            $table->string('zip_code', 8)->notNull();
             $table->string('address')->notNull();
             $table->integer('stock_id')->unsigned();
             $table->foreign('stock_id')->references('id')->on('stockpile');

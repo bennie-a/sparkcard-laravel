@@ -9,5 +9,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ShippingLog extends Model
 {
+    protected $table = 'shipping_log';
+
+    protected $fillable = ['name', 'stock_id',  'zip_code', 'address', 'quantity', 'shipping_date', 'single_price', 'total_price', 'order_id'];
+
+
     use HasFactory;
 }
