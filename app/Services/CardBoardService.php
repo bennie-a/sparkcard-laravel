@@ -6,7 +6,6 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
-use App\Repositories\Api\Notion\ExpansionRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use Illuminate\Http\Response;
@@ -147,6 +146,17 @@ class CardBoardService {
         } catch(NotionException $e) {
             throw $e;
         }
+    }
+
+    
+    /**
+     * SPC_IDに該当する販売カードを取得する。
+     *
+     * @param string $spcid
+     * @return void
+     */
+    public function findBySpcId(string $spcid) {
+        return $this->repo->findBySpcId($spcid);
     }
 
     public function deleteByExp($name) {

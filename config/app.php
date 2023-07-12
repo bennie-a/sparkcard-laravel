@@ -206,7 +206,7 @@ return [
         App\Providers\MtgDevProvider::class,
         App\Providers\CardInfoServProvider::class,
         App\Providers\ScryfallProvider::class,
-        // App\Providers\CardBoardProvider::class
+        App\Providers\CardBoardProvider::class
     ],
 
     /*

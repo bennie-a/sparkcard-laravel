@@ -27,8 +27,7 @@ class CardBoardRepository extends NotionRepository{
         $notion = self::createNotion();
 
         // ソート順設定
-        $sorting = new Collection();
-        $sorting->add(Sorting::propertySort("カード番号", "ascending"));
+        $sorting  = Sorting::propertySort("カード番号", "ascending");
         $database = $notion->database($this->databaseId)->filterBy($filters)->sortBy($sorting);
         $pageCollection = $database->query();
         $pages = $pageCollection->asCollection();
@@ -55,6 +54,13 @@ class CardBoardRepository extends NotionRepository{
         $filter =$this->createEqualFilter("エキスパンション", $expId);
         $result = $this->findAsCollection($filter);
         return $result;
+    }
+
+    
+    public function findBySpcId(int $spcid) {
+        $filter = Filter::numberFilter('SPC_ID', Operators::EQUALS, $spcid);
+        $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
+        return $pages[0];
     }
 }
 ?>
