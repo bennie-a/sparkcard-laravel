@@ -7,6 +7,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -55,8 +56,45 @@ class ShippingLogTest extends TestCase
         $page = \CardBoard::findBySpcId(6171);
         logger()->debug($page->getTitle());
         // 状態
-        $selectProp = $page->getProperty('状態');
-        logger()->debug($selectProp->getName());
+        // $selectProp = $page->getProperty('状態');
+        // logger()->debug($selectProp->getName());
+
+        $properties = $page-> getProperties();
+        foreach($properties as $p){
+            $value = '';
+            switch($p->getType()) {
+                case 'title':
+                break;
+                case 'formula':
+                break;
+                case 'relation':
+                break;
+                case 'rollup':
+                    break;
+                    case 'url':
+                    $value = $p->getUrl();
+                break;
+                case 'number':
+                    $value = round($p->getNumber());
+                break;
+                case 'checkbox':
+                    $value = $p->isChecked();
+                break;
+                case 'rich_text':
+                    $value = $p->getPlainText();
+                break;
+                case 'last_edited_time':
+                    $value = $p->getContent();
+                break;
+                case 'date':
+                    $value = $p->getStart();
+                    break;
+                default:
+                    $value = $p->getName();
+            }
+
+            logger()->debug('項目',[$p->getTitle() => $value]);
+        }
         // $selectProp->getItem();
     }
 
