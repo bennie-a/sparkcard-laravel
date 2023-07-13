@@ -139,9 +139,13 @@ class CardBoardService {
     }
 
     public function update($id, $details) {
+        $factory = new NotionPageFactory();
+        $page = $factory->create($id, $details);
+        $this->updatePage($page);
+    }
+
+    public function updatePage(Page $page) {
         try {
-            $factory = new NotionPageFactory();
-            $page = $factory->create($id, $details);
             $this->repo->update($page);
         } catch(NotionException $e) {
             throw $e;
@@ -155,7 +159,7 @@ class CardBoardService {
      * @param string $spcid
      * @return void
      */
-    public function findBySpcId(string $spcid) {
+    public function findBySpcId(int $spcid) {
         return $this->repo->findBySpcId($spcid);
     }
 

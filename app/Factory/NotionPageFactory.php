@@ -24,7 +24,10 @@ class NotionPageFactory {
         $setAttr = function($page, $value) {
             // 略称に関しては何もしない
         };
-        $detailMap = ['status' => $setStatus, 'name' => $setImageUrl, 'attr' => $setAttr];
+        $setSpcId = function($page, $value) {
+            $page->setNumber('SPC_ID', $value);
+        };
+        $detailMap = ['status' => $setStatus, 'name' => $setImageUrl, 'attr' => $setAttr, 'id' => $setSpcId];
         // 入力パラメータに沿って値を設定する。
         foreach($details as $key => $value) {
             $func = $detailMap[$key];

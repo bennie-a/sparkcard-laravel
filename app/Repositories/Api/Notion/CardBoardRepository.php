@@ -56,7 +56,6 @@ class CardBoardRepository extends NotionRepository{
         return $result;
     }
 
-    
     public function findBySpcId(int $spcid) {
         $filter = Filter::numberFilter('SPC_ID', Operators::EQUALS, $spcid);
         $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();

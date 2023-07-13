@@ -93,7 +93,6 @@ class NotionRepository {
         $startCursor = new StartCursor($nextCursor);
         $pages = $notion->database($this->databaseId)->offset($startCursor);
         return $pages;
-
     }
 
     // idから特定のページを取得する。
@@ -113,5 +112,6 @@ class NotionRepository {
     protected function getDatabaseId() {
         return $this->databaseId;
     }
+
 }
 ?>

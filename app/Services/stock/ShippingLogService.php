@@ -1,12 +1,17 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Facades\CardBoard;
 use App\Files\CsvReader;
 use App\Files\Stock\ShippingLogCsvReader;
 use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\Constant\StockpileHeader as Header;
+use FiveamCode\LaravelNotionApi\Entities\Page;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Select;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -41,10 +46,22 @@ class ShippingLogService extends AbstractSmsService{
 
             $stock->quantity = $stock->quantity - $row->quantity();
             $stock->update();
+            $this->updateNotion($row, $stock['card_id']);
             $this->addSuccess($row->number());
         } else {
             $this->addError($row->number(), '在庫情報なし');
         }
+    }
+
+    private function updateNotion($row, int $card_id) {
+        $notionCard = \CardBoard::findBySpcId($card_id);
+        $page = new Page();
+        $page->setId($notionCard->getId());
+        $page->set('購入者名', Text::value($row->buyer()));
+        $page->set('Status', Select::value('出荷準備中'));
+        $page->set('発送日',  Date::value($row->shipping_date()));
+        \CardBoard::updatePage($page);
+
     }
 
     protected function createRow(int $index, array $row) {
