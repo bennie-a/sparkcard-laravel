@@ -56,8 +56,8 @@ class CardBoardRepository extends NotionRepository{
         return $result;
     }
 
-    public function findBySpcId(int $spcid) {
-        $filter = Filter::numberFilter('SPC_ID', Operators::EQUALS, $spcid);
+    public function findByOrderId(string $orderId) {
+        $filter = Filter::textFilter('注文番号', Operators::EQUALS, $orderId);
         $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
         return $pages[0];
     }

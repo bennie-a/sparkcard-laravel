@@ -46,15 +46,15 @@ class ShippingLogService extends AbstractSmsService{
 
             $stock->quantity = $stock->quantity - $row->quantity();
             $stock->update();
-            $this->updateNotion($row, $stock['card_id']);
+            $this->updateNotion($row);
             $this->addSuccess($row->number());
         } else {
             $this->addError($row->number(), '在庫情報なし');
         }
     }
 
-    private function updateNotion($row, int $card_id) {
-        $notionCard = \CardBoard::findBySpcId($card_id);
+    private function updateNotion($row) {
+        $notionCard = \CardBoard::findByOrderId($row->order_id());
         $page = new Page();
         $page->setId($notionCard->getId());
         $page->set('購入者名', Text::value($row->buyer()));

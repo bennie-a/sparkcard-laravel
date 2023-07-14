@@ -24,14 +24,14 @@ class ShippingLogTest extends TestCase
          'isFoil' => false, 'image_url' => ''];
         $draftinfo = CardInfo::factory()->createOne($draft);
         Stockpile::factory()->createOne(['card_id' => $draftinfo->id, 'condition' => 'NM', 'quantity' => 1, 'language' => 'JP']);
-        CardBoard::update('64690625-60e1-4442-bd7b-ddd12bb26d67', ['id' => $draftinfo->id, 'status' =>'両方販売中']);
+        CardBoard::update('64690625-60e1-4442-bd7b-ddd12bb26d67', ['status' =>'両方販売中']);
 
         $foil = ['exp_id' => $this->bro->notion_id, 'name' => 'ファイレクシアのドラゴン・エンジン',
         'en_name' => 'Phyrexian Dragon Engine', 'color_id' => 'A', 'number' => '163',
          'isFoil' => true, 'image_url' => ''];
          $foilinfo = CardInfo::factory()->createOne($foil);
          Stockpile::factory()->createOne(['card_id' => $foilinfo->id, 'condition' => 'NM-', 'quantity' => 3, 'language' => 'JP']);
-         CardBoard::update('b4c3cc34-ca79-4109-b26d-068e3975fd2f', ['id' => $foilinfo->id, 'status' =>'両方販売中']);
+         CardBoard::update('b4c3cc34-ca79-4109-b26d-068e3975fd2f', ['status' =>'両方販売中']);
 
          $stockzero = ['exp_id' => $this->bro->notion_id, 'name' => 'ドラゴンの運命',
          'en_name' => 'Draconic Destiny', 'color_id' => 'R', 'number' => '130',

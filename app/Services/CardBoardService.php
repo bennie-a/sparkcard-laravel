@@ -154,13 +154,13 @@ class CardBoardService {
 
     
     /**
-     * SPC_IDに該当する販売カードを取得する。
+     * 注文番号に該当する販売カードを取得する。
      *
      * @param string $spcid
      * @return void
      */
-    public function findBySpcId(int $spcid) {
-        return $this->repo->findBySpcId($spcid);
+    public function findByOrderId(string $orderId) {
+        return $this->repo->findByOrderId($orderId);
     }
 
     public function deleteByExp($name) {
