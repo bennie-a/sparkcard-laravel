@@ -64,6 +64,9 @@ export default {
                     let data = results.data;
                     let idKey = "order_id";
                     data.map((line, index) => {
+                        if (line[idKey] === "") {
+                            return;
+                        }
                         let order = {};
                         let name = line["shipping_name"];
                         let beforeOrder = this.orders[this.orders.length - 1];
