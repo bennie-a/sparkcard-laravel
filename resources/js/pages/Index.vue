@@ -68,6 +68,9 @@ export default {
                         return;
                     }
                     let filterd = response.data;
+                    filterd.map((f) => {
+                        f.language = "日本語";
+                    });
                     this.$store.dispatch("setCard", filterd);
 
                     // this.$store.dispatch("setLoad", false);
@@ -99,7 +102,7 @@ export default {
 
             const card = this.$store.getters.card;
             const filterd = card.filter((c) => {
-                return c.quantity != null && c.quantity > 0;
+                return c.stock != null && c.stock > 0;
             });
 
             await Promise.all(
@@ -113,7 +116,7 @@ export default {
                         attr: c.exp.attr,
                         color: c.color,
                         imageUrl: c.image,
-                        quantity: c.quantity,
+                        stock: c.stock,
                         isFoil: c.isFoil,
                         language: c.language,
                         condition: c.condition,
@@ -133,12 +136,19 @@ export default {
                         })
                         .catch(({ response }) => {
                             const data = response.data;
-                            this.$store.dispatch("message/error", data.message);
+                            $msg = `${query.name}(${query.attr}):${data.message}`;
+                            this.$store.commit("message/addErrorList", $msg);
+                        })
+                        .finally(function () {
+                            let ul = this.$store.getters["message/errorlist"];
+                            if (!ul) {
+                                this.$store.dispatch("message/errorhtml", ul);
+                            }
+                            $("#regist").modal("hide");
+                            this.$store.dispatch("setLoad", false);
                         });
                 })
             );
-            this.$store.dispatch("setLoad", false);
-            $("#regist").modal("hide");
         },
         showImage: function (id) {
             const selecterId = `#${id}`;
@@ -225,6 +235,7 @@ export default {
     </div>
     <div class="mt-1 ui four cards">
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
+            <div class="content meta">ID:{{ card.id }}</div>
             <div class="image">
                 <img
                     class=""
@@ -247,40 +258,40 @@ export default {
             </div>
             <div class="content">
                 <div class="ui form">
+                    <!-- {{ card.language }} -->
                     <div class="inline field radio-button">
                         <label
                             ><input
                                 type="radio"
-                                value="JP"
+                                value="日本語"
                                 v-model="card.language"
-                                checked
                             /><span>JP</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="EN"
+                                value="英語"
                                 v-model="card.language"
                             /><span>EN</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="IT"
+                                value="イタリア語"
                                 v-model="card.language"
                             /><span>IT</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="CS"
+                                value="簡体中国語"
                                 v-model="card.language"
                             /><span>CS</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="CT"
+                                value="繫体中国語"
                                 v-model="card.language"
                             /><span>CT</span></label
                         >
@@ -307,7 +318,7 @@ export default {
                                     step="1"
                                     min="0"
                                     class="text-stock"
-                                    v-model="card.quantity"
+                                    v-model="card.stock"
                                 />
                                 <div class="ui basic label">枚</div>
                             </div>

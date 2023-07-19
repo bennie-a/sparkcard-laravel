@@ -35,10 +35,26 @@ class ArrivalRequest extends FormRequest
             'attr' =>'required',
             'color' =>'required',
             'imageUrl' =>'nullable',
-            'quantity' =>'required|numeric',
+            'stock' =>'required|numeric|min:1',
             'isFoil' =>'required|boolean',
-            'language' =>'required|in:JP,EN,IT,CS,CT',
+            'language' =>'required|in:日本語,英語,イタリア語,簡体中国語,繁体中国語',
             'condition' =>'required|in:NM,NM-,EX+,EX,PLD',
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'カード名',
+            'enname' => 'カード名(英語)',
+            'color' => '色',
+            'attr' => 'セット名(略称)',
+            'imageUrl' => '画像URL',
+            'language' => '言語',
+            'stock' => '枚数',
+            'condition' => '状態'
+        ];
+    }
+
 }

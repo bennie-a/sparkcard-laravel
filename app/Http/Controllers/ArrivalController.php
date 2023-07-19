@@ -31,10 +31,10 @@ class ArrivalController extends Controller
      */
     public function store(ArrivalRequest $request)
     {
-        $details = $request->only(['id', 'name','enname','index','price','attr','color','imageUrl','quantity','isFoil','language','condition']);
+        $details = $request->only(['id', 'name','enname','index','price','attr','color','imageUrl','stock','isFoil','language','condition']);
         \CardBoard::store($details);
         logger()->info($details);
-        return response(Response::HTTP_OK);
+        return response(Response::HTTP_CREATED);
     }
 
     /**

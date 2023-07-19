@@ -3,6 +3,7 @@ const getDefaultState = () => ({
     success: "",
     error: "",
     errorhtml: "",
+    errorlist: [],
 });
 
 export default {
@@ -18,6 +19,9 @@ export default {
         errorhtml(state, error) {
             state.errorhtml = error;
         },
+        addErrorList(state, error) {
+            state.errorlist.push(error);
+        },
         clear(state) {
             state.error = "";
             state.success = "";
@@ -30,6 +34,14 @@ export default {
         },
         errorhtml: function (state) {
             return state.errorhtml;
+        },
+        errorlist: function (state) {
+            let msgs = "<ul>";
+            state.errorlist.forEach((e) => {
+                msgs += `<li>${e}</li>`;
+            });
+            msgs += "</ul>";
+            return msgs;
         },
     },
     actions: {

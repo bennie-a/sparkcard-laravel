@@ -102,15 +102,15 @@ class CardBoardService {
         $page = new Page();
         $page->setTitle("名前", $details['name']);
         $page->setText("英名", $details['enname']);
-        $page->setSelect("Status", "ロジクラ要登録");
+        $page->setSelect("Status", "要写真撮影");
         $page->setNumber("枚数", $details['stock']);
         $priceVal = intval($details['price']);
         $page->setNumber("価格", $priceVal);
         $page->setNumber("カード番号", $details['index']);
-        $page->setSelect("言語", "日本語");
+        $page->setSelect("言語", $details["language"]);
         $page->setCheckbox("Foil", $details['isFoil']);
         $page->setSelect("色", $details['color']);
-        $page->setSelect("状態", "NM");
+        $page->setSelect("状態", $details["condition"]);
         if (array_key_exists('imageUrl', $details)) {
             $page->setUrl('画像URL', $details['imageUrl']);
         }
