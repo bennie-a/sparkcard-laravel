@@ -51,23 +51,25 @@ class ScryfallService {
             return $details['imageurl'];
         }
         $multiverseId = $details['multiverseId'];
-        $scryfallId = MtgJsonUtil::hasKey('scryfallId',$details) ? $details['multiverseId'] : '';
         $json = [];
         if (!empty($multiverseId)) {
             $json = $this->repo->getCardByMultiverseId($multiverseId);
-        } else if (!empty($scryfallId)) {
+        } else if (MtgJsonUtil::hasKey('scryfallId',$details) && !empty($details['scryfallId'])) {
+            $scryfallId = $details['scryfallId'];
             $json = $this->repo->getCardByScryFallId($scryfallId);
         } else {
             return null;
         }
         $layout = $json['layout'];
+        $images = [];
         if ($layout == 'transform') {
             // 両面カードの場合は表面のカードを取得する。
-            return $json = current($json['card_faces']);
+            $faces = current($json['card_faces']);
+            $images = $faces['image_uris'];
         } else {
             $images = $json['image_uris'];
-            return $images['png'];
         }
+        return $images['png'];
     }
 
     public function getCardInfoByName(string $setcode, string $name) {

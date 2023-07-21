@@ -138,17 +138,15 @@ export default {
                             const data = response.data;
                             $msg = `${query.name}(${query.attr}):${data.message}`;
                             this.$store.commit("message/addErrorList", $msg);
-                        })
-                        .finally(function () {
-                            let ul = this.$store.getters["message/errorlist"];
-                            if (!ul) {
-                                this.$store.dispatch("message/errorhtml", ul);
-                            }
-                            $("#regist").modal("hide");
-                            this.$store.dispatch("setLoad", false);
                         });
                 })
             );
+            let ul = this.$store.getters["message/errorlist"];
+            if (!ul) {
+                this.$store.dispatch("message/errorhtml", ul);
+            }
+            $("#regist").modal("hide");
+            this.$store.dispatch("setLoad", false);
         },
         showImage: function (id) {
             const selecterId = `#${id}`;
