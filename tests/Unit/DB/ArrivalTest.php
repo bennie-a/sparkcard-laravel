@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\DB;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -12,13 +11,24 @@ use Tests\TestCase;
  */
 class ArrivalTest extends TestCase
 {
+    use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed('TestExpansionSeeder');
+        $this->seed('MainColorSeeder');
+        $this->seed('ShippingSeeder');
+        $this->seed('TestCardInfoSeeder');
+        $this->seed('TestStockpileSeeder');
+    }
     /**
      * A basic feature test example.
      *
-     * @dataProvider okprovider
+     * 
      * @return void
      */
-    public function test_ok(array $query)
+    public function test_ok()
     {
         $response = $this->post('/api/arrival');
 
@@ -32,5 +42,11 @@ class ArrivalTest extends TestCase
      */
     public function okprovider() {
 
+    }
+
+    public function tearDown(): void
+    {
+        Artisan::call('migrate:refresh');
+        parent::tearDown();
     }
 }

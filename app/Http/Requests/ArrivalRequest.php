@@ -27,33 +27,28 @@ class ArrivalRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' =>'required|numeric',
-            'name' =>'required',
-            'enname' =>'required',
-            'index' =>'required',
-            'price' =>'required|numeric',
-            'attr' =>'required',
-            'color' =>'required',
-            'imageUrl' =>'nullable',
-            'stock' =>'required|numeric|min:1',
-            'isFoil' =>'required|boolean',
-            'language' =>'required|in:日本語,英語,イタリア語,簡体中国語,繁体中国語',
+            'card_id' =>'required|numeric',
+            'language' =>'required|in:JP,EN,IT,CS,CT',
+            'cost' =>'required|numeric|min:1',
+            'market_price' =>'required|numeric|min:1',
+            'quantity' =>'required|numeric|min:1',
             'condition' =>'required|in:NM,NM-,EX+,EX,PLD',
+            'supplier' =>'required',
+            'isFoil' =>'required|boolean',
         ];
     }
 
     public function attributes()
     {
         return [
-            'id' => 'ID',
-            'name' => 'カード名',
-            'enname' => 'カード名(英語)',
-            'color' => '色',
-            'attr' => 'セット名(略称)',
-            'imageUrl' => '画像URL',
+            'card_id' => 'カード情報ID',
             'language' => '言語',
-            'stock' => '枚数',
-            'condition' => '状態'
+            'cost' =>'原価',
+            'market_price' =>'相場価格',
+            'quantity' => '枚数',
+            'condition' => '状態',
+            'supplier' =>'入荷先',
+            'isFoil' =>'通常/Foil',
         ];
     }
 

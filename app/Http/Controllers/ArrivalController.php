@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Constant\StockpileHeader as Header;
 
 /**
  * 入荷手続きAPI
@@ -31,9 +32,10 @@ class ArrivalController extends Controller
      */
     public function store(ArrivalRequest $request)
     {
-        $details = $request->only(['id', 'name','enname','index','price','attr','color','imageUrl','stock','isFoil','language','condition']);
-        \CardBoard::store($details);
-        logger()->info($details);
+        // $details = $request->only(['card_id', 'language',  Header::QUANTITY, 'cost', 'market_price', 'condition']);
+        // $details[Header::IS_FOIL] = $request->boolean(Header::IS_FOIL);
+        // \CardBoard::store($details);
+        // logger()->info($details);
         return response(Response::HTTP_CREATED);
     }
 
