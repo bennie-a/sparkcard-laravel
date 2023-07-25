@@ -16,6 +16,8 @@ class TestExpansionSeeder extends Seeder
      */
     public function run()
     {
-        Expansion::create(['attr' => 'BRO', 'name' => '兄弟戦争', 'notion_id' => 'd4d9832d-3bb3-4e07-be26-6a37ec198991', 'release_date' => '2022-11-08']);
+        Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'BRO']);
+        Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'WAR']);
+        // Expansion::create(['attr' => 'BRO', 'name' => '兄弟戦争', 'notion_id' => 'd4d9832d-3bb3-4e07-be26-6a37ec198991', 'release_date' => '2022-11-08']);
     }
 }

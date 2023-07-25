@@ -207,7 +207,7 @@ return [
         App\Providers\CardInfoServProvider::class,
         App\Providers\ScryfallProvider::class,
         App\Providers\CardBoardProvider::class,
-        App\Providers\StockServiceProvider::class
+        App\Providers\StockpileServiceProvider::class
     ],
 
     /*

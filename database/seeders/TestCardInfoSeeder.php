@@ -18,14 +18,27 @@ class TestCardInfoSeeder extends Seeder
     public function run()
     {
         // 兄弟戦争
-        CardInfo::create(['exp_id' => 'd4d9832d-3bb3-4e07-be26-6a37ec198991', 'name' => 'ドラゴンの運命',
+        $bro = $this->findNotionId('BRO');
+        
+        CardInfo::factory()->createOne(['exp_id' => $bro, 'name' => 'ドラゴンの運命',
         'en_name' => 'Draconic Destiny', 'color_id' => 'R', 'number' => '130',
-         'isFoil' => false, 'image_url' => '', 'barcode' => 'xxxxxxxx']);
-        CardInfo::create(['exp_id' => 'd4d9832d-3bb3-4e07-be26-6a37ec198991', 'name' => 'ファイレクシアのドラゴン・エンジン',
+        'isFoil' => false, 'image_url' => '', 'barcode' => 'xxxxxxxx']);
+        CardInfo::factory()->createOne(['exp_id' => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
         'en_name' => 'Phyrexian Dragon Engine', 'color_id' => 'A', 'number' => '163',
-         'isFoil' => false, 'image_url' => '', 'barcode' => 'xxxxxxxy']);
-         CardInfo::create(['exp_id' => 'd4d9832d-3bb3-4e07-be26-6a37ec198991', 'name' => 'ファイレクシアのドラゴン・エンジン',
-         'en_name' => 'Phyrexian Dragon Engine', 'color_id' => 'A', 'number' => '163',
-          'isFoil' => true, 'image_url' => '', 'barcode' => 'xxxxxxxz']);
+        'isFoil' => false, 'image_url' => '', 'barcode' => 'xxxxxxxy']);
+        CardInfo::factory()->createOne(['exp_id' => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
+        'en_name' => 'Phyrexian Dragon Engine', 'color_id' => 'A', 'number' => '163',
+        'isFoil' => true, 'image_url' => '']);
+
+        // 灯争大戦
+        $war = $this->findNotionId('WAR');
+        CardInfo::factory()->createOne(['exp_id' => $war, 'name' => '群れの声、アーリン≪絵違い≫',
+        'en_name' => 'Arlinn, Voice of the Pack', 'color_id' => 'G', 'number' => '150',
+         'isFoil' => true, 'image_url' => '']);
+    }
+        
+        private function findNotionId(string $attr) : string {
+            $set = Expansion::where('attr', 'BRO')->first();
+            return $set->notion_id;
       }
 }

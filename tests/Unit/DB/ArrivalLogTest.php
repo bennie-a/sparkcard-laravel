@@ -69,7 +69,8 @@ class ArrivalLogTest extends TestCase
      */
     public function okprovider() {
         return [
-            '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', false, 'NM', '2023-07-24', 23, 200]
+            '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', false, 'NM', '2023-07-24', 23, 200],
+            '在庫情報なし' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'EX+', '2023-06-10', 23, 100]
         ];
     }
 

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class StockServiceProvider extends ServiceProvider
+class StockpileServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -13,7 +13,7 @@ class StockServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('StockpileServ', 'App\Services\StockpileService');
+        $this->app->bind('StockpileServ', ' App\Services\Stock\StockpileService');
     }
 
     /**
