@@ -3,11 +3,14 @@ namespace App\Repositories\Api\Notion;
 use App\Repositories\Api\Notion\NotionRepository;
 use FiveamCode\LaravelNotionApi\Endpoints\Database;
 use FiveamCode\LaravelNotionApi\Entities\Collections\PageCollection;
+use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use FiveamCode\LaravelNotionApi\Notion;
 use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
+use FiveamCode\LaravelNotionApi\Query\Filters\FilterBag;
 use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use FiveamCode\LaravelNotionApi\Query\Sorting;
 use Illuminate\Support\Collection;
+use App\Notion\NotionPropContext;
 use PHPUnit\Framework\Constraint\Operator;
 
 //Notionのエキスパンションテーブルへの接続
@@ -58,6 +61,12 @@ class CardBoardRepository extends NotionRepository{
 
     public function findByOrderId(string $orderId) {
         $filter = Filter::textFilter('注文番号', Operators::EQUALS, $orderId);
+        $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
+        return $pages[0];
+    }
+
+    public function findBySparkcardId (int $id) {
+        $filter = Filter::numberFilter('sparkcard_id', Operators::EQUALS, $id);
         $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
         return $pages[0];
     }

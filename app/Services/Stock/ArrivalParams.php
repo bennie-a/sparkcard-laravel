@@ -39,4 +39,8 @@ class ArrivalParams {
     public function cost():int {
         return $this->details[Header::COST];
     }
+
+    public function details() : array {
+        return $this->details;
+    }
 }

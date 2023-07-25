@@ -7,6 +7,7 @@ use App\Models\Expansion;
 use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use Illuminate\Http\Response;
 
@@ -98,40 +99,47 @@ class CardBoardService {
     }
     
     // 入力値をNotionに登録する。
-    public function store(array $details) {
-        $page = new Page();
-        $page->setTitle("名前", $details['name']);
-        $page->setText("英名", $details['enname']);
-        $page->setSelect("Status", "要写真撮影");
-        $page->setNumber("枚数", $details['stock']);
-        $priceVal = intval($details['price']);
-        $page->setNumber("価格", $priceVal);
-        $page->setNumber("カード番号", $details['index']);
-        $page->setSelect("言語", $details["language"]);
-        $page->setCheckbox("Foil", $details['isFoil']);
-        $page->setSelect("色", $details['color']);
-        $page->setSelect("状態", $details["condition"]);
-        if (array_key_exists('imageUrl', $details)) {
-            $page->setUrl('画像URL', $details['imageUrl']);
-        }
-        $expansion = Expansion::where('attr', $details['attr'])->first();
-        logger()->debug($details['attr']);
-        $page->setRelation("エキスパンション",[$expansion['notion_id']]);
-        $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
-        // ミニレター
-        $sends = [];
-        if ($priceVal >= 1500) {
-            // クリックポスト
-            array_push($sends, '29c8c95ed21645909cafea172a5dd2f7');
-        } else {
-            array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
-        }
-        $page->setRelation('発送方法', $sends);
+    public function store(CardInfo $info, array $details) {
         try {
-            $page = $this->repo->store($page);
-            // ページID
-            logger()->info($page->getId());
-            response($page->getId(), Response::HTTP_OK);
+            $page = new Page();
+            $duplicated = $this->repo->findBySparkcardId($info->id);
+            if (!empty($duplicated)) {
+                $page->setId($duplicated->getId());
+                $stock = $duplicated->getProperty("枚数")->getNumber() + intval($details['quantity']);
+                $page->set("枚数", Number::value($stock));
+                $this->updatePage($page);
+            } else {
+                $page->setTitle("名前", $info->name);
+                $page->setText("英名", $info->en_name);
+                $page->setSelect("Status", "要写真撮影");
+                $page->setNumber("枚数", $details['quantity']);
+                $priceVal = intval($details['market_price']);
+                $page->setNumber("価格", $priceVal);
+                $page->setNumber("カード番号", $info->number);
+                $page->setSelect("言語", $details["language"]);
+                $page->setCheckbox("Foil", $info->isFoil);
+                $page->setSelect("色", $info->color_id);
+                $page->setSelect("状態", $details["condition"]);
+                if (!empty($info->image_url)) {
+                    $page->setUrl('画像URL', $info->image_url);
+                }
+                // $expansion = Expansion::where('attr', $details['attr'])->first();
+                // logger()->debug($details['attr']);
+                $page->setRelation("エキスパンション",[$info->exp_id]);
+                $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
+                // ミニレター
+                $sends = [];
+                if ($priceVal >= 1500) {
+                    // クリックポスト
+                    array_push($sends, '29c8c95ed21645909cafea172a5dd2f7');
+                } else {
+                    array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
+                }
+                $page->setRelation('発送方法', $sends);
+                $page = $this->repo->store($page);
+                // ページID
+                logger()->info($page->getId());
+            }
         } catch (NotionException $e) {
             logger()->error($e->getMessage());
         }
