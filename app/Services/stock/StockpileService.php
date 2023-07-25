@@ -58,8 +58,7 @@ class StockpileService extends AbstractSmsService{
                 parent::addSkip($number, '在庫情報が登録済み');
                 return;
             }
-            Stockpile::create(['card_id' => $info->id, 'language' => $lang,
-                     Header::CONDITION => $condition, Header::QUANTITY => $row->quantity()]);
+            $this->create($info->id, $lang, $condition, $row->quantity());
             parent::addSuccess($number);
 
         } catch (NotFoundException | ConflictException $e) {
@@ -67,6 +66,20 @@ class StockpileService extends AbstractSmsService{
         }
     }
 
+    /**
+     * stockpileテーブルに1件登録する。
+     *
+     * @param integer $cardId
+     * @param string $language
+     * @param string $condition
+     * @param integer $quantity
+     * @return void
+     */
+    public function create(int $cardId, string $language, string $condition, int $quantity) {
+        $stockpile = Stockpile::create(['card_id' => $cardId, 'language' => $language,
+        Header::CONDITION => $condition, Header::QUANTITY => $quantity]);
+        return $stockpile;
+    }
 
     public function getEnCard(string $path) {
         $records = $this->read($path);
@@ -81,7 +94,6 @@ class StockpileService extends AbstractSmsService{
         $results = $this->execute($records, $callback);
         return $results;
     }
-
 
     /**
      * 

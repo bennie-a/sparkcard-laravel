@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('arrival_date')->notNull();
             $table->integer('stock_id')->unsigned()->notNull();
             $table->foreign('stock_id')->references('id')->on('stockpile');
+            $table->integer('cost')->notnull();
             $table->integer('quantity')->notNull();
             $table->timestamps();
             $table->unique(['supplier', 'arrival_date', 'stock_id', 'quantity']);

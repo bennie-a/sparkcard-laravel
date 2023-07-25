@@ -34,7 +34,7 @@ class ArrivalRequest extends FormRequest
             'quantity' =>'required|numeric|min:1',
             'condition' =>'required|in:NM,NM-,EX+,EX,PLD',
             'supplier' =>'required',
-            'isFoil' =>'required|boolean',
+            'arrival_date' => 'required|date'
         ];
     }
 
@@ -49,6 +49,7 @@ class ArrivalRequest extends FormRequest
             'condition' => '状態',
             'supplier' =>'入荷先',
             'isFoil' =>'通常/Foil',
+            'arrival_date' => '入荷日'
         ];
     }
 

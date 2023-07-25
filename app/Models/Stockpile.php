@@ -38,4 +38,17 @@ class Stockpile extends Model
     public static function isExists(int $cardId, string $lang, string $condition) {
         return Stockpile::where(['card_id' => $cardId, 'language' => $lang, 'condition' => $condition])->exists();
     }
+
+    /**
+     * カード情報IDと言語、状態から特定の在庫情報を取得する。
+     *
+     * @param integer $cardId
+     * @param string $language
+     * @param string $condition
+     * @return void
+     */
+    public static function findSpecificCard(int $cardId, string $language, string $condition) {
+        return Stockpile::where(['card_id' => $cardId, 'language' => $language, 'condition' => $condition])->first();
+    }
+
 }

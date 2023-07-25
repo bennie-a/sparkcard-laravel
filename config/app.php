@@ -206,7 +206,8 @@ return [
         App\Providers\MtgDevProvider::class,
         App\Providers\CardInfoServProvider::class,
         App\Providers\ScryfallProvider::class,
-        App\Providers\CardBoardProvider::class
+        App\Providers\CardBoardProvider::class,
+        App\Providers\StockServiceProvider::class
     ],
 
     /*
@@ -226,7 +227,8 @@ return [
         'MtgDev' => App\Facades\MtgDev::class,
         'CardInfoServ' => App\Facades\CardInfoServ::class,
         'ScryfallServ' => App\Facades\ScryfallServ::class,
-        'CardBoard' => App\Facades\CardBoard::class
+        'CardBoard' => App\Facades\CardBoard::class,
+        'StockpileServ' => App\Facades\StockpileServ::class
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

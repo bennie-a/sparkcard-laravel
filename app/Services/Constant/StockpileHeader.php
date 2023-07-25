@@ -9,6 +9,10 @@ class StockpileHeader {
     const QUANTITY = 'quantity';
     const IS_FOIL = 'isFoil';
     const EN_NAME = 'en_name';
+    const COST = 'cost';
+    const MARKET_PRICE = 'market_price';
+    const ARRIVAL_DATE = 'arrival_date';
+    const SUPPLIER = 'supplier';
 
     // 出荷CSV(メルカリ)
     public const ORDER_ID = "order_id";
