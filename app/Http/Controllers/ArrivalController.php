@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Facades\CardBoard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
+use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

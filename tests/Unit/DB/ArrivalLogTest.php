@@ -3,6 +3,7 @@
 namespace Tests\Unit\DB;
 
 use App\Facades\CardBoard;
+use App\Http\Response\CustomResponse;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
 use App\Models\Stockpile;
@@ -40,7 +41,6 @@ class ArrivalLogTest extends TestCase
         $updatePage->setId($page->getId());
         $updatePage->set('枚数', Number::value(1));
         \CardBoard::updatePage($updatePage);
-
     }
     /**
      * A basic feature test example.
@@ -84,6 +84,20 @@ class ArrivalLogTest extends TestCase
     }
 
     /**
+     * NGケース(HTTPステータスコードとメッセージを確認する)
+     * @dataProvider ngprovider
+     * @param integer $cardId
+     * @return void
+     */
+    public function test_ng(int $cardId) {
+        $response = $this->post('/api/arrival', ['card_id' => $cardId, 'language' => 'JP', 'condition' => 'NM-',
+                                                                                 'arrival_date' => '2023/7/25', 'cost' => 10, 'market_price' => 400,
+                                                                                  'quantity' => 3, 'supplier' => '私物']);
+
+        $response->assertStatus(CustomResponse::HTTP_NOT_FOUND_CARD);
+    }
+
+    /**
      * OKケース
      *
      * @return void
@@ -91,13 +105,20 @@ class ArrivalLogTest extends TestCase
     public function okprovider() {
         return [
             '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', false, 'NM', '2023-07-24', 23, 200],
-            // '在庫情報なし' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'EX+', '2023-06-10', 23, 100]
+            '在庫情報なし' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'EX+', '2023-06-10', 23, 100]
+        ];
+    }
+
+    public function ngprovider() {
+        return [
+            'カード情報IDが存在しない' => [99],
         ];
     }
 
     public function tearDown(): void
     {
         Artisan::call('migrate:refresh');
+        $page = $this->repo->findBySparkcardId(3);
         parent::tearDown();
     }
 }
