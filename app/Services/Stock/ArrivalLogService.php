@@ -18,13 +18,9 @@ class ArrivalLogService {
      * 入荷ログを1件登録する。
      *
      * @param array $details
-     * @return void
+     * @return CardInfo
      */
     public function store(ArrivalParams $params) {
-        $info = CardInfo::find($params->cardId());
-        if (empty($info)) {
-            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_CARD, 'カード情報がありません');
-        }
 
         $stockpile = Stockpile::findSpecificCard($params->cardId(), $params->language(), $params->condition());
         if (empty($stockpile)) {
@@ -36,8 +32,8 @@ class ArrivalLogService {
             $stockpile->quantity += $params->quantity();
             $stockpile->update();
         }
-        ArrivalLog::create(['stock_id' => $stockpile->id, 'arrival_date' => $params->arrivalDate(), 
+        $arrivalLog = ArrivalLog::create(['stock_id' => $stockpile->id, 'arrival_date' => $params->arrivalDate(), 
                                         'supplier' => $params->supplier(), 'quantity' => $params->quantity(), 'cost' => $params->cost()]);
-        \CardBoard::store($info, $params->details());
+        return $arrivalLog;
     }
 }

@@ -13,6 +13,7 @@ class StockpileHeader {
     const MARKET_PRICE = 'market_price';
     const ARRIVAL_DATE = 'arrival_date';
     const SUPPLIER = 'supplier';
+    const CARD_ID = 'card_id';
 
     // 出荷CSV(メルカリ)
     public const ORDER_ID = "order_id";

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Facades\CardBoard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
+use App\Models\CardInfo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Constant\StockpileHeader as Header;
@@ -38,14 +39,22 @@ class ArrivalController extends Controller {
      */
     public function store(ArrivalRequest $request)
     {
-        $details = $request->only(['card_id', 'language',  Header::QUANTITY, Header::COST,
-                                                 Header::MARKET_PRICE, Header::CONDITION, Header::SUPPLIER]);
+        $details = $request->only([Header::CARD_ID, 'language',  Header::QUANTITY, Header::COST,
+        Header::MARKET_PRICE, Header::CONDITION, Header::SUPPLIER]);
         $details[Header::IS_FOIL] = $request->boolean(Header::IS_FOIL);
         $details[Header::ARRIVAL_DATE] = $request->date(Header::ARRIVAL_DATE);
         $params = new ArrivalParams($details);
-        $this->service->store($params);
-        // \CardBoard::store($details);
-        // logger()->info($details);
+        logger()->info('Start Arrival log', [$params->cardId()]);
+        $info = CardInfo::find($params->cardId());
+        if (empty($info)) {
+            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_CARD, 'カード情報がありません');
+        }
+
+        $arrivalLog = $this->service->store($params);
+        if (!empty($arrivalLog)) {
+            \CardBoard::store($info, $details);
+        }
+        logger()->info('End Arrival log', [$params->cardId()]);
         return response()->json([], Response::HTTP_CREATED);
     }
 

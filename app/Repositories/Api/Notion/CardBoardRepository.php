@@ -68,6 +68,9 @@ class CardBoardRepository extends NotionRepository{
     public function findBySparkcardId (int $id) {
         $filter = Filter::numberFilter('sparkcard_id', Operators::EQUALS, $id);
         $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
+        if ($pages->isEmpty()) {
+            return null;
+        }
         return $pages[0];
     }
 }

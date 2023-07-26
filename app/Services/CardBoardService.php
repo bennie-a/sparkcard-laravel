@@ -9,7 +9,7 @@ use App\Repositories\Api\Notion\CardBoardRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
-use Illuminate\Http\Response;
+use App\Services\Constant\StockpileHeader as Header;
 
 /**
  * Notionの販売管理ボードに関するServiceクラス
@@ -136,6 +136,7 @@ class CardBoardService {
                     array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
                 }
                 $page->setRelation('発送方法', $sends);
+                $page->set('sparkcard_id', Number::value($info->id));
                 $page = $this->repo->store($page);
                 // ページID
                 logger()->info($page->getId());
