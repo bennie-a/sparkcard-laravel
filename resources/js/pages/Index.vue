@@ -13,6 +13,7 @@ export default {
             color: "",
             isFoil: false,
             name: "",
+            supplier: "オリジナルパック",
         };
     },
     computed: {
@@ -227,9 +228,12 @@ export default {
         </div>
     </div>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <ModalButton @action="regist"
-            ><i class="checkmark icon"></i>入荷登録する</ModalButton
-        >
+        <h5 class="ui sub header">仕入れ先</h5>
+        <select v-model="supplier" class="mr-1 ui dropdown">
+            <option>オリジナルパック</option>
+            <option>棚卸し</option>
+            <option>私物</option>
+        </select>
     </div>
     <div class="mt-1 ui four cards">
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
@@ -323,6 +327,11 @@ export default {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="extra content">
+                <ModalButton @action="regist">
+                    <i class="add icon"></i>入荷する</ModalButton
+                >
             </div>
         </div>
     </div>

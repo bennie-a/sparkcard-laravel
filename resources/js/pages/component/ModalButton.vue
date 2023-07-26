@@ -1,5 +1,5 @@
 <template>
-    <button class="ui teal button" @click="show"><slot></slot></button>
+    <button class="fluid ui teal button" @click="show"><slot></slot></button>
     <div id="confirm" class="ui tiny modal">
         <div class="header">Notice</div>
         <div class="content" v-if="this.$store.getters.isLoad == false">
