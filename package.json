@@ -26,15 +26,13 @@
     },
     "dependencies": {
         "@vue/compiler-sfc": "^3.2.38",
-        "@vuepic/vue-datepicker": "^4.4.0",
+        "@vuepic/vue-datepicker": "^5.4.0",
         "encoding-japanese": "^2.0.0",
-        "firebase": "^9.10.0",
         "semantic-ui-css": "^2.4.1",
         "semantic-ui-vue": "^0.11.0",
         "vue-loader": "^17.0.0",
         "vue-papa-parse": "^3.1.0",
         "vue-router": "^4.1.5",
-        "vue-toasted": "^1.1.28",
         "vuedraggable": "^4.1.0",
         "vuejs-paginate-next": "^1.0.2",
         "vuex": "^4.1.0"

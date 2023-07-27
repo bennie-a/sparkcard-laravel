@@ -6,6 +6,7 @@ import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
 import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
+import Datepicker from "@vuepic/vue-datepicker";
 export default {
     data() {
         return {
@@ -14,6 +15,7 @@ export default {
             isFoil: false,
             name: "",
             supplier: "オリジナルパック",
+            arrivalDate: new Date(),
         };
     },
     computed: {
@@ -154,6 +156,12 @@ export default {
             console.log(selecterId);
             $(selecterId).modal("show");
         },
+        dateFormat: function (date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}/${month}/${day}`;
+        },
     },
     components: {
         "now-loading": NowLoading,
@@ -161,6 +169,7 @@ export default {
         "message-area": MessageArea,
         pagination: ListPagination,
         ModalButton: ModalButton,
+        datepicker: Datepicker,
     },
 };
 </script>
@@ -234,6 +243,15 @@ export default {
             <option>棚卸し</option>
             <option>私物</option>
         </select>
+    </div>
+    <div>
+        <datepicker
+            placeholder="ここをクリックして日時を入力"
+            v-model="arrivalDate"
+            locale="jp"
+            :enable-time-picker="false"
+            :format="dateFormat"
+        ></datepicker>
     </div>
     <div class="mt-1 ui four cards">
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
