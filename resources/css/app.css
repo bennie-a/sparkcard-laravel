@@ -90,6 +90,12 @@ body {
     margin: 0 auto;
     max-width: 400px;
 }
+
+/* datepickerのレイアウト調整 */
+input.dp_custom_input {
+    padding-left: 2rem !important;
+}
+
 @-webkit-keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);

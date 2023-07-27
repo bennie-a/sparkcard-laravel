@@ -236,22 +236,27 @@ export default {
             </div>
         </div>
     </div>
-    <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <h5 class="ui sub header">仕入れ先</h5>
-        <select v-model="supplier" class="mr-1 ui dropdown">
-            <option>オリジナルパック</option>
-            <option>棚卸し</option>
-            <option>私物</option>
-        </select>
-    </div>
-    <div>
-        <datepicker
-            placeholder="ここをクリックして日時を入力"
-            v-model="arrivalDate"
-            locale="jp"
-            :enable-time-picker="false"
-            :format="dateFormat"
-        ></datepicker>
+    <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
+        <div class="two fields">
+            <div class="four wide column field">
+                <label for="">仕入れ先</label>
+                <select v-model="supplier" class="mr-1 ui dropdown">
+                    <option>オリジナルパック</option>
+                    <option>棚卸し</option>
+                    <option>私物</option>
+                </select>
+            </div>
+            <div class="four wide column field">
+                <label>入荷日</label>
+                <datepicker
+                    input-class-name="dp_custom_input"
+                    v-model="arrivalDate"
+                    locale="jp"
+                    :enable-time-picker="false"
+                    :format="dateFormat"
+                ></datepicker>
+            </div>
+        </div>
     </div>
     <div class="mt-1 ui four cards">
         <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
@@ -415,5 +420,10 @@ label input:checked + span {
     color: #fff; /* 文字色を白に */
     background: var(--teal); /* 背景色を薄い赤に */
     border: 0;
+}
+input.dp_custom_input {
+    margin-left: 1rem !important;
+    color: blue;
+    box-shadow: 0 0 6px #1976d2;
 }
 </style>
