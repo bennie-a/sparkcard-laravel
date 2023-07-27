@@ -1,39 +1,92 @@
 <template>
-    <button class="fluid ui teal button" @click="show"><slot></slot></button>
-    <div id="confirm" class="ui tiny modal">
-        <div class="header">Notice</div>
-        <div class="content" v-if="this.$store.getters.isLoad == false">
-            登録してもよろしいですか?
+    <vue-final-modal
+        v-model="showModal"
+        name="confirm"
+        classes="modal-container"
+        content-class="modal-content"
+    >
+        <div class="modal__close">
+            <i class="bi bi-x" @click="showModal = false"></i>
         </div>
-        <div class="actions" v-if="this.$store.getters.isLoad == false">
-            <button class="ui cancel button">
-                <i class="close icon"></i>キャンセル
-            </button>
-            <button class="ui teal button" @click="execute">
-                <i class="checkmark icon"></i>登録する
-            </button>
+        <h2 class="ui header">Notice</h2>
+        <div class="modal__content">
+            <p>登録してもよろしいですか?</p>
         </div>
-        <now-loading></now-loading>
-    </div>
+        <div class="ui divider"></div>
+        <div class="modal__action">
+            <button class="ui basic teal button" @click="showModal = false">
+                キャンセル
+            </button>
+            <button class="ui teal button" @click="execute">OK</button>
+        </div>
+    </vue-final-modal>
+    <button class="ui teal button" @click="show">
+        <slot></slot>
+    </button>
 </template>
 <script>
 import NowLoading from "../component/NowLoading.vue";
+import { $vfm, VueFinalModal } from "vue-final-modal";
 
 export default {
+    data() {
+        return {
+            showModal: false,
+        };
+    },
     emits: ["action"],
     methods: {
         show: function () {
-            $("#confirm").modal("show");
+            $vfm.show("confirm");
         },
         execute: function () {
             this.$store.dispatch("setLoad", true);
             this.$emit("action");
-            $("#confirm").modal("hide");
+            this.showModal = false;
             this.$store.dispatch("setLoad", false);
         },
     },
     components: {
         "now-loading": NowLoading,
+        "vue-final-modal": VueFinalModal,
     },
 };
 </script>
+<style scoped>
+::v-deep .modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+::v-deep .modal-content {
+    width: 40%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 1rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.25rem;
+    background: #fff;
+}
+
+.modal__content {
+    flex-grow: 1;
+    padding-top: 0rem;
+}
+
+.modal__action {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
+    column-gap: 1rem;
+}
+.modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+</style>

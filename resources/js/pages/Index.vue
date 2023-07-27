@@ -18,8 +18,6 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
-            isOpen: false,
-            showModal: false,
         };
     },
     computed: {
@@ -101,9 +99,6 @@ export default {
             console.log(keyword);
         },
 
-        onStoreDialog() {
-            this.$vfm.show("example");
-        },
         // Notionにカード情報を登録する。
         async regist(card) {
             console.log(card);
@@ -186,32 +181,7 @@ export default {
 
 <template>
     <message-area></message-area>
-    <vue-final-modal
-        v-model="showModal"
-        name="example"
-        classes="modal-container"
-        content-class="modal-content"
-    >
-        <div class="modal__close">
-            <i class="bi bi-x-lg" @click="showModal = false"></i>
-        </div>
-        <div class="modal__content">
-            <p>
-                Vue Final Modal is a renderless, stackable, detachable and
-                lightweight modal component.
-            </p>
-        </div>
-        <div class="modal__action">
-            <button class="ui basic teal button" @click="showModal = false">
-                cancel
-            </button>
-            <button class="ui teal button" @click="showModal = false">
-                confirm
-            </button>
-        </div>
-    </vue-final-modal>
-    <button class="ui teal button" @click="onStoreDialog">登録する</button>
-    <ModalsContainer />
+    <ModalButton @action="">登録する</ModalButton>
     <div class="mt-1 ui form segment">
         <div class="five fields">
             <div class="field">
@@ -462,42 +432,5 @@ label input:checked + span {
     color: #fff; /* 文字色を白に */
     background: var(--teal); /* 背景色を薄い赤に */
     border: 0;
-}
-::v-deep .modal-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-::v-deep .modal-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    max-height: 90%;
-    margin: 0 1rem;
-    padding: 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.25rem;
-    background: #fff;
-}
-
-.modal__content {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding-top: 1rem;
-}
-
-.modal__action {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    flex-shrink: 0;
-    padding: 1rem 0 0;
-    column-gap: 1rem;
-}
-.modal__close {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    font-size: 1.5rem;
 }
 </style>
