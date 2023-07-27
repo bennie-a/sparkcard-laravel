@@ -7,6 +7,8 @@ import { AxiosTask } from "../component/AxiosTask";
 import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
 import Datepicker from "@vuepic/vue-datepicker";
+import { $vfm, VueFinalModal, ModalsContainer } from "vue-final-modal";
+
 export default {
     data() {
         return {
@@ -16,6 +18,8 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
+            isOpen: false,
+            showModal: false,
         };
     },
     computed: {
@@ -97,58 +101,62 @@ export default {
             console.log(keyword);
         },
 
+        onStoreDialog() {
+            this.$vfm.show("example");
+        },
         // Notionにカード情報を登録する。
-        async regist() {
-            this.$store.dispatch("setLoad", true);
-            console.log("Arrival Start");
-            this.$store.dispatch("message/clear");
+        async regist(card) {
+            console.log(card);
+            // this.$store.dispatch("setLoad", true);
+            // console.log("Arrival Start");
+            // this.$store.dispatch("message/clear");
 
-            const card = this.$store.getters.card;
-            const filterd = card.filter((c) => {
-                return c.stock != null && c.stock > 0;
-            });
+            // const card = this.$store.getters.card;
+            // const filterd = card.filter((c) => {
+            //     return c.stock != null && c.stock > 0;
+            // });
 
-            await Promise.all(
-                filterd.map(async (c) => {
-                    let query = {
-                        id: c.id,
-                        name: c.name,
-                        enname: c.enname,
-                        index: c.index,
-                        price: c.price.replace(",", ""),
-                        attr: c.exp.attr,
-                        color: c.color,
-                        imageUrl: c.image,
-                        stock: c.stock,
-                        isFoil: c.isFoil,
-                        language: c.language,
-                        condition: c.condition,
-                    };
-                    await axios
-                        .post("api/arrival", query)
-                        .then((response) => {
-                            if (response.status == 201) {
-                                console.log(query.name + ":登録完了");
-                            } else {
-                                console.log(response.status);
-                            }
-                            this.$store.dispatch(
-                                "setSuccessMessage",
-                                "登録が完了しました。"
-                            );
-                        })
-                        .catch(({ response }) => {
-                            const data = response.data;
-                            $msg = `${query.name}(${query.attr}):${data.message}`;
-                            this.$store.commit("message/addErrorList", $msg);
-                        });
-                })
-            );
-            let ul = this.$store.getters["message/errorlist"];
-            if (!ul) {
-                this.$store.dispatch("message/errorhtml", ul);
-            }
-            $("#regist").modal("hide");
+            // await Promise.all(
+            //     filterd.map(async (c) => {
+            //         let query = {
+            //             id: c.id,
+            //             name: c.name,
+            //             enname: c.enname,
+            //             index: c.index,
+            //             price: c.price.replace(",", ""),
+            //             attr: c.exp.attr,
+            //             color: c.color,
+            //             imageUrl: c.image,
+            //             stock: c.stock,
+            //             isFoil: c.isFoil,
+            //             language: c.language,
+            //             condition: c.condition,
+            //         };
+            //         await axios
+            //             .post("api/arrival", query)
+            //             .then((response) => {
+            //                 if (response.status == 201) {
+            //                     console.log(query.name + ":登録完了");
+            //                 } else {
+            //                     console.log(response.status);
+            //                 }
+            //                 this.$store.dispatch(
+            //                     "setSuccessMessage",
+            //                     "登録が完了しました。"
+            //                 );
+            //             })
+            //             .catch(({ response }) => {
+            //                 const data = response.data;
+            //                 $msg = `${query.name}(${query.attr}):${data.message}`;
+            //                 this.$store.commit("message/addErrorList", $msg);
+            //             });
+            //     })
+            // );
+            // let ul = this.$store.getters["message/errorlist"];
+            // if (!ul) {
+            //     this.$store.dispatch("message/errorhtml", ul);
+            // }
+            // $("#regist").modal("hide");
             this.$store.dispatch("setLoad", false);
         },
         showImage: function (id) {
@@ -170,12 +178,40 @@ export default {
         pagination: ListPagination,
         ModalButton: ModalButton,
         datepicker: Datepicker,
+        "vue-final-modal": VueFinalModal,
+        ModalsContainer,
     },
 };
 </script>
 
 <template>
     <message-area></message-area>
+    <vue-final-modal
+        v-model="showModal"
+        name="example"
+        classes="modal-container"
+        content-class="modal-content"
+    >
+        <div class="modal__close">
+            <i class="bi bi-x-lg" @click="showModal = false"></i>
+        </div>
+        <div class="modal__content">
+            <p>
+                Vue Final Modal is a renderless, stackable, detachable and
+                lightweight modal component.
+            </p>
+        </div>
+        <div class="modal__action">
+            <button class="ui basic teal button" @click="showModal = false">
+                cancel
+            </button>
+            <button class="ui teal button" @click="showModal = false">
+                confirm
+            </button>
+        </div>
+    </vue-final-modal>
+    <button class="ui teal button" @click="onStoreDialog">登録する</button>
+    <ModalsContainer />
     <div class="mt-1 ui form segment">
         <div class="five fields">
             <div class="field">
@@ -259,7 +295,10 @@ export default {
         </div>
     </div>
     <div class="mt-1 ui four cards">
-        <div class="card gallery" v-for="card in this.$store.getters.sliceCard">
+        <div
+            class="card gallery"
+            v-for="(card, index) in this.$store.getters.sliceCard"
+        >
             <div class="content meta">ID:{{ card.id }}</div>
             <div class="image">
                 <img
@@ -283,7 +322,7 @@ export default {
             </div>
             <div class="content">
                 <div class="ui form">
-                    <!-- {{ card.language }} -->
+                    {{ index }}
                     <div class="inline field radio-button">
                         <label
                             ><input
@@ -352,9 +391,12 @@ export default {
                 </div>
             </div>
             <div class="extra content">
-                <ModalButton @action="regist">
+                <ModalButton @action="regist(card)">
                     <i class="add icon"></i>入荷する</ModalButton
                 >
+                <button class="fluid ui button" @click="onStoreDialog()">
+                    <i class="add icon"></i>入荷する
+                </button>
             </div>
         </div>
     </div>
@@ -421,9 +463,41 @@ label input:checked + span {
     background: var(--teal); /* 背景色を薄い赤に */
     border: 0;
 }
-input.dp_custom_input {
-    margin-left: 1rem !important;
-    color: blue;
-    box-shadow: 0 0 6px #1976d2;
+::v-deep .modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+::v-deep .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 90%;
+    margin: 0 1rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.25rem;
+    background: #fff;
+}
+
+.modal__content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-top: 1rem;
+}
+
+.modal__action {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 1rem 0 0;
+    column-gap: 1rem;
+}
+.modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
 }
 </style>
