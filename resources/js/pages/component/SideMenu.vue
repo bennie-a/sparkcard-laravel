@@ -13,7 +13,7 @@
                             aria-current="page"
                             to="/"
                             ><i class="bi bi-inboxes-fill"></i
-                            >入荷手続き</router-link
+                            >入荷登録</router-link
                         >
                     </li>
                     <li>

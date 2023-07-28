@@ -79,12 +79,6 @@ export default {
                     });
                     this.cost = 23;
                     this.$store.dispatch("setCard", filterd);
-
-                    // this.$store.dispatch("setLoad", false);
-                    this.$store.dispatch(
-                        "setSuccessMessage",
-                        filterd.length + "件取得しました。"
-                    );
                 })
                 .catch((e) => {
                     console.error(e);
@@ -104,8 +98,8 @@ export default {
         // 入荷情報を登録する。
         async regist() {
             this.$store.dispatch("setLoad", true);
-            console.log("Arrival Start");
             this.$store.dispatch("message/clear");
+            console.log("Arrival Start");
 
             const card = this.$store.getters.card;
             const filterd = card.filter((c) => {
@@ -118,7 +112,7 @@ export default {
                         card_id: c.id,
                         language: c.language,
                         quantity: c.stock,
-                        cost: c.cost,
+                        cost: this.cost,
                         market_price: c.price.replace(",", ""),
                         condition: c.condition,
                         attr: c.exp.attr,
@@ -130,7 +124,7 @@ export default {
                         .post("api/arrival", query)
                         .then((response) => {
                             if (response.status == 201) {
-                                console.log(query.name + ":登録完了");
+                                console.log(c.name + ":登録完了");
                             } else {
                                 console.log(response.status);
                             }
@@ -141,8 +135,9 @@ export default {
                         })
                         .catch(({ response }) => {
                             const data = response.data;
-                            $msg = `${query.name}(${query.attr}):${data.message}`;
-                            this.$store.commit("message/addErrorList", $msg);
+                            const msg = `${c.name}(${c.exp.attr}):${data.message}`;
+                            console.error(msg);
+                            this.$store.dispatch("message/error", msg);
                         });
                 })
             );
@@ -178,7 +173,7 @@ export default {
 
 <template>
     <message-area></message-area>
-    <div class="mt-1 ui form segment">
+    <article class="mt-1 ui form segment">
         <div class="five fields">
             <div class="field">
                 <label>カード名(一部)</label>
@@ -237,153 +232,164 @@ export default {
                 </button>
             </div>
         </div>
-    </div>
-    <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
-        <div class="four fields">
-            <div class="four wide column field">
-                <label for="">仕入れ先</label>
-                <select v-model="supplier" class="mr-1 ui dropdown">
-                    <option>オリジナルパック</option>
-                    <option>棚卸し</option>
-                    <option>私物</option>
-                </select>
-            </div>
-            <div class="three wide column field">
-                <label>入荷日</label>
-                <datepicker
-                    input-class-name="dp_custom_input"
-                    v-model="arrivalDate"
-                    locale="jp"
-                    :enable-time-picker="false"
-                    :format="dateFormat"
-                ></datepicker>
-            </div>
-            <div class="two wide column field">
-                <label>原価</label>
-                <div class="ui middle right labeled input">
-                    <input
-                        type="number"
-                        step="1"
-                        min="1"
-                        class="text-stock"
-                        v-model="this.cost"
-                    />
-                    <div class="ui basic label">円</div>
+    </article>
+    <article class="mt-2">
+        <h2
+            class="ui medium dividing header"
+            v-if="this.$store.getters.cardsLength != 0"
+        >
+            件数：{{ this.$store.getters.cardsLength }}件
+        </h2>
+
+        <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
+            <div class="four fields">
+                <div class="four wide column field">
+                    <label for="">仕入れ先</label>
+                    <select v-model="supplier" class="mr-1 ui dropdown">
+                        <option>オリジナルパック</option>
+                        <option>棚卸し</option>
+                        <option>私物</option>
+                    </select>
                 </div>
-            </div>
-            <div class="three wide column field">
-                <label style="visibility: hidden">登録ボタン</label>
-                <ModalButton @action="regist">登録する</ModalButton>
+                <div class="three wide column field">
+                    <label>入荷日</label>
+                    <datepicker
+                        input-class-name="dp_custom_input"
+                        v-model="arrivalDate"
+                        locale="jp"
+                        :enable-time-picker="false"
+                        :format="dateFormat"
+                    ></datepicker>
+                </div>
+                <div class="two wide column field">
+                    <label>原価</label>
+                    <div class="ui middle right labeled input">
+                        <input
+                            type="number"
+                            step="1"
+                            min="1"
+                            class="text-stock"
+                            v-model="this.cost"
+                        />
+                        <div class="ui basic label">円</div>
+                    </div>
+                </div>
+                <div class="three wide column field">
+                    <label style="visibility: hidden">登録ボタン</label>
+                    <ModalButton @action="regist">登録する</ModalButton>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="mt-1 ui four cards">
-        <div
-            class="card gallery"
-            v-for="(card, index) in this.$store.getters.sliceCard"
-        >
-            <div class="content">
-                <label class="ui label" v-if="!card.isFoil">通常</label>
-                <label class="ui orange label" v-if="card.isFoil">Foil</label>
-                <div class="right floated meta">#{{ card.id }}</div>
-            </div>
-            <div class="image">
-                <img
-                    class=""
-                    v-bind:src="card.image"
-                    @click="showImage(card.id)"
-                />
-                <div class="ui tiny modal" v-bind:id="card.id">
-                    <i class="close icon"></i>
-                    <div class="image content">
-                        <img v-bind:src="card.image" class="image" />
-                    </div>
+        <div class="mt-1 ui four cards">
+            <div
+                class="card gallery"
+                v-for="(card, index) in this.$store.getters.sliceCard"
+            >
+                <div class="content">
+                    <label class="ui tag label" v-if="!card.isFoil">通常</label>
+                    <label class="ui tag orange label" v-if="card.isFoil"
+                        >Foil</label
+                    >
+                    <div class="right floated meta">#{{ card.id }}</div>
                 </div>
-            </div>
-            <div class="content">
-                <div class="header">{{ card.name }}</div>
-                <div class="meta">{{ card.exp.name }}</div>
-                <div class="description ui right floated">
-                    平均価格:<span class="price">&yen{{ card.price }}</span>
-                </div>
-            </div>
-            <div class="content">
-                <div class="ui form">
-                    <div class="inline field radio-button">
-                        <label
-                            ><input
-                                type="radio"
-                                value="JP"
-                                v-model="card.language"
-                            /><span>JP</span></label
-                        >
-                        <label
-                            ><input
-                                type="radio"
-                                value="EN"
-                                v-model="card.language"
-                            /><span>EN</span></label
-                        >
-                        <label
-                            ><input
-                                type="radio"
-                                value="IT"
-                                v-model="card.language"
-                            /><span>IT</span></label
-                        >
-                        <label
-                            ><input
-                                type="radio"
-                                value="CS"
-                                v-model="card.language"
-                            /><span>CS</span></label
-                        >
-                        <label
-                            ><input
-                                type="radio"
-                                value="CT"
-                                v-model="card.language"
-                            /><span>CT</span></label
-                        >
-                    </div>
-                    <div class="two fields">
-                        <div class="eight wide field">
-                            <label for="">状態</label>
-                            <select
-                                class="ui fluid dropdown"
-                                v-model="card.condition"
-                            >
-                                <option value="NM">NM</option>
-                                <option value="NM-">NM-</option>
-                                <option value="EX+">EX+</option>
-                                <option value="EX">EX</option>
-                                <option value="PLD">PLD</option>
-                            </select>
+                <div class="image">
+                    <img
+                        class=""
+                        v-bind:src="card.image"
+                        @click="showImage(card.id)"
+                    />
+                    <div class="ui tiny modal" v-bind:id="card.id">
+                        <i class="close icon"></i>
+                        <div class="image content">
+                            <img v-bind:src="card.image" class="image" />
                         </div>
-                        <div class="eight wide field">
-                            <label>枚数</label>
-                            <div class="ui middle right labeled input">
-                                <input
-                                    type="number"
-                                    step="1"
-                                    min="0"
-                                    class="text-stock"
-                                    v-model="card.stock"
-                                />
-                                <div class="ui basic label">枚</div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="header">{{ card.name }}</div>
+                    <div class="meta">{{ card.exp.name }}</div>
+                    <div class="description ui right floated">
+                        平均価格:<span class="price">&yen{{ card.price }}</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="ui form">
+                        <div class="inline field radio-button">
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="JP"
+                                    v-model="card.language"
+                                /><span>JP</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="EN"
+                                    v-model="card.language"
+                                /><span>EN</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="IT"
+                                    v-model="card.language"
+                                /><span>IT</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="CS"
+                                    v-model="card.language"
+                                /><span>CS</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="CT"
+                                    v-model="card.language"
+                                /><span>CT</span></label
+                            >
+                        </div>
+                        <div class="two fields">
+                            <div class="eight wide field">
+                                <label for="">状態</label>
+                                <select
+                                    class="ui fluid dropdown"
+                                    v-model="card.condition"
+                                >
+                                    <option value="NM">NM</option>
+                                    <option value="NM-">NM-</option>
+                                    <option value="EX+">EX+</option>
+                                    <option value="EX">EX</option>
+                                    <option value="PLD">PLD</option>
+                                </select>
+                            </div>
+                            <div class="eight wide field">
+                                <label>枚数</label>
+                                <div class="ui middle right labeled input">
+                                    <input
+                                        type="number"
+                                        step="1"
+                                        min="0"
+                                        class="text-stock"
+                                        v-model="card.stock"
+                                    />
+                                    <div class="ui basic label">枚</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="ui grid">
-        <div class="four wide column row right floated">
-            <pagination :count="Number(12)"></pagination>
+        <div class="ui grid">
+            <div class="four wide column row right floated">
+                <pagination :count="Number(12)"></pagination>
+            </div>
         </div>
-    </div>
-    <now-loading></now-loading>
+        <now-loading></now-loading>
+    </article>
 </template>
 <style scoped>
 div.card > .image {

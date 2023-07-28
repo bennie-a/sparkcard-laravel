@@ -16,8 +16,8 @@ const routes = [
         path: "/",
         component: Index,
         meta: {
-            title: "カード登録",
-            description: "販売カードをNotionの商品管理ボードに登録します。",
+            title: "入荷登録",
+            description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
         },
     },
     {
