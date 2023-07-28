@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Enum\CardLanguage;
 use App\Factory\NotionPageFactory;
 use App\Models\CardInfo;
 use App\Models\Expansion;
@@ -116,7 +117,8 @@ class CardBoardService {
                 $priceVal = intval($details['market_price']);
                 $page->setNumber("価格", $priceVal);
                 $page->setNumber("カード番号", $info->number);
-                $page->setSelect("言語", $details["language"]);
+                $language = CardLanguage::find($details["language"]);
+                $page->setSelect("言語", $language->text());
                 $page->setCheckbox("Foil", $info->isFoil);
                 $page->setSelect("色", $info->color_id);
                 $page->setSelect("状態", $details["condition"]);

@@ -78,6 +78,7 @@ class ArrivalLogTest extends TestCase
             $repo = new CardBoardRepository();
             $card = $repo->findBySparkcardId($info->id);
             assertEquals($quantity, $card->getProperty('枚数')->getNumber(), 'Notionの枚数');
+            assertEquals('日本語', $card->getProperty('言語')->getName());
         } catch(NotionException $e) {
             $this->fail($e->getMessage());
         }

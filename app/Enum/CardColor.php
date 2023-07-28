@@ -82,7 +82,7 @@ enum CardColor:string {
             case CardColor::LAND:
                 $ope = "able";
                 break;
-            case EnumCardColor::LESS:
+            case CardColor::LESS:
                 $ope = "must";
         }
         return $ope;

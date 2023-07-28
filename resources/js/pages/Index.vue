@@ -297,35 +297,35 @@ export default {
                         <label
                             ><input
                                 type="radio"
-                                value="日本語"
+                                value="JP"
                                 v-model="card.language"
                             /><span>JP</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="英語"
+                                value="EN"
                                 v-model="card.language"
                             /><span>EN</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="イタリア語"
+                                value="IT"
                                 v-model="card.language"
                             /><span>IT</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="簡体中国語"
+                                value="CS"
                                 v-model="card.language"
                             /><span>CS</span></label
                         >
                         <label
                             ><input
                                 type="radio"
-                                value="繫体中国語"
+                                value="CT"
                                 v-model="card.language"
                             /><span>CT</span></label
                         >
