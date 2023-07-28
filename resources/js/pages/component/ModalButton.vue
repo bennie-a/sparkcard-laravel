@@ -4,9 +4,10 @@
         name="confirm"
         classes="modal-container"
         content-class="modal-content"
+        v-slot="{ params, close }"
     >
         <div class="modal__close">
-            <i class="bi bi-x" @click="showModal = false"></i>
+            <i class="bi bi-x" @click="close"></i>
         </div>
         <h2 class="ui header">Notice</h2>
         <div class="modal__content">
@@ -14,13 +15,13 @@
         </div>
         <div class="ui divider"></div>
         <div class="modal__action">
-            <button class="ui basic teal button" @click="showModal = false">
+            <button class="ui basic teal button" @click="close">
                 キャンセル
             </button>
             <button class="ui teal button" @click="execute">OK</button>
         </div>
     </vue-final-modal>
-    <button class="ui teal button" @click="show">
+    <button class="ui fluid teal button" @click="show">
         <slot></slot>
     </button>
 </template>
@@ -34,10 +35,11 @@ export default {
             showModal: false,
         };
     },
+    props: { name: { type: String, default: "confirm" } },
     emits: ["action"],
     methods: {
         show: function () {
-            $vfm.show("confirm");
+            $vfm.show(this.name);
         },
         execute: function () {
             this.$store.dispatch("setLoad", true);
@@ -59,7 +61,6 @@ export default {
     align-items: center;
 }
 ::v-deep .modal-content {
-    width: 40%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -86,7 +87,7 @@ export default {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    font-size: 1.5rem;
+    font-size: 2rem;
     cursor: pointer;
 }
 </style>

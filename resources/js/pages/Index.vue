@@ -100,63 +100,60 @@ export default {
         },
 
         // Notionにカード情報を登録する。
-        async regist(card) {
-            console.log(card);
-            // this.$store.dispatch("setLoad", true);
-            // console.log("Arrival Start");
-            // this.$store.dispatch("message/clear");
+        async regist() {
+            this.$store.dispatch("setLoad", true);
+            console.log("Arrival Start");
+            this.$store.dispatch("message/clear");
 
-            // const card = this.$store.getters.card;
-            // const filterd = card.filter((c) => {
-            //     return c.stock != null && c.stock > 0;
-            // });
+            const card = this.$store.getters.card;
+            const filterd = card.filter((c) => {
+                return c.stock != null && c.stock > 0;
+            });
 
-            // await Promise.all(
-            //     filterd.map(async (c) => {
-            //         let query = {
-            //             id: c.id,
-            //             name: c.name,
-            //             enname: c.enname,
-            //             index: c.index,
-            //             price: c.price.replace(",", ""),
-            //             attr: c.exp.attr,
-            //             color: c.color,
-            //             imageUrl: c.image,
-            //             stock: c.stock,
-            //             isFoil: c.isFoil,
-            //             language: c.language,
-            //             condition: c.condition,
-            //         };
-            //         await axios
-            //             .post("api/arrival", query)
-            //             .then((response) => {
-            //                 if (response.status == 201) {
-            //                     console.log(query.name + ":登録完了");
-            //                 } else {
-            //                     console.log(response.status);
-            //                 }
-            //                 this.$store.dispatch(
-            //                     "setSuccessMessage",
-            //                     "登録が完了しました。"
-            //                 );
-            //             })
-            //             .catch(({ response }) => {
-            //                 const data = response.data;
-            //                 $msg = `${query.name}(${query.attr}):${data.message}`;
-            //                 this.$store.commit("message/addErrorList", $msg);
-            //             });
-            //     })
-            // );
-            // let ul = this.$store.getters["message/errorlist"];
-            // if (!ul) {
-            //     this.$store.dispatch("message/errorhtml", ul);
-            // }
-            // $("#regist").modal("hide");
+            await Promise.all(
+                filterd.map(async (c) => {
+                    let query = {
+                        id: c.id,
+                        name: c.name,
+                        enname: c.enname,
+                        index: c.index,
+                        price: c.price.replace(",", ""),
+                        attr: c.exp.attr,
+                        color: c.color,
+                        imageUrl: c.image,
+                        stock: c.stock,
+                        isFoil: c.isFoil,
+                        language: c.language,
+                        condition: c.condition,
+                    };
+                    await axios
+                        .post("api/arrival", query)
+                        .then((response) => {
+                            if (response.status == 201) {
+                                console.log(query.name + ":登録完了");
+                            } else {
+                                console.log(response.status);
+                            }
+                            this.$store.dispatch(
+                                "setSuccessMessage",
+                                "登録が完了しました。"
+                            );
+                        })
+                        .catch(({ response }) => {
+                            const data = response.data;
+                            $msg = `${query.name}(${query.attr}):${data.message}`;
+                            this.$store.commit("message/addErrorList", $msg);
+                        });
+                })
+            );
+            let ul = this.$store.getters["message/errorlist"];
+            if (!ul) {
+                this.$store.dispatch("message/errorhtml", ul);
+            }
             this.$store.dispatch("setLoad", false);
         },
         showImage: function (id) {
             const selecterId = `#${id}`;
-            console.log(selecterId);
             $(selecterId).modal("show");
         },
         dateFormat: function (date) {
@@ -181,7 +178,6 @@ export default {
 
 <template>
     <message-area></message-area>
-    <ModalButton @action="">登録する</ModalButton>
     <div class="mt-1 ui form segment">
         <div class="five fields">
             <div class="field">
@@ -229,7 +225,7 @@ export default {
                 </div>
             </div>
             <div class="field">
-                <label for="" style="visibility: hidden">検索ボタン</label>
+                <label style="visibility: hidden">検索ボタン</label>
                 <button
                     id="search"
                     class="ui button teal ml-1"
@@ -243,7 +239,7 @@ export default {
         </div>
     </div>
     <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
-        <div class="two fields">
+        <div class="three fields">
             <div class="four wide column field">
                 <label for="">仕入れ先</label>
                 <select v-model="supplier" class="mr-1 ui dropdown">
@@ -261,6 +257,10 @@ export default {
                     :enable-time-picker="false"
                     :format="dateFormat"
                 ></datepicker>
+            </div>
+            <div class="four wide column field">
+                <label style="visibility: hidden">登録ボタン</label>
+                <ModalButton @action="regist">登録する</ModalButton>
             </div>
         </div>
     </div>
@@ -359,14 +359,6 @@ export default {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="extra content">
-                <ModalButton @action="regist(card)">
-                    <i class="add icon"></i>入荷する</ModalButton
-                >
-                <button class="fluid ui button" @click="onStoreDialog()">
-                    <i class="add icon"></i>入荷する
-                </button>
             </div>
         </div>
     </div>
