@@ -18,6 +18,7 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
+            cost: 23,
         };
     },
     computed: {
@@ -74,8 +75,9 @@ export default {
                     }
                     let filterd = response.data;
                     filterd.map((f) => {
-                        f.language = "日本語";
+                        f.language = "JP";
                     });
+                    this.cost = 23;
                     this.$store.dispatch("setCard", filterd);
 
                     // this.$store.dispatch("setLoad", false);
@@ -99,7 +101,7 @@ export default {
             console.log(keyword);
         },
 
-        // Notionにカード情報を登録する。
+        // 入荷情報を登録する。
         async regist() {
             this.$store.dispatch("setLoad", true);
             console.log("Arrival Start");
@@ -113,18 +115,16 @@ export default {
             await Promise.all(
                 filterd.map(async (c) => {
                     let query = {
-                        id: c.id,
-                        name: c.name,
-                        enname: c.enname,
-                        index: c.index,
-                        price: c.price.replace(",", ""),
-                        attr: c.exp.attr,
-                        color: c.color,
-                        imageUrl: c.image,
-                        stock: c.stock,
-                        isFoil: c.isFoil,
+                        card_id: c.id,
                         language: c.language,
+                        quantity: c.stock,
+                        cost: c.cost,
+                        market_price: c.price.replace(",", ""),
                         condition: c.condition,
+                        attr: c.exp.attr,
+                        supplier: this.supplier,
+                        isFoil: c.isFoil,
+                        arrival_date: this.arrivalDate,
                     };
                     await axios
                         .post("api/arrival", query)
@@ -239,7 +239,7 @@ export default {
         </div>
     </div>
     <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
-        <div class="three fields">
+        <div class="four fields">
             <div class="four wide column field">
                 <label for="">仕入れ先</label>
                 <select v-model="supplier" class="mr-1 ui dropdown">
@@ -248,7 +248,7 @@ export default {
                     <option>私物</option>
                 </select>
             </div>
-            <div class="four wide column field">
+            <div class="three wide column field">
                 <label>入荷日</label>
                 <datepicker
                     input-class-name="dp_custom_input"
@@ -258,7 +258,20 @@ export default {
                     :format="dateFormat"
                 ></datepicker>
             </div>
-            <div class="four wide column field">
+            <div class="two wide column field">
+                <label>原価</label>
+                <div class="ui middle right labeled input">
+                    <input
+                        type="number"
+                        step="1"
+                        min="1"
+                        class="text-stock"
+                        v-model="this.cost"
+                    />
+                    <div class="ui basic label">円</div>
+                </div>
+            </div>
+            <div class="three wide column field">
                 <label style="visibility: hidden">登録ボタン</label>
                 <ModalButton @action="regist">登録する</ModalButton>
             </div>
@@ -269,7 +282,11 @@ export default {
             class="card gallery"
             v-for="(card, index) in this.$store.getters.sliceCard"
         >
-            <div class="content meta">ID:{{ card.id }}</div>
+            <div class="content">
+                <label class="ui label" v-if="!card.isFoil">通常</label>
+                <label class="ui orange label" v-if="card.isFoil">Foil</label>
+                <div class="right floated meta">#{{ card.id }}</div>
+            </div>
             <div class="image">
                 <img
                     class=""
@@ -292,7 +309,6 @@ export default {
             </div>
             <div class="content">
                 <div class="ui form">
-                    {{ index }}
                     <div class="inline field radio-button">
                         <label
                             ><input
@@ -345,7 +361,7 @@ export default {
                             </select>
                         </div>
                         <div class="eight wide field">
-                            <label for="">枚数</label>
+                            <label>枚数</label>
                             <div class="ui middle right labeled input">
                                 <input
                                     type="number"
