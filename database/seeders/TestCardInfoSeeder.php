@@ -35,10 +35,23 @@ class TestCardInfoSeeder extends Seeder
         CardInfo::factory()->createOne(['exp_id' => $war, 'name' => '群れの声、アーリン≪絵違い≫',
         'en_name' => 'Arlinn, Voice of the Pack', 'color_id' => 'G', 'number' => '150',
          'isFoil' => true, 'image_url' => '']);
+
+         // 神河：輝ける世界
+         $neo = $this->findNotionId('NEO');
+        CardInfo::factory()->createOne(['exp_id' => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
+        'en_name' => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', 'number' => '59',
+        'isFoil' => false, 'image_url' => '']);
+        CardInfo::factory()->createOne(['exp_id' => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
+        'en_name' => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', 'number' => '59',
+        'isFoil' => true, 'image_url' => '']);
+        CardInfo::factory()->createOne(['exp_id' => $neo, 'name' => '告別≪ショーケース≫',
+    'en_name' => 'Farewell', 'color_id' => 'W', 'number' => '365',
+        'isFoil' => true, 'image_url' => '']);
+
     }
         
         private function findNotionId(string $attr) : string {
-            $set = Expansion::where('attr', 'BRO')->first();
+            $set = Expansion::where('attr', $attr)->first();
             return $set->notion_id;
       }
 }

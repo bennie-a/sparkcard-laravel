@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockpileIndexRequest;
+use App\Services\Constant\SearchConstant;
 use App\Services\Stock\StockpileService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
@@ -28,9 +30,16 @@ class StockpileController extends Controller
      * @return json
      */
     public function index(StockpileIndexRequest $request) {
-        $details = $request->only(['card_name', 'set_name']);
-        $details['limit'] = (int)$request->input('limit');
+        logger()->info('Start Search Stockpile');
+        $details = $request->only([SearchConstant::CARD_NAME, SearchConstant::SET_NAME]);
+        $details[SearchConstant::LIMIT] = (int)$request->input(SearchConstant::LIMIT);
         logger()->debug('入力パラメータ', $details);
+        $result = $this->service->fetch($details);
+        logger()->info('End Search Stockpile');
+        if (empty($result)) {
+            throw new NotFoundException(Response::HTTP_NO_CONTENT, '在庫情報がありません');
+        }
+
         return response()->json(Response::HTTP_OK);
     }
 }

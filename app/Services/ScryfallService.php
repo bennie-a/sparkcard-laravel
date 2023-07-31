@@ -98,7 +98,7 @@ class ScryfallService {
         $card = new ScryfallCard($contents);
         $color = CardColor::findColor($card->colors(), $card->cardtype());
         $promotype = \Promo::find($card);
-        logger()->info($promotype);
+        logger()->info('プロモタイプ', [$promotype]);
         return ['name' => $card->name(), 
                     'multiverse_id' => $card->multiverseId(),
                     'en_name' => $card->enname(),

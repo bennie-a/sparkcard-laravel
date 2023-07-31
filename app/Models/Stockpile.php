@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
@@ -49,6 +50,31 @@ class Stockpile extends Model
      */
     public static function findSpecificCard(int $cardId, string $language, string $condition) {
         return Stockpile::where(['card_id' => $cardId, 'language' => $language, 'condition' => $condition])->first();
+    }
+
+    /**
+     * カード名とセット名に部分一致する在庫情報を取得する。
+     *
+     * @param array $details
+     * @return array
+     */
+    public static function fetch(array $details) {
+        $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity', 'c.image_url', 'c.isFoil as isFoil'];
+        $query = self::select($columns)->from('stockpile as s');
+        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
+        $cardname = $details[SearchConstant::CARD_NAME];
+        if (!empty($cardname)) {
+            $query = $query->where('c.name', 'like', '%'.$cardname.'%');
+        }
+        $setname = $details[SearchConstant::SET_NAME];
+        if (!empty($setname)) {
+            $query = $query->where('e.setname', 'like', '%'.$setname.'%');
+        }
+        $limit = $details[SearchConstant::LIMIT];
+        if ($limit > 0) {
+            $query = $query->limit($limit);
+        }
+        return $query->orderBy('c.id', 'asc')->get();
     }
 
 }

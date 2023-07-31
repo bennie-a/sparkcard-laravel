@@ -33,8 +33,8 @@ class StockpileService extends AbstractSmsService{
             $number = $row->number();
             $strategy = $row->strategy();
             $setcode = $strategy->getSetCode($row);
-            if(\ExService::isExistByAttr($setcode) == false) {
-                \ExService::storeByScryfall($setcode, 'レガシー');
+            if(\App\Facades\ExService::isExistByAttr($setcode) == false) {
+                \App\Facades\ExService::storeByScryfall($setcode, 'レガシー');
             }
 
             $isFoil = $row->isFoil();
@@ -48,7 +48,7 @@ class StockpileService extends AbstractSmsService{
                     $this->addError($number, '特別版はマスタ登録できません');
                     return;
                 }
-                $info = \CardInfoServ::postByScryfall($setcode, $cardname, $row->en_name(),$isFoil);
+                $info = \App\Facades\CardInfoServ::postByScryfall($setcode, $cardname, $row->en_name(),$isFoil);
             }
             $lang = $row->language();
             $condition = $row->condition();
@@ -101,5 +101,10 @@ class StockpileService extends AbstractSmsService{
      */
     protected function createRow(int $index, array $row) {
         return new StockpileRow($index, $row);
+    }
+
+    protected function fetch(array $details) {
+        $result = Stockpile::fetch($details);
+        return $result;
     }
 }
