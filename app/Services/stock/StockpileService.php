@@ -28,7 +28,7 @@ class StockpileService extends AbstractSmsService{
      * @param StockpileRow $row
      * @return void
      */
-    protected function store(StockpileRow $row) {
+    protected function store($row) {
         try {
             $number = $row->number();
             $strategy = $row->strategy();

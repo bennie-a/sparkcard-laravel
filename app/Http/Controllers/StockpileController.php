@@ -19,4 +19,17 @@ class StockpileController extends Controller
         $this->service = $service;
     }
     use ImportCsv;
+
+    /**
+     * 在庫情報を検索する。
+     *
+     * @param Request $request
+     * @return json
+     */
+    public function index(Request $request) {
+        $details = $request->only(['card_name', 'set_name']);
+        $details['limit'] = (int)$request->input('limit');
+        logger()->debug('入力パラメータ', $details);
+        return response()->json(Response::HTTP_OK);
+    }
 }

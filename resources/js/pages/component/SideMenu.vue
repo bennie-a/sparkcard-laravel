@@ -3,7 +3,7 @@
         <div class="ui list">
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-box-seam"></i>在庫管理
+                    <i class="bi bi-box-seam"></i>入荷
                 </div>
                 <ul>
                     <li>
@@ -18,31 +18,29 @@
                     </li>
                     <li>
                         <router-link
-                            to="/notion/update/status"
                             class="nav-link"
-                            :class="{
-                                active: $route.path === '/notion/update/status',
-                            }"
-                            ><i class="bi bi-kanban"></i
-                            >ステータス一括変更</router-link
+                            :class="{ active: $route.path === '/arrival' }"
+                            aria-current="page"
+                            to="/arrival"
+                            ><i class="bi bi-list-task"></i
+                            >入荷ログ一覧</router-link
                         >
                     </li>
                 </ul>
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-inboxes"></i>入荷
+                    <i class="bi bi-bank2"></i>在庫情報
                 </div>
                 <ul>
                     <li>
                         <router-link
-                            to="/zaiko/newitem"
                             class="nav-link"
-                            :class="{
-                                active: $route.path === '/zaiko/newitem',
-                            }"
-                            ><i class="bi bi-filetype-csv"></i
-                            >商品登録CSV</router-link
+                            :class="{ active: $route.path === '/stockpile' }"
+                            aria-current="page"
+                            to="/stockpile"
+                            ><i class="bi bi-list-task"></i
+                            >在庫一覧</router-link
                         >
                     </li>
                 </ul>
@@ -76,7 +74,7 @@
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-box2-heart"></i>出荷
+                    <i class="bi bi-truck"></i>出荷
                 </div>
                 <ul>
                     <li>
@@ -88,6 +86,16 @@
                             }"
                             ><i class="bi bi-filetype-txt"></i
                             >宛先ラベル作成</router-link
+                        >
+                    </li>
+                    <li>
+                        <router-link
+                            class="nav-link"
+                            :class="{ active: $route.path === '/shipping' }"
+                            aria-current="page"
+                            to="/shipping"
+                            ><i class="bi bi-list-task"></i
+                            >出荷ログ一覧</router-link
                         >
                     </li>
                 </ul>
@@ -111,7 +119,7 @@ import { version } from "../../../../package";
 }
 .ui.list > .item .header {
     color: white;
-    font-weight: 300;
+    font-weight: 700;
     margin-left: 0.5em;
 }
 div.item > ul {
@@ -131,7 +139,7 @@ div.item > ul > li > a {
     padding: 1em 1em;
     display: block;
     color: white;
-    line-height: 1.6;
+    line-height: 1.4;
 }
 div.item > ul > li > a:hover {
     background: #2766cc;
@@ -140,10 +148,11 @@ div.item > ul > li > a:hover {
 div.item > ul > li > a.active {
     font-weight: 500;
     background: #2766cc;
-    border-left: 5px solid #a333c8;
+    border-right: 5px solid #cc5df1;
 }
 
 i {
     margin-right: 0.5rem;
+    font-size: 1.2rem;
 }
 </style>

@@ -247,8 +247,8 @@ export default {
                     <label for="">仕入れ先</label>
                     <select v-model="supplier" class="mr-1 ui dropdown">
                         <option>オリジナルパック</option>
-                        <option>棚卸し</option>
                         <option>私物</option>
+                        <option>棚卸し</option>
                     </select>
                 </div>
                 <div class="three wide column field">

@@ -39,3 +39,4 @@ Route::post('shipping/import', [ShippingLogController::class, 'import']);
 Route::resource('translate', TranslateController::class);
 Route::apiResource('arrival', ArrivalController::class);
 Route::apiResource('shipping', ShippingLogController::class);
+Route::get('stockpile', [StockpileController::class, 'index']);
