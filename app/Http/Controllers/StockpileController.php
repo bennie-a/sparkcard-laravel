@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StockpileIndexRequest;
 use App\Services\Stock\StockpileService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class StockpileController extends Controller
      * @param Request $request
      * @return json
      */
-    public function index(Request $request) {
+    public function index(StockpileIndexRequest $request) {
         $details = $request->only(['card_name', 'set_name']);
         $details['limit'] = (int)$request->input('limit');
         logger()->debug('入力パラメータ', $details);
