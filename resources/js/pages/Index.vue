@@ -8,6 +8,7 @@ import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import { $vfm, VueFinalModal, ModalsContainer } from "vue-final-modal";
+import FoilTag from "./component/FoilTag.vue";
 
 export default {
     data() {
@@ -167,6 +168,7 @@ export default {
         datepicker: Datepicker,
         "vue-final-modal": VueFinalModal,
         ModalsContainer,
+        foiltag: FoilTag,
     },
 };
 </script>
@@ -286,10 +288,7 @@ export default {
                 v-for="(card, index) in this.$store.getters.sliceCard"
             >
                 <div class="content">
-                    <label class="ui tag label" v-if="!card.isFoil">通常</label>
-                    <label class="ui tag orange label" v-if="card.isFoil"
-                        >Foil</label
-                    >
+                    <foiltag :isFoil="card.isFoil"></foiltag>
                     <div class="right floated meta">#{{ card.id }}</div>
                 </div>
                 <div class="image">

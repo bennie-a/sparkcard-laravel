@@ -44,12 +44,8 @@
                         class="ui button nocolor"
                         @click="showImage(card.index)"
                     >
-                        {{ card.name
-                        }}<label
-                            class="ui horizontal yellow label ml-1"
-                            v-show="card.isFoil"
-                            ><i class="star icon"></i>Foil</label
-                        >
+                        {{ card.name }}
+                        <foiltag :isFoil="card.isFoil"></foiltag>
                     </button>
                     <div class="ui tiny modal" v-bind:id="card.index">
                         <i class="close icon"></i>
@@ -123,6 +119,7 @@ input.text-stock {
 </style>
 <script>
 import ListPagination from "./ListPagination.vue";
+import FoilTag from "../component/FoilTag.vue";
 
 export default {
     props: {
@@ -186,6 +183,6 @@ export default {
             $(selecterId).modal("show");
         },
     },
-    components: { pagination: ListPagination },
+    components: { pagination: ListPagination, foiltag: FoilTag },
 };
 </script>

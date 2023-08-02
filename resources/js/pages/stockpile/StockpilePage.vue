@@ -49,7 +49,8 @@
                                 class="ui mini rounded image"
                             />
                             <div class="content">
-                                {{ s.cardname }}
+                                {{ s.cardname
+                                }}<foiltag :isFoil="s.isFoil"></foiltag>
                                 <div class="sub header">{{ s.setname }}</div>
                             </div>
                         </h4>
@@ -79,11 +80,11 @@
 </template>
 
 <script>
-import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 import ListPagination from "../component/ListPagination.vue";
+import FoilTag from "../component/FoilTag.vue";
 
 export default {
     data() {
@@ -124,6 +125,7 @@ export default {
         loading: Loading,
         "message-area": MessageArea,
         pagination: ListPagination,
+        foiltag: FoilTag,
     },
 };
 </script>
