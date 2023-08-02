@@ -26,12 +26,13 @@ class StockpileController extends Controller
     /**
      * 在庫情報を検索する。
      *
-     * @param Request $request
+     * @param StockpileIndexRequest $request
      * @return json
      */
     public function index(StockpileIndexRequest $request) {
         logger()->info('Start Search Stockpile');
-        $details = $request->only([SearchConstant::CARD_NAME, SearchConstant::SET_NAME]);
+        $details[SearchConstant::CARD_NAME] = $request->get(SearchConstant::CARD_NAME);
+        $details[SearchConstant::SET_NAME] = $request->get(SearchConstant::SET_NAME);
         $details[SearchConstant::LIMIT] = (int)$request->input(SearchConstant::LIMIT);
         logger()->debug('入力パラメータ', $details);
         $result = $this->service->fetch($details);
@@ -40,6 +41,6 @@ class StockpileController extends Controller
             throw new NotFoundException(Response::HTTP_NO_CONTENT, '在庫情報がありません');
         }
 
-        return response()->json(Response::HTTP_OK);
+        return response()->json($result, Response::HTTP_OK);
     }
 }

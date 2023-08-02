@@ -103,7 +103,7 @@ class StockpileService extends AbstractSmsService{
         return new StockpileRow($index, $row);
     }
 
-    protected function fetch(array $details) {
+    public function fetch(array $details) {
         $result = Stockpile::fetch($details);
         return $result;
     }

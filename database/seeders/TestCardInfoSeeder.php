@@ -48,6 +48,17 @@ class TestCardInfoSeeder extends Seeder
     'en_name' => 'Farewell', 'color_id' => 'W', 'number' => '365',
         'isFoil' => true, 'image_url' => '']);
 
+        // ファイレクシア：完全なる統一
+        $one = $this->findNotionId('ONE');
+        CardInfo::factory()->createOne(['exp_id' => $one, 'name' => '機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫',
+        'en_name' => 'Elesh Norn, Mother of Machines', 'color_id' => 'W', 'number' => '298',
+        'isFoil' => false]);
+        CardInfo::factory()->createOne(['exp_id' => $one, 'name' => '完成化した精神、ジェイス',
+        'en_name' => 'Jace, the Perfected Mind', 'color_id' => 'U', 'number' => '57',
+        'isFoil' => false]);
+        CardInfo::factory()->createOne(['exp_id' => $one, 'name' => 'ドロスの魔神',
+        'en_name' => 'Archfiend of the Dross', 'color_id' => 'B', 'number' => '82',
+        'isFoil' => false]);
     }
         
         private function findNotionId(string $attr) : string {

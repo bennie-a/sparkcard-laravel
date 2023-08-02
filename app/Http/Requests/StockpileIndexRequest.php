@@ -24,6 +24,8 @@ class StockpileIndexRequest extends FormRequest
     public function rules()
     {
         return [
+            'card_name' => 'nullable|string',
+            'set_name' => 'nullable|string',
             'limit' => 'numeric|min:0',
         ];
     }

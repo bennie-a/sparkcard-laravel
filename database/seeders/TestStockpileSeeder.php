@@ -24,5 +24,11 @@ class TestStockpileSeeder extends Seeder
 
         $zero = CardInfo::findSingleCard('BRO', 'ドラゴンの運命', false);
         Stockpile::create(['card_id' => $zero->id, 'condition' => 'NM', 'quantity' => 0, 'language' => 'JP']);
+
+        $dross = CardInfo::findSingleCard('ONE', 'ドロスの魔神', false);
+        Stockpile::create(['card_id' => $dross->id, 'condition' => 'NM', 'quantity' => 1, 'language' => 'JP']);
+
+        $jace = CardInfo::findSingleCard('ONE', '完成化した精神、ジェイス', false);
+        Stockpile::create(['card_id' => $jace->id, 'condition' => 'NM-', 'quantity' => 2, 'language' => 'JP']);
     }
 }

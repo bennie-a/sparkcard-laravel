@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Libs\MtgJsonUtil;
 use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -60,21 +61,21 @@ class Stockpile extends Model
      */
     public static function fetch(array $details) {
         $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity', 'c.image_url', 'c.isFoil as isFoil'];
-        $query = self::select($columns)->from('stockpile as s');
+        $query = self::from('stockpile as s')->select($columns);
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
-        $cardname = $details[SearchConstant::CARD_NAME];
+        $cardname = MtgJsonUtil::hasKey(SearchConstant::CARD_NAME, $details) ? $details[SearchConstant::CARD_NAME] : '';
         if (!empty($cardname)) {
             $query = $query->where('c.name', 'like', '%'.$cardname.'%');
         }
-        $setname = $details[SearchConstant::SET_NAME];
+        $setname = MtgJsonUtil::hasKey(SearchConstant::SET_NAME, $details) ? $details[SearchConstant::SET_NAME] : '';
         if (!empty($setname)) {
             $query = $query->where('e.setname', 'like', '%'.$setname.'%');
         }
         $limit = $details[SearchConstant::LIMIT];
-        if ($limit > 0) {
+        if (!empty($limit) && $limit > 0) {
             $query = $query->limit($limit);
         }
-        return $query->orderBy('c.id', 'asc')->get();
+        return $query->orderBy('s.id', 'asc')->get();
     }
 
 }
