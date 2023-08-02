@@ -12,6 +12,8 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Draggable from "vuedraggable";
 import vfmPlugin from "vue-final-modal";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
 
 // ルータをインストール
 app.use(router);
@@ -22,4 +24,5 @@ app.use(Encoding);
 app.use(Datepicker);
 app.use(Draggable);
 app.use(vfmPlugin);
+app.use(Loading);
 app.mount("#app");

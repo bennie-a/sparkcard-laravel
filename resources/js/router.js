@@ -1,6 +1,5 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import LogikuraItemCSV from "./pages/zaiko/LogikuraItemPage.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
@@ -9,6 +8,7 @@ import CardInfoCsvPage from "./pages/config/CardInfoCsvPage.vue";
 import CardinfoPage from "./pages/config/CardInfoPage.vue";
 import PostExPage from "./pages/config/PostExPage.vue";
 import Packing from "./pages/packing/Packing.vue";
+import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -21,12 +21,11 @@ const routes = [
         },
     },
     {
-        path: "/zaiko/newitem",
-        component: LogikuraItemCSV,
+        path: "/stockpile/",
+        component: StockpilePage,
         meta: {
-            title: "在庫登録CSVダウンロード",
-            description:
-                "Notionの商品管理ボードからZAIKOの商品登録用CSVを作成します。",
+            title: "在庫情報検索",
+            description: "在庫情報を検索します。",
         },
     },
     {

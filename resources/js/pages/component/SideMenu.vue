@@ -36,11 +36,11 @@
                     <li>
                         <router-link
                             class="nav-link"
-                            :class="{ active: $route.path === '/stockpile' }"
+                            :class="{ active: $route.path === '/stockpile/' }"
                             aria-current="page"
-                            to="/stockpile"
+                            to="/stockpile/"
                             ><i class="bi bi-list-task"></i
-                            >在庫一覧</router-link
+                            >在庫情報検索</router-link
                         >
                     </li>
                 </ul>
