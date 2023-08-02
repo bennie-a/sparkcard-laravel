@@ -27,22 +27,63 @@
         </div>
     </article>
     <article>
+        <h2 class="ui medium dividing header">
+            件数：{{ this.stock.length }}件
+        </h2>
+        <table class="ui striped table">
+            <thead>
+                <tr>
+                    <th class="six wide">カード</th>
+                    <th class="two wide center aligned">言語</th>
+                    <th class="two wide center aligned">状態</th>
+                    <th class="two wide center aligned">枚数</th>
+                    <th class="right aligned">最終更新日</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="s in this.$store.getters.sliceCard">
+                    <td>
+                        <h4 class="ui image header">
+                            <img
+                                v-bind:src="s.image_url"
+                                class="ui mini rounded image"
+                            />
+                            <div class="content">
+                                {{ s.cardname }}
+                                <div class="sub header">{{ s.setname }}</div>
+                            </div>
+                        </h4>
+                    </td>
+                    <td class="center aligned">{{ s.language }}</td>
+                    <td class="center aligned">{{ s.condition }}</td>
+                    <td class="center aligned">{{ s.quantity }}</td>
+                    <td class="right aligned">{{ s.updated_at }}</td>
+                </tr>
+            </tbody>
+            <tfoot class="full-width">
+                <tr>
+                    <th colspan="10">
+                        <div class="right aligned">
+                            <pagination></pagination>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
         <loading
             :active.sync="isLoading"
             :can-cancel="true"
-            :on-cancel="onCancel"
             :is-full-page="true"
         ></loading>
     </article>
 </template>
 
 <script>
-import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
-import SearchForm from "../component/SearchForm.vue";
-import DownloadButton from "../component/DownloadButton.vue";
 import Loading from "vue-loading-overlay";
+import axios from "axios";
+import ListPagination from "../component/ListPagination.vue";
 
 export default {
     data() {
@@ -50,26 +91,39 @@ export default {
             cardname: "",
             setname: "",
             isLoading: false,
+            stock: [],
         };
     },
     methods: {
-        search: function () {
+        async search() {
             let self = this;
             self.isLoading = true;
-            // simulate AJAX
-            setTimeout(function () {
-                self.isLoading = false;
-                console.log("load off");
-            }, 1000);
-        },
-        onCancel: function () {
-            console.log("User cancelled the loader.");
+            console.log("search stockpile");
+            const query = {
+                params: {
+                    card_name: this.cardname,
+                    set_name: this.setname,
+                },
+            };
+            await axios
+                .get("/api/stockpile", query)
+                .then((response) => {
+                    let data = response.data;
+                    this.stock = data;
+                    this.$store.dispatch("setCard", this.stock);
+                })
+                .catch((e) => {
+                    console.error(e);
+                })
+                .finally(() => {
+                    self.isLoading = false;
+                });
         },
     },
     components: {
         loading: Loading,
-        "card-list": CardList,
         "message-area": MessageArea,
+        pagination: ListPagination,
     },
 };
 </script>

@@ -7,6 +7,7 @@ use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use Carbon\Carbon;
 
 /**
  * stockpileテーブルのModelクラス
@@ -17,7 +18,7 @@ class Stockpile extends Model
 
     protected $table = 'stockpile';
 
-    protected $fillable = ['card_id', 'language',  'condition', 'quantity'];
+    protected $fillable = ['card_id', 'language',  'condition', 'quantity', 'updated_at'];
 
     public function cardinfo() {
         return $this->belongsTo('App\Models\CardInfo');
@@ -58,7 +59,7 @@ class Stockpile extends Model
      * @return array
      */
     public static function fetch(array $details) {
-        $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity', 'c.image_url', 'c.isFoil as isFoil'];
+        $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity', 'c.image_url', 'c.isFoil as isFoil', 's.updated_at as updated_at'];
         $query = self::from('stockpile as s')->select($columns);
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
         $cardname = MtgJsonUtil::hasKey(SearchConstant::CARD_NAME, $details) ? $details[SearchConstant::CARD_NAME] : '';
@@ -74,6 +75,11 @@ class Stockpile extends Model
             $query = $query->limit($limit);
         }
         return $query->orderBy('s.id', 'asc')->get();
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format("Y/m/d H:i:s");
     }
 
 }
