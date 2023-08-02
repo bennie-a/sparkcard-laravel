@@ -27,8 +27,6 @@ class Stockpile extends Model
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id');
-        // $stock = $query->where([['cinfo.name', '=',  $cardname], ['sinfo.isFoil', '=', $isFoil],  ['s.condition', '=', $condition],
-        //                  ['s.language', '=', $language]])->first();
         $stock = $query->where(['c.name' => $cardname, 'c.isFoil' => $isFoil,
                                              's.condition' => $condition, 's.language' => $language])->first();
         return $stock;
@@ -69,7 +67,7 @@ class Stockpile extends Model
         }
         $setname = MtgJsonUtil::hasKey(SearchConstant::SET_NAME, $details) ? $details[SearchConstant::SET_NAME] : '';
         if (!empty($setname)) {
-            $query = $query->where('e.setname', 'like', '%'.$setname.'%');
+            $query = $query->where('e.name', 'like', '%'.$setname.'%');
         }
         $limit = $details[SearchConstant::LIMIT];
         if (!empty($limit) && $limit > 0) {

@@ -6,8 +6,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Stockpile;
 use App\Services\Constant\StockpileHeader;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -20,15 +19,17 @@ use function PHPUnit\Framework\assertNotNull;
 /**
  * 在庫管理情報のテスト
  */
-class StockpileTest extends TestCase
+class StockpileImportTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function setup():void
     {
         parent::setup();
-        // $this->seed('DatabaseSeeder');
-        // $this->seed('TestExpansionSeeder');
-        // $this->seed('TestCardInfoSeeder');
-        // $this->seed('TestStockpileSeeder');
+        $this->seed('DatabaseSeeder');
+        $this->seed('TestExpansionSeeder');
+        $this->seed('TestCardInfoSeeder');
+        $this->seed('TestStockpileSeeder');
     }
 
     /**
@@ -39,7 +40,6 @@ class StockpileTest extends TestCase
      */
     public function test_import(string $file, int $success, int $ignore, int $error, array $details)
     {
-        $this->markTestSkipped('一時中断');
         $dir = dirname(__FILE__, 4).'\storage\test\sms\\';
         $response = $this->post('api/stockpile/import', ['path' => $dir.$file]);
 
@@ -51,44 +51,6 @@ class StockpileTest extends TestCase
             assertNotNull($stock, '在庫情報の有無');
             assertEquals('JP', $stock->language, '在庫情報の言語');
         }
-    }
-
-    /**
-     * 在庫情報検索のテスト
-     *
-     * @param string $cardname
-     * @param string $setname
-     * @param integer $limit
-     * @dataProvider searchprovider
-     * @return void
-     */
-    public function test_index_ok(string $cardname, string $setname, int $limit, array $exStockNo) {
-        $query = ['card_name' => $cardname, 'set_name' => $setname, 'limit' => $limit];
-        $response = $this->call('GET', '/api/stockpile', $query);
-        $response->assertStatus(Response::HTTP_OK);
-
-        $expected = Stockpile::findMany($exStockNo);
-        $actual = $response->json();
-        assertEquals(count($expected), count($actual), '件数');
-        foreach($expected as $index =>  $stock) {
-            
-            $info = CardInfo::find($stock->card_id);
-            assertEquals($info->name, $actual[$index]['cardname']);
-            assertEquals($stock->quantity, $actual[$index][StockpileHeader::QUANTITY]);
-            assertEquals($stock->condition, $actual[$index][StockpileHeader::CONDITION]);
-        }
-
-    }
-
-    public function searchprovider() {
-        return [
-            '検索結果あり_検索条件なし' => ['', '', 0, [1,2,3,4,5]],
-            '検索結果あり_カード名入力' => ['ファイレクシアの', '', 0, [1,2]],
-            // '検索結果あり_セット名入力' => [],
-            // '検索結果あり_取得件数あり' => [],
-            // '検索結果あり_取得件数なし' => [],
-            // '検索結果なし' =>[],
-        ];
     }
 
     public function importprovider() {
