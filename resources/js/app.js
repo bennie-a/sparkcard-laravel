@@ -22,7 +22,7 @@ app.use(store);
 app.use(VuePapaParse);
 app.use(Encoding);
 app.use(Datepicker);
-app.use(Draggable);
+// app.use(Draggable);
 app.use(vfmPlugin);
 app.use(Loading);
 app.mount("#app");
