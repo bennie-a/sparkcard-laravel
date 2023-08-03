@@ -1,6 +1,6 @@
 <script>
 import axios from "axios";
-import NowLoading from "./component/NowLoading.vue";
+import Loading from "vue-loading-overlay";
 import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
@@ -21,6 +21,7 @@ export default {
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
             cost: 23,
+            isLoading: false,
         };
     },
     computed: {
@@ -53,7 +54,7 @@ export default {
             task.get("/database/exp", query, success, fail);
         },
         async search() {
-            this.$store.dispatch("setLoad", true);
+            this.isLoading = true;
             console.log("wisdom guild search");
             this.$store.dispatch("message/clear");
             this.$store.dispatch("clearCards");
@@ -90,7 +91,7 @@ export default {
                     );
                 })
                 .finally(() => {
-                    this.$store.dispatch("setLoad", false);
+                    this.isLoading = false;
                 });
         },
         filterdCard: function (keyword) {
@@ -157,7 +158,7 @@ export default {
         },
     },
     components: {
-        "now-loading": NowLoading,
+        Loading,
         "card-list": CardList,
         "message-area": MessageArea,
         pagination: ListPagination,
@@ -387,7 +388,11 @@ export default {
                 <pagination :count="Number(12)"></pagination>
             </div>
         </div>
-        <now-loading></now-loading>
+        <loading
+            :active="isLoading"
+            :can-cancel="false"
+            :is-full-page="true"
+        ></loading>
     </article>
 </template>
 <style scoped>

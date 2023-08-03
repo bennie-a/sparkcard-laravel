@@ -84,7 +84,7 @@
         </table>
         <loading
             :active="isLoading"
-            :can-cancel="true"
+            :can-cancel="false"
             :is-full-page="true"
         ></loading>
     </article>
