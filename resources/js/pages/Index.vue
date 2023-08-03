@@ -9,6 +9,7 @@ import ModalButton from "./component/ModalButton.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import { $vfm, VueFinalModal, ModalsContainer } from "vue-final-modal";
 import FoilTag from "./component/FoilTag.vue";
+import ImageModal from "./component/ImageModal.vue";
 
 export default {
     data() {
@@ -148,10 +149,6 @@ export default {
             }
             this.$store.dispatch("setLoad", false);
         },
-        showImage: function (id) {
-            const selecterId = `#${id}`;
-            $(selecterId).modal("show");
-        },
         dateFormat: function (date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -169,6 +166,7 @@ export default {
         "vue-final-modal": VueFinalModal,
         ModalsContainer,
         foiltag: FoilTag,
+        ImageModal,
     },
 };
 </script>
@@ -286,6 +284,7 @@ export default {
             <div
                 class="card gallery"
                 v-for="(card, index) in this.$store.getters.sliceCard"
+                :key="index"
             >
                 <div class="content">
                     <foiltag :isFoil="card.isFoil"></foiltag>
@@ -295,20 +294,21 @@ export default {
                     <img
                         class=""
                         v-bind:src="card.image"
-                        @click="showImage(card.id)"
+                        @click="$refs.modal[index].showImage(card.id)"
                     />
-                    <div class="ui tiny modal" v-bind:id="card.id">
-                        <i class="close icon"></i>
-                        <div class="image content">
-                            <img v-bind:src="card.image" class="image" />
-                        </div>
-                    </div>
+                    <image-modal
+                        :url="card.image"
+                        :id="card.id"
+                        ref="modal"
+                    ></image-modal>
                 </div>
                 <div class="content">
                     <div class="header">{{ card.name }}</div>
                     <div class="meta">{{ card.exp.name }}</div>
                     <div class="description ui right floated">
-                        平均価格:<span class="price">&yen{{ card.price }}</span>
+                        平均価格:<span class="price"
+                            >&#xa5;{{ card.price }}</span
+                        >
                     </div>
                 </div>
                 <div class="content">
