@@ -26,7 +26,7 @@
             </div>
         </div>
     </article>
-    <article>
+    <article class="mt-2" v-if="this.stock.length != 0">
         <h2 class="ui medium dividing header">
             件数：{{ this.stock.length }}件
         </h2>
@@ -41,22 +41,33 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="s in this.$store.getters.sliceCard">
+                <tr
+                    v-for="(s, index) in this.$store.getters.sliceCard"
+                    :key="index"
+                >
                     <td>
                         <h4 class="ui image header">
                             <img
                                 v-bind:src="s.image_url"
                                 class="ui mini rounded image"
+                                @click="$refs.modal[index].showImage(s.id)"
                             />
                             <div class="content">
                                 {{ s.cardname
                                 }}<foiltag :isFoil="s.isFoil"></foiltag>
                                 <div class="sub header">{{ s.setname }}</div>
                             </div>
+                            <image-modal
+                                :url="s.image_url"
+                                :id="s.id"
+                                ref="modal"
+                            ></image-modal>
                         </h4>
                     </td>
                     <td class="center aligned">{{ s.language }}</td>
-                    <td class="center aligned">{{ s.condition }}</td>
+                    <td class="center aligned">
+                        <condition :name="s.condition"></condition>
+                    </td>
                     <td class="center aligned">{{ s.quantity }}</td>
                     <td class="right aligned">{{ s.updated_at }}</td>
                 </tr>
@@ -72,7 +83,7 @@
             </tfoot>
         </table>
         <loading
-            :active.sync="isLoading"
+            :active="isLoading"
             :can-cancel="true"
             :is-full-page="true"
         ></loading>
@@ -85,6 +96,8 @@ import Loading from "vue-loading-overlay";
 import axios from "axios";
 import ListPagination from "../component/ListPagination.vue";
 import FoilTag from "../component/FoilTag.vue";
+import ConditionTag from "../component/ConditionTag.vue";
+import ImageModal from "../component/ImageModal.vue";
 
 export default {
     data() {
@@ -126,6 +139,8 @@ export default {
         "message-area": MessageArea,
         pagination: ListPagination,
         foiltag: FoilTag,
+        condition: ConditionTag,
+        ImageModal,
     },
 };
 </script>
