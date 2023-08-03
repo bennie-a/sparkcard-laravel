@@ -45,7 +45,7 @@ class CardInfo extends Model
             }
         }
         $cardList = $query->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->
-                        orderBy('card_info.number', 'asc')->get();
+                        orderBy('expansion.release_date', 'desc')->orderByRaw('CAST(card_info.number as integer ) asc')->get();
         return $cardList;
     }
 
