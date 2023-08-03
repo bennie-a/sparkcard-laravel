@@ -10,7 +10,6 @@ import { store } from "./store.js";
 import Encoding from "encoding-japanese";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import Draggable from "vuedraggable";
 import vfmPlugin from "vue-final-modal";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
