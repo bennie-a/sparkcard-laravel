@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
+    name: "condition",
     props: { name: { type: String } },
     computed: {
         colorClass: function () {

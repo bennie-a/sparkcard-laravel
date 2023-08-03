@@ -166,7 +166,7 @@ export default {
         "vue-final-modal": VueFinalModal,
         ModalsContainer,
         foiltag: FoilTag,
-        ImageModal,
+        "image-modal": ImageModal,
     },
 };
 </script>

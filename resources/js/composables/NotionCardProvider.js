@@ -18,10 +18,6 @@ export default class NotionCardProvider {
             let cards = results.filter((r) => filtered(r));
             console.log("Card Get Count " + cards.length);
             store.dispatch("setCard", cards);
-            store.dispatch(
-                "setSuccessMessage",
-                cards.length + "件取得しました。"
-            );
         };
         const fail = function (e, store, query) {
             const res = e.response;
