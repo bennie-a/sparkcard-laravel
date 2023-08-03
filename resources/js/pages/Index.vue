@@ -1,9 +1,16 @@
 <script>
 import axios from "axios";
-import NowLoading from "./component/NowLoading.vue";
+import Loading from "vue-loading-overlay";
 import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
+import ListPagination from "./component/ListPagination.vue";
+import ModalButton from "./component/ModalButton.vue";
+import Datepicker from "@vuepic/vue-datepicker";
+import { $vfm, VueFinalModal, ModalsContainer } from "vue-final-modal";
+import FoilTag from "./component/FoilTag.vue";
+import ImageModal from "./component/ImageModal.vue";
+
 export default {
     data() {
         return {
@@ -11,6 +18,10 @@ export default {
             color: "",
             isFoil: false,
             name: "",
+            supplier: "オリジナルパック",
+            arrivalDate: new Date(),
+            cost: 23,
+            isLoading: false,
         };
     },
     computed: {
@@ -43,7 +54,7 @@ export default {
             task.get("/database/exp", query, success, fail);
         },
         async search() {
-            this.$store.dispatch("setLoad", true);
+            this.isLoading = true;
             console.log("wisdom guild search");
             this.$store.dispatch("message/clear");
             this.$store.dispatch("clearCards");
@@ -66,13 +77,11 @@ export default {
                         return;
                     }
                     let filterd = response.data;
+                    filterd.map((f) => {
+                        f.language = "JP";
+                    });
+                    this.cost = 23;
                     this.$store.dispatch("setCard", filterd);
-
-                    // this.$store.dispatch("setLoad", false);
-                    this.$store.dispatch(
-                        "setSuccessMessage",
-                        filterd.length + "件取得しました。"
-                    );
                 })
                 .catch((e) => {
                     console.error(e);
@@ -82,47 +91,43 @@ export default {
                     );
                 })
                 .finally(() => {
-                    this.$store.dispatch("setLoad", false);
+                    this.isLoading = false;
                 });
         },
         filterdCard: function (keyword) {
             console.log(keyword);
         },
 
-        showRegist() {
-            $("#regist").modal("show");
-        },
-        // Notionにカード情報を登録する。
+        // 入荷情報を登録する。
         async regist() {
             this.$store.dispatch("setLoad", true);
-            console.log("Notion Resist Start");
             this.$store.dispatch("message/clear");
+            console.log("Arrival Start");
 
             const card = this.$store.getters.card;
-            const checkbox = this.$store.getters["csvOption/selectedList"];
-            console.log(checkbox);
             const filterd = card.filter((c) => {
-                return checkbox.includes(c.id);
+                return c.stock != null && c.stock > 0;
             });
 
             await Promise.all(
                 filterd.map(async (c) => {
                     let query = {
-                        name: c.name,
-                        enname: c.enname,
-                        index: c.index,
-                        price: c.price.replace(",", ""),
+                        card_id: c.id,
+                        language: c.language,
+                        quantity: c.stock,
+                        cost: this.cost,
+                        market_price: c.price.replace(",", ""),
+                        condition: c.condition,
                         attr: c.exp.attr,
-                        color: c.color,
-                        imageUrl: c.image,
-                        stock: c.stock,
+                        supplier: this.supplier,
                         isFoil: c.isFoil,
+                        arrival_date: this.arrivalDate,
                     };
                     await axios
-                        .post("api/notion/card", query)
+                        .post("api/arrival", query)
                         .then((response) => {
                             if (response.status == 201) {
-                                console.log(query.name + ":登録完了");
+                                console.log(c.name + ":登録完了");
                             } else {
                                 console.log(response.status);
                             }
@@ -133,28 +138,43 @@ export default {
                         })
                         .catch(({ response }) => {
                             const data = response.data;
-                            this.$store.dispatch("message/error", data.message);
+                            const msg = `${c.name}(${c.exp.attr}):${data.message}`;
+                            console.error(msg);
+                            this.$store.dispatch("message/error", msg);
                         });
                 })
             );
+            let ul = this.$store.getters["message/errorlist"];
+            if (!ul) {
+                this.$store.dispatch("message/errorhtml", ul);
+            }
             this.$store.dispatch("setLoad", false);
-            $("#regist").modal("hide");
         },
-        clickCallback(pageNum) {
-            this.currentPage = Number(pageNum);
+        dateFormat: function (date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}/${month}/${day}`;
         },
     },
     components: {
-        "now-loading": NowLoading,
+        Loading,
         "card-list": CardList,
         "message-area": MessageArea,
+        pagination: ListPagination,
+        ModalButton: ModalButton,
+        datepicker: Datepicker,
+        "vue-final-modal": VueFinalModal,
+        ModalsContainer,
+        foiltag: FoilTag,
+        "image-modal": ImageModal,
     },
 };
 </script>
 
 <template>
     <message-area></message-area>
-    <div class="mt-1 ui form segment">
+    <article class="mt-1 ui form segment">
         <div class="five fields">
             <div class="field">
                 <label>カード名(一部)</label>
@@ -201,7 +221,7 @@ export default {
                 </div>
             </div>
             <div class="field">
-                <label for="" style="visibility: hidden">検索ボタン</label>
+                <label style="visibility: hidden">検索ボタン</label>
                 <button
                     id="search"
                     class="ui button teal ml-1"
@@ -213,31 +233,222 @@ export default {
                 </button>
             </div>
         </div>
-    </div>
-    <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <button
-            class="ui teal button"
-            @click="showRegist"
-            :class="{ disabled: isDisabled }"
+    </article>
+    <article class="mt-2">
+        <h2
+            class="ui medium dividing header"
+            v-if="this.$store.getters.cardsLength != 0"
         >
-            Notionに登録する
-        </button>
-        <div id="regist" class="ui tiny modal">
-            <div class="header">Notice</div>
-            <div class="content" v-if="this.$store.getters.isLoad == false">
-                登録してもよろしいですか?
+            件数：{{ this.$store.getters.cardsLength }}件
+        </h2>
+
+        <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
+            <div class="four fields">
+                <div class="four wide column field">
+                    <label for="">仕入れ先</label>
+                    <select v-model="supplier" class="mr-1 ui dropdown">
+                        <option>オリジナルパック</option>
+                        <option>私物</option>
+                        <option>棚卸し</option>
+                    </select>
+                </div>
+                <div class="three wide column field">
+                    <label>入荷日</label>
+                    <datepicker
+                        input-class-name="dp_custom_input"
+                        v-model="arrivalDate"
+                        locale="jp"
+                        :enable-time-picker="false"
+                        :format="dateFormat"
+                    ></datepicker>
+                </div>
+                <div class="two wide column field">
+                    <label>原価</label>
+                    <div class="ui middle right labeled input">
+                        <input
+                            type="number"
+                            step="1"
+                            min="1"
+                            class="text-stock"
+                            v-model="this.cost"
+                        />
+                        <div class="ui basic label">円</div>
+                    </div>
+                </div>
+                <div class="three wide column field">
+                    <label style="visibility: hidden">登録ボタン</label>
+                    <ModalButton @action="regist">登録する</ModalButton>
+                </div>
             </div>
-            <div class="actions" v-if="this.$store.getters.isLoad == false">
-                <button class="ui cancel button">
-                    <i class="close icon"></i>キャンセル
-                </button>
-                <button class="ui primary button" @click="regist">
-                    <i class="checkmark icon"></i>登録する
-                </button>
-            </div>
-            <now-loading></now-loading>
         </div>
-    </div>
-    <card-list></card-list>
-    <now-loading></now-loading>
+        <div class="mt-1 ui four cards">
+            <div
+                class="card gallery"
+                v-for="(card, index) in this.$store.getters.sliceCard"
+                :key="index"
+            >
+                <div class="content">
+                    <foiltag :isFoil="card.isFoil"></foiltag>
+                    <div class="right floated meta">#{{ card.id }}</div>
+                </div>
+                <div class="image">
+                    <img
+                        class=""
+                        v-bind:src="card.image"
+                        @click="$refs.modal[index].showImage(card.id)"
+                    />
+                    <image-modal
+                        :url="card.image"
+                        :id="card.id"
+                        ref="modal"
+                    ></image-modal>
+                </div>
+                <div class="content">
+                    <div class="header">{{ card.name }}</div>
+                    <div class="meta">{{ card.exp.name }}</div>
+                    <div class="description ui right floated">
+                        平均価格:<span class="price"
+                            >&#xa5;{{ card.price }}</span
+                        >
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="ui form">
+                        <div class="inline field radio-button">
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="JP"
+                                    v-model="card.language"
+                                /><span>JP</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="EN"
+                                    v-model="card.language"
+                                /><span>EN</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="IT"
+                                    v-model="card.language"
+                                /><span>IT</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="CS"
+                                    v-model="card.language"
+                                /><span>CS</span></label
+                            >
+                            <label
+                                ><input
+                                    type="radio"
+                                    value="CT"
+                                    v-model="card.language"
+                                /><span>CT</span></label
+                            >
+                        </div>
+                        <div class="two fields">
+                            <div class="eight wide field">
+                                <label for="">状態</label>
+                                <select
+                                    class="ui fluid dropdown"
+                                    v-model="card.condition"
+                                >
+                                    <option value="NM">NM</option>
+                                    <option value="NM-">NM-</option>
+                                    <option value="EX+">EX+</option>
+                                    <option value="EX">EX</option>
+                                    <option value="PLD">PLD</option>
+                                </select>
+                            </div>
+                            <div class="eight wide field">
+                                <label>枚数</label>
+                                <div class="ui middle right labeled input">
+                                    <input
+                                        type="number"
+                                        step="1"
+                                        min="0"
+                                        class="text-stock"
+                                        v-model="card.stock"
+                                    />
+                                    <div class="ui basic label">枚</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid">
+            <div class="four wide column row right floated">
+                <pagination :count="Number(12)"></pagination>
+            </div>
+        </div>
+        <loading
+            :active="isLoading"
+            :can-cancel="false"
+            :is-full-page="true"
+        ></loading>
+    </article>
 </template>
+<style scoped>
+div.card > .image {
+    height: 120px !important;
+    overflow: hidden;
+    /* height: min-content; */
+}
+div.image img {
+    width: fit-content;
+    height: 100% !important;
+    object-position: 50% 20%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+div.gallery div.header {
+    font-size: 1rem !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0rem;
+}
+div.gallery span.price {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+input.text-stock {
+    width: 6vw;
+}
+
+.radio-button > :first-child,
+.radio-button > label span {
+    margin-right: 0.5rem !important;
+
+    cursor: pointer;
+}
+
+.ui.form .inline.field > :first-child {
+    margin-right: 0 !important;
+}
+.radio-button {
+    line-height: 3;
+}
+.radio-button > label input {
+    display: none; /* デフォルトのinputは非表示にする */
+}
+.radio-button > label span {
+    padding: 5px 10px !important; /* 上下左右に余白をトル */
+    border-radius: 5px;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+}
+
+label input:checked + span {
+    color: #fff; /* 文字色を白に */
+    background: var(--teal); /* 背景色を薄い赤に */
+    border: 0;
+}
+</style>

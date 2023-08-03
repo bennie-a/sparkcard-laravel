@@ -9,7 +9,7 @@
         :next-text="'Next'"
         :prev-class="'item'"
         :next-class="'item'"
-        :container-class="'ui right floated pagination menu'"
+        :container-class="'ui pagination menu'"
         :page-class="'item'"
         v-if="length != 0"
     >
@@ -25,8 +25,11 @@ export default {
 
     data() {
         return {
-            perPage: 10,
+            perPage: this.count,
         };
+    },
+    props: {
+        count: { type: Number, default: 10 },
     },
     computed: {
         page: function () {
@@ -36,8 +39,9 @@ export default {
             return this.$store.getters.cardsLength;
         },
         getPageCount: function () {
+            this.$store.dispatch("perPage", this.count);
             const length = this.$store.getters.cardsLength;
-            return Math.ceil(length / this.perPage);
+            return Math.ceil(length / this.count);
         },
     },
     methods: {
@@ -51,5 +55,9 @@ export default {
 /* Write your own CSS for pagination */
 .pagination.menu {
     padding-left: 0;
+}
+
+.pagination.menu > .item {
+    cursor: pointer;
 }
 </style>

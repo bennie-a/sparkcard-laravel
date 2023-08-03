@@ -1,101 +1,105 @@
 <template>
-    <table v-show="!loading" class="ui table striped">
-        <thead>
-            <tr>
-                <th class="one wide">
-                    <input
-                        type="checkbox"
-                        id="all"
-                        v-model="isAll"
-                        @change="allChecked"
-                    />
-                </th>
-                <th v-show="$route.path === '/logikura/newitem'">バーコード</th>
-                <th v-show="$route.path === '/base/newitem'">商品ID</th>
-                <th>カード番号</th>
-                <th>カード名</th>
-                <th class="one wide">枚数</th>
-                <th>エキスパンション</th>
-                <th v-if="this.isNotion" class="one wide">状態</th>
-                <th>色</th>
-                <th v-if="this.isNotion" class="one wide">言語</th>
-                <th class="">価格</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="card in getCards">
-                <td>
-                    <input
-                        type="checkbox"
-                        v-model="selectedCard"
-                        :value="card.id"
-                        @change="checked"
-                    />
-                </td>
-                <td v-show="$route.path === '/logikura/newitem'">
-                    {{ card.barcode }}
-                </td>
-                <td v-show="$route.path === '/base/newitem'">
-                    {{ card.baseId }}
-                </td>
-                <td>{{ card.index }}</td>
-                <td>
-                    <button
-                        class="ui button nocolor"
-                        @click="showImage(card.index)"
-                    >
-                        {{ card.name
-                        }}<label
-                            class="ui horizontal yellow label ml-1"
-                            v-show="card.isFoil"
-                            ><i class="star icon"></i>Foil</label
-                        >
-                    </button>
-                    <div class="ui tiny modal" v-bind:id="card.index">
-                        <i class="close icon"></i>
-                        <div class="image content">
-                            <img v-bind:src="card.image" class="image" />
-                        </div>
-                    </div>
-                </td>
-
-                <td v-if="this.isNotion">{{ card.stock }}枚</td>
-                <td v-if="this.isNotion == false">
-                    <div
-                        class="ui right labeled input one wide"
-                        :class="{
-                            disabled: !this.selectedCard.includes(card.id),
-                        }"
-                    >
+    <article class="mt-2" v-if="getCards.length > 0">
+        <h2 class="ui medium dividing header">件数：{{ getCards.length }}件</h2>
+        <table v-show="!loading" class="ui table striped">
+            <thead>
+                <tr>
+                    <th class="one wide">
                         <input
-                            type="number"
-                            step="1"
-                            min="0"
-                            class="text-stock"
-                            v-model="card.stock"
+                            type="checkbox"
+                            id="all"
+                            v-model="isAll"
+                            @change="allChecked"
                         />
-                        <div class="ui basic label">枚</div>
-                    </div>
-                </td>
-                <td>{{ card.exp.name }}</td>
-                <td v-if="this.isNotion">
-                    <div class="ui label" :class="condiColor(card.condition)">
-                        {{ card.condition }}
-                    </div>
-                </td>
-                <td>{{ card.color }}</td>
-                <td v-if="this.isNotion">{{ card.lang }}</td>
-                <td>{{ card.price }}円</td>
-            </tr>
-        </tbody>
-        <tfoot v-if="this.$store.getters.cardsLength != 0">
-            <tr>
-                <th colspan="9">
-                    <pagination></pagination>
-                </th>
-            </tr>
-        </tfoot>
-    </table>
+                    </th>
+                    <th class="six wide left aligned">カード</th>
+                    <th class="two wide center aligned">数量</th>
+                    <th v-if="this.isNotion" class="two wide center aligned">
+                        状態
+                    </th>
+                    <th v-if="this.isNotion" class="two wide center aligned">
+                        言語
+                    </th>
+                    <th class="left aligned">価格</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(card, index) in getCards" :key="index">
+                    <td>
+                        <input
+                            type="checkbox"
+                            v-model="selectedCard"
+                            :value="card.id"
+                            @change="checked"
+                        />
+                    </td>
+                    <td>
+                        <h4 class="ui image header">
+                            <img
+                                v-bind:src="card.image"
+                                class="ui mini rounded image"
+                                @click="
+                                    $refs.modal[index].showImage(card.index)
+                                "
+                            />
+                            <div class="content">
+                                {{ card.name
+                                }}<foiltag :isFoil="card.isFoil"></foiltag>
+                                <div class="sub header">
+                                    {{ card.exp.name }}
+                                </div>
+                            </div>
+                            <image-modal
+                                :url="card.image"
+                                :id="card.index"
+                                ref="modal"
+                            ></image-modal>
+                        </h4>
+                    </td>
+
+                    <td v-if="this.isNotion" class="center aligned">
+                        {{ card.stock }}
+                    </td>
+                    <td v-if="this.isNotion == false" class="center aligned">
+                        <div
+                            class="ui right labeled input one wide"
+                            :class="{
+                                disabled: !this.selectedCard.includes(card.id),
+                            }"
+                        >
+                            <input
+                                type="number"
+                                step="1"
+                                min="0"
+                                class="text-stock"
+                                v-model="card.stock"
+                            />
+                            <div class="ui basic label">枚</div>
+                        </div>
+                    </td>
+                    <td v-if="this.isNotion" class="center aligned">
+                        <condition :name="card.condition"></condition>
+                    </td>
+                    <td v-if="this.isNotion" class="center aligned">
+                        {{ card.lang }}
+                    </td>
+                    <td>{{ card.price }}円</td>
+                </tr>
+            </tbody>
+            <tfoot
+                class="full-width"
+                v-if="this.$store.getters.cardsLength != 0"
+            >
+                <tr>
+                    <th colspan="10">
+                        <div class="right aligned">
+                            <pagination></pagination>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </article>
 </template>
 <style scoped>
 img.image {
@@ -121,6 +125,9 @@ input.text-stock {
 </style>
 <script>
 import ListPagination from "./ListPagination.vue";
+import FoilTag from "../component/FoilTag.vue";
+import ConditionTag from "./ConditionTag.vue";
+import ImageModal from "./ImageModal.vue";
 
 export default {
     props: {
@@ -143,31 +150,7 @@ export default {
             return this.$store.getters.isload;
         },
         getCards: function () {
-            // if (this.fullcard.length == 0) {
-            //     this.fullcard = this.$store.getters.card;
-            // }
-            // let filterd = [];
-            // this.fullcard.forEach((c) => {
-            //     if (
-            //         c.name.indexOf(this.keyword) !== -1 ||
-            //         c.enname.indexOf(this.keyword) !== -1
-            //     ) {
-            //         filterd.push(c);
-            //     }
-            // });
-            // this.$store.dispatch("setCard", filterd);
             return this.$store.getters.sliceCard;
-        },
-        condiColor: function () {
-            return (condition) => {
-                const colors = {
-                    NM: "teal",
-                    "NM-": "blue",
-                    "EX+": "purple",
-                    EX: "brown",
-                };
-                return colors[condition];
-            };
         },
         isChecked: function ($id) {
             console.log($id);
@@ -197,6 +180,11 @@ export default {
             $(selecterId).modal("show");
         },
     },
-    components: { pagination: ListPagination },
+    components: {
+        pagination: ListPagination,
+        foiltag: FoilTag,
+        condition: ConditionTag,
+        ImageModal,
+    },
 };
 </script>

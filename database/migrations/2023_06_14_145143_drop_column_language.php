@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('card_info', function (Blueprint $table) {
-            $table->string('number')->change();
+            $table->dropColumn("language");
         });
     }
 
@@ -26,8 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('card_info', function (Blueprint $table) {
-             $table->integer('number')->change();
-            //  $table->dropColumn('number');
+            $table->string('language', 10)->nullable(false)->default('JP')->comment('言語');
         });
     }
 };

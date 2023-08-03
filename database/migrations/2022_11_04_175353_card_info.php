@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('card_info', function(Blueprint $table) {
             $table->id()->comment('ID');
             $table->string('barcode', 16)->nullable(false)->comment('ロジクラのバーコード');
-            $table->string('number')->nullable(false)->comment('エキスパンション内のカード番号');
+            $table->string('number')->nullable(false)->comment('カード番号');
             $table->string('exp_id')->comment('expansionテーブルのID');
             $table->foreign('exp_id')->references('notion_id')->on('expansion');
             $table->string('name', 60)->nullable(false)->comment('カード名');

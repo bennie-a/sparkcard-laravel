@@ -47,7 +47,7 @@ class CardController extends Controller
 
     /**
      * Notionの商品管理テーブルにカードを1件登録する。
-     *
+     * @deprecated 3.0.0
      * @param  PostNotionCardRequest  $request
      * @return \Illuminate\Http\Response
      */

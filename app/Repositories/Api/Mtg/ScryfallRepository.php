@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Mtg;
 use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Response;
 
 /**
@@ -16,15 +17,19 @@ class ScryfallRepository {
      * @return array エキスパンション情報 
      */
     public function getExpansion(string $attr) {
-        if (str_ends_with($attr, '_BF') || str_ends_with($attr, '_BLK') ) {
-            $attr = substr($attr, 0, 3);
+        try {
+            if (str_ends_with($attr, '_BF') || str_ends_with($attr, '_BLK') ) {
+                $attr = substr($attr, 0, 3);
+            }
+            $client = GuzzleClientFactory::create("scryfall");
+            $res = $client->request("GET", 'sets/'.$attr, ['http_errors' => false]);
+            if ($res->getStatusCode() == Response::HTTP_NOT_FOUND) {
+                return ['released_at' => ''];
+            }
+            return $this->getContents($res);
+        } catch (ClientException $e) {
+            return [];
         }
-        $client = GuzzleClientFactory::create("scryfall");
-        $res = $client->request("GET", 'sets/'.$attr, ['http_errors' => false]);
-        if ($res->getStatusCode() == Response::HTTP_NOT_FOUND) {
-            return ['released_at' => ''];
-        }
-        return $this->getContents($res);
     }
 
     /**
@@ -54,6 +59,36 @@ class ScryfallRepository {
     }
 
     /**
+     * セット略称とカード番号から情報を取得する。
+     *
+     * @param string $setCode
+     * @param integer $number
+     * @return void
+     */
+    public function getCardInfoByNumber(string $setCode, int $number, string $language) {
+        $client = $this->client();
+        $rowerCode = \mb_strtolower($setCode);
+        $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
+        return $this->getContents($response);
+    }
+
+    public function getCardInfoByName(string $setcode, string $name) {
+        try {
+            $param = [ 
+                'query' => [
+                    'exact' => $name,
+                    'set'=> strtolower($setcode)
+                ]
+            ];
+            $response = $this->client()->request('GET', 'cards/named', $param);
+            return $this->getContents($response);
+        } catch(ClientException $e) {
+            logger()->info('Not Found in Scryfall');
+            return [];
+        }
+    }
+
+    /**
      * レスポンスからJSON情報を取得する。
      *
      * @param Response $response
@@ -64,5 +99,8 @@ class ScryfallRepository {
         return json_decode($contents, true);
     }
 
+    private function client() {
+        return GuzzleClientFactory::create('scryfall');
+    }
 }
 ?>

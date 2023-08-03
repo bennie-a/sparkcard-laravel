@@ -75,18 +75,22 @@ abstract class AbstractCard implements CardInfoInterface {
         return 'JP';
     }
 
+    public function setcode():string {
+        return $this->json['setCode'];
+    }
+
     public function promotype() {
-        if (MtgJsonUtil::hasKey(self::IS_FULLART, $this->json)) {
+        if ($this->isFullArt()) {
             return 'fullart';
         }
 
-        if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json)) {
+        if (!$this->hasPromotype()) {
             return 'draft';
         }
         $filterd = function($f) {
             return $f != 'textured';
         };
-        return $this->filtering(self::PROMOTYPE, $filterd);
+        return $this->filtering($this->promotypeKey(), $filterd);
     }
 
     public function frameEffects() {
@@ -133,6 +137,18 @@ abstract class AbstractCard implements CardInfoInterface {
 
     protected function getIdentifiers() {
         return $this->json['identifiers'];
+    }
+
+    protected function isFullArt() {
+        return MtgJsonUtil::hasKey(self::IS_FULLART, $this->json);
+    }
+
+    protected function hasPromotype() {
+        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json);
+    }
+
+    protected function promotypeKey() : string {
+        return self::PROMOTYPE;
     }
  }
 ?>

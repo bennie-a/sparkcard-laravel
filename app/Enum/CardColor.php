@@ -1,8 +1,6 @@
 <?php
 namespace App\Enum;
 
-use App\Enum\CardColor as EnumCardColor;
-
 /**
  * カードの色を示すenum
  */
@@ -84,7 +82,7 @@ enum CardColor:string {
             case CardColor::LAND:
                 $ope = "able";
                 break;
-            case EnumCardColor::LESS:
+            case CardColor::LESS:
                 $ope = "must";
         }
         return $ope;
@@ -146,9 +144,18 @@ enum CardColor:string {
     public static function match(array $card) {
         $colorKey = "colors";
         $types = $card["types"];
-        $cardtype = $types[0];
+        $cardtype = current($types);
+        // 無色
+        if (!array_key_exists($colorKey, $card)) {
+            return CardColor::LESS;
+        } 
+        $colorArray = $card[$colorKey];
+        return self::findColor($colorArray, $cardtype);
+    }
+
+    public static function findColor(array $color, string $cardtype) {
         // アーティファクト
-        if (strcmp($cardtype, "Artifact") == 0) {
+        if (strpos($cardtype, 'Artifact') !== false) {
             return CardColor::ARTIFACT;
         }
         // 土地
@@ -157,16 +164,15 @@ enum CardColor:string {
         }
 
         // 無色
-        if (!array_key_exists($colorKey, $card) || empty($card[$colorKey])) {
+        if (empty($color)) {
             return CardColor::LESS;
         } 
 
-        $colorArray = $card[$colorKey];
         // 多色
-        if (count($colorArray) > 1) {
+        if (count($color) > 1) {
             return CardColor::MULTI;
         }
         // 単色
-        return CardColor::tryFrom(current($colorArray));
+        return CardColor::tryFrom(current($color));
     }
 }

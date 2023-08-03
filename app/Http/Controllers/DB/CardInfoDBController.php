@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DB;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CsvFileRequest;
 use App\Http\Requests\PostCardDBRequest;
 use App\Http\Resources\CardInfoResource;
 use App\Models\Expansion;
@@ -50,12 +51,10 @@ class CardInfoDBController extends Controller
      */
     public function store(PostCardDBRequest $request)
     {
-        logger()->info("insert start.");
         $details = $request->all();
         $setCode = $details['setCode'];
         // card_infoテーブルに登録
         $this->service->post($setCode, $details);
-        logger()->info("insert end.");
         return response('', Response::HTTP_CREATED);
     }
 }

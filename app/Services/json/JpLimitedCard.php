@@ -9,6 +9,16 @@ class JpLimitedCard extends AbstractCard
         $this->jp = $this->getJp($json);
     }
 
+    public function jpname(string $enname):string
+    {
+        // STA対応
+        if (empty($this->jp)) {
+            return $this->getJpnameByAPI($enname);
+        }
+        return parent::jpname($enname);
+    }
+
+
     public function multiverseId()
     {
         return '';
@@ -23,6 +33,14 @@ class JpLimitedCard extends AbstractCard
     {
         $number = parent::number();
         return str_replace('★', '', $number);
+    }
+
+    public function promotype() {
+        // STA日本画対応
+        if (strcmp($this->setcode(), 'STA') == 0) {
+            return 'jpainting';
+        }
+        return parent::promotype();
     }
 
 }

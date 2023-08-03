@@ -51,6 +51,7 @@ export default {
             isCopyed: false,
             filename: "",
             orders: [],
+            notions: [],
         };
     },
     methods: {
@@ -63,9 +64,12 @@ export default {
                     let data = results.data;
                     let idKey = "order_id";
                     data.map((line, index) => {
+                        if (line[idKey] === "") {
+                            return;
+                        }
                         let order = {};
                         let name = line["shipping_name"];
-                        let beforeOrder = this.orders[index - 1];
+                        let beforeOrder = this.orders[this.orders.length - 1];
                         if (index > 0 && name == beforeOrder["name"]) {
                             beforeOrder["items"].push(line["product_name"]);
                         } else {

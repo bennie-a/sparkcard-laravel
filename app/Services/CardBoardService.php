@@ -1,16 +1,20 @@
 <?php
 namespace App\Services;
 
+use App\Enum\CardLanguage;
 use App\Factory\NotionPageFactory;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
-use App\Repositories\Api\Notion\ExpansionRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
-use Illuminate\Http\Response;
+use App\Services\Constant\StockpileHeader as Header;
 
+/**
+ * Notionの販売管理ボードに関するServiceクラス
+ */
 class CardBoardService {
     
     public function __construct() {
@@ -76,7 +80,7 @@ class CardBoardService {
             if (!is_null($stock)) {
                 $card->setStock($stock->getContent());
             } else {
-                $card->setStock("0");
+                $card->setStock(0);
             }
             if (!is_null($condition)) {
                 $card->setCondition($condition->getName());
@@ -96,40 +100,49 @@ class CardBoardService {
     }
     
     // 入力値をNotionに登録する。
-    public function store(array $details) {
-        $page = new Page();
-        $page->setTitle("名前", $details['name']);
-        $page->setText("英名", $details['enname']);
-        $page->setSelect("Status", "ロジクラ要登録");
-        $page->setNumber("枚数", $details['stock']);
-        $priceVal = intval($details['price']);
-        $page->setNumber("価格", $priceVal);
-        $page->setNumber("カード番号", $details['index']);
-        $page->setSelect("言語", "日本語");
-        $page->setCheckbox("Foil", $details['isFoil']);
-        $page->setSelect("色", $details['color']);
-        $page->setSelect("状態", "NM");
-        if (array_key_exists('imageUrl', $details)) {
-            $page->setUrl('画像URL', $details['imageUrl']);
-        }
-        $expansion = Expansion::where('attr', $details['attr'])->first();
-        logger()->debug($details['attr']);
-        $page->setRelation("エキスパンション",[$expansion['notion_id']]);
-        $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
-        // ミニレター
-        $sends = [];
-        if ($priceVal >= 1500) {
-            // クリックポスト
-            array_push($sends, '29c8c95ed21645909cafea172a5dd2f7');
-        } else {
-            array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
-        }
-        $page->setRelation('発送方法', $sends);
+    public function store(CardInfo $info, array $details) {
         try {
-            $page = $this->repo->store($page);
-            // ページID
-            logger()->info($page->getId());
-            response($page->getId(), Response::HTTP_OK);
+            $page = new Page();
+            $duplicated = $this->repo->findBySparkcardId($info->id);
+            if (!empty($duplicated)) {
+                $page->setId($duplicated->getId());
+                $stock = $duplicated->getProperty("枚数")->getNumber() + intval($details['quantity']);
+                $page->set("枚数", Number::value($stock));
+                $this->updatePage($page);
+            } else {
+                $page->setTitle("名前", $info->name);
+                $page->setText("英名", $info->en_name);
+                $page->setSelect("Status", "要写真撮影");
+                $page->setNumber("枚数", $details['quantity']);
+                $priceVal = intval($details['market_price']);
+                $page->setNumber("価格", $priceVal);
+                $page->setNumber("カード番号", $info->number);
+                $language = CardLanguage::find($details["language"]);
+                $page->setSelect("言語", $language->text());
+                $page->setCheckbox("Foil", $info->isFoil);
+                $page->setSelect("色", $info->color_id);
+                $page->setSelect("状態", $details["condition"]);
+                if (!empty($info->image_url)) {
+                    $page->setUrl('画像URL', $info->image_url);
+                }
+                // $expansion = Expansion::where('attr', $details['attr'])->first();
+                // logger()->debug($details['attr']);
+                $page->setRelation("エキスパンション",[$info->exp_id]);
+                $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
+                // ミニレター
+                $sends = [];
+                if ($priceVal >= 1500) {
+                    // クリックポスト
+                    array_push($sends, '29c8c95ed21645909cafea172a5dd2f7');
+                } else {
+                    array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
+                }
+                $page->setRelation('発送方法', $sends);
+                $page->set('sparkcard_id', Number::value($info->id));
+                $page = $this->repo->store($page);
+                // ページID
+                logger()->info($page->getId());
+            }
         } catch (NotionException $e) {
             logger()->error($e->getMessage());
         }
@@ -137,13 +150,28 @@ class CardBoardService {
     }
 
     public function update($id, $details) {
+        $factory = new NotionPageFactory();
+        $page = $factory->create($id, $details);
+        $this->updatePage($page);
+    }
+
+    public function updatePage(Page $page) {
         try {
-            $factory = new NotionPageFactory();
-            $page = $factory->create($id, $details);
             $this->repo->update($page);
         } catch(NotionException $e) {
             throw $e;
         }
+    }
+
+    
+    /**
+     * 注文番号に該当する販売カードを取得する。
+     *
+     * @param string $spcid
+     * @return void
+     */
+    public function findByOrderId(string $orderId) {
+        return $this->repo->findByOrderId($orderId);
     }
 
     public function deleteByExp($name) {

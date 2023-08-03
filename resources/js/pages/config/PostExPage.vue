@@ -1,7 +1,7 @@
 <template>
     <section class="ui grids">
         <message-area></message-area>
-        <router-link to="/settings/expansion"
+        <router-link to="/config/expansion"
             ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
         >
         <div class="mt-1 content ui form">
@@ -22,9 +22,13 @@
                         <option>ミラディン/ファイレクシア</option>
                         <option>神河</option>
                         <option>ドミナリア</option>
+                        <option>ラヴニカ</option>
                         <option>ゼンディカー</option>
                         <option>イコリア</option>
                         <option>エルドレイン</option>
+                        <option>イクサラン</option>
+                        <option>ストリクスヘイヴン</option>
+                        <option>イニストラード</option>
                         <option>カラデシュ</option>
                         <option>基本セット</option>
                         <option>その他</option>
@@ -84,7 +88,7 @@ export default {
             return `${year}/${month}/${day}`;
         },
         back: function () {
-            this.$router.push("/settings/expansion");
+            this.$router.push("/config/expansion");
         },
         store: function () {
             const task = new AxiosTask(this.$store);

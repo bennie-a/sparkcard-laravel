@@ -1,13 +1,14 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import LogikuraItemCSV from "./pages/zaiko/LogikuraItemPage.vue";
 import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
-import ExpansionPage from "./pages/settings/ExpansionPage.vue";
-import CardInfoPage from "./pages/settings/CardInfoPage.vue";
-import PostExPage from "./pages/settings/PostExPage.vue";
+import ExpansionPage from "./pages/config/ExpansionPage.vue";
+import CardInfoCsvPage from "./pages/config/CardInfoCsvPage.vue";
+import CardinfoPage from "./pages/config/CardInfoPage.vue";
+import PostExPage from "./pages/config/PostExPage.vue";
 import Packing from "./pages/packing/Packing.vue";
+import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -15,17 +16,16 @@ const routes = [
         path: "/",
         component: Index,
         meta: {
-            title: "カード登録",
-            description: "販売カードをNotionの商品管理ボードに登録します。",
+            title: "入荷登録",
+            description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
         },
     },
     {
-        path: "/zaiko/newitem",
-        component: LogikuraItemCSV,
+        path: "/stockpile/",
+        component: StockpilePage,
         meta: {
-            title: "在庫登録CSVダウンロード",
-            description:
-                "Notionの商品管理ボードからZAIKOの商品登録用CSVを作成します。",
+            title: "在庫情報検索",
+            description: "在庫情報を検索します。",
         },
     },
     {
@@ -56,7 +56,7 @@ const routes = [
         },
     },
     {
-        path: "/settings/expansion",
+        path: "/config/expansion",
         component: ExpansionPage,
         meta: {
             title: "エキスパンション一覧",
@@ -64,20 +64,30 @@ const routes = [
         },
     },
     {
-        path: "/settings/expansion/post",
+        path: "/config/expansion/post",
         component: PostExPage,
         meta: {
             title: "エキスパンション登録",
             description: "エキスパンションの登録・編集を行います。",
         },
+        prop: true,
     },
     {
-        path: "/settings/cardinfo",
-        component: CardInfoPage,
+        path: "/config/cardinfo/csv",
+        component: CardInfoCsvPage,
         meta: {
-            title: "カード情報マスタ登録",
+            title: "カード情報マスタCSV登録",
             description:
                 "MTGJSONからダウンロードしたファイルのカード情報をDBに登録します。",
+        },
+    },
+    {
+        path: "/config/cardinfo/post/:setname/:attr",
+        name: "PostCardInfo",
+        component: CardinfoPage,
+        meta: {
+            title: "カード情報マスタ登録",
+            description: "カード情報をDBに登録します。",
         },
     },
     {

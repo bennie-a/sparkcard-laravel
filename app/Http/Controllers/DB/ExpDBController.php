@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\DB;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostExRequest;
 use App\Http\Resources\ExpDBResource;
 use App\Http\Resources\Notion\ExpansionResource;
+use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use Illuminate\Http\Request;
@@ -34,12 +36,15 @@ class ExpDBController extends Controller
         $query = $request->input("query");
         logger()->info('入力パラメータ', [$query]);
         $list = Expansion::where('attr', 'like', '%'.$query.'%')->limit(5)->get();
-        foreach($list as $exp) {
-            logger()->debug($exp->notion_id);
-            $isExist = CardInfo::where('exp_id', $exp->notion_id)->exists();
-            $exp['is_exist'] = $isExist;
+        if (count($list) == 0) {
+            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_EXPANSION, '検索結果がありません。');
         }
-        return response()->json($list);
+        foreach($list as $exp) {
+            logger()->debug($exp->name.':'.$exp->notion_id);
+            $count = CardInfo::where('exp_id', $exp->notion_id)->count();
+            $exp['count'] = $count;
+        }
+        return response()->json($list, Response::HTTP_OK);
     }
 
     /**

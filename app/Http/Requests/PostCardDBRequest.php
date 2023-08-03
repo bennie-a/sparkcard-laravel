@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Halfsize;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostCardDBRequest extends FormRequest
@@ -28,10 +29,28 @@ class PostCardDBRequest extends FormRequest
             'name'=>'required',
             'en_name'=>'required',
             'color'=>'required',
-            'multiverseId' => 'nullable',
-            'scryfallId' => 'nullable'
+            'multiverseId' => 'required_without_all:scryfallId,imageurl|integer',
+            'scryfallId' => ['required_without_all:multiverseId,imageurl', new Halfsize],
+            'number' => 'required',
+            'imageurl' => 'required_without_all:multiverseId,scryfallId',
+            'isSkip' => 'nullable|boolean'
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'setCode'=>'セット略称',
+            'name'=>'カード名',
+            'en_name'=>'カード名(英語)',
+            'color'=>'色',
+            'multiverseId' => 'Multiverse ID',
+            'scryfallId' => 'Scryfall ID',
+            'number' => 'カード番号',
+            'imageurl' => '画像URL',
+        ];
+    }
+
 
     /**
      * エラーメッセージを変更

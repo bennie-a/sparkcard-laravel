@@ -16,6 +16,10 @@ class CardInfo extends Model
         return $this->belongsTo('App\Models\Expansion');
     }
 
+    public function stockpile() {
+        return $this->hasMany('App\Models\Stockpile');
+    }
+
     protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
 
     /**
@@ -65,6 +69,20 @@ class CardInfo extends Model
         return $list[0];
     }
 
+    public static function findSingleCard($setcode, $name, $isFoil) {
+        return self::findSingleQuery($setcode, $name, $isFoil)->first();
+    }
+
+    public static function isExist($setcode, $name, $isFoil):bool {
+        $query = self::findSingleQuery($setcode, $name, $isFoil);
+        return $query->exists();
+    }
+
+    private static function findSingleQuery($setcode, $name, $isFoil) {
+        $conditions = ['expansion.attr' => $setcode, 'card_info.name' => $name, 'card_info.isFoil' => $isFoil];
+        return  CardInfo::where($conditions)->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id');
+    }
+
     /**
      * 特定のカード情報を取得する。
      *
@@ -77,6 +95,11 @@ class CardInfo extends Model
     {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
         $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
+        return $info;
+    }
+
+    public static function findEnCard($name) {
+        $info = self::select('en_name')->where(['name' => $name])->first();
         return $info;
     }
 }

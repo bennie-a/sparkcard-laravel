@@ -39,9 +39,8 @@ class CardInfoDBTest extends TestCase
                 'en_name' => 'Emergence Zone',
                 'color' => 'Land',
                 'number'=> '245',
-                'multiverseId' => '462492',
-                'promotype' => '', 'scryfallId' => '', 'isFoil' => false,
-            'language' => 'JP'];
+                'multiverseId' => 462492,
+                'promotype' => '', 'scryfallId' => '', 'isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
@@ -55,10 +54,9 @@ class CardInfoDBTest extends TestCase
                 'en_name' => 'Arlinn, Voice of the Pack',
                 'color' => 'G',
                 'number'=> '150',
-                'multiverseId' => '',
+                'multiverseId' => 0,
                 'promotype' => '絵違い', 
-                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => false,
-                'language' => 'JP'];
+                'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => false, 'isSkip' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
@@ -71,9 +69,9 @@ class CardInfoDBTest extends TestCase
                 'en_name' => 'Aeronaut Cavalry',
                 'color' => 'W',
                 'number'=> '1',
-                'multiverseId' => '',
+                'multiverseId' => 0,
                 'promotype' => '', 
-                'scryfallId' => '', 'isFoil' => false,'language' => 'JP'];
+                'scryfallId' => '', 'isFoil' => false];
         $record = $this->post_ok($data);
         assertEquals($data['name'], $record->name, 'カード名');
         assertNull($record->image_url, '画像URLの有無');
@@ -87,35 +85,35 @@ class CardInfoDBTest extends TestCase
                 'en_name' => 'Arlinn, Voice of the Pack',
                 'color' => 'G',
                 'number'=> '150',
-                'multiverseId' => '',
+                'multiverseId' => 0,
                 'promotype' => '絵違い', 
                 'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428','isFoil' => true,
-            'language' => 'JP'];
+            'language' => 'JP', 'isSkip' => false];
+
         $record = $this->post_ok($data);
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
     }
 
-    public function test_登録_Foil版_同名通常版あり() {
+    public function test_更新_Foil版_同名通常版あり() {
         $exist = ['exp_id' => $this->war->notion_id, 'name' => '群れの声、アーリン≪絵違い≫',
           'en_name' => 'Arlinn, Voice of the Pack', 'color_id' => 'G', 'number' => '150★',
-           'isFoil' => true, 'language' => 'JP', 'image_url' => ''];
+           'isFoil' => true, 'image_url' => ''];
         $duplicate = CardInfo::factory()->createOne($exist);
         $data = ['setCode' => 'WAR',
                 'name' => '群れの声、アーリン',
                 'en_name' => 'Arlinn, Voice of the Pack',
                 'color' => 'G',
                 'number'=> '150★',
-                'multiverseId' => '',
+                'multiverseId' => 0,
                 'promotype' => '絵違い', 
                 'scryfallId' => '43261927-7655-474b-ac61-dfef9e63f428',
                 'isFoil' => true,
-                'language' => 'JP'];
+                'isSkip' => false];
         $record = $this->post_ok($data);
         assertEquals($duplicate->id, $record->id, 'ID');
         assertEquals($data['name'].'≪'.$data['promotype'].'≫', $record->name, 'カード名');
         assertNotNull($record->image_url, '画像URLの有無');
-        assertEquals('JP', $record['language'], "言語");
     }
 
     public function test_両面カード() {
@@ -146,9 +144,7 @@ class CardInfoDBTest extends TestCase
         assertEquals($data['en_name'], $record->en_name, 'カード名(英名)');
         assertEquals($data['color'], $record->color_id, '色');
         assertEquals($data['number'], $record->number, 'カード番号');
-        assertIsInt(16, strlen($record->barcode), 'バーコード');
         assertEquals($data['isFoil'], $record->isFoil, '通常版/Foil');
-        assertEquals($data['language'], 'JP', '言語');
 
         $exp = Expansion::where('attr', $data['setCode'])->first();
         assertEquals($exp->notion_id, $record->exp_id, 'エキスパンションID');
@@ -171,9 +167,9 @@ class CardInfoDBTest extends TestCase
 
     public function test_検索() {
         CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id,
-                                                 'color_id' => 'W' ,'language' => 'JP', 'isFoil' => false, 'en_name' =>'aaaaa' ]);
+                                                 'color_id' => 'W', 'isFoil' => false, 'en_name' =>'aaaaa' ]);
         CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id, 
-                                                    'color_id' => 'U', 'language' => 'JP', 'isFoil' => false,  'en_name' =>'bbbbb']);
+                                                    'color_id' => 'U', 'isFoil' => false,  'en_name' =>'bbbbb']);
 
         $condition = ['name' => '', 'set' => $this->bro->attr, 'color' => 'W', 'isFoil' => false];
         $response = $this->json('GET', 'api/database/card', $condition)->assertOk();
@@ -192,7 +188,7 @@ class CardInfoDBTest extends TestCase
 
     public function test_検索_検索結果なし() {
         CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id,
-         'color_id' => 'W', 'language' => 'JP', 'isFoil' => false,  'en_name' =>'aaaaa']);
+         'color_id' => 'W', 'isFoil' => false,  'en_name' =>'aaaaa']);
         $condition = ['name' => '', 'set' => $this->bro->attr, 'color' => 'U', 'isFoil' => false];
         $response = $this->json('GET', 'api/database/card', $condition)
                                     ->assertStatus(Response::HTTP_NO_CONTENT);
