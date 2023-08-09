@@ -95,6 +95,9 @@
                             <option value="Bring-a-Friend">
                                 Bring-a-Friend
                             </option>
+                            <option value="テキストレス・フルアート">
+                                テキストレス・フルアート
+                            </option>
                         </select>
                     </div>
                 </div>
