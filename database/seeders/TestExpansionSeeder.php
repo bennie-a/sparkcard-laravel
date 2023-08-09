@@ -20,5 +20,10 @@ class TestExpansionSeeder extends Seeder
         Expansion::create(['attr' => 'WAR', 'name' => '灯争大戦', 'notion_id' => '80a7660b-3de0-4ce1-8e51-1e90e123faae', 'release_date' => '2022-11-08']);
         Expansion::create(['name' => '神河：輝ける世界', 'attr' => 'NEO', 'notion_id' => '92f67d9b-aae6-4df7-9ca0-18f00fc9c7f5', 'release_date' => '2022-02-08']);
         Expansion::create(['attr' => 'ONE', 'name' => 'ファイレクシア：完全なる統一', 'notion_id' => '1a36d935-ee60-466b-ac43-ecc797c0ee87', 'release_date' => '2023-02-03']);
+        Expansion::create(['attr' => 'DMU', 'name' => '団結のドミナリア', 'notion_id' => 'e72e96b4-2457-4e96-82a6-264d7e7731ec', 'release_date' => '2022-09-09']);
+        Expansion::create(['attr' => 'MIR', 'name' => 'ミラージュ', 'notion_id' => 'd87da876-9912-46ce-9334-fa05bc859f27', 'release_date' => '1996-10-08']);
+        Expansion::create(['attr' => 'MUL', 'name' => '機械兵団の進軍_多元宇宙の伝説', 'notion_id' => 'd4a09cf4-d115-44d6-9cbe-ba4bda78e737', 'release_date' => '2023-04-21']);
+        Expansion::create(['attr' => 'MOM', 'name' => '機械兵団の進軍', 'notion_id' => 'f9ee51b8-4a57-4dc9-b29e-f85076dc0b62', 'release_date' => '2023-04-21']);
+        Expansion::create(['attr' => 'SCH', 'name' => 'Store Championships', 'notion_id' => 'xxxxssss-xxxxxx', 'release_date' => '2023-09-08']);
     }
 }

@@ -60,7 +60,7 @@ class ScryfallCard extends AbstractCard {
     }
 
     protected function hasPromotype() {
-        return MtgJsonUtil::hasKey('promo_types', $this->json);
+        return MtgJsonUtil::hasKey('promo_types', $this->getJson());
     }
 
     protected function promotypeKey() : string {
@@ -82,7 +82,7 @@ class ScryfallCard extends AbstractCard {
 
     public function number()
     {
-        return $this->json['collector_number'];
+        return $this->getJson()['collector_number'];
     }
 
     public function setcode():string {
@@ -92,4 +92,14 @@ class ScryfallCard extends AbstractCard {
     public function reprint() {
         return $this->getJson()['reprint'];
     }
+
+        /**
+     * isTextlessの項目を取得する。
+     * @see AbstractCard
+     * @return boolean
+     */
+    public function isTextless() {
+        return MtgJsonUtil::isTrue('textless', $this->getJson());
+    }
+
 }

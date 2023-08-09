@@ -27,6 +27,8 @@ abstract class AbstractCard implements CardInfoInterface {
     const FRAME_EFFECTS = 'frameEffects';
 
     const IS_FULLART = 'isFullArt';
+
+    const IS_TEXTLESS = 'isTextless';
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
      *
@@ -68,7 +70,7 @@ abstract class AbstractCard implements CardInfoInterface {
 
     public function number()
     {
-        return $this->json['number'];
+        return $this->getJson()['number'];
     }
 
     public function language():string {
@@ -76,14 +78,16 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     public function setcode():string {
-        return $this->json['setCode'];
+        return $this->getJson()['setCode'];
     }
 
     public function promotype() {
         if ($this->isFullArt()) {
             return 'fullart';
         }
-
+        if ($this->isTextless()) {
+            return 'textless';
+        }
         if (!$this->hasPromotype()) {
             return 'draft';
         }
@@ -91,6 +95,15 @@ abstract class AbstractCard implements CardInfoInterface {
             return $f != 'textured';
         };
         return $this->filtering($this->promotypeKey(), $filterd);
+    }
+
+    /**
+     * isTextlessの項目を取得する。
+     *
+     * @return boolean
+     */
+    public function isTextless() {
+        return MtgJsonUtil::isTrue(self::IS_TEXTLESS, $this->getJson());
     }
 
     public function frameEffects() {

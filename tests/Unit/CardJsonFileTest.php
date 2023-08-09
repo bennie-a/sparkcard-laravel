@@ -3,6 +3,7 @@
 namespace Tests\Feature\Unit;
 
 use App\Models\Expansion;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Response;
 use Tests\TestCase;
 
@@ -24,17 +25,13 @@ class CardJsonFileTest extends TestCase
 
     const SCRYFALLID = 'scryfallId';
 
+    use RefreshDatabase;
     public function setup():void
     {
         parent::setup();
-        $this->war = Expansion::factory()->createOne(['name' => '灯争大戦','attr' => 'WAR']);
-        $this->bro = Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'BRO']);
-        $this->dmu = Expansion::factory()->createOne(['name' => '団結のドミナリア', 'attr' => 'DMU']);
-        $this->neo = Expansion::factory()->createOne(['name' => '神河：輝ける世界', 'attr' => 'NEO']);
-        Expansion::factory()->createOne(['name' => 'ミラージュ', 'attr' => 'MIR']);
-        Expansion::factory()->createOne(['name' => 'ファイレクシア：完全なる統一', 'attr' => 'ONE']);
-        Expansion::factory()->createOne(['name' => '機械兵団の進軍_多元宇宙の伝説', 'attr' => 'MUL']);
-        Expansion::factory()->createOne(['name' => '機械兵団の進軍', 'attr' => 'MOM']);
+        $this->seed('DatabaseSeeder');
+        $this->seed('TestExpansionSeeder');
+
     }
 
     /**
@@ -70,6 +67,8 @@ class CardJsonFileTest extends TestCase
      * @dataProvider cardtypeProvider
      */
     public function test_カードタイプ(string $filename, array $expected) {
+        // $this->markTestSkipped('一時スキップ');
+
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
         assertNotEmpty($actualcard, '結果の有無');
@@ -205,7 +204,7 @@ class CardJsonFileTest extends TestCase
     }
 
     /**
-     * テストデータ(特別版)
+     * プロモタイプ別のテスト
      *
      * @return array 各テストの入力値
      */
@@ -222,6 +221,7 @@ class CardJsonFileTest extends TestCase
             'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
             'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
             'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
+            'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']]
         ];
     }
 
@@ -229,10 +229,5 @@ class CardJsonFileTest extends TestCase
         return [
             'エキスパンションが存在しない' => ['not_found_ex.json', 441, 'NFDが登録されていません。'],
         ];
-    }
-
-    public function tearDown():void
-    {
-        Expansion::query()->delete();
     }
 }
