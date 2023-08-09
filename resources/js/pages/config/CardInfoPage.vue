@@ -86,9 +86,11 @@
                             <option value="">通常</option>
                             <option value="フルアート">フルアート</option>
                             <option value="プレリリース">プレリリース</option>
+                            <option value="ショーケース">ショーケース</option>
                             <option value="トーナメント景品">
                                 トーナメント景品
                             </option>
+                            <option value="プロモカード">プロモカード</option>
                             <option value="ボーダレス">ボーダレス</option>
                             <option value="Bring-a-Friend">
                                 Bring-a-Friend
@@ -122,12 +124,20 @@
             <img :src="imageurl" :alt="name" />
         </div>
     </section>
+    <section>
+        <loading
+            :active="isLoading"
+            :can-cancel="false"
+            :is-full-page="true"
+        ></loading>
+    </section>
 </template>
 <script>
 import { AxiosTask } from "../../component/AxiosTask";
 import MessageArea from "../component/MessageArea.vue";
 import ModalButton from "../component/ModalButton.vue";
 import axios from "axios";
+import Loading from "vue-loading-overlay";
 
 export default {
     data() {
@@ -143,10 +153,12 @@ export default {
             color: "",
             imageurl: "",
             language: "jp",
+            isLoading: false,
         };
     },
     methods: {
         search: async function () {
+            this.isLoading = true;
             this.$store.dispatch("message/clear");
             const task = new AxiosTask(this.$store);
             const query = {
@@ -156,7 +168,6 @@ export default {
                     language: this.language,
                 },
             };
-            this.$store.dispatch("setLoad", false);
             await axios
                 .get("/api/scryfall", query)
                 .then((response) => {
@@ -178,11 +189,10 @@ export default {
                     }
                 })
                 .finally(() => {
-                    this.$store.dispatch("setLoad", false);
+                    this.isLoading = false;
                 });
         },
         store: function () {
-            this.$store.dispatch("message/clear");
             const task = new AxiosTask(this.$store);
             let json = {
                 setCode: this.attr,
@@ -194,6 +204,7 @@ export default {
                 color: this.color,
                 number: this.number,
                 isSkip: false,
+                imageurl: this.imageurl,
             };
             const success = function (response, store) {
                 // this.back();
@@ -207,6 +218,7 @@ export default {
     components: {
         "message-area": MessageArea,
         ModalButton: ModalButton,
+        loading: Loading,
     },
 };
 </script>

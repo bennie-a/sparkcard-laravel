@@ -42,6 +42,7 @@ export default {
             $vfm.show(this.name);
         },
         execute: function () {
+            this.$store.dispatch("message/clear");
             this.$store.dispatch("setLoad", true);
             this.$emit("action");
             this.showModal = false;
