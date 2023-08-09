@@ -41,5 +41,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'stamped', 'name' => 'プレリリース']);
         Promotype::create(['attr' => 'borderless', 'name' => 'ボーダレス']);
         Promotype::create(['attr' => 'bringafriend', 'name' => 'Bring-a-Friend']);
+        Promotype::create(['attr' => 'textless', 'name' => 'テキストレス・フルアート']);
     }
 }
