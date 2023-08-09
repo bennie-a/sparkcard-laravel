@@ -2,6 +2,7 @@
 namespace App\Factory;
 
 use App\Libs\MtgJsonUtil;
+use App\Services\json\BasicLand;
 use App\Services\json\ExcludeCard;
 use App\Services\json\FullartLand;
 use App\Services\json\JpCard;
@@ -40,15 +41,19 @@ class CardInfoFactory {
 
         $class = $langArray[$lang];
 
-        // カードタイプがフルアート基本土地か判別する。
+        // 基本土地か特殊土地か判別する。
         $cardtypes = $json["types"];
         if (in_array('Land',  $cardtypes)) {
+
             $superTypes = $json["supertypes"];
             if (in_array('Snow', $superTypes)) {
                 $class = JpCard::class;
-            } else if (MtgJsonUtil::isTrue("isFullArt", $json) ) {
-                $class = FullartLand::class;
+            } else if (in_array('Basic', $superTypes)) {
+                $class = BasicLand::class;
             }
+            // } else if (MtgJsonUtil::isTrue("isFullArt", $json) ) {
+            //     $class = FullartLand::class;
+            // }
         }
         if ($class != NoJpCard::class) {
             $obj = new $class($json);

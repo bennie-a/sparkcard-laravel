@@ -17,6 +17,9 @@ class MtgJsonUtil {
     }
 
     public static function hasKey($key, $json) {
+        if (empty($json)) {
+            return false;
+        }
         return array_key_exists($key, $json);
     }
 

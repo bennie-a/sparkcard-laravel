@@ -3,20 +3,13 @@ namespace App\Services\json;
 
 /**
  * 基本土地クラス
- * @deprecated 3.0.3
  */
-class FullartLand extends AbstractCard
+class BasicLand extends JpCard
 {
     public function jpname(string $enname):string
     {
         $names = ["Island" => "島", "Plains" => "平地", "Swamp" => "沼", "Forest" => "森", "Mountain" => "山"];
-        return $names[$enname];
+        return $names[$enname].'('.$this->number().')';
     }
-
-    public function multiverseId()
-    {
-        return parent::multiverseId();
-    }
-
 }
 ?>

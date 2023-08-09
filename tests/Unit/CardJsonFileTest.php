@@ -196,9 +196,9 @@ class CardJsonFileTest extends TestCase
      */
     public function cardtypeProvider() {
         return [
-            '基本土地' => ['land.json', ['name' => '島', self::MULTIVERSEID => '604650']],
+            '基本土地' => ['land.json', ['name' => '島(263)', self::MULTIVERSEID => '604650']],
             '特殊土地' => ['land.json', ['name' => 'やせた原野', self::MULTIVERSEID => '465455']],
-            'フルアート版土地' => ['land.json', ['name' => '平地', self::MULTIVERSEID => '604624']],
+            'フルアート版土地' => ['land.json', ['name' => '平地(262)', self::MULTIVERSEID => '604649']],
             '冠雪土地' => ['land.json', ['name' => '冠雪の島', self::MULTIVERSEID => '465470']]
         ];
     }
@@ -215,7 +215,7 @@ class CardJsonFileTest extends TestCase
             '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => '拡張アート']],
             'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', self::PROMOTYPE => 'ブースターファン']],
             'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => 'ショーケース']],
-            'フルアート' =>  ['neo.json', [self::NAME =>  '平地', self::PROMOTYPE => 'フルアート']],
+            'フルアート' =>  ['neo.json', [self::NAME =>  '平地(293)', self::PROMOTYPE => 'フルアート']],
             'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', self::PROMOTYPE => 'ネオンインク']],
             'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
             'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
