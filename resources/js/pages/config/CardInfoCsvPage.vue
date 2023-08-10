@@ -171,6 +171,7 @@ export default {
                 });
         },
         store: async function () {
+            this.isLoading = true;
             const task = new AxiosTask(this.$store);
             const list = this.$store.getters.card;
             await Promise.all(
@@ -182,6 +183,7 @@ export default {
             ).catch(() => {
                 console.error("error");
             });
+            this.isLoading = false;
             this.$store.dispatch(
                 "setSuccessMessage",
                 `${list.length}件登録が完了しました。`
