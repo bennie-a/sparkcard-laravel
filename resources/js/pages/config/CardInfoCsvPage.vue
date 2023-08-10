@@ -20,28 +20,22 @@
                 <table class="ui table striped six column">
                     <thead>
                         <tr>
-                            <th class="two wide">カード番号</th>
-                            <th class="four wide">カード名</th>
+                            <th class="one wide">番号</th>
+                            <th class="five wide left aligned">カード名</th>
                             <th class="four wide">英名</th>
-                            <th class="one wide">色</th>
-                            <th class="one wide">言語</th>
+                            <th class="">色</th>
+                            <th class="">言語</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="card in getCards">
-                            <td>{{ card.number }}</td>
-                            <td v-if="card.name == 'エラー'">
+                        <tr v-for="card in getCards" :key="card.id">
+                            <td class="one wide">{{ card.number }}</td>
+                            <td>
                                 <input type="text" v-model="card.name" />
-                            </td>
-                            <td v-if="card.name != 'エラー'">
-                                {{ card.name
-                                }}<label v-if="card.promotype != ''"
+                                <label v-if="card.promotype != ''"
                                     >≪{{ card.promotype }}≫</label
-                                ><label
-                                    class="ui horizontal yellow label ml-1"
-                                    v-show="card.isFoil"
-                                    ><i class="star icon"></i>Foil</label
                                 >
+                                <foiltag :isFoil="card.isFoil"></foiltag>
                             </td>
                             <td>
                                 {{ card.en_name }}
@@ -68,16 +62,21 @@
                 </table>
             </div>
         </form>
-        <now-loading></now-loading>
+        <loading
+            :active="isLoading"
+            :can-cancel="false"
+            :is-full-page="true"
+        ></loading>
     </article>
 </template>
 <script>
-import NowLoading from "../component/NowLoading.vue";
+import Loading from "vue-loading-overlay";
 import FileUpload from "../component/FileUpload.vue";
 import MessageArea from "../component/MessageArea.vue";
 import ListPagination from "../component/ListPagination.vue";
 import ModalButton from "../component/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
+import FoilTag from "../component/FoilTag.vue";
 
 import axios from "axios";
 export default {
@@ -86,6 +85,7 @@ export default {
             filename: "ファイルを選択してください",
             setCode: "",
             isSkip: false,
+            isLoading: false,
         };
     },
     mounted: function () {
@@ -130,7 +130,7 @@ export default {
     },
     methods: {
         upload: async function (file) {
-            this.$store.dispatch("setLoad", true);
+            this.isLoading = true;
             this.filename = file.name;
             const config = {
                 headers: {
@@ -167,7 +167,7 @@ export default {
                     }
                 })
                 .finally(() => {
-                    this.$store.dispatch("setLoad", false);
+                    this.isLoading = false;
                 });
         },
         store: async function () {
@@ -193,9 +193,10 @@ export default {
     components: {
         "file-upload": FileUpload,
         "message-area": MessageArea,
-        "now-loading": NowLoading,
+        Loading,
         pagination: ListPagination,
         ModalButton: ModalButton,
+        foiltag: FoilTag,
     },
 };
 </script>
