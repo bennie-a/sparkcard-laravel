@@ -110,9 +110,11 @@ export default {
     },
     methods: {
         async search() {
+            this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearCards");
             let self = this;
             self.isLoading = true;
-            console.log("search stockpile");
+            console.log("start search stockpile");
             const query = {
                 params: {
                     card_name: this.cardname,
@@ -122,6 +124,14 @@ export default {
             await axios
                 .get("/api/stockpile", query)
                 .then((response) => {
+                    if (response.status != 200) {
+                        this.$store.dispatch(
+                            "message/error",
+                            "検索結果がありません。"
+                        );
+                        return;
+                    }
+                    console.log(response.status);
                     let data = response.data;
                     this.stock = data;
                     this.$store.dispatch("setCard", this.stock);
@@ -131,6 +141,7 @@ export default {
                 })
                 .finally(() => {
                     self.isLoading = false;
+                    console.log("end search stockpile");
                 });
         },
     },
