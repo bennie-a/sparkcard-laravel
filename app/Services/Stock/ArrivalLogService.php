@@ -23,7 +23,7 @@ class ArrivalLogService {
     public function store(ArrivalParams $params) {
 
         $stockpile = Stockpile::findSpecificCard($params->cardId(), $params->language(), $params->condition());
-        if (empty($stockpile)) {
+        if (empty($stockpile->id)) {
             // 在庫情報なし
             $stockpile = Stockpile::create(['card_id' => $params->cardId(), 'language' => $params->language(),
             Header::CONDITION => $params->condition(), Header::QUANTITY => $params->quantity()]);

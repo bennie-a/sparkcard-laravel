@@ -5,6 +5,7 @@ use App\Enum\CardLanguage;
 use App\Factory\NotionPageFactory;
 use App\Models\CardInfo;
 use App\Models\Expansion;
+use App\Models\MainColor;
 use App\Models\notion\NotionCard;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
@@ -120,7 +121,9 @@ class CardBoardService {
                 $language = CardLanguage::find($details["language"]);
                 $page->setSelect("言語", $language->text());
                 $page->setCheckbox("Foil", $info->isFoil);
-                $page->setSelect("色", $info->color_id);
+
+                $color = MainColor::find($info->color_id);
+                $page->setSelect("色", $color->name);
                 $page->setSelect("状態", $details["condition"]);
                 if (!empty($info->image_url)) {
                     $page->setUrl('画像URL', $info->image_url);

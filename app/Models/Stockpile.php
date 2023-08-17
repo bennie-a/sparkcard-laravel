@@ -46,10 +46,11 @@ class Stockpile extends Model
      * @param integer $cardId
      * @param string $language
      * @param string $condition
-     * @return void
+     * @return Stockpile
      */
-    public static function findSpecificCard(int $cardId, string $language, string $condition) {
-        return Stockpile::where(['card_id' => $cardId, 'language' => $language, 'condition' => $condition])->first();
+    public static function findSpecificCard(int $cardId, string $language, string $condition):Stockpile {
+        $stockpile = Stockpile::where(['card_id' => $cardId, 'language' => $language, 'condition' => $condition])->first();
+        return $stockpile ?? new Stockpile();
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Facades\CardBoard;
 use App\Http\Response\CustomResponse;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
+use App\Models\MainColor;
 use App\Models\Stockpile;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
@@ -79,6 +80,9 @@ class ArrivalLogTest extends TestCase
             $card = $repo->findBySparkcardId($info->id);
             assertEquals($quantity, $card->getProperty('枚数')->getNumber(), 'Notionの枚数');
             assertEquals('日本語', $card->getProperty('言語')->getName());
+
+            $color = MainColor::find($info->color_id);
+            assertEquals($color->name, $card->getProperty("色")->getName(), '色');
         } catch(NotionException $e) {
             $this->fail($e->getMessage());
         }

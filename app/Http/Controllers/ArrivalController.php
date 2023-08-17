@@ -54,7 +54,7 @@ class ArrivalController extends Controller {
 
         $arrivalLog = $this->service->store($params);
         if (!empty($arrivalLog)) {
-            \CardBoard::store($info, $details);
+            \App\Facades\CardBoard::store($info, $details);
         }
         logger()->info('End Arrival log', [$params->cardId()]);
         return response()->json([], Response::HTTP_CREATED);
