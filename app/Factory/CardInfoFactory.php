@@ -28,20 +28,22 @@ class CardInfoFactory {
      * @return AbstractCard
      */
     public static function create($json) {
-        $lang = $json['language'];
-        $langArray = ['English' => NoJpCard::class, 'Japanese' => JpLimitedCard::class,
-                         'Phyrexian' => PhyrexianCard::class];
-        if (!MtgJsonUtil::hasKey($lang, $langArray) || self::isOnlineOnly($json)) {
+        if (self::isExclude($json)) {
             return new ExcludeCard($json);
         }
+        // 両面カード
         $layout = $json["layout"];
         if (strcmp($layout, "transform") == 0) {
             return new TransformCard($json);
         }
+        // 言語限定カード
+        $class = match($json['language']) {
+            'Japanese' =>JPLimitedCard::class,
+            'Phyrexian' => PhyrexianCard::class,
+            'English' => NoJpCard::class
+        };
 
-        $class = $langArray[$lang];
-
-        // 基本土地か特殊土地か判別する。
+        // 基本土地or冠雪土地
         $cardtypes = $json["types"];
         if (in_array('Land',  $cardtypes)) {
 
@@ -51,9 +53,6 @@ class CardInfoFactory {
             } else if (in_array('Basic', $superTypes)) {
                 $class = BasicLand::class;
             }
-            // } else if (MtgJsonUtil::isTrue("isFullArt", $json) ) {
-            //     $class = FullartLand::class;
-            // }
         }
         if ($class != NoJpCard::class) {
             $obj = new $class($json);
@@ -72,6 +71,7 @@ class CardInfoFactory {
                 return new ExcludeCard($json);
             }
         }
+
         // 日本語版の検索
         if (self::hasJp($json)) {
             return new JpCard($json);
@@ -127,6 +127,22 @@ class CardInfoFactory {
         return in_array($setCode, $starter);
     }
 
+    /** 除外カードか判別する
+     *  @return bool
+     */
+    private static function isExclude($json):bool {
+        return self::isOnlineOnly($json) || self::isAdventure($json);
+    }
+
+    /**
+     * 出来事カードか判別する。
+     *
+     * @param array $json
+     * @return boolean
+     */
+    private static function isAdventure($json) {
+        return strcmp($json["type"], "Sorcery — Adventure") == 0;
+    }
 
 }
 ?>
