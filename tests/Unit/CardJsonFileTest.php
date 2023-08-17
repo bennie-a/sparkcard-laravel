@@ -25,6 +25,8 @@ class CardJsonFileTest extends TestCase
 
     const SCRYFALLID = 'scryfallId';
 
+    const EN_NAME = 'en_name';
+
     use RefreshDatabase;
     public function setup():void
     {
@@ -92,7 +94,7 @@ class CardJsonFileTest extends TestCase
     }
 
     /**
-     * Undocumented function
+     * エラーケース
      *
      * @param string $filename
      * @param integer $expectedCode
@@ -100,6 +102,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
+        // $this->markTestSkipped('一時スキップ');
 
         $header = [
             'headers' => [
@@ -116,6 +119,20 @@ class CardJsonFileTest extends TestCase
         ];
         $response = $this->post('/api/upload/card', $data, $header);
         $response->assertStatus($expectedCode);
+    }
+
+    /**
+     * 除外カードのテストケース
+     * @dataProvider excludeprovider
+     */
+    public function test_除外カード(string $filename, string $excludedname) {
+        $result = $this->execute($filename);
+        $filterd = array_filter($result, function($a) use($excludedname){
+            if ($a[self::EN_NAME] == $excludedname) {
+                return $a;
+            }
+        });
+        assertEmpty($filterd, '除外カードがある');
     }
 
     /**
@@ -199,7 +216,7 @@ class CardJsonFileTest extends TestCase
             '基本土地' => ['land.json', ['name' => '島(263)', self::MULTIVERSEID => '604650']],
             '特殊土地' => ['land.json', ['name' => 'やせた原野', self::MULTIVERSEID => '465455']],
             'フルアート版土地' => ['land.json', ['name' => '平地(262)', self::MULTIVERSEID => '604649']],
-            '冠雪土地' => ['land.json', ['name' => '冠雪の島', self::MULTIVERSEID => '465470']]
+            '冠雪土地' => ['land.json', ['name' => '冠雪の島', self::MULTIVERSEID => '465470']],
         ];
     }
 
@@ -229,5 +246,9 @@ class CardJsonFileTest extends TestCase
         return [
             'エキスパンションが存在しない' => ['not_found_ex.json', 441, 'NFDが登録されていません。'],
         ];
+    }
+
+    public function excludeprovider() {
+        return ['出来事カード' => ['woe.json', 'Betroth the Beast']];
     }
 }
