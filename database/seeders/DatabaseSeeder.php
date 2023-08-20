@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ShippingSeeder::class);
         // $this->call(BaseCategory::class);
         $this->call(PromotypeSeeder::class);
-        $this->call(TreatmentSeeder::class);
+        $this->call(FoiltypeSeeder::class);
         // $this->call(FrameEffectsSeeder::class);
     }
 }

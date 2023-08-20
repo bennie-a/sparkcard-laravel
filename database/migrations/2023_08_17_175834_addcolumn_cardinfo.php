@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('card_info', function (Blueprint $table) {
-            $table->integer('treat_id')->default(1)->comment('表面加工ID');
+            $table->integer('foiltype_id')->default(1)->comment('表面加工ID');
             // 外部キー制約
-            $table->foreign('treat_id')->references('id')->on('treatment');
+            $table->foreign('foiltype_id')->references('id')->on('treatment');
         });
     }
 

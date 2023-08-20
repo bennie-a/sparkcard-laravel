@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('treatment', function (Blueprint $table) {
+        Schema::create('foiltype', function (Blueprint $table) {
             $table->id();
             $table->string('attr', 20)->nullable(false)->comment('略称');
             $table->string('name', 20)->nullable(false)->comment('加工名');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('treatment');
+        Schema::dropIfExists('foiltype');
     }
 };

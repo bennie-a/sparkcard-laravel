@@ -20,7 +20,7 @@ class CardInfo extends Model
         return $this->hasMany('App\Models\Stockpile');
     }
 
-    protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'language'];
+    protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id'];
 
     /**
      * 検索条件に該当するデータを取得する。
