@@ -13,7 +13,7 @@ class Foiltype extends Model
 
     protected $table = 'foiltype';
 
-    protected $fillable = ['attr',  'name'];
+    protected $fillable = ['id', 'attr',  'name'];
 
     /**
      * Foil名を条件に検索する。
