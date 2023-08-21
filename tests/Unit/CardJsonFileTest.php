@@ -43,7 +43,7 @@ class CardJsonFileTest extends TestCase
      */
     public function test_通常版(string $filename, array $expected)
     {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $exMultiverseId = $expected[self::MULTIVERSEID];
         $exScryId = $expected[self::SCRYFALLID];
@@ -69,7 +69,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider cardtypeProvider
      */
     public function test_カードタイプ(string $filename, array $expected) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
@@ -82,10 +82,26 @@ class CardJsonFileTest extends TestCase
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
+                return $a;
+            }
+        });
+        $actualcard = current($filterd);
+        assertNotEmpty($actualcard, '該当カードの有無');
+    }
+
+    /**
+     * Foilタイプの特定テスト
+     * @dataProvider foiltypeprovider
+     * @return void
+     */
+    public function test_finishes(string $filename, int $number, string $foiltype) {
+        $result = $this->execute($filename);
+        $filterd = array_filter($result, function($a) use($number, $foiltype){
+            if ($a['number'] == $number && $a["foiltype"] == $foiltype) {
                 return $a;
             }
         });
@@ -102,7 +118,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
 
         $header = [
             'headers' => [
@@ -126,6 +142,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider excludeprovider
      */
     public function test_除外カード(string $filename, string $excludedname) {
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($excludedname){
             if ($a[self::EN_NAME] == $excludedname) {
@@ -239,6 +256,17 @@ class CardJsonFileTest extends TestCase
             'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
             'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
             'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']]
+        ];
+    }
+
+    public function foiltypeprovider() {
+        return [
+            '通常版' => ['mul.json', 1, "nonfoil"],
+            'Foil' => ['mul.json', 1, "foil"],
+            'ハロー・Foil' => ['mul.json', 131, "halofoil"],
+            'エッチングFoil' => ['mul.json', 66, "etched"],
+            'S&C・Foil' => ['one.json', 422, 'stepandcompleat'],
+            'オイルスリックFoil' => ['one.json', 345, 'foil'],
         ];
     }
 

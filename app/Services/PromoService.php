@@ -21,4 +21,8 @@ class PromoService {
         }
         return $promo->name;
     }
+
+    public function findFoil(AbstractCard $cardtype) {
+
+    }
 }

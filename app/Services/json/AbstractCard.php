@@ -97,6 +97,20 @@ abstract class AbstractCard implements CardInfoInterface {
         return $this->filtering($this->promotypeKey(), $filterd);
     }
 
+    public function specialFoil() {
+        if (!$this->isSpecialFoil()) {
+            return false;
+        }
+        $filterd = function($f) {
+            return $f != 'boosterfun';
+        };
+        $type = $this->filtering($this->promotypeKey(), $filterd);
+        if ($type == 'oilslick') {
+            return 'foil';
+        }
+        return $type;
+    }
+
     /**
      * isTextlessの項目を取得する。
      *
@@ -121,11 +135,24 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     private function filtering($keyword, Closure $filterd) {
-        $frames = $this->json[$keyword];
+        $frames = $this->getJson()[$keyword];
         $filterd = array_filter($frames, $filterd);
         return current($filterd);
     }
 
+    public function finishes() {
+        return $this->getJson()["finishes"];
+    }
+
+    /**
+     * 特殊Foilが存在する判定する。
+     *
+     * @return boolean
+     */
+    public function isSpecialFoil() {
+        $finishes = $this->finishes();
+        return count($finishes) == 1 && in_array("foil", $finishes);
+    }
 
     /**
      * 除外したいカード情報の条件式
@@ -149,7 +176,7 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     protected function getIdentifiers() {
-        return $this->json['identifiers'];
+        return $this->getJson()['identifiers'];
     }
 
     protected function isFullArt() {

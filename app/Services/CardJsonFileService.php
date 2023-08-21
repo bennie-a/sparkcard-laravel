@@ -4,8 +4,7 @@ namespace App\Services;
 use App\Enum\CardColor;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
-use App\Libs\MtgJsonUtil;
-use App\Http\Response\CustomResponse;
+use App\Services\Constant\JsonFileConstant as Column;
 
 class CardJsonFileService {
     public function build($json) {
@@ -13,7 +12,7 @@ class CardJsonFileService {
         $setcode = $json["code"];
         
         // エキスパンション登録チェック
-        if (\ExService::isExistByAttr($setcode) == false) {
+        if (\App\Facades\ExService::isExistByAttr($setcode) == false) {
             throw new NotFoundException(441, $setcode.'が登録されていません。');
         }
         $cardInfo = [];
@@ -26,25 +25,30 @@ class CardJsonFileService {
             }
             $enname = $c['name'];
             $color = CardColor::match($c);
-            $promoType = \Promo::find($cardtype);
+            $promoType = \App\Facades\Promo::find($cardtype);
 
-            $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname),"en_name" => $enname,
+            $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
-            'color' => $color->value, 'number' => $cardtype->number(), 'promotype' => $promoType, 'isFoil' => false,
-            'language' => $cardtype->language()
-            ];
+            'color' => $color->value, Column::NUMBER => $cardtype->number(),
+             Column::PROMOTYPE => $promoType, Column::IS_FOIL => true, 'language' => $cardtype->language()];
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
-            // if (!MtgJsonUtil::hasKey('hasNonFoil', $c) || (MtgJsonUtil::hasKey('hasNonFoil', $c) && $c['hasNonFoil'] == true)) {
-            // }
-            array_push($cardInfo, $newCard);
-            if ($c['hasFoil']) {
-                $newCard['isFoil'] = true;
+
+            if ($cardtype->isSpecialFoil()) {
+                $newCard[Column::FOIL_TYPE] = $cardtype->specialFoil();
                 array_push($cardInfo, $newCard);
+                logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
+            } else {
+                foreach($cardtype->finishes() as $f) {
+                    $newCard[Column::FOIL_TYPE] = $f;
+                    if(strcmp("nonfoil",  $f) == 0) {
+                        $newCard[Column::IS_FOIL] = false;
+                    }
+                    array_push($cardInfo, $newCard);
+                    logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
+                }
             }
-            logger()->info('get card:',['name' => $newCard['name'], 'number' => $newCard['number'], 'isFoil' => $newCard['isFoil']]);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;
     }
-
 }
