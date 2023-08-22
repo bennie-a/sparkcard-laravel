@@ -82,11 +82,13 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     public function promotype() {
-        if ($this->isFullArt()) {
-            return 'fullart';
-        }
+        
+        $booster = 'boosterfun';
         if ($this->isTextless()) {
             return 'textless';
+        }
+        if ($this->isFullArt()) {
+            return 'fullart';
         }
         if (!$this->hasPromotype()) {
             return 'draft';
@@ -94,12 +96,26 @@ abstract class AbstractCard implements CardInfoInterface {
         $filterd = function($f) {
             return $f != 'textured';
         };
-        return $this->filtering($this->promotypeKey(), $filterd);
+        $promo = $this->filtering($this->promotypeKey(), $filterd);
+        if ($promo != $booster) {
+            return $promo;
+        }
+        
+        // boosterfanの場合はframeeffectを取得する。
+        $frame = $this->frameEffects();
+        if ($frame != $booster) {
+            return $frame;
+        }        
+        $border = $this->getJson()['borderColor'];
+        if ($border == 'borderless') {
+            return $border;
+        }
+        return $booster;
     }
 
     public function specialFoil() {
-        if (!$this->isSpecialFoil()) {
-            return false;
+        if (!$this->isSpecialFoil() || !$this->hasPromotype()) {
+            return 'foil';
         }
         $filterd = function($f) {
             return $f != 'boosterfun';

@@ -4,6 +4,8 @@ namespace App\Services;
 use App\Enum\CardColor;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
+use App\Http\Response\CustomResponse;
+use App\Models\Foiltype;
 use App\Services\Constant\JsonFileConstant as Column;
 
 class CardJsonFileService {
@@ -34,12 +36,12 @@ class CardJsonFileService {
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
 
             if ($cardtype->isSpecialFoil()) {
-                $newCard[Column::FOIL_TYPE] = $cardtype->specialFoil();
+                $newCard[Column::FOIL_TYPE] = $this->foiltype($newCard['name'], $cardtype->specialFoil());
                 array_push($cardInfo, $newCard);
                 logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
             } else {
                 foreach($cardtype->finishes() as $f) {
-                    $newCard[Column::FOIL_TYPE] = $f;
+                    $newCard[Column::FOIL_TYPE] = $this->foiltype($newCard['name'], $f);
                     if(strcmp("nonfoil",  $f) == 0) {
                         $newCard[Column::IS_FOIL] = false;
                     }
@@ -50,5 +52,13 @@ class CardJsonFileService {
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;
+    }
+
+    private function foiltype(string $name, string $attr) {
+        $type = Foiltype::findByAttr($attr);
+        if (empty($type)) {
+            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_FOIL, $name.':'.$attr.'が見つかりません');
+        }
+        return $type->name;
     }
 }

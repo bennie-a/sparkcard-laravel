@@ -24,4 +24,8 @@ class Foiltype extends Model
     public static function findByName(string $name) {
         return self::where('name', '=', $name)->first();
     }
+
+    public static function findByAttr(string $attr) {
+        return self::where('attr', '=', $attr)->first();
+    }
 }

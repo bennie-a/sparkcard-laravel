@@ -333,6 +333,109 @@
                     "81b524b7-dc2f-50d9-8906-d9d63a2c3256",
                     "e8f00824-e625-5267-b1fb-c279a860e424"
                 ]
+            },
+            {
+                "artist": "Scott M. Fischer",
+                "artistIds": ["23b0cf43-3e43-44c6-8329-96446eca5bce"],
+                "availability": ["paper"],
+                "borderColor": "borderless",
+                "colorIdentity": ["B"],
+                "colors": ["B"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 5059,
+                "edhrecSaltiness": 0.33,
+                "finishes": ["foil"],
+                "foreignData": [],
+                "frameEffects": ["inverted"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "262760",
+                    "cardsphereId": "90837",
+                    "mcmId": "664275",
+                    "mcmMetaId": "223052",
+                    "mtgjsonV4Id": "2f595d8b-0ea4-53fc-928a-84af8b773755",
+                    "multiverseId": "572991",
+                    "scryfallId": "d5e2a410-fca6-4d3d-9b6b-519a968e5e86",
+                    "scryfallIllustrationId": "200cf618-f0c7-43f2-a054-ff29588ef50d",
+                    "scryfallOracleId": "64a9a6b4-26b5-4d23-be86-85c54e9c4727",
+                    "tcgplayerProductId": "276371"
+                },
+                "isAlternative": true,
+                "isReprint": true,
+                "keywords": ["Mill"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "loyalty": "3",
+                "manaCost": "{1}{B}{B}",
+                "manaValue": 3.0,
+                "name": "Liliana, the Last Hope",
+                "number": "573",
+                "originalText": "+1: Up to one target creature gets -2/-1 until your next turn.\n−2: Mill two cards, then you may return a creature card from your graveyard to your hand.\n−7: You get an emblem with \"At the beginning of your end step, create X 2/2 black Zombie creature tokens, where X is two plus the number of Zombies you control.\"",
+                "originalType": "Legendary Planeswalker — Liliana",
+                "printings": [
+                    "2X2",
+                    "EMN",
+                    "MED",
+                    "PEMN",
+                    "PLIST",
+                    "PRM",
+                    "PS16",
+                    "SIR"
+                ],
+                "promoTypes": ["textured", "boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/25a8b7e27f0ff663",
+                    "cardmarket": "https://mtgjson.com/links/fb7dfb9144558fc5",
+                    "tcgplayer": "https://mtgjson.com/links/15738eb0e6b984fd"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2016-07-13",
+                        "text": "You can activate Liliana’s first ability without any targets just to add a loyalty counter to her."
+                    },
+                    {
+                        "date": "2016-07-13",
+                        "text": "Liliana’s second ability doesn’t target the card to return to your hand. After putting the top two cards of your library into your graveyard, you may choose from among any creature cards there."
+                    },
+                    {
+                        "date": "2016-07-13",
+                        "text": "While resolving the triggered ability of Liliana’s emblem, if you control zero Zombies, you’ll get two Zombie tokens."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "2X2",
+                "subtypes": ["Liliana"],
+                "supertypes": ["Legendary"],
+                "text": "[+1]: Up to one target creature gets -2/-1 until your next turn.\n[−2]: Mill two cards, then you may return a creature card from your graveyard to your hand.\n[−7]: You get an emblem with \"At the beginning of your end step, create X 2/2 black Zombie creature tokens, where X is two plus the number of Zombies you control.\"",
+                "type": "Legendary Planeswalker — Liliana",
+                "types": ["Planeswalker"],
+                "uuid": "001e28fe-5bc1-57ef-9814-adc1195a297b",
+                "variations": [
+                    "7a05291f-d4ec-597f-8685-db41838d38c5",
+                    "d0d78dd8-cbe2-5387-8433-5ce7e4ef0d11",
+                    "f93cadb6-5cd4-5b3b-a374-c44c57cd1c01"
+                ]
             }
         ],
         "code": "MUL"
