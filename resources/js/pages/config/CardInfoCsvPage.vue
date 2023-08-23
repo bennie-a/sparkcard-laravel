@@ -20,11 +20,12 @@
                 <table class="ui table striped six column">
                     <thead>
                         <tr>
-                            <th class="one wide">番号</th>
-                            <th class="five wide left aligned">カード名</th>
+                            <th class="one wide">No.</th>
+                            <th class="four wide left aligned">カード名</th>
                             <th class="four wide">英名</th>
-                            <th class="">色</th>
-                            <th class="">言語</th>
+                            <th>カード仕様</th>
+                            <th class="one wide">色</th>
+                            <th class="one wide">言語</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,14 +36,11 @@
                                 <label v-if="card.promotype != ''"
                                     >≪{{ card.promotype }}≫</label
                                 >
-                                <foiltag
-                                    :isFoil="card.isFoil"
-                                    :foiltype="card.foiltype"
-                                ></foiltag>
                             </td>
                             <td>
                                 {{ card.en_name }}
                             </td>
+                            <td>{{ join(card.foiltype) }}</td>
                             <td>
                                 <label
                                     class="ui large label"
@@ -112,6 +110,11 @@ export default {
                     Land: "土地",
                 };
                 return colors[key];
+            };
+        },
+        join: function () {
+            return function (key) {
+                return key.join("|");
             };
         },
         colorlabel: function () {
