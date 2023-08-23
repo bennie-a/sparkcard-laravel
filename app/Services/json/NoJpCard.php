@@ -1,14 +1,21 @@
 <?php
 namespace App\Services\json;
 
+use App\Models\CardInfo;
+
 /**
- * 日本語が無いカード情報クラス
+ * 日本語情報が無いカード情報クラス
  */
 class NoJpCard extends AbstractCard
 {
     public function jpname(string $enname):string
     {
-        return $this->getJpnameByAPI($enname);
+        $info = CardInfo::findEnCard($enname);
+        if (!empty($info)) {
+            return $info->name;
+        }
+        $name = $this->getJpnameByAPI($enname);
+        return $name != 'エラー' ? $name : "";
     }
 
     public function multiverseId()
@@ -24,7 +31,7 @@ class NoJpCard extends AbstractCard
 
     public function scryfallId()
     {
-        return $this->json['identifiers']['scryfallId'];
+        return $this->getJson()['identifiers']['scryfallId'];
     }
 }
 ?>

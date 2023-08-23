@@ -11,6 +11,7 @@ use App\Services\WisdomGuildService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Facades\ScryfallServ;
 use App\Enum\CardColor;
+use App\Facades\WisdomGuild;
 use App\Files\Stock\StockpileCsvReader;
 use Illuminate\Http\Response;
 
@@ -31,10 +32,10 @@ class CardInfoDBService {
                     'expansion.attr' => $details['set'],
                     'card_info.isFoil' => $details['isFoil']];
         $list = CardInfo::fetchByCondition($condition);
-        $service = new WisdomGuildService();
+        // $service = new WisdomGuildService();
 
         foreach ($list as $info) {
-            $price = $service->getPrice($info['en_name']);
+            $price = WisdomGuild::getPrice($info['en_name']);
             $info['price'] = $price;
         }
 

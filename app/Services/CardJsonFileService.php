@@ -44,6 +44,8 @@ class CardJsonFileService {
                     $newCard[Column::FOIL_TYPE] = $this->foiltype($newCard['name'], $f);
                     if(strcmp("nonfoil",  $f) == 0) {
                         $newCard[Column::IS_FOIL] = false;
+                    } else {
+                        $newCard[Column::IS_FOIL] = true;
                     }
                     array_push($cardInfo, $newCard);
                     logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
@@ -55,6 +57,11 @@ class CardJsonFileService {
     }
 
     private function foiltype(string $name, string $attr) {
+        if ($attr == 'nonfoil') {
+            return '通常版';
+        } else if($attr == 'foil') {
+            return 'Foil';
+        }
         $type = Foiltype::findByAttr($attr);
         if (empty($type)) {
             throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_FOIL, $name.':'.$attr.'が見つかりません');

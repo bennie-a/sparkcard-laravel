@@ -118,10 +118,10 @@ abstract class AbstractCard implements CardInfoInterface {
             return 'foil';
         }
         $filterd = function($f) {
-            return $f != 'boosterfun';
+            return $f != 'boosterfun' && $f != 'bundle';
         };
         $type = $this->filtering($this->promotypeKey(), $filterd);
-        if ($type == 'oilslick') {
+        if (empty($type) || $type == 'oilslick') {
             return 'foil';
         }
         return $type;

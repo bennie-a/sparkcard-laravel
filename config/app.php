@@ -1,8 +1,10 @@
 <?php
 
 use App\Facades\PromotypeFacade;
+use App\Facades\WisdomGuild;
 use App\Providers\ExServiceProvider;
 use App\Providers\MtgDevProvider;
+use App\Providers\WisdomServProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -207,7 +209,8 @@ return [
         App\Providers\CardInfoServProvider::class,
         App\Providers\ScryfallProvider::class,
         App\Providers\CardBoardProvider::class,
-        App\Providers\StockpileServiceProvider::class
+        App\Providers\StockpileServiceProvider::class,
+        App\Providers\WisdomServProvider::class
     ],
 
     /*
@@ -228,8 +231,9 @@ return [
         'CardInfoServ' => App\Facades\CardInfoServ::class,
         'ScryfallServ' => App\Facades\ScryfallServ::class,
         'CardBoard' => App\Facades\CardBoard::class,
-        'StockpileServ' => App\Facades\StockpileServ::class
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'StockpileServ' => App\Facades\StockpileServ::class,
+        'WisdomGuild' => App\Facades\WisdomGuild::class
+         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
 ];

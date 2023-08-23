@@ -35,7 +35,10 @@
                                 <label v-if="card.promotype != ''"
                                     >≪{{ card.promotype }}≫</label
                                 >
-                                <foiltag :isFoil="card.isFoil"></foiltag>
+                                <foiltag
+                                    :isFoil="card.isFoil"
+                                    :foiltype="card.foiltype"
+                                ></foiltag>
                             </td>
                             <td>
                                 {{ card.en_name }}
