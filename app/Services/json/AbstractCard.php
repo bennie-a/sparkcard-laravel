@@ -1,9 +1,9 @@
 <?php
 namespace app\Services\json;
 
+use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
 use App\Services\interfaces\CardInfoInterface;
-use App\Services\WisdomGuildService;
 use Closure;
 
 abstract class AbstractCard implements CardInfoInterface {
@@ -54,8 +54,7 @@ abstract class AbstractCard implements CardInfoInterface {
      * @return string カード名(日本語名)
      */
     protected function getJpnameByAPI($enname) {
-        $service = new WisdomGuildService();
-        $jpname = $service->getJpName($enname);
+        $jpname = WisdomGuild::getJpName($enname);
         return $jpname;
     }
 
@@ -167,7 +166,7 @@ abstract class AbstractCard implements CardInfoInterface {
      */
     public function isSpecialFoil() {
         $finishes = $this->finishes();
-        return count($finishes) == 1 && in_array("foil", $finishes);
+        return count($finishes) == 1 && in_array('foil', $finishes);
     }
 
     /**
@@ -196,11 +195,11 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     protected function isFullArt() {
-        return MtgJsonUtil::hasKey(self::IS_FULLART, $this->json);
+        return MtgJsonUtil::hasKey(self::IS_FULLART, $this->getJson());
     }
 
     protected function hasPromotype() {
-        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json);
+        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->getJson());
     }
 
     protected function promotypeKey() : string {

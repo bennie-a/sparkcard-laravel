@@ -2,6 +2,7 @@
 namespace App\Factory;
 
 use App\Libs\MtgJsonUtil;
+use app\Services\json\AbstractCard;
 use App\Services\json\BasicLand;
 use App\Services\json\ExcludeCard;
 use App\Services\json\JpCard;

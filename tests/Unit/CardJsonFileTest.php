@@ -98,17 +98,19 @@ class CardJsonFileTest extends TestCase
      * @dataProvider foiltypeprovider
      * @return void
      */
-    public function test_finishes(string $filename, int $number, string $foiltype) {
+    public function test_finishes(string $filename, int $number, array $foiltype) {
         // $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($number, $foiltype){
-            if ($a['number'] == $number && $a["foiltype"] == $foiltype) {
+            if ($a['number'] == $number) {
                 return $a;
             }
         });
         $actualcard = current($filterd);
         assertNotEmpty($actualcard, '該当カードの有無');
+        $actualFoil = $actualcard['foiltype'];
+        $this->assertSame($foiltype, $actualFoil, '仕様の特定');
     }
 
     /**
@@ -264,13 +266,12 @@ class CardJsonFileTest extends TestCase
 
     public function foiltypeprovider() {
         return [
-            '通常版' => ['mul.json', 1, "通常版"],
-            'Foil' => ['mul.json', 1, "Foil"],
-            'ハロー・Foil' => ['mul.json', 131, "ハロー・Foil"],
-            'エッチングFoil' => ['mul.json', 66, "エッチングFoil"],
-            'S&C・Foil' => ['one.json', 422, 'S&C・Foil'],
-            'オイルスリックFoil' => ['one.json', 345, 'Foil'],
-            'テクスチャーFoil' => ['mul.json', 573, 'テクスチャーFoil'],
+            '通常版&Foil' => ['mul.json', 1, ["通常版", "Foil"]],
+            'ハロー・Foil' => ['mul.json', 131, ["ハロー・Foil"]],
+            'エッチングFoil' => ['mul.json', 66, ["エッチングFoil"]],
+            'S&C・Foil' => ['one.json', 422, ['S&C・Foil']],
+            'オイルスリックFoil' => ['one.json', 345, ['Foil']],
+            'テクスチャーFoil' => ['mul.json', 573,[ 'テクスチャーFoil']],
         ];
     }
 

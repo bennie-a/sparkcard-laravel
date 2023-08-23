@@ -32,7 +32,6 @@ class CardInfoDBService {
                     'expansion.attr' => $details['set'],
                     'card_info.isFoil' => $details['isFoil']];
         $list = CardInfo::fetchByCondition($condition);
-        // $service = new WisdomGuildService();
 
         foreach ($list as $info) {
             $price = WisdomGuild::getPrice($info['en_name']);

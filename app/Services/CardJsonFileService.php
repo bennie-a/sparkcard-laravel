@@ -7,6 +7,7 @@ use App\Factory\CardInfoFactory;
 use App\Http\Response\CustomResponse;
 use App\Models\Foiltype;
 use App\Services\Constant\JsonFileConstant as Column;
+use app\Services\json\AbstractCard;
 
 class CardJsonFileService {
     public function build($json) {
@@ -28,44 +29,47 @@ class CardJsonFileService {
             $enname = $c['name'];
             $color = CardColor::match($c);
             $promoType = \App\Facades\Promo::find($cardtype);
+            $foiltype = $this->foiltype($cardtype);
 
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
             'color' => $color->value, Column::NUMBER => $cardtype->number(),
-             Column::PROMOTYPE => $promoType, Column::IS_FOIL => true, 'language' => $cardtype->language()];
+             Column::PROMOTYPE => $promoType, Column::IS_FOIL => true, 'language' => $cardtype->language(),
+             Column::FOIL_TYPE => $foiltype];
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
-
-            if ($cardtype->isSpecialFoil()) {
-                $newCard[Column::FOIL_TYPE] = $this->foiltype($newCard['name'], $cardtype->specialFoil());
-                array_push($cardInfo, $newCard);
-                logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
-            } else {
-                foreach($cardtype->finishes() as $f) {
-                    $newCard[Column::FOIL_TYPE] = $this->foiltype($newCard['name'], $f);
-                    if(strcmp("nonfoil",  $f) == 0) {
-                        $newCard[Column::IS_FOIL] = false;
-                    } else {
-                        $newCard[Column::IS_FOIL] = true;
-                    }
-                    array_push($cardInfo, $newCard);
-                    logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
-                }
-            }
+            
+            array_push($cardInfo, $newCard);
+            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;
     }
 
-    private function foiltype(string $name, string $attr) {
-        if ($attr == 'nonfoil') {
-            return '通常版';
-        } else if($attr == 'foil') {
-            return 'Foil';
+    private function foiltype(AbstractCard $cardtype) {
+        $foiltype = [];
+        if($cardtype->isSpecialFoil()) {
+            $type = $cardtype->specialFoil();
+            $typename = $this->findFoilName($type);
+            array_push($foiltype, $typename);
+        } else {
+            $finishes = $cardtype->finishes();
+            $foiltype = array_map(function($f) {
+                if ($f == 'nonfoil') {
+                    return '通常版';
+                } else if ($f== 'foil') {
+                    return 'Foil';
+                } else {
+                    $typename = $this->findFoilName($f);
+                    return $typename;
+                }
+                }, $finishes);
         }
-        $type = Foiltype::findByAttr($attr);
-        if (empty($type)) {
-            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_FOIL, $name.':'.$attr.'が見つかりません');
-        }
-        return $type->name;
+        return $foiltype;
+    }
+
+    private function findFoilName(string $attr) {
+        $result = Foiltype::findByAttr($attr);
+        $typename = empty($result) ? '不明':$result->name;
+        return $typename;
     }
 }
