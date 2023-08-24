@@ -56,7 +56,15 @@ class ScryfallCard extends AbstractCard {
     }
 
     public function imageurl() {
-        return $this->getJson()['image_uris']['png'];
+        $imageuris = [];
+        if ($this->getJson()['layout'] == 'transform') {
+            $imageuris = $this->getJson()['card_faces'][0]['image_uris'];
+        } else {
+            $imageuris =  $this->getJson()['image_uris'];
+        }
+
+
+        return $imageuris['png'];
     }
 
     protected function hasPromotype() {

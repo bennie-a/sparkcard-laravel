@@ -4,6 +4,7 @@ namespace Tests\Unit\DB;
 
 use App\Facades\ExService;
 use App\Facades\ScryfallServ;
+use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
@@ -30,22 +31,8 @@ class CardInfoDBTest extends TestCase
         parent::setup();
         $this->seed('DatabaseSeeder');
         $this->seed('TestExpansionSeeder');
+        $this->seed('TestCardInfoSeeder');
     }
-
-//     public function test_両面カード() {
-//                 $data = ['setCode' => 'NEO',
-//                 'name' => '永岩城の修繕',
-//                 'en_name' => 'The Restoration of Eiganjo // Architect of Restoration',
-//                 'color' => 'W',
-//                 'number'=> '442',
-//                 'multiverseId' => '551715',
-//                 'promotype' => '', 
-//                 'scryfallId' => '','isFoil' => false,
-//             'language' => 'JP'];
-//         $record = $this->post_execute($this->neo, $data);
-//         assertEquals("https://cards.scryfall.io/png/front/0/7/070d6344-ee01-4e27-a513-467d8775a853.png?1657724945",
-//                      $record['image_url'], "画像");
-//     }
 
 /**
  * 画像URL取得に関する検証テスト
@@ -58,8 +45,7 @@ class CardInfoDBTest extends TestCase
  * @return void
  * @dataProvider imageprovider
  */
-public function test_getImage(string $name, string $color, int $number, int $multiId, string $scryId) {
-    $setcode = 'WAR';
+public function test_getImage(string $setcode, string $name, string $color, int $number, int $multiId, string $scryId) {
     $enname = $this->getEnName($setcode, $number);
     $data = ['setCode' => $setcode,
                         Con::NAME => $name,
@@ -73,39 +59,41 @@ public function test_getImage(string $name, string $color, int $number, int $mul
 
     public function imageprovider() {
         return[
-            'multiverseIdあり' => ['出現領域', 'Land', 245, 462492, ''],
-            'scryfallIdあり' => ['群れの声、アーリン', 'G', 150, 0, '43261927-7655-474b-ac61-dfef9e63f428'],
-            'multiverseIdとscryfallIdなし' => ['出現領域', 'Land', 245, 0, '']
+            'multiverseIdあり' => ['WAR', '出現領域', 'Land', 245, 462492, ''],
+            'scryfallIdあり' => ['WAR', '出現領域', 'Land', 245, 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
+            'multiverseIdとscryfallIdなし' => ['WAR', '出現領域', 'Land', 245, 0, ''],
+            '両面カード' => ['NEO', '永岩城の修繕', 'W', 442, 551715, ''],
+            '画像URL更新' => ['NEO', '告別≪ショーケース≫', 'W', 365,552454, ''],
         ];
     }
 
     /**
-     * プロモタイプ登録テスト
-     *@dataProvider promoprovider
+     * 特別版の登録テスト
+     *@dataProvider specialcardprovider
      * @return void
      */
-    public function test_promotype(int $number, int $multiId, string $promotype) {
-        $setcode = 'NEO';
+    public function test_specialcard(string $setcode, string $name, int $number, int $multiId, string $promotype, string $scryId, array $foiltype) {
         $enname = $this->getEnName($setcode, $number);
         $data = ['setCode' => $setcode,
-                            Con::NAME => '発展の暴君、ジン＝ギタクシアス',
+                            Con::NAME => $name,
                             Con::EN_NAME => $enname,
                             Con::COLOR => 'U',
                             Con::NUMBER => $number,
                             'multiverseId' => $multiId,
-                           Con::PROMOTYPE => $promotype, 'scryfallId' => '', Con::FOIL_TYPE => ['通常版', 'Foil'], 'isSkip' => false];
+                           Con::PROMOTYPE => $promotype, 'scryfallId' => $scryId, Con::FOIL_TYPE => $foiltype, 'isSkip' => false];
             $this->post_ok($data);
     
     }
-    public function promoprovider() {
+    public function specialcardprovider() {
         return [
-            '特別版' => [371, 552460, 'ショーケース']
-            // '特別版' => []
+            '特別版' => ['NEO', '発展の暴君、ジン＝ギタクシアス', 371, 552460, 'ショーケース', '', ['通常版', 'Foil']],
+            'ハロー・Foil' => ['MUL', '族樹の精霊、アナフェンザ', 131, 0, '',  "262ebc87-fcf5-4893-8357-dcb985a9ba60", ['ハロー・Foil']]
         ];
     }
 
     private function post_ok($data)
     {
+        // $this->markTestSkipped('一時スキップ');
         $this->post_execute($data, 201);
 
         $setcode = $data['setCode'];
@@ -114,7 +102,6 @@ public function test_getImage(string $name, string $color, int $number, int $mul
         $record = CardInfo::where(['exp_id' => $exp->notion_id, 'number' => $number])->get();
         $foiltype =  $data[Con::FOIL_TYPE];
         assertCount(count($foiltype), $record, '登録レコードの有無');
-
 
         foreach($foiltype as $foil) {
             $type = Foiltype::findByName($foil);
@@ -145,51 +132,57 @@ public function test_getImage(string $name, string $color, int $number, int $mul
     }
 
     private function getEnName(string $setcode, int $number) {
-        $api = ScryfallServ::getCardInfoByNumber(["setcode" => $setcode, Con::NUMBER => $number, 'language' => "ja"]);
+        $api = ScryfallServ::getCardInfoByNumber(["setcode" => $setcode, Con::NUMBER => $number, 'language' => "en"]);
         return $api[Con::EN_NAME];
     }
 
-//     public function test_setCodeがDBになし() 
-//     {
-//         $data = ['setCode' => 'XXX',
-//                 'name' => '出現領域',
-//                     'en_name' => 'Emergence Zone',
-//                     'color' => 'Land',
-//                 'number'=> '245',
-//                 'multiverseId' => '462492',
-//                 'scryfallId' => '',
-//                 'promotype' => '', 'isFoil' => false,
-//             'language' => 'JP'];
-//         $response = $this->post('api/database/card', $data)->assertStatus(441);
-//     }
+    /**
+     * エラーケース
+     *@dataProvider errorcase
+     * @return void
+     */
+    public function test_error(string $setcode, string $name, string $enname, 
+                                            int $number, int $multiId, int $statuscode, array $foiltype) {
+        $data = ['setCode' => $setcode,
+                            Con::NAME => $name,
+                            Con::EN_NAME => $enname,
+                            Con::COLOR => 'Land',
+                            Con::NUMBER => $number,
+                            'multiverseId' => $multiId,
+                           Con::PROMOTYPE => '', 'scryfallId' => '', Con::FOIL_TYPE => $foiltype, 'isSkip' => false];
+        $this->post_execute($data, $statuscode);
+    }
 
-//     public function test_検索() {
-//         CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id,
-//                                                  'color_id' => 'W', 'isFoil' => false, 'en_name' =>'aaaaa' ]);
-//         CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id, 
-//                                                     'color_id' => 'U', 'isFoil' => false,  'en_name' =>'bbbbb']);
+    public function errorcase() {
+        return [
+            'setCodeがDBになし' => ['XXX', '出現領域', 'Emergence Zone', 245, 462492, 441, ['通常版']],
+            '不明なFoilタイプ' => ['WAR', '出現領域', 'Emergence Zone',
+                                                     245, 462492, CustomResponse::HTTP_NOT_FOUND_FOIL, ['不明']]
+        ];
+    }
 
-//         $condition = ['name' => '', 'set' => $this->bro->attr, 'color' => 'W', 'isFoil' => false];
-//         $response = $this->json('GET', 'api/database/card', $condition)->assertOk();
-//         $response->assertJsonCount(5);
-//         $json = $response->baseResponse->getContent();
-//         $contents = json_decode($json, true);
-//         foreach($contents as $line) {
-//             assertTrue(array_key_exists('index', $line), 'index');
-//             assertTrue(array_key_exists('name', $line), 'name');
-//             assertTrue(array_key_exists('enname', $line), 'enname');
-//             assertTrue(array_key_exists('image', $line), 'image');
-//             assertTrue(array_key_exists('color', $line), 'color');
-//             assertEquals('白', $line['color'], '色の返り値');
-//         }
-//     }
+    // public function test_検索() {
+    //     $condition = ['name' => '', 'set' => 'BRO', 'color' => 'W', 'isFoil' => false];
+    //     $response = $this->json('GET', 'api/database/card', $condition)->assertOk();
+    //     $response->assertJsonCount(5);
+    //     $json = $response->baseResponse->getContent();
+    //     $contents = json_decode($json, true);
+    //     foreach($contents as $line) {
+    //         assertTrue(array_key_exists('index', $line), 'index');
+    //         assertTrue(array_key_exists('name', $line), 'name');
+    //         assertTrue(array_key_exists('enname', $line), 'enname');
+    //         assertTrue(array_key_exists('image', $line), 'image');
+    //         assertTrue(array_key_exists('color', $line), 'color');
+    //         assertEquals('白', $line['color'], '色の返り値');
+    //     }
+    // }
 
-//     public function test_検索_検索結果なし() {
-//         CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id,
-//          'color_id' => 'W', 'isFoil' => false,  'en_name' =>'aaaaa']);
-//         $condition = ['name' => '', 'set' => $this->bro->attr, 'color' => 'U', 'isFoil' => false];
-//         $response = $this->json('GET', 'api/database/card', $condition)
-//                                     ->assertStatus(Response::HTTP_NO_CONTENT);
-//     }
+    // public function test_検索_検索結果なし() {
+    //     CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id,
+    //      'color_id' => 'W', 'isFoil' => false,  'en_name' =>'aaaaa']);
+    //     $condition = ['name' => '', 'set' => $this->bro->attr, 'color' => 'U', 'isFoil' => false];
+    //     $response = $this->json('GET', 'api/database/card', $condition)
+    //                                 ->assertStatus(Response::HTTP_NO_CONTENT);
+    // }
  
 }

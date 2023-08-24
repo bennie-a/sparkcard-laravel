@@ -60,11 +60,17 @@ class CardInfoDBService {
             logger()->error('not exist:'.$setCode);
             throw new HttpResponseException(response($setCode.'がDBに登録されていません', CustomResponse::HTTP_NOT_FOUND_EXPANSION));
         }
+        $number = $details[Con::NUMBER];
         foreach($foiltype as $foil) {
             $isFoil = $foil != '通常版';
             logger()->info("import start.");
             // カード名、エキスパンション略称、カード番号で一意性チェック
             $foiltype = Foiltype::findByName($foil);
+            if (empty($foiltype)) {
+                $msg = $name.'('.$number.')のFoilタイプが見つかりません';
+                throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_FOIL, $msg);
+            }
+
             $info = CardInfo::findSpecificCard($exp->notion_id, $name, $foiltype->id);
             // 画像URL取得
             $url = $this->service->getImageUrl($details);
