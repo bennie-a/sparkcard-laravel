@@ -10,12 +10,14 @@ class NoJpCard extends AbstractCard
 {
     public function jpname(string $enname):string
     {
-        $info = CardInfo::findEnCard($enname);
+        $info = CardInfo::findJpName($enname);
         if (!empty($info)) {
             return $info->name;
+        } else {
+            return "";
         }
-        $name = $this->getJpnameByAPI($enname);
-        return $name != 'エラー' ? $name : "";
+        // $name = $this->getJpnameByAPI($enname);
+        // return $name != 'エラー' ? $name : "";
     }
 
     public function multiverseId()

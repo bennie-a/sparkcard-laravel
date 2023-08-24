@@ -102,4 +102,9 @@ class CardInfo extends Model
         $info = self::select('en_name')->where(['name' => $name])->first();
         return $info;
     }
+
+    public static function findJpName(string $enname) {
+        $name = self::select('name')->where(['en_name' => $enname])->first();
+        return $name;
+    }
 }

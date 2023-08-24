@@ -1,17 +1,33 @@
 <template>
     <message-area></message-area>
-    <article class="mt-1 ui segment">
-        <file-upload @action="upload" type="json"></file-upload>
-        {{ filename }}
-    </article>
-    <article class="mt-1">
-        <div v-if="getCards.length != 0">
-            <div class="mr-1 ui toggle checkbox">
-                <input type="checkbox" id="isSkip" v-model="isSkip" />
-                <label for="isSkip">情報の更新を行わない</label>
-            </div>
-            <ModalButton @action="store">DBに登録する</ModalButton>
+    <article class="mt-1 ui grid segment">
+        <div
+            class="three wide column middle aligned content ui toggle checkbox"
+        >
+            <input type="checkbox" id="isDraftOnly" v-model="isDraftOnly" />
+            <label for="isDraftOnly">通常版のみ表示</label>
         </div>
+        <div class="three wide column field">
+            <select v-model="color" class="ui dropdown">
+                <option value="">全て</option>
+                <option value="R">赤</option>
+                <option value="W">白</option>
+                <option value="B">黒</option>
+                <option value="G">緑</option>
+                <option value="U">青</option>
+                <option value="M">多色</option>
+                <option value="L">無色</option>
+                <option value="A">アーティファクト</option>
+                <option value="Land">土地</option>
+            </select>
+        </div>
+        <div class="seven wide column">
+            <file-upload @action="upload" type="json"></file-upload>
+            {{ filename }}
+        </div>
+    </article>
+    <article class="mt-1" v-if="getCards.length != 0">
+        <!-- <div v-if="getCards.length != 0"> -->
         <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="inline field">
                 <label>エキスパンション名：</label>{{ setCode }}
@@ -33,8 +49,10 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
-                                <label v-if="card.promotype != ''"
-                                    >≪{{ card.promotype }}≫</label
+                                <span
+                                    v-if="card.promotype != ''"
+                                    class="sub header"
+                                    >≪{{ card.promotype }}≫</span
                                 >
                             </td>
                             <td>
@@ -62,6 +80,17 @@
                     </tfoot>
                 </table>
             </div>
+            <div class="ui centered grid">
+                <div
+                    class="three wide column middle aligned content ui toggle checkbox"
+                >
+                    <input type="checkbox" id="isSkip" v-model="isSkip" />
+                    <label for="isSkip">更新をスキップ</label>
+                </div>
+                <div class="three wide column">
+                    <ModalButton @action="store">DBに登録する</ModalButton>
+                </div>
+            </div>
         </form>
         <loading
             :active="isLoading"
@@ -87,6 +116,8 @@ export default {
             setCode: "",
             isSkip: false,
             isLoading: false,
+            isDraftOnly: false,
+            color: "",
         };
     },
     mounted: function () {
@@ -143,8 +174,14 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
+            // let query = {
+            //     data: file,
+            //     has_draft: this.isDraftOnly,
+            //     color: this.color,
+            // };
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color;
             await axios
-                .post("/api/upload/card", file, config)
+                .post("/api/upload/card" + query, file, config)
                 .then((response) => {
                     if (response.status == 201) {
                         let item = response.data;
@@ -182,6 +219,9 @@ export default {
             const list = this.$store.getters.card;
             await Promise.all(
                 list.map(async (card) => {
+                    if (card.name == undefined) {
+                        return;
+                    }
                     const success = function (response, store) {};
                     card["isSkip"] = this.isSkip;
                     await task.post("/database/card", card, success);

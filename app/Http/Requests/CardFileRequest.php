@@ -25,7 +25,11 @@ class CardFileRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = ['data' => 'required', 'data.cards' => 'required', 'data.code' => 'required'];
+        $rules = ['data' => 'required', 
+                            'data.cards' => 'required',
+                             'data.code' => 'required',
+                             'isDraft' => 'required',
+                            'color' => 'nullable:string'];
 
         return $rules;
     }
@@ -38,9 +42,27 @@ class CardFileRequest extends FormRequest
     public function messages()
     {
         return [
-            'data.required' => 'dataオブジェクトは必ず入力してください。',
             'data.cards.required' => 'cardsオブジェクトはdataオブジェクト内に指定してください。',
             'data.code.required' => 'codeはdataオブジェクト内に指定してください',
         ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'isDraft' => '通常版フィルター',
+            'color' => '色'
+        ];
+    }
+
+    protected function prepareForValidation() {
+        $value = $this->isDraft;
+        # 文字列表現のboolを実際のboolに変換
+        if ($value === 'false') {
+            $value = false;
+        } elseif ($value === 'true') {
+            $value = true;
+        }
+        $this->merge(['isDraft' => $value]);
     }
 }
