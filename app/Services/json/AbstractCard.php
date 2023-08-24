@@ -105,7 +105,7 @@ abstract class AbstractCard implements CardInfoInterface {
         if ($frame != $booster) {
             return $frame;
         }        
-        $border = $this->getJson()['borderColor'];
+        $border = $this->borderColor();
         if ($border == 'borderless') {
             return $border;
         }
@@ -147,6 +147,10 @@ abstract class AbstractCard implements CardInfoInterface {
             return 'boosterfun';
         }
         return $filterd;
+    }
+
+    public function borderColor() {
+        return $this->getJson()['borderColor'];
     }
 
     private function filtering($keyword, Closure $filterd) {

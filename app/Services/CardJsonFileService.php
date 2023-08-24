@@ -34,7 +34,7 @@ class CardJsonFileService {
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
             'color' => $color->value, Column::NUMBER => $cardtype->number(),
-             Column::PROMOTYPE => $promoType, Column::IS_FOIL => true, 'language' => $cardtype->language(),
+             Column::PROMOTYPE => $promoType, 'language' => $cardtype->language(),
              Column::FOIL_TYPE => $foiltype];
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
             

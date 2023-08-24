@@ -210,7 +210,8 @@ return [
         App\Providers\ScryfallProvider::class,
         App\Providers\CardBoardProvider::class,
         App\Providers\StockpileServiceProvider::class,
-        App\Providers\WisdomServProvider::class
+        App\Providers\WisdomServProvider::class,
+        App\Providers\ScryfallProvider::class
     ],
 
     /*

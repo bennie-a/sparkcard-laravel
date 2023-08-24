@@ -102,4 +102,7 @@ class ScryfallCard extends AbstractCard {
         return MtgJsonUtil::isTrue('textless', $this->getJson());
     }
 
+    public function borderColor() {
+        return $this->getJson()['border_color'];
+    }
 }

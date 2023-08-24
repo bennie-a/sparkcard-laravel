@@ -13,7 +13,9 @@ use App\Facades\ScryfallServ;
 use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
 use App\Files\Stock\StockpileCsvReader;
+use App\Models\Foiltype;
 use Illuminate\Http\Response;
+use App\Services\Constant\JsonFileConstant as Con;
 
 /**
  * card_infoテーブルのロジッククラス
@@ -52,39 +54,44 @@ class CardInfoDBService {
     {
         $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
         $name = $details['name'].$promotype;
-        $isFoil = $details['isFoil'];
-        logger()->info("import start.",['カード名' => $name, '通常/Foil' => $isFoil]);
+        $foiltype = $details[Con::FOIL_TYPE];
         $exp = Expansion::where('attr', $setCode)->first();
         if (\is_null($exp)) {
             logger()->error('not exist:'.$setCode);
             throw new HttpResponseException(response($setCode.'がDBに登録されていません', CustomResponse::HTTP_NOT_FOUND_EXPANSION));
         }
-        // カード名、エキスパンション略称、カード番号で一意性チェック
-        $info = CardInfo::findSpecificCard($exp->notion_id, $name, $isFoil);
-        // 画像URL取得
-        $url = $this->service->getImageUrl($details);
-        if (empty($info)) {
-            logger()->info('insert card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
-            $record = [
-                'exp_id'=> $exp->notion_id,
-                'name' => $name,
-                'barcode' => $this->barcode(),
-                'en_name' => $details['en_name'],
-                'color_id' => $details['color'],
-                'number' => $details['number'],
-                'image_url' => $url,
-                'isFoil' => $isFoil
-            ];
-            $record = CardInfo::create($record);
-            return $record;
-        } else if (!is_null($url) && boolval($details['isSkip']) !== true) {
-            logger()->info('update card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
-            $info->image_url = $url;
-            $info->update();
-        } else {
-            logger()->info('skip card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
-        }
-        logger()->info("import end.");
+        foreach($foiltype as $foil) {
+            $isFoil = $foil != '通常版';
+            logger()->info("import start.");
+            // カード名、エキスパンション略称、カード番号で一意性チェック
+            $foiltype = Foiltype::findByName($foil);
+            $info = CardInfo::findSpecificCard($exp->notion_id, $name, $foiltype->id);
+            // 画像URL取得
+            $url = $this->service->getImageUrl($details);
+            $log = ['カード名' => $name, 'number' => $details['number'], 'カード仕様' => $foil];
+            if (empty($info)) {
+                logger()->info("insert card.",$log);
+                $record = [
+                    'exp_id'=> $exp->notion_id,
+                    'name' => $name,
+                    'barcode' => $this->barcode(),
+                    'en_name' => $details['en_name'],
+                    'color_id' => $details['color'],
+                    'number' => $details['number'],
+                    'image_url' => $url,
+                    'isFoil' => $isFoil,
+                    'foiltype_id' => $foiltype->id
+                ];
+                $record = CardInfo::create($record);
+            } else if (!is_null($url) && boolval($details['isSkip']) !== true) {
+                logger()->info('update card:', $log);
+                $info->image_url = $url;
+                $info->update();
+            } else {
+                logger()->info('skip card:', ['カード名' => $name, '通常/Foil' => $isFoil]);
+            }
+            logger()->info("import end.");
+        };
     }
 
     

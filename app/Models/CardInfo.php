@@ -91,10 +91,10 @@ class CardInfo extends Model
      * @param [type] $isFoil
      * @return カード情報
      */
-    public static function findSpecificCard($exp_id, $name, $isFoil)
+    public static function findSpecificCard($exp_id, $name, $foiltype_id)
     {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
-        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
+        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'foiltype_id' => $foiltype_id])->first();
         return $info;
     }
 
