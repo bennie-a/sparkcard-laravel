@@ -28,8 +28,8 @@ class CardFileRequest extends FormRequest
         $rules = ['data' => 'required', 
                             'data.cards' => 'required',
                              'data.code' => 'required',
-                            //  'isDraft' => 'required',
-                            // 'color' => 'nullable:string'
+                             'isDraft' => 'nullable|boolean',
+                            'color' => 'nullable|string'
                         ];
 
         return $rules;
@@ -51,19 +51,25 @@ class CardFileRequest extends FormRequest
     public function attributes()
     {
         return [
-            'isDraft' => '通常版フィルター',
-            'color' => '色'
+            'isDraft' => '通常版フィルタースイッチ',
+            'color' => '色フィルター'
         ];
     }
 
     protected function prepareForValidation() {
         $value = $this->isDraft;
         # 文字列表現のboolを実際のboolに変換
-        if ($value === 'false') {
+        if (empty($value) || $value === 'false' || $value == '0') {
             $value = false;
-        } elseif ($value === 'true') {
+        } elseif ($value == 1 || $value === 'true') {
             $value = true;
         }
         $this->merge(['isDraft' => $value]);
+
+        $color = $this->color;
+        if (empty($color)) {
+            $color = '';
+        }
+        $this->merge(['color' => $color]);
     }
 }

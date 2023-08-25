@@ -11,6 +11,7 @@ use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNotSame;
 
 /**
  * カード情報ファイルアップロードのテスト
@@ -178,6 +179,37 @@ class CardJsonFileTest extends TestCase
     }
 
     /**
+     * 読み込みフィルターの確認テスト
+     * @dataProvider filterProvider
+     * @return void
+     */
+    public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
+        $result = $this->execute($filename, 201, $isDraft, $color);
+        assertNotSame(0, count($result), '結果件数');
+        foreach($result as $r) {
+            if ($isDraft) {
+                assertEmpty($r[self::PROMOTYPE], '通常版の確認');
+            }
+            if (!empty($color)) {
+                assertEquals($color, $r['color'], '指定した色の確認');
+            }
+        }
+    }
+
+    /**
+     * フィルターのデータ
+     *
+     * @return void
+     */
+    public function filterProvider() {
+        return [
+            '通常版フィルターのみ' => ['war_short.json', true, ''],
+            '色フィルターのみ' => ['war_short.json', false, 'B'],
+            '通常版フィルターと色フィルター両方' => ['war_short.json', true, 'B']
+        ];
+    }
+
+    /**
      * エラーケース
      *
      * @param string $filename
@@ -187,22 +219,8 @@ class CardJsonFileTest extends TestCase
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
         // $this->markTestSkipped('一時スキップ');
-
-        $header = [
-            'headers' => [
-                "Content-Type" => "application/json",
-            ]
-        ];
-        $json = $this->json_decode($filename);
-        $cards = $json['data']['cards'];
-        $data = [
-            'data' => [
-                'cards' => $cards,
-                'code' => $json['data']['code']
-            ]
-        ];
-        $response = $this->post('/api/upload/card', $data, $header);
-        $response->assertStatus($expectedCode);
+        $response = $this->execute($filename, $expectedCode);
+        assertEquals($expectedMsg, $response->json('detail'), 'メッセージ');
     }
 
     /**
@@ -242,7 +260,7 @@ class CardJsonFileTest extends TestCase
         return $actualcard;
 
     }
-    private function execute(string $filename) {
+    private function execute(string $filename, int $statuscode = 201, bool $isDraft = false, string $color = '') {
         $header = [
             'headers' => [
                 "Content-Type" => "application/json",
@@ -256,12 +274,15 @@ class CardJsonFileTest extends TestCase
                 'code' => $json['data']['code']
             ]
         ];
-        $response = $this->post('/api/upload/card', $data, $header);
-        $response->assertStatus(201);
-        assertEquals($data['data']['code'], $response->json('setCode'), 'Ex略称');
-
-        $result = $response->json('cards');
-        return $result;
+        $query = sprintf('?isDraft=%s&color=%s', $isDraft, $color);
+        $response = $this->post('/api/upload/card'.$query, $data, $header);
+        $response->assertStatus($statuscode);
+        if ($statuscode == 201) {
+            assertEquals($data['data']['code'], $response->json('setCode'), 'Ex略称');
+            $result = $response->json('cards');
+            return $result;
+        }
+        return $response;
     }
 
     /**

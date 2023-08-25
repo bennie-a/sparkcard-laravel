@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\json;
 
+use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
 use App\Services\interfaces\CardInfoInterface;
@@ -33,6 +34,8 @@ abstract class AbstractCard implements CardInfoInterface {
     protected $json;
 
     protected $jp;
+
+    protected $color;
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
      *
@@ -189,6 +192,14 @@ abstract class AbstractCard implements CardInfoInterface {
      */
     public function isExclude($json, array $cardInfo) {
         return false;
+    }
+
+    public function color() {
+        if (empty($this->color)) {
+            $type = CardColor::match($this->json);
+            $this->color = $type->value;
+        }
+        return $this->color;
     }
 
     /**

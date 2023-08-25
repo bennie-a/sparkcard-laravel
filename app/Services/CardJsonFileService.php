@@ -6,11 +6,12 @@ use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
 use App\Http\Response\CustomResponse;
 use App\Models\Foiltype;
+use App\Models\Promotype;
 use App\Services\Constant\JsonFileConstant as Column;
 use app\Services\json\AbstractCard;
 
 class CardJsonFileService {
-    public function build($json) {
+    public function build($json, bool $isDraft, string $colorFilter) {
         $cards = $json["cards"];
         $setcode = $json["code"];
         
@@ -22,18 +23,16 @@ class CardJsonFileService {
         foreach($cards as $c) {
             $cardtype = CardInfoFactory::create($c);
 
-            // AbstractCardクラスでスキップ条件メソッドを記述。場合に応じて各カードタイプでメソッド化。
-            if ($cardtype->isExclude($c, $cardInfo)) {
+            $promoType = \App\Facades\Promo::find($cardtype);
+            if ($this->isExclude($cardInfo, $c, $cardtype, $promoType, $isDraft, $colorFilter)) {
                 continue;
             }
             $enname = $c['name'];
-            $color = CardColor::match($c);
-            $promoType = \App\Facades\Promo::find($cardtype);
             $foiltype = $this->foiltype($cardtype);
 
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
-            'color' => $color->value, Column::NUMBER => $cardtype->number(),
+            'color' => $cardtype->color(), Column::NUMBER => $cardtype->number(),
              Column::PROMOTYPE => $promoType, 'language' => $cardtype->language(),
              Column::FOIL_TYPE => $foiltype];
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
@@ -71,5 +70,22 @@ class CardJsonFileService {
         $result = Foiltype::findByAttr($attr);
         $typename = empty($result) ? '不明':$result->name;
         return $typename;
+    }
+
+    /**
+     * 除外カードを判定する。
+     *
+     * @param array $cardInfo
+     * @param array $json
+     * @param AbstractCard $cardtype
+     * @param string $promo
+     * @param boolean $isDraft
+     * @param string $colorFilter
+     * @return boolean
+     */
+    private function isExclude(array $cardInfo, array $json, 
+            AbstractCard $cardtype, string $promo, bool $isDraft, string $colorFilter) {
+        $isExcludeColor = !empty($colorFilter) && $cardtype->color() != $colorFilter;
+        return $cardtype->isExclude($json, $cardInfo) || $isExcludeColor || $isDraft && !empty($promo);
     }
 }

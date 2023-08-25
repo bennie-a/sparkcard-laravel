@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CardJsonFileController extends Controller
 {
+    private $service;
     public function __construct(CardJsonFileService $service)
     {
         ini_set("max_execution_time",240); // タイムアウトを240秒にセット
@@ -30,17 +31,13 @@ class CardJsonFileController extends Controller
         logger()->info('upload start');
         $json = $request->input("data");
         $color = $request->color;
-        logger()->debug($color);
+        logger()->debug('色フィルター', [$color]);
         $isDraft = $request->isDraft;
-        logger()->debug($isDraft);
-        $data = $this->service->build($json);
+        logger()->debug('通常版フィルタースイッチ', [$isDraft]);
+        $data = $this->service->build($json, $isDraft, $color);
+
         logger()->info('upload end');
         return response($data, Response::HTTP_CREATED);
-        // try {
-
-        // } catch(Exception $e) {
-        //     return response($e->getMessage(), 410);
-        // }
 
     }
 }
