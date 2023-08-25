@@ -28,8 +28,9 @@ class CardFileRequest extends FormRequest
         $rules = ['data' => 'required', 
                             'data.cards' => 'required',
                              'data.code' => 'required',
-                             'isDraft' => 'required',
-                            'color' => 'nullable:string'];
+                            //  'isDraft' => 'required',
+                            // 'color' => 'nullable:string'
+                        ];
 
         return $rules;
     }

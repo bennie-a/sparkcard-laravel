@@ -1,5 +1,5 @@
 <?php
-namespace app\Services\json;
+namespace App\Services\json;
 
 use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
@@ -29,6 +29,10 @@ abstract class AbstractCard implements CardInfoInterface {
     const IS_FULLART = 'isFullArt';
 
     const IS_TEXTLESS = 'isTextless';
+
+    protected $json;
+
+    protected $jp;
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
      *
@@ -60,6 +64,11 @@ abstract class AbstractCard implements CardInfoInterface {
 
     public function jpname(string $enname):string {
         return $this->jp[self::NAME];        
+    }
+
+    public function multiverseId()
+    {
+        return 0;
     }
 
     public function scryfallId()
@@ -182,8 +191,14 @@ abstract class AbstractCard implements CardInfoInterface {
         return false;
     }
 
+    /**
+     * 英語版のmultiverse_idを返す。
+     *
+     * @return int
+     */
     protected function getEnMultiverseId() {
-        return $this->getIdentifiersValue(self::MULTIVERSEID);
+        $id = $this->getIdentifiersValue(self::MULTIVERSEID);
+        return empty($id) ? 0 : $id;
     }
 
     protected function getEnScryfallId () {

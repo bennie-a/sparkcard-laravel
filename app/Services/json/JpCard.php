@@ -11,6 +11,11 @@ class JpCard extends AbstractCard
         $this->jp = $this->getJp($json);
     }
 
+    /**
+     * multiverse_idを返す
+     * @see AbstractCard::multiverseId()
+     * @return int
+     */
     public function multiverseId()
     {
         return MtgJsonUtil::hasKey(self::MULTIVERSEID, $this->getJpData()) ?

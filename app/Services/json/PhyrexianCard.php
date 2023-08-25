@@ -8,11 +8,6 @@ use App\Services\WisdomGuildService;
  */
 class PhyrexianCard extends AbstractCard
 {
-    public function multiverseId()
-    {
-        return '';
-    }
-
     public function jpname(string $enname): string
     {
         $jpname = $this->getJpnameByAPI($enname);

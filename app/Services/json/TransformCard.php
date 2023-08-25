@@ -16,6 +16,11 @@ class TransformCard extends AbstractCard {
         return $this->getJpnameByAPI($enname);
     }
 
+    /**
+     * multiverse_idを返す
+     *@see AbstractCard::multiverseId()
+     * @return void
+     */
     public function multiverseId() {
             return $this->getEnMultiverseId();
     }

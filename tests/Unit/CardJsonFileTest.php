@@ -62,7 +62,23 @@ class CardJsonFileTest extends TestCase
         assertEquals($expected[self::MULTIVERSEID], $actualcard[self::MULTIVERSEID], 'multiverseId');
         assertEquals($expected[self::SCRYFALLID], $actualcard[self::SCRYFALLID], 'scryfallId');
         assertEquals($expected['language'], $actualcard['language'], '言語');
-    }   
+    } 
+
+    
+    /**
+     * テストデータ(通常版)
+     *
+     * @return array 各テストの入力値
+     */
+    public function dataprovider() {
+        return [
+            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => '', 'language' => 'JP']],
+            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 3476, 'scryfallId' => '', 'language' => 'JP']],
+            '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
+            '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => 0,  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
+            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']]
+        ];
+    }
 
     /**
      * カードタイプのテスト
@@ -70,12 +86,26 @@ class CardJsonFileTest extends TestCase
      */
     public function test_カードタイプ(string $filename, array $expected) {
         // $this->markTestSkipped('一時スキップ');
-
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
         assertNotEmpty($actualcard, '結果の有無');
         assertEquals($expected[self::NAME], $actualcard[self::NAME], 'カード名');
     }
+
+    /**
+     * カードタイプ別のテストデータ
+     *
+     * @return void
+     */
+    public function cardtypeProvider() {
+        return [
+            '基本土地' => ['land.json', ['name' => '島(263)', self::MULTIVERSEID => 604650]],
+            '特殊土地' => ['land.json', ['name' => 'やせた原野', self::MULTIVERSEID => 465455]],
+            'フルアート版土地' => ['land.json', ['name' => '平地(262)', self::MULTIVERSEID => 604649]],
+            '冠雪土地' => ['land.json', ['name' => '冠雪の島', self::MULTIVERSEID => 465470]],
+        ];
+    }
+
 
     /**
      * 特別版の特定に関するテスト
@@ -91,6 +121,29 @@ class CardJsonFileTest extends TestCase
         });
         $actualcard = current($filterd);
         assertNotEmpty($actualcard, '該当カードの有無');
+    }
+
+    /**
+     * プロモタイプ別のテスト
+     *
+     * @return array 各テストの入力値
+     */
+    public function specialdataprovider() {
+        return [
+            '通常版' => ['war_short.json', [self::NAME => '鮮血の刃先', self::PROMOTYPE => '']],
+            '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', self::PROMOTYPE => '絵違い']],
+            '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => '拡張アート']],
+            'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', self::PROMOTYPE => 'ブースターファン']],
+            'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => 'ショーケース']],
+            'フルアート' =>  ['neo.json', [self::NAME =>  '平地(293)', self::PROMOTYPE => 'フルアート']],
+            'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', self::PROMOTYPE => 'ネオンインク']],
+            'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
+            'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
+            'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
+            'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
+            'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']],
+            'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', self::PROMOTYPE => 'ボーダレス']]
+        ];
     }
 
     /**
@@ -111,6 +164,17 @@ class CardJsonFileTest extends TestCase
         assertNotEmpty($actualcard, '該当カードの有無');
         $actualFoil = $actualcard['foiltype'];
         $this->assertSame($foiltype, $actualFoil, '仕様の特定');
+    }
+
+    public function foiltypeprovider() {
+        return [
+            '通常版&Foil' => ['mul.json', 1, ["通常版", "Foil"]],
+            'ハロー・Foil' => ['mul.json', 131, ["ハロー・Foil"]],
+            'エッチングFoil' => ['mul.json', 66, ["エッチングFoil"]],
+            'S&C・Foil' => ['one.json', 422, ['S&C・Foil']],
+            'オイルスリックFoil' => ['one.json', 345, ['Foil']],
+            'テクスチャーFoil' => ['mul.json', 573,[ 'テクスチャーFoil']],
+        ];
     }
 
     /**
@@ -210,69 +274,6 @@ class CardJsonFileTest extends TestCase
         $contents = file_get_contents(storage_path("test/json/".$path));
         $json = json_decode($contents, true);
         return $json;
-    }
-
-    /**
-     * テストデータ(通常版)
-     *
-     * @return array 各テストの入力値
-     */
-    public function dataprovider() {
-        return [
-            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => '463894', 'scryfallId' => '', 'language' => 'JP']],
-            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => '3476', 'scryfallId' => '', 'language' => 'JP']],
-            '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => '', 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
-            '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => '',  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
-            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => '',  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']]
-        ];
-    }
-
-    /**
-     * カードタイプ別のテストデータ
-     *
-     * @return void
-     */
-    public function cardtypeProvider() {
-        return [
-            '基本土地' => ['land.json', ['name' => '島(263)', self::MULTIVERSEID => '604650']],
-            '特殊土地' => ['land.json', ['name' => 'やせた原野', self::MULTIVERSEID => '465455']],
-            'フルアート版土地' => ['land.json', ['name' => '平地(262)', self::MULTIVERSEID => '604649']],
-            '冠雪土地' => ['land.json', ['name' => '冠雪の島', self::MULTIVERSEID => '465470']],
-        ];
-    }
-
-    /**
-     * プロモタイプ別のテスト
-     *
-     * @return array 各テストの入力値
-     */
-    public function specialdataprovider() {
-        return [
-            '通常版' => ['war_short.json', [self::NAME => '鮮血の刃先', self::PROMOTYPE => '']],
-            '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', self::PROMOTYPE => '絵違い']],
-            '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => '拡張アート']],
-            'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', self::PROMOTYPE => 'ブースターファン']],
-            'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => 'ショーケース']],
-            'フルアート' =>  ['neo.json', [self::NAME =>  '平地(293)', self::PROMOTYPE => 'フルアート']],
-            'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', self::PROMOTYPE => 'ネオンインク']],
-            'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
-            'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
-            'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
-            'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
-            'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']],
-            'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', self::PROMOTYPE => 'ボーダレス']]
-        ];
-    }
-
-    public function foiltypeprovider() {
-        return [
-            '通常版&Foil' => ['mul.json', 1, ["通常版", "Foil"]],
-            'ハロー・Foil' => ['mul.json', 131, ["ハロー・Foil"]],
-            'エッチングFoil' => ['mul.json', 66, ["エッチングFoil"]],
-            'S&C・Foil' => ['one.json', 422, ['S&C・Foil']],
-            'オイルスリックFoil' => ['one.json', 345, ['Foil']],
-            'テクスチャーFoil' => ['mul.json', 573,[ 'テクスチャーFoil']],
-        ];
     }
 
     public function errorprovider() {
