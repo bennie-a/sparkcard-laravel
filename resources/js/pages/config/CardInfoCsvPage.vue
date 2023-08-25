@@ -27,18 +27,7 @@
         </div>
     </article>
     <article class="mt-1" v-if="getCards.length != 0">
-        <div class="ui centered grid">
-            <div
-                class="three wide column middle aligned content ui toggle checkbox"
-            >
-                <input type="checkbox" id="isSkip" v-model="isSkip" />
-                <label for="isSkip">更新をスキップ</label>
-            </div>
-            <div class="three wide column">
-                <ModalButton @action="store">DBに登録する</ModalButton>
-            </div>
-        </div>
-        <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
+        <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="inline field">
                 <label>エキスパンション名：</label>{{ setCode }}
             </div>
@@ -90,7 +79,18 @@
                     </tfoot>
                 </table>
             </div>
-        </form>
+            <div class="ui centered grid">
+                <div
+                    class="three wide column middle aligned content ui toggle checkbox"
+                >
+                    <input type="checkbox" id="isSkip" v-model="isSkip" />
+                    <label for="isSkip">更新をスキップ</label>
+                </div>
+                <div class="three wide column">
+                    <ModalButton @action="store">DBに登録する</ModalButton>
+                </div>
+            </div>
+        </div>
         <loading
             :active="isLoading"
             :can-cancel="false"
@@ -173,13 +173,10 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
-            // let query = {
-            //     data: file,
-            //     has_draft: this.isDraftOnly,
-            //     color: this.color,
-            // };
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color;
+
             await axios
-                .post("/api/upload/card", file, config)
+                .post("/api/upload/card" + query, file, config)
                 .then((response) => {
                     if (response.status == 201) {
                         let item = response.data;
@@ -218,11 +215,10 @@ export default {
             await Promise.all(
                 list.map(async (card) => {
                     if (card.name != "") {
-                        return;
+                        const success = function (response, store) {};
+                        card["isSkip"] = this.isSkip;
+                        await task.post("/database/card", card, success);
                     }
-                    const success = function (response, store) {};
-                    card["isSkip"] = this.isSkip;
-                    await task.post("/database/card", card, success);
                 })
             ).catch(() => {
                 console.error("error");
