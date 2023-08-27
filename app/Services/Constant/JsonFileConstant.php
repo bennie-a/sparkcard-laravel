@@ -15,4 +15,12 @@ class JsonFileConstant {
     const COLOR = 'color';
 
     const PROMOTYPE = 'promotype';
+    
+    const MULTIVERSEID = 'multiverseId';
+
+    const IDENTIFER = 'identifiers';
+
+    const SCRYFALLID = 'scryfallId';
+
+    const SIDE = 'side';
 }

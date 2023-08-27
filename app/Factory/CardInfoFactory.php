@@ -3,15 +3,18 @@ namespace App\Factory;
 
 use App\Libs\MtgJsonUtil;
 use app\Services\json\AbstractCard;
+use App\Services\json\AdventureCard;
 use App\Services\json\BasicLand;
 use App\Services\json\ExcludeCard;
 use App\Services\json\JpCard;
 use App\Services\json\JpLimitedCard;
+use App\Services\json\JsonCard;
 use App\Services\json\NoJpCard;
 use App\Services\json\PhyrexianCard;
 use App\Services\json\PlistCard;
 use App\Services\json\StarterCard;
 use App\Services\json\TransformCard;
+use App\Services\Constant\JsonFileConstant as Con;
 
 /**
  * JSONファイルに記載されたカード情報の形式に沿って
@@ -30,16 +33,16 @@ class CardInfoFactory {
         if (self::isExclude($json)) {
             return new ExcludeCard($json);
         }
-        // 両面カード
-        $layout = $json["layout"];
-        if (strcmp($layout, "transform") == 0) {
+        // 2機能以上のカード
+        if (MtgJsonUtil::hasKey(Con::SIDE, $json)) {
             return new TransformCard($json);
         }
+
         // 言語限定カード
         $class = match($json['language']) {
             'Japanese' =>JPLimitedCard::class,
             'Phyrexian' => PhyrexianCard::class,
-            'English' => NoJpCard::class
+            'English' => JsonCard::class
         };
 
         // 基本土地or冠雪土地
@@ -48,12 +51,12 @@ class CardInfoFactory {
 
             $superTypes = $json["supertypes"];
             if (in_array('Snow', $superTypes)) {
-                $class = JpCard::class;
+                $class = JsonCard::class;
             } else if (in_array('Basic', $superTypes)) {
                 $class = BasicLand::class;
             }
         }
-        if ($class != NoJpCard::class) {
+        if ($class != JsonCard::class) {
             $obj = new $class($json);
             return $obj;
         }
@@ -71,11 +74,7 @@ class CardInfoFactory {
             }
         }
 
-        // 日本語版の検索
-        if (self::hasJp($json)) {
-            return new JpCard($json);
-        }
-        return new NoJpCard($json);
+        return new JsonCard($json);
     }
 
     /**

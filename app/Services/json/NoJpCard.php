@@ -5,18 +5,10 @@ use App\Models\CardInfo;
 
 /**
  * 日本語情報が無いカード情報クラス
+ * @deprecated 3.2.0
  */
 class NoJpCard extends AbstractCard
 {
-    public function jpname(string $enname):string
-    {
-        $info = CardInfo::findJpName($enname);
-        if (!empty($info)) {
-            return $info->name;
-        }
-        $name = $this->getJpnameByAPI($enname);
-        return $name != 'エラー' ? $name : "";
-    }
 
     public function number()
     {

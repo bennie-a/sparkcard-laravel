@@ -4,6 +4,8 @@ namespace App\Services\json;
 use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
+use App\Models\CardInfo;
+use App\Services\Constant\JsonFileConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
 use Closure;
 
@@ -11,17 +13,8 @@ abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
     {
         $this->json = $json;
+        $this->jp = $this->getJpData($json);
     }
-
-    const NAME = 'name';
-
-    const EN_NAME = 'en_name';
-
-    const MULTIVERSEID = 'multiverseId';
-
-    const IDENTIFER = 'identifiers';
-
-    const SCRYFALLID = 'scryfallId';
 
     const PROMOTYPE = 'promoTypes';
 
@@ -42,7 +35,10 @@ abstract class AbstractCard implements CardInfoInterface {
      * @param [type] $json
      * @return void 
      */
-    protected function getJp($json) {
+    protected function getJpData($json) {
+        if (!MtgJsonUtil::hasKey('foreignData', $json)) {
+            return;
+        }
         $forgienData = $json['foreignData'];
         $filterd = array_filter($forgienData, function($data) {
             return strcmp($data['language'], 'Japanese') == 0;
@@ -65,8 +61,17 @@ abstract class AbstractCard implements CardInfoInterface {
         return $jpname;
     }
 
-    public function jpname(string $enname):string {
-        return $this->jp[self::NAME];        
+    public function jpname(string $enname):string
+    {
+        if (!empty($this->jp)) {
+            return $this->jp[Con::NAME];
+        }
+        $info = CardInfo::findJpName($enname);
+        if (!empty($info)) {
+            return $info->name;
+        }
+        $name = $this->getJpnameByAPI($enname);
+        return $name != 'エラー' ? $name : "";
     }
 
     public function multiverseId()
@@ -208,12 +213,12 @@ abstract class AbstractCard implements CardInfoInterface {
      * @return int
      */
     protected function getEnMultiverseId() {
-        $id = $this->getIdentifiersValue(self::MULTIVERSEID);
+        $id = $this->getIdentifiersValue(Con::MULTIVERSEID);
         return empty($id) ? 0 : $id;
     }
 
     protected function getEnScryfallId () {
-        return $this->getIdentifiersValue(self::SCRYFALLID);
+        return $this->getIdentifiersValue(Con::SCRYFALLID);
     }
     private function getIdentifiersValue($key){
         $identifiers = $this->getIdentifiers();

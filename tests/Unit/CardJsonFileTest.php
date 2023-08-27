@@ -73,11 +73,12 @@ class CardJsonFileTest extends TestCase
      */
     public function dataprovider() {
         return [
-            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => '', 'language' => 'JP']],
-            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 3476, 'scryfallId' => '', 'language' => 'JP']],
+            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027', 'language' => 'JP']],
+            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84', 'language' => 'JP']],
             '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
             '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => 0,  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
-            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']]
+            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']],
+            '出来事付きカード' => ['woe.json', ['name' => '恋に落ちた騎士', self::MULTIVERSEID => 0,  'scryfallId' => '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'language' => 'JP']]
         ];
     }
 
@@ -156,7 +157,7 @@ class CardJsonFileTest extends TestCase
         // $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
-        $filterd = array_filter($result, function($a) use($number, $foiltype){
+        $filterd = array_filter($result, function($a) use($number){
             if ($a['number'] == $number) {
                 return $a;
             }
@@ -184,6 +185,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename, 201, $isDraft, $color);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
@@ -206,6 +208,25 @@ class CardJsonFileTest extends TestCase
             '通常版フィルターのみ' => ['war_short.json', true, ''],
             '色フィルターのみ' => ['war_short.json', false, 'B'],
             '通常版フィルターと色フィルター両方' => ['war_short.json', true, 'B']
+        ];
+    }
+
+    /**
+     * 色の判別を検証する
+     * @dataProvider colorprovider
+     * @return void
+     */
+    public function test_color(string $filename, string $name, string $scryfallId, string $color) {
+        $result = $this->execute($filename);
+        $actual = $this->findCard($result, 0, $scryfallId);
+        assertNotNull($actual, "該当カード");
+        assertEquals($name, $actual[self::NAME], "カード名");
+        assertEquals($color, $actual['color']);
+    }
+
+    public function colorprovider() {
+        return [
+            '多色の出来事付きカード' => ['woe.json', 'イモデーンの徴募兵', '4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0', 'M']
         ];
     }
 
@@ -304,6 +325,6 @@ class CardJsonFileTest extends TestCase
     }
 
     public function excludeprovider() {
-        return ['出来事カード' => ['woe.json', 'Betroth the Beast']];
+        return ['出来事ソーサリー' => ['woe.json', 'Betroth the Beast']];
     }
 }

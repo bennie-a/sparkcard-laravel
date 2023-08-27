@@ -4,11 +4,10 @@ namespace App\Services;
 use App\Enum\CardColor;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
-use App\Http\Response\CustomResponse;
 use App\Models\Foiltype;
-use App\Models\Promotype;
 use App\Services\Constant\JsonFileConstant as Column;
 use app\Services\json\AbstractCard;
+use App\Services\json\TransformCard;
 
 class CardJsonFileService {
     public function build($json, bool $isDraft, string $colorFilter) {
@@ -20,8 +19,12 @@ class CardJsonFileService {
             throw new NotFoundException(441, $setcode.'が登録されていません。');
         }
         $cardInfo = [];
-        foreach($cards as $c) {
+        foreach($cards as $i => $c) {
             $cardtype = CardInfoFactory::create($c);
+            if ($cardtype instanceof TransformCard && $cardtype->side() == 'a') {
+                $sideb = new TransformCard($cards[$i + 1]);
+                $cardtype->setSideB($sideb);
+            }
 
             $promoType = \App\Facades\Promo::find($cardtype);
             if ($this->isExclude($cardInfo, $c, $cardtype, $promoType, $isDraft, $colorFilter)) {

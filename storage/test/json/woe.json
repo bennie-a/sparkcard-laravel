@@ -16,7 +16,12 @@
                 "faceName": "Besotted Knight",
                 "finishes": ["nonfoil", "foil"],
                 "flavorText": "\"You are no monster to me, my love.\"",
-                "foreignData": [],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "恋に落ちた騎士"
+                    }
+                ],
                 "frameVersion": "2015",
                 "hasFoil": true,
                 "hasNonFoil": true,
@@ -64,7 +69,12 @@
                 "faceName": "Betroth the Beast",
                 "finishes": ["nonfoil", "foil"],
                 "flavorText": "\"You are no monster to me, my love.\"",
-                "foreignData": [],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "獣との婚約"
+                    }
+                ],
                 "frameVersion": "2015",
                 "hasFoil": true,
                 "hasNonFoil": true,
@@ -97,6 +107,104 @@
                 "type": "Sorcery — Adventure",
                 "types": ["Sorcery"],
                 "uuid": "cd7cb0c4-f317-5f0e-9b2d-e5ac83dfb0ed"
+            },
+            {
+                "artist": "Nestor Ossandon Leal",
+                "artistIds": ["7a6f1667-a8ac-47f5-a302-f71cb54b2adf"],
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["default"],
+                "borderColor": "black",
+                "colorIdentity": ["R", "W"],
+                "colors": ["R"],
+                "convertedManaCost": 3.0,
+                "faceConvertedManaCost": 3.0,
+                "faceManaValue": 3.0,
+                "faceName": "Imodane's Recruiter",
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "イモデーンの徴募兵"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "mtgjsonV4Id": "5ac287f7-b140-510e-b139-a24f232424f8",
+                    "scryfallId": "4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0",
+                    "scryfallIllustrationId": "b4917d96-22fa-46ed-a330-98a7ee72c116",
+                    "scryfallOracleId": "50bee80e-89df-48c2-b608-ba66ff3e794a"
+                },
+                "language": "English",
+                "layout": "adventure",
+                "legalities": { "future": "Legal" },
+                "manaCost": "{2}{R}",
+                "manaValue": 3.0,
+                "name": "Imodane's Recruiter // Train Troops",
+                "number": "229",
+                "otherFaceIds": ["f358ec5c-ad0d-5b68-8d2f-edc92b13022d"],
+                "power": "2",
+                "printings": ["WOE"],
+                "purchaseUrls": {},
+                "rarity": "uncommon",
+                "setCode": "WOE",
+                "side": "a",
+                "subtypes": ["Human", "Knight"],
+                "supertypes": [],
+                "text": "When Imodane's Recruiter enters the battlefield, creatures you control get +1/+0 and gain haste until end of turn.",
+                "toughness": "2",
+                "type": "Creature — Human Knight",
+                "types": ["Creature"],
+                "uuid": "d07c6d79-289a-5a83-a221-13eff0e629ba"
+            },
+            {
+                "artist": "Nestor Ossandon Leal",
+                "artistIds": ["7a6f1667-a8ac-47f5-a302-f71cb54b2adf"],
+                "availability": ["arena", "mtgo", "paper"],
+                "boosterTypes": ["default"],
+                "borderColor": "black",
+                "colorIdentity": ["R", "W"],
+                "colors": ["W"],
+                "convertedManaCost": 3.0,
+                "faceConvertedManaCost": 5.0,
+                "faceManaValue": 5.0,
+                "faceName": "Train Troops",
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "兵団の訓練"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "mtgjsonV4Id": "e996cd4f-3fdb-5eaf-b980-8fbe6afca71f",
+                    "scryfallId": "4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0",
+                    "scryfallIllustrationId": "b4917d96-22fa-46ed-a330-98a7ee72c116",
+                    "scryfallOracleId": "50bee80e-89df-48c2-b608-ba66ff3e794a"
+                },
+                "language": "English",
+                "layout": "adventure",
+                "legalities": { "future": "Legal" },
+                "manaCost": "{4}{W}",
+                "manaValue": 3.0,
+                "name": "Imodane's Recruiter // Train Troops",
+                "number": "229",
+                "otherFaceIds": ["d07c6d79-289a-5a83-a221-13eff0e629ba"],
+                "printings": ["WOE"],
+                "purchaseUrls": {},
+                "rarity": "uncommon",
+                "setCode": "WOE",
+                "side": "b",
+                "subtypes": ["Adventure"],
+                "supertypes": [],
+                "text": "Create two 2/2 white Knight creature tokens with vigilance. (Then exile this card. You may cast the creature later from exile.)",
+                "type": "Sorcery — Adventure",
+                "types": ["Sorcery"],
+                "uuid": "f358ec5c-ad0d-5b68-8d2f-edc92b13022d"
             }
         ],
         "code": "WOE"
