@@ -22,12 +22,16 @@ class CardJsonFileService {
         foreach($cards as $i => $c) {
             $cardtype = CardInfoFactory::create($c);
 
+            $enname = $c['name'];
             $promoType = \App\Facades\Promo::find($cardtype);
-            if ($this->isExclude($cardInfo, $c, $cardtype, $promoType, $isDraft, $colorFilter)) {
+            $foiltype = $this->foiltype($cardtype);
+            if ($this->isExclude($cardtype, $promoType, $isDraft, $colorFilter)) {
+                if ($cardtype->color() == CardColor::BLUE) {
+                    logger()->debug('skip card:', ['class' => $cardtype::class, Column::NAME => $cardtype->jpname($enname), 
+                                                                                                        Column::NUMBER => $cardtype->number()]);
+                }
                 continue;
             }
-            $enname = $c['name'];
-            $foiltype = $this->foiltype($cardtype);
 
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
             'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
@@ -82,9 +86,8 @@ class CardJsonFileService {
      * @param string $colorFilter
      * @return boolean
      */
-    private function isExclude(array $cardInfo, array $json, 
-            AbstractCard $cardtype, string $promo, bool $isDraft, string $colorFilter) {
+    private function isExclude(AbstractCard $cardtype, string $promo, bool $isDraft, string $colorFilter) {
         $isExcludeColor = !empty($colorFilter) && $cardtype->color() != $colorFilter;
-        return $cardtype->isExclude($json, $cardInfo) || $isExcludeColor || $isDraft && !empty($promo);
+        return $cardtype->isExclude() || $isExcludeColor || $isDraft && !empty($promo);
     }
 }

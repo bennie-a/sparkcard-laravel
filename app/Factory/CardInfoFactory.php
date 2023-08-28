@@ -129,7 +129,7 @@ class CardInfoFactory {
      *  @return bool
      */
     private static function isExclude($json):bool {
-        return self::isOnlineOnly($json) || self::isAdventure($json);
+        return self::isOnlineOnly($json);
     }
 
     /**

@@ -37,7 +37,8 @@ class TransformCard extends JsonCard {
             $colors = $this->getJson()['colorIdentity'];
             $types =$this->getJson()["types"];
             $cardtype = current($types);
-            $this->color = CardColor::findColor($colors, $cardtype);
+            $colortype = CardColor::findColor($colors, $cardtype);
+            $this->color = $colortype->value;
         }
         return $this->color;
     }
@@ -47,7 +48,7 @@ class TransformCard extends JsonCard {
      * @return boolean
      */
     public function isExclude() {
-        return $this->side() != 'a';
+        return $this->side() !== "a";
     }
 }
 ?>

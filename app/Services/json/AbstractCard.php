@@ -110,7 +110,8 @@ abstract class AbstractCard implements CardInfoInterface {
             return 'draft';
         }
         $filterd = function($f) {
-            return $f != 'textured';
+            $excluded = ['textured', 'confettifoil'];
+            return !in_array($f, $excluded);
         };
         $promo = $this->filtering($this->promotypeKey(), $filterd);
         if ($promo != $booster) {

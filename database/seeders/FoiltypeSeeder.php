@@ -21,7 +21,7 @@ class FoiltypeSeeder extends Seeder
         Foiltype::create(['attr' => 'etched', 'name' => 'エッチングFoil']);
         Foiltype::create(['attr' => 'stepandcompleat', 'name' => 'S&C・Foil']);
         Foiltype::create(['attr' => 'textured', 'name' => 'テクスチャーFoil']);
-        Foiltype::create(['attr' => 'confetti', 'name' => 'コンフェッティFoil']);
+        Foiltype::create(['attr' => 'confettifoil', 'name' => 'コンフェッティFoil']);
         Foiltype::create(['attr' => 'halofoil', 'name' => 'ハロー・Foil']);
         Foiltype::create(['attr' => 'neonink', 'name' => 'ネオンインクFoil']);
     }

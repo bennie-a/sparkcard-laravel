@@ -146,7 +146,9 @@ class CardJsonFileTest extends TestCase
             'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
             'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
             'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']],
-            'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', self::PROMOTYPE => 'ボーダレス']]
+            'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', self::PROMOTYPE => 'ボーダレス']],
+            'おとぎ話' => ['wot.json', [self::NAME => '盲従', self::PROMOTYPE => 'おとぎ話']],
+            'アニメ・ボーダレス' => ['wot.json', [self::NAME => '騙し討ち', self::PROMOTYPE => 'アニメ・ボーダレス']]
         ];
     }
 
@@ -178,6 +180,7 @@ class CardJsonFileTest extends TestCase
             'S&C・Foil' => ['one.json', 422, ['S&C・Foil']],
             'オイルスリックFoil' => ['one.json', 345, ['Foil']],
             'テクスチャーFoil' => ['mul.json', 573,[ 'テクスチャーFoil']],
+            'コンフェッティFoil' => ['wot.json', 90,[ 'コンフェッティFoil']],
         ];
     }
 
@@ -315,6 +318,7 @@ class CardJsonFileTest extends TestCase
         ];
         $query = sprintf('?isDraft=%s&color=%s', $isDraft, $color);
         $response = $this->post('/api/upload/card'.$query, $data, $header);
+        logger()->error($response->json('detail'));
         $response->assertStatus($statuscode);
         if ($statuscode == 201) {
             assertEquals($data['data']['code'], $response->json('setCode'), 'Ex略称');
