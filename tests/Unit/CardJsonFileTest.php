@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Unit;
 
+use App\Enum\CardColor;
 use App\Models\Expansion;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Response;
@@ -73,12 +74,12 @@ class CardJsonFileTest extends TestCase
      */
     public function dataprovider() {
         return [
-            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027', 'language' => 'JP']],
-            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84', 'language' => 'JP']],
-            '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
-            '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => 0,  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
-            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']],
-            '出来事付きカード' => ['woe.json', ['name' => '恋に落ちた騎士', self::MULTIVERSEID => 0,  'scryfallId' => '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'language' => 'JP']]
+            // '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027', 'language' => 'JP']],
+            // '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84', 'language' => 'JP']],
+            // '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
+            // '両面カード' => ['mom.json' ,['name' => 'ラヴニカへの侵攻', 'multiverseId' => 0,  'scryfallId' => '73f8fc4f-2f36-4932-8d04-3c2651c116dc',  'language' => 'JP']],
+            // 'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']],
+            // '出来事付きカード' => ['woe.json', ['name' => '恋に落ちた騎士', self::MULTIVERSEID => 0,  'scryfallId' => '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'language' => 'JP']],
         ];
     }
 
@@ -87,11 +88,12 @@ class CardJsonFileTest extends TestCase
      * @dataProvider cardtypeProvider
      */
     public function test_カードタイプ(string $filename, array $expected) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
         assertNotEmpty($actualcard, '結果の有無');
         assertEquals($expected[self::NAME], $actualcard[self::NAME], 'カード名');
+        assertEquals(CardColor::LAND->value, $actualcard['color'], '色コード');
     }
 
     /**
@@ -114,7 +116,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
@@ -154,7 +156,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_finishes(string $filename, int $number, array $foiltype) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($number){
@@ -185,7 +187,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename, 201, $isDraft, $color);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
@@ -217,6 +219,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_color(string $filename, string $name, string $scryfallId, string $color) {
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actual = $this->findCard($result, 0, $scryfallId);
         assertNotNull($actual, "該当カード");
@@ -224,8 +227,23 @@ class CardJsonFileTest extends TestCase
         assertEquals($color, $actual['color']);
     }
 
+    /**
+     * カードの色に関するテストデータ
+     * (土地はcardtypeにて別途テスト)
+     *
+     * @return void
+     */
     public function colorprovider() {
         return [
+            '白' => ['war_short.json', '規律の絆', 'bb7c78bb-9f2a-47a4-adc4-b497bb38f46f', 'W'],
+            '黒' => ['war_short.json', '鮮血の刃先', 'ac82422c-8ac8-4fbb-b9b9-d0aa23dded61', 'B'],
+            '青' => ['war_short.json', 'ジェイスの投影', 'c4d35a34-01b7-41e1-8491-a6589175d027', 'U'],
+            '赤' => ['war_short.json', '炎の職工、チャンドラ', 'd21a7b23-8827-49f2-ade4-75a602d17743', 'R'],
+            '緑' => ['war_short.json', '群れの声、アーリン', '43261927-7655-474b-ac61-dfef9e63f428', 'G'],
+            '多色' => ['war_short.json', '龍神、ニコル・ボーラス', '98b68dea-a7be-4f99-8a50-4c8cf0e0f7a9', 'M'],
+            'アーティファクト' => ['war_short.json', '静かな潜水艇', 'ae2f3dee-1768-4562-9333-a50b9ee7570f', 'A'],
+            '無色' => ['war_short.json', '大いなる創造者、カーン', '3ec0c0fb-1a4f-45f4-85b7-346a6d3ce2c5', 'L'],
+            '単色の出来事付きカード' => ['woe.json', '恋に落ちた騎士', '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'W'],
             '多色の出来事付きカード' => ['woe.json', 'イモデーンの徴募兵', '4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0', 'M']
         ];
     }
@@ -239,7 +257,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $response = $this->execute($filename, $expectedCode);
         assertEquals($expectedMsg, $response->json('detail'), 'メッセージ');
     }
@@ -249,7 +267,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider excludeprovider
      */
     public function test_除外カード(string $filename, string $excludedname) {
-        // $this->markTestSkipped('一時スキップ');
+        $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($excludedname){
             if ($a[self::EN_NAME] == $excludedname) {

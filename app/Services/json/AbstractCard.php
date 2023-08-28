@@ -195,7 +195,7 @@ abstract class AbstractCard implements CardInfoInterface {
      *
      * @return boolean 除外したい場合はtrue, そうでない場合はfalse
      */
-    public function isExclude($json, array $cardInfo) {
+    public function isExclude() {
         return false;
     }
 
@@ -226,7 +226,7 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     protected function getIdentifiers() {
-        return $this->getJson()['identifiers'];
+        return $this->getJson()[Con::IDENTIFIERS];
     }
 
     protected function isFullArt() {

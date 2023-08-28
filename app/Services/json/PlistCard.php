@@ -15,7 +15,7 @@ class PlistCard extends AbstractCard
 
     public function scryfallId()
     {
-        return $this->json['identifiers']['scryfallId'];
+        return parent::getEnScryfallId();
     }
 
 }

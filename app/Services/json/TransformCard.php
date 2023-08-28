@@ -2,7 +2,6 @@
 namespace App\Services\json;
 
 use App\Enum\CardColor;
-use App\Services\json\AbstractCard;
 use App\Services\Constant\JsonFileConstant as Con;
 
 /**
@@ -10,12 +9,6 @@ use App\Services\Constant\JsonFileConstant as Con;
  */
 class TransformCard extends JsonCard {
 
-    private TransformCard $sideb;
-    
-    public function setSideB(TransformCard $sideb) 
-    {
-        $this->sideb = $sideb;
-    }
     /**
      * multiverse_idを返す
      *@see AbstractCard::multiverseId()
@@ -53,7 +46,7 @@ class TransformCard extends JsonCard {
      * @override AbstractCard
      * @return boolean
      */
-    public function isExclude($json, array $cardInfo) {
+    public function isExclude() {
         return $this->side() != 'a';
     }
 }

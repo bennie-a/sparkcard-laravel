@@ -18,9 +18,9 @@ class JsonFileConstant {
     
     const MULTIVERSEID = 'multiverseId';
 
-    const IDENTIFER = 'identifiers';
-
     const SCRYFALLID = 'scryfallId';
 
     const SIDE = 'side';
+
+    const IDENTIFIERS = 'identifiers';
 }

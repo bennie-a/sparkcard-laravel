@@ -21,10 +21,6 @@ class CardJsonFileService {
         $cardInfo = [];
         foreach($cards as $i => $c) {
             $cardtype = CardInfoFactory::create($c);
-            if ($cardtype instanceof TransformCard && $cardtype->side() == 'a') {
-                $sideb = new TransformCard($cards[$i + 1]);
-                $cardtype->setSideB($sideb);
-            }
 
             $promoType = \App\Facades\Promo::find($cardtype);
             if ($this->isExclude($cardInfo, $c, $cardtype, $promoType, $isDraft, $colorFilter)) {

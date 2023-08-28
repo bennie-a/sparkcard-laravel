@@ -11,7 +11,7 @@ class ExcludeCard extends AbstractCard
      * @override AbstractCard
      * @return boolean
      */
-    public function isExclude($json, array $cardInfo) {
+    public function isExclude() {
         return true;
     }
 
