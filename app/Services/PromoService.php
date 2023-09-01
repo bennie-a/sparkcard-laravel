@@ -11,10 +11,7 @@ use app\Services\json\AbstractCard;
 class PromoService {
     public function find(AbstractCard $cardtype) {
         $promoValue = $cardtype->promotype();
-        // boosterfanの場合はframeeffectを取得する。
-        if (strcmp($promoValue, 'boosterfun') == 0) {
-            $promoValue = $cardtype->frameEffects();
-        }
+
         $promo = Promotype::findCardByAttr($promoValue);
         if (empty($promo)) {
                 throw new NoPromoTypeException($cardtype->getJson()['name'], $cardtype->number(), $promoValue);

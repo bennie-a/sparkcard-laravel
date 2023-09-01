@@ -144,12 +144,13 @@
             },
             {
                 "artist": "Kento Matsuura",
+                "artistIds": ["dcbe4f38-05ba-4272-9b71-b6f73d311cdb"],
                 "availability": ["paper"],
                 "borderColor": "borderless",
                 "colorIdentity": ["W"],
                 "colors": ["W"],
                 "convertedManaCost": 6.0,
-                "edhrecRank": 18113,
+                "edhrecRank": 1989,
                 "finishes": ["foil"],
                 "foreignData": [],
                 "frameEffects": ["inverted", "showcase"],
@@ -170,17 +171,33 @@
                 "language": "English",
                 "layout": "normal",
                 "leadershipSkills": {
-                    "brawl": false,
+                    "brawl": true,
                     "commander": false,
                     "oathbreaker": true
                 },
-                "legalities": { "future": "Legal" },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "vintage": "Legal"
+                },
                 "loyalty": "5",
                 "manaCost": "{4}{W}{W}",
                 "manaValue": 6.0,
                 "name": "The Eternal Wanderer",
                 "number": "422",
-                "printings": ["ONE"],
+                "printings": ["ONE", "PONE"],
                 "promoTypes": ["stepandcompleat", "boosterfun"],
                 "purchaseUrls": {
                     "cardKingdomFoil": "https://mtgjson.com/links/7808801fafe77c5f",
@@ -188,7 +205,32 @@
                     "tcgplayer": "https://mtgjson.com/links/dcbaec293a775721"
                 },
                 "rarity": "rare",
-                "rulings": [],
+                "rulings": [
+                    {
+                        "date": "2023-02-04",
+                        "text": "The Eternal Wanderer does not have a planeswalker type."
+                    },
+                    {
+                        "date": "2023-02-04",
+                        "text": "For the first loyalty ability, the exiled card will return to the battlefield at the beginning of that player's next end step even if The Eternal Wanderer is no longer on the battlefield at that time."
+                    },
+                    {
+                        "date": "2023-02-04",
+                        "text": "If the permanent that returns to the battlefield has any abilities that trigger at the beginning of the end step, those abilities won't trigger that turn."
+                    },
+                    {
+                        "date": "2023-02-04",
+                        "text": "Auras attached to the exiled permanent will be put into their owners' graveyards. Equipment attached to the exiled permanent will become unattached and remain on the battlefield. Any counters on the exiled permanent will cease to exist. Once the exiled permanent returns, it's considered a new object with no relation to the object that it was."
+                    },
+                    {
+                        "date": "2023-02-04",
+                        "text": "If a token is exiled this way, it will cease to exist and won't return to the battlefield."
+                    },
+                    {
+                        "date": "2023-02-04",
+                        "text": "For the last loyalty ability, none of the chosen creatures are targets of the ability. You may choose creatures with hexproof, for example, and choosing a creature with ward will not cause the ward ability to trigger."
+                    }
+                ],
                 "securityStamp": "oval",
                 "setCode": "ONE",
                 "subtypes": [],

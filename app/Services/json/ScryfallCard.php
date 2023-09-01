@@ -3,6 +3,8 @@ namespace app\Services\json;
 
 use App\Libs\MtgJsonUtil;
 use App\Services\json\AbstractCard;
+use App\Services\Constant\JsonFileConstant as Con;
+
 
 class ScryfallCard extends AbstractCard {
 
@@ -35,7 +37,7 @@ class ScryfallCard extends AbstractCard {
      * @return string
      */
     public function enname():string {
-        return $this->getJson()[self::NAME];
+        return $this->getJson()[Con::NAME];
     }
 
     /**
@@ -56,7 +58,15 @@ class ScryfallCard extends AbstractCard {
     }
 
     public function imageurl() {
-        return $this->getJson()['image_uris']['png'];
+        $imageuris = [];
+        if ($this->getJson()['layout'] == 'transform') {
+            $imageuris = $this->getJson()['card_faces'][0]['image_uris'];
+        } else {
+            $imageuris =  $this->getJson()['image_uris'];
+        }
+
+
+        return $imageuris['png'];
     }
 
     protected function hasPromotype() {
@@ -102,4 +112,7 @@ class ScryfallCard extends AbstractCard {
         return MtgJsonUtil::isTrue('textless', $this->getJson());
     }
 
+    public function borderColor() {
+        return $this->getJson()['border_color'];
+    }
 }

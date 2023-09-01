@@ -5,6 +5,160 @@
         "cards": [
             {
                 "artist": "Domenico Cava",
+                "artistIds": ["15eda809-1e56-4583-89e6-c9ccda740e16"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 3032,
+                "edhrecSaltiness": 0.11,
+                "finishes": ["nonfoil", "foil"],
+                "flavorText": "The Machine Legion coveted her strength, but a spirit of sand, sun, and memory could never be *compleated*.",
+                "foreignData": [
+                    {
+                        "flavorText": "Die Legion der Maschinen begehrte ihre Stärke, doch ein Geist des Sandes, der Sonne und der Erinnerungen würde nie *vollendet* werden können.",
+                        "language": "German",
+                        "multiverseId": 611371,
+                        "name": "Anafenza, Geist des Sippenbaums",
+                        "text": "Immer wenn eine andere Nichtspielsteinkreatur unter deiner Kontrolle ins Spiel kommt, wende Kräftigung 1 an. (Lege eine +1/+1-Marke auf eine Kreatur mit der niedrigsten Widerstandskraft unter den Kreaturen, die du kontrollierst.)",
+                        "type": "Legendäre Kreatur — Geist, Soldat"
+                    },
+                    {
+                        "flavorText": "La Legión de las Máquinas codiciaba su fuerza, pero un espíritu de arena, sol y recuerdos es imposible de **perfeccionar.",
+                        "language": "Spanish",
+                        "multiverseId": 611436,
+                        "name": "Anafenza, espíritu del árbol familiar",
+                        "text": "Siempre que otra criatura que no sea ficha entre al campo de batalla bajo tu control, fortalece 1. (Elige una criatura con la menor resistencia entre las criaturas que controlas y pon un contador +1/+1 sobre ella.)",
+                        "type": "Criatura legendaria — Soldado espíritu"
+                    },
+                    {
+                        "flavorText": "La Légion des machines convoitait sa force ; mais un esprit de sable, de soleil et de souvenirs ne pourrait jamais être *parachevé*.",
+                        "language": "French",
+                        "multiverseId": 611501,
+                        "name": "Anafenza, esprit de l'arbre-parent",
+                        "text": "À chaque fois qu'une autre créature non-jeton arrive sur le champ de bataille sous votre contrôle, renforcement 1. (Choisissez une créature avec l'endurance la plus faible parmi les créatures que vous contrôlez et mettez un marqueur +1/+1 sur elle.)",
+                        "type": "Créature légendaire : esprit et soldat"
+                    },
+                    {
+                        "flavorText": "La Legione delle Macchine bramava la sua forza, ma uno spirito di sabbia, sole e ricordi non potrà mai essere *completato*.",
+                        "language": "Italian",
+                        "multiverseId": 611566,
+                        "name": "Anafenza, Spirito dell'Albero Atavico",
+                        "text": "Ogniqualvolta un'altra creatura non pedina entra nel campo di battaglia sotto il tuo controllo, sostieni 1. (Scegli una creatura con la costituzione minore tra le creature che controlli e metti un segnalino +1/+1 su di essa.)",
+                        "type": "Creatura Leggendaria — Soldato Spirito"
+                    },
+                    {
+                        "flavorText": "機械兵団は彼女の力を切望したが、砂と太陽と記憶の精霊を*完成化*することは不可能だった。",
+                        "language": "Japanese",
+                        "multiverseId": 611631,
+                        "name": "族樹の精霊、アナフェンザ",
+                        "text": "トークンでもこれでもないクリーチャー１体があなたのコントロール下で戦場に出るたび、鼓舞１を行う。（あなたがコントロールしているクリーチャーの中で最も小さいタフネスを持つクリーチャー１体を選び、それの上に＋１/＋１カウンター１個を置く。）",
+                        "type": "伝説のクリーチャー — スピリット・兵士"
+                    },
+                    {
+                        "flavorText": "A Legião das Máquinas converteu sua força, mas um espírito de areia, sol e memória jamais poderia ser *completado*.",
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 611761,
+                        "name": "Anafenza, Espírito da Árvore de Família",
+                        "text": "Toda vez que outra criatura não ficha entrar no campo de batalha sob seu controle, revigore 1. (Escolha uma criatura com a menor resistência entre as que você controla e coloque um marcador +1/+1 nela.)",
+                        "type": "Criatura Lendária — Espírito Soldado"
+                    },
+                    {
+                        "flavorText": "机械军团虽觊觎她的力量，但由黄砂、烈日与记忆组成的精魂永无*完化*可能。",
+                        "language": "Chinese Simplified",
+                        "multiverseId": 611891,
+                        "name": "族树之灵阿娜芬札",
+                        "text": "每当另一个非衍生物的生物在你的操控下进战场时，振励1。（于由你操控的生物中选择一个防御力最小的生物，在其上放置一个+1/+1指示物。）",
+                        "type": "传奇生物 ～精怪／士兵"
+                    }
+                ],
+                "frameEffects": ["legendary", "showcase", "inverted"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "276314",
+                    "cardKingdomId": "276249",
+                    "cardsphereId": "102374",
+                    "mcmId": "705052",
+                    "mcmMetaId": "211198",
+                    "mtgArenaId": "84992",
+                    "mtgjsonV4Id": "9b75a044-0f2c-5a0f-a99e-6023afec534b",
+                    "mtgoId": "109224",
+                    "multiverseId": "611306",
+                    "scryfallId": "278d7781-ddfe-4bcb-94bd-3c155030dfdc",
+                    "scryfallIllustrationId": "9247ed0e-7689-49eb-b92d-07cedaed6dc9",
+                    "scryfallOracleId": "f7fa6ac0-70db-4586-b881-5a19db644dfb",
+                    "tcgplayerProductId": "491816"
+                },
+                "isReprint": true,
+                "isStarter": true,
+                "keywords": ["Bolster"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "paupercommander": "Restricted",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{W}{W}",
+                "manaValue": 2.0,
+                "name": "Anafenza, Kin-Tree Spirit",
+                "number": "1",
+                "originalText": "Whenever another nontoken creature enters the battlefield under your control, bolster 1. (Choose a creature with the least toughness among creatures you control and put a +1/+1 counter on it.)",
+                "originalType": "Legendary Creature — Spirit Soldier",
+                "power": "2",
+                "printings": ["CMM", "DMC", "DTK", "MUL", "PDTK"],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/a265670cee7f3bac",
+                    "cardKingdomFoil": "https://mtgjson.com/links/9ab7d04d9db35a6a",
+                    "cardmarket": "https://mtgjson.com/links/ee52778778cd3f56",
+                    "tcgplayer": "https://mtgjson.com/links/8d2d2dd7a2e979ae"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2015-02-25",
+                        "text": "Bolster itself doesn't target any creature, though some spells and abilities that bolster may have other effects that target creatures. For example, you could put counters on a creature with protection from white with Aven Tactician's bolster ability."
+                    },
+                    {
+                        "date": "2015-02-25",
+                        "text": "You determine which creature to put counters on as the spell or ability that instructs you to bolster resolves. That could be the creature with the bolster ability, if it's still under your control and has the least toughness."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "MUL",
+                "subtypes": ["Spirit", "Soldier"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever another nontoken creature enters the battlefield under your control, bolster 1. (Choose a creature with the least toughness among creatures you control and put a +1/+1 counter on it.)",
+                "toughness": "2",
+                "type": "Legendary Creature — Spirit Soldier",
+                "types": ["Creature"],
+                "uuid": "7496ad08-1898-5a29-8a52-5db8956d6186",
+                "variations": [
+                    "9d34171e-8236-5c97-a316-541c12a88a8a",
+                    "81b524b7-dc2f-50d9-8906-d9d63a2c3256",
+                    "e8f00824-e625-5267-b1fb-c279a860e424"
+                ]
+            },
+            {
+                "artist": "Domenico Cava",
                 "availability": ["paper"],
                 "borderColor": "black",
                 "colorIdentity": ["W"],
@@ -86,6 +240,201 @@
                 "variations": [
                     "7496ad08-1898-5a29-8a52-5db8956d6186",
                     "9d34171e-8236-5c97-a316-541c12a88a8a"
+                ]
+            },
+            {
+                "artist": "Ryan Yee",
+                "artistIds": ["8955dca7-3e37-42b4-83a9-167c78a2178f"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 3032,
+                "edhrecSaltiness": 0.11,
+                "finishes": ["etched"],
+                "flavorText": "Martyred for worshipping her ancestors, she now walks among them.",
+                "foreignData": [],
+                "frameEffects": ["legendary", "inverted"],
+                "frameVersion": "2015",
+                "hasFoil": false,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomEtchedId": "276530",
+                    "cardsphereId": "102309",
+                    "mcmId": "706427",
+                    "mcmMetaId": "211198",
+                    "mtgArenaId": "85519",
+                    "mtgjsonV4Id": "6d6f7a06-7669-510f-b56e-a7a0c9df5831",
+                    "mtgoId": "109354",
+                    "scryfallId": "cf348206-1dee-417c-a3e1-7430b84371c2",
+                    "scryfallIllustrationId": "40579289-ba85-40b4-bb3a-fa2b6cbb0435",
+                    "scryfallOracleId": "f7fa6ac0-70db-4586-b881-5a19db644dfb",
+                    "tcgplayerEtchedProductId": "491866"
+                },
+                "isReprint": true,
+                "isStarter": true,
+                "keywords": ["Bolster"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "paupercommander": "Restricted",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{W}{W}",
+                "manaValue": 2.0,
+                "name": "Anafenza, Kin-Tree Spirit",
+                "number": "66",
+                "power": "2",
+                "printings": ["CMM", "DMC", "DTK", "MUL", "PDTK"],
+                "purchaseUrls": {
+                    "cardKingdomEtched": "https://mtgjson.com/links/9e076ba6464784ce",
+                    "cardmarket": "https://mtgjson.com/links/4bd116a471c1cf5c",
+                    "tcgplayerEtched": "https://mtgjson.com/links/6532ce8e1600ce6c"
+                },
+                "rarity": "rare",
+                "rulings": [
+                    {
+                        "date": "2015-02-25",
+                        "text": "Bolster itself doesn't target any creature, though some spells and abilities that bolster may have other effects that target creatures. For example, you could put counters on a creature with protection from white with Aven Tactician's bolster ability."
+                    },
+                    {
+                        "date": "2015-02-25",
+                        "text": "You determine which creature to put counters on as the spell or ability that instructs you to bolster resolves. That could be the creature with the bolster ability, if it's still under your control and has the least toughness."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "MUL",
+                "subtypes": ["Spirit", "Soldier"],
+                "supertypes": ["Legendary"],
+                "text": "Whenever another nontoken creature enters the battlefield under your control, bolster 1. (Choose a creature with the least toughness among creatures you control and put a +1/+1 counter on it.)",
+                "toughness": "2",
+                "type": "Legendary Creature — Spirit Soldier",
+                "types": ["Creature"],
+                "uuid": "9d34171e-8236-5c97-a316-541c12a88a8a",
+                "variations": [
+                    "7496ad08-1898-5a29-8a52-5db8956d6186",
+                    "81b524b7-dc2f-50d9-8906-d9d63a2c3256",
+                    "e8f00824-e625-5267-b1fb-c279a860e424"
+                ]
+            },
+            {
+                "artist": "Scott M. Fischer",
+                "artistIds": ["23b0cf43-3e43-44c6-8329-96446eca5bce"],
+                "availability": ["paper"],
+                "borderColor": "borderless",
+                "colorIdentity": ["B"],
+                "colors": ["B"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 5059,
+                "edhrecSaltiness": 0.33,
+                "finishes": ["foil"],
+                "foreignData": [],
+                "frameEffects": ["inverted"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "262760",
+                    "cardsphereId": "90837",
+                    "mcmId": "664275",
+                    "mcmMetaId": "223052",
+                    "mtgjsonV4Id": "2f595d8b-0ea4-53fc-928a-84af8b773755",
+                    "multiverseId": "572991",
+                    "scryfallId": "d5e2a410-fca6-4d3d-9b6b-519a968e5e86",
+                    "scryfallIllustrationId": "200cf618-f0c7-43f2-a054-ff29588ef50d",
+                    "scryfallOracleId": "64a9a6b4-26b5-4d23-be86-85c54e9c4727",
+                    "tcgplayerProductId": "276371"
+                },
+                "isAlternative": true,
+                "isReprint": true,
+                "keywords": ["Mill"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "historicbrawl": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "vintage": "Legal"
+                },
+                "loyalty": "3",
+                "manaCost": "{1}{B}{B}",
+                "manaValue": 3.0,
+                "name": "Liliana, the Last Hope",
+                "number": "573",
+                "originalText": "+1: Up to one target creature gets -2/-1 until your next turn.\n−2: Mill two cards, then you may return a creature card from your graveyard to your hand.\n−7: You get an emblem with \"At the beginning of your end step, create X 2/2 black Zombie creature tokens, where X is two plus the number of Zombies you control.\"",
+                "originalType": "Legendary Planeswalker — Liliana",
+                "printings": [
+                    "2X2",
+                    "EMN",
+                    "MED",
+                    "PEMN",
+                    "PLIST",
+                    "PRM",
+                    "PS16",
+                    "SIR"
+                ],
+                "promoTypes": ["textured", "boosterfun"],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/25a8b7e27f0ff663",
+                    "cardmarket": "https://mtgjson.com/links/fb7dfb9144558fc5",
+                    "tcgplayer": "https://mtgjson.com/links/15738eb0e6b984fd"
+                },
+                "rarity": "mythic",
+                "rulings": [
+                    {
+                        "date": "2016-07-13",
+                        "text": "You can activate Liliana’s first ability without any targets just to add a loyalty counter to her."
+                    },
+                    {
+                        "date": "2016-07-13",
+                        "text": "Liliana’s second ability doesn’t target the card to return to your hand. After putting the top two cards of your library into your graveyard, you may choose from among any creature cards there."
+                    },
+                    {
+                        "date": "2016-07-13",
+                        "text": "While resolving the triggered ability of Liliana’s emblem, if you control zero Zombies, you’ll get two Zombie tokens."
+                    }
+                ],
+                "securityStamp": "oval",
+                "setCode": "2X2",
+                "subtypes": ["Liliana"],
+                "supertypes": ["Legendary"],
+                "text": "[+1]: Up to one target creature gets -2/-1 until your next turn.\n[−2]: Mill two cards, then you may return a creature card from your graveyard to your hand.\n[−7]: You get an emblem with \"At the beginning of your end step, create X 2/2 black Zombie creature tokens, where X is two plus the number of Zombies you control.\"",
+                "type": "Legendary Planeswalker — Liliana",
+                "types": ["Planeswalker"],
+                "uuid": "001e28fe-5bc1-57ef-9814-adc1195a297b",
+                "variations": [
+                    "7a05291f-d4ec-597f-8685-db41838d38c5",
+                    "d0d78dd8-cbe2-5387-8433-5ce7e4ef0d11",
+                    "f93cadb6-5cd4-5b3b-a374-c44c57cd1c01"
                 ]
             }
         ],

@@ -17,6 +17,8 @@ use Illuminate\Http\Response;
  */
 class CardInfoDBController extends Controller
 {
+    private CardInfoDBService $service;
+
     public function __construct(CardInfoDBService $service)
     {
         $this->service = $service;
@@ -36,7 +38,7 @@ class CardInfoDBController extends Controller
         $condition = $request->only(['name', 'set', 'color', 'isFoil']);
         logger()->info('search condition:',$condition);
         $result = $this->service->fetch($condition);
-        if ($result->isEmpty()) {
+        if (empty($result)) {
             throw new HttpResponseException(response(['message' => '検索結果なし'], Response::HTTP_NO_CONTENT));
         }
         $json = CardInfoResource::collection($result);

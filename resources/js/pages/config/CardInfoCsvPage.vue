@@ -1,18 +1,33 @@
 <template>
     <message-area></message-area>
-    <article class="mt-1 ui segment">
-        <file-upload @action="upload" type="json"></file-upload>
-        {{ filename }}
-    </article>
-    <article class="mt-1">
-        <div v-if="getCards.length != 0">
-            <div class="mr-1 ui toggle checkbox">
-                <input type="checkbox" id="isSkip" v-model="isSkip" />
-                <label for="isSkip">情報の更新を行わない</label>
-            </div>
-            <ModalButton @action="store">DBに登録する</ModalButton>
+    <article class="mt-1 ui grid segment">
+        <div
+            class="three wide column middle aligned content ui toggle checkbox"
+        >
+            <input type="checkbox" id="isDraftOnly" v-model="isDraftOnly" />
+            <label for="isDraftOnly">通常版のみ表示</label>
         </div>
-        <form class="ui large form mt-2" v-if="$store.getters.isLoad == false">
+        <div class="three wide column field">
+            <select v-model="color" class="ui dropdown">
+                <option value="">全て</option>
+                <option value="R">赤</option>
+                <option value="W">白</option>
+                <option value="B">黒</option>
+                <option value="G">緑</option>
+                <option value="U">青</option>
+                <option value="M">多色</option>
+                <option value="L">無色</option>
+                <option value="A">アーティファクト</option>
+                <option value="Land">土地</option>
+            </select>
+        </div>
+        <div class="seven wide column">
+            <file-upload @action="upload" type="json"></file-upload>
+            {{ filename }}
+        </div>
+    </article>
+    <article class="mt-1" v-if="getCards.length != 0">
+        <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="inline field">
                 <label>エキスパンション名：</label>{{ setCode }}
             </div>
@@ -20,11 +35,12 @@
                 <table class="ui table striped six column">
                     <thead>
                         <tr>
-                            <th class="one wide">番号</th>
-                            <th class="five wide left aligned">カード名</th>
+                            <th class="one wide">No.</th>
+                            <th class="four wide left aligned">カード名</th>
                             <th class="four wide">英名</th>
-                            <th class="">色</th>
-                            <th class="">言語</th>
+                            <th>カード仕様</th>
+                            <th class="one wide">色</th>
+                            <th class="one wide">言語</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,14 +48,16 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
-                                <label v-if="card.promotype != ''"
-                                    >≪{{ card.promotype }}≫</label
+                                <span
+                                    v-if="card.promotype != ''"
+                                    class="sub header"
+                                    >≪{{ card.promotype }}≫</span
                                 >
-                                <foiltag :isFoil="card.isFoil"></foiltag>
                             </td>
                             <td>
                                 {{ card.en_name }}
                             </td>
+                            <td>{{ join(card.foiltype) }}</td>
                             <td>
                                 <label
                                     class="ui large label"
@@ -61,7 +79,18 @@
                     </tfoot>
                 </table>
             </div>
-        </form>
+            <div class="ui centered grid">
+                <div
+                    class="three wide column middle aligned content ui toggle checkbox"
+                >
+                    <input type="checkbox" id="isSkip" v-model="isSkip" />
+                    <label for="isSkip">更新をスキップ</label>
+                </div>
+                <div class="three wide column">
+                    <ModalButton @action="store">DBに登録する</ModalButton>
+                </div>
+            </div>
+        </div>
         <loading
             :active="isLoading"
             :can-cancel="false"
@@ -86,6 +115,8 @@ export default {
             setCode: "",
             isSkip: false,
             isLoading: false,
+            isDraftOnly: false,
+            color: "",
         };
     },
     mounted: function () {
@@ -109,6 +140,11 @@ export default {
                     Land: "土地",
                 };
                 return colors[key];
+            };
+        },
+        join: function () {
+            return function (key) {
+                return key.join("|");
             };
         },
         colorlabel: function () {
@@ -137,8 +173,10 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color;
+
             await axios
-                .post("/api/upload/card", file, config)
+                .post("/api/upload/card" + query, file, config)
                 .then((response) => {
                     if (response.status == 201) {
                         let item = response.data;
@@ -176,9 +214,11 @@ export default {
             const list = this.$store.getters.card;
             await Promise.all(
                 list.map(async (card) => {
-                    const success = function (response, store) {};
-                    card["isSkip"] = this.isSkip;
-                    await task.post("/database/card", card, success);
+                    if (card.name != "") {
+                        const success = function (response, store) {};
+                        card["isSkip"] = this.isSkip;
+                        await task.post("/database/card", card, success);
+                    }
                 })
             ).catch(() => {
                 console.error("error");

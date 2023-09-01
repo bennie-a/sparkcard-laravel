@@ -3,12 +3,6 @@ namespace App\Services\json;
 
 class JpLimitedCard extends AbstractCard
 {
-    public function __construct($json)
-    {
-        parent::__construct($json);
-        $this->jp = $this->getJp($json);
-    }
-
     public function jpname(string $enname):string
     {
         // STA対応
@@ -16,12 +10,6 @@ class JpLimitedCard extends AbstractCard
             return $this->getJpnameByAPI($enname);
         }
         return parent::jpname($enname);
-    }
-
-
-    public function multiverseId()
-    {
-        return '';
     }
 
     public function scryfallId()

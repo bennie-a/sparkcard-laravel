@@ -208,6 +208,7 @@ export default {
                 number: this.number,
                 isSkip: false,
                 imageurl: this.imageurl,
+                foiltype: ["通常版"],
             };
             const success = function (response, store) {
                 // this.back();

@@ -1,26 +1,20 @@
 <?php
-namespace app\Services\json;
+namespace App\Services\json;
 
+use App\Enum\CardColor;
+use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
+use App\Models\CardInfo;
+use App\Services\Constant\JsonFileConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
-use App\Services\WisdomGuildService;
 use Closure;
 
 abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
     {
         $this->json = $json;
+        $this->jp = $this->getJpData($json);
     }
-
-    const NAME = 'name';
-
-    const EN_NAME = 'en_name';
-
-    const MULTIVERSEID = 'multiverseId';
-
-    const IDENTIFER = 'identifiers';
-
-    const SCRYFALLID = 'scryfallId';
 
     const PROMOTYPE = 'promoTypes';
 
@@ -29,13 +23,22 @@ abstract class AbstractCard implements CardInfoInterface {
     const IS_FULLART = 'isFullArt';
 
     const IS_TEXTLESS = 'isTextless';
+
+    protected $json;
+
+    protected $jp;
+
+    protected $color;
     /**
      * foreignDataオブジェクトから日本語部分を取得する。
      *
      * @param [type] $json
      * @return void 
      */
-    protected function getJp($json) {
+    protected function getJpData($json) {
+        if (!MtgJsonUtil::hasKey('foreignData', $json)) {
+            return;
+        }
         $forgienData = $json['foreignData'];
         $filterd = array_filter($forgienData, function($data) {
             return strcmp($data['language'], 'Japanese') == 0;
@@ -54,13 +57,26 @@ abstract class AbstractCard implements CardInfoInterface {
      * @return string カード名(日本語名)
      */
     protected function getJpnameByAPI($enname) {
-        $service = new WisdomGuildService();
-        $jpname = $service->getJpName($enname);
+        $jpname = WisdomGuild::getJpName($enname);
         return $jpname;
     }
 
-    public function jpname(string $enname):string {
-        return $this->jp[self::NAME];        
+    public function jpname(string $enname):string
+    {
+        if (!empty($this->jp)) {
+            return $this->jp[Con::NAME];
+        }
+        $info = CardInfo::findJpName($enname);
+        if (!empty($info)) {
+            return $info->name;
+        }
+        $name = $this->getJpnameByAPI($enname);
+        return $name != 'エラー' ? $name : "";
+    }
+
+    public function multiverseId()
+    {
+        return 0;
     }
 
     public function scryfallId()
@@ -82,19 +98,50 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     public function promotype() {
-        if ($this->isFullArt()) {
-            return 'fullart';
-        }
+        
+        $booster = 'boosterfun';
         if ($this->isTextless()) {
             return 'textless';
+        }
+        if ($this->isFullArt()) {
+            return 'fullart';
         }
         if (!$this->hasPromotype()) {
             return 'draft';
         }
         $filterd = function($f) {
-            return $f != 'textured';
+            $excluded = ['textured', 'confettifoil'];
+            return !in_array($f, $excluded);
         };
-        return $this->filtering($this->promotypeKey(), $filterd);
+        $promo = $this->filtering($this->promotypeKey(), $filterd);
+        if ($promo != $booster) {
+            return $promo;
+        }
+        
+        // boosterfanの場合はframeeffectを取得する。
+        $frame = $this->frameEffects();
+        if ($frame != $booster) {
+            return $frame;
+        }        
+        $border = $this->borderColor();
+        if ($border == 'borderless') {
+            return $border;
+        }
+        return $booster;
+    }
+
+    public function specialFoil() {
+        if (!$this->isSpecialFoil() || !$this->hasPromotype()) {
+            return 'foil';
+        }
+        $filterd = function($f) {
+            return $f != 'boosterfun' && $f != 'bundle';
+        };
+        $type = $this->filtering($this->promotypeKey(), $filterd);
+        if (empty($type) || $type == 'oilslick') {
+            return 'foil';
+        }
+        return $type;
     }
 
     /**
@@ -120,28 +167,59 @@ abstract class AbstractCard implements CardInfoInterface {
         return $filterd;
     }
 
+    public function borderColor() {
+        return $this->getJson()['borderColor'];
+    }
+
     private function filtering($keyword, Closure $filterd) {
-        $frames = $this->json[$keyword];
+        $frames = $this->getJson()[$keyword];
         $filterd = array_filter($frames, $filterd);
         return current($filterd);
     }
 
+    public function finishes() {
+        return $this->getJson()["finishes"];
+    }
+
+    /**
+     * 特殊Foilが存在する判定する。
+     *
+     * @return boolean
+     */
+    public function isSpecialFoil() {
+        $finishes = $this->finishes();
+        return count($finishes) == 1 && in_array('foil', $finishes);
+    }
 
     /**
      * 除外したいカード情報の条件式
      *
      * @return boolean 除外したい場合はtrue, そうでない場合はfalse
      */
-    public function isExclude($json, array $cardInfo) {
+    public function isExclude() {
         return false;
     }
 
+    public function color() {
+        if (empty($this->color)) {
+            $type = CardColor::match($this->json);
+            $this->color = $type->value;
+        }
+        return $this->color;
+    }
+
+    /**
+     * 英語版のmultiverse_idを返す。
+     *
+     * @return int
+     */
     protected function getEnMultiverseId() {
-        return $this->getIdentifiersValue(self::MULTIVERSEID);
+        $id = $this->getIdentifiersValue(Con::MULTIVERSEID);
+        return empty($id) ? 0 : $id;
     }
 
     protected function getEnScryfallId () {
-        return $this->getIdentifiersValue(self::SCRYFALLID);
+        return $this->getIdentifiersValue(Con::SCRYFALLID);
     }
     private function getIdentifiersValue($key){
         $identifiers = $this->getIdentifiers();
@@ -149,15 +227,15 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     protected function getIdentifiers() {
-        return $this->json['identifiers'];
+        return $this->getJson()[Con::IDENTIFIERS];
     }
 
     protected function isFullArt() {
-        return MtgJsonUtil::hasKey(self::IS_FULLART, $this->json);
+        return MtgJsonUtil::hasKey(self::IS_FULLART, $this->getJson());
     }
 
     protected function hasPromotype() {
-        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->json);
+        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->getJson());
     }
 
     protected function promotypeKey() : string {

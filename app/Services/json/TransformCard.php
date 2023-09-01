@@ -1,46 +1,54 @@
 <?php
 namespace App\Services\json;
 
-use App\Libs\MtgJsonUtil;
-use App\Services\json\AbstractCard;
-
-use function Termwind\ValueObjects\isEmpty;
+use App\Enum\CardColor;
+use App\Services\Constant\JsonFileConstant as Con;
 
 /**
  * 両面カード用クラス
  */
-class TransformCard extends AbstractCard {
+class TransformCard extends JsonCard {
 
-    public function jpname(string $enname):string
-    {
-        return $this->getJpnameByAPI($enname);
-    }
-
+    /**
+     * multiverse_idを返す
+     *@see AbstractCard::multiverseId()
+     * @return void
+     */
     public function multiverseId() {
-            return $this->getEnMultiverseId();
+            return 0;
     }
 
-    public function scryfallId()
-    {
-        return $this->getEnScryfallId();
+    /**
+     * カードの表面(A面)/裏面(B面)を取得する。
+     *
+     * @return string "a" or "b"
+     */
+    public function side() {
+        return $this->json[Con::SIDE];
+    }
+
+        /**
+     * 色コードを取得する。
+     * @see AbstractCard::color()
+     * @return string
+     */
+    public function color() {
+        if (empty($this->color)) {
+            $colors = $this->getJson()['colorIdentity'];
+            $types =$this->getJson()["types"];
+            $cardtype = current($types);
+            $colortype = CardColor::findColor($colors, $cardtype);
+            $this->color = $colortype->value;
+        }
+        return $this->color;
     }
     /**
      * 除外したいカード情報を検出する。
      * @override AbstractCard
      * @return boolean
      */
-    public function isExclude($json, array $cardInfo) {
-        if (empty($cardInfo)) {
-            return false;
-        }
-        $name = $json[self::NAME];
-        $lastcard = end($cardInfo);
-        if (strcmp($name, $lastcard[self::EN_NAME]) == 0) {
-            logger()->info('skip transform', ['name' => $name]);
-            return true;
-        }
-        
-        return false;
+    public function isExclude() {
+        return $this->side() !== "a";
     }
 }
 ?>

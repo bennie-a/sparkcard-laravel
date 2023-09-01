@@ -97,7 +97,7 @@ class ScryfallService {
     protected function toArray(array $contents) {
         $card = new ScryfallCard($contents);
         $color = CardColor::findColor($card->colors(), $card->cardtype());
-        $promotype = \Promo::find($card);
+        $promotype = \App\Facades\Promo::find($card);
         logger()->info('プロモタイプ', [$promotype]);
         return ['name' => $card->name(), 
                     'multiverse_id' => $card->multiverseId(),

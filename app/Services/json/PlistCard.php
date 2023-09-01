@@ -8,11 +8,6 @@ use App\Services\WisdomGuildService;
  */
 class PlistCard extends AbstractCard
 {
-    public function multiverseId()
-    {
-        return '';
-    }
-
     public function jpname(string $enname): string
     {
         return $this->getJpnameByAPI($enname);
@@ -20,7 +15,7 @@ class PlistCard extends AbstractCard
 
     public function scryfallId()
     {
-        return $this->json['identifiers']['scryfallId'];
+        return parent::getEnScryfallId();
     }
 
 }

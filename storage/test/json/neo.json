@@ -622,7 +622,7 @@
             {
                 "artist": "Ishikawa Kenta",
                 "availability": ["arena", "mtgo", "paper"],
-                "borderColor": "borderless",
+                "borderColor": "black",
                 "colorIdentity": ["W"],
                 "colors": ["W"],
                 "convertedManaCost": 5.0,
@@ -746,7 +746,7 @@
                 "manaCost": "{3}{W}{W}",
                 "manaValue": 5.0,
                 "name": "Ao, the Dawn Sky",
-                "number": "406",
+                "number": "433",
                 "originalText": "Flying, vigilance\nWhen Ao, the Dawn Sky dies, choose one —\n• Look at the top seven cards of your library. Put any number of nonland permanent cards with total mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.\n• Put two +1/+1 counters on each permanent you control that's a creature or Vehicle.",
                 "originalType": "Legendary Creature — Dragon Spirit",
                 "power": "5",

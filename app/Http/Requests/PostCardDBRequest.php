@@ -33,7 +33,8 @@ class PostCardDBRequest extends FormRequest
             'scryfallId' => ['required_without_all:multiverseId,imageurl', new Halfsize],
             'number' => 'required',
             'imageurl' => 'required_without_all:multiverseId,scryfallId',
-            'isSkip' => 'nullable|boolean'
+            'isSkip' => 'nullable|boolean',
+            'foiltype' => 'required'
         ];
     }
 
@@ -48,6 +49,7 @@ class PostCardDBRequest extends FormRequest
             'scryfallId' => 'Scryfall ID',
             'number' => 'カード番号',
             'imageurl' => '画像URL',
+            'foiltype' => 'カード仕様'
         ];
     }
 

@@ -18,13 +18,14 @@ class CardInfoResource extends JsonResource
         return [
                 'id' => $this->id,
                 'exp' => ['name' => $this->exp_name, 'attr' => $this->exp_attr],
-                'index' => $this->number,
+                'number' => $this->number,
                 'name' => $this->name,
                 'enname' => $this->en_name,
                 'price' => $this->price,
                 'color' => CardColor::tryFrom($this->color_id)->text(),
                 'image' => $this->image_url,
-                'isFoil' => $this->isFoil
+                'isFoil' => $this->isFoil,
+                'foiltype' => $this->foiltype
             ];
     }
 }

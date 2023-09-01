@@ -20,6 +20,10 @@ class CardInfo extends Model
         return $this->hasMany('App\Models\Stockpile');
     }
 
+    public function foiltype() {
+        return $this->hasOne('App\Model\Foiltype');
+    }
+
     protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id'];
 
     /**
@@ -30,7 +34,8 @@ class CardInfo extends Model
      */
     public static function fetchByCondition($condition)
     {
-        $columns = ['expansion.name as exp_name', 'expansion.attr as exp_attr', 'card_info.id', 'card_info.number', 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil'];
+        $columns = ['e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
+                 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil', 'f.name as foiltype'];
         $name = $condition['card_info.name'];
         $query = self::select($columns);
         if (!empty($name)) {
@@ -44,8 +49,8 @@ class CardInfo extends Model
                 $query = $query->where($key, $value);
             }
         }
-        $cardList = $query->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id')->
-                        orderBy('expansion.release_date', 'desc')->orderByRaw('CAST(card_info.number as integer ) asc')->get();
+        $cardList = $query->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id')->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')->
+                        orderBy('e.release_date', 'desc')->orderByRaw('CAST(card_info.number as integer ) asc')->get();
         return $cardList;
     }
 
@@ -91,15 +96,20 @@ class CardInfo extends Model
      * @param [type] $isFoil
      * @return カード情報
      */
-    public static function findSpecificCard($exp_id, $name, $isFoil)
+    public static function findSpecificCard($exp_id, $name, $foiltype_id)
     {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
-        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'isFoil' => $isFoil])->first();
+        $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'foiltype_id' => $foiltype_id])->first();
         return $info;
     }
 
     public static function findEnCard($name) {
         $info = self::select('en_name')->where(['name' => $name])->first();
         return $info;
+    }
+
+    public static function findJpName(string $enname) {
+        $name = self::select('name')->where(['en_name' => $enname])->first();
+        return $name;
     }
 }

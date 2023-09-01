@@ -14,4 +14,6 @@ class CustomResponse {
 
     /** カード情報がAPIに見つからなかった時のステータスコード */
     const HTTP_NOT_FOUND_CARD = 443;
+
+    const HTTP_NOT_FOUND_FOIL = 444;
 }
