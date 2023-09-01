@@ -288,7 +288,10 @@ export default {
                 :key="index"
             >
                 <div class="content">
-                    <foiltag :isFoil="card.isFoil"></foiltag>
+                    <foiltag
+                        :isFoil="card.isFoil"
+                        :foiltype="card.foiltype"
+                    ></foiltag>
                     <div class="right floated meta">#{{ card.id }}</div>
                 </div>
                 <div class="image">
@@ -304,8 +307,12 @@ export default {
                     ></image-modal>
                 </div>
                 <div class="content">
-                    <div class="header">{{ card.name }}</div>
-                    <div class="meta">{{ card.exp.name }}</div>
+                    <div class="header">
+                        {{ card.name }}
+                    </div>
+                    <div class="meta">
+                        {{ card.exp.name }}#{{ card.number }}
+                    </div>
                     <div class="description ui right floated">
                         平均価格:<span class="price"
                             >&#xa5;{{ card.price }}</span

@@ -161,6 +161,9 @@ public function test_getImage(string $setcode, string $name, string $color, int 
         ];
     }
 
+    public function test_search(string $name, string $set, string $color, bool $isFoil) {
+
+    }
     // public function test_検索() {
     //     $condition = ['name' => '', 'set' => 'BRO', 'color' => 'W', 'isFoil' => false];
     //     $response = $this->json('GET', 'api/database/card', $condition)->assertOk();

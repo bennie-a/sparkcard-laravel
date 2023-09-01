@@ -3,18 +3,12 @@ namespace App\Services;
 
 use App\Exceptions\NotFoundException;
 use App\Http\Response\CustomResponse;
-use App\Libs\MtgJsonUtil;
 use App\Models\CardInfo;
 use App\Models\Expansion;
-use App\Services\ScryfallService;
-use App\Services\WisdomGuildService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Facades\ScryfallServ;
-use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
-use App\Files\Stock\StockpileCsvReader;
 use App\Models\Foiltype;
-use Illuminate\Http\Response;
 use App\Services\Constant\JsonFileConstant as Con;
 
 /**
@@ -23,7 +17,7 @@ use App\Services\Constant\JsonFileConstant as Con;
 class CardInfoDBService {
     public function __construct()
     {
-        $this->service = new ScryfallService();
+        // $this->service = new ScryfallService();
     }
 
     public function fetch($details)
@@ -31,7 +25,7 @@ class CardInfoDBService {
         $condition = [
                     'card_info.name' => $details['name'],
                     'card_info.color_id' => $details['color'],
-                    'expansion.attr' => $details['set'],
+                    'e.attr' => $details['set'],
                     'card_info.isFoil' => $details['isFoil']];
         $list = CardInfo::fetchByCondition($condition);
 
@@ -73,7 +67,7 @@ class CardInfoDBService {
 
             $info = CardInfo::findSpecificCard($exp->notion_id, $name, $foiltype->id);
             // 画像URL取得
-            $url = $this->service->getImageUrl($details);
+            $url = ScryfallServ::getImageUrl($details);
             $log = ['カード名' => $name, 'number' => $details['number'], 'カード仕様' => $foil];
             if (empty($info)) {
                 logger()->info("insert card.",$log);
@@ -110,7 +104,7 @@ class CardInfoDBService {
      */
     public function postByScryfall($setcode, string $name, string $enname, $isFoil) {
         logger()->info('Retrieve info from Scryfall', [$setcode, $name]);
-        $details = \ScryfallServ::getCardInfoByName($setcode, $enname);
+        $details = ScryfallServ::getCardInfoByName($setcode, $enname);
         $details['name'] = $name;
         $details['isFoil'] = $isFoil;
         logger()->info('Post Info', [$details['setcode'], $name]);
