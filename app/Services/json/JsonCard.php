@@ -2,7 +2,7 @@
 namespace App\Services\json;
 
 use App\Libs\MtgJsonUtil;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 
 
 class JsonCard extends AbstractCard

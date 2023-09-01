@@ -1,7 +1,10 @@
 <?php
 namespace App\Services\Constant;
 
-class JsonFileConstant {
+class CardConstant {
+
+    const SET = 'set';
+    
     const NAME = 'name';
 
     const EN_NAME = 'en_name';

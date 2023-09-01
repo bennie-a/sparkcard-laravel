@@ -4,8 +4,8 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * MtgDevクラス用のFacadeクラス
- * 処理自体はMtgDevServiceクラスを参照。
+ * CardInfoDBServiceクラス用のFacadeクラス
+ * 処理自体はCardInfoDBServiceクラスを参照。
  */
 class CardInfoServ extends Facade {
 

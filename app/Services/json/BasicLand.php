@@ -1,6 +1,5 @@
 <?php
 namespace App\Services\json;
-use App\Services\Constant\JsonFileConstant as Con;
 /**
  * 基本土地クラス
  */

@@ -5,7 +5,7 @@ use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
 use App\Models\CardInfo;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
 use Closure;
 
