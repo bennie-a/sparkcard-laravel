@@ -9,6 +9,8 @@ use App\Services\Stock\Strategy\DefaultRowStrategy;
  */
 class StockpileRow {
     
+    protected $number;
+    protected $row;
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;

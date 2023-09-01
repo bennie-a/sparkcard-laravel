@@ -10,6 +10,11 @@ use Carbon\Carbon;
  */
 class ShippingRow extends StockpileRow {
     
+    private $setcode;
+
+    private $cardname;
+
+    private $language;
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;

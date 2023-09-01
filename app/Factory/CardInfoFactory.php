@@ -14,7 +14,7 @@ use App\Services\json\PhyrexianCard;
 use App\Services\json\PlistCard;
 use App\Services\json\StarterCard;
 use App\Services\json\TransformCard;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 
 /**
  * JSONファイルに記載されたカード情報の形式に沿って

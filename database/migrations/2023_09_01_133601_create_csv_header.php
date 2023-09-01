@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('shop', 10)->notNull();
             $table->string('column')->notNull();
+            $table->integer('order_id')->notNull();
             $table->timestamps();
         });
     }

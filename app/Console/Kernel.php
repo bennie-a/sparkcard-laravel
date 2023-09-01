@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ShopCsvCommand;
+use App\Console\Commands\ItemCsvCommand;
 use App\Console\Commands\TreatCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         TreatCommand::class,
-        ShopCsvCommand::class
+        ItemCsvCommand::class
     ];
     /**
      * Define the application's command schedule.
