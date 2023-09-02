@@ -23,16 +23,21 @@ abstract class ItemCsvWriter {
         if ($f) {
             // header
             $header = CsvHeader::findColumns($this->shopname());
-            // logger()->debug('Columns', $header);
             fputcsv($f, $header);
 
             // data
-            // fputcsv($f, ['あいこ', '28']);
+            foreach($data as $row) {
+                fputcsv($f, $this->toCsv($row));
+            }
         }
         fclose($f);
     }
 
     protected abstract function toCsv(CardInfo $row);
 
-    protected abstract function shopname();
+    public abstract function shopname();
+    
+    protected function description() {
+        return '';
+    }
 }

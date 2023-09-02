@@ -26,4 +26,6 @@ class CardConstant {
     const SIDE = 'side';
 
     const IDENTIFIERS = 'identifiers';
+
+    const PRICE = 'price';
 }

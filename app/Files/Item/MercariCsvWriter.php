@@ -10,10 +10,10 @@ use App\Models\CardInfo;
 class MercariCsvWriter extends ItemCsvWriter {
 
     protected function toCsv(CardInfo $row) {
-        return [];
+        return ['', '', $row->name, $this->description(), '', '0', $row->price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2'];
     }
 
-    protected function shopname() {
+    public function shopname() {
         return 'mercari';
     }
 

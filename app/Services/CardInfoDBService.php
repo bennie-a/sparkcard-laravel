@@ -27,7 +27,7 @@ class CardInfoDBService {
 
         foreach ($list as $info) {
             $price = WisdomGuild::getPrice($info[Con::EN_NAME]);
-            $info['price'] = $price;
+            $info[Con::PRICE] = $price;
         }
 
         return $list;

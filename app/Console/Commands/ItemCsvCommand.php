@@ -42,6 +42,7 @@ class ItemCsvCommand extends Command
         logger()->info('get card info', ['count' => count($result)]);
         $files = [new BaseCsvWriter(), new MercariCsvWriter()];
         foreach($files as $writer) {
+            logger()->info('write item csv:'.$writer->shopname());
             $writer->write($result);
         }
         logger()->info('end download csv.');
