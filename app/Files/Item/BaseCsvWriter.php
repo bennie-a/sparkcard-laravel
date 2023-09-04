@@ -9,9 +9,9 @@ use App\Models\CardInfo;
  */
 class BaseCsvWriter extends ItemCsvWriter {
 
-    protected function toCsv(CardInfo $row) {
+    protected function toCsv(int $price, CardInfo $row) {
         return ['', $this->itemname($row), '', '', $this->description($row), 
-                        $row->price, '1', '0', '0', $row->number, 
+                        $price, '1', '0', '0', $row->number, 
                         '', $this->thumbnail($row), $this->itemImage($row)];
     }
 
@@ -19,5 +19,12 @@ class BaseCsvWriter extends ItemCsvWriter {
         return 'base';
     }
 
-
+    /**
+     * @see ItemCsvWriter basevalue()
+     *
+     * @return integer
+     */
+    protected function basevalue():int {
+        return 50;
+    }
 }

@@ -9,9 +9,9 @@ use App\Models\CardInfo;
  */
 class MercariCsvWriter extends ItemCsvWriter {
 
-    protected function toCsv(CardInfo $row) {
+    protected function toCsv(int $price, CardInfo $row) {
         return [$this->thumbnail($row), $this->itemImage($row), $this->itemname($row),
-                 $this->description($row), '', '0', $row->price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2'];
+                 $this->description($row), '', '0', $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2'];
     }
 
     public function shopname() {
@@ -43,5 +43,14 @@ class MercariCsvWriter extends ItemCsvWriter {
             return "クリックポスト";
         }
         return "ミニレター";
+    }
+
+    /**
+     * @see ItemCsvWriter basevalue()
+     *
+     * @return integer
+     */
+    protected function basevalue():int {
+        return 300;
     }
 }

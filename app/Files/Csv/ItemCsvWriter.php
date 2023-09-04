@@ -28,14 +28,25 @@ abstract class ItemCsvWriter {
 
             // data
             foreach($data as $row) {
-                fputcsv($f, $this->toCsv($row));
+                $price = $this->roundPrice($row->price);
+                // 一定金額以下は除外
+                if ($price < $this->basevalue()) {
+                    continue;
+                }
+                fputcsv($f, $this->toCsv($price, $row));
             }
         }
         fclose($f);
     }
     
-    protected abstract function toCsv(CardInfo $row);
+    protected abstract function toCsv(int $price, CardInfo $row);
     
+    /**
+     * 除外する金額を取得する。
+     *ここで取得した金額以下の商品は除外する。
+     * @return int
+     */
+    protected abstract function basevalue():int;
     public abstract function shopname();
     
     protected function description(CardInfo $row) {
@@ -77,5 +88,15 @@ abstract class ItemCsvWriter {
         return sprintf($format, $attr, $row->name, $color->text());
     }
 
-
+    /**
+     * 金額を1の位で四捨五入する。
+     *
+     * @param string $inputAmount
+     * @return int
+     */
+    protected function roundPrice(string $inputAmount) {
+        $amountWithoutComma = (int)str_replace(',', '', $inputAmount);
+        $roundedAmount = round($amountWithoutComma/10, 0) * 10;
+        return $roundedAmount;
+    }
 }
