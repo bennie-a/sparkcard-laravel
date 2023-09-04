@@ -1,6 +1,7 @@
 <?php
 namespace App\Files\Csv;
 
+use App\Enum\CardColor;
 use App\Models\CardInfo;
 use App\Models\CsvHeader;
 
@@ -32,12 +33,40 @@ abstract class ItemCsvWriter {
         }
         fclose($f);
     }
-
+    
     protected abstract function toCsv(CardInfo $row);
-
+    
     public abstract function shopname();
     
     protected function description() {
         return '';
     }
+    
+    protected function thumbnail(CardInfo $row) {
+        $enname = $row->en_name;
+        return sprintf('%s_%s-min.jpg', $enname, $this->shopname());
+    }
+
+    protected function itemImage(CardInfo $row) {
+        $enname = $row->en_name;
+        return sprintf('%s-min.jpg', $enname);
+    }
+
+    /**
+     * 商品名を取得する。
+     *
+     * @param CardInfo $row
+     * @return string 
+     */
+    protected function itemname(CardInfo $row) {
+        $attr = $row->exp_attr;
+        $color = CardColor::tryFrom($row->color_id);
+        $format = '【%s】%s[JP][%s]';
+        if ($row->isFoil) {
+            $format = '【%s】【Foil】%s[JP][%s]';
+        }
+        return sprintf($format, $attr, $row->name, $color->text());
+    }
+
+
 }

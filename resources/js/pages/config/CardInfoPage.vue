@@ -201,14 +201,14 @@ export default {
                 setCode: this.attr,
                 name: this.name,
                 isFoil: this.isFoil,
-                promotype: this.promotype,
+                promotype: "アニメ・ボーダレス",
                 multiverseId: this.multiverse_id,
                 en_name: this.en_name,
                 color: this.color,
                 number: this.number,
                 isSkip: false,
                 imageurl: this.imageurl,
-                foiltype: ["通常版"],
+                foiltype: ["コンフェッティFoil"],
             };
             const success = function (response, store) {
                 // this.back();
