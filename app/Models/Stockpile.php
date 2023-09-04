@@ -80,7 +80,7 @@ class Stockpile extends Model
 
     public function getUpdatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format("Y/m/d H:i:s");
+        return Carbon::parse($value)->format("Y/m/d");
     }
 
 }

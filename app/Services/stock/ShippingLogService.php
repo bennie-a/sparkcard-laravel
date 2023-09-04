@@ -29,7 +29,7 @@ class ShippingLogService extends AbstractSmsService{
 
         /**
      * @see AbstractSmsService::store
-     * @param StockpileRow $row
+     * @param ShippingRow $row
      * @return void
      */
     protected function store($row) {

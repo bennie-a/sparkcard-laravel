@@ -22,7 +22,11 @@ class ShippingRow extends StockpileRow {
     }
 
     public function shipping_date() {
-        $carbon = new Carbon($this->row[Header::SHIPPING_DATE]);
+        $date = $this->row[Header::SHIPPING_DATE];
+        $carbon = new Carbon();
+        if (!empty($date)) {
+            $carbon = new Carbon($date);
+        }
         return $carbon;
     }
 
