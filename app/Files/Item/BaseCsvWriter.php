@@ -10,7 +10,7 @@ use App\Models\CardInfo;
 class BaseCsvWriter extends ItemCsvWriter {
 
     protected function toCsv(CardInfo $row) {
-        return ['', $this->itemname($row), '', '', $this->description(), 
+        return ['', $this->itemname($row), '', '', $this->description($row), 
                         $row->price, '1', '0', '0', $row->number, 
                         '', $this->thumbnail($row), $this->itemImage($row)];
     }

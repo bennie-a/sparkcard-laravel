@@ -38,8 +38,17 @@ abstract class ItemCsvWriter {
     
     public abstract function shopname();
     
-    protected function description() {
-        return '';
+    protected function description(CardInfo $row) {
+        $foil = $row->isFoil ? "[Foil]" : "";
+        $desc = '■商品内容
+商品名：「%s%s」
+エキスパンション：%s(%s)
+言語：日本語
+在庫：0点
+
+■状態
+状態は【NM】です。ドラフトブースターパックから出ました。開封直後にスリーブに入れて保管しています。';
+        return sprintf($desc, $row->name, $foil, $row->exp_name, $row->exp_attr);
     }
     
     protected function thumbnail(CardInfo $row) {
