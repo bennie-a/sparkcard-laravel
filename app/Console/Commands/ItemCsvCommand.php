@@ -43,7 +43,7 @@ class ItemCsvCommand extends Command
         $files = [new BaseCsvWriter(), new MercariCsvWriter()];
         foreach($files as $writer) {
             logger()->info('write item csv:'.$writer->shopname());
-            $writer->write($result);
+            $writer->write($set, $color, $result);
         }
         logger()->info('end download csv.');
         return Command::SUCCESS;

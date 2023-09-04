@@ -12,14 +12,14 @@ abstract class ItemCsvWriter {
 
     /**
      * 商品登録用CSVファイルを作成する。
-     *
-     * @param string $shop
+     * @param string $set
+     * @param string $color
      * @param $data
      * @return void
      */
-    public function write($data) {
-        $dir = 'C:\Users\salto\OneDrive\ドキュメント\beninekoya_doc\woe\\';
-        $filename = $this->shopname().'_item.csv';
+    public function write(string $set, string $color, $data) {
+        $dir = env('CSV_EXPORT');
+        $filename = sprintf('%s_item_%s_%s.csv', $this->shopname(), $set, $color);
         $f = fopen($dir.$filename, 'w');
         if ($f) {
             // header
