@@ -17,7 +17,7 @@ abstract class ItemCsvWriter {
      * @param $data
      * @return void
      */
-    public function write(string $set, string $color, $data) {
+    public function write(string $set, string $color, int $number, $data) {
         $dir = env('CSV_EXPORT');
         $filename = sprintf('%s_item_%s_%s.csv', $this->shopname(), $set, $color);
         $f = fopen($dir.$filename, 'w');
@@ -33,13 +33,14 @@ abstract class ItemCsvWriter {
                 if ($price < $this->basevalue()) {
                     continue;
                 }
-                fputcsv($f, $this->toCsv($price, $row));
+                fputcsv($f, $this->toCsv($price, $number, $row));
+                $number++;
             }
         }
         fclose($f);
     }
     
-    protected abstract function toCsv(int $price, CardInfo $row);
+    protected abstract function toCsv(int $price, int $number, CardInfo $row);
     
     /**
      * 除外する金額を取得する。

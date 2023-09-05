@@ -9,9 +9,9 @@ use App\Models\CardInfo;
  */
 class BaseCsvWriter extends ItemCsvWriter {
 
-    protected function toCsv(int $price, CardInfo $row) {
+    protected function toCsv(int $price, int $number, CardInfo $row) {
         return ['', $this->itemname($row), '', '', $this->description($row), 
-                        $price, '1', '0', '0', $row->number, 
+                        $price, '1', '0', '0', $number, 
                         '', $this->thumbnail($row), $this->itemImage($row)];
     }
 

@@ -17,7 +17,7 @@ class ItemCsvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'itemcsv {set : セット略称} {color : W,R,B,U,G,A,M,Land,Lのいずれか}';
+    protected $signature = 'itemcsv {set : セット略称} {color : W,R,B,U,G,A,M,Land,Lのいずれか} {--start=:開始番号}';
 
     /**
      * The console command description.
@@ -36,6 +36,7 @@ class ItemCsvCommand extends Command
         logger()->info('start download csv.');
         $set = $this->argument(Con::SET);
         $color = $this->argument(Con::COLOR);
+        $start_number = (int)$this->option('start');
         logger()->debug('argument',[$set, $color]);
 
         $result = CardInfoServ::fetch([Con::NAME => '', Con::SET => $set, Con::COLOR => $color, Con::IS_FOIL => 'false']);
@@ -43,7 +44,7 @@ class ItemCsvCommand extends Command
         $files = [new BaseCsvWriter(), new MercariCsvWriter()];
         foreach($files as $writer) {
             logger()->info('write item csv:'.$writer->shopname());
-            $writer->write($set, $color, $result);
+            $writer->write($set, $color, $start_number, $result);
         }
         logger()->info('end download csv.');
         return Command::SUCCESS;
