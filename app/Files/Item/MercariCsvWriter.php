@@ -10,8 +10,14 @@ use App\Models\CardInfo;
 class MercariCsvWriter extends ItemCsvWriter {
 
     protected function toCsv(int $price, int $number, CardInfo $row) {
-        return [$this->thumbnail($row), $this->itemImage($row), $this->itemname($row),
-                 $this->description($row), '', '0', $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2'];
+        $lines =  [$this->thumbnail($row), $this->itemImage($row)];
+        $empty = array_fill(0, 8, '');
+        $lines = array_merge($lines, $empty);
+        array_push($lines, $this->itemname($row), $this->description($row), '', '0');
+        $emptyItems = array_fill(count($lines), 39, '');
+        $lines = array_merge($lines, $emptyItems);
+        array_push($lines, $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2');
+        return $lines;
     }
 
     public function shopname() {
