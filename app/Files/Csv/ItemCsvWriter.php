@@ -4,6 +4,7 @@ namespace App\Files\Csv;
 use App\Enum\CardColor;
 use App\Models\CardInfo;
 use App\Models\CsvHeader;
+use App\Models\Promotype;
 
 /** 
  * 商品登録用CSVファイルを作成するクラス
@@ -29,6 +30,14 @@ abstract class ItemCsvWriter {
             // data
             foreach($data as $row) {
                 $price = $this->roundPrice($row->price);
+                $separator = ' // ';
+                if (str_contains($row->en_name, $separator)) {
+                    $row->en_name = explode($separator, $row->en_name)[0];
+                }
+                $promotype = $this->extractPromotype($row->name);
+                if (!empty($promotype)) {
+                    $row->en_name = $row->en_name.'_'.$promotype;
+                }
                 // 一定金額以下は除外
                 if ($price < $this->basevalue()) {
                     continue;
@@ -41,9 +50,8 @@ abstract class ItemCsvWriter {
     }
     
     protected abstract function toCsv(int $price, int $number, CardInfo $row);
-    
     /**
-     * 除外する金額を取得する。
+     * 除外する下限金額を取得する。
      *ここで取得した金額以下の商品は除外する。
      * @return int
      */
@@ -99,5 +107,16 @@ abstract class ItemCsvWriter {
         $amountWithoutComma = (int)str_replace(',', '', $inputAmount);
         $roundedAmount = round($amountWithoutComma/10, 0) * 10;
         return $roundedAmount;
+    }
+
+    private function extractPromotype(string $name) {
+        $pattern = '/≪([^≫]+)≫/';
+
+        if (preg_match($pattern, $name, $matches)) {
+            $extractedText = $matches[1];
+            $promotype = Promotype::findCardByName($extractedText);
+            return $promotype->attr;
+        } 
+        return '';
     }
 }

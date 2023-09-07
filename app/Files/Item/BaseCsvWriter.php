@@ -11,8 +11,8 @@ class BaseCsvWriter extends ItemCsvWriter {
 
     protected function toCsv(int $price, int $number, CardInfo $row) {
         return ['', $this->itemname($row), '', '', $this->description($row), 
-                        $price, '1', '0', '0', $number, 
-                        '', $this->thumbnail($row), $this->itemImage($row)];
+                        $this->minusShipping($price), '1', '0', '0', $number, 
+                        '', $this->thumbnail($row), $this->itemImage($row), $row->en_name];
     }
 
     public function shopname() {
@@ -26,5 +26,22 @@ class BaseCsvWriter extends ItemCsvWriter {
      */
     protected function basevalue():int {
         return 50;
+    }
+
+
+    /**
+     * 送料抜き価格を計算する。
+     *
+     * @param integer $price
+     * @return int
+     */
+    private function minusShipping(int $price) {
+        if ($price < 300) {
+            return $price;
+        }
+        if ($price >= 300 && $price < 1500) {
+            return $price - 60;
+        }
+        return $price -180;
     }
 }

@@ -10,14 +10,36 @@ use App\Models\CardInfo;
 class MercariCsvWriter extends ItemCsvWriter {
 
     protected function toCsv(int $price, int $number, CardInfo $row) {
+        $row->price = $price;
+        if ($price < 300) {
+            $quantity = $this->calcQuantity($price);
+            $price = $price * $quantity;
+        }
+
         $lines =  [$this->thumbnail($row), $this->itemImage($row)];
         $empty = array_fill(0, 8, '');
         $lines = array_merge($lines, $empty);
         array_push($lines, $this->itemname($row), $this->description($row), '', '0');
         $emptyItems = array_fill(count($lines), 39, '');
         $lines = array_merge($lines, $emptyItems);
-        array_push($lines, $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2');
+        array_push($lines, $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2', $row->en_name);
         return $lines;
+    }
+
+    /**
+     * 商品名を取得する。
+     * @see ItemCsvWriter#itemname
+     * @param CardInfo $row
+     * @return string 
+     */
+    protected function itemname(CardInfo $row) {
+        if ((int)$row->price < 300) {
+            $quantity = $this->calcQuantity($row->price);
+            if ($quantity > 1) {
+                $row->name .= sprintf('%s枚セット', $quantity);
+            }
+        }
+        return parent::itemname($row);
     }
 
     public function shopname() {
@@ -57,6 +79,32 @@ class MercariCsvWriter extends ItemCsvWriter {
      * @return integer
      */
     protected function basevalue():int {
-        return 300;
+        return 80;
+    }
+
+    protected function combinedPrice(string $price) {
+        $quantity = $this->calcQuantity($price);
+        return $price * $quantity;
+    }
+
+
+    /**
+     * セットで販売する枚数を計算する。
+     *
+     * @param integer $price
+     * @return int セット枚数
+     */
+    private function calcQuantity(string $price) {
+        $intPrice = (int)$price;
+        switch($intPrice) {
+            case $intPrice >= 80 && $intPrice < 95:
+                return 4;
+            case $intPrice >= 95 && $intPrice < 150:
+                return 3;
+            case $intPrice > 150 && $intPrice <= 299:
+                return 2; 
+            default:
+            return 1;
+        }
     }
 }
