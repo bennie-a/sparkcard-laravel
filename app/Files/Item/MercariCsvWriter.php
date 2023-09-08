@@ -22,7 +22,8 @@ class MercariCsvWriter extends ItemCsvWriter {
         array_push($lines, $this->itemname($row), $this->description($row), '', '0');
         $emptyItems = array_fill(count($lines), 39, '');
         $lines = array_merge($lines, $emptyItems);
-        array_push($lines, $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2', $row->en_name);
+        array_push($lines, $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2', 
+                                    $this->concatPromotype($row->en_name, $row->promotype));
         return $lines;
     }
 

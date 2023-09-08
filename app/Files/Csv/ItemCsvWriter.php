@@ -35,9 +35,7 @@ abstract class ItemCsvWriter {
                     $row->en_name = explode($separator, $row->en_name)[0];
                 }
                 $promotype = $this->extractPromotype($row->name);
-                if (!empty($promotype)) {
-                    $row->en_name = $row->en_name.'_'.$promotype;
-                }
+                $row->promotype = $promotype;
                 // 一定金額以下は除外
                 if ($price < $this->basevalue()) {
                     continue;
@@ -72,12 +70,12 @@ abstract class ItemCsvWriter {
     }
     
     protected function thumbnail(CardInfo $row) {
-        $enname = $row->en_name;
+        $enname = $this->concatPromotype($row->en_name, $row->promotype);
         return sprintf('%s_%s-min.jpg', $enname, $this->shopname());
     }
 
     protected function itemImage(CardInfo $row) {
-        $enname = $row->en_name;
+        $enname = $this->concatPromotype($row->en_name, $row->promotype);
         return sprintf('%s-min.jpg', $enname);
     }
 
@@ -107,6 +105,13 @@ abstract class ItemCsvWriter {
         $amountWithoutComma = (int)str_replace(',', '', $inputAmount);
         $roundedAmount = round($amountWithoutComma/10, 0) * 10;
         return $roundedAmount;
+    }
+
+    protected function concatPromotype(string $enname, string $promotype) {
+        if (!empty($promotype)) {
+            $enname .= '_'.$promotype;
+        }
+        return $enname;
     }
 
     private function extractPromotype(string $name) {
