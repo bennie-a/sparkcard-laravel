@@ -9,29 +9,25 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Facades\ScryfallServ;
 use App\Facades\WisdomGuild;
 use App\Models\Foiltype;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 
 /**
  * card_infoテーブルのロジッククラス
  */
 class CardInfoDBService {
-    public function __construct()
-    {
-        // $this->service = new ScryfallService();
-    }
 
     public function fetch($details)
     {
         $condition = [
-                    'card_info.name' => $details['name'],
-                    'card_info.color_id' => $details['color'],
-                    'e.attr' => $details['set'],
-                    'card_info.isFoil' => $details['isFoil']];
+                    'card_info.name' => $details[Con::NAME],
+                    'card_info.color_id' => $details[Con::COLOR],
+                    'e.attr' => $details[Con::SET],
+                    'card_info.isFoil' => $details[Con::IS_FOIL]];
         $list = CardInfo::fetchByCondition($condition);
 
         foreach ($list as $info) {
-            $price = WisdomGuild::getPrice($info['en_name']);
-            $info['price'] = $price;
+            $price = WisdomGuild::getPrice($info[Con::EN_NAME]);
+            $info[Con::PRICE] = $price;
         }
 
         return $list;

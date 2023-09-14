@@ -5,7 +5,7 @@ use App\Enum\CardColor;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
 use App\Models\Foiltype;
-use App\Services\Constant\JsonFileConstant as Column;
+use App\Services\Constant\CardConstant as Column;
 use app\Services\json\AbstractCard;
 use App\Services\json\TransformCard;
 

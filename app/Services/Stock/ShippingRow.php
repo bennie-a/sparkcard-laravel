@@ -10,6 +10,11 @@ use Carbon\Carbon;
  */
 class ShippingRow extends StockpileRow {
     
+    private $setcode;
+
+    private $cardname;
+
+    private $language;
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;
@@ -17,7 +22,11 @@ class ShippingRow extends StockpileRow {
     }
 
     public function shipping_date() {
-        $carbon = new Carbon($this->row[Header::SHIPPING_DATE]);
+        $date = $this->row[Header::SHIPPING_DATE];
+        $carbon = new Carbon();
+        if (!empty($date)) {
+            $carbon = new Carbon($date);
+        }
         return $carbon;
     }
 

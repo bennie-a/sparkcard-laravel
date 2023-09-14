@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Enum\PromoType;
 use App\Models\BaseCategory;
+use App\Models\CsvHeader;
 use App\Models\Shipping;
 use Illuminate\Database\Seeder;
 
@@ -23,6 +24,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(BaseCategory::class);
         $this->call(PromotypeSeeder::class);
         $this->call(FoiltypeSeeder::class);
-        // $this->call(FrameEffectsSeeder::class);
+        $this->call(CsvHeaderSeeder::class);
     }
 }

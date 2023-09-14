@@ -2,7 +2,7 @@
 namespace App\Services\json;
 
 use App\Enum\CardColor;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 
 /**
  * 両面カード用クラス

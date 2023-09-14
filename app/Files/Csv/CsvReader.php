@@ -1,5 +1,5 @@
 <?php
-namespace App\Files;
+namespace App\Files\Csv;
 
 use App\Http\Response\CustomResponse;
 use App\Http\Validator\AbstractCsvValidator;

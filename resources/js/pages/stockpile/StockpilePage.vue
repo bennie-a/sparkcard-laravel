@@ -33,6 +33,7 @@
         <table class="ui striped table">
             <thead>
                 <tr>
+                    <th>在庫ID</th>
                     <th class="six wide">カード</th>
                     <th class="two wide center aligned">言語</th>
                     <th class="two wide center aligned">状態</th>
@@ -45,6 +46,7 @@
                     v-for="(s, index) in this.$store.getters.sliceCard"
                     :key="index"
                 >
+                    <td>{{ s.id }}</td>
                     <td>
                         <h4 class="ui image header">
                             <img

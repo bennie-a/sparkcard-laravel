@@ -3,7 +3,7 @@ namespace app\Services\json;
 
 use App\Libs\MtgJsonUtil;
 use App\Services\json\AbstractCard;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 
 
 class ScryfallCard extends AbstractCard {

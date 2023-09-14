@@ -29,7 +29,7 @@ class ShippingLogService extends AbstractSmsService{
 
         /**
      * @see AbstractSmsService::store
-     * @param StockpileRow $row
+     * @param ShippingRow $row
      * @return void
      */
     protected function store($row) {
@@ -54,13 +54,13 @@ class ShippingLogService extends AbstractSmsService{
     }
 
     private function updateNotion($row) {
-        $notionCard = \CardBoard::findByOrderId($row->order_id());
+        $notionCard = CardBoard::findByOrderId($row->order_id());
         $page = new Page();
         $page->setId($notionCard->getId());
         $page->set('購入者名', Text::value($row->buyer()));
         $page->set('Status', Select::value('出荷準備中'));
         $page->set('発送日',  Date::value($row->shipping_date()));
-        \CardBoard::updatePage($page);
+        CardBoard::updatePage($page);
 
     }
 

@@ -24,4 +24,15 @@ class Promotype extends Model
         return Promotype::where('attr', $attr)->first();
     }
 
+    /**
+     * 名称から該当するプロモ情報を取得する。
+     *
+     * @param string $name
+     * @return Promotype
+     */
+    public static function findCardByName(string $name) {
+        return Promotype::where('name', $name)->first();
+    }
+
+
 }

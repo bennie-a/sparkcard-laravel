@@ -1,7 +1,7 @@
 <?php
 namespace App\Files\Stock;
 
-use App\Files\CsvReader;
+use App\Files\Csv\CsvReader;
 use App\Http\Validator\StockpileValidator;
 use App\Services\Constant\StockpileHeader as Header;
 
