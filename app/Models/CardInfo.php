@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Services\Constant\CardConstant as Con;
 
 class CardInfo extends Model
 {
@@ -16,7 +17,7 @@ class CardInfo extends Model
         return $this->belongsTo('App\Models\Expansion');
     }
 
-    public function stockpile() {
+    public function stockpiles() {
         return $this->hasMany('App\Models\Stockpile');
     }
 
@@ -24,7 +25,7 @@ class CardInfo extends Model
         return $this->hasOne('App\Model\Foiltype');
     }
 
-    protected $fillable = ['expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id'];
+    protected $fillable = ['id', 'expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id'];
 
     /**
      * 検索条件に該当するデータを取得する。
@@ -35,7 +36,8 @@ class CardInfo extends Model
     public static function fetchByCondition($condition)
     {
         $columns = ['e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
-                 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 'card_info.isFoil', 'f.name as foiltype'];
+                 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
+                 'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
         $name = $condition['card_info.name'];
         $query = self::select($columns);
         if (!empty($name)) {
@@ -49,7 +51,8 @@ class CardInfo extends Model
                 $query = $query->where($key, $value);
             }
         }
-        $cardList = $query->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id')->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')->
+        $cardList = $query->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id'
+                                )->leftJoin('stockpile as s', 'card_info.id', '=', 's.card_id')->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')->
                         orderBy('e.release_date', 'desc')->orderByRaw('CAST(card_info.number as integer ) asc')->get();
         return $cardList;
     }
@@ -111,5 +114,12 @@ class CardInfo extends Model
     public static function findJpName(string $enname) {
         $name = self::select('name')->where(['en_name' => $enname])->first();
         return $name;
+    }
+
+    public function getQuantityAttribute($value) {
+        if (empty($value)) {
+            return 0;
+        }
+        return $value;
     }
 }
