@@ -20,7 +20,7 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
-            cost: 23,
+            cost: 27,
             isLoading: false,
         };
     },
@@ -116,7 +116,10 @@ export default {
                         language: c.language,
                         quantity: c.stock,
                         cost: this.cost,
-                        market_price: c.price.replace(",", ""),
+                        market_price:
+                            c.price.indexOf(",") != -1
+                                ? c.price.replace(",", "")
+                                : c.price,
                         condition: c.condition,
                         attr: c.exp.attr,
                         supplier: this.supplier,

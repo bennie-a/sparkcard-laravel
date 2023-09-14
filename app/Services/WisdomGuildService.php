@@ -97,6 +97,9 @@ class WisdomGuildService {
      */
     public function getPrice($enname) {
         $price = $this->getInfo($enname, '//div[@class="contents"]/b/text()');
+        if (empty($price)) {
+            $price = 1;
+        }
         return $price;
     }
 
