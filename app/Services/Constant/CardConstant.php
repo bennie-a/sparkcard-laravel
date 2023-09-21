@@ -28,4 +28,6 @@ class CardConstant {
     const IDENTIFIERS = 'identifiers';
 
     const PRICE = 'price';
+
+    const QUANTITY = 'quantity';
 }

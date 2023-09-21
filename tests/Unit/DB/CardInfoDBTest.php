@@ -8,7 +8,7 @@ use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
-use App\Services\Constant\JsonFileConstant as Con;
+use App\Services\Constant\CardConstant as Con;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;

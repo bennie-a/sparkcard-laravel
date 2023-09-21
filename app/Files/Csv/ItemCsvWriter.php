@@ -62,11 +62,12 @@ abstract class ItemCsvWriter {
 商品名：「%s%s」
 エキスパンション：%s(%s)
 言語：日本語
-在庫：0点
+在庫：%s点
 
 ■状態
-状態は【NM】です。ドラフトブースターパックから出ました。開封直後にスリーブに入れて保管しています。';
-        return sprintf($desc, $row->name, $foil, $row->exp_name, $row->exp_attr);
+状態は【%s】です。ドラフトブースターパックから出ました。開封直後にスリーブに入れて保管しています。';
+        return sprintf($desc, $row->name, $foil, $row->exp_name, 
+                    $row->exp_attr, $row->condition, $row->quantity);
     }
     
     protected function thumbnail(CardInfo $row) {

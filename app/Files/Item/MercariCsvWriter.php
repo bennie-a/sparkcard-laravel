@@ -19,7 +19,7 @@ class MercariCsvWriter extends ItemCsvWriter {
         $lines =  [$this->thumbnail($row), $this->itemImage($row)];
         $empty = array_fill(0, 8, '');
         $lines = array_merge($lines, $empty);
-        array_push($lines, $this->itemname($row), $this->description($row), '', '0');
+        array_push($lines, $this->itemname($row), $this->description($row), '', $row->quantity);
         $emptyItems = array_fill(count($lines), 39, '');
         $lines = array_merge($lines, $emptyItems);
         array_push($lines, $price, 'iV9pczaBytZwZQGxHf6gqN', '1', '1', 'jp27', '1', '2');

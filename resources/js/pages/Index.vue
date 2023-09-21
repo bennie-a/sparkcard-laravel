@@ -321,6 +321,7 @@ export default {
                             >&#xa5;{{ card.price }}</span
                         >
                     </div>
+                    <div>在庫：{{ card.quantity }}</div>
                 </div>
                 <div class="content">
                     <div class="ui form">
