@@ -107,7 +107,8 @@ class ScryfallService {
                     'imageurl' => $card->imageurl(),
                     'number' => $card->number(),
                     'setcode' => $card->setcode(),
-                    'reprint' => $card->reprint()
+                    'reprint' => $card->reprint(),
+                    'foiltype' => $card->foiltype()
             ];
     }
 

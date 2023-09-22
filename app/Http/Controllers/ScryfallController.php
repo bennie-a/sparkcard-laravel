@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 
 class ScryfallController extends Controller
 {
+    private $service;
     public function __construct(ScryfallService $service)
     {
      $this->service = $service;   

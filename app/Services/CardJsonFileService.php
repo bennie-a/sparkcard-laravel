@@ -47,6 +47,12 @@ class CardJsonFileService {
         return $array;
     }
 
+    /**
+     * Undocumented function
+     *@deprecated 4.0.0
+     * @param AbstractCard $cardtype
+     * @return void
+     */
     private function foiltype(AbstractCard $cardtype) {
         $foiltype = [];
         if($cardtype->isSpecialFoil()) {
@@ -69,6 +75,12 @@ class CardJsonFileService {
         return $foiltype;
     }
 
+    /**
+     * 仕上げ名を取得する。
+     * @deprecated 4.0.0
+     * @param string $attr
+     * @return void
+     */
     private function findFoilName(string $attr) {
         $result = Foiltype::findByAttr($attr);
         $typename = empty($result) ? '不明':$result->name;

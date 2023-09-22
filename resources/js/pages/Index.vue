@@ -1,17 +1,24 @@
 <script>
 import axios from "axios";
 import Loading from "vue-loading-overlay";
-import CardList from "./component/CardList.vue";
 import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
 import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
 import Datepicker from "@vuepic/vue-datepicker";
-import { $vfm, VueFinalModal, ModalsContainer } from "vue-final-modal";
 import FoilTag from "./component/FoilTag.vue";
 import ImageModal from "./component/ImageModal.vue";
 
 export default {
+    components: {
+        Loading,
+        "message-area": MessageArea,
+        pagination: ListPagination,
+        ModalButton: ModalButton,
+        datepicker: Datepicker,
+        foiltag: FoilTag,
+        "image-modal": ImageModal,
+    },
     data() {
         return {
             selectedSet: "",
@@ -160,42 +167,31 @@ export default {
             return `${year}/${month}/${day}`;
         },
     },
-    components: {
-        Loading,
-        "card-list": CardList,
-        "message-area": MessageArea,
-        pagination: ListPagination,
-        ModalButton: ModalButton,
-        datepicker: Datepicker,
-        "vue-final-modal": VueFinalModal,
-        ModalsContainer,
-        foiltag: FoilTag,
-        "image-modal": ImageModal,
-    },
 };
 </script>
 
 <template>
-    <message-area></message-area>
+    <message-area />
     <article class="mt-1 ui form segment">
         <div class="five fields">
             <div class="field">
                 <label>カード名(一部)</label>
-                <input type="text" v-model="name" />
+                <input v-model="name" type="text" />
             </div>
 
             <div class="three wide column field">
                 <label for="">セット名</label>
                 <div class="ui input">
                     <input
+                        v-model="selectedSet"
                         type="text"
                         autocomplete="on"
                         list="setlist"
-                        v-model="selectedSet"
                         @input="suggestSet"
                     />
                     <datalist id="setlist">
-                        <option v-for="n in suggestions" :key="n">
+                        <option v-for="n in suggestions"
+                        :key="n">
                             {{ n.attr }}
                         </option>
                     </datalist>
@@ -204,7 +200,7 @@ export default {
             <div class="two wide column field">
                 <label>色</label>
                 <select v-model="color" class="ui dropdown">
-                    <option value=""></option>
+                    <option value="" />
                     <option value="R">赤</option>
                     <option value="W">白</option>
                     <option value="B">黒</option>
@@ -219,7 +215,7 @@ export default {
             <div class="three wide column field">
                 <label for="">通常版orFoil</label>
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" name="isFoil" v-model="isFoil" />
+                    <input v-model="isFoil" type="checkbox" name="isFoil" />
                     <label for="isFoil">Foilのみ検索する</label>
                 </div>
             </div>
@@ -228,9 +224,9 @@ export default {
                 <button
                     id="search"
                     class="ui button teal ml-1"
-                    @click="search"
                     :class="{ disabled: selectedSet == '' && name == '' }"
                     style=""
+                    @click="search"
                 >
                     検索する
                 </button>
@@ -239,13 +235,13 @@ export default {
     </article>
     <article class="mt-2">
         <h2
+            v-if="$store.getters.cardsLength != 0"
             class="ui medium dividing header"
-            v-if="this.$store.getters.cardsLength != 0"
         >
-            件数：{{ this.$store.getters.cardsLength }}件
+            件数：{{ $store.getters.cardsLength }}件
         </h2>
 
-        <div class="mt-2 ui form" v-if="this.$store.getters.cardsLength != 0">
+        <div v-if="$store.getters.cardsLength != 0" class="mt-2 ui form">
             <div class="four fields">
                 <div class="four wide column field">
                     <label for="">仕入れ先</label>
@@ -258,56 +254,49 @@ export default {
                 <div class="three wide column field">
                     <label>入荷日</label>
                     <datepicker
-                        input-class-name="dp_custom_input"
                         v-model="arrivalDate"
+                        input-class-name="dp_custom_input"
                         locale="jp"
                         :enable-time-picker="false"
                         :format="dateFormat"
-                    ></datepicker>
+                    />
                 </div>
                 <div class="two wide column field">
                     <label>原価</label>
                     <div class="ui middle right labeled input">
                         <input
+                            v-model="cost"
                             type="number"
                             step="1"
                             min="1"
                             class="text-stock"
-                            v-model="this.cost"
                         />
                         <div class="ui basic label">円</div>
                     </div>
                 </div>
                 <div class="three wide column field">
                     <label style="visibility: hidden">登録ボタン</label>
-                    <ModalButton @action="regist">登録する</ModalButton>
+                    <ModalButton @action="regist"> 登録する </ModalButton>
                 </div>
             </div>
         </div>
         <div class="mt-1 ui four cards">
             <div
-                class="card gallery"
-                v-for="(card, index) in this.$store.getters.sliceCard"
+                v-for="(card, index) in $store.getters.sliceCard"
                 :key="index"
+                class="card gallery"
             >
                 <div class="content">
-                    <foiltag
-                        :isFoil="card.isFoil"
-                        :foiltype="card.foiltype"
-                    ></foiltag>
+                    <foiltag :is-foil="card.isFoil" :foiltype="card.foiltype" />
                     <div class="right floated meta">#{{ card.id }}</div>
                 </div>
                 <div class="image">
                     <img
                         class=""
-                        v-bind:src="card.image"
+                        :src="card.image"
                         @click="$refs.modal[index].showImage(card.id)"
                     />
-                    <image-modal
-                        :url="card.image"
-                        :id="card.id"
-                        ref="modal"
-                    ></image-modal>
+                    <image-modal :id="card.id" ref="modal" :url="card.image" />
                 </div>
                 <div class="content">
                     <div class="header">
@@ -328,37 +317,37 @@ export default {
                         <div class="inline field radio-button">
                             <label
                                 ><input
+                                    v-model="card.language"
                                     type="radio"
                                     value="JP"
-                                    v-model="card.language"
                                 /><span>JP</span></label
                             >
                             <label
                                 ><input
+                                    v-model="card.language"
                                     type="radio"
                                     value="EN"
-                                    v-model="card.language"
                                 /><span>EN</span></label
                             >
                             <label
                                 ><input
+                                    v-model="card.language"
                                     type="radio"
                                     value="IT"
-                                    v-model="card.language"
                                 /><span>IT</span></label
                             >
                             <label
                                 ><input
+                                    v-model="card.language"
                                     type="radio"
                                     value="CS"
-                                    v-model="card.language"
                                 /><span>CS</span></label
                             >
                             <label
                                 ><input
+                                    v-model="card.language"
                                     type="radio"
                                     value="CT"
-                                    v-model="card.language"
                                 /><span>CT</span></label
                             >
                         </div>
@@ -366,8 +355,8 @@ export default {
                             <div class="eight wide field">
                                 <label for="">状態</label>
                                 <select
-                                    class="ui fluid dropdown"
                                     v-model="card.condition"
+                                    class="ui fluid dropdown"
                                 >
                                     <option value="NM">NM</option>
                                     <option value="NM-">NM-</option>
@@ -380,11 +369,11 @@ export default {
                                 <label>枚数</label>
                                 <div class="ui middle right labeled input">
                                     <input
+                                        v-model="card.stock"
                                         type="number"
                                         step="1"
                                         min="0"
                                         class="text-stock"
-                                        v-model="card.stock"
                                     />
                                     <div class="ui basic label">枚</div>
                                 </div>
@@ -396,14 +385,12 @@ export default {
         </div>
         <div class="ui grid">
             <div class="four wide column row right floated">
-                <pagination :count="Number(12)"></pagination>
+                <pagination :count="Number(12)" />
             </div>
         </div>
         <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        ></loading>
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
     </article>
 </template>
 <style scoped>

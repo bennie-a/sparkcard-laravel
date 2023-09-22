@@ -14,10 +14,10 @@
                     </th>
                     <th class="six wide left aligned">カード</th>
                     <th class="two wide center aligned">数量</th>
-                    <th v-if="this.isNotion" class="two wide center aligned">
+                    <th v-if="isNotion" class="two wide center aligned">
                         状態
                     </th>
-                    <th v-if="this.isNotion" class="two wide center aligned">
+                    <th v-if="isNotion" class="two wide center aligned">
                         言語
                     </th>
                     <th class="left aligned">価格</th>
@@ -36,7 +36,7 @@
                     <td>
                         <h4 class="ui image header">
                             <img
-                                v-bind:src="card.image"
+                                :src="card.image"
                                 class="ui mini rounded image"
                                 @click="
                                     $refs.modal[index].showImage(card.index)
@@ -57,14 +57,14 @@
                         </h4>
                     </td>
 
-                    <td v-if="this.isNotion" class="center aligned">
+                    <td v-if="isNotion" class="center aligned">
                         {{ card.stock }}
                     </td>
-                    <td v-if="this.isNotion == false" class="center aligned">
+                    <td v-if="isNotion == false" class="center aligned">
                         <div
                             class="ui right labeled input one wide"
                             :class="{
-                                disabled: !this.selectedCard.includes(card.id),
+                                disabled: !selectedCard.includes(card.id),
                             }"
                         >
                             <input
@@ -77,10 +77,10 @@
                             <div class="ui basic label">枚</div>
                         </div>
                     </td>
-                    <td v-if="this.isNotion" class="center aligned">
+                    <td v-if="isNotion" class="center aligned">
                         <condition :name="card.condition"></condition>
                     </td>
-                    <td v-if="this.isNotion" class="center aligned">
+                    <td v-if="isNotion" class="center aligned">
                         {{ card.lang }}
                     </td>
                     <td>{{ card.price }}円</td>
@@ -88,7 +88,7 @@
             </tbody>
             <tfoot
                 class="full-width"
-                v-if="this.$store.getters.cardsLength != 0"
+                v-if="$store.getters.cardsLength != 0"
             >
                 <tr>
                     <th colspan="10">
@@ -101,28 +101,6 @@
         </table>
     </article>
 </template>
-<style scoped>
-img.image {
-    margin: 0 auto;
-    max-width: 400px;
-}
-.ui.pagination.menu .item {
-    cursor: pointer;
-}
-.ui.button.nocolor {
-    background-color: transparent;
-    font-weight: bold;
-    text-decoration: underline;
-    padding: 0;
-    margin: 0;
-    border: 0;
-    color: #2185d0;
-}
-
-input.text-stock {
-    width: 6vw;
-}
-</style>
 <script>
 import ListPagination from "./ListPagination.vue";
 import FoilTag from "../component/FoilTag.vue";
@@ -130,6 +108,12 @@ import ConditionTag from "./ConditionTag.vue";
 import ImageModal from "./ImageModal.vue";
 
 export default {
+    components: {
+        pagination: ListPagination,
+        foiltag: FoilTag,
+        condition: ConditionTag,
+        ImageModal,
+    },
     props: {
         exp: { type: Boolean, default: false },
         isNotion: { type: Boolean, default: false },
@@ -142,9 +126,6 @@ export default {
             // fullcard: [],
         };
     },
-    mounted: function () {
-        // this.selectedCard = [];
-    },
     computed: {
         loading: function () {
             return this.$store.getters.isload;
@@ -152,9 +133,10 @@ export default {
         getCards: function () {
             return this.$store.getters.sliceCard;
         },
-        isChecked: function ($id) {
-            console.log($id);
-        },
+
+    },
+    mounted: function () {
+        // this.selectedCard = [];
     },
     methods: {
         allChecked: function () {
@@ -180,11 +162,27 @@ export default {
             $(selecterId).modal("show");
         },
     },
-    components: {
-        pagination: ListPagination,
-        foiltag: FoilTag,
-        condition: ConditionTag,
-        ImageModal,
-    },
 };
 </script>
+<style scoped>
+img.image {
+    margin: 0 auto;
+    max-width: 400px;
+}
+.ui.pagination.menu .item {
+    cursor: pointer;
+}
+.ui.button.nocolor {
+    background-color: transparent;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    color: #2185d0;
+}
+
+input.text-stock {
+    width: 6vw;
+}
+</style>

@@ -1,34 +1,34 @@
 <template>
-    <message-area></message-area>
+    <message-area/>
     <article class="mt-1 ui form segment">
         <div class="two fields">
             <div class="five wide field">
                 <label>カード名(一部)</label>
-                <input type="text" v-model="cardname" />
+                <input v-model="cardname" type="text">
             </div>
 
             <div class="five wide field">
                 <label for="">セット名(一部)</label>
                 <div class="ui input">
-                    <input type="text" v-model="setname" />
+                    <input v-model="setname" type="text">
                 </div>
             </div>
             <div class="field">
                 <label style="visibility: hidden">検索ボタン</label>
                 <button
-                    id="search"
+                id="search"
+                :class="{ disabled: cardname == '' && setname == '' }"
                     class="ui button teal ml-1"
                     @click="search"
-                    :class="{ disabled: cardname == '' && setname == '' }"
                 >
                     検索する
                 </button>
             </div>
         </div>
     </article>
-    <article class="mt-2" v-if="this.stock.length != 0">
+    <article class="mt-2" v-if="stock.length != 0">
         <h2 class="ui medium dividing header">
-            件数：{{ this.stock.length }}件
+            件数：{{ stock.length }}件
         </h2>
         <table class="ui striped table">
             <thead>
@@ -43,32 +43,32 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(s, index) in this.$store.getters.sliceCard"
+                    v-for="(s, index) in $store.getters.sliceCard"
                     :key="index"
                 >
                     <td>{{ s.id }}</td>
                     <td>
                         <h4 class="ui image header">
                             <img
-                                v-bind:src="s.image_url"
+                                :src="s.image_url"
                                 class="ui mini rounded image"
                                 @click="$refs.modal[index].showImage(s.id)"
-                            />
+                            >
                             <div class="content">
                                 {{ s.cardname
-                                }}<foiltag :isFoil="s.isFoil"></foiltag>
+                                }}<foiltag :isFoil="s.isFoil"/>
                                 <div class="sub header">{{ s.setname }}</div>
                             </div>
                             <image-modal
                                 :url="s.image_url"
                                 :id="s.id"
                                 ref="modal"
-                            ></image-modal>
+                            />
                         </h4>
                     </td>
                     <td class="center aligned">{{ s.language }}</td>
                     <td class="center aligned">
-                        <condition :name="s.condition"></condition>
+                        <condition :name="s.condition"/>
                     </td>
                     <td class="center aligned">{{ s.quantity }}</td>
                     <td class="right aligned">{{ s.updated_at }}</td>
@@ -78,7 +78,7 @@
                 <tr>
                     <th colspan="10">
                         <div class="right aligned">
-                            <pagination></pagination>
+                            <pagination/>
                         </div>
                     </th>
                 </tr>
@@ -88,7 +88,7 @@
             :active="isLoading"
             :can-cancel="false"
             :is-full-page="true"
-        ></loading>
+        />
     </article>
 </template>
 
@@ -102,6 +102,14 @@ import ConditionTag from "../component/ConditionTag.vue";
 import ImageModal from "../component/ImageModal.vue";
 
 export default {
+    components: {
+        loading: Loading,
+        "message-area": MessageArea,
+        pagination: ListPagination,
+        foiltag: FoilTag,
+        condition: ConditionTag,
+        ImageModal,
+    },
     data() {
         return {
             cardname: "",
@@ -146,14 +154,6 @@ export default {
                     console.log("end search stockpile");
                 });
         },
-    },
-    components: {
-        loading: Loading,
-        "message-area": MessageArea,
-        pagination: ListPagination,
-        foiltag: FoilTag,
-        condition: ConditionTag,
-        ImageModal,
     },
 };
 </script>
