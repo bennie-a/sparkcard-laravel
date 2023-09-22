@@ -5,6 +5,7 @@ use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
 use App\Libs\MtgJsonUtil;
 use App\Models\CardInfo;
+use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
 use Closure;
@@ -241,5 +242,34 @@ abstract class AbstractCard implements CardInfoInterface {
     protected function promotypeKey() : string {
         return self::PROMOTYPE;
     }
+
+    public function foiltype() {
+        $foiltype = [];
+        if($this->isSpecialFoil()) {
+            $type = $this->specialFoil();
+            $typename = $this->findFoilName($type);
+            array_push($foiltype, $typename);
+        } else {
+            $finishes = $this->finishes();
+            $foiltype = array_map(function($f) {
+                if ($f == 'nonfoil') {
+                    return '通常版';
+                } else if ($f== 'foil') {
+                    return 'Foil';
+                } else {
+                    $typename = $this->findFoilName($f);
+                    return $typename;
+                }
+                }, $finishes);
+        }
+        return $foiltype;
+    }
+
+    private function findFoilName(string $attr) {
+        $result = Foiltype::findByAttr($attr);
+        $typename = empty($result) ? '不明':$result->name;
+        return $typename;
+    }
+
  }
 ?>

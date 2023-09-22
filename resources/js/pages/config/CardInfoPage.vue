@@ -1,7 +1,8 @@
 <template>
     <message-area></message-area>
     <router-link to="/config/expansion"
-        ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
+        >
+<i class="bi bi-arrow-left"></i>一覧に戻る</router-link
     >
     <div class="mt-1 ui form segment">
         <div class="two fields">
@@ -15,13 +16,13 @@
                     <div class="field">
                         <div class="ui radio checkbox">
                             <input
-                                id="jp"
+                                id="ja"
                                 type="radio"
                                 name="frequency"
                                 v-model="language"
-                                value="jp"
+                                value="ja"
                             />
-                            <label for="jp">日本語</label>
+                            <label for="ja">日本語</label>
                         </div>
                     </div>
                     <div class="field">
@@ -103,15 +104,8 @@
                 </div>
                 <div class="two fields">
                     <div class="six wide field">
-                        <label for="">通常 or Foil</label>
-                        <div class="ui toggle checkbox">
-                            <input
-                                type="checkbox"
-                                name="foil"
-                                v-model="isFoil"
-                            />
-                            <label for="foil">Foil</label>
-                        </div>
+                        <label for="">仕上げ</label>
+                        <span>{{ foiltype }}</span>
                     </div>
                     <div class="four wide field">
                         <label for="multiverse_id">Multiverse ID</label>
@@ -119,8 +113,9 @@
                     </div>
                 </div>
                 <ModalButton @action="store"
-                    ><i class="checkmark icon"></i>登録する</ModalButton
-                >
+                    ><i class="checkmark icon"></i>
+                    登録する
+                </ModalButton>
             </div>
         </div>
         <div class="four wide column">
@@ -143,6 +138,11 @@ import axios from "axios";
 import Loading from "vue-loading-overlay";
 
 export default {
+    components: {
+        "message-area": MessageArea,
+        ModalButton: ModalButton,
+        loading: Loading,
+    },
     data() {
         return {
             setname: this.$route.params.setname,
@@ -155,8 +155,9 @@ export default {
             multiverse_id: "",
             color: "",
             imageurl: "",
-            language: "jp",
+            language: "ja",
             isLoading: false,
+            foiltype:[]
         };
     },
     methods: {
@@ -181,6 +182,7 @@ export default {
                     this.color = data["color"];
                     this.promotype = data["promotype"];
                     this.imageurl = data["imageurl"];
+                    this.foiltype = data["foiltype"];
                 })
                 .catch((e) => {
                     console.error(e);
@@ -201,14 +203,14 @@ export default {
                 setCode: this.attr,
                 name: this.name,
                 isFoil: this.isFoil,
-                promotype: "アニメ・ボーダレス",
+                promotype: this.promotype,
                 multiverseId: this.multiverse_id,
                 en_name: this.en_name,
                 color: this.color,
                 number: this.number,
                 isSkip: false,
                 imageurl: this.imageurl,
-                foiltype: ["コンフェッティFoil"],
+                foiltype: ["通常版", "Foil"],
             };
             const success = function (response, store) {
                 // this.back();
@@ -218,11 +220,6 @@ export default {
             const fail = function () {};
             task.post("/database/card", json, success);
         },
-    },
-    components: {
-        "message-area": MessageArea,
-        ModalButton: ModalButton,
-        loading: Loading,
     },
 };
 </script>

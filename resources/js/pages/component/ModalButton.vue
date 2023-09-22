@@ -4,7 +4,6 @@
         name="confirm"
         classes="modal-container"
         content-class="modal-content"
-        v-slot="{ params, close }"
     >
         <div class="modal__close">
             <i class="bi bi-x" @click="close"></i>
@@ -26,42 +25,41 @@
     </button>
 </template>
 <script>
-import NowLoading from "../component/NowLoading.vue";
-import { $vfm, VueFinalModal } from "vue-final-modal";
+import { VueFinalModal } from "vue-final-modal";
 
 export default {
+    components: {
+        "vue-final-modal": VueFinalModal,
+    },
+    props: { },
+    emits: ["action"],
     data() {
         return {
             showModal: false,
         };
     },
-    props: { name: { type: String, default: "confirm" } },
-    emits: ["action"],
     methods: {
         show: function () {
-            $vfm.show(this.name);
+            this.showModal = true;
         },
         execute: function () {
             this.$store.dispatch("message/clear");
-            this.$store.dispatch("setLoad", true);
             this.$emit("action");
             this.showModal = false;
-            this.$store.dispatch("setLoad", false);
         },
-    },
-    components: {
-        "now-loading": NowLoading,
-        "vue-final-modal": VueFinalModal,
+        close:function() {
+            this.showModal = false;
+        }
     },
 };
 </script>
 <style scoped>
-:deep .modal-container {
+::v-deep .modal-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-:deep .modal-content {
+::v-deep .modal-content {
     position: relative;
     display: flex;
     flex-direction: column;
