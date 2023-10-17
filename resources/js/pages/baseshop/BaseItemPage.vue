@@ -28,7 +28,6 @@ import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/MessageArea.vue";
 import { writeCsv, write } from "../../composables/CSVWriter";
-import { toItemName } from "../../composables/CardCollector";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
 import DownloadButton from "../component/DownloadButton.vue";

@@ -1,7 +1,6 @@
 import {
     toItemName,
     toPhotoName,
-    toRevName,
     toNoLabelName,
     details,
 } from "../composables/CardCollector";
@@ -74,7 +73,7 @@ export default () => {
             let json = [
                 this.toPicName(c),
                 toNoLabelName(c),
-                toRevName(c),
+                "",
                 "",
                 "",
                 "",

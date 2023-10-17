@@ -1,7 +1,6 @@
 import {
     toItemName,
     toSurfaceName,
-    toRevName,
     toNoLabelName,
     details,
 } from "../composables/CardCollector";
@@ -39,9 +38,7 @@ export default () => {
                 c.index,
                 "",
                 toSurfaceName(c),
-                toNoLabelName(c),
-                toRevName(c),
-                "",
+                toNoLabelName(c)
             ];
             return json;
         },

@@ -40,7 +40,7 @@ class StockpileRow {
 
     public function condition() : string {
         $condition = $this->row[Header::CONDITION];
-        return !empty($condition) ? $condition  : 'EX+';
+        return !empty($condition) ? $condition  : 'NM';
     }
 
     public function isFoil():bool {
