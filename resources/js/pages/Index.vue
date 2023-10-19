@@ -63,7 +63,7 @@ export default {
         async search() {
             this.isLoading = true;
             console.log("wisdom guild search");
-            this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearMessage");
             this.$store.dispatch("clearCards");
             const query = {
                 params: {
