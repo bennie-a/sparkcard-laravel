@@ -63,7 +63,7 @@ class ScryfallRepository {
      *
      * @param string $setCode
      * @param integer $number
-     * @return void
+     * @return array
      */
     public function getCardInfoByNumber(string $setCode, int $number, string $language) {
         $client = $this->client();

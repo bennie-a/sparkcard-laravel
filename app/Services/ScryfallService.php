@@ -16,6 +16,7 @@ use Illuminate\Http\Response;
  */
 class ScryfallService {
 
+    private $repo;
     public function __construct() {
         $this->repo = new ScryfallRepository();
     }

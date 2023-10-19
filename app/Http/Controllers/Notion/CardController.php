@@ -46,26 +46,6 @@ class CardController extends Controller
     }
 
     /**
-     * Notionの商品管理テーブルにカードを1件登録する。
-     * @deprecated 3.0.0
-     * @param  PostNotionCardRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $details = $request->all();
-        // $name = '「'.$details['name'].'」';
-        // $rules = ['stock' => 'required | integer | min:1', 'imageUrl' => 'required'];
-        // $msgs = ['stock.required' => $name.'の枚数が入力されていません。',
-        //     'stock.min' => $name.'の枚数は1枚以上を入力してください。',
-        //     'imageUrl.required' => $name.'の画像URLを登録してください。できればscryfall.comの画像を使ってほしいです。'];
-        // Validator::make($details, $rules, $msgs)->validate();
-        logger()->debug("登録パラメータ", $details);
-        $this->service->store($details);
-        return Response::HTTP_CREATED;
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id

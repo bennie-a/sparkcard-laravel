@@ -16,7 +16,7 @@
         <div v-if="isCopyed" class="ui left pointing blue label">
             コピーしました
         </div>
-        <table class="ui table striped definition" v-for="o in orders">
+        <table class="ui table striped definition" v-for="(o, i) in orders" :key="i">
             <tr>
                 <td>注文番号</td>
                 <td>{{ o.order_id }}</td>
@@ -25,7 +25,7 @@
                 <td>商品名</td>
                 <td>
                     <ul>
-                        <li v-for="item in o.items">{{ item }}</li>
+                        <li v-for="(item, k) in o.items" :key="k">{{ item }}</li>
                     </ul>
                 </td>
             </tr>
