@@ -37,7 +37,7 @@ class NotionCardControllerTest extends TestCase
     public function limitPriceProvider() {
         return [
             'limitPriceが0' => [0],
-            // 'limitPriceが1以上' => [100]
+            'limitPriceが1以上' => [50]
         ];
     }
 

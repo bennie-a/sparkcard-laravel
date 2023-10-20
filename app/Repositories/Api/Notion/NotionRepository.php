@@ -103,15 +103,15 @@ class NotionRepository {
     }
 
     // Notionオブジェクトを作成する。
-    public static function createNotion() {
+    private function createNotion() {
         $token = config("notion.token");
         $notion = new Notion($token);
         return $notion;
     }
 
-    protected function getDatabaseId():string {
-        return $this->databaseId;
+    protected function getDatabase() {
+        $notion = self::createNotion();
+        return $notion->database($this->databaseId);
     }
-
 }
 ?>
