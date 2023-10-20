@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Services\Constant\SearchConstant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertTrue;
 
@@ -22,7 +24,7 @@ class NotionCardControllerTest extends TestCase
     }
 
     /**
-     * 下限価格に関するテストケース
+     * 最低価格に関するテストケース
      *@dataProvider limitPriceProvider
      * @return void
      */
@@ -41,12 +43,38 @@ class NotionCardControllerTest extends TestCase
     }
 
     /**
+     * セット名による検索
+     *
+     * @param string $setname
+     * @return void
+     * @dataProvider expProvider
+     */
+    public function test_expansion(string $setname) {
+        $actual = $this->execute(0, $setname);
+        if (!empty($setname)) {
+            foreach($actual as $a) {
+                assertEquals($setname, $a->exp->name, 'エキスパンション名');
+            }
+        }
+    }
+
+    private function expProvider() {
+        return [
+            'セット名なし' => [''],
+            'セット名あり' => ['神河：輝ける世界']
+        ];
+    }
+
+    /**
      * テスト実行メソッド
      */
-    public function execute(int $limitPrice)
+    private function execute(int $limitPrice, string $setname = '')
     {
         $status = 'ショップ登録予定';
         $query = ['status' => $status, 'price' => $limitPrice];
+        if (!empty($setname)) {
+            $query[SearchConstant::SET_NAME] = $setname;
+        }
         $response = $this->json('GET','api/notion/card', $query);
         
         $response->assertStatus(200);
