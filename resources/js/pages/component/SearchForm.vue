@@ -16,7 +16,7 @@
 import NotionCardProvider from "../../composables/NotionCardProvider";
 
 export default {
-    props: ["limitprice"],
+    props: ["limitprice", 'status'],
     data() {
         return {
             expansion: "",
@@ -26,12 +26,13 @@ export default {
         async search() {
             const provider = new NotionCardProvider(this.$store);
             const query = {
-                limitprice: this.limitprice,
+                params:{
+                    price: this.limitprice,
+                    status:this.status
+                }
             };
-            const filtered = function (r) {
-                return r.price >= query.limitprice;
-            };
-            provider.searchByStatus(query, filtered);
+
+            provider.searchByStatus(query);
         },
     },
 };

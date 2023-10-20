@@ -30,16 +30,17 @@ class GetCardboardRequest extends PostCardboardRequest
      */
     public function rules(ValidationRules $rules)
     {
-        return $rules->getRules([
-            'cardboard.status',
-            'cardboard.limitPrice'
+        $commonRules =$rules->getRules([
+            'cardboard.status' => ['required'],
         ]);
+        $commonRules['price'] = 'required|integer';
+        return $commonRules;
     }
 
     public function attributes()
     {
         $attrs = parent::attributes();
-        $attrs[ 'cardboard.limitPrice'] = '最低価格';
+        $attrs[ 'price'] = '最低価格';
         return $attrs;
     }
 }

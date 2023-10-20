@@ -33,7 +33,7 @@ class CardController extends Controller
     {   
         logger()->info('get card by status...');
         $status = $request->input('status');
-        $limitPrice = $request->input('limitPrice');
+        $limitPrice = $request->input('price');
         $results = $this->service->findByStatus($status, $limitPrice);
         if (array_key_exists('status', $results)) {
             logger()->info('Status:'.$results['status']);

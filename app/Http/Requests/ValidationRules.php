@@ -15,7 +15,6 @@ class ValidationRules
     protected const RULES = [
         'cardboard' => [
             'status'=>'in:ロジクラ要登録,販売保留,要写真撮影,撮影済み,サムネ作成,ショップ登録予定,メルカリのみ販売中,両方販売中',
-            'limitPrice' => 'integer'
         ]
     ];
 

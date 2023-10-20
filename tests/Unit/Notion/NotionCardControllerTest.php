@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertTrue;
 
@@ -36,8 +35,8 @@ class NotionCardControllerTest extends TestCase
 
     public function limitPriceProvider() {
         return [
-            'limitPriceが0' => [0],
-            'limitPriceが1以上' => [50]
+            '最低価格が0' => [0],
+            '最低価格が1以上' => [50]
         ];
     }
 
@@ -47,7 +46,7 @@ class NotionCardControllerTest extends TestCase
     public function execute(int $limitPrice)
     {
         $status = 'ショップ登録予定';
-        $query = ['status' => $status, 'limitPrice' => $limitPrice];
+        $query = ['status' => $status, 'price' => $limitPrice];
         $response = $this->json('GET','api/notion/card', $query);
         
         $response->assertStatus(200);
