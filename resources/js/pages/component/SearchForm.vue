@@ -4,8 +4,8 @@
             <div class="ui action input field">
                 <input
                     type="text"
-                    placeholder="エキスパンション(未実装)"
-                    v-model="expansion"
+                    placeholder="エキスパンション名"
+                    v-model="set_name"
                 />
                 <button class="ui teal button" @click="search">検索</button>
             </div>
@@ -19,7 +19,7 @@ export default {
     props: ["limitprice", 'status'],
     data() {
         return {
-            expansion: "",
+            set_name: "",
         };
     },
     methods: {
@@ -28,7 +28,8 @@ export default {
             const query = {
                 params:{
                     price: this.limitprice,
-                    status:this.status
+                    status:this.status,
+                    set_name:this.set_name
                 }
             };
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Notion;
 
 use App\Http\Requests\ValidationRules;
+use App\Services\Constant\SearchConstant as Con;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -42,5 +43,16 @@ class GetCardboardRequest extends PostCardboardRequest
         $attrs = parent::attributes();
         $attrs[ 'price'] = '最低価格';
         return $attrs;
+    }
+
+    /**
+     * 入力パラメータを取得する。
+     *
+     * @return array
+     */
+    public function getParams():array {
+        $details = $this->only([Con::STATUS,  Con::SET_NAME]);
+        $details[Con::PRICE] = (int)$this->input(Con::PRICE);
+        return $details;
     }
 }

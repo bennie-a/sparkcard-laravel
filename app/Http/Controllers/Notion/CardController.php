@@ -10,7 +10,7 @@ use App\Services\CardBoardService;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
-use App\Services\Constant\SearchConstant as Con;
+
 /**
  * Notion操作に関するAPIクラス
  */
@@ -31,7 +31,9 @@ class CardController extends Controller
     public function index(GetCardboardRequest $request)
     {   
         logger()->info('Start Search Notion Card');
-        $details = $request->only([Con::STATUS, Con::PRICE, Con::SET_NAME]);
+        $details = $request->getParams();
+
+        logger()->debug('params', $details);
         $results = $this->service->findByStatus($details);
         if (array_key_exists('status', $results)) {
             logger()->info('Status:'.$results['status']);

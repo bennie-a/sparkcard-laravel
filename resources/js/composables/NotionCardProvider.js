@@ -10,8 +10,7 @@ export default class NotionCardProvider {
         this.store.dispatch("setLoad", true);
         this.store.dispatch("clearCards");
         const task = new AxiosTask(this.store);
-        // const status = this.store.getters["search/status"];
-        // console.log(status);
+
         const success = async function (response, store, query) {
             console.log(response.status);
             let results = response.data;

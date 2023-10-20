@@ -42,6 +42,9 @@ class CardBoardRepository extends NotionRepository{
         //DBからエキスパンションIDを取得、IDで検索結果をフィルタリング
         if (array_key_exists(Con::SET_NAME, $details)) {
             $setname = $details[Con::SET_NAME];
+            if (empty($setname)) {
+                return $pages;
+            }
             $exp = Expansion::where('name', $setname)->first();
             $filtered = $pages->filter(function($value, $key) use ($exp) {
                 $relation = $value->getProperty('エキスパンション');
