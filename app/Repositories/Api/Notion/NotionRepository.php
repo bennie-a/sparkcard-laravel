@@ -109,7 +109,7 @@ class NotionRepository {
         return $notion;
     }
 
-    protected function getDatabaseId() {
+    protected function getDatabaseId():string {
         return $this->databaseId;
     }
 

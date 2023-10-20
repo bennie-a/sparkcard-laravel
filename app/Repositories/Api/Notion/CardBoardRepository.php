@@ -23,7 +23,7 @@ class CardBoardRepository extends NotionRepository{
     }
 
     // Statusと一致するカード情報を取得する。
-    public function findByStatus($status, $details) {
+    public function findByStatus($status, $price) {
         $filters = new Collection();
         $filter = new Filter("Status", 'select', [Operators::EQUALS => $status]);
         $filters->add($filter);
@@ -61,13 +61,13 @@ class CardBoardRepository extends NotionRepository{
 
     public function findByOrderId(string $orderId) {
         $filter = Filter::textFilter('注文番号', Operators::EQUALS, $orderId);
-        $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
+        $pages = Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
         return $pages[0];
     }
 
     public function findBySparkcardId (int $id) {
         $filter = Filter::numberFilter('sparkcard_id', Operators::EQUALS, $id);
-        $pages = \Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
+        $pages = Notion::database($this->getDatabaseId())->filterBy($filter)->query()->asCollection();
         if ($pages->isEmpty()) {
             return null;
         }

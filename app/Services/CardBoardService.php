@@ -18,13 +18,14 @@ use App\Services\Constant\StockpileHeader as Header;
  */
 class CardBoardService {
     
+    private $repo;
     public function __construct() {
         $this->repo = new CardBoardRepository();
     }
 
     // Statusに一致したカード情報を取得する。
-    public function findByStatus($status, $details) {
-        $pages = $this->repo->findByStatus($status, $details);
+    public function findByStatus($status, $price) {
+        $pages = $this->repo->findByStatus($status, $price);
         $resultList = array();
         if (count($pages) == 0) {
             $error = ['status' => 204, 'message'=>'件数は0件です。'];
@@ -178,9 +179,9 @@ class CardBoardService {
     }
 
     public function deleteByExp($name) {
-        $pages = $this->repo->findByExp($name);
-        foreach($pages as $p) {
-            $this->repo->delete($p->getId());
-        }
+        // $pages = $this->repo->findByExp($name);
+        // foreach($pages as $p) {
+        //     $this->repo->delete($p->getId());
+        // }
     }
 }
