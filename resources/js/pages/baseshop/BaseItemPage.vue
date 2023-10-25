@@ -2,22 +2,31 @@
     <message-area></message-area>
     <search-form limitprice="50" status="ショップ登録予定"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
-        <div class="ui toggle checkbox mr-2">
-            <input type="checkbox" name="public" v-model="isPrinting" />
-            <label for="name">画像に「Now Printing」を使用する</label>
-        </div>
-        <div class="ui toggle checkbox mr-2">
-            <input type="checkbox" name="public" v-model="isPublic" />
-            <label>BASEに公開する</label>
-        </div>
-        <div class="mt-1">
+        <div class="mt-1 ui form">
+            <div class="three fields">
+                <!-- <div class="mr-1 two wide columns field">
+                    <label for="">登録開始No.</label>
+                    <input type="number" step="1" min="1" v-model="start">
+                </div> -->
+                <div class="three wide columns field">
+                    <label for="">公開/非公開</label>
+                    <div class="ui toggle checkbox mr-2">
+                        <input type="checkbox" name="public" v-model="isPublic" />
+                        <label>商品を公開する</label>
+                    </div>
+                </div>
+                <div class="three wide columns field">
+                    <label for="">画像名</label>
+                    <div class="ui toggle checkbox mr-2">
+                    <input type="checkbox" name="public" v-model="isPrinting" />
+                    <label for="name">Now Printing</label>
+                </div>
+                </div>
+            </div>
             <download-button filename="base_item"
                 ><i class="download icon"></i
-                >登録・更新用CSVを作成する
+                >ダウンロード
 </download-button
-            >
-            <file-upload @upload="csvUpload"
-                >商品一覧をアップロード</file-upload
             >
         </div>
     </div>
@@ -49,6 +58,7 @@ export default {
             isPublic: true,
             canCategory: true,
             contentMap: {},
+            start:1
         };
     },
 
