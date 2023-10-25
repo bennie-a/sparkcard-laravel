@@ -32,12 +32,12 @@ export const toItemName = (card) => {
 // カードの表面の画像名に変換する。
 export const toSurfaceName = (card) => {
     let name = toPhotoName(card);
-    return name + "_base-min.jpg";
+    return name + "_base.jpg";
 };
 
 export const toNoLabelName = (card) => {
     let name = toPhotoName(card);
-    return name + "-min.jpg";
+    return name + ".jpg";
 };
 
 export const toPhotoName = (card) => {

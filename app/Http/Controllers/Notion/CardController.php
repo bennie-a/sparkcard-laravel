@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Notion;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Notion\NotionCardRequest;
-use App\Http\Requests\PostNotionCardRequest;
+use App\Http\Requests\Notion\GetCardboardRequest;
+use App\Http\Requests\Notion\PostCardboardRequest;
 use App\Http\Resources\Notion\NotionCardResource;
 use App\Services\CardBoardService;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+
 /**
  * Notion操作に関するAPIクラス
  */
@@ -29,12 +28,13 @@ class CardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(GetCardboardRequest $request)
     {   
-        logger()->info('get card by status...');
-        $status = $request->input('status');
-        $details = $request->all();
-        $results = $this->service->findByStatus($status, $details);
+        logger()->info('Start Search Notion Card');
+        $details = $request->getParams();
+
+        logger()->debug('params', $details);
+        $results = $this->service->findByStatus($details);
         if (array_key_exists('status', $results)) {
             logger()->info('Status:'.$results['status']);
             $res = response()->json($results, $results['status']);
@@ -63,7 +63,7 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NotionCardRequest $request, $id)
+    public function update(PostCardboardRequest $request, $id)
     {
         try {
             $details = $request->all();

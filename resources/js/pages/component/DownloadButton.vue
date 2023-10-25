@@ -1,6 +1,6 @@
 <template>
     <button
-        class="ui button basic"
+        class="ui button"
         @click="download"
         :class="[color, { disabled: isDisabled }]"
     >
@@ -16,15 +16,15 @@ import { write } from "../../composables/CSVWriter";
 import Contentsfactory from "../../csv/ContentsFactory";
 
 export default {
+    props: {
+        color: { type: String, default: "teal" },
+        filename: { type: String, reqiured: true },
+    },
     computed: {
         isDisabled: function () {
             const checkbox = this.$store.getters["csvOption/selectedList"];
             return checkbox.length == 0;
         },
-    },
-    props: {
-        color: { type: String, default: "teal" },
-        filename: { type: String, reqiured: true },
     },
     methods: {
         download: function () {
@@ -37,7 +37,7 @@ export default {
             const filterd = card.filter((c) => {
                 return checkbox.includes(c.id);
             });
-            const jsonArray = filterd.map((c) => contents.contents(c));
+            const jsonArray = filterd.map((c, index) => contents.contents(c, index + 1));
 
             const csv = this.$papa.unparse({
                 fields: header,

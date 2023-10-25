@@ -4,8 +4,8 @@
             <div class="ui action input field">
                 <input
                     type="text"
-                    placeholder="エキスパンション(未実装)"
-                    v-model="expansion"
+                    placeholder="エキスパンション名"
+                    v-model="set_name"
                 />
                 <button class="ui teal button" @click="search">検索</button>
             </div>
@@ -16,22 +16,24 @@
 import NotionCardProvider from "../../composables/NotionCardProvider";
 
 export default {
-    props: ["limitprice"],
+    props: ["limitprice", 'status'],
     data() {
         return {
-            expansion: "",
+            set_name: "",
         };
     },
     methods: {
         async search() {
             const provider = new NotionCardProvider(this.$store);
             const query = {
-                limitprice: this.limitprice,
+                params:{
+                    price: this.limitprice,
+                    status:this.status,
+                    set_name:this.set_name
+                }
             };
-            const filtered = function (r) {
-                return r.price >= query.limitprice;
-            };
-            provider.searchByStatus(query, filtered);
+
+            provider.searchByStatus(query);
         },
     },
 };

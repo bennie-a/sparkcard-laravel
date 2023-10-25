@@ -24,7 +24,7 @@ export default () => {
             "画像3",
             "画像4",
         ],
-        contents: function (c) {
+        contents: function (c, index) {
             let json = [
                 c.baseId,
                 toItemName(c),
@@ -35,7 +35,7 @@ export default () => {
                 "1",
                 c.stock,
                 "1",
-                c.index,
+                index,
                 "",
                 toSurfaceName(c),
                 toNoLabelName(c)
@@ -56,7 +56,6 @@ export default () => {
 商品名：「${c.name}${foil}」
 エキスパンション：${c.exp.name}(${c.exp.attr})
 言語：${c.lang}
-在庫：${c.stock}点
 
 ■状態
 状態は【${c.condition}】です。${details(c.condition)}

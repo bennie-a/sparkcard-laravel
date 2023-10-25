@@ -1,6 +1,6 @@
 <template>
     <message-area></message-area>
-    <search-form limitprice="300"></search-form>
+    <search-form limitprice="300" status="ショップ登録予定"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <div class="ui toggle checkbox mr-2">
             <input type="checkbox" name="public" v-model="isPublic" />
@@ -21,26 +21,22 @@ import MessageArea from "../component/MessageArea.vue";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
 import DownloadButton from "../component/DownloadButton.vue";
-import { NOTION_STATUS } from "../../cost/NotionStatus";
 
 export default {
+    components: {
+        "now-loading": NowLoading,
+        "card-list": CardList,
+        "message-area": MessageArea,
+        "search-form": SearchForm,
+        "download-button": DownloadButton,
+    },
     data() {
         return {
             isPublic: true,
             // contentMap: {},
         };
     },
-    mounted: function () {
-        this.$store.dispatch("search/status", NOTION_STATUS.tobase);
-    },
     methods: {},
-    components: {
-        "now-loading": NowLoading,
-        "card-list": CardList,
-        "message-area": MessageArea,
-        "search-form": SearchForm,
-        "file-upload": CSVUpload,
-        "download-button": DownloadButton,
-    },
+
 };
 </script>

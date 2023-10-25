@@ -69,7 +69,7 @@ export default () => {
             "発送までの日数",
             "商品ステータス",
         ],
-        contents: function (c) {
+        contents: function (c, index) {
             let json = [
                 this.toPicName(c),
                 toNoLabelName(c),
@@ -136,7 +136,7 @@ export default () => {
         },
         toPicName: function (c) {
             let name = toPhotoName(c);
-            return `${name}_mercari-min.jpg`;
+            return `${name}_mercari.jpg`;
         },
         getCondition(condition) {
             const numbers = {
@@ -160,7 +160,6 @@ export default () => {
 商品名：「${c.name}${foil}」
 エキスパンション：${c.exp.name}(${c.exp.attr})
 言語：${c.lang}
-在庫：${c.stock}点
 
 ■状態
 状態は【${c.condition}】です。${details(c.condition)}
