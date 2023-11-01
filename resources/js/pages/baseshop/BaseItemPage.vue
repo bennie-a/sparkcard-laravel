@@ -3,11 +3,11 @@
     <search-form limitprice="50" status="ショップ登録予定"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <div class="mt-1 ui form">
-            <div class="three fields">
-                <!-- <div class="mr-1 two wide columns field">
+            <div class="four fields">
+                <div class="mr-1 two wide columns field">
                     <label for="">登録開始No.</label>
                     <input type="number" step="1" min="1" v-model="start">
-                </div> -->
+                </div>
                 <div class="three wide columns field">
                     <label for="">公開/非公開</label>
                     <div class="ui toggle checkbox mr-2">
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <download-button filename="base_item"
-                ><i class="download icon"></i
+                :startnum="start"><i class="download icon"></i
                 >ダウンロード
 </download-button
             >
