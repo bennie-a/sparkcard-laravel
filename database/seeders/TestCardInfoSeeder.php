@@ -63,6 +63,15 @@ class TestCardInfoSeeder extends Seeder
         CardInfo::factory()->createOne(['exp_id' => $one, 'name' => 'ドロスの魔神',
         'en_name' => 'Archfiend of the Dross', 'color_id' => 'B', 'number' => '82',
         'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
+
+        // イクサラン
+        $xln = $this->findNotionId('XLN');
+        CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '軍団の上陸',
+        'en_name' => 'Legion\'s Landing  Adanto', 'color_id' => 'W', 'number' => '22',
+        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '軍団の上陸≪プレリリース≫',
+        'en_name' => 'Legion\'s Landing  Adanto', 'color_id' => 'W', 'number' => '22s',
+        'isFoil' => true, 'foiltype_id' => $nonfoil->id]);
     }
         
         private function findNotionId(string $attr) : string {

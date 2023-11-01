@@ -35,6 +35,7 @@ class CardInfo extends Model
      */
     public static function fetchByCondition($condition)
     {
+        // DB::enableQueryLog();
         $columns = ['e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
                  'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
                  'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
@@ -53,7 +54,8 @@ class CardInfo extends Model
         }
         $cardList = $query->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id'
                                 )->leftJoin('stockpile as s', 'card_info.id', '=', 's.card_id')->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')->
-                        orderBy('e.release_date', 'desc')->orderByRaw('CAST(card_info.number as integer ) asc')->get();
+                        orderBy('e.release_date', 'desc')->orderByRaw('CAST(replace(card_info.number, \'s\',\'\') as integer ) asc')->get();
+        // logger()->debug(DB::getQueryLog());
         return $cardList;
     }
 
