@@ -109,6 +109,14 @@ import FoilTag from "../component/FoilTag.vue";
 
 import axios from "axios";
 export default {
+    components: {
+        "file-upload": FileUpload,
+        "message-area": MessageArea,
+        Loading,
+        pagination: ListPagination,
+        ModalButton: ModalButton,
+        foiltag: FoilTag,
+    },
     data() {
         return {
             filename: "ファイルを選択してください",
@@ -118,9 +126,6 @@ export default {
             isDraftOnly: false,
             color: "",
         };
-    },
-    mounted: function () {
-        // this.$store.dispatch("setLoad", true);
     },
     computed: {
         getCards: function () {
@@ -163,6 +168,9 @@ export default {
                 return colors[key];
             };
         },
+    },
+    mounted: function () {
+        // this.$store.dispatch("setLoad", true);
     },
     methods: {
         upload: async function (file) {
@@ -231,14 +239,6 @@ export default {
 
             console.log("store finished.");
         },
-    },
-    components: {
-        "file-upload": FileUpload,
-        "message-area": MessageArea,
-        Loading,
-        pagination: ListPagination,
-        ModalButton: ModalButton,
-        foiltag: FoilTag,
     },
 };
 </script>

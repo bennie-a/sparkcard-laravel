@@ -19,6 +19,7 @@ export default {
     props: {
         color: { type: String, default: "teal" },
         filename: { type: String, reqiured: true },
+        startnum:{type:Number, default:1}
     },
     computed: {
         isDisabled: function () {
@@ -37,7 +38,7 @@ export default {
             const filterd = card.filter((c) => {
                 return checkbox.includes(c.id);
             });
-            const jsonArray = filterd.map((c, index) => contents.contents(c, index + 1));
+            const jsonArray = filterd.map((c, index) => contents.contents(c, this.startnum + index));
 
             const csv = this.$papa.unparse({
                 fields: header,
