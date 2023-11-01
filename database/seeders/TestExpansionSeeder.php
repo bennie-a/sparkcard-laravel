@@ -28,5 +28,6 @@ class TestExpansionSeeder extends Seeder
         Expansion::create(['attr' => 'WOE', 'name' => 'エルドレインの森', 'notion_id' => '0ad5f0d5-101e-44e8-8212-8116c7170274', 'release_date' => '2023-09-08']);
         Expansion::create(['attr' => 'WOT', 'name' => 'エルドレインの森おとぎ話カード', 'notion_id' => 'b5216886-c859-4a6b-87e6-b3ecae203dfb', 'release_date' => '2023-09-08']);
         Expansion::create(['attr' => 'SCH', 'name' => 'Store Championships', 'notion_id' => 'xxxxssss-xxxxxx', 'release_date' => '2023-09-08']);
+        Expansion::create(['attr' => 'XLN', 'name' => 'イクサラン', 'notion_id' => 'xxxxssss-xxxxxa', 'release_date' => '2017-11-17']);
     }
 }
