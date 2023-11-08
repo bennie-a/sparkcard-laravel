@@ -29,14 +29,14 @@ class CardJsonFileTest extends TestCase
 
     const EN_NAME = 'en_name';
 
-    use RefreshDatabase;
-    public function setup():void
-    {
-        parent::setup();
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
+    // use RefreshDatabase;
+    // public function setup():void
+    // {
+    //     parent::setup();
+    //     $this->seed('DatabaseSeeder');
+    //     $this->seed('TestExpansionSeeder');
 
-    }
+    // }
 
     /**
      * カードの言語別テスト
@@ -181,6 +181,7 @@ class CardJsonFileTest extends TestCase
             'オイルスリックFoil' => ['one.json', 345, ['Foil']],
             'テクスチャーFoil' => ['mul.json', 573,[ 'テクスチャーFoil']],
             'コンフェッティFoil' => ['wot.json', 90,[ 'コンフェッティFoil']],
+            'プロモカード' => ['lci.json', 406, ['Foil']]
         ];
     }
 

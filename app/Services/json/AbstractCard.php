@@ -132,7 +132,7 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     public function specialFoil() {
-        if (!$this->isSpecialFoil() || !$this->hasPromotype()) {
+        if (!$this->isSpecialFoil() || $this->isPromo() || !$this->hasPromotype()) {
             return 'foil';
         }
         $filterd = function($f) {
@@ -190,6 +190,15 @@ abstract class AbstractCard implements CardInfoInterface {
     public function isSpecialFoil() {
         $finishes = $this->finishes();
         return count($finishes) == 1 && in_array('foil', $finishes);
+    }
+
+    /**
+     * イベント用カードかどうか判別する
+     *
+     * @return boolean
+     */
+    public function isPromo() {
+        return MtgJsonUtil::isTrue("isPromo", $this->getJson());
     }
 
     /**

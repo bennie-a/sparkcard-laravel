@@ -1,0 +1,65 @@
+{
+    "data": {
+        "booster": {},
+        "cards":[
+            {
+                "artist": "Campbell White",
+                "artistIds": ["d281eab4-463a-4ba8-9039-8943737960a0"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["B"],
+                "colors": ["B"],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 25919,
+                "finishes": ["foil"],
+                "foreignData": [
+                  {
+                    "language": "Japanese",
+                    "name": "大洞窟のコウモリ"
+                  }
+        
+                ],
+                "frameEffects": ["inverted"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                  "mcmId": "740865",
+                  "mcmMetaId": "426656",
+                  "mtgjsonV4Id": "88c68b14-4b31-5762-9d53-0f78d156ed65",
+                  "scryfallId": "444190a9-5ad7-4132-aae4-247ad3d9ea01",
+                  "scryfallIllustrationId": "faa12a99-b9dd-4491-b399-e77ef200f6c0",
+                  "scryfallOracleId": "e46f6644-6bf1-47b1-817c-906bd3eca99f"
+                },
+                "isPromo": true,
+                "isStarter": true,
+                "keywords": ["Flying", "Lifelink"],
+                "language": "English",
+                "layout": "normal",
+                "legalities": { "future": "Legal" },
+                "manaCost": "{1}{B}",
+                "manaValue": 2.0,
+                "name": "Deep-Cavern Bat",
+                "number": "406",
+                "power": "1",
+                "printings": ["LCI"],
+                "promoTypes": ["promopack"],
+                "purchaseUrls": {
+                  "cardmarket": "https://mtgjson.com/links/7403decdac085e29"
+                },
+                "rarity": "uncommon",
+                "securityStamp": "oval",
+                "setCode": "LCI",
+                "subtypes": ["Bat"],
+                "supertypes": [],
+                "text": "Flying, lifelink\nWhen Deep-Cavern Bat enters the battlefield, look at target opponent's hand. You may exile a nonland card from it until Deep-Cavern Bat leaves the battlefield.",
+                "toughness": "1",
+                "type": "Creature — Bat",
+                "types": ["Creature"],
+                "uuid": "a7f931a4-0828-505d-bf89-2e0eada89465",
+                "variations": ["45db1587-d9aa-55d5-a64a-7437928a2564"]
+              }
+        ],
+        "code": "LCI"
+    }
+}
