@@ -70,9 +70,9 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot v-if="this.$store.getters.cardsLength != 0">
+                    <tfoot v-if="this.$store.getters.cardsLength != 0" class="full-width">
                         <tr>
-                            <th colspan="4">
+                            <th colspan="6">
                                 <pagination></pagination>
                             </th>
                         </tr>

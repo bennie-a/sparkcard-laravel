@@ -76,7 +76,7 @@ const routes = [
         path: "/config/cardinfo/csv",
         component: CardInfoCsvPage,
         meta: {
-            title: "カード情報マスタCSV登録",
+            title: "カード情報マスタ一括登録",
             description:
                 "MTGJSONからダウンロードしたファイルのカード情報をDBに登録します。",
         },
