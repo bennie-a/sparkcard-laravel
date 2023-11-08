@@ -24,7 +24,7 @@ class CardJsonFileService {
 
             $enname = $c['name'];
             $promoType = \App\Facades\Promo::find($cardtype);
-            $foiltype = $this->foiltype($cardtype);
+            $foiltype = $cardtype->foiltype();
             if ($this->isExclude($cardtype, $promoType, $isDraft, $colorFilter)) {
                 if ($cardtype->color() == CardColor::BLUE) {
                     logger()->debug('skip card:', ['class' => $cardtype::class, Column::NAME => $cardtype->jpname($enname), 
@@ -45,46 +45,6 @@ class CardJsonFileService {
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;
-    }
-
-    /**
-     * Undocumented function
-     *@deprecated 4.0.0
-     * @param AbstractCard $cardtype
-     * @return void
-     */
-    private function foiltype(AbstractCard $cardtype) {
-        $foiltype = [];
-        if($cardtype->isSpecialFoil()) {
-            $type = $cardtype->specialFoil();
-            $typename = $this->findFoilName($type);
-            array_push($foiltype, $typename);
-        } else {
-            $finishes = $cardtype->finishes();
-            $foiltype = array_map(function($f) {
-                if ($f == 'nonfoil') {
-                    return '通常版';
-                } else if ($f== 'foil') {
-                    return 'Foil';
-                } else {
-                    $typename = $this->findFoilName($f);
-                    return $typename;
-                }
-                }, $finishes);
-        }
-        return $foiltype;
-    }
-
-    /**
-     * 仕上げ名を取得する。
-     * @deprecated 4.0.0
-     * @param string $attr
-     * @return void
-     */
-    private function findFoilName(string $attr) {
-        $result = Foiltype::findByAttr($attr);
-        $typename = empty($result) ? '不明':$result->name;
-        return $typename;
     }
 
     /**
