@@ -30,4 +30,6 @@ class CardConstant {
     const PRICE = 'price';
 
     const QUANTITY = 'quantity';
+
+    const MARKET_PRICE = 'market_price';
 }

@@ -18,6 +18,12 @@ use App\Services\Constant\StockpileHeader as Header;
  */
 class CardBoardService {
     
+    private const JA_QTY = '枚数';
+
+    private const JA_PRICE = '価格';
+
+    private const JA_SET = 'エキスパンション';
+
     private $repo;
     public function __construct() {
         $this->repo = new CardBoardRepository();
@@ -33,13 +39,13 @@ class CardBoardService {
         }
         foreach($pages as $page) {
             $array = $page->toArray();
-            $price = $page->getProperty('価格');
+            $price = $page->getProperty($this::JA_PRICE);
             $cardIndex = $page->getProperty('カード番号');
             $color = $page->getProperty('色');
-            $stock = $page->getProperty('枚数');
+            $stock = $page->getProperty($this::JA_QTY);
             $url = $page->getProperty('画像URL');
             $lang = $page->getProperty('言語');
-            $exp = $page->getProperty('エキスパンション');
+            $exp = $page->getProperty($this::JA_SET);
             $condition = $page->getProperty('状態');
             $properties = $array['rawProperties'];
             $descArray = $properties['説明文']['rich_text'];
@@ -105,33 +111,33 @@ class CardBoardService {
     public function store(CardInfo $info, array $details) {
         try {
             $page = new Page();
+            logger()->debug($info->name);
             $duplicated = $this->repo->findBySparkcardId($info->id);
+            $priceVal = intval($details[Header::MARKET_PRICE]);
+            $page->set($this::JA_PRICE, Number::value($priceVal));
             if (!empty($duplicated)) {
-                $page->setId($duplicated->getId());
-                $stock = $duplicated->getProperty("枚数")->getNumber() + intval($details['quantity']);
+                $stock = $duplicated->getProperty("枚数")->getNumber() + intval($details[Header::QUANTITY]);
                 $page->set("枚数", Number::value($stock));
+                $page->setId($duplicated->getId());
                 $this->updatePage($page);
             } else {
                 $page->setTitle("名前", $info->name);
                 $page->setText("英名", $info->en_name);
                 $page->setSelect("Status", "要写真撮影");
-                $page->setNumber("枚数", $details['quantity']);
-                $priceVal = intval($details['market_price']);
-                $page->setNumber("価格", $priceVal);
+                $page->setNumber("枚数", $details[Header::QUANTITY]);
                 $page->setNumber("カード番号", $info->number);
-                $language = CardLanguage::find($details["language"]);
+                $language = CardLanguage::find($details[Header::LANGUAGE]);
                 $page->setSelect("言語", $language->text());
                 $page->setCheckbox("Foil", $info->isFoil);
 
                 $color = MainColor::find($info->color_id);
                 $page->setSelect("色", $color->name);
-                $page->setSelect("状態", $details["condition"]);
+                $page->setSelect("状態", $details[Header::CONDITION]);
                 if (!empty($info->image_url)) {
                     $page->setUrl('画像URL', $info->image_url);
                 }
                 // $expansion = Expansion::where('attr', $details['attr'])->first();
-                // logger()->debug($details['attr']);
-                $page->setRelation("エキスパンション",[$info->exp_id]);
+                $page->setRelation($this::JA_SET, [$info->exp_id]);
                 $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
                 // ミニレター
                 $sends = [];
