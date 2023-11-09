@@ -36,7 +36,7 @@ class CardInfo extends Model
     public static function fetchByCondition($condition)
     {
         // DB::enableQueryLog();
-        $columns = ['e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
+        $columns = ['card_info.exp_id', 'e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
                  'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
                  'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
         $name = $condition['card_info.name'];

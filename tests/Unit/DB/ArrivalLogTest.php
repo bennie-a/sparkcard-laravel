@@ -16,6 +16,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
+use Tests\Unit\Concerns\RefreshDatabaseLite;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
@@ -25,23 +26,20 @@ use function PHPUnit\Framework\assertNotNull;
  */
 class ArrivalLogTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabaseLite;
 
+    private static  $isSetup = false;
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TestExpansionSeeder');
-        $this->seed('MainColorSeeder');
-        $this->seed('ShippingSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
-
+        $this->seed('TestingDatabaseSeeder');
         $this->repo = new CardBoardRepository();
         $page = $this->repo->findBySparkcardId(2);
         $updatePage = new Page();
         $updatePage->setId($page->getId());
         $updatePage->set('枚数', Number::value(1));
-        \CardBoard::updatePage($updatePage);
+        $updatePage->set('価格', Number::value(300));
+        CardBoard::updatePage($updatePage);
     }
     /**
      * A basic feature test example.
@@ -83,6 +81,8 @@ class ArrivalLogTest extends TestCase
 
             $color = MainColor::find($info->color_id);
             assertEquals($color->name, $card->getProperty("色")->getName(), '色');
+
+            assertEquals($market_price, $card->getProperty("価格")->getNumber(), 'Notionの価格');
         } catch(NotionException $e) {
             $this->fail($e->getMessage());
         }
@@ -109,7 +109,7 @@ class ArrivalLogTest extends TestCase
      */
     public function okprovider() {
         return [
-            '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', false, 'NM', '2023-07-24', 23, 200],
+            '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', false, 'NM', '2023-07-24', 23, 400],
             '在庫情報なし' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'EX+', '2023-06-10', 23, 100]
         ];
     }
@@ -122,8 +122,8 @@ class ArrivalLogTest extends TestCase
 
     public function tearDown(): void
     {
-        Artisan::call('migrate:refresh');
-        $page = $this->repo->findBySparkcardId(3);
+        // Artisan::call('migrate:refresh');
+        // $page = $this->repo->findBySparkcardId(3);
         parent::tearDown();
     }
 }
