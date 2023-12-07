@@ -2,6 +2,7 @@ import {
     toItemName,
     toPhotoName,
     toNoLabelName,
+    toSurfaceName,
     details,
 } from "../composables/CardCollector";
 
@@ -71,7 +72,7 @@ export default () => {
         ],
         contents: function (c, index) {
             let json = [
-                this.toPicName(c),
+                toSurfaceName(c),
                 toNoLabelName(c),
                 "",
                 "",
@@ -134,10 +135,6 @@ export default () => {
             ];
             return json;
         },
-        toPicName: function (c) {
-            let name = toPhotoName(c);
-            return `${name}_mercari.jpg`;
-        },
         getCondition(condition) {
             const numbers = {
                 NM: "1",
@@ -155,7 +152,7 @@ export default () => {
         description: function (c) {
             let foil = c.isFoil ? "[Foil]" : "";
             let delivery = this.getDelivery(c.price);
-            let desc = `≪2品以上のお買い上げで割引します♪希望の方はお問い合わせ欄にて承ります(o^^o)≫
+            let desc = `≪『イクサラン：失われし洞窟(LCI)』商品を大量出品しています。2商品以上を希望の方は割引します(o^^o)≫
 ■商品内容
 商品名：「${c.name}${foil}」
 エキスパンション：${c.exp.name}(${c.exp.attr})
@@ -164,6 +161,7 @@ export default () => {
 ■状態
 状態は【${c.condition}】です。${details(c.condition)}
 ${c.desc}
+
 ■発送について
 スリーブに入れた商品をおまけのカードと一緒に透明袋に梱包して【${delivery}】で発送します。
 おまけカードは基本土地カードに変更OKです。購入後の取引メッセージでご希望の色をお伝えください。
@@ -175,7 +173,7 @@ ${c.desc}
 ■割引一覧
 2品⇒5%引き 3品⇒10%引き 4品以上⇒15%引き
 
-#ベニネコヤ　#TCG #トレーディングカード #mtg #MTGシングル #MTGカード トレカ　マジック・ザ・ギャザリング スタンダード`;
+#ベニネコヤ #TCG #トレーディングカード #mtg #MTGシングル #MTGカード トレカ マジック・ザ・ギャザリング`;
             return desc;
         },
 

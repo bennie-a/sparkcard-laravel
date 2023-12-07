@@ -32,7 +32,7 @@ export const toItemName = (card) => {
 // カードの表面の画像名に変換する。
 export const toSurfaceName = (card) => {
     let name = toPhotoName(card);
-    return name + "_base.jpg";
+    return name + "_thumb.jpg";
 };
 
 export const toNoLabelName = (card) => {
@@ -41,12 +41,19 @@ export const toNoLabelName = (card) => {
 };
 
 export const toPhotoName = (card) => {
-    let name = card.enname;
-    let filterdname = name.replace(/[<|>|、]/g, "");
-    if (card.isFoil) {
-        filterdname += "-Foil";
+    let number = card.index;
+    let expAttr = card.exp.attr;
+    let photoname = number + "_" + expAttr;
+    if (card.name.includes("ショーケース")) {
+        photoname += "_showcase";    
     }
-    return filterdname;
+    if (card.name.includes("ボーダレス")) {
+        photoname += "_borderless";
+    }
+    if (card.isFoil) {
+        photoname += "-Foil";
+    }
+    return photoname;
 };
 
 export const createTemplate = (card) => {

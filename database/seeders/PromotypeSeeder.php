@@ -46,5 +46,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'anime', 'name' => 'アニメ・ボーダレス']);
         Promotype::create(['attr' => 'phoilslick', 'name' => 'ファイレクシア語「胆液」']);
         Promotype::create(['attr' => 'oilslickshowcase', 'name' => 'ショーケース「胆液」']);
+        Promotype::create(['attr' => 'boxtopper', 'name' => 'ボックストッパー']);
     }
 }
