@@ -13,7 +13,7 @@ class SalesTaxCsv extends Command
      *
      * @var string
      */
-    protected $signature = 'taxcsv';
+    protected $signature = 'taxcsv {--mercari : メルカリの売上のみ作成する} {--base : BASEの売上のみ作成する}';
 
     /**
      * The console command description.
@@ -27,6 +27,16 @@ class SalesTaxCsv extends Command
      */
     public function handle()
     {
-        //
+        $isMercari = $this->option("mercari");
+        $isBase = $this->option('base');
+        $Shop = 'メルカリShops';
+        if (!$isMercari && $isBase) {
+            $Shop = 'BASEショップ';
+        }
+        if ($this->confirm($Shop.'の売上のみ作成してもよろしいでしょうか?')) {
+
+        }
+        $this->info('処理を終了しました。');
+        return config('command.exit_code.SUCCESS');
     }
 }
