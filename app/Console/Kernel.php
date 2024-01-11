@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\ItemCsvCommand;
 use App\Console\Commands\CreateNotionCard;
+use App\Console\Commands\SalesTaxCsv;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,7 +18,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         CreateNotionCard::class,
-        ItemCsvCommand::class
+        ItemCsvCommand::class,
+        SalesTaxCsv::class
     ];
     /**
      * Define the application's command schedule.
