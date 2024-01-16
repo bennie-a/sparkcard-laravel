@@ -3,6 +3,8 @@
 namespace App\Models\notion;
 
 use App\Models\Expansion;
+use DateTime;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,6 +40,12 @@ class NotionCard extends Model
     private string $conditon = "";
 
     private string $barcode = "";
+
+    private string $buyer = "";
+
+    private string $orderNo = "";
+
+    private DateTime $shippingDate;
 
     public function setId($id) {
         $this->id = $id;
@@ -162,5 +170,29 @@ class NotionCard extends Model
         $this->barcode = $barcode;
 
         return $this;
+    }
+
+    public function getBuyer() {
+        return $this->buyer;
+    }
+
+    public function setBuyer($buyer) {
+        $this->buyer = $buyer;
+    }
+
+    public function getOrderNo() {
+        return $this->orderNo;       
+    }
+
+    public function setOrderNo($orderNo) { 
+        $this->orderNo = $orderNo;
+    }
+
+    public function setShippingDate($shippingDate) {
+        $this->shippingDate = $shippingDate;
+    }
+
+    public function getShippingDate() {
+        return $this->shippingDate;
     }
 }

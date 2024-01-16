@@ -47,6 +47,15 @@ abstract class ItemCsvWriter {
         fclose($f);
     }
     
+    /**
+     * CSVファイルに出力するヘッダーを取得する。
+     *
+     * @return void
+     */
+    protected function getHeader() {
+        return CsvHeader::findColumns($this->shopname());
+    }
+
     protected abstract function toCsv(int $price, int $number, CardInfo $row);
     /**
      * 除外する下限金額を取得する。

@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Facades\CardBoard;
+use App\Files\Csv\Tax\TaxCsvWriter;
 use Illuminate\Console\Command;
+
 /**
  * 売り上げをやよい青色申告に一括登録するCSVファイルを作成するコマンドクラス
  */
@@ -29,13 +32,15 @@ class SalesTaxCsv extends Command
     {
         $isMercari = $this->option("mercari");
         $isBase = $this->option('base');
-        $Shop = 'メルカリShops';
+        $shop = 'メルカリShops';
         if (!$isMercari && $isBase) {
-            $Shop = 'BASEショップ';
+            $shop = 'BASEショップ';
         }
-        if ($this->confirm($Shop.'の売上のみ作成してもよろしいでしょうか?')) {
-
-        }
+        $result = CardBoard::findByTaxStatus($isMercari, $isBase);
+        $this->info(sprintf("%sの売上%s件を取得しました。", $shop, count($result)));
+        $this->info("指定したパスにCSVファイルを出力します。");
+        $writer = new TaxCsvWriter();
+        $writer->write($result);
         $this->info('処理を終了しました。');
         return config('command.exit_code.SUCCESS');
     }
