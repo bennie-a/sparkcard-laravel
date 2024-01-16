@@ -24,4 +24,32 @@ enum CardLanguage:string {
     public static function find(string $language) {
         return CardLanguage::tryFrom($language) ?? CardLanguage::UNDEFINED;
     }
+
+    /**
+     * 言語名から言語略称を取得する。
+     *
+     * @param string $name
+     * @return string
+     */
+    public static function reverse(string $name) {
+        $langcase = self::UNDEFINED;
+        switch($name) {
+            case '日本語':
+                $langcase = self::JP;
+                break;
+            case  '英語':
+                $langcase = self::EN;
+                break;
+            case 'イタリア語':
+                $langcase = self::IT;
+                break;
+            case '簡体中国語':
+                $langcase = self::CS;
+                break;
+            case '繫体中国語':
+                $langcase = self::CT;
+                break;
+        }
+        return $langcase->name;
+    }
 }

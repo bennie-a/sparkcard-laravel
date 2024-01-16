@@ -57,8 +57,12 @@ class CardBoardService {
             $price = $page->getProperty($this::JA_PRICE);
             $card->setPrice($price->getNumber());
             $card->setExpansion($this->getExpansion($page));
+
             $lang = $page->getProperty($this::JA_LANG);
             $card->setLang($lang->getName());
+
+            $stock = $page->getProperty($this::JA_QTY);
+            $card->setStock($stock->getNumber());
 
             $buyer = $page->getProperty("購入者名");
             $card->setBuyer($buyer->getPlainText());

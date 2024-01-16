@@ -11,7 +11,9 @@ class CsvWriter {
         $f = fopen($dir.$filename, 'w');
         if ($f) {
             // header
-            fputcsv($f, $header);
+            if (!empty($header)) {
+                fputcsv($f, $header);
+            }
 
             // data
             foreach($data as $d) {

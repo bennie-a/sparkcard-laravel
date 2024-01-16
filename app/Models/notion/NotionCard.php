@@ -2,6 +2,7 @@
 
 namespace App\Models\notion;
 
+use App\Enum\CardLanguage;
 use App\Models\Expansion;
 use DateTime;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
@@ -134,6 +135,15 @@ class NotionCard extends Model
 
     public function getLang() {
         return $this->lang;
+    }
+
+    /**
+     * 言語名から言語略称を取得する。
+     *
+     * @return string
+     */
+    public function getLangAbbr() {
+        return CardLanguage::reverse($this->getLang());
     }
 
     public function getDesc() {
