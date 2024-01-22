@@ -5,12 +5,18 @@ use DateTime;
 
 class TaxCsvWriter {
 
+    /**
+     * 青色申告用のCSVファイルをShift-JISで出力する。
+     *
+     * @param array $data
+     * @return void
+     */
     public function write(array $data) {
         $now = new DateTime();
         $filename = sprintf("taxreturn_%s.csv", $now->format('Ymd'));
         $writer = new CsvWriter();
         $csvdata = $this->toCsvData($data);
-        $writer->write($filename, [], $csvdata);
+        $writer->write($filename, [], $csvdata, 'convert.iconv.utf-8/cp932');
     }
 
     /**
@@ -22,9 +28,8 @@ class TaxCsvWriter {
         $list = [];
         foreach($data as $d) {
             $attr = $d->getExpansion()['attr'];
-            $name = $d->getName();
-            $description = sprintf("【%s】%s[%s](%s)", $attr, $d->getName(), $d->getLangAbbr(), $d->getOrderNo());
-            $row = [$d->getShippingDate()->format('Y/m/d'), $d->getPrice() * $d->getStock(), $description];
+            $description = sprintf("【%s】%s[%s]", $attr, $d->getName(), $d->getLangAbbr());
+            $row = [$d->getShippingDate()->format('Y/m/d'), $d->getPrice() * $d->getStock(), '', $description];
 
             // 日付
             $list[] = $row;
