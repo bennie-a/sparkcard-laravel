@@ -6,11 +6,12 @@ namespace App\Files\Csv;
  */
 class CsvWriter {
 
-    public function write(string $filename, array $header, $data, string $encode = "UTF-8") {
+    public function write(string $filename, array $header, $data, string $encode = "utf-8") {
         $dir = config('csv.export');
         $f = fopen($dir.$filename, 'w');
         if ($f) {
-            stream_filter_prepend($f, $encode);
+            $charset = sprintf("convert.iconv.utf-8/%s", $encode);
+            stream_filter_prepend($f, $charset);
             // header
             if (!empty($header)) {
                 fputcsv($f, $header);

@@ -228,7 +228,8 @@ class CardBoardService {
      * @return void
      */
     public function findByOrderId(string $orderId) {
-        return $this->repo->findByOrderId($orderId);
+        $pages = $this->repo->findByOrderId($orderId);
+        return $pages;
     }
 
     public function deleteByExp($name) {

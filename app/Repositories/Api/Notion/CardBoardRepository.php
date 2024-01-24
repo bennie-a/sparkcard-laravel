@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Api\Notion;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Expansion;
 use App\Repositories\Api\Notion\NotionRepository;
 use FiveamCode\LaravelNotionApi\Endpoints\Database;
@@ -130,7 +131,7 @@ class CardBoardRepository extends NotionRepository{
     public function findByOrderId(string $orderId) {
         $filter = Filter::textFilter('注文番号', Operators::EQUALS, $orderId);
         $pages = $this->getDatabase()->filterBy($filter)->query()->asCollection();
-        return $pages[0];
+        return $pages;
     }
 
     public function findBySparkcardId (int $id) {

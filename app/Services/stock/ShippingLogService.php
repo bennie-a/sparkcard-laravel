@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Exceptions\NotFoundException;
 use App\Facades\CardBoard;
 use App\Files\CsvReader;
 use App\Files\Stock\ShippingLogCsvReader;
@@ -12,6 +13,8 @@ use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Select;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
+use Illuminate\Http\Client\Response;
+use Illuminate\Http\Response as HttpResponse;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -39,6 +42,12 @@ class ShippingLogService extends AbstractSmsService{
                 $this->addError($row->number(), '在庫が0枚です');
                 return;
             }
+            $notionCard = CardBoard::findByOrderId($row->order_id());
+            if ($notionCard->isEmpty()) {
+                $this->addError($row->number(), '該当するNotionカードがありません');
+                return;
+            }
+    
             $log = ['order_id' => $row->order_id(), Header::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
                          'stock_id' => $stock['id'], Header::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
                         'single_price' => $row->product_price(), 'total_price' => $row->total_price() ];
@@ -46,15 +55,14 @@ class ShippingLogService extends AbstractSmsService{
 
             $stock->quantity = $stock->quantity - $row->quantity();
             $stock->update();
-            $this->updateNotion($row);
+            $this->updateNotion($notionCard[0], $row);
             $this->addSuccess($row->number());
         } else {
             $this->addError($row->number(), '在庫情報なし');
         }
     }
 
-    private function updateNotion($row) {
-        $notionCard = CardBoard::findByOrderId($row->order_id());
+    private function updateNotion(Page $notionCard, ShippingRow $row) {
         $page = new Page();
         $page->setId($notionCard->getId());
         $page->set('購入者名', Text::value($row->buyer()));

@@ -16,7 +16,7 @@ class TaxCsvWriter {
         $filename = sprintf("taxreturn_%s.csv", $now->format('Ymd'));
         $writer = new CsvWriter();
         $csvdata = $this->toCsvData($data);
-        $writer->write($filename, [], $csvdata, 'convert.iconv.utf-8/cp932');
+        $writer->write($filename, [], $csvdata, 'cp932');
     }
 
     /**

@@ -33,7 +33,7 @@ class ItemCsvCommand extends Command
      */
     public function handle()
     {
-        logger()->info('start download csv.');
+        $this->info('start download csv.');
         $set = $this->argument(Con::SET);
         $color = $this->argument(Con::COLOR);
         $start_number = (int)$this->option('start');
@@ -51,13 +51,13 @@ class ItemCsvCommand extends Command
             return true;        
         });
 
-        logger()->info('get card info', ['count' => count($filterd)]);
+        $this->info('get card info.count:'.count($filterd));
         $files = [new BaseCsvWriter(), new MercariCsvWriter()];
         foreach($files as $writer) {
-            logger()->info('write item csv:'.$writer->shopname());
+            $this->info('write item csv:'.$writer->shopname());
             $writer->write($set, $color, $start_number, $filterd);
         }
-        logger()->info('end download csv.');
+        $this->info('end download csv.');
         return Command::SUCCESS;
     }
 }
