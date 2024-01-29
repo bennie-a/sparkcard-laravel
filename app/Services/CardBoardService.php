@@ -69,6 +69,7 @@ class CardBoardService {
 
             $shipping = $page->getProperty("発送日");
             $card->setShippingDate($shipping->getStart());
+            array_push($resultList, $card);
         }
         return $resultList;
     }

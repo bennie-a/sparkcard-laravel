@@ -84,6 +84,7 @@ class CardBoardRepository extends NotionRepository{
         } else {
             return $pages;
         }
+        return $pages;
     }
     
     /**
