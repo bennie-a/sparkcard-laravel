@@ -21,7 +21,6 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -62,7 +61,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),
-
+    'csv_export' => env('CSV_EXPORT'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

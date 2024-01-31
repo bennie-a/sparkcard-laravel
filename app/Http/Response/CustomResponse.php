@@ -16,4 +16,7 @@ class CustomResponse {
     const HTTP_NOT_FOUND_CARD = 443;
 
     const HTTP_NOT_FOUND_FOIL = 444;
+
+    /** インポートに失敗したときのステータスコード */
+    const HTTP_IMPORT_ERROR = 445;
 }

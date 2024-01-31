@@ -12,6 +12,7 @@ use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use App\Services\Constant\StockpileHeader as Header;
+use Illuminate\Support\Collection;
 
 /**
  * Notionの販売管理ボードに関するServiceクラス
@@ -24,6 +25,8 @@ class CardBoardService {
 
     private const JA_SET = 'エキスパンション';
 
+    private const JA_LANG = '言語';
+
     private $repo;
     public function __construct() {
         $this->repo = new CardBoardRepository();
@@ -32,6 +35,52 @@ class CardBoardService {
     // Statusに一致したカード情報を取得する。
     public function findByStatus($details) {
         $pages = $this->repo->findByStatus($details);
+        return $this->toNotionCardList($pages);
+    }
+
+    /**
+     * 「やよい青色申告」に該当するカードを取得する。
+     *
+     * @param boolean $isMercari trueならショップがメルカリShopsのみ
+     * @param boolean $isBase trueならショップがBASEショップのみ
+     * @return array
+     */
+    public function findByTaxStatus(bool $isMercari, bool $isBase) {
+        $pages = $this->repo->findByTaxStatus($isMercari, $isBase);
+        $resultList = array();
+        if (count($pages) == 0) {
+            return $resultList;
+        }
+        foreach($pages as $page) {
+            $card = new NotionCard();
+            $card->setName($page->getTitle());
+            $price = $page->getProperty($this::JA_PRICE);
+            $card->setPrice($price->getNumber());
+            $card->setExpansion($this->getExpansion($page));
+
+            $lang = $page->getProperty($this::JA_LANG);
+            $card->setLang($lang->getName());
+
+            $stock = $page->getProperty($this::JA_QTY);
+            $card->setStock($stock->getNumber());
+
+            $buyer = $page->getProperty("購入者名");
+            $card->setBuyer($buyer->getPlainText());
+
+            $shipping = $page->getProperty("発送日");
+            $card->setShippingDate($shipping->getStart());
+            array_push($resultList, $card);
+        }
+        return $resultList;
+    }
+
+    /**
+     * Notionから取得した情報をCollectionオブジェクトに変換する。
+     *(中身はNotionCardオブジェクトの配列)
+     * @param Collection $pages
+     * @return array $resultList
+     */
+    private function toNotionCardList(Collection $pages) {
         $resultList = array();
         if (count($pages) == 0) {
             $error = ['status' => 204, 'message'=>'件数は0件です。'];
@@ -44,31 +93,18 @@ class CardBoardService {
             $color = $page->getProperty('色');
             $stock = $page->getProperty($this::JA_QTY);
             $url = $page->getProperty('画像URL');
-            $lang = $page->getProperty('言語');
-            $exp = $page->getProperty($this::JA_SET);
+            $lang = $page->getProperty($this::JA_LANG);
             $condition = $page->getProperty('状態');
             $properties = $array['rawProperties'];
             $descArray = $properties['説明文']['rich_text'];
             $ennameArray = $properties['英名']['rich_text'];
             $card = new NotionCard();
-            $card->setId($array['id']);
-            $card->setName($array['title']);
+            $card->setId($page->getId());
+            $card->setName($page->getTitle());
             $isFoilProperty = $page->getProperty('Foil');
             $isFoil = $isFoilProperty->getContent();
-
-            $exp_id = $exp->getContent();
-            $expModel = Expansion::where('notion_id', $exp_id)->first();
-            if (!is_null($expModel)) {
-                $card->setExpansion(['name' => $expModel['name'], 'attr' => $expModel['attr']]);
-                if (!empty($card->getName())) {
-                    $cardInfo = CardInfo::findCard($exp_id, $card->getName(), $isFoil);
-                    if (!empty($cardInfo)) {
-                        $card->setBarcode($cardInfo['barcode']);
-                    }
-                }
-            } else {
-                $card->setExpansion(['name' => '不明', 'attr' => 'undefined']);
-            }
+            $exp = $this->getExpansion($page);
+            $card->setExpansion($exp);
             $card->setPrice($price->getContent());
             if (!is_null($cardIndex)) {
                 $card->setIndex($cardIndex->getContent());
@@ -105,6 +141,18 @@ class CardBoardService {
             array_push($resultList, $card);
         }
         return $resultList;
+
+    }
+
+    private function getExpansion($page) {
+        $exp = $page->getProperty($this::JA_SET);
+        $exp_id = $exp->getContent()[0]['id'];
+        $expModel = Expansion::findByNotionId($exp_id);
+        if (!is_null($expModel)) {
+            return ['name' => $expModel['name'], 'attr' => $expModel['attr']];
+        } else {
+            return ['name' => '不明', 'attr' => 'undefined'];
+        }
     }
     
     // 入力値をNotionに登録する。
@@ -181,7 +229,8 @@ class CardBoardService {
      * @return void
      */
     public function findByOrderId(string $orderId) {
-        return $this->repo->findByOrderId($orderId);
+        $pages = $this->repo->findByOrderId($orderId);
+        return $pages;
     }
 
     public function deleteByExp($name) {

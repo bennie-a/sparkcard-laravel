@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 class ShippingLogTest extends TestCase
 {
-
+    private $bro;
     public function setup():void {
         parent::setup();
         $this->bro =  Expansion::factory()->createOne(['name' => '兄弟戦争', 'attr' => 'BRO']);

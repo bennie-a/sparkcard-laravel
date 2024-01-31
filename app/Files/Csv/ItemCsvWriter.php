@@ -19,34 +19,43 @@ abstract class ItemCsvWriter {
      * @return void
      */
     public function write(string $set, string $color, int $number, $data) {
-        $dir = env('CSV_EXPORT');
         $filename = sprintf('%s_item_%s_%s.csv', $this->shopname(), $set, $color);
-        $f = fopen($dir.$filename, 'w');
-        if ($f) {
-            // header
-            $header = CsvHeader::findColumns($this->shopname());
-            fputcsv($f, $header);
 
-            // data
-            foreach($data as $row) {
-                $price = $this->roundPrice($row->price);
-                $separator = ' // ';
-                if (str_contains($row->en_name, $separator)) {
-                    $row->en_name = explode($separator, $row->en_name)[0];
-                }
-                $promotype = $this->extractPromotype($row->name);
-                $row->promotype = $promotype;
-                // 一定金額以下は除外
-                if ($price < $this->basevalue()) {
-                    continue;
-                }
-                fputcsv($f, $this->toCsv($price, $number, $row));
-                $number++;
+        // header
+        $header = CsvHeader::findColumns($this->shopname());
+
+        // data
+        $csvdata = [];
+        foreach($data as $row) {
+            $price = $this->roundPrice($row->price);
+            $separator = ' // ';
+            if (str_contains($row->en_name, $separator)) {
+                $row->en_name = explode($separator, $row->en_name)[0];
             }
+            $promotype = $this->extractPromotype($row->name);
+            $row->promotype = $promotype;
+            // 一定金額以下は除外
+            if ($price < $this->basevalue()) {
+                continue;
+            }
+            $row = $this->toCsv($price, $number, $row);
+            $csvdata[] = $row;
+            $number++;
         }
-        fclose($f);
+
+        $writer = new CsvWriter();
+        $writer->write($filename, $header, $csvdata);
     }
     
+    /**
+     * CSVファイルに出力するヘッダーを取得する。
+     *
+     * @return void
+     */
+    protected function getHeader() {
+        return CsvHeader::findColumns($this->shopname());
+    }
+
     protected abstract function toCsv(int $price, int $number, CardInfo $row);
     /**
      * 除外する下限金額を取得する。

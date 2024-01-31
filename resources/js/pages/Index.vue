@@ -248,6 +248,7 @@ export default {
                     <select v-model="supplier" class="mr-1 ui dropdown">
                         <option>オリジナルパック</option>
                         <option>私物</option>
+                        <option>返品</option>
                         <option>棚卸し</option>
                     </select>
                 </div>

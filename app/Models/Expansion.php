@@ -31,4 +31,14 @@ class Expansion extends Model
         return Expansion::where('attr', $attr)->exists();
     }
 
+    /**
+     * 引数のnotion_idに該当するエキスパンションを取得する。
+     *
+     * @param string $notionId
+     * @return Expansion
+     */
+    public static function findByNotionId(string $notionId) {
+        return Expansion::where('notion_id', $notionId)->first();
+    }
+
 }
