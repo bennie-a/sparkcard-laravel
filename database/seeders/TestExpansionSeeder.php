@@ -30,5 +30,7 @@ class TestExpansionSeeder extends Seeder
         Expansion::create(['attr' => 'SCH', 'name' => 'Store Championships', 'notion_id' => 'xxxxssss-xxxxxx', 'release_date' => '2023-09-08']);
         Expansion::create(['attr' => 'XLN', 'name' => 'イクサラン', 'notion_id' => 'xxxxssss-xxxxxa', 'release_date' => '2017-11-17']);
         Expansion::create(['attr' => 'LCI', 'name' => 'イクサラン:失われし洞窟', 'notion_id' => 'xxxxssss-xxxxxb', 'release_date' => '2023-11-17']);
+        Expansion::create(['attr' => 'MKM', 'name' => 'カルロフ邸殺人事件', 'notion_id' => 'xxxxssss-xxxxxc', 'release_date' => '2024-02-09']);
+        Expansion::create(['attr' => 'SPG', 'name' => 'スペシャルゲスト', 'notion_id' => 'xxxxssss-xxxxxd', 'release_date' => '2023-02-09']);
     }
 }
