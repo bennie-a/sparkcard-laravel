@@ -45,7 +45,7 @@ class CardJsonFileTest extends TestCase
      */
     public function test_通常版(string $filename, array $expected)
     {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $exMultiverseId = $expected[self::MULTIVERSEID];
         $exScryId = $expected[self::SCRYFALLID];
@@ -88,7 +88,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider cardtypeProvider
      */
     public function test_カードタイプ(string $filename, array $expected) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
         assertNotEmpty($actualcard, '結果の有無');
@@ -161,7 +161,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_finishes(string $filename, int $number, array $foiltype) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($number){
@@ -194,7 +194,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename, 201, $isDraft, $color);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
@@ -226,7 +226,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_color(string $filename, string $name, string $scryfallId, string $color) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actual = $this->findCard($result, 0, $scryfallId);
         assertNotNull($actual, "該当カード");
@@ -264,7 +264,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $response = $this->execute($filename, $expectedCode);
         assertEquals($expectedMsg, $response->json('detail'), 'メッセージ');
     }
@@ -274,7 +274,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider excludeprovider
      */
     public function test_除外カード(string $filename, string $excludedname) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($excludedname){
             if ($a[self::EN_NAME] == $excludedname) {
