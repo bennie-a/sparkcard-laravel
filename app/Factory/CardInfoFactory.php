@@ -2,6 +2,7 @@
 namespace App\Factory;
 
 use App\Libs\MtgJsonUtil;
+use App\Models\ExcludePromo;
 use app\Services\json\AbstractCard;
 use App\Services\json\AdventureCard;
 use App\Services\json\BasicLand;
@@ -15,6 +16,7 @@ use App\Services\json\PlistCard;
 use App\Services\json\StarterCard;
 use App\Services\json\TransformCard;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\CardConstant;
 
 /**
  * JSONファイルに記載されたカード情報の形式に沿って
@@ -129,7 +131,13 @@ class CardInfoFactory {
      *  @return bool
      */
     private static function isExclude($json):bool {
-        return self::isOnlineOnly($json);
+        // 除外するプロモタイプであるか判別する。
+        if (MtgJsonUtil::hasKey(CardConstant::PROMOTYPES, $json)) {
+            $promotypes = $json['promoTypes'];
+            // logger()->debug('除外カードか判別', [$json[CardConstant::NUMBER]]);
+            return ExcludePromo::existsByAttr($promotypes);
+        }
+        return self::isOnlineOnly($json) || self::isAdventure($json);
     }
 
     /**

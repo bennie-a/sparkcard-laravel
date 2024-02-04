@@ -32,4 +32,6 @@ class CardConstant {
     const QUANTITY = 'quantity';
 
     const MARKET_PRICE = 'market_price';
+
+    const PROMOTYPES = 'promoTypes';
 }

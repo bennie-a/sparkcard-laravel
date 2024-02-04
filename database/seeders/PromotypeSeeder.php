@@ -47,5 +47,8 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'phoilslick', 'name' => 'ファイレクシア語「胆液」']);
         Promotype::create(['attr' => 'oilslickshowcase', 'name' => 'ショーケース「胆液」']);
         Promotype::create(['attr' => 'boxtopper', 'name' => 'ボックストッパー']);
+        Promotype::create(['attr' => 'magnified', 'name' => '「拡大鏡」ショーケース']);
+        Promotype::create(['attr' => 'dossier', 'name' => '「事件簿」ショーケース']);
+        Promotype::create(['attr' => 'ravnicacity', 'name' => '大都市ラヴニカ']);
     }
 }

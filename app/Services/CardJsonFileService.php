@@ -21,6 +21,10 @@ class CardJsonFileService {
         $cardInfo = [];
         foreach($cards as $i => $c) {
             $cardtype = CardInfoFactory::create($c);
+            if ($cardtype->isExclude()) {
+                logger()->debug('skip card:', ['class' => $cardtype::class, Column::NUMBER => $cardtype->number()]);
+                continue;
+            }
 
             $enname = $c['name'];
             $promoType = \App\Facades\Promo::find($cardtype);
@@ -60,6 +64,6 @@ class CardJsonFileService {
      */
     private function isExclude(AbstractCard $cardtype, string $promo, bool $isDraft, string $colorFilter) {
         $isExcludeColor = !empty($colorFilter) && $cardtype->color() != $colorFilter;
-        return $cardtype->isExclude() || $isExcludeColor || $isDraft && !empty($promo);
+        return $isExcludeColor || $isDraft && !empty($promo);
     }
 }

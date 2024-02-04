@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
-        // $this->call(BaseCategory::class);
         $this->call(PromotypeSeeder::class);
         $this->call(FoiltypeSeeder::class);
         $this->call(CsvHeaderSeeder::class);
+        $this->call(ExcludePromoSeeder::class);
     }
 }
