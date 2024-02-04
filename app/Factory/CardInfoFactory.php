@@ -134,6 +134,7 @@ class CardInfoFactory {
         // 除外するプロモタイプであるか判別する。
         if (MtgJsonUtil::hasKey(CardConstant::PROMOTYPES, $json)) {
             $promotypes = $json['promoTypes'];
+            // logger()->debug('除外カードか判別', [$json[CardConstant::NUMBER]]);
             return ExcludePromo::existsByAttr($promotypes);
         }
         return self::isOnlineOnly($json) || self::isAdventure($json);

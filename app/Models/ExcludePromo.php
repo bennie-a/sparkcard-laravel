@@ -24,6 +24,9 @@ class ExcludePromo extends Model
      * @return boolean trueなら存在する
      */
     public static function existsByAttr(array $attrs) {
-        return self::whereIn('attr', $attrs)->exists();
+        $query = self::whereIn('attr', $attrs);
+        // $query->dd();
+        $isExists = $query->exists();
+        return $isExists;
     }
 }

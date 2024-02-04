@@ -151,7 +151,7 @@ class CardJsonFileTest extends TestCase
             'アニメ・ボーダレス' => ['wot.json', [self::NAME => '騙し討ち', self::PROMOTYPE => 'アニメ・ボーダレス']],
             '「事件簿」ショーケース' => ['mkm.json', [self::NAME => '古き神々の咆哮、ヤラス', self::PROMOTYPE => '「事件簿」ショーケース']],
             '「拡大鏡」ショーケース' => ['mkm.json', [self::NAME => '戦導者の号令', self::PROMOTYPE => '「拡大鏡」ショーケース']],
-            '大都市ラヴニカ' => ['mkm.json', [self::NAME => '法の超越者、オレリア', self::PROMOTYPE => '大都市ラヴニカ']]
+            '大都市ラヴニカ' => ['mkm.json', [self::NAME => '顔を繕う者、ラザーヴ', self::PROMOTYPE => '大都市ラヴニカ']]
         ];
     }
 
@@ -355,7 +355,8 @@ class CardJsonFileTest extends TestCase
     public function excludeprovider() {
         return [
             '出来事ソーサリー' => ['woe.json', 'Betroth the Beast'],
-            '不可視インク仕様' => ['mkm.json', 'Aurelia\'s Vindicator']
+            '不可視インク仕様' => ['mkm.json', 'Aurelia\'s Vindicator'],
+            'シリアル番号付き' => ['mkm.json', 'Aurelia, the Law Above'],
         ];
     }
 }
