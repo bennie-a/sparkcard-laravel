@@ -19,6 +19,7 @@
                 <div class="required four wide field">
                     <label for="">ブロック</label>
                     <select v-model="block" class="ui search dropdown">
+                        <option>サンダー・ジャンクション</option>
                         <option>ミラディン/ファイレクシア</option>
                         <option>神河</option>
                         <option>ドミナリア</option>
@@ -75,7 +76,7 @@ export default {
         return {
             name: "",
             attr: "",
-            block: "ミラディン/ファイレクシア",
+            block: "サンダー・ジャンクション",
             format: "スタンダード",
             release_date: null,
         };

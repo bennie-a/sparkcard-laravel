@@ -152,7 +152,7 @@ export default () => {
         description: function (c) {
             let foil = c.isFoil ? "[Foil]" : "";
             let delivery = this.getDelivery(c.price);
-            let desc = `≪『イクサラン：失われし洞窟(LCI)』商品を大量出品しています。2商品以上を希望の方は割引します(o^^o)≫
+            let desc = `≪『カルロフ邸殺人事件(MMKM)』商品を大量出品しています。2商品以上を希望の方は割引します(o^^o)≫
 ■商品内容
 商品名：「${c.name}${foil}」
 エキスパンション：${c.exp.name}(${c.exp.attr})

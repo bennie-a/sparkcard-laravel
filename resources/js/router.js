@@ -9,6 +9,7 @@ import CardinfoPage from "./pages/config/CardInfoPage.vue";
 import PostExPage from "./pages/config/PostExPage.vue";
 import Packing from "./pages/packing/Packing.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
+import ShippingPage from "./pages/shipping/ShippingPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -98,6 +99,14 @@ const routes = [
             description: "注文情報CSVファイルから宛名ラベルを作成します。",
         },
     },
+    {
+        path: "/shipping/",
+        component:ShippingPage,
+        meta:{
+            title:"出荷情報検索",
+            description:"出荷情報を一覧表示します。"
+        },
+    }
 ];
 
 // VueRouterインスタンスを作成する

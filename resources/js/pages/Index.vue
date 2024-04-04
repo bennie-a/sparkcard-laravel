@@ -27,7 +27,7 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
-            cost: 27,
+            cost: 36,
             isLoading: false,
         };
     },

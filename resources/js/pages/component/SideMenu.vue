@@ -93,7 +93,7 @@
                             class="nav-link"
                             :class="{ active: $route.path === '/shipping' }"
                             aria-current="page"
-                            to="/shipping"
+                            to="/shipping/"
                             ><i class="bi bi-list-task"></i
                             >出荷ログ一覧</router-link
                         >
