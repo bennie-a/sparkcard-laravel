@@ -17,7 +17,7 @@ class ItemCsvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'itemcsv {set : セット略称} {color : W,R,B,U,G,A,M,Land,Lのいずれか} {--start=:開始番号}{--excPromo=*}';
+    protected $signature = 'itemcsv {set : セット略称} {color? : W,R,B,U,G,A,M,Land,Lのいずれか} {--start=:開始番号}{--excPromo=*}';
 
     /**
      * The console command description.

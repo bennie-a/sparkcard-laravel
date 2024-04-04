@@ -35,7 +35,7 @@ class CardBoardService {
     // Statusに一致したカード情報を取得する。
     public function findByStatus($details) {
         $pages = $this->repo->findByStatus($details);
-        return $this->toNotionCardList($pages);
+        return $this->toNotionCardList(collect($pages));
     }
 
     /**
@@ -162,7 +162,6 @@ class CardBoardService {
             logger()->debug($info->name);
             $duplicated = $this->repo->findBySparkcardId($info->id);
             $priceVal = intval($details[Header::MARKET_PRICE]);
-            $page->set($this::JA_PRICE, Number::value($priceVal));
             if (!empty($duplicated)) {
                 $stock = $duplicated->getProperty("枚数")->getNumber() + intval($details[Header::QUANTITY]);
                 $page->set("枚数", Number::value($stock));
@@ -197,6 +196,8 @@ class CardBoardService {
                 }
                 $page->setRelation('発送方法', $sends);
                 $page->set('sparkcard_id', Number::value($info->id));
+                $page->set($this::JA_PRICE, Number::value($priceVal));
+
                 $page = $this->repo->store($page);
                 // ページID
                 logger()->info($page->getId());

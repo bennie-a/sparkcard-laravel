@@ -79,13 +79,12 @@ abstract class ItemCsvWriter {
     }
     
     protected function thumbnail(CardInfo $row) {
-        $enname = $this->concatPromotype($row->en_name, $row->promotype);
-        return sprintf('%s_%s-min.jpg', $enname, $this->shopname());
+        return sprintf('%s_%s_thumb.jpg', $row->number, $row->exp_attr);
     }
 
     protected function itemImage(CardInfo $row) {
         $enname = $this->concatPromotype($row->en_name, $row->promotype);
-        return sprintf('%s-min.jpg', $enname);
+        return sprintf('%s_%s.jpg', $row->number, $row->exp_attr);
     }
 
     /**

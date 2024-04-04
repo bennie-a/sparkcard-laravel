@@ -12,8 +12,7 @@ class BaseCsvWriter extends ItemCsvWriter {
     protected function toCsv(int $price, int $number, CardInfo $row) {
         return ['', $this->itemname($row), '', '', $this->description($row), 
                         $this->minusShipping($price), '1', $row->quantity, '1', $number, 
-                        '', $this->thumbnail($row), $this->itemImage($row), 
-                        $this->concatPromotype($row->en_name, $row->promotype)];
+                        '', $this->thumbnail($row), $this->itemImage($row)];
     }
 
     public function shopname() {
