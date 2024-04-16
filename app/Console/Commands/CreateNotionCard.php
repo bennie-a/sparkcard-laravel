@@ -36,7 +36,7 @@ class CreateNotionCard extends Command
      */
     public function handle()
     {
-        logger()->info('start createcard.');
+        $this->info("Notionカードを作成します。");
         $set = $this->argument(Con::SET);
         $color = $this->argument(Con::COLOR);
 
@@ -48,11 +48,15 @@ class CreateNotionCard extends Command
             'e.attr' => $set,
             'card_info.isFoil' => 'false'];
         $result = CardInfo::fetchByCondition($condition);
-        logger()->info('get card info', ['count' => count($result)]);
+        $this->info(sprintf("カード情報を%s件を取得しました。", count($result)));
+        $this->info("******************************************");
         $details = [Con::QUANTITY => '0', Con::MARKET_PRICE => '0', 'condition' => 'NM', 'language' => 'JP'];
         foreach($result as $r) {
+            $this->info(sprintf("「%s」作成", $r->name));
             CardBoard::store($r, $details);
         }
+        $this->info("******************************************");
+        $this->info("Notionカードの作成が完了しました。");
         logger()->info('end createcard');
         return Command::SUCCESS;
     }

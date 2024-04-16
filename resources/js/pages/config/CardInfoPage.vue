@@ -87,7 +87,7 @@
                             <option value="">通常</option>
                             <option value="フルアート">フルアート</option>
                             <option value="プレリリース">プレリリース</option>
-                            <option value="ショーケース">ショーケース</option>
+                            <option value="「手配書」ショーケース">「手配書」ショーケース</option>
                             <option value="トーナメント景品">
                                 トーナメント景品
                             </option>

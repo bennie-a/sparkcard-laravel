@@ -44,12 +44,7 @@ export const toPhotoName = (card) => {
     let number = card.index;
     let expAttr = card.exp.attr;
     let photoname = number + "_" + expAttr;
-    if (card.name.includes("ショーケース")) {
-        photoname += "_showcase";    
-    }
-    if (card.name.includes("ボーダレス")) {
-        photoname += "_borderless";
-    }
+
     if (card.isFoil) {
         photoname += "-Foil";
     }
@@ -75,12 +70,3 @@ export const details = (condition) => {
     };
     return templates[condition];
 };
-
-// const toImageName = (enName) => {
-//     let splits = enName.split(" ");
-//     splits = splits.map((s) => {
-//         let cha = s.replace(",", "").replace("’", "");
-//         return cha.toLowerCase();
-//     });
-//     return splits.join("_");
-// };

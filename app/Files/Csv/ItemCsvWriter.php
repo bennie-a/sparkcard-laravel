@@ -32,8 +32,8 @@ abstract class ItemCsvWriter {
             if (str_contains($row->en_name, $separator)) {
                 $row->en_name = explode($separator, $row->en_name)[0];
             }
-            $promotype = $this->extractPromotype($row->name);
-            $row->promotype = $promotype;
+            // $promotype = $this->extractPromotype($row->name);
+            // $row->promotype = $promotype;
             // 一定金額以下は除外
             if ($price < $this->basevalue()) {
                 continue;
@@ -83,7 +83,6 @@ abstract class ItemCsvWriter {
     }
 
     protected function itemImage(CardInfo $row) {
-        $enname = $this->concatPromotype($row->en_name, $row->promotype);
         return sprintf('%s_%s.jpg', $row->number, $row->exp_attr);
     }
 
