@@ -19,9 +19,8 @@ export default class NotionCardProvider {
         };
         const fail = function (e, store, query) {
             const res = e.response;
-            console.error(e);
             console.log(res.data);
-            store.dispatch("message/error", res.data.message);
+            store.dispatch("message/error", res.data.detail);
         };
         await task.get("/notion/card", query, success, fail);
     }

@@ -164,6 +164,7 @@ export default {
         search: async function () {
             this.isLoading = true;
             this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearMessage");
             const task = new AxiosTask(this.$store);
             const query = {
                 params: {
@@ -185,11 +186,10 @@ export default {
                     this.foiltype = data["foiltype"];
                 })
                 .catch((e) => {
-                    console.error(e);
                     if (e.response.status != 200) {
                         this.$store.dispatch(
                             "message/error",
-                            e.response.data.message
+                            "カード情報がありません。"
                         );
                     }
                 })
