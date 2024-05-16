@@ -31,6 +31,7 @@
                         <option>ストリクスヘイヴン</option>
                         <option>イニストラード</option>
                         <option>カラデシュ</option>
+                        <option>インベイジョン</option>
                         <option>基本セット</option>
                         <option>その他</option>
                     </select>

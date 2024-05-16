@@ -48,7 +48,7 @@ class MercariCsvWriter extends ItemCsvWriter {
 
     protected function description(CardInfo $row) {
         $contents = parent::description($row);
-        $before = '≪2品以上のお買い上げで割引します♪希望の方はお問い合わせ欄にて承ります(o^^o)≫';
+        $before = '≪『サンダー・ジャンクションの無法者(OTJ)』が大量入荷中！2品以上のお買い上げで割引します♪希望の方はお問い合わせ欄にて承ります(o^^o)≫';
         $after = '■発送について
 スリーブに入れた商品をおまけのカードと一緒に透明袋に梱包して【%s】で発送します。
 おまけカードは基本土地カードに変更OKです。購入後の取引メッセージでご希望の色をお伝えください。

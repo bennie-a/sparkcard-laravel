@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Notion;
 
 use App\Exceptions\NotFoundException;
+use App\Http\Response\CustomResponse;
 use App\Models\Expansion;
 use App\Repositories\Api\Notion\NotionRepository;
 use FiveamCode\LaravelNotionApi\Endpoints\Database;
@@ -31,7 +32,7 @@ class CardBoardRepository extends NotionRepository{
         $status = $details[Con::STATUS];
         $price = $details[Con::PRICE];
         $filterbag = FilterBag::and();
-        $filterbag->addFilter(new Filter("Status", 'select', [Operators::EQUALS => $status]));
+            $filterbag->addFilter(new Filter("Status", 'select', [Operators::EQUALS => $status]));
         $filterbag->addFilter(Filter::numberFilter("価格", Operators::GREATER_THAN_OR_EQUAL_TO, $price));
         
         // ソート順設定
@@ -45,6 +46,9 @@ class CardBoardRepository extends NotionRepository{
                 return $pages;
             }
             $exp = Expansion::where('name', $setname)->first();
+            if (!$exp) {
+                throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_EXPANSION, '該当するエキスパンションがありません');
+            }
             $filtered = $pages->filter(function($value, $key) use ($exp) {
                 $relation = $value->getProperty('エキスパンション');
                 return $relation->getRelation()[0]['id'] === $exp->notion_id;

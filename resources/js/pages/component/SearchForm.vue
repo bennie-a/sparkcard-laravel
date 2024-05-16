@@ -24,6 +24,7 @@ export default {
     },
     methods: {
         async search() {
+            this.$store.dispatch("message/clear");
             const provider = new NotionCardProvider(this.$store);
             const query = {
                 params:{

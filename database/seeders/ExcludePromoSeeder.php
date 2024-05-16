@@ -14,6 +14,8 @@ class ExcludePromoSeeder extends Seeder
     public function run(): void
     {
         // ExcludePromo::create(['attr' => 'invisibleink', 'name' => '不可視インク仕様']);
-        ExcludePromo::create(['attr' => 'serialized', 'name' => 'シリアル番号付き']);
+        // ExcludePromo::create(['attr' => 'serialized', 'name' => 'シリアル番号付き']);
+        // ExcludePromo::create(['attr' => 'rainbow', 'name' => 'レイズド・フォイル']);
+        ExcludePromo::create(['attr' => 'vault', 'name' => '「宝物庫」フレーム']);
     }
 }

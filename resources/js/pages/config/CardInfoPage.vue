@@ -87,7 +87,7 @@
                             <option value="">通常</option>
                             <option value="フルアート">フルアート</option>
                             <option value="プレリリース">プレリリース</option>
-                            <option value="ショーケース">ショーケース</option>
+                            <option value="「手配書」ショーケース">「手配書」ショーケース</option>
                             <option value="トーナメント景品">
                                 トーナメント景品
                             </option>
@@ -164,6 +164,7 @@ export default {
         search: async function () {
             this.isLoading = true;
             this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearMessage");
             const task = new AxiosTask(this.$store);
             const query = {
                 params: {
@@ -185,11 +186,10 @@ export default {
                     this.foiltype = data["foiltype"];
                 })
                 .catch((e) => {
-                    console.error(e);
                     if (e.response.status != 200) {
                         this.$store.dispatch(
                             "message/error",
-                            e.response.data.message
+                            "カード情報がありません。"
                         );
                     }
                 })

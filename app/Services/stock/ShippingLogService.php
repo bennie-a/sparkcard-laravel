@@ -11,6 +11,7 @@ use App\Models\Stockpile;
 use App\Services\Constant\StockpileHeader as Header;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
+use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Select;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 use Illuminate\Http\Client\Response;
@@ -68,6 +69,7 @@ class ShippingLogService extends AbstractSmsService{
         $page->set('購入者名', Text::value($row->buyer()));
         $page->set('Status', Select::value('出荷準備中'));
         $page->set('発送日',  Date::value($row->shipping_date()));
+        $page->set('sparkcard_id', Number::value(0));
         CardBoard::updatePage($page);
 
     }
