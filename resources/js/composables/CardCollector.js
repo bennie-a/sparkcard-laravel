@@ -46,7 +46,7 @@ export const toPhotoName = (card) => {
     let photoname = number + "_" + expAttr;
 
     if (card.isFoil) {
-        photoname += "-Foil";
+        photoname += "-foil";
     }
     return photoname;
 };
