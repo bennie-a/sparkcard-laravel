@@ -38,6 +38,10 @@ import SideMenu from "../pages/component/SideMenu.vue";
             <SideMenu></SideMenu>
         </nav>
         <main id="main" ref="main" class="twelve wide column">
+            <div class="ui breadcrumb">
+                <div class="active section">{{ $route.meta.title }}</div>
+                <i class="right angle icon divider"></i>
+            </div>
             <h1 class="ui header">
                 {{ $route.meta.title }}
                 <div class="sub header">

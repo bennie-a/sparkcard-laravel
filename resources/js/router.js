@@ -103,9 +103,23 @@ const routes = [
         path: "/shipping/",
         component:ShippingPage,
         meta:{
-            title:"出荷情報検索",
-            description:"出荷情報を一覧表示します。"
+            title:"出荷情報一覧",
+            description:"出荷情報を一覧表示します。",
         },
+    },
+    {
+        path:"/shipping/detail",
+        component:ShippingPage,
+        meta:{
+            title:"出荷詳細",
+            description:"",
+            urls: [
+                {
+                    url:"/shipping/",
+                    title:"出荷情報一覧"
+                },
+            ]
+        }
     }
 ];
 
