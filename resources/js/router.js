@@ -9,7 +9,8 @@ import CardinfoPage from "./pages/config/CardInfoPage.vue";
 import PostExPage from "./pages/config/PostExPage.vue";
 import Packing from "./pages/packing/Packing.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
-import ShippingPage from "./pages/shipping/ShippingPage.vue";
+import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
+import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -70,6 +71,12 @@ const routes = [
         meta: {
             title: "エキスパンション登録",
             description: "エキスパンションの登録・編集を行います。",
+            urls:[
+                {
+                    url:"/config/expansion",
+                    title:"エキスパンション一覧"
+                },
+            ]
         },
         prop: true,
     },
@@ -101,7 +108,7 @@ const routes = [
     },
     {
         path: "/shipping/",
-        component:ShippingPage,
+        component:ShiptLogPage,
         meta:{
             title:"出荷情報一覧",
             description:"出荷情報を一覧表示します。",
@@ -109,7 +116,7 @@ const routes = [
     },
     {
         path:"/shipping/detail",
-        component:ShippingPage,
+        component:ShiptLogDssPage,
         meta:{
             title:"出荷詳細",
             description:"",

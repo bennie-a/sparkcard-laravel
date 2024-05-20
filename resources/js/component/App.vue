@@ -38,10 +38,13 @@ import SideMenu from "../pages/component/SideMenu.vue";
             <SideMenu></SideMenu>
         </nav>
         <main id="main" ref="main" class="twelve wide column">
-            <div class="ui breadcrumb">
-                <div class="active section">{{ $route.meta.title }}</div>
-                <i class="right angle icon divider"></i>
-            </div>
+            <nav v-if="$route.meta.urls" class="ui breadcrumb">
+                <span v-for="url in $route.meta.urls" :key="url">
+                    <router-link :to="url.url" class="section">{{ url.title }}</router-link>
+                    <i class="right angle icon divider"></i>
+                </span>
+                <span class="active section">{{ $route.meta.title }}</span>
+            </nav>
             <h1 class="ui header">
                 {{ $route.meta.title }}
                 <div class="sub header">
@@ -54,6 +57,50 @@ import SideMenu from "../pages/component/SideMenu.vue";
         </main>
     </div>
 </template>
+<script>
+export default {
+    data() {
+        return {
+            initHeight: 0,
+            sidebarHeight: 0,
+            mainHeight: 0,
+            isMounted: false,
+            urls:[]
+        };
+    },
+    computed: {
+        higherHeightPx() {
+            return this.isMounted
+                ? Math.max(this.sidebarHeight, this.mainHeight) + "px"
+                : null;
+        },
+    },
+    watch: {
+        $route(to, from) {
+            this.$store.dispatch("clearCards");
+            this.$store.dispatch("clearMessage");
+            this.$store.dispatch("message/clear");
+            // 画面が替わる度に高さをリセット。
+            this.mainHeight = this.initHeight;
+        },
+    },
+    mounted: function () {
+        this.$store.dispatch("clearCards");
+        this.$store.dispatch("clearMessage");
+
+        // メイン部分のリサイズ検知
+        const main = document.querySelector("#main");
+        const resizeObserver = new ResizeObserver((entries) => {
+            this.mainHeight = this.$refs.main.clientHeight;
+        });
+        resizeObserver.observe(main);
+        this.sidebarHeight = this.$refs.sidebar.clientHeight;
+        this.mainHeight = this.$refs.main.clientHeight;
+        this.initHeight = this.mainHeight;
+        this.isMounted = true;
+    },
+};
+</script>
 <style scoped>
 .ui.grid {
     height: 100%;
@@ -72,46 +119,3 @@ import SideMenu from "../pages/component/SideMenu.vue";
     background-color: whitesmoke;
 }
 </style>
-<script>
-export default {
-    data() {
-        return {
-            initHeight: 0,
-            sidebarHeight: 0,
-            mainHeight: 0,
-            isMounted: false,
-        };
-    },
-    mounted: function () {
-        this.$store.dispatch("clearCards");
-        this.$store.dispatch("clearMessage");
-
-        // メイン部分のリサイズ検知
-        const main = document.querySelector("#main");
-        const resizeObserver = new ResizeObserver((entries) => {
-            this.mainHeight = this.$refs.main.clientHeight;
-        });
-        resizeObserver.observe(main);
-        this.sidebarHeight = this.$refs.sidebar.clientHeight;
-        this.mainHeight = this.$refs.main.clientHeight;
-        this.initHeight = this.mainHeight;
-        this.isMounted = true;
-    },
-    computed: {
-        higherHeightPx() {
-            return this.isMounted
-                ? Math.max(this.sidebarHeight, this.mainHeight) + "px"
-                : null;
-        },
-    },
-    watch: {
-        $route(to, from) {
-            this.$store.dispatch("clearCards");
-            this.$store.dispatch("clearMessage");
-            this.$store.dispatch("message/clear");
-            // 画面が替わる度に高さをリセット。
-            this.mainHeight = this.initHeight;
-        },
-    },
-};
-</script>

@@ -53,7 +53,8 @@
                     <td><i class="bi bi-currency-yen"></i>333</td>
                     <td>2024/02/04</td>
                     <td class="one wide center aligned">1点</td>
-                    <td class="center aligned"><i class="bi bi-chevron-double-right"></i></td>
+                    <td class="center aligned selectable">
+                        <router-link to="/shipping/detail"><i class="bi bi-chevron-double-right"></i></router-link></td>
                 </tr>
                 <!-- <tr
                     v-for="(s, index) in $store.getters.sliceCard"
