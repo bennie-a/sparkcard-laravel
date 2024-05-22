@@ -3,7 +3,7 @@
         <div class="ui  grid">
             <div class="two wide column">
                 <h2 class="ui medium header">販売ショップ</h2>
-                <label class="mercari ui label">メルカリShops</label>
+                <shop :orderId="orderId"/>
             </div>
             <div class="four wide column">
                 <h2 class="ui medium header">注文番号</h2>
@@ -53,7 +53,16 @@
     </article>
 </template>
 <script>
+import ShopTag from '../component/ShopTag.vue';
 export default {
+    components:{
+        shop:ShopTag
+    },
+    data(){
+        return {
+            orderId:"m_xgXgHv3ohAEHpkkwaFE8zF"
+        };
+    },
     methods:{
         toList:function() {
             this.$router.push("/shipping");
@@ -62,8 +71,4 @@ export default {
 }
 </script>
 <style>
-.mercari {
-    color: #DB2828!important;
-    background: rgb(255, 140, 65,0.2)!important;
-}
 </style>

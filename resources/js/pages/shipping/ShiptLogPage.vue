@@ -35,7 +35,7 @@
             <thead>
                 <tr>
                     <th class="one wide">出荷ID</th>
-                    <th class="two wide">ショップ名</th>
+                    <th class="two wide center aligned">販売ショップ</th>
                     <th class="two wide">注文番号</th>
                     <th class="three wide">購入者名</th>
                     <th class="">合計金額</th>
@@ -47,7 +47,7 @@
             <tbody>
                 <tr>
                     <td>1111</td>
-                    <td><shop :orderId="orderId"/></td>
+                    <td class=" center aligned"><shop :orderId="orderId"/></td>
                     <td>order_QgyazqM4Tt5FWusfhjSNQ</td>
                     <td>三崎健太&nbsp;<button class="ui icon mini teal button"><i class="bi bi-clipboard-plus-fill"></i></button></td>
                     <td><i class="bi bi-currency-yen"></i>333</td>
@@ -111,7 +111,7 @@ export default {
     data() {
         return {
             shippingDate : new Date(),
-            orderId:"m_xgXgHv3ohAEHpkkwaFE8zF"
+            orderId:"order_xgXgHv3ohAEHpkkwaFE8zF"
         };
     },
     methods:{
@@ -125,8 +125,4 @@ export default {
 }
 </script>
 <style>
-.mercari {
-    color: #DB2828!important;
-    background: rgb(255, 140, 65,0.2)!important;
-}
 </style>
