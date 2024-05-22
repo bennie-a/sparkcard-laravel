@@ -47,7 +47,7 @@
             <tbody>
                 <tr>
                     <td>1111</td>
-                    <td><label class="mercari ui label">メルカリShops</label></td>
+                    <td><shop :orderId="orderId"/></td>
                     <td>order_QgyazqM4Tt5FWusfhjSNQ</td>
                     <td>三崎健太&nbsp;<button class="ui icon mini teal button"><i class="bi bi-clipboard-plus-fill"></i></button></td>
                     <td><i class="bi bi-currency-yen"></i>333</td>
@@ -102,13 +102,16 @@
 </template>
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
+import ShopTag from "../component/ShopTag.vue";
 export default {
     components: {
         datepicker:Datepicker,
+        shop:ShopTag
     },
     data() {
         return {
-            shippingDate : new Date()
+            shippingDate : new Date(),
+            orderId:"m_xgXgHv3ohAEHpkkwaFE8zF"
         };
     },
     methods:{
