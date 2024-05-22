@@ -5,11 +5,8 @@
 <script>
 export default{
     props: {
-        orderId: { type: String, required:true, default:"注文" },
+        orderId: { type: String, required:true },
     },
-    computed:{
-        
-    }
 };
 </script>
 <style>

@@ -3,7 +3,7 @@
         <div class="two fields">
             <div class="four wide field">
                 <label>購入者名</label>
-                <input v-model="cardname" type="text">
+                <input v-model="buyer" type="text">
             </div>
             <div class="three wide field">
                 <label for="">発送日</label>
@@ -28,6 +28,7 @@
             </button>
     </article>
     <article class="mt-2">
+        <scdatepicker :selectedDate="shippingDate" :user="user" @update="handleupdate"/>
         <h2 class="ui medium dividing header">
             件数：1件
         </h2>
@@ -56,37 +57,6 @@
                     <td class="center aligned selectable">
                         <router-link to="/shipping/detail"><i class="bi bi-chevron-double-right"></i></router-link></td>
                 </tr>
-                <!-- <tr
-                    v-for="(s, index) in $store.getters.sliceCard"
-                    :key="index"
-                >
-                    <td>{{ s.id }}</td>
-                    <td>
-                        <h4 class="ui image header">
-                            <img
-                                :src="s.image_url"
-                                class="ui mini rounded image"
-                                @click="$refs.modal[index].showImage(s.id)"
-                            >
-                            <div class="content">
-                                {{ s.cardname
-                                }}<foiltag :isFoil="s.isFoil"/>
-                                <div class="sub header">{{ s.setname }}</div>
-                            </div>
-                            <image-modal
-                                :url="s.image_url"
-                                :id="s.id"
-                                ref="modal"
-                            />
-                        </h4>
-                    </td>
-                    <td class="center aligned">{{ s.language }}</td>
-                    <td class="center aligned">
-                        <condition :name="s.condition"/>
-                    </td>
-                    <td class="center aligned">{{ s.quantity }}</td>
-                    <td class="right aligned">{{ s.updated_at }}</td>
-                </tr> -->
             </tbody>
             <tfoot class="full-width">
                 <tr>
@@ -103,15 +73,23 @@
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
 import ShopTag from "../component/ShopTag.vue";
+import ScDatePicker from "../component/ScDatePicker.vue";
+import { ref, toRefs, watch } from 'vue';
 export default {
     components: {
         datepicker:Datepicker,
+        scdatepicker:ScDatePicker,
         shop:ShopTag
     },
     data() {
         return {
             shippingDate : new Date(),
-            orderId:"order_xgXgHv3ohAEHpkkwaFE8zF"
+            orderId:"order_xgXgHv3ohAEHpkkwaFE8zF",
+            buyer:'',
+            user:ref({
+                name:'Taro',
+                score:{english:80, math:90}
+            }),
         };
     },
     methods:{
@@ -121,6 +99,9 @@ export default {
             const day = String(date.getDate()).padStart(2, "0");
             return `${year}/${month}/${day}`;
         },
+        handleupdate:function(value) {
+            this.user.score.math = value;
+        }
     }
 }
 </script>
