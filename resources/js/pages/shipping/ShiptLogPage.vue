@@ -8,13 +8,7 @@
             <div class="three wide field">
                 <label for="">発送日</label>
                 <div>
-                    <datepicker
-                        v-model="shippingDate"
-                        input-class-name="dp_custom_input"
-                        locale="jp"
-                        :enable-time-picker="false"
-                        :format="dateFormat"
-                    />
+                    <scdatepicker :selectedDate="shippingDate" @update="handleupdate"/>
                 </div>
             </div>
         </div>
@@ -28,7 +22,6 @@
             </button>
     </article>
     <article class="mt-2">
-        <scdatepicker :selectedDate="shippingDate" :user="user" @update="handleupdate"/>
         <h2 class="ui medium dividing header">
             件数：1件
         </h2>
@@ -71,13 +64,10 @@
     </article>
 </template>
 <script>
-import Datepicker from "@vuepic/vue-datepicker";
 import ShopTag from "../component/ShopTag.vue";
 import ScDatePicker from "../component/ScDatePicker.vue";
-import { ref, toRefs, watch } from 'vue';
 export default {
     components: {
-        datepicker:Datepicker,
         scdatepicker:ScDatePicker,
         shop:ShopTag
     },
@@ -85,11 +75,7 @@ export default {
         return {
             shippingDate : new Date(),
             orderId:"order_xgXgHv3ohAEHpkkwaFE8zF",
-            buyer:'',
-            user:ref({
-                name:'Taro',
-                score:{english:80, math:90}
-            }),
+            buyer:''
         };
     },
     methods:{
@@ -100,7 +86,7 @@ export default {
             return `${year}/${month}/${day}`;
         },
         handleupdate:function(value) {
-            this.user.score.math = value;
+            this.shippingDate = value;
         }
     }
 }
