@@ -5,9 +5,9 @@ import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
 import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
-import Datepicker from "@vuepic/vue-datepicker";
 import FoilTag from "./component/FoilTag.vue";
 import ImageModal from "./component/ImageModal.vue";
+import ScDatePicker from "./component/ScDatePicker.vue";
 
 export default {
     components: {
@@ -15,9 +15,10 @@ export default {
         "message-area": MessageArea,
         pagination: ListPagination,
         ModalButton: ModalButton,
-        datepicker: Datepicker,
         foiltag: FoilTag,
         "image-modal": ImageModal,
+        scdatepicker:ScDatePicker
+
     },
     data() {
         return {
@@ -160,13 +161,10 @@ export default {
             }
             this.$store.dispatch("setLoad", false);
         },
-        dateFormat: function (date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
-            return `${year}/${month}/${day}`;
-        },
-    },
+        handleupdate:function(value) {
+            this.arrivalDate = value;
+        }
+    }
 };
 </script>
 
@@ -254,13 +252,14 @@ export default {
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
-                    <datepicker
+                    <scdatepicker :selectedDate="arrivalDate" @update="handleupdate"/>
+                    <!-- <datepicker
                         v-model="arrivalDate"
                         input-class-name="dp_custom_input"
                         locale="jp"
                         :enable-time-picker="false"
                         :format="dateFormat"
-                    />
+                    /> -->
                 </div>
                 <div class="two wide column field">
                     <label>原価</label>
