@@ -30,8 +30,7 @@
                 <tr>
                     <th class="one wide">出荷ID</th>
                     <th class="two wide center aligned">販売ショップ</th>
-                    <th class="two wide">注文番号</th>
-                    <th class="three wide">購入者名</th>
+                    <th class="seven wide">購入者名</th>
                     <th class="">合計金額</th>
                     <th class="two wide">発送日</th>
                     <th class="one wide">商品数</th>
@@ -42,8 +41,7 @@
                 <tr>
                     <td>1111</td>
                     <td class=" center aligned"><shop :orderId="orderId"/></td>
-                    <td>order_QgyazqM4Tt5FWusfhjSNQ</td>
-                    <td>三崎健太&nbsp;<button class="ui icon mini teal button"><i class="bi bi-clipboard-plus-fill"></i></button></td>
+                    <td><h3 class="ui header">三崎健太<span class="sub header">〒490-1400 愛知県海部郡飛島村大字飛島新田字竹之郷ヨタレ南ノ割979-3</span></h3></td>
                     <td><i class="bi bi-currency-yen"></i>333</td>
                     <td>2024/02/04</td>
                     <td class="one wide center aligned">1点</td>
@@ -79,6 +77,7 @@ export default {
         };
     },
     methods:{
+        // SCDatePickerで変更した日付を代入する。
         handleupdate:function(value) {
             this.shippingDate = value;
         }

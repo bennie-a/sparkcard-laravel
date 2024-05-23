@@ -19,6 +19,10 @@
                         <p>〒490-1400<br>愛知県海部郡飛島村大字飛島新田字竹之郷ヨタレ南ノ割979-3</p>
                         <p>小林 真理子</p>
                     </address>
+                    <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
+                        <i class="bi bi-clipboard-fill mr-half"></i>コピー
+                    </button>
+                    <div v-if="isCopied" class="ui left pointing teal label">コピーしました</div>
             </div>
         </div>
         <h2 class="ui medium header">商品一覧</h2>
@@ -60,15 +64,44 @@ export default {
     },
     data(){
         return {
-            orderId:"m_xgXgHv3ohAEHpkkwaFE8zF"
+            orderId:"m_xgXgHv3ohAEHpkkwaFE8zF",
+            isCopied:false
         };
     },
     methods:{
         toList:function() {
             this.$router.push("/shipping");
+        },
+         // 商品と宛先をコピーする
+        copyAddress: function () {
+            let copytext = "";
+            // let items = order.items.join(",");
+            //     copytext += `${items}\n${order.postcode}\n${order.address1}\n`;
+            //     if (order.address2 != "") {
+            //         copytext += `${order.address2}\n`;
+            //     }
+            //     copytext += `${order.name}様\n`;
+            // });
+            // navigator.clipboard.writeText(copytext);
+            this.isCopied = true;
+            setTimeout(() => {
+                this.isCopied = false;
+            }, 2000);
         }
     }
 }
 </script>
 <style>
+address {
+    font-style: normal;
+}
+address > p {
+    margin-bottom: 0.5em!important;
+}
+
+#copy:hover {
+    color: white!important;
+    background: #00B2AA!important;
+    border: 0!important;
+}
 </style>
