@@ -8,6 +8,7 @@ use App\Files\Stock\ShippingLogCsvReader;
 use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
+use App\Repositories\Api\Stock\ShippingLogRepository;
 use App\Services\Constant\StockpileHeader as Header;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
@@ -22,6 +23,11 @@ use Illuminate\Http\Response as HttpResponse;
  */
 class ShippingLogService extends AbstractSmsService{
 
+    private $repo;
+
+    public function __construct() {
+        $this->repo = new ShippingLogRepository();
+    }
     /**
      * 出荷ログ用のCSV読み込みクラスを取得する。
      * @see CsvReader::csvReader
@@ -78,5 +84,15 @@ class ShippingLogService extends AbstractSmsService{
         return new ShippingRow($index, $row);
     }
 
+    /**
+     * 出荷IDに該当する出荷情報を取得する。
+     *
+     * @param string $orderId
+     * @return array
+     */
+    public function show(string $orderId) {
+        return $this->repo->fetchByOrderId($orderId);
+        // $log = ShippingLog::find($id);
+    }
 
 }

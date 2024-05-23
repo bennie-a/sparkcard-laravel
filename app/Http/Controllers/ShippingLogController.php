@@ -38,5 +38,16 @@ class ShippingLogController extends Controller
     }
 
     use ImportCsv;
-    
+
+    /**
+     * 出荷IDに該当する出荷情報を1件取得する。
+     *
+     * @param string $orderId
+     * @return Response
+     */
+    public function show(string $orderId) {
+        $info = $this->service->show($orderId);
+        return response()->json($info, Response::HTTP_OK);
+    }
+
 }
