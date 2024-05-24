@@ -3,6 +3,7 @@ namespace App\Services\Constant;
 
 class StockpileHeader {
     public const SETCODE = 'setcode';
+    const SETNAME = 'setname';
     const NAME = 'name';
     const LANG = 'lang';
     const CONDITION = 'condition';

@@ -34,6 +34,7 @@
                 <th class="center aligned">状態</th>
                 <th class="center aligned">枚数</th>
                 <th class="center aligned">単価</th>
+                <th class="center aligned">小計</th>
             </thead>
             <tr>
                 <td>2330</td>
@@ -48,6 +49,7 @@
                 <td class="center aligned">JP</td>
                 <td class="center aligned"><label class="ui blue label">NM</label></td>
                 <td class="center aligned">1枚</td>
+                <td class="center aligned"><i class="bi bi-currency-yen"></i>560</td>
                 <td class="center aligned"><i class="bi bi-currency-yen"></i>560</td>
             </tr>
         </table>
