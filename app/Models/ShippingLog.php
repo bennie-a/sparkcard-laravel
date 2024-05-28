@@ -29,11 +29,12 @@ class ShippingLog extends Model
                                     "slog.name as buyer_name", 'slog.zip_code as zip',
                                      'slog.address as address', 'slog.shipping_date as shipping_date',
                                     'slog.single_price', 'slog.total_price', 's.id as stock_id', 'c.name as cardname', 'e.name as setname',
-                                     'c.image_url as image_url', 's.language as lang', 's.condition as condition'];
+                                     'c.image_url as image_url', 's.language as lang', 's.condition as condition', 'c.isFoil as isFoil', 'f.name as foilname'];
         $query = self::from("shipping_log as slog")->select($columns);
         return $query->join("stockpile as s", "s.id","=", "slog.stock_id")
                                     ->join("card_info as c", "c.id", "=", "s.card_id")
                                     ->join("expansion as e", 'e.notion_id', '=', 'c.exp_id')
+                                    ->join("foiltype as f", "f.id", '=', 'c.foiltype_id')
                                                 ->where("slog.order_id", $orderId)->get();
 
     }

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import condition from "../component/ConditionTag.vue";
 import imagemodal from '../component/ImageModal.vue';
+import foiltag from '../component/FoilTag.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -91,7 +92,7 @@ onMounted(async() => {
                     <h4 class="ui image header">
                         <img :src="i.image_url" class="ui mini rounded image" @click="$refs.modal[index].showImage(i.id)">
                         <div class="content">
-                            {{ i.cardname }}
+                            {{ i.cardname }}<foiltag :isFoil="i.foil.isFoil" :name="i.foil.name"/>
                             <div class="sub header">{{ i.setname }}</div>
                         </div>
                         <imagemodal

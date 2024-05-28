@@ -88,7 +88,7 @@ class ShippingLogService extends AbstractSmsService{
         $items = $list->map(function($slog) {
                 return ["id" => $slog["stock_id"], "cardname" => $slog["cardname"], Header::SETNAME => $slog[Header::SETNAME],
                              Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,
-                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"],
+                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"], 'foil' => ['isFoil' => $slog['isFoil'], 'foilname' => $slog['foilname']],
                             'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price];
         });
         // $items = array_map(function($log) {
