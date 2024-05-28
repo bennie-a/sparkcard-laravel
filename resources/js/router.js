@@ -96,6 +96,13 @@ const routes = [
         meta: {
             title: "カード情報マスタ登録",
             description: "カード情報をDBに登録します。",
+            urls:[
+                {
+                    url:"/config/expansion",
+                    title:"エキスパンション一覧"
+
+                }
+            ]
         },
     },
     {
@@ -115,7 +122,8 @@ const routes = [
         },
     },
     {
-        path:"/shipping/detail",
+        path:"/shipping/detail/:order_id",
+        name:'ShiptLogDss',
         component:ShiptLogDssPage,
         meta:{
             title:"出荷詳細",

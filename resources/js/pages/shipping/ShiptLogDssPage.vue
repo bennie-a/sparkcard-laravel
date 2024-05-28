@@ -1,3 +1,51 @@
+<script setup>
+import shop from '../component/ShopTag.vue';
+import Loading from "vue-loading-overlay";
+import {useRoute, useRouter} from "vue-router";
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import condition from "../component/ConditionTag.vue";
+import imagemodal from '../component/ImageModal.vue';
+
+const route = useRoute();
+const router = useRouter();
+
+const isLoading = ref(false);
+const isCopied = ref(false);
+const orderId = route.params.order_id;
+
+const detail = ref({});
+// 出荷情報一覧に戻る
+const toList = () => {
+        router.push("/shipping");
+}
+
+// 詳細情報を取得する。
+const getDetail = async () => {
+    isLoading.value = true;
+    await axios.get("/api/shipping/"+ orderId).
+        then((response) =>{
+            detail.value = response.data;
+        })
+        .catch()
+        .finally(()=> {
+            isLoading.value = false;
+        });
+}
+
+const copyAddress = () => {
+    isCopied.value = true;
+    let copyText = `${detail.value.zipcode}\n${detail.value.address}\n${detail.value.buyer_name}`;
+    navigator.clipboard.writeText(copyText);
+    setTimeout(() => {
+        isCopied.value = false;
+    }, 2000);
+}
+onMounted(async() => {
+    await getDetail();
+});
+</script>
+
 <template>
     <article>
         <div class="ui  grid">
@@ -7,17 +55,17 @@
             </div>
             <div class="four wide column">
                 <h2 class="ui medium header">注文番号</h2>
-                <p>order_QgyazqM4Tt5FWusfhjSNQ</p>
+                <p>{{ detail.order_id }}</p>
             </div>
             <div class="two wide column">
                 <h2 class="ui medium header">発送日</h2>
-                <p>2024/7/15</p>
+                <p>{{ detail.shipping_date }}</p>
             </div>
             <div class="four wide column">
                     <h2 class="ui medium header">購入者情報</h2>
                     <address>
-                        <p>〒490-1400<br>愛知県海部郡飛島村大字飛島新田字竹之郷ヨタレ南ノ割979-3</p>
-                        <p>小林 真理子</p>
+                        <p>{{detail.zipcode}}<br>{{ detail.address }}</p>
+                        <p>{{ detail.buyer_name }}</p>
                     </address>
                     <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
                         <i class="bi bi-clipboard-fill mr-half"></i>コピー
@@ -36,63 +84,38 @@
                 <th class="center aligned">単価</th>
                 <th class="center aligned">小計</th>
             </thead>
-            <tr>
-                <td>2330</td>
+            <tbody>
+                <tr v-for="(i, index) in detail.items" :key="index">
+                <td>{{ i.id }}</td>
                 <td>
                     <h4 class="ui image header">
-                        <img src="https://cards.scryfall.io/png/front/1/1/11fbe52f-febd-49fc-8391-28d3efe9c3eb.png?1712356193" class="ui mini rounded image">
+                        <img :src="i.image_url" class="ui mini rounded image" @click="$refs.modal[index].showImage(i.id)">
                         <div class="content">
-                            収集家の檻
-                            <div class="sub header">「サンダー・ジャンクションの無法者」_ビッグスコア</div>
+                            {{ i.cardname }}
+                            <div class="sub header">{{ i.setname }}</div>
                         </div>
+                        <imagemodal
+                                :url="i.image_url"
+                                :id="i.id"
+                                ref="modal"
+                            />
                     </h4></td>
-                <td class="center aligned">JP</td>
-                <td class="center aligned"><label class="ui blue label">NM</label></td>
-                <td class="center aligned">1枚</td>
-                <td class="center aligned"><i class="bi bi-currency-yen"></i>560</td>
-                <td class="center aligned"><i class="bi bi-currency-yen"></i>560</td>
+                <td class="center aligned">{{ i.lang }}</td>
+                <td class="center aligned"><condition :name="i.condition"/></td>
+                <td class="center aligned">{{i.quantity}}枚</td>
+                <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ i.single_price }}</td>
+                <td class="center aligned"><i class="bi bi-currency-yen"></i>{{i.subtotal_price}}</td>
             </tr>
+            </tbody>
         </table>
         <div class="text-center">
             <button class="ui gray basic button" @click="toList">一覧に戻る</button>
         </div>
+        <loading
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
     </article>
 </template>
-<script>
-import ShopTag from '../component/ShopTag.vue';
-export default {
-    components:{
-        shop:ShopTag
-    },
-    data(){
-        return {
-            orderId:"m_xgXgHv3ohAEHpkkwaFE8zF",
-            isCopied:false
-        };
-    },
-    methods:{
-        toList:function() {
-            this.$router.push("/shipping");
-        },
-         // 商品と宛先をコピーする
-        copyAddress: function () {
-            let copytext = "";
-            // let items = order.items.join(",");
-            //     copytext += `${items}\n${order.postcode}\n${order.address1}\n`;
-            //     if (order.address2 != "") {
-            //         copytext += `${order.address2}\n`;
-            //     }
-            //     copytext += `${order.name}様\n`;
-            // });
-            // navigator.clipboard.writeText(copytext);
-            this.isCopied = true;
-            setTimeout(() => {
-                this.isCopied = false;
-            }, 2000);
-        }
-    }
-}
-</script>
 <style>
 address {
     font-style: normal;

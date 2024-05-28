@@ -46,7 +46,9 @@
                     <td>2024/02/04</td>
                     <td class="one wide center aligned">1点</td>
                     <td class="center aligned selectable">
-                        <router-link to="/shipping/detail"><i class="bi bi-chevron-double-right"></i></router-link></td>
+                        <a @click="toDssPage(orderId)"><i class="bi bi-chevron-double-right"></i></a>
+                        <!-- <router-link to="{name:'ShiptLogDss', params:{order_id:'order_Qzp6H3LYojxthM2WDGSjBN'}}"><i class="bi bi-chevron-double-right"></i></router-link> -->
+                    </td>
                 </tr>
             </tbody>
             <tfoot class="full-width">
@@ -72,11 +74,17 @@ export default {
     data() {
         return {
             shippingDate : new Date(),
-            orderId:"order_xgXgHv3ohAEHpkkwaFE8zF",
+            orderId:"order_Qzp6H3LYojxthM2WDGSjBN",
             buyer:''
         };
     },
     methods:{
+        toDssPage:function(order_id) {
+            this.$router.push({
+                name: "ShiptLogDss",
+                params: { order_id: order_id},
+            });
+        },
         // SCDatePickerで変更した日付を代入する。
         handleupdate:function(value) {
             this.shippingDate = value;

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use Carbon\Carbon;
 
 /**
  * shippinng_logテーブルのModelクラス
@@ -27,13 +28,17 @@ class ShippingLog extends Model
         $columns = ['slog.order_id as order_id', 'slog.quantity as quantity',
                                     "slog.name as buyer_name", 'slog.zip_code as zip',
                                      'slog.address as address', 'slog.shipping_date as shipping_date',
-                                    'slog.single_price', 'slog.total_price', 'c.name as cardname', 'e.name as setname',
-                                     'c.image_url', 's.language as lang', 's.condition as condition'];
+                                    'slog.single_price', 'slog.total_price', 's.id as stock_id', 'c.name as cardname', 'e.name as setname',
+                                     'c.image_url as image_url', 's.language as lang', 's.condition as condition'];
         $query = self::from("shipping_log as slog")->select($columns);
         return $query->join("stockpile as s", "s.id","=", "slog.stock_id")
                                     ->join("card_info as c", "c.id", "=", "s.card_id")
                                     ->join("expansion as e", 'e.notion_id', '=', 'c.exp_id')
                                                 ->where("slog.order_id", $orderId)->get();
 
+    }
+
+    public function getShippingDateAttribute($value) {
+        return Carbon::parse($value)->format("Y/m/d");
     }
 }

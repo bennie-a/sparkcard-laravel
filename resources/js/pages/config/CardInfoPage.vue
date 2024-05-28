@@ -1,9 +1,5 @@
 <template>
     <message-area></message-area>
-    <router-link to="/config/expansion"
-        >
-<i class="bi bi-arrow-left"></i>一覧に戻る</router-link
-    >
     <div class="mt-1 ui form segment">
         <div class="two fields">
             <div class="three wide field">
