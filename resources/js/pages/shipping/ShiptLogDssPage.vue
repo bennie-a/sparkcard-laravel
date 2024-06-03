@@ -36,7 +36,7 @@ const getDetail = async () => {
 
 const copyAddress = () => {
     isCopied.value = true;
-    let copyText = `${detail.value.zipcode}\n${detail.value.address}\n${detail.value.buyer_name}`;
+    let copyText = `${detail.value.zipcode}\n${detail.value.address}\n${detail.value.buyer_name}様`;
     navigator.clipboard.writeText(copyText);
     setTimeout(() => {
         isCopied.value = false;
@@ -66,7 +66,7 @@ onMounted(async() => {
                     <h2 class="ui medium header">購入者情報</h2>
                     <address>
                         <p>{{detail.zipcode}}<br>{{ detail.address }}</p>
-                        <p>{{ detail.buyer_name }}</p>
+                        <p>{{ detail.buyer_name }}様</p>
                     </address>
                     <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
                         <i class="bi bi-clipboard-fill mr-half"></i>コピー

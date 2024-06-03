@@ -1,3 +1,25 @@
+<script setup>
+import shop from "../component/ShopTag.vue";
+import scdatepicker from "../component/ScDatePicker.vue";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+const shippingDate = ref(new Date());
+const orderId = "order_bB2t8GUhHSUxfUShWT4Daf";
+const router = useRouter();
+
+// 詳細画面を表示する。
+const toDssPage = (orderId) => {
+    router.push({
+        name: "ShiptLogDss",
+        params: { order_id: orderId},
+    });
+}
+
+// SCDatePickerで選択した日付を設定する。
+const handleupdate = (date) => {
+    shippingDate.value = date;
+}
+</script>
 <template>
         <article class="mt-1 ui form segment">
         <div class="two fields">
@@ -47,7 +69,6 @@
                     <td class="one wide center aligned">1点</td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage(orderId)"><i class="bi bi-chevron-double-right"></i></a>
-                        <!-- <router-link to="{name:'ShiptLogDss', params:{order_id:'order_Qzp6H3LYojxthM2WDGSjBN'}}"><i class="bi bi-chevron-double-right"></i></router-link> -->
                     </td>
                 </tr>
             </tbody>
@@ -63,34 +84,5 @@
         </table>
     </article>
 </template>
-<script>
-import ShopTag from "../component/ShopTag.vue";
-import ScDatePicker from "../component/ScDatePicker.vue";
-export default {
-    components: {
-        scdatepicker:ScDatePicker,
-        shop:ShopTag
-    },
-    data() {
-        return {
-            shippingDate : new Date(),
-            orderId:"order_HMhX7LCfkwQpYAZykyfNmP",
-            buyer:''
-        };
-    },
-    methods:{
-        toDssPage:function(order_id) {
-            this.$router.push({
-                name: "ShiptLogDss",
-                params: { order_id: order_id},
-            });
-        },
-        // SCDatePickerで変更した日付を代入する。
-        handleupdate:function(value) {
-            this.shippingDate = value;
-        }
-    }
-}
-</script>
 <style>
 </style>

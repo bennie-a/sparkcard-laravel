@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShiptLogRequest;
 use App\Services\Stock\ShippingLogService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
@@ -40,9 +41,18 @@ class ShippingLogController extends Controller
     use ImportCsv;
 
     /**
+     * 入力した条件に該当する出荷情報を検索する。
+     * @param ShiptLogRequest $request
+     * @return Response
+     */
+    public function index(ShiptLogRequest $request) {
+        return response('検索完了', Response::HTTP_OK);
+    }
+
+    /**
      * 出荷IDに該当する出荷情報を1件取得する。
      *
-     * @param string $orderId
+     * @param string $orderId 注文番号
      * @return Response
      */
     public function show(string $orderId) {
