@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Promotype;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PromotypeSeeder extends Seeder
 {
@@ -15,6 +16,7 @@ class PromotypeSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('promotype')->truncate();
         Promotype::create(['attr' => 'jpwalker', 'name' => '絵違い']);
         Promotype::create(['attr' => 'boosterfun', 'name' => 'ブースターファン']);
         Promotype::create(['attr' => 'draft', 'name' => '']);
@@ -50,5 +52,8 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'magnified', 'name' => '「拡大鏡」ショーケース']);
         Promotype::create(['attr' => 'dossier', 'name' => '「事件簿」ショーケース']);
         Promotype::create(['attr' => 'ravnicacity', 'name' => '大都市ラヴニカ']);
+        Promotype::create(['attr' => 'profiles', 'name' => '「プロファイル」ボーダーレス']);
+        Promotype::create(['attr' => 'flamebreak', 'name' => '「フレームブレイク」ボーダーレス']);
+        Promotype::create(['attr' => 'oldframe', 'name' => '旧枠']);
     }
 }

@@ -4,7 +4,7 @@ import scdatepicker from "../component/ScDatePicker.vue";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 const shippingDate = ref(new Date());
-const orderId = "order_bB2t8GUhHSUxfUShWT4Daf";
+const orderId = "order_GCBU9evkzEQ9Bnae7n4qnG";
 const router = useRouter();
 
 // 詳細画面を表示する。
