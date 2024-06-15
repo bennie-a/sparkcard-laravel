@@ -2,6 +2,139 @@
     "data": {
         "booster": {},
         "cards":[
+          {
+            "artist": "Magali Villeneuve",
+            "artistIds": ["9e6a55ae-be4d-4c23-a2a5-135737ffd879"],
+            "availability": ["arena", "mtgo", "paper"],
+            "boosterTypes": ["default"],
+            "borderColor": "black",
+            "colorIdentity": ["G", "U"],
+            "colors": ["U"],
+            "convertedManaCost": 1.0,
+            "edhrecRank": 22756,
+            "faceConvertedManaCost": 1.0,
+            "faceManaValue": 1.0,
+            "faceName": "Tamiyo, Inquisitive Student",
+            "finishes": ["nonfoil", "foil"],
+            "foreignData": [
+              {
+                "language": "Japanese",
+                "name": "知りたがりの学徒、タミヨウ"
+              }
+            ],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "identifiers": {
+              "cardKingdomFoilId": "297020",
+              "cardKingdomId": "296138",
+              "mcmId": "771207",
+              "mcmMetaId": "434956",
+              "mtgjsonV4Id": "5a8a7a90-87d7-5f39-89ab-8e4c6ebd0c46",
+              "scryfallId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
+              "scryfallIllustrationId": "8b89f6b6-b648-41a3-b8b1-1bf2806a2d2b",
+              "scryfallOracleId": "1ed9e351-0000-4b75-8ecb-d15bd88df68a",
+              "tcgplayerProductId": "552333"
+            },
+            "keywords": ["Flying", "Investigate", "Transform"],
+            "language": "English",
+            "layout": "transform",
+            "leadershipSkills": {
+              "brawl": false,
+              "commander": true,
+              "oathbreaker": false
+            },
+            "legalities": {},
+            "manaCost": "{U}",
+            "manaValue": 1.0,
+            "name": "Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar",
+            "number": "242",
+            "otherFaceIds": ["36f3308d-943e-544c-a920-258b4a90d311"],
+            "power": "0",
+            "printings": ["MH3"],
+            "purchaseUrls": {
+              "cardKingdom": "https://mtgjson.com/links/0eab0aa9acaa00b4",
+              "cardKingdomFoil": "https://mtgjson.com/links/eca8780296762185",
+              "cardmarket": "https://mtgjson.com/links/7d17e167dbb450aa",
+              "tcgplayer": "https://mtgjson.com/links/1f49a3840bdf75ee"
+            },
+            "rarity": "mythic",
+            "securityStamp": "oval",
+            "setCode": "MH3",
+            "side": "a",
+            "subtypes": ["Moonfolk", "Wizard"],
+            "supertypes": ["Legendary"],
+            "text": "Flying\nWhenever Tamiyo, Inquisitive Student attacks, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this artifact: Draw a card.\")\nWhen you draw your third card in a turn, exile Tamiyo, then return her to the battlefield transformed under her owner's control.",
+            "toughness": "3",
+            "type": "Legendary Creature — Moonfolk Wizard",
+            "types": ["Creature"],
+            "uuid": "614f1d54-6bc9-5578-a9c3-d4d446b4a9ab",
+            "variations": [
+              "d7bd8437-9999-5615-b6bc-9a64f37a5c42",
+              "46a667e4-ea37-53e8-88fd-7896307d1a6d"
+            ]
+          },
+          {
+            "artist": "Magali Villeneuve",
+            "artistIds": ["9e6a55ae-be4d-4c23-a2a5-135737ffd879"],
+            "availability": ["arena", "mtgo", "paper"],
+            "boosterTypes": ["default"],
+            "borderColor": "black",
+            "colorIdentity": ["G", "U"],
+            "colorIndicator": ["G", "U"],
+            "colors": ["G", "U"],
+            "convertedManaCost": 1.0,
+            "edhrecRank": 22756,
+            "faceConvertedManaCost": 0.0,
+            "faceManaValue": 0.0,
+            "faceName": "Tamiyo, Seasoned Scholar",
+            "finishes": ["nonfoil", "foil"],
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "identifiers": {
+              "mcmId": "771207",
+              "mcmMetaId": "434956",
+              "mtgjsonV4Id": "eb966327-6a6a-538b-9a5c-b1ba1fb86c7e",
+              "scryfallId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
+              "scryfallIllustrationId": "5b329d90-24a6-4733-878f-aa3e853e1dd5",
+              "scryfallOracleId": "1ed9e351-0000-4b75-8ecb-d15bd88df68a",
+              "tcgplayerProductId": "552333"
+            },
+            "language": "English",
+            "layout": "transform",
+            "leadershipSkills": {
+              "brawl": false,
+              "commander": false,
+              "oathbreaker": true
+            },
+            "legalities": {},
+            "loyalty": "2",
+            "manaValue": 1.0,
+            "name": "Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar",
+            "number": "242",
+            "otherFaceIds": ["614f1d54-6bc9-5578-a9c3-d4d446b4a9ab"],
+            "printings": ["MH3"],
+            "purchaseUrls": {
+              "cardmarket": "https://mtgjson.com/links/8847e23b3d28bc5d",
+              "tcgplayer": "https://mtgjson.com/links/3c1ca178b9674d67"
+            },
+            "rarity": "mythic",
+            "securityStamp": "oval",
+            "setCode": "MH3",
+            "side": "b",
+            "subtypes": ["Tamiyo"],
+            "supertypes": ["Legendary"],
+            "text": "[+2]: Until your next turn, whenever a creature attacks you or a planeswalker you control, it gets -1/-0 until end of turn.\n[−3]: Return target instant or sorcery card from your graveyard to your hand. If it's a green card, add one mana of any color.\n[−7]: Draw cards equal to half the number of cards in your library, rounded up. You get an emblem with \"You have no maximum hand size.\"",
+            "type": "Legendary Planeswalker — Tamiyo",
+            "types": ["Planeswalker"],
+            "uuid": "36f3308d-943e-544c-a920-258b4a90d311",
+            "variations": [
+              "d0c7070d-3d72-543c-98a0-1d5d7c41a4a4",
+              "5f9c7ee5-31b9-5bf2-8736-e1fc9de778ee"
+            ]
+          },
             {
                 "artist": "Livia Prima",
                 "artistIds": ["0f41e561-bc26-4d85-aab6-66c384e01b74"],

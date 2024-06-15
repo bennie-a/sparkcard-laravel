@@ -137,7 +137,7 @@ class CardInfoFactory {
             // logger()->debug('除外カードか判別', [$json[CardConstant::NUMBER]]);
             return ExcludePromo::existsByAttr($promotypes);
         }
-        return self::isOnlineOnly($json) || self::isAdventure($json);
+        return self::isOnlineOnly($json) || self::isAdventure($json) || self::isExtendedArt($json);
     }
 
     /**
@@ -150,5 +150,12 @@ class CardInfoFactory {
         return strcmp($json["type"], "Sorcery — Adventure") == 0;
     }
 
+
+    private static function isExtendedArt($json) {
+        if (MtgJsonUtil::hasKey(Con::FRAME_EFFECT, $json)) {
+            return $json[Con::FRAME_EFFECT][0] === 'extendedart';
+        }
+        return false;
+    }
 }
 ?>

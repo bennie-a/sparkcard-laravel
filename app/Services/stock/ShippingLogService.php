@@ -77,6 +77,10 @@ class ShippingLogService extends AbstractSmsService{
         return new ShippingRow($index, $row);
     }
 
+    public function fetch(array $details) {
+        return ShippingLog::fetch();
+    }
+
     /**
      * 出荷IDに該当する出荷情報を取得する。
      *

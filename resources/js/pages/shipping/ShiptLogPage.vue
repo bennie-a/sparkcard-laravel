@@ -2,10 +2,29 @@
 import shop from "../component/ShopTag.vue";
 import scdatepicker from "../component/ScDatePicker.vue";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import axios from 'axios';
+import Loading from "vue-loading-overlay";
+
 const shippingDate = ref(new Date());
-const orderId = "order_GCBU9evkzEQ9Bnae7n4qnG";
+const orderId = "order_h4eKcB8RCjyejCthfphH2K";
+const orderId2 = "C197D909A9CFF5C4";
 const router = useRouter();
+
+const result = ref([]);
+const isLoading = ref(false);
+
+const fetch =  async () => {
+    isLoading.value = true;
+   await axios.get('/api/shipping/')
+                            .then((response) => {
+                                result.value = response.data;
+                            })
+                            .catch()
+                            .finally(() => {
+                                isLoading.value = false;
+                            });    
+};
 
 // 詳細画面を表示する。
 const toDssPage = (orderId) => {
@@ -19,6 +38,10 @@ const toDssPage = (orderId) => {
 const handleupdate = (date) => {
     shippingDate.value = date;
 }
+
+onMounted(async() => {
+    await fetch();
+});
 </script>
 <template>
         <article class="mt-1 ui form segment">
@@ -50,25 +73,28 @@ const handleupdate = (date) => {
         <table class="ui striped table">
             <thead>
                 <tr>
-                    <th class="one wide">出荷ID</th>
+                    <th class="one wide">注文ID</th>
                     <th class="two wide center aligned">販売ショップ</th>
-                    <th class="seven wide">購入者名</th>
+                    <th class="five wide">購入者名</th>
                     <th class="">合計金額</th>
-                    <th class="two wide">発送日</th>
+                    <th class="">発送日</th>
                     <th class="one wide">商品数</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1111</td>
-                    <td class=" center aligned"><shop :orderId="orderId"/></td>
-                    <td><h3 class="ui header">三崎健太<span class="sub header">〒490-1400 愛知県海部郡飛島村大字飛島新田字竹之郷ヨタレ南ノ割979-3</span></h3></td>
-                    <td><i class="bi bi-currency-yen"></i>333</td>
-                    <td>2024/02/04</td>
-                    <td class="one wide center aligned">1点</td>
+                <tr v-for="(r, index) in result" :key="index">
+                    <td>{{r.order_id}}</td>
+                    <td class=" center aligned"><shop :orderId="r.order_id"/></td>
+                    <td><h3 class="ui header">{{ r.name }}
+                        <span class="sub header">〒{{ r.zip_code }} {{ r.address }}</span>
+                    </h3>
+                    </td>
+                    <td><i class="bi bi-currency-yen"></i>{{ r.total_price }}</td>
+                    <td>{{ r.shipping_date }}</td>
+                    <td class="one wide center aligned">{{r.item_count}}点</td>
                     <td class="center aligned selectable">
-                        <a @click="toDssPage(orderId)"><i class="bi bi-chevron-double-right"></i></a>
+                        <a @click="toDssPage(r.order_id)"><i class="bi bi-chevron-double-right"></i></a>
                     </td>
                 </tr>
             </tbody>
@@ -83,6 +109,10 @@ const handleupdate = (date) => {
             </tfoot>
         </table>
     </article>
+    <loading
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
+
 </template>
 <style>
 </style>

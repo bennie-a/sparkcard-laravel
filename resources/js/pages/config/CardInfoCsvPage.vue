@@ -37,7 +37,8 @@
                         <tr>
                             <th class="one wide">No.</th>
                             <th class="four wide left aligned">カード名</th>
-                            <th class="four wide">英名</th>
+                            <th class="four wide">特別版</th>
+                            <th class="three wide">英名</th>
                             <th>カード仕様</th>
                             <th class="one wide">色</th>
                             <th class="one wide">言語</th>
@@ -48,11 +49,23 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
-                                <span
+                                <!-- <span
                                     v-if="card.promotype != ''"
                                     class="sub header"
                                     >≪{{ card.promotype }}≫</span
-                                >
+                                > -->
+                            </td>
+                            <td>
+                                <select v-model="card.promotype">
+                                    <option value="">通常版</option>
+                                    <option value="拡張アート版">拡張アート版</option>
+                                    <option value="ボーダレス">ボーダレス</option>
+                                    <option value="「プロファイル」ボーダーレス">「プロファイル」ボーダーレス</option>
+                                    <option value="「フレームブレイク」ボーダーレス">「フレームブレイク」ボーダーレス</option>
+                                    <option value="旧枠">旧枠</option>
+                                    <option value="コンセプトアート">コンセプトアート</option>
+                                    <option value="フルアート">フルアート</option>
+                                </select>
                             </td>
                             <td>
                                 {{ card.en_name }}

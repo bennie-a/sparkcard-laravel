@@ -81,14 +81,16 @@
                         <label for="promotype">プロモタイプ</label>
                         <select class="ui dropdown" v-model="promotype">
                             <option value="">通常</option>
+                            <option value="ボーダーレス">ボーダーレス</option>
+                            <option value="「プロファイル」ボーダーレス">「プロファイル」ボーダーレス</option>
+                            <option value="「フレームブレイク」ボーダーレス">「フレームブレイク」ボーダーレス</option>
+                            <option value="旧枠">旧枠</option>
                             <option value="フルアート">フルアート</option>
                             <option value="プレリリース">プレリリース</option>
-                            <option value="「手配書」ショーケース">「手配書」ショーケース</option>
                             <option value="トーナメント景品">
                                 トーナメント景品
                             </option>
                             <option value="プロモカード">プロモカード</option>
-                            <option value="ボーダレス">ボーダレス</option>
                             <option value="Bring-a-Friend">
                                 Bring-a-Friend
                             </option>

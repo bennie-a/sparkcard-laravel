@@ -8,6 +8,8 @@ use App\Services\Stock\ShippingLogService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Constant\StockpileHeader as Header;
+
 
 /**
  * 出荷ログAPI
@@ -46,7 +48,9 @@ class ShippingLogController extends Controller
      * @return Response
      */
     public function index(ShiptLogRequest $request) {
-        return response('検索完了', Response::HTTP_OK);
+        $detail = $request->only([Header::BUYER, Header::SHIPPING_DATE]);
+        $result = $this->service->fetch($detail);
+        return response()->json($result, Response::HTTP_OK);
     }
 
     /**

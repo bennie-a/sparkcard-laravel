@@ -48,7 +48,7 @@ class TransformCard extends JsonCard {
      * @return boolean
      */
     public function isExclude() {
-        return $this->side() !== "a";
+        return strcmp($this->side(), "a") != 0;
     }
 }
 ?>

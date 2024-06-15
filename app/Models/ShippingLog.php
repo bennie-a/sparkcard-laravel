@@ -36,7 +36,12 @@ class ShippingLog extends Model
                                     ->join("expansion as e", 'e.notion_id', '=', 'c.exp_id')
                                     ->join("foiltype as f", "f.id", '=', 'c.foiltype_id')
                                                 ->where("slog.order_id", $orderId)->get();
+    }
 
+    public static function fetch() {
+        return ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
+        selectRaw('count(order_id) as item_count, sum(total_price) as total_price')->orderBy('shipping_date', 'desc')
+            ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->limit(10)->get();
     }
 
     public function getShippingDateAttribute($value) {

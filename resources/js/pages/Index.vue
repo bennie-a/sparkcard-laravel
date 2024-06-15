@@ -198,12 +198,12 @@ export default {
             <div class="two wide column field">
                 <label>色</label>
                 <select v-model="color" class="ui dropdown">
-                    <option value="" />
-                    <option value="R">赤</option>
+                    <option value=""></option>
                     <option value="W">白</option>
-                    <option value="B">黒</option>
-                    <option value="G">緑</option>
                     <option value="U">青</option>
+                    <option value="B">黒</option>
+                    <option value="R">赤</option>
+                    <option value="G">緑</option>
                     <option value="M">多色</option>
                     <option value="L">無色</option>
                     <option value="A">アーティファクト</option>
