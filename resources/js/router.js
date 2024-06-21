@@ -7,7 +7,6 @@ import ExpansionPage from "./pages/config/ExpansionPage.vue";
 import CardInfoCsvPage from "./pages/config/CardInfoCsvPage.vue";
 import CardinfoPage from "./pages/config/CardInfoPage.vue";
 import PostExPage from "./pages/config/PostExPage.vue";
-import Packing from "./pages/packing/Packing.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
 import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
@@ -103,14 +102,6 @@ const routes = [
 
                 }
             ]
-        },
-    },
-    {
-        path: "/packing/",
-        component: Packing,
-        meta: {
-            title: "宛名ラベル作成",
-            description: "注文情報CSVファイルから宛名ラベルを作成します。",
         },
     },
     {

@@ -28,7 +28,7 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
-            cost: 36,
+            cost: 73,
             isLoading: false,
         };
     },
@@ -88,7 +88,6 @@ export default {
                     filterd.map((f) => {
                         f.language = "JP";
                     });
-                    this.cost = 23;
                     this.$store.dispatch("setCard", filterd);
                 })
                 .catch((e) => {

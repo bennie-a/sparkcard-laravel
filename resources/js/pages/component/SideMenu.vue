@@ -77,17 +77,6 @@
                 <ul>
                     <li>
                         <router-link
-                            to="/packing/"
-                            class="nav-link"
-                            :class="{
-                                active: $route.path === '/packing/',
-                            }"
-                            ><i class="bi bi-filetype-txt"></i
-                            >宛先ラベル作成</router-link
-                        >
-                    </li>
-                    <li>
-                        <router-link
                             class="nav-link"
                             :class="{ active: $route.path === '/shipping/' }"
                             aria-current="page"

@@ -2,17 +2,17 @@
 import shop from "../component/ShopTag.vue";
 import scdatepicker from "../component/ScDatePicker.vue";
 import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
 import Loading from "vue-loading-overlay";
 
 const shippingDate = ref(new Date());
-const orderId = "order_h4eKcB8RCjyejCthfphH2K";
-const orderId2 = "C197D909A9CFF5C4";
 const router = useRouter();
 
+const buyer = "";
 const result = ref([]);
 const isLoading = ref(false);
+const today = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
 
 const fetch =  async () => {
     isLoading.value = true;
@@ -42,6 +42,11 @@ const handleupdate = (date) => {
 onMounted(async() => {
     await fetch();
 });
+
+// 発送日が今日かどうか判定する。
+const isToday = (date) => {
+    return today === date;
+};
 </script>
 <template>
         <article class="mt-1 ui form segment">
@@ -91,7 +96,7 @@ onMounted(async() => {
                     </h3>
                     </td>
                     <td><i class="bi bi-currency-yen"></i>{{ r.total_price }}</td>
-                    <td>{{ r.shipping_date }}</td>
+                    <td :class="[isToday(r.shipping_date) ? 'positive': '', isToday(r.shipping_date)?'tobold':'']">{{ r.shipping_date }}</td>
                     <td class="one wide center aligned">{{r.item_count}}点</td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage(r.order_id)"><i class="bi bi-chevron-double-right"></i></a>
@@ -112,7 +117,9 @@ onMounted(async() => {
     <loading
          :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
-
 </template>
-<style>
+<style scoped>
+.tobold {
+    font-weight: bold;
+}
 </style>

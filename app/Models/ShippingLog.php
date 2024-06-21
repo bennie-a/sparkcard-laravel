@@ -41,7 +41,7 @@ class ShippingLog extends Model
     public static function fetch() {
         return ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
         selectRaw('count(order_id) as item_count, sum(total_price) as total_price')->orderBy('shipping_date', 'desc')
-            ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->limit(10)->get();
+            ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->limit(13)->get();
     }
 
     public function getShippingDateAttribute($value) {
