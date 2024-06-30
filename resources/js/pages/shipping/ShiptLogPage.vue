@@ -2,27 +2,38 @@
 import shop from "../component/ShopTag.vue";
 import scdatepicker from "../component/ScDatePicker.vue";
 import { useRouter } from "vue-router";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, reactive } from "vue";
 import axios from 'axios';
 import Loading from "vue-loading-overlay";
+import paginate from "vuejs-paginate-next";
 
 const shippingDate = ref(new Date());
 const router = useRouter();
 
 const buyer = "";
-const result = ref([]);
+const result = reactive([]);
 const isLoading = ref(false);
 const today = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
+const lastPage = ref(0);
+
+const currentPage = reactive([]);
+const resultCount = ref(0);
+
+const perPage = ref(10);
 
 const fetch =  async () => {
     isLoading.value = true;
    await axios.get('/api/shipping/')
                             .then((response) => {
                                 result.value = response.data;
+                                resultCount.value = result.value.length;
                             })
                             .catch()
                             .finally(() => {
                                 isLoading.value = false;
+                                if (result.value.length != 0) {
+                                    clickCallback(1);
+                                }
                             });    
 };
 
@@ -39,8 +50,22 @@ const handleupdate = (date) => {
     shippingDate.value = date;
 }
 
+const clickCallback = (pageNum) => {
+    console.log(pageNum);
+    let current = pageNum * perPage.value;
+    let start = current - perPage.value;
+
+    currentPage.value = result.value.slice(start, current);
+}
+
+// paginationのページ数を算出する。
+const pageCount = () => {
+    lastPage.value = Math.ceil(result.value.length / perPage.value);
+}
+
 onMounted(async() => {
     await fetch();
+    pageCount();
 });
 
 // 発送日が今日かどうか判定する。
@@ -73,7 +98,7 @@ const isToday = (date) => {
     </article>
     <article class="mt-2">
         <h2 class="ui medium dividing header">
-            件数：1件
+            件数：{{resultCount}}件
         </h2>
         <table class="ui striped table">
             <thead>
@@ -88,9 +113,11 @@ const isToday = (date) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(r, index) in result" :key="index">
+                <tr v-for="(r, index) in currentPage.value" :key="index">
                     <td>{{r.order_id}}</td>
-                    <td class=" center aligned"><shop :orderId="r.order_id"/></td>
+                    <td class=" center aligned">
+                        <shop :orderId="r.order_id"/>
+                    </td>
                     <td><h3 class="ui header">{{ r.name }}
                         <span class="sub header">〒{{ r.zip_code }} {{ r.address }}</span>
                     </h3>
@@ -107,7 +134,20 @@ const isToday = (date) => {
                 <tr>
                     <th colspan="10">
                         <div class="right aligned">
-                            <pagination/>
+                            <paginate
+                                v-model="result"
+                                :page-count="lastPage"
+                                :click-handler="clickCallback"
+                                :prev-text="'<'"
+                                :next-text="'>'"
+                                :page-range="3"
+                                 :margin-pages="2"
+                                :container-class="'ui pagination menu'"
+                                :page-class="'item'"
+                                :prev-class="'item'"
+                                :next-class="'item'"
+                            >
+    </paginate>
                         </div>
                     </th>
                 </tr>
@@ -121,5 +161,18 @@ const isToday = (date) => {
 <style scoped>
 .tobold {
     font-weight: bold;
+}
+
+/* Write your own CSS for pagination */
+.pagination.menu {
+    padding-left: 0;
+}
+
+.pagination.menu .item {
+    cursor: pointer;
+}
+
+a.page-link {
+    cursor: pointer  !important;
 }
 </style>
