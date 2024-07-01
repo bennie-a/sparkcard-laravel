@@ -2,24 +2,21 @@
 import shop from "../component/ShopTag.vue";
 import scdatepicker from "../component/ScDatePicker.vue";
 import { useRouter } from "vue-router";
-import { ref, onMounted, computed, reactive } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import axios from 'axios';
 import Loading from "vue-loading-overlay";
-import paginate from "vuejs-paginate-next";
+import pglist from "../component/PgList.vue";
 
 const shippingDate = ref(new Date());
 const router = useRouter();
-
 const buyer = "";
-const result = reactive([]);
+let result = reactive([]);
 const isLoading = ref(false);
 const today = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
-const lastPage = ref(0);
-
-const currentPage = reactive([]);
+const currentList = reactive([]);
 const resultCount = ref(0);
 
-const perPage = ref(10);
+const pglistRef = ref();
 
 const fetch =  async () => {
     isLoading.value = true;
@@ -31,9 +28,6 @@ const fetch =  async () => {
                             .catch()
                             .finally(() => {
                                 isLoading.value = false;
-                                if (result.value.length != 0) {
-                                    clickCallback(1);
-                                }
                             });    
 };
 
@@ -50,28 +44,33 @@ const handleupdate = (date) => {
     shippingDate.value = date;
 }
 
-const clickCallback = (pageNum) => {
-    console.log(pageNum);
-    let current = pageNum * perPage.value;
-    let start = current - perPage.value;
+// const clickCallback = (pageNum) => {
+//     console.log(pageNum);
+//     let current = pageNum * perPage.value;
+//     let start = current - perPage.value;
 
-    currentPage.value = result.value.slice(start, current);
-}
+//     currentPage.value = result.value.slice(start, current);
+// }
 
-// paginationのページ数を算出する。
-const pageCount = () => {
-    lastPage.value = Math.ceil(result.value.length / perPage.value);
-}
+// // paginationのページ数を算出する。
+// const pageCount = () => {
+//     lastPage.value = Math.ceil(result.value.length / perPage.value);
+//     pglistRef.value.loadPage();
+// }
 
 onMounted(async() => {
     await fetch();
-    pageCount();
 });
 
 // 発送日が今日かどうか判定する。
 const isToday = (date) => {
     return today === date;
 };
+
+// pglistから送られた1ページあたりの結果を取得する。
+const current = (data) => {
+    currentList.value = data.response;
+}
 </script>
 <template>
         <article class="mt-1 ui form segment">
@@ -89,7 +88,7 @@ const isToday = (date) => {
         </div>
         <button
             id="search"
-            :class="{ disabled: cardname == '' && setname == '' }"
+            :class="{ disabled: buyer == '' }"
                 class="ui button teal"
                 @click="search"
             >
@@ -113,7 +112,7 @@ const isToday = (date) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(r, index) in currentPage.value" :key="index">
+                <tr v-for="(r, index) in currentList.value" :key="index">
                     <td>{{r.order_id}}</td>
                     <td class=" center aligned">
                         <shop :orderId="r.order_id"/>
@@ -134,7 +133,8 @@ const isToday = (date) => {
                 <tr>
                     <th colspan="10">
                         <div class="right aligned">
-                            <paginate
+                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+                            <!-- <paginate
                                 v-model="result"
                                 :page-count="lastPage"
                                 :click-handler="clickCallback"
@@ -146,8 +146,9 @@ const isToday = (date) => {
                                 :page-class="'item'"
                                 :prev-class="'item'"
                                 :next-class="'item'"
+                                :page-link-class="'page-link'"
                             >
-    </paginate>
+                           </paginate> -->
                         </div>
                     </th>
                 </tr>
@@ -161,18 +162,5 @@ const isToday = (date) => {
 <style scoped>
 .tobold {
     font-weight: bold;
-}
-
-/* Write your own CSS for pagination */
-.pagination.menu {
-    padding-left: 0;
-}
-
-.pagination.menu .item {
-    cursor: pointer;
-}
-
-a.page-link {
-    cursor: pointer  !important;
 }
 </style>
