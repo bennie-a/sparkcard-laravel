@@ -7,7 +7,9 @@
         emit('loadPage', { 'response': currentList.value });
     }
 
+    // 現在表示されているページ数
     const currentPage = ref(1);
+    // 最後のページ数
     const lastPage = ref(0);
     const perPage = ref(10);
 
@@ -51,10 +53,14 @@
         :prev-class="'item'"
         :next-class="'item'"
         :page-link-class="'page-link'"
+        first-last-button
+        first-button-text="最初へ"
+        last-button-text="最後へ"
+        v-if="lastPage.value != 0"
     >
     </paginate>
 </template>
-<style scoped>
+<style>
 /* Write your own CSS for pagination */
 .pagination.menu {
     padding-left: 0;
@@ -64,7 +70,10 @@
     cursor: pointer;
 }
 
-a.page-link:hover {
-    cursor: pointer  !important;
+.page-link {
+    display: block;
+}
+.page-link:hover {
+    cursor: pointer;
 }
 </style>

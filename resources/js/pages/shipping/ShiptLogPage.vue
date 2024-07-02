@@ -44,20 +44,6 @@ const handleupdate = (date) => {
     shippingDate.value = date;
 }
 
-// const clickCallback = (pageNum) => {
-//     console.log(pageNum);
-//     let current = pageNum * perPage.value;
-//     let start = current - perPage.value;
-
-//     currentPage.value = result.value.slice(start, current);
-// }
-
-// // paginationのページ数を算出する。
-// const pageCount = () => {
-//     lastPage.value = Math.ceil(result.value.length / perPage.value);
-//     pglistRef.value.loadPage();
-// }
-
 onMounted(async() => {
     await fetch();
 });
@@ -95,7 +81,7 @@ const current = (data) => {
             検索
             </button>
     </article>
-    <article class="mt-2">
+    <article class="mt-2" v-if="resultCount.value != 0">
         <h2 class="ui medium dividing header">
             件数：{{resultCount}}件
         </h2>
