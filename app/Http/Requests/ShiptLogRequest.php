@@ -26,7 +26,7 @@ class ShiptLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            Header::BUYER => 'string',
+            Header::BUYER => 'nullable',
             Header::SHIPPING_DATE => 'date | before_or_equal:today',
         ];
     }

@@ -78,7 +78,7 @@ class ShippingLogService extends AbstractSmsService{
     }
 
     public function fetch(array $details) {
-        return ShippingLog::fetch();
+        return ShippingLog::fetch($details);
     }
 
     /**

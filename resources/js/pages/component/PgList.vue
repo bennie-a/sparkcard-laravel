@@ -32,10 +32,10 @@
     }
 
     watch(() => list.value, () => {
-        if (lastPage.value === 0) {
-            pageCount();
-            clickCallback(currentPage.value);
-        }
+        pageCount();
+        clickCallback(currentPage.value);
+        // if (lastPage.value === 0) {
+        // }
     });
 
 </script>

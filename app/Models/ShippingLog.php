@@ -38,9 +38,13 @@ class ShippingLog extends Model
                                                 ->where("slog.order_id", $orderId)->get();
     }
 
-    public static function fetch() {
+    public static function fetch($details) {
+        $buyer = $details[Header::BUYER];
+        $pat = '%' . addcslashes($buyer, '%_\\') . '%';
+        $shiptDate = $details[Header::SHIPPING_DATE];
         return ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
-        selectRaw('count(order_id) as item_count, sum(total_price) as total_price')->orderBy('shipping_date', 'desc')
+        selectRaw('count(order_id) as item_count, sum(total_price) as total_price')->
+        where('name', 'LIKE', $pat)->whereDate(Header::SHIPPING_DATE, $shiptDate)->orderBy('shipping_date', 'desc')
             ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->limit(22)->get();
     }
 

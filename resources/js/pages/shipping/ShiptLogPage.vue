@@ -13,6 +13,7 @@ const buyer = "";
 let result = reactive([]);
 const isLoading = ref(false);
 const today = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
+let shippingStartDate = new Date();
 const currentList = reactive([]);
 const resultCount = ref(0);
 
@@ -20,12 +21,21 @@ const pglistRef = ref();
 
 const fetch =  async () => {
     isLoading.value = true;
-   await axios.get('/api/shipping/')
+    const query = {
+                params: {
+                    "buyer_name": buyer,
+                    "shipping_date": shippingStartDate.toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" }),
+                },
+            };
+   await axios.get('/api/shipping/', query)
                             .then((response) => {
                                 result.value = response.data;
                                 resultCount.value = result.value.length;
                             })
-                            .catch()
+                            .catch((e) => {
+                                console.error(e);
+                                isLoading.value = false;
+                            })
                             .finally(() => {
                                 isLoading.value = false;
                             });    
@@ -40,9 +50,13 @@ const toDssPage = (orderId) => {
 }
 
 // SCDatePickerで選択した日付を設定する。
-const handleupdate = (date) => {
-    shippingDate.value = date;
+const handleStartDate = (date) => {
+    shippingStartDate = date;
 }
+
+// const handleEndDate = (date) => {
+//     shippingEndDate.value = date;
+// }
 
 onMounted(async() => {
     await fetch();
@@ -66,17 +80,22 @@ const current = (data) => {
                 <input v-model="buyer" type="text">
             </div>
             <div class="three wide field">
-                <label for="">発送日</label>
+                <label for="">発送日(開始)</label>
                 <div>
-                    <scdatepicker :selectedDate="shippingDate" @update="handleupdate"/>
+                    <scdatepicker :selectedDate="shippingStartDate" @update="handleStartDate"/>
                 </div>
             </div>
+            <!-- <div class="three wide field">
+                <label for="">発送日(終了)</label>
+                <div>
+                    <scdatepicker :selectedDate="shippingEndDate" @update="handleEndDate"/>
+                </div>
+            </div> -->
         </div>
         <button
             id="search"
-            :class="{ disabled: buyer == '' }"
                 class="ui button teal"
-                @click="search"
+                @click="fetch"
             >
             検索
             </button>

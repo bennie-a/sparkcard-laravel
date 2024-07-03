@@ -6,6 +6,7 @@
         :enable-time-picker="false"
         :format="dateFormat"
         @update:model-value="handleUpdate"
+        auto-apply
     />
 </template>
 <script>
