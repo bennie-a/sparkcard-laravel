@@ -7,7 +7,8 @@ import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
 import FoilTag from "./component/FoilTag.vue";
 import ImageModal from "./component/ImageModal.vue";
-import ScDatePicker from "./component/ScDatePicker.vue";
+import SCDatePicker from "./component/SCDatePicker.vue";
+import PgList from "./component/PgList.vue";
 
 export default {
     components: {
@@ -17,8 +18,8 @@ export default {
         ModalButton: ModalButton,
         foiltag: FoilTag,
         "image-modal": ImageModal,
-        scdatepicker:ScDatePicker
-
+        scdatepicker:SCDatePicker,
+        pglist:PgList
     },
     data() {
         return {

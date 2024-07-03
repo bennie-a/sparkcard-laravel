@@ -1,6 +1,6 @@
 <script setup>
 import shop from "../component/ShopTag.vue";
-import scdatepicker from "../component/ScDatePicker.vue";
+import scdatepicker from "../component/SCDatePicker.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import axios from 'axios';
@@ -81,7 +81,7 @@ const current = (data) => {
             検索
             </button>
     </article>
-    <article class="mt-2" v-if="resultCount.value != 0">
+    <article class="mt-2" v-show="resultCount != 0">
         <h2 class="ui medium dividing header">
             件数：{{resultCount}}件
         </h2>
@@ -120,21 +120,6 @@ const current = (data) => {
                     <th colspan="10">
                         <div class="right aligned">
                             <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
-                            <!-- <paginate
-                                v-model="result"
-                                :page-count="lastPage"
-                                :click-handler="clickCallback"
-                                :prev-text="'<'"
-                                :next-text="'>'"
-                                :page-range="3"
-                                 :margin-pages="2"
-                                :container-class="'ui pagination menu'"
-                                :page-class="'item'"
-                                :prev-class="'item'"
-                                :next-class="'item'"
-                                :page-link-class="'page-link'"
-                            >
-                           </paginate> -->
                         </div>
                     </th>
                 </tr>
