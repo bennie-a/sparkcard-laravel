@@ -74,7 +74,7 @@ export default {
             </div>
 
             <div class="four wide field">
-                <label for="">セット名()</label>
+                <label for="">セット名(ex:ローウィン)</label>
                 <div class="ui input">
                     <input v-model="setname" type="text">
                 </div>

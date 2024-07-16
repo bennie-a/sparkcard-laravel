@@ -51,6 +51,7 @@ class ShippingLogController extends Controller
         $detail = $request->only([Header::BUYER, Header::SHIPPING_DATE]);
         $result = $this->service->fetch($detail);
         logger()->debug($request);
+        logger()->info($result);
         return response()->json($result, Response::HTTP_OK);
     }
 

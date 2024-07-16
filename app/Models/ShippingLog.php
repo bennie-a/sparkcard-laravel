@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Libs\MtgJsonUtil;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
@@ -40,12 +41,21 @@ class ShippingLog extends Model
 
     public static function fetch($details) {
         $buyer = $details[Header::BUYER];
-        $pat = '%' . addcslashes($buyer, '%_\\') . '%';
-        $shiptDate = $details[Header::SHIPPING_DATE];
-        return ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
-        selectRaw('count(order_id) as item_count, sum(total_price) as total_price')->
-        where('name', 'LIKE', $pat)->whereDate(Header::SHIPPING_DATE, $shiptDate)->orderBy('shipping_date', 'desc')
-            ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->limit(22)->get();
+        $shiptDate = null;
+        if (MtgJsonUtil::hasKey(Header::SHIPPING_DATE, $details)) {
+            $shiptDate = $details[Header::SHIPPING_DATE];
+        }
+        $query = ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
+        selectRaw('count(order_id) as item_count, sum(total_price) as total_price');
+        if ($buyer != null) {
+            $pat = '%' . addcslashes($buyer, '%_\\') . '%';
+            $query = $query->where('name', 'LIKE', $pat);
+        }
+        if ($shiptDate != null) {
+            $query = $query->whereDate(Header::SHIPPING_DATE, $shiptDate);
+        }
+        return $query->orderBy('shipping_date', 'desc')
+            ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->get();
     }
 
     public function getShippingDateAttribute($value) {

@@ -9,10 +9,10 @@ import pglist from "../component/PgList.vue";
 
 const shippingDate = ref(new Date());
 const router = useRouter();
-const buyer = "";
+const buyer = ref("");
 let result = reactive([]);
 const isLoading = ref(false);
-const today = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
+const today = new Date();
 let shippingStartDate = new Date();
 const currentList = reactive([]);
 const resultCount = ref(0);
@@ -23,8 +23,8 @@ const fetch =  async () => {
     isLoading.value = true;
     const query = {
                 params: {
-                    "buyer_name": buyer,
-                    "shipping_date": shippingStartDate.toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" }),
+                    "buyer_name": buyer.value,
+                    "shipping_date": toDateString(shippingStartDate),
                 },
             };
    await axios.get('/api/shipping/', query)
@@ -71,6 +71,13 @@ const isToday = (date) => {
 const current = (data) => {
     currentList.value = data.response;
 }
+
+const toDateString = (date) => {
+    if (date != null) {
+        return date.toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
+    }
+    return null;
+}
 </script>
 <template>
         <article class="mt-1 ui form segment">
@@ -85,6 +92,7 @@ const current = (data) => {
                     <scdatepicker :selectedDate="shippingStartDate" @update="handleStartDate"/>
                 </div>
             </div>
+            {{ buyer }}
             <!-- <div class="three wide field">
                 <label for="">発送日(終了)</label>
                 <div>
