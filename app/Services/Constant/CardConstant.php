@@ -34,4 +34,6 @@ class CardConstant {
     const MARKET_PRICE = 'market_price';
 
     const PROMOTYPES = 'promoTypes';
+
+    const FRAME_EFFECT = 'extendedart';
 }

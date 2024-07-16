@@ -1,9 +1,6 @@
 <template>
     <section class="ui grids">
         <message-area></message-area>
-        <router-link to="/config/expansion"
-            ><i class="bi bi-arrow-left"></i>一覧に戻る</router-link
-        >
         <div class="mt-1 content ui form">
             <div class="two fields">
                 <div class="required six wide field">
@@ -19,7 +16,7 @@
                 <div class="required four wide field">
                     <label for="">ブロック</label>
                     <select v-model="block" class="ui search dropdown">
-                        <option>サンダー・ジャンクション</option>
+                        <option>ブルームバロウ</option>
                         <option>ミラディン/ファイレクシア</option>
                         <option>神河</option>
                         <option>ドミナリア</option>

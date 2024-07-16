@@ -5,9 +5,10 @@ import MessageArea from "./component/MessageArea.vue";
 import { AxiosTask } from "../component/AxiosTask";
 import ListPagination from "./component/ListPagination.vue";
 import ModalButton from "./component/ModalButton.vue";
-import Datepicker from "@vuepic/vue-datepicker";
 import FoilTag from "./component/FoilTag.vue";
 import ImageModal from "./component/ImageModal.vue";
+import SCDatePicker from "./component/SCDatePicker.vue";
+import PgList from "./component/PgList.vue";
 
 export default {
     components: {
@@ -15,9 +16,10 @@ export default {
         "message-area": MessageArea,
         pagination: ListPagination,
         ModalButton: ModalButton,
-        datepicker: Datepicker,
         foiltag: FoilTag,
         "image-modal": ImageModal,
+        scdatepicker:SCDatePicker,
+        pglist:PgList
     },
     data() {
         return {
@@ -27,7 +29,7 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
-            cost: 36,
+            cost: 73,
             isLoading: false,
         };
     },
@@ -87,7 +89,6 @@ export default {
                     filterd.map((f) => {
                         f.language = "JP";
                     });
-                    this.cost = 23;
                     this.$store.dispatch("setCard", filterd);
                 })
                 .catch((e) => {
@@ -160,13 +161,10 @@ export default {
             }
             this.$store.dispatch("setLoad", false);
         },
-        dateFormat: function (date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
-            return `${year}/${month}/${day}`;
-        },
-    },
+        handleupdate:function(value) {
+            this.arrivalDate = value;
+        }
+    }
 };
 </script>
 
@@ -200,12 +198,12 @@ export default {
             <div class="two wide column field">
                 <label>色</label>
                 <select v-model="color" class="ui dropdown">
-                    <option value="" />
-                    <option value="R">赤</option>
+                    <option value=""></option>
                     <option value="W">白</option>
-                    <option value="B">黒</option>
-                    <option value="G">緑</option>
                     <option value="U">青</option>
+                    <option value="B">黒</option>
+                    <option value="R">赤</option>
+                    <option value="G">緑</option>
                     <option value="M">多色</option>
                     <option value="L">無色</option>
                     <option value="A">アーティファクト</option>
@@ -254,13 +252,14 @@ export default {
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
-                    <datepicker
+                    <scdatepicker :selectedDate="arrivalDate" @update="handleupdate"/>
+                    <!-- <datepicker
                         v-model="arrivalDate"
                         input-class-name="dp_custom_input"
                         locale="jp"
                         :enable-time-picker="false"
                         :format="dateFormat"
-                    />
+                    /> -->
                 </div>
                 <div class="two wide column field">
                     <label>原価</label>

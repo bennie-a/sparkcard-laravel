@@ -21,7 +21,6 @@ use Illuminate\Http\Response as HttpResponse;
  * 出荷ログ機能のサービスクラス
  */
 class ShippingLogService extends AbstractSmsService{
-
     /**
      * 出荷ログ用のCSV読み込みクラスを取得する。
      * @see CsvReader::csvReader
@@ -78,5 +77,32 @@ class ShippingLogService extends AbstractSmsService{
         return new ShippingRow($index, $row);
     }
 
+    public function fetch(array $details) {
+        return ShippingLog::fetch($details);
+    }
+
+    /**
+     * 出荷IDに該当する出荷情報を取得する。
+     *
+     * @param string $orderId
+     * @return array
+     */
+    public function show(string $orderId) {
+        $list = ShippingLog::fetchByOrderId($orderId);
+        $items = $list->map(function($slog) {
+                return ["id" => $slog["stock_id"], "cardname" => $slog["cardname"], Header::SETNAME => $slog[Header::SETNAME],
+                             Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,
+                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"], 'foil' => ['isFoil' => $slog['isFoil'], 'foilname' => $slog['foilname']],
+                            'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price];
+        });
+        // $items = array_map(function($log) {
+        // }, $list);
+        $slog = $list[0];
+        $info = [Header::ORDER_ID => $slog->order_id, Header::BUYER => $slog[Header::BUYER],
+                        Header::SHIPPING_DATE => $slog->shipping_date,  'zipcode' => '〒'.$slog->zip, 
+                        'address' => $slog->address, 'items' => $items->toArray()];
+        return $info;
+        // $log = ShippingLog::find($id);
+    }
 
 }

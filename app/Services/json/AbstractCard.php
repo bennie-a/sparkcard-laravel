@@ -119,11 +119,15 @@ abstract class AbstractCard implements CardInfoInterface {
             return $promo;
         }
         
-        // boosterfanの場合はframeeffectを取得する。
+        // boosterfunの場合はframeeffectを取得する。
         $frame = $this->frameEffects();
         if ($frame != $booster) {
             return $frame;
-        }        
+        }
+        $version = $this->frameVersion();
+        if ($version === '1997') {
+            return 'oldframe';
+        }
         $border = $this->borderColor();
         if ($border == 'borderless') {
             return $border;
@@ -166,6 +170,15 @@ abstract class AbstractCard implements CardInfoInterface {
             return 'boosterfun';
         }
         return $filterd;
+    }
+
+    /**
+     * カードの枠のバージョンを取得する。
+     *
+     * @return string
+     */
+    public function frameVersion() {
+        return $this->getJson()['frameVersion'];
     }
 
     public function borderColor() {

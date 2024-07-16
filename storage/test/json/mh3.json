@@ -1,0 +1,458 @@
+{
+    "data": {
+        "booster": {},
+        "cards":[
+          {
+            "artist": "Magali Villeneuve",
+            "artistIds": ["9e6a55ae-be4d-4c23-a2a5-135737ffd879"],
+            "availability": ["arena", "mtgo", "paper"],
+            "boosterTypes": ["default"],
+            "borderColor": "black",
+            "colorIdentity": ["G", "U"],
+            "colors": ["U"],
+            "convertedManaCost": 1.0,
+            "edhrecRank": 22756,
+            "faceConvertedManaCost": 1.0,
+            "faceManaValue": 1.0,
+            "faceName": "Tamiyo, Inquisitive Student",
+            "finishes": ["nonfoil", "foil"],
+            "foreignData": [
+              {
+                "language": "Japanese",
+                "name": "知りたがりの学徒、タミヨウ"
+              }
+            ],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "identifiers": {
+              "cardKingdomFoilId": "297020",
+              "cardKingdomId": "296138",
+              "mcmId": "771207",
+              "mcmMetaId": "434956",
+              "mtgjsonV4Id": "5a8a7a90-87d7-5f39-89ab-8e4c6ebd0c46",
+              "scryfallId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
+              "scryfallIllustrationId": "8b89f6b6-b648-41a3-b8b1-1bf2806a2d2b",
+              "scryfallOracleId": "1ed9e351-0000-4b75-8ecb-d15bd88df68a",
+              "tcgplayerProductId": "552333"
+            },
+            "keywords": ["Flying", "Investigate", "Transform"],
+            "language": "English",
+            "layout": "transform",
+            "leadershipSkills": {
+              "brawl": false,
+              "commander": true,
+              "oathbreaker": false
+            },
+            "legalities": {},
+            "manaCost": "{U}",
+            "manaValue": 1.0,
+            "name": "Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar",
+            "number": "242",
+            "otherFaceIds": ["36f3308d-943e-544c-a920-258b4a90d311"],
+            "power": "0",
+            "printings": ["MH3"],
+            "purchaseUrls": {
+              "cardKingdom": "https://mtgjson.com/links/0eab0aa9acaa00b4",
+              "cardKingdomFoil": "https://mtgjson.com/links/eca8780296762185",
+              "cardmarket": "https://mtgjson.com/links/7d17e167dbb450aa",
+              "tcgplayer": "https://mtgjson.com/links/1f49a3840bdf75ee"
+            },
+            "rarity": "mythic",
+            "securityStamp": "oval",
+            "setCode": "MH3",
+            "side": "a",
+            "subtypes": ["Moonfolk", "Wizard"],
+            "supertypes": ["Legendary"],
+            "text": "Flying\nWhenever Tamiyo, Inquisitive Student attacks, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this artifact: Draw a card.\")\nWhen you draw your third card in a turn, exile Tamiyo, then return her to the battlefield transformed under her owner's control.",
+            "toughness": "3",
+            "type": "Legendary Creature — Moonfolk Wizard",
+            "types": ["Creature"],
+            "uuid": "614f1d54-6bc9-5578-a9c3-d4d446b4a9ab",
+            "variations": [
+              "d7bd8437-9999-5615-b6bc-9a64f37a5c42",
+              "46a667e4-ea37-53e8-88fd-7896307d1a6d"
+            ]
+          },
+          {
+            "artist": "Magali Villeneuve",
+            "artistIds": ["9e6a55ae-be4d-4c23-a2a5-135737ffd879"],
+            "availability": ["arena", "mtgo", "paper"],
+            "boosterTypes": ["default"],
+            "borderColor": "black",
+            "colorIdentity": ["G", "U"],
+            "colorIndicator": ["G", "U"],
+            "colors": ["G", "U"],
+            "convertedManaCost": 1.0,
+            "edhrecRank": 22756,
+            "faceConvertedManaCost": 0.0,
+            "faceManaValue": 0.0,
+            "faceName": "Tamiyo, Seasoned Scholar",
+            "finishes": ["nonfoil", "foil"],
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "identifiers": {
+              "mcmId": "771207",
+              "mcmMetaId": "434956",
+              "mtgjsonV4Id": "eb966327-6a6a-538b-9a5c-b1ba1fb86c7e",
+              "scryfallId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
+              "scryfallIllustrationId": "5b329d90-24a6-4733-878f-aa3e853e1dd5",
+              "scryfallOracleId": "1ed9e351-0000-4b75-8ecb-d15bd88df68a",
+              "tcgplayerProductId": "552333"
+            },
+            "language": "English",
+            "layout": "transform",
+            "leadershipSkills": {
+              "brawl": false,
+              "commander": false,
+              "oathbreaker": true
+            },
+            "legalities": {},
+            "loyalty": "2",
+            "manaValue": 1.0,
+            "name": "Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar",
+            "number": "242",
+            "otherFaceIds": ["614f1d54-6bc9-5578-a9c3-d4d446b4a9ab"],
+            "printings": ["MH3"],
+            "purchaseUrls": {
+              "cardmarket": "https://mtgjson.com/links/8847e23b3d28bc5d",
+              "tcgplayer": "https://mtgjson.com/links/3c1ca178b9674d67"
+            },
+            "rarity": "mythic",
+            "securityStamp": "oval",
+            "setCode": "MH3",
+            "side": "b",
+            "subtypes": ["Tamiyo"],
+            "supertypes": ["Legendary"],
+            "text": "[+2]: Until your next turn, whenever a creature attacks you or a planeswalker you control, it gets -1/-0 until end of turn.\n[−3]: Return target instant or sorcery card from your graveyard to your hand. If it's a green card, add one mana of any color.\n[−7]: Draw cards equal to half the number of cards in your library, rounded up. You get an emblem with \"You have no maximum hand size.\"",
+            "type": "Legendary Planeswalker — Tamiyo",
+            "types": ["Planeswalker"],
+            "uuid": "36f3308d-943e-544c-a920-258b4a90d311",
+            "variations": [
+              "d0c7070d-3d72-543c-98a0-1d5d7c41a4a4",
+              "5f9c7ee5-31b9-5bf2-8736-e1fc9de778ee"
+            ]
+          },
+            {
+                "artist": "Livia Prima",
+                "artistIds": ["0f41e561-bc26-4d85-aab6-66c384e01b74"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "borderless",
+                "colorIdentity": ["B", "R", "W"],
+                "colors": ["B", "R", "W"],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 3471,
+                "edhrecSaltiness": 1.25,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "巨大なるカーリア"
+                      }
+                ],
+                "frameEffects": ["legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                  "cardKingdomFoilId": "297301",
+                  "cardKingdomId": "296169",
+                  "mcmId": "771213",
+                  "mcmMetaId": "203334",
+                  "mtgjsonV4Id": "f667021f-4f6b-58db-94cf-f48a25451ee6",
+                  "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                  "scryfallId": "ef099f25-2b0b-4028-8490-fbc859e35f6c",
+                  "scryfallIllustrationId": "b69b4245-169d-4156-ac17-39a0cf7a6284",
+                  "scryfallOracleId": "cb8d80c9-ed58-4f2d-aa8c-c383370c7f1a",
+                  "tcgplayerProductId": "552351"
+                },
+                "isReprint": true,
+                "isStarter": true,
+                "keywords": ["Flying"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                  "brawl": false,
+                  "commander": true,
+                  "oathbreaker": false
+                },
+                "legalities": {
+                  "commander": "Legal",
+                  "duel": "Legal",
+                  "legacy": "Legal",
+                  "oathbreaker": "Legal",
+                  "vintage": "Legal"
+                },
+                "manaCost": "{1}{R}{W}{B}",
+                "manaValue": 4.0,
+                "name": "Kaalia of the Vast",
+                "number": "343",
+                "power": "2",
+                "printings": [
+                  "2X2",
+                  "2XM",
+                  "CM1",
+                  "CMA",
+                  "CMD",
+                  "MH3",
+                  "OCMD",
+                  "PRM",
+                  "PZ1"
+                ],
+                "purchaseUrls": {
+                  "cardKingdom": "https://mtgjson.com/links/1d899c0e8e45e528",
+                  "cardKingdomFoil": "https://mtgjson.com/links/889dbbdc16900f81",
+                  "cardmarket": "https://mtgjson.com/links/71b14294d11556b4",
+                  "tcgplayer": "https://mtgjson.com/links/8f8413e2e4b30e6d"
+                },
+                "promoTypes":["flamebreak"],
+                "rarity": "mythic",
+                "rulings": [
+                  {
+                    "date": "2020-08-07",
+                    "text": "Although the creature you put onto the battlefield is an attacking creature, it was never declared as an attacking creature. This means that abilities that trigger whenever a creature attacks won't trigger when it enters the battlefield attacking."
+                  },
+                  {
+                    "date": "2020-08-07",
+                    "text": "Any effects that say that the Angel, Demon, or Dragon creature can't attack (such as that of Propaganda or if the creature has defender) affect only the declaration of attackers. They won't stop the creature from entering the battlefield attacking."
+                  },
+                  {
+                    "date": "2020-08-07",
+                    "text": "If Kaalia attacks an opponent, the creature enters attacking that player even if Kaalia is somehow attacking a different player or planeswalker as its triggered ability resolves."
+                  },
+                  {
+                    "date": "2020-08-07",
+                    "text": "If the opponent Kaalia attacked is no longer in the game when its ability resolves, you may put an Angel, Demon, or Dragon creature card onto the battlefield tapped, but it won't be attacking anyone and it won't be an attacking creature."
+                  },
+                  {
+                    "date": "2020-08-07",
+                    "text": "Kaalia's ability doesn't trigger if it attacks a planeswalker."
+                  }
+                ],
+                "securityStamp": "oval",
+                "setCode": "MH3",
+                "subtypes": ["Human", "Cleric"],
+                "supertypes": ["Legendary"],
+                "text": "Flying\nWhenever Kaalia of the Vast attacks an opponent, you may put an Angel, Demon, or Dragon creature card from your hand onto the battlefield tapped and attacking that opponent.",
+                "toughness": "2",
+                "type": "Legendary Creature — Human Cleric",
+                "types": ["Creature"],
+                "uuid": "662bffaa-0bbc-56bf-a700-3929ebcbc54c",
+                "variations": [
+                  "f8ee5841-00a6-52bf-820d-a4fa29e18fe6",
+                  "bd222010-1fb4-5eb1-a280-53848c31c9e9",
+                  "19852bc3-4f46-5ba5-976b-95cd8cf95469"
+                ]
+              },
+            {
+                "artist": "Peter Diamond",
+                "artistIds": ["4479293e-f8a4-41ad-8941-5d6180d9a02b"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "borderless",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 20232,
+                "finishes": ["nonfoil", "foil"],
+                "flavorText": "\"For all his crimes, Lord Konda's greatest legacy is his daughter. I will guide her as I can.\"",
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "皇国の相談役、真珠耳"
+                      }
+                ],
+                "frameEffects": ["legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                  "cardKingdomFoilId": "296219",
+                  "cardKingdomId": "296175",
+                  "mcmId": "771181",
+                  "mcmMetaId": "434930",
+                  "mtgjsonV4Id": "e6da9995-69e8-5bdc-8d91-95829498829c",
+                  "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                  "scryfallId": "41dd6f74-a3bb-4d12-9dbe-1d0a4dde85cb",
+                  "scryfallIllustrationId": "1418a8d0-d5f8-4565-8b9b-edcae781de37",
+                  "scryfallOracleId": "9bdc1e63-1cf9-4ddb-a7d5-f2a2eb91bdfd",
+                  "tcgplayerProductId": "552372"
+                },
+                "isStarter": true,
+                "keywords": ["Lifelink"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                  "brawl": false,
+                  "commander": true,
+                  "oathbreaker": false
+                },
+                "legalities": {},
+                "manaCost": "{1}{W}{W}",
+                "manaValue": 3.0,
+                "name": "Pearl-Ear, Imperial Advisor",
+                "number": "363",
+                "power": "3",
+                "printings": ["MH3"],
+                "purchaseUrls": {
+                  "cardKingdom": "https://mtgjson.com/links/22f358d01f81ce1e",
+                  "cardKingdomFoil": "https://mtgjson.com/links/66a8c78dd9b2cf2c",
+                  "cardmarket": "https://mtgjson.com/links/2807d61b6282ce78",
+                  "tcgplayer": "https://mtgjson.com/links/c82e4af608a1ae8d"
+                },
+                "promoTypes":["profiles"],
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "MH3",
+                "subtypes": ["Fox", "Advisor"],
+                "supertypes": ["Legendary"],
+                "text": "Lifelink\nEnchantment spells you cast have affinity for Auras. (They cost {1} less to cast for each Aura you control.)\nWhenever you cast an Aura spell that targets a modified permanent you control, draw a card. (Equipment, Auras you control, and counters are modifications.)",
+                "toughness": "4",
+                "type": "Legendary Creature — Fox Advisor",
+                "types": ["Creature"],
+                "uuid": "4acb0149-3207-5843-a701-dd53b651f3f8",
+                "variations": [
+                  "4508bde5-72d3-503b-a6e0-756bc70b21a5",
+                  "3317592d-0770-5b38-9b87-01166f186269"
+                ]
+              },
+              {
+                "artist": "Mark Tedin",
+                "artistIds": ["9ee9a9cc-c09e-486f-918b-69f80cbc4188"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "borderless",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 12.0,
+                "edhrecRank": 12175,
+                "finishes": ["nonfoil", "foil"],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "再誕世界、エムラクール"
+                      }
+                ],
+                "frameEffects": ["legendary"],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                  "cardKingdomFoilId": "297268",
+                  "cardKingdomId": "295899",
+                  "mcmId": "759780",
+                  "mcmMetaId": "432031",
+                  "mtgjsonV4Id": "22dbf241-fa80-52da-89b4-10def36cb44f",
+                  "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                  "scryfallId": "de77f5c3-b027-416b-8d9c-1b96c7bd504e",
+                  "scryfallIllustrationId": "9e65bf1d-0769-4e77-ba92-e2df8944b72b",
+                  "scryfallOracleId": "33300e69-29f6-41e4-92ab-82d8b018b217",
+                  "tcgplayerProductId": "541281"
+                },
+                "isStarter": true,
+                "keywords": ["Flying", "Madness", "Protection"],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                  "brawl": false,
+                  "commander": true,
+                  "oathbreaker": false
+                },
+                "legalities": {},
+                "manaCost": "{12}",
+                "manaValue": 12.0,
+                "name": "Emrakul, the World Anew",
+                "number": "381",
+                "power": "12",
+                "printings": ["MH3"],
+                "promoTypes": ["concept"],
+                "purchaseUrls": {
+                  "cardKingdom": "https://mtgjson.com/links/cf3793fa88249e55",
+                  "cardKingdomFoil": "https://mtgjson.com/links/10ef11cb5e01231c",
+                  "cardmarket": "https://mtgjson.com/links/9fe161780d9bdda6",
+                  "tcgplayer": "https://mtgjson.com/links/f0c8b1d3b69da4a0"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "MH3",
+                "subtypes": ["Eldrazi"],
+                "supertypes": ["Legendary"],
+                "text": "When you cast this spell, gain control of all creatures target player controls.\nFlying, protection from spells and from permanents that were cast this turn\nWhen Emrakul, the World Anew leaves the battlefield, sacrifice all creatures you control.\nMadness—Pay six {C}.",
+                "toughness": "12",
+                "type": "Legendary Creature — Eldrazi",
+                "types": ["Creature"],
+                "uuid": "d34e8e6e-c9a8-5783-ad82-d4ccbf3feecd",
+                "variations": [
+                  "0ca5ef79-ca0b-5fc6-b108-2dc6f3d970d2",
+                  "14c848d0-7d9f-5257-a1ed-d17fe8851070",
+                  "9d0586da-121d-5a2c-89cd-dfda9f5b70bd",
+                  "0f0ec9f1-e34e-54c7-8c10-5d017b11aa63"
+                ]
+              },
+            {
+                "artist": "Eric Wilkerson",
+                "artistIds": ["525ec49d-a7c8-4ddc-96aa-58cf5ad5e937"],
+                "availability": ["arena", "mtgo", "paper"],
+                "borderColor": "black",
+                "colorIdentity": ["W"],
+                "colors": ["W"],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 1249,
+                "edhrecSaltiness": 0.49,
+                "finishes": ["nonfoil", "foil"],
+                "flavorText": "\"The kingdom is in peril! Who among you is brave enough to defend it?\"",
+                "foreignData": [],
+                "frameVersion": "1997",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                  "cardKingdomFoilId": "297358",
+                  "cardKingdomId": "296595",
+                  "mcmId": "772318",
+                  "mcmMetaId": "223547",
+                  "mtgjsonV4Id": "83e9869c-19ea-5613-9640-9ec2f7e43c5c",
+                  "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                  "scryfallId": "c6920d07-f406-4458-9446-209202c1d9ca",
+                  "scryfallIllustrationId": "f1558062-1ccd-4a62-96fd-ee9f7f45b38d",
+                  "scryfallOracleId": "d521a329-a53a-4962-810a-2abed80df260",
+                  "tcgplayerProductId": "552884"
+                },
+                "isReprint": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                  "commander": "Legal",
+                  "duel": "Legal",
+                  "legacy": "Legal",
+                  "oathbreaker": "Legal",
+                  "vintage": "Legal"
+                },
+                "manaCost": "{2}{W}",
+                "manaValue": 3.0,
+                "name": "Recruiter of the Guard",
+                "number": "395",
+                "power": "1",
+                "printings": ["CN2", "MH3", "PLST", "PZ2"],
+                "promoTypes": ["boosterfun"],
+                "purchaseUrls": {
+                  "cardKingdom": "https://mtgjson.com/links/5b9e64210fdd92f7",
+                  "cardKingdomFoil": "https://mtgjson.com/links/df9684afd9057828",
+                  "cardmarket": "https://mtgjson.com/links/af264ca2b75c5412",
+                  "tcgplayer": "https://mtgjson.com/links/cab602e2b17da734"
+                },
+                "rarity": "mythic",
+                "setCode": "MH3",
+                "subtypes": ["Human", "Soldier"],
+                "supertypes": [],
+                "text": "When Recruiter of the Guard enters the battlefield, you may search your library for a creature card with toughness 2 or less, reveal it, put it into your hand, then shuffle.",
+                "toughness": "1",
+                "type": "Creature — Human Soldier",
+                "types": ["Creature"],
+                "uuid": "c8928311-e2ab-53bb-b34d-13d6219a5204",
+                "variations": ["42dd85df-9c12-5389-911f-5eacec78d7a6"]
+              }
+        ],
+        "code": "MH3"
+    }
+}

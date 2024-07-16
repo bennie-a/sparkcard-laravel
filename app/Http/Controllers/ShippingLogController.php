@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShiptLogRequest;
 use App\Services\Stock\ShippingLogService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Constant\StockpileHeader as Header;
+
 
 /**
  * 出荷ログAPI
@@ -38,5 +41,29 @@ class ShippingLogController extends Controller
     }
 
     use ImportCsv;
-    
+
+    /**
+     * 入力した条件に該当する出荷情報を検索する。
+     * @param ShiptLogRequest $request
+     * @return Response
+     */
+    public function index(ShiptLogRequest $request) {
+        $detail = $request->only([Header::BUYER, Header::SHIPPING_DATE]);
+        $result = $this->service->fetch($detail);
+        logger()->debug($request);
+        logger()->info($result);
+        return response()->json($result, Response::HTTP_OK);
+    }
+
+    /**
+     * 出荷IDに該当する出荷情報を1件取得する。
+     *
+     * @param string $orderId 注文番号
+     * @return Response
+     */
+    public function show(string $orderId) {
+        $info = $this->service->show($orderId);
+        return response()->json($info, Response::HTTP_OK);
+    }
+
 }

@@ -1,3 +1,69 @@
+<script>
+import MessageArea from "../component/MessageArea.vue";
+import Loading from "vue-loading-overlay";
+import axios from "axios";
+import ListPagination from "../component/ListPagination.vue";
+import FoilTag from "../component/FoilTag.vue";
+import ConditionTag from "../component/ConditionTag.vue";
+import ImageModal from "../component/ImageModal.vue";
+
+export default {
+    components: {
+        loading: Loading,
+        "message-area": MessageArea,
+        pagination: ListPagination,
+        foiltag: FoilTag,
+        condition: ConditionTag,
+        ImageModal,
+    },
+    data() {
+        return {
+            cardname: "",
+            setname: "",
+            isLoading: false,
+            stock: [],
+        };
+    },
+    methods: {
+        async search() {
+            this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearCards");
+            let self = this;
+            self.isLoading = true;
+            console.log("start search stockpile");
+            const query = {
+                params: {
+                    card_name: this.cardname,
+                    set_name: this.setname,
+                },
+            };
+            await axios
+                .get("/api/stockpile", query)
+                .then((response) => {
+                    if (response.status != 200) {
+                        this.$store.dispatch(
+                            "message/error",
+                            "検索結果がありません。"
+                        );
+                        return;
+                    }
+                    console.log(response.status);
+                    let data = response.data;
+                    this.stock = data;
+                    this.$store.dispatch("setCard", this.stock);
+                })
+                .catch((e) => {
+                    console.error(e);
+                })
+                .finally(() => {
+                    self.isLoading = false;
+                    console.log("end search stockpile");
+                });
+        },
+    },
+};
+</script>
+
 <template>
     <message-area/>
     <article class="mt-1 ui form segment">
@@ -7,8 +73,8 @@
                 <input v-model="cardname" type="text">
             </div>
 
-            <div class="five wide field">
-                <label for="">セット名(一部)</label>
+            <div class="four wide field">
+                <label for="">セット名(ex:ローウィン)</label>
                 <div class="ui input">
                     <input v-model="setname" type="text">
                 </div>
@@ -91,69 +157,3 @@
         />
     </article>
 </template>
-
-<script>
-import MessageArea from "../component/MessageArea.vue";
-import Loading from "vue-loading-overlay";
-import axios from "axios";
-import ListPagination from "../component/ListPagination.vue";
-import FoilTag from "../component/FoilTag.vue";
-import ConditionTag from "../component/ConditionTag.vue";
-import ImageModal from "../component/ImageModal.vue";
-
-export default {
-    components: {
-        loading: Loading,
-        "message-area": MessageArea,
-        pagination: ListPagination,
-        foiltag: FoilTag,
-        condition: ConditionTag,
-        ImageModal,
-    },
-    data() {
-        return {
-            cardname: "",
-            setname: "",
-            isLoading: false,
-            stock: [],
-        };
-    },
-    methods: {
-        async search() {
-            this.$store.dispatch("message/clear");
-            this.$store.dispatch("clearCards");
-            let self = this;
-            self.isLoading = true;
-            console.log("start search stockpile");
-            const query = {
-                params: {
-                    card_name: this.cardname,
-                    set_name: this.setname,
-                },
-            };
-            await axios
-                .get("/api/stockpile", query)
-                .then((response) => {
-                    if (response.status != 200) {
-                        this.$store.dispatch(
-                            "message/error",
-                            "検索結果がありません。"
-                        );
-                        return;
-                    }
-                    console.log(response.status);
-                    let data = response.data;
-                    this.stock = data;
-                    this.$store.dispatch("setCard", this.stock);
-                })
-                .catch((e) => {
-                    console.error(e);
-                })
-                .finally(() => {
-                    self.isLoading = false;
-                    console.log("end search stockpile");
-                });
-        },
-    },
-};
-</script>

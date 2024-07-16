@@ -7,9 +7,9 @@ import ExpansionPage from "./pages/config/ExpansionPage.vue";
 import CardInfoCsvPage from "./pages/config/CardInfoCsvPage.vue";
 import CardinfoPage from "./pages/config/CardInfoPage.vue";
 import PostExPage from "./pages/config/PostExPage.vue";
-import Packing from "./pages/packing/Packing.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
-import ShippingPage from "./pages/shipping/ShippingPage.vue";
+import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
+import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -70,6 +70,12 @@ const routes = [
         meta: {
             title: "エキスパンション登録",
             description: "エキスパンションの登録・編集を行います。",
+            urls:[
+                {
+                    url:"/config/expansion",
+                    title:"エキスパンション一覧"
+                },
+            ]
         },
         prop: true,
     },
@@ -89,23 +95,37 @@ const routes = [
         meta: {
             title: "カード情報マスタ登録",
             description: "カード情報をDBに登録します。",
-        },
-    },
-    {
-        path: "/packing/",
-        component: Packing,
-        meta: {
-            title: "宛名ラベル作成",
-            description: "注文情報CSVファイルから宛名ラベルを作成します。",
+            urls:[
+                {
+                    url:"/config/expansion",
+                    title:"エキスパンション一覧"
+
+                }
+            ]
         },
     },
     {
         path: "/shipping/",
-        component:ShippingPage,
+        component:ShiptLogPage,
         meta:{
-            title:"出荷情報検索",
-            description:"出荷情報を一覧表示します。"
+            title:"出荷情報一覧",
+            description:"出荷情報を一覧表示します。",
         },
+    },
+    {
+        path:"/shipping/detail/:order_id",
+        name:'ShiptLogDss',
+        component:ShiptLogDssPage,
+        meta:{
+            title:"出荷詳細",
+            description:"",
+            urls: [
+                {
+                    url:"/shipping/",
+                    title:"出荷情報一覧"
+                },
+            ]
+        }
     }
 ];
 

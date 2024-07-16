@@ -22,8 +22,7 @@
                             :class="{ active: $route.path === '/arrival' }"
                             aria-current="page"
                             to="/arrival"
-                            ><i class="bi bi-list-task"></i
-                            >入荷ログ一覧</router-link
+                            ><i class="bi bi-search"></i>入荷ログ一覧</router-link
                         >
                     </li>
                 </ul>
@@ -39,8 +38,7 @@
                             :class="{ active: $route.path === '/stockpile/' }"
                             aria-current="page"
                             to="/stockpile/"
-                            ><i class="bi bi-list-task"></i
-                            >在庫情報検索</router-link
+                            ><i class="bi bi-search"></i>在庫情報検索</router-link
                         >
                     </li>
                 </ul>
@@ -79,23 +77,11 @@
                 <ul>
                     <li>
                         <router-link
-                            to="/packing/"
                             class="nav-link"
-                            :class="{
-                                active: $route.path === '/packing/',
-                            }"
-                            ><i class="bi bi-filetype-txt"></i
-                            >宛先ラベル作成</router-link
-                        >
-                    </li>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/shipping' }"
+                            :class="{ active: $route.path === '/shipping/' }"
                             aria-current="page"
                             to="/shipping/"
-                            ><i class="bi bi-list-task"></i
-                            >出荷ログ一覧</router-link
+                            ><i class="bi bi-search"></i>出荷情報一覧</router-link
                         >
                     </li>
                 </ul>
