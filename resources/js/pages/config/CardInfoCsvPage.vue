@@ -60,8 +60,8 @@
                                     <option value="">通常版</option>
                                     <option value="拡張アート版">拡張アート版</option>
                                     <option value="ボーダレス">ボーダレス</option>
-                                    <option value="「プロファイル」ボーダーレス">「プロファイル」ボーダーレス</option>
-                                    <option value="「フレームブレイク」ボーダーレス">「フレームブレイク」ボーダーレス</option>
+                                    <option value="「実地調査」ボーダーレス">「実地調査」ボーダーレス</option>
+                                    <option value="「森林」ショーケース">「森林」ショーケース</option>
                                     <option value="旧枠">旧枠</option>
                                     <option value="コンセプトアート">コンセプトアート</option>
                                     <option value="フルアート">フルアート</option>

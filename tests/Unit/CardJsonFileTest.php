@@ -30,13 +30,13 @@ class CardJsonFileTest extends TestCase
     const EN_NAME = 'en_name';
 
     // use RefreshDatabase;
-    // public function setup():void
-    // {
-    //     parent::setup();
-    //     $this->seed('DatabaseSeeder');
-    //     $this->seed('TestExpansionSeeder');
+    public function setup():void
+    {
+        parent::setup();
+        // $this->seed('DatabaseSeeder');
+        // $this->seed('TestExpansionSeeder');
 
-    // }
+    }
 
     /**
      * カードの言語別テスト
@@ -74,12 +74,12 @@ class CardJsonFileTest extends TestCase
      */
     public function dataprovider() {
         return [
-            // '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027', 'language' => 'JP']],
-            // '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84', 'language' => 'JP']],
-            // '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
-            '両面カード' => ['mh3.json' ,['name' => '知りたがりの学徒、タミヨウ', 'multiverseId' => 0,  'scryfallId' => '2a717b98-cdac-416d-bf6c-f6b6638e65d1',  'language' => 'JP']]
-            // 'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']],
-            // '出来事付きカード' => ['woe.json', ['name' => '恋に落ちた騎士', self::MULTIVERSEID => 0,  'scryfallId' => '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'language' => 'JP']],
+            '日本語表記あり' =>['war_short.json', ['name' => 'ジェイスの投影', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027', 'language' => 'JP']],
+            '日本語表記あり_multiverseIdなし' => ['mir.json', ['name' => '死後の生命', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84', 'language' => 'JP']],
+            '日本語表記なし' =>['test_color.json', ['name' => '飛空士の騎兵部隊', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c', 'language' => 'JP']],
+            '両面カード' => ['mh3.json' ,['name' => '知りたがりの学徒、タミヨウ', 'multiverseId' => 0,  'scryfallId' => '2a717b98-cdac-416d-bf6c-f6b6638e65d1',  'language' => 'JP']],
+            'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']],
+            '出来事付きカード' => ['woe.json', ['name' => '恋に落ちた騎士', self::MULTIVERSEID => 0,  'scryfallId' => '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'language' => 'JP']],
         ];
     }
 
@@ -88,7 +88,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider cardtypeProvider
      */
     public function test_カードタイプ(string $filename, array $expected) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
         assertNotEmpty($actualcard, '結果の有無');
@@ -116,7 +116,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
@@ -166,7 +166,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_finishes(string $filename, int $number, array $foiltype) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($number){
@@ -188,8 +188,7 @@ class CardJsonFileTest extends TestCase
             'S&C・Foil' => ['one.json', 422, ['S&C・Foil']],
             'オイルスリックFoil' => ['one.json', 345, ['Foil']],
             'テクスチャーFoil' => ['mul.json', 573,[ 'テクスチャーFoil']],
-            'コンフェッティFoil' => ['wot.json', 90,[ 'コンフェッティFoil']],
-            'プロモカード' => ['lci.json', 406, ['Foil']]
+            'コンフェッティFoil' => ['wot.json', 90,[ 'コンフェッティFoil']]
         ];
     }
 
@@ -199,7 +198,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename, 201, $isDraft, $color);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
@@ -231,7 +230,7 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_color(string $filename, string $name, string $scryfallId, string $color) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actual = $this->findCard($result, 0, $scryfallId);
         assertNotNull($actual, "該当カード");
@@ -269,7 +268,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $response = $this->execute($filename, $expectedCode);
         assertEquals($expectedMsg, $response->json('detail'), 'メッセージ');
     }
@@ -279,7 +278,7 @@ class CardJsonFileTest extends TestCase
      * @dataProvider excludeprovider
      */
     public function test_除外カード(string $filename, string $excludedname) {
-        $this->markTestSkipped('一時スキップ');
+        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($excludedname){
             if ($a[self::EN_NAME] == $excludedname) {
@@ -362,6 +361,8 @@ class CardJsonFileTest extends TestCase
             '出来事ソーサリー' => ['woe.json', 'Betroth the Beast'],
             '不可視インク仕様' => ['mkm.json', 'Aurelia\'s Vindicator'],
             'シリアル番号付き' => ['mkm.json', 'Aurelia, the Law Above'],
+            'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat']
+
         ];
     }
 }

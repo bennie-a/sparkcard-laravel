@@ -30,8 +30,8 @@ class CardJsonFileService {
             $promoType = \App\Facades\Promo::find($cardtype);
             $foiltype = $cardtype->foiltype();
             if ($this->isExclude($cardtype, $promoType, $isDraft, $colorFilter)) {
-                logger()->debug('skip card:', ['class' => $cardtype::class, Column::NAME => $cardtype->jpname($enname), 
-                                                                                                    Column::NUMBER => $cardtype->number()]);
+                logger()->debug('skip card:', [Column::NAME => $cardtype->jpname($enname), 
+                                                                        Column::NUMBER => $cardtype->number(), Column::PROMOTYPE => $promoType]);
                 continue;
             }
 
