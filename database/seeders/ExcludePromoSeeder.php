@@ -21,5 +21,6 @@ class ExcludePromoSeeder extends Seeder
         ExcludePromo::create(['attr' => 'vault', 'name' => '「宝物庫」フレーム']);
         ExcludePromo::create(['attr' => 'ripplefoil', 'name' => 'リップル・フォイル']);
         ExcludePromo::create(['attr' => 'promopack', 'name' => 'イベント用プロモパック']);
+        ExcludePromo::create(['attr' => 'starterdeck', 'name' => 'スターターキット']);
     }
 }

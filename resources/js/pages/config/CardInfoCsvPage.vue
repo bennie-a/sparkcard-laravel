@@ -37,7 +37,7 @@
                         <tr>
                             <th class="one wide">No.</th>
                             <th class="four wide left aligned">カード名</th>
-                            <th class="four wide">特別版</th>
+                            <th class="three wide">特別版</th>
                             <th class="three wide">英名</th>
                             <th>カード仕様</th>
                             <th class="one wide">色</th>
@@ -58,13 +58,11 @@
                             <td>
                                 <select v-model="card.promotype">
                                     <option value="">通常版</option>
-                                    <option value="拡張アート版">拡張アート版</option>
                                     <option value="ボーダレス">ボーダレス</option>
                                     <option value="「実地調査」ボーダーレス">「実地調査」ボーダーレス</option>
                                     <option value="「森林」ショーケース">「森林」ショーケース</option>
-                                    <option value="旧枠">旧枠</option>
-                                    <option value="コンセプトアート">コンセプトアート</option>
                                     <option value="フルアート">フルアート</option>
+                                    <option value="拡張アート版">拡張アート版</option>
                                 </select>
                             </td>
                             <td>
