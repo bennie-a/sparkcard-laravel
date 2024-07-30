@@ -29,7 +29,7 @@ export default {
             name: "",
             supplier: "オリジナルパック",
             arrivalDate: new Date(),
-            cost: 73,
+            cost: 28,
             isLoading: false,
         };
     },
@@ -163,7 +163,7 @@ export default {
         },
         handleupdate:function(value) {
             this.arrivalDate = value;
-        }
+        },
     }
 };
 </script>
@@ -253,13 +253,7 @@ export default {
                 <div class="three wide column field">
                     <label>入荷日</label>
                     <scdatepicker :selectedDate="arrivalDate" @update="handleupdate"/>
-                    <!-- <datepicker
-                        v-model="arrivalDate"
-                        input-class-name="dp_custom_input"
-                        locale="jp"
-                        :enable-time-picker="false"
-                        :format="dateFormat"
-                    /> -->
+
                 </div>
                 <div class="two wide column field">
                     <label>原価</label>
