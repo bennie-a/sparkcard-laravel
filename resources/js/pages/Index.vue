@@ -124,10 +124,7 @@ export default {
                         language: c.language,
                         quantity: c.stock,
                         cost: this.cost,
-                        market_price:
-                            c.price.indexOf(",") != -1
-                                ? c.price.replace(",", "")
-                                : c.price,
+                        market_price:this.formatPrice(c.price),
                         condition: c.condition,
                         attr: c.exp.attr,
                         supplier: this.supplier,
@@ -164,6 +161,13 @@ export default {
         handleupdate:function(value) {
             this.arrivalDate = value;
         },
+
+        formatPrice:function(price) {
+            let formattedPrice = String(price);
+            return formattedPrice.indexOf(",") != -1
+                                ? formattedPrice.replace(",", "")
+                                : formattedPrice
+        }
     }
 };
 </script>
