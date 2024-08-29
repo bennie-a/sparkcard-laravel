@@ -19,11 +19,9 @@ use Tests\Unit\Concerns\RefreshDatabaseLite;
  */
 class ShippingLogTest extends TestCase
 {
-    // use DatabaseTransactions;
     public function setup():void {
         parent::setup();
-        $this->truncateDB();
-        // $this->seed('TestingDatabaseSeeder');
+        $this->seed('TruncateAllTables');
         $this->seed('DatabaseSeeder');
         $this->seed('TestExpansionSeeder');
         $this->seed('TestCardInfoSeeder');
@@ -31,17 +29,33 @@ class ShippingLogTest extends TestCase
      }
     /**
      * A basic feature test example.
-     *
+     *@dataProvider okprovider
      * @return void
      */
-    public function test_import()
+    public function test_ok(String $filename)
     {
-        // $dir = dirname(__FILE__, 4).'\storage\test\sms\\';
-        // $response = $this->post('/api/shipping/import', ['path' => $dir.'shipping_log.csv']);
-        // logger()->debug($response->json());
-
-        // $response->assertStatus(201);
+        $dir = dirname(__FILE__, 4).'\storage\test\sms\shipt\\';
+        $response = $this->post('/api/shipping/import', ['path' => $dir.$filename]);
+        logger()->debug($response->json());
+        
+        $response->assertStatus(201);
         // $response->assertJson(['row' => 4, 'success' => 2, 'skip' => 0, 'error' => 2, 'details' => [2 => '在庫情報なし', 5 => '在庫が0枚です']]);
+    }
+    
+    public function okprovider() {
+        return [
+            '全件成功' => ['all_success.csv'],
+            '一部登録済み' => ['partial_registration.csv']
+        ];
+    }
+
+    public function ngprovider() {
+        return [
+            '一部失敗' => ['all_success.csv'],
+            '全件失敗' => ['partial_registration.csv'],
+            '文字コードがUTF-8' => []
+        ];
+
     }
 
     // 全部成功
@@ -56,17 +70,4 @@ class ShippingLogTest extends TestCase
         // Expansion::query()->delete();
     }
 
-    // DBのデータを全て削除する。
-    protected function truncateDB() {
-        $tableNames = DB::getDoctrineSchemaManager()->listTableNames();
-        Schema::disableForeignKeyConstraints();
-        foreach($tableNames as $name) {
-            if ($name === 'migrations' || $name === "pgsodium.key" || $name === 'realtime.subscription') {
-                continue;
-            }
-            logger()->debug($name);
-            DB::table($name)->truncate();
-        }
-        Schema::enableForeignKeyConstraints();
-    }
 }
