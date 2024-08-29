@@ -17,7 +17,6 @@ class TestExpansionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('promotype')->truncate();
         Expansion::create(['attr' => '4ED', 'name' => '第4版', 'notion_id' => 'f01d4e05-600a-4f30-bc15-9633b98ca8c7', 'release_date' => '1995-04-01']);
         Expansion::create(['attr' => 'BRO', 'name' => '兄弟戦争', 'notion_id' => 'd4d9832d-3bb3-4e07-be26-6a37ec198991', 'release_date' => '2022-11-08']);
         Expansion::create(['attr' => 'WAR', 'name' => '灯争大戦', 'notion_id' => '80a7660b-3de0-4ce1-8e51-1e90e123faae', 'release_date' => '2022-11-08']);

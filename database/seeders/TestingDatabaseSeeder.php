@@ -13,7 +13,7 @@ class TestingDatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            TruncateAllTables::class,
+            // TruncateAllTables::class,
             TestExpansionSeeder::class,
             MainColorSeeder::class,
             ShippingSeeder::class,
