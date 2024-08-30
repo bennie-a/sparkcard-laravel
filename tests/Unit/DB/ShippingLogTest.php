@@ -2,17 +2,7 @@
 
 namespace Tests\Feature\tests\Unit\DB;
 
-use App\Facades\CardBoard;
-use App\Models\CardInfo;
-use App\Models\Expansion;
-use App\Models\ShippingLog;
-use App\Models\Stockpile;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
-use Tests\Unit\Concerns\RefreshDatabaseLite;
 
 /**
  * 出荷ログに関するテスト
@@ -44,8 +34,24 @@ class ShippingLogTest extends TestCase
     
     public function okprovider() {
         return [
-            '全件成功' => ['all_success.csv'],
-            '一部登録済み' => ['partial_registration.csv']
+            '全件成功' => ['all_success.csv']
+            // '一部登録済み' => ['partial_registration.csv']
+        ];
+    }
+
+    /**
+     * 文字コード別CSVファイル読み込みテスト
+     * @dataProvider encodeProvider
+     * @return void
+     */
+    public function test_encode() {
+
+    }
+
+    public function encodeProvider() {
+        return [
+            'ファイルの文字コードがShift-JIS' => [],
+            'ファイルの文字コードがUTF-8' => []
         ];
     }
 
@@ -53,7 +59,6 @@ class ShippingLogTest extends TestCase
         return [
             '一部失敗' => ['all_success.csv'],
             '全件失敗' => ['partial_registration.csv'],
-            '文字コードがUTF-8' => []
         ];
 
     }

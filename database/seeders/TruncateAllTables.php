@@ -13,6 +13,7 @@ class TruncateAllTables extends Seeder
      */
     public function run(): void
     {
+        logger()->info("全テーブル削除開始");
         $tableNames = DB::getDoctrineSchemaManager()->listTableNames();
         Schema::disableForeignKeyConstraints();
         $excludes = ["migrations", "pgsodium.key", "realtime.subscription"];
@@ -23,7 +24,7 @@ class TruncateAllTables extends Seeder
             DB::table($name)->truncate();
         }
         Schema::enableForeignKeyConstraints();
-
+        logger()->info("全テーブル削除終了");
     }
 
     /**
