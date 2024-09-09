@@ -29,31 +29,31 @@ class ShippingLogTest extends TestCase
         logger()->debug($response->json());
         
         $response->assertStatus(201);
-        // $response->assertJson(['row' => 4, 'success' => 2, 'skip' => 0, 'error' => 2, 'details' => [2 => '在庫情報なし', 5 => '在庫が0枚です']]);
+        $response->assertJson(['row' => 2, 'success' => 2, 'skip' => 0, 'error' => 0, 'details' => []]);
     }
     
     public function okprovider() {
         return [
-            '全件成功' => ['all_success.csv']
+            '全件成功' => ['all_success.csv'],
+            'ファイルの文字コードがShift-JIS' => ['shift-jis.csv'],
+            'ファイルの文字コードがUTF-8' => ['utf-8.csv']
             // '一部登録済み' => ['partial_registration.csv']
         ];
     }
 
-    /**
-     * 文字コード別CSVファイル読み込みテスト
-     * @dataProvider encodeProvider
-     * @return void
-     */
-    public function test_encode() {
+    // /**
+    //  * 文字コード別CSVファイル読み込みテスト
+    //  * @dataProvider encodeProvider
+    //  * @return void
+    //  */
+    // public function test_encode() {
 
-    }
+    // }
 
-    public function encodeProvider() {
-        return [
-            'ファイルの文字コードがShift-JIS' => [],
-            'ファイルの文字コードがUTF-8' => []
-        ];
-    }
+    // public function encodeProvider() {
+    //     return [
+    //     ];
+    // }
 
     public function ngprovider() {
         return [
