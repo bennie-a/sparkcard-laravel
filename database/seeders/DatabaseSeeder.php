@@ -19,11 +19,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        logger()->info('マスタデータ登録開始');
         $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
         $this->call(PromotypeSeeder::class);
         $this->call(FoiltypeSeeder::class);
         $this->call(CsvHeaderSeeder::class);
         $this->call(ExcludePromoSeeder::class);
+        logger()->info('マスタデータ登録終了');
     }
 }

@@ -252,6 +252,7 @@ export default {
                         <option>私物</option>
                         <option>返品</option>
                         <option>棚卸し</option>
+                        <option>店舗購入</option>
                     </select>
                 </div>
                 <div class="three wide column field">

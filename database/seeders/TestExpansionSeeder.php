@@ -34,5 +34,6 @@ class TestExpansionSeeder extends Seeder
         Expansion::create(['attr' => 'MKM', 'name' => 'カルロフ邸殺人事件', 'notion_id' => 'xxxxssss-xxxxxc', 'release_date' => '2024-02-09']);
         Expansion::create(['attr' => 'SPG', 'name' => 'スペシャルゲスト', 'notion_id' => 'xxxxssss-xxxxxd', 'release_date' => '2023-02-09']);
         Expansion::create(['attr' => 'MH3', 'name' => 'モダンホライゾン3', 'notion_id' => 'xxxxssss-xxxxxe', 'release_date' => '2024-06-14']);
+        Expansion::create(['attr' => 'DSK', 'name' => 'ダスクモーン：戦慄の館', 'notion_id' => '132258ea-f797-4913-b107-60d6b2c0505c', 'release_date' => '2024-09-27']);
     }
 }

@@ -3,6 +3,7 @@ namespace App\Factory;
 
 use App\Libs\MtgJsonUtil;
 use App\Models\ExcludePromo;
+use App\Models\Promotype;
 use app\Services\json\AbstractCard;
 use App\Services\json\AdventureCard;
 use App\Services\json\BasicLand;
@@ -131,13 +132,18 @@ class CardInfoFactory {
      *  @return bool
      */
     private static function isExclude($json):bool {
+
+        $isExclude = self::isOnlineOnly($json) || self::isAdventure($json) || self::isExtendedArt($json);
+        if ($isExclude) {
+            return $isExclude;
+        }
         // 除外するプロモタイプであるか判別する。
         if (MtgJsonUtil::hasKey(CardConstant::PROMOTYPES, $json)) {
             $promotypes = $json['promoTypes'];
             // logger()->debug('除外カードか判別', [$json[CardConstant::NUMBER]]);
             return ExcludePromo::existsByAttr($promotypes);
         }
-        return self::isOnlineOnly($json) || self::isAdventure($json) || self::isExtendedArt($json);
+        return false;
     }
 
     /**
@@ -150,10 +156,15 @@ class CardInfoFactory {
         return strcmp($json["type"], "Sorcery — Adventure") == 0;
     }
 
-
+    /**
+     * 拡張アートかどうか検証する。
+     *
+     * @param array $json
+     * @return boolean
+     */
     private static function isExtendedArt($json) {
         if (MtgJsonUtil::hasKey(Con::FRAME_EFFECT, $json)) {
-            return $json[Con::FRAME_EFFECT][0] === 'extendedart';
+            return in_array(Con::EXTENDED_ART, $json[Con::FRAME_EFFECT]);
         }
         return false;
     }

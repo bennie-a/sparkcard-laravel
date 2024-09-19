@@ -22,5 +22,7 @@ class ExcludePromoSeeder extends Seeder
         ExcludePromo::create(['attr' => 'ripplefoil', 'name' => 'リップル・フォイル']);
         ExcludePromo::create(['attr' => 'promopack', 'name' => 'イベント用プロモパック']);
         ExcludePromo::create(['attr' => 'starterdeck', 'name' => 'スターターキット']);
+        ExcludePromo::create(['attr' => 'fracturefoil', 'name' => 'フラクチャー・Foil']);
+        ExcludePromo::create(['attr' => 'textured', 'name' => 'テクスチャー・Foil']);
     }
 }

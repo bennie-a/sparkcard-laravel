@@ -24,7 +24,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'textured', 'name' => 'テクスチャー']);
         Promotype::create(['attr' => 'bundle', 'name' => 'バンドル']);
         Promotype::create(['attr' => 'showcase', 'name' => 'ショーケース']);
-        Promotype::create(['attr' => 'extendedart', 'name' => '拡張アート']);
         Promotype::create(['attr' => 'neonink', 'name' => 'ネオンインク']);
         Promotype::create(['attr' => 'themepack', 'name' => 'テーマブースター限定']);
         Promotype::create(['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース']);
