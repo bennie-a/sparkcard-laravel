@@ -1,13 +1,10 @@
 <?php
 namespace App\Services;
 
-use App\Enum\CardColor;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
-use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Column;
 use app\Services\json\AbstractCard;
-use App\Services\json\TransformCard;
 
 class CardJsonFileService {
     public function build($json, bool $isDraft, string $colorFilter) {
@@ -43,7 +40,7 @@ class CardJsonFileService {
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
             
             array_push($cardInfo, $newCard);
-            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::FOIL_TYPE => $newCard[Column::FOIL_TYPE]]);
+            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::PROMOTYPE => $newCard[Column::PROMOTYPE]]);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;

@@ -38,4 +38,8 @@ class CardConstant {
     const FRAME_EFFECT = 'frameEffects';
 
     const EXTENDED_ART = 'extendedart';
+
+    const FULLART = 'fullart';
+
+    const BORDERLESS = 'borderless';
 }

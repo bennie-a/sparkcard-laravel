@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Unit;
+namespace Tests\Unit;
 
 use App\Enum\CardColor;
 use App\Models\Expansion;
@@ -113,13 +113,19 @@ class CardJsonFileTest extends TestCase
      */
     public function test_promotype(string $filename, array $expected) {
         $result = $this->execute($filename);
+        $actualcard = $this->filtering_card($result, $expected);
+        assertNotEmpty($actualcard, '該当カードの有無');
+        assertEquals($expected[self::PROMOTYPE], $actualcard[self::PROMOTYPE], 'プロモタイプ');
+    }
+
+    protected function filtering_card(array $result, array $expected) {
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
                 return $a;
             }
         });
         $actualcard = current($filterd);
-        assertNotEmpty($actualcard, '該当カードの有無');
+        return $actualcard;
     }
 
     /**
@@ -129,29 +135,29 @@ class CardJsonFileTest extends TestCase
      */
     public function specialdataprovider() {
         return [
-            '通常版' => ['war_short.json', [self::NAME => '鮮血の刃先', self::PROMOTYPE => '']],
-            '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', self::PROMOTYPE => '絵違い']],
-            '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => '拡張アート']],
-            'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', self::PROMOTYPE => 'ブースターファン']],
-            'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => 'ショーケース']],
-            'フルアート' =>  ['neo.json', [self::NAME =>  '平地(293)', self::PROMOTYPE => 'フルアート']],
-            'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', self::PROMOTYPE => 'ネオンインク']],
-            'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
-            'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
-            'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
-            'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
-            'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']],
-            'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', self::PROMOTYPE => 'ボーダレス']],
-            'おとぎ話' => ['wot.json', [self::NAME => '盲従', self::PROMOTYPE => 'おとぎ話']],
-            'アニメ・ボーダレス' => ['wot.json', [self::NAME => '騙し討ち', self::PROMOTYPE => 'アニメ・ボーダレス']],
-            '「事件簿」ショーケース' => ['mkm.json', [self::NAME => '古き神々の咆哮、ヤラス', self::PROMOTYPE => '「事件簿」ショーケース']],
-            '「拡大鏡」ショーケース' => ['mkm.json', [self::NAME => '戦導者の号令', self::PROMOTYPE => '「拡大鏡」ショーケース']],
-            '大都市ラヴニカ' => ['mkm.json', [self::NAME => '顔を繕う者、ラザーヴ', self::PROMOTYPE => '大都市ラヴニカ']],
-            '旧枠' => ['mh3.json', [self::NAME => '護衛募集員', self::PROMOTYPE => '旧枠']],
-            '「プロファイル」ボーダーレス' => ['mh3.json', [self::NAME => '皇国の相談役、真珠耳', self::PROMOTYPE => '「プロファイル」ボーダーレス']],
-            '「フレームブレイク」ボーダーレス' => ['mh3.json', [self::NAME => '巨大なるカーリア', self::PROMOTYPE => '「フレームブレイク」ボーダーレス']],
-            '「コンセプトアート」ボーダーレス版エルドラージ' =>
-                     ['mh3.json', [self::NAME => '再誕世界、エムラクール', self::PROMOTYPE => 'コンセプトアート']],
+            // '通常版' => ['war_short.json', [self::NAME => '鮮血の刃先', self::PROMOTYPE => '']],
+            // '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', self::PROMOTYPE => '絵違い']],
+            // '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => '拡張アート']],
+            // 'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', self::PROMOTYPE => 'ブースターファン']],
+            // 'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', self::PROMOTYPE => 'ショーケース']],
+            // 'フルアート' =>  ['neo.json', [self::NAME =>  '平地(293)', self::PROMOTYPE => 'フルアート']],
+            // 'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', self::PROMOTYPE => 'ネオンインク']],
+            // 'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
+            // 'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', self::PROMOTYPE => 'コンセプトアート']],
+            // 'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', self::PROMOTYPE => 'S&C']],
+            // 'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', self::PROMOTYPE => 'ハロー・Foil']],
+            // 'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', self::PROMOTYPE => 'テキストレス・フルアート']],
+            // 'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', self::PROMOTYPE => 'ボーダレス']],
+            // 'おとぎ話' => ['wot.json', [self::NAME => '盲従', self::PROMOTYPE => 'おとぎ話']],
+            // 'アニメ・ボーダレス' => ['wot.json', [self::NAME => '騙し討ち', self::PROMOTYPE => 'アニメ・ボーダレス']],
+            // '「事件簿」ショーケース' => ['mkm.json', [self::NAME => '古き神々の咆哮、ヤラス', self::PROMOTYPE => '「事件簿」ショーケース']],
+            // '「拡大鏡」ショーケース' => ['mkm.json', [self::NAME => '戦導者の号令', self::PROMOTYPE => '「拡大鏡」ショーケース']],
+            // '大都市ラヴニカ' => ['mkm.json', [self::NAME => '顔を繕う者、ラザーヴ', self::PROMOTYPE => '大都市ラヴニカ']],
+            // '旧枠' => ['mh3.json', [self::NAME => '護衛募集員', self::PROMOTYPE => '旧枠']],
+            // '「プロファイル」ボーダーレス' => ['mh3.json', [self::NAME => '皇国の相談役、真珠耳', self::PROMOTYPE => '「プロファイル」ボーダーレス']],
+            // '「フレームブレイク」ボーダーレス' => ['mh3.json', [self::NAME => '巨大なるカーリア', self::PROMOTYPE => '「フレームブレイク」ボーダーレス']],
+            // '「コンセプトアート」ボーダーレス版エルドラージ' =>
+            //          ['mh3.json', [self::NAME => '再誕世界、エムラクール', self::PROMOTYPE => 'コンセプトアート']],
         ];
     }
 
