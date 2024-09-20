@@ -11,6 +11,8 @@ use App\Services\Constant\CardConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
 use Closure;
 
+use function PHPUnit\Framework\isEmpty;
+
 abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
     {
@@ -122,20 +124,21 @@ abstract class AbstractCard implements CardInfoInterface {
         
         // boosterfunの場合はframe_effectsを取得する。
         $frame = $this->frameEffects();
-        $detector = SpCardDetectorFactory::create($this->getJson()["printings"][0]);
+        $detector = SpCardDetectorFactory::create($this->getJson()["setCode"]);
         if ($frame != $booster) {
             $frame = $detector->showcase($frame, $this);
             return $frame;
         }
-        $version = $this->frameVersion();
-        if ($version === '1997') {
-            return 'oldframe';
-        }
+
         $border = $this->borderColor();
         if ($border == Con::BORDERLESS) {
             return $detector->borderless($this);
         }
 
+        $othercase = $detector->othercase($this);
+        if(!empty($othercase)) {
+            return $othercase;
+        }
         return $booster;
     }
 

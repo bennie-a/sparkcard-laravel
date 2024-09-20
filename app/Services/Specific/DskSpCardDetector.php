@@ -26,6 +26,10 @@ class DskSpCardDetector implements SpCardDetectorInterface {
         return 'mirror';
     }
 
+    public function othercase(AbstractCard $card):string {
+        return '';
+    }
+
     /**
      * 部屋カードかどうか判別する。
      *

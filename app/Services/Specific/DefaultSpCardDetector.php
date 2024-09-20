@@ -16,4 +16,8 @@ class DefaultSpCardDetector implements SpCardDetectorInterface {
     public function borderless(AbstractCard $card):string {
         return "borderless";
     }
+
+    public function othercase(AbstractCard $card):string {
+        return '';
+    }
 }

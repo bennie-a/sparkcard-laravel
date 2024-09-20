@@ -18,4 +18,11 @@ interface SpCardDetectorInterface
     public function showcase(string $frame, AbstractCard $card):string;
 
     public function borderless(AbstractCard $card):string;
+
+    /**
+     * ショーケースでもボーダーレスでもない特別版を判定する。
+     *
+     * @return string
+     */
+    public function othercase(AbstractCard $card):string;
 }
