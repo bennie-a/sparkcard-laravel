@@ -5,6 +5,7 @@ use App\Services\interfaces\SpCardDetectorInterface;
 use App\Services\Specific\DefaultSpCardDetector;
 use App\Services\Specific\DskSpCardDetector;
 use App\Services\Specific\Mh3SpCardDetector;
+use App\Services\Specific\WoeSpCardDetector;
 use PhpParser\Builder\Class_;
 
 class SpCardDetectorFactory {
@@ -17,6 +18,7 @@ class SpCardDetectorFactory {
         $class = match($setCode){
             "DSK" => DskSpCardDetector::class,
             "MH3" => Mh3SpCardDetector::class,
+            "WOE" => WoeSpCardDetector::class,
             default => DefaultSpCardDetector::class
         };
         return new $class;

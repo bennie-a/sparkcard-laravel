@@ -58,11 +58,12 @@
                             <td>
                                 <select v-model="card.promotype">
                                     <option value="">通常版</option>
-                                    <option value="ボーダレス">ボーダレス</option>
-                                    <option value="「実地調査」ボーダーレス">「実地調査」ボーダーレス</option>
-                                    <option value="「森林」ショーケース">「森林」ショーケース</option>
+                                    <option value="ショーケース">ショーケース</option>
+                                    <option value="「二重露光」ショーケース">「二重露光」ショーケース</option>
+                                    <option value="「超常」フレーム">「超常」フレーム</option>
+                                    <option value="ボーダーレス">ボーダーレス</option>
+                                    <option value="「鏡の怪物」ボーダーレス">「鏡の怪物」ボーダーレス</option>
                                     <option value="フルアート">フルアート</option>
-                                    <option value="拡張アート版">拡張アート版</option>
                                 </select>
                             </td>
                             <td>

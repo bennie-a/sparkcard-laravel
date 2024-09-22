@@ -17,6 +17,12 @@ interface SpCardDetectorInterface
      */
     public function showcase(string $frame, AbstractCard $card):string;
 
+    /**
+     * 詳細なボーダーレスを判別する。
+     *
+     * @param AbstractCard $card
+     * @return string
+     */
     public function borderless(AbstractCard $card):string;
 
     /**
@@ -25,4 +31,6 @@ interface SpCardDetectorInterface
      * @return string
      */
     public function othercase(AbstractCard $card):string;
+
+    public function isExclude(array $json):bool;
 }

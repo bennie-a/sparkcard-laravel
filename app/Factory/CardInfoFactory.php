@@ -63,7 +63,7 @@ class CardInfoFactory {
             $obj = new $class($json);
             return $obj;
         }
-        $setCode = $json['setCode'];
+        $setCode = self::setCode($json);
         // ザ・リスト
         if (strcmp($setCode, 'PLIST') == 0) {
             return new PlistCard($json);
@@ -78,6 +78,11 @@ class CardInfoFactory {
         }
 
         return new JsonCard($json);
+    }
+
+    private static function setCode($json) {
+        $setCode = $json['setCode'];
+        return $setCode;
     }
 
     /**
@@ -132,8 +137,8 @@ class CardInfoFactory {
      *  @return bool
      */
     private static function isExclude($json):bool {
-
-        $isExclude = self::isOnlineOnly($json) || self::isAdventure($json) || self::isExtendedArt($json);
+        $detector = SpCardDetectorFactory::create(self::setCode($json));
+        $isExclude = self::isOnlineOnly($json) || self::isExtendedArt($json) || $detector->isExclude($json);
         if ($isExclude) {
             return $isExclude;
         }
@@ -144,16 +149,6 @@ class CardInfoFactory {
             return ExcludePromo::existsByAttr($promotypes);
         }
         return false;
-    }
-
-    /**
-     * 出来事カードか判別する。
-     *
-     * @param array $json
-     * @return boolean
-     */
-    private static function isAdventure($json) {
-        return strcmp($json["type"], "Sorcery — Adventure") == 0;
     }
 
     /**

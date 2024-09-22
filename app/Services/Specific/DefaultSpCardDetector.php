@@ -20,4 +20,8 @@ class DefaultSpCardDetector implements SpCardDetectorInterface {
     public function othercase(AbstractCard $card):string {
         return '';
     }
+
+    public function isExclude(array $json):bool {
+        return false;
+    }
 }

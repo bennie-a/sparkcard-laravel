@@ -55,6 +55,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'oldframe', 'name' => '旧枠']);
         Promotype::create(['attr' => 'doubleexposure', 'name' => '「二重露光」ショーケース']);
         Promotype::create(['attr' => 'paranormal', 'name' => '「超常」フレーム']);
-        Promotype::create(['attr' => 'mirror', 'name' => '「鏡の怪物」ボーダレス']);
+        Promotype::create(['attr' => 'mirror', 'name' => '「鏡の怪物」ボーダーレス']);
     }
 }

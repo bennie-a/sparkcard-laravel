@@ -2,6 +2,7 @@
 namespace App\Services\Specific;
 
 use App\Enum\CardColor;
+use App\Libs\MtgJsonUtil;
 use App\Services\interfaces\SpCardDetectorInterface;
 use App\Services\json\AbstractCard;
 use App\Services\Constant\CardConstant as Con;
@@ -28,6 +29,19 @@ class DskSpCardDetector implements SpCardDetectorInterface {
 
     public function othercase(AbstractCard $card):string {
         return '';
+    }
+
+    public function isExclude(array $json):bool {
+        $number = intval($json[Con::NUMBER]);
+        if ($number >= 388 && $number <= 391) {
+            return true;
+        }
+        if (!MtgJsonUtil::hasKey(Con::FRAME_EFFECT, $json)) {
+            return false;
+        }
+        $frame = $json[Con::FRAME_EFFECT];
+        $isFullart = MtgJsonUtil::isTrue("isFullArt", $json);
+        return in_array("showcase", $frame) && $isFullart;
     }
 
     /**
