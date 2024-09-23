@@ -154,6 +154,11 @@ class CardBoardService {
             return ['name' => '不明', 'attr' => 'undefined'];
         }
     }
+
+    public function exists($sparkcardId) {
+        $page = $this->repo->findBySparkcardId($sparkcardId);
+        return !empty($page);
+    }
     
     // 入力値をNotionに登録する。
     public function store(CardInfo $info, array $details) {
