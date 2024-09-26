@@ -37,18 +37,17 @@ class ShippingLogTest extends TestCase
             '全件成功' => ['all_success.csv'],
             'ファイルの文字コードがShift-JIS' => ['shift-jis.csv'],
             'ファイルの文字コードがUTF-8' => ['utf-8.csv']
-            // '一部登録済み' => ['partial_registration.csv']
         ];
     }
 
-    // /**
-    //  * 文字コード別CSVファイル読み込みテスト
-    //  * @dataProvider encodeProvider
-    //  * @return void
-    //  */
-    // public function test_encode() {
+    /**
+     * 一部成功パターン
+     * @dataProvider encodeProvider
+     * @return void
+     */
+    public function test_partical() {
 
-    // }
+    }
 
     // public function encodeProvider() {
     //     return [
@@ -57,7 +56,7 @@ class ShippingLogTest extends TestCase
 
     public function ngprovider() {
         return [
-            '一部失敗' => ['all_success.csv'],
+            'CSVヘッダー不足' => [],
             '全件失敗' => ['partial_registration.csv'],
         ];
 
