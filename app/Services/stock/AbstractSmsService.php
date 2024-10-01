@@ -31,10 +31,11 @@ abstract class AbstractSmsService {
         $callback = function($row) {
             $this->store($row);
         };
-        
+        $details = 
         $this->execute($records, $callback);
-        $result = ["row"=>count($records), 'success' => count($this->success), 
-                                    'skip' => count($this->ignore), 'error' => count($this->error), 'details' => $this->error];
+        $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success), 
+                            'failed_rows' => count($this->error), 'failed_details' => $this->error,
+                            'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
         return $result;
     }
 
@@ -79,12 +80,12 @@ abstract class AbstractSmsService {
 
     protected function addSkip(int $number, string $judge) {
         logger()->info('skip', [$number, $judge]);
-        $this->ignore[] = $judge;
+        $this->ignore[] = ["number" => $number, "reason" => $judge];
     }
 
     protected function addError(int $number, string $judge) {
         logger()->info('error', [$number , $judge]);
-        $this->error[$number] = $judge;
+        $this->error[] = ["number" => $number, "reason" => $judge];
     }
 
     protected abstract function store($row);

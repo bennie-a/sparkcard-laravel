@@ -42,8 +42,8 @@ export const toNoLabelName = (card) => {
 
 export const toPhotoName = (card) => {
     let number = card.index;
-    let expAttr = card.exp.attr;
-    let photoname = number + "_" + expAttr;
+    // let expAttr = card.exp.attr;
+    let photoname = number;
 
     if (card.isFoil) {
         photoname += "-foil";

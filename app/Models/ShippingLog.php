@@ -61,4 +61,21 @@ class ShippingLog extends Model
     public function getShippingDateAttribute($value) {
         return Carbon::parse($value)->format("Y/m/d");
     }
+
+    /**
+     * 注文IDと購入者名、在庫IDを条件にデータが存在するかチェックする。
+     *
+     * @param string $orderId
+     * @param string $buyer
+     * @param integer $stockId
+     * @return bool
+     */
+    public static function isExists(string $orderId, string $buyer, int $stockId):bool {
+        $condition = [
+            ["order_id", "=", $orderId],
+            [ "name", "=", $buyer],
+            ["stock_id", "=", $stockId]
+        ];
+        return ShippingLog::where($condition)->exists();
+    }
 }

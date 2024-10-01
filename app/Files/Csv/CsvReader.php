@@ -1,6 +1,7 @@
 <?php
 namespace App\Files\Csv;
 
+use App\Exceptions\CsvFormatException;
 use App\Http\Response\CustomResponse;
 use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -47,8 +48,9 @@ abstract class CsvReader {
             }
         }
         if (count($exHeaders) !== $count) {
-            throw new \Exception('Header is not included.');
+            throw new CsvFormatException('CSVファイルのヘッダーが足りません');
         }
+        
         // ヘッダーを除いて1行ずつ配列にする
         $csv->setHeaderOffset(0);
         $records = [];

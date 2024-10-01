@@ -145,7 +145,7 @@ class CardBoardRepository extends NotionRepository{
         if ($pages->isEmpty()) {
             return null;
         }
-        return current($pages);
+        return $pages[0];
     }
 }
 ?>
