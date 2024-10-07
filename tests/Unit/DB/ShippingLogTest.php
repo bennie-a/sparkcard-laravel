@@ -84,27 +84,22 @@ class ShippingLogTest extends TestCase
         return [
             'CSVヘッダー不足' => ['ng-noheader.csv', CustomResponse::HTTP_CSV_VALIDATION,
                      ["title" => "CSV Validation Error", "detail" => 'CSVファイルのヘッダーが足りません']],
-            '重複した出荷登録' => ["duplicate.csv", 201,  
+            '重複した出荷登録(在庫あり)' => ["duplicate.csv", 201,  
             ['total_rows' => 2, 'successful_rows' => 1,
             'failed_rows' => 0, 'failed_details' => [],
             'skip_rows' => 1, "skip_details" => [["number" => "3", "reason" => "既に登録されています"]]]],
-            // '在庫情報が0件' => [],
-            // '在庫情報が存在しない' => [],
-            // '全件失敗' => ['partial_registration.csv'],
+            '重複した出荷登録(在庫が0枚)' => ["duplicate_stock0.csv", 201,  
+            ['total_rows' => 2, 'successful_rows' => 1,
+            'failed_rows' => 0, 'failed_details' => [],
+            'skip_rows' => 1, "skip_details" => [["number" => "3", "reason" => "既に登録されています"]]]],
+            '在庫が0枚' => ["ng_stock0.csv", 445,  
+            ['total_rows' => 1, 'successful_rows' => 0,
+            'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => "在庫が0枚です"]],
+            'skip_rows' => 0, "skip_details" => []]],
+            '在庫情報が存在しない' => ["ng_nostock.csv", 445,  
+            ['total_rows' => 1, 'successful_rows' => 0,
+            'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => "在庫データがありません"]],
+            'skip_rows' => 0, "skip_details" => []]],
         ];
-
     }
-
-    // 全部成功
-    // 出荷記録が登録済み
-    // 全部失敗
-    // 一部失敗
-    public function tearDown():void
-    {
-        // ShippingLog::query()->delete();
-        // Stockpile::query()->delete();
-        // CardInfo::query()->delete();
-        // Expansion::query()->delete();
-    }
-
 }

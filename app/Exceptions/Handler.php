@@ -54,7 +54,10 @@ class Handler extends ExceptionHandler
             default =>  Response::HTTP_INTERNAL_SERVER_ERROR,
         };
 
-        $title = "CSV Validation Error";
+        $title = "";
+        if ($e instanceof CsvFormatException) {
+            $title = 'CSV Validation Error';
+        }
         return response()->json([
             'title' => $title,
             'detail' => $e->getMessage(),
