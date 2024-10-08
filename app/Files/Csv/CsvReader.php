@@ -1,6 +1,7 @@
 <?php
 namespace App\Files\Csv;
 
+use App\Exceptions\CsvFormatException;
 use App\Http\Response\CustomResponse;
 use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -24,25 +25,21 @@ abstract class CsvReader {
         if (!file_exists($path)) {
             $response = response()->json([
                 'status' => 'File Not Found',
-                'error' => 'ファイルが存在しません。'
+                'error' => 'ファイルが存在しません'
             ], Response::HTTP_BAD_REQUEST);
             throw new HttpResponseException($response);
         }
 
-        // 文字コードがUTF-8であるかチェック
-        $file_encoding = mb_detect_encoding(file_get_contents($path));
-        if ($file_encoding !== 'UTF-8') {
-            throw new \Exception('File encoding is not UTF-8.');
-        }
+        // 文字コードを取得する。
+        $character_codes = ['ASCII', 'ISO-2022-JP', 'UTF-8', 'EUC-JP', 'SJIS'];
+        $file_encoding = mb_detect_encoding(file_get_contents($path), $character_codes, true);
+        logger()->debug("文字コード：$file_encoding");
 
         // CSVファイルを読み込む
         $csv = Reader::createFromPath($path);
         // 指定したヘッダーがファイルに存在するかチェック
         $fileHeaders = $csv->fetchOne();
         $exHeaders = $this->csvHeaders();
-        // if (count($fileHeaders) !== count($exHeaders)) {
-        //     throw new \Exception('Header is invalid.');
-        // }
 
         $count = 0;
         foreach($fileHeaders as $h) {
@@ -51,13 +48,18 @@ abstract class CsvReader {
             }
         }
         if (count($exHeaders) !== $count) {
-            throw new \Exception('Header is not included.');
+            $response = response()->json([
+                'status' => 'CSV Validation Error',
+                'error' => 'CSVファイルのヘッダーが足りません'
+            ], Response::HTTP_BAD_REQUEST);
+            throw new HttpResponseException($response);
         }
+        
         // ヘッダーを除いて1行ずつ配列にする
         $csv->setHeaderOffset(0);
         $records = [];
         foreach ($csv as $row) {
-            $records[] = $row;
+            $records[] = mb_convert_encoding($row, 'UTF-8', $file_encoding);
         }
         $this->validate($records);
         return $records;

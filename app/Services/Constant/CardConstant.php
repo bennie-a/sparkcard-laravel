@@ -35,5 +35,11 @@ class CardConstant {
 
     const PROMOTYPES = 'promoTypes';
 
-    const FRAME_EFFECT = 'extendedart';
+    const FRAME_EFFECT = 'frameEffects';
+
+    const EXTENDED_ART = 'extendedart';
+
+    const FULLART = 'fullart';
+
+    const BORDERLESS = 'borderless';
 }

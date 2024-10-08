@@ -14,12 +14,9 @@ class TestingDatabaseSeeder extends Seeder
     {
         $this->call([
             TruncateAllTables::class,
-            TestExpansionSeeder::class,
             MainColorSeeder::class,
             ShippingSeeder::class,
             FoiltypeSeeder::class,
-            TestCardInfoSeeder::class,
-            TestStockpileSeeder::class
         ]);
         //
     }

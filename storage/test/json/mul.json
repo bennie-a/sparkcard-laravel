@@ -345,7 +345,12 @@
                 "edhrecRank": 5059,
                 "edhrecSaltiness": 0.33,
                 "finishes": ["foil"],
-                "foreignData": [],
+                "foreignData": [
+                    {
+                        "language":"Japanese",
+                        "name":"最後の望み、リリアナ"
+                    }
+                ],
                 "frameEffects": ["inverted"],
                 "frameVersion": "2015",
                 "hasFoil": true,
@@ -402,7 +407,7 @@
                     "PS16",
                     "SIR"
                 ],
-                "promoTypes": ["textured", "boosterfun"],
+                "promoTypes": ["boosterfun"],
                 "purchaseUrls": {
                     "cardKingdomFoil": "https://mtgjson.com/links/25a8b7e27f0ff663",
                     "cardmarket": "https://mtgjson.com/links/fb7dfb9144558fc5",

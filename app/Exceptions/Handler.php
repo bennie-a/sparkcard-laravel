@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Http\Response\CustomResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -41,6 +42,27 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    /**
+     * @param $request
+     * @param Throwable $e
+     * @return JsonResponse
+     */
+    public function render($request, Throwable $e): JsonResponse {
+        $statusCode = match (true) {
+            $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
+            default =>  Response::HTTP_INTERNAL_SERVER_ERROR,
+        };
+
+        $title = "";
+        if ($e instanceof CsvFormatException) {
+            $title = 'CSV Validation Error';
+        }
+        return response()->json([
+            'title' => $title,
+            'detail' => $e->getMessage(),
+        ], $statusCode);
+    }
 
     /**
      * Register the exception handling callbacks for the application.

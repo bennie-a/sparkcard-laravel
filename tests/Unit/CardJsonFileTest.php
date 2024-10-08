@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Unit;
+namespace Tests\Unit;
 
 use App\Enum\CardColor;
 use App\Models\Expansion;
@@ -29,14 +29,12 @@ class CardJsonFileTest extends TestCase
 
     const EN_NAME = 'en_name';
 
-    // use RefreshDatabase;
-    public function setup():void
-    {
-        parent::setup();
-        // $this->seed('DatabaseSeeder');
-        // $this->seed('TestExpansionSeeder');
-
-    }
+    public function setUp():void {
+        parent::setUp();
+        $this->seed('TruncateAllTables');
+        $this->seed('DatabaseSeeder');
+        $this->seed('TestExpansionSeeder');
+     }
 
     /**
      * カードの言語別テスト
@@ -45,7 +43,6 @@ class CardJsonFileTest extends TestCase
      */
     public function test_通常版(string $filename, array $expected)
     {
-        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $exMultiverseId = $expected[self::MULTIVERSEID];
         $exScryId = $expected[self::SCRYFALLID];
@@ -88,7 +85,6 @@ class CardJsonFileTest extends TestCase
      * @dataProvider cardtypeProvider
      */
     public function test_カードタイプ(string $filename, array $expected) {
-        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actualcard = $this->findCard($result, $expected[self::MULTIVERSEID], '');
         assertNotEmpty($actualcard, '結果の有無');
@@ -116,15 +112,20 @@ class CardJsonFileTest extends TestCase
      * @dataProvider specialdataprovider
      */
     public function test_promotype(string $filename, array $expected) {
-        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
+        $actualcard = $this->filtering_card($result, $expected);
+        assertNotEmpty($actualcard, '該当カードの有無');
+        assertEquals($expected[self::PROMOTYPE], $actualcard[self::PROMOTYPE], 'プロモタイプ');
+    }
+
+    protected function filtering_card(array $result, array $expected) {
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[self::PROMOTYPE] == $expected[self::PROMOTYPE]) {
                 return $a;
             }
         });
         $actualcard = current($filterd);
-        assertNotEmpty($actualcard, '該当カードの有無');
+        return $actualcard;
     }
 
     /**
@@ -166,7 +167,6 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_finishes(string $filename, int $number, array $foiltype) {
-        // $this->markTestSkipped('一時スキップ');
 
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($number){
@@ -198,7 +198,6 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
-        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename, 201, $isDraft, $color);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
@@ -230,7 +229,6 @@ class CardJsonFileTest extends TestCase
      * @return void
      */
     public function test_color(string $filename, string $name, string $scryfallId, string $color) {
-        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $actual = $this->findCard($result, 0, $scryfallId);
         assertNotNull($actual, "該当カード");
@@ -268,7 +266,6 @@ class CardJsonFileTest extends TestCase
      * @dataProvider errorprovider
      */
     public function test_error(string $filename, int $expectedCode, string $expectedMsg) {
-        // $this->markTestSkipped('一時スキップ');
         $response = $this->execute($filename, $expectedCode);
         assertEquals($expectedMsg, $response->json('detail'), 'メッセージ');
     }
@@ -278,7 +275,6 @@ class CardJsonFileTest extends TestCase
      * @dataProvider excludeprovider
      */
     public function test_除外カード(string $filename, string $excludedname) {
-        // $this->markTestSkipped('一時スキップ');
         $result = $this->execute($filename);
         $filterd = array_filter($result, function($a) use($excludedname){
             if ($a[self::EN_NAME] == $excludedname) {
@@ -361,8 +357,10 @@ class CardJsonFileTest extends TestCase
             '出来事ソーサリー' => ['woe.json', 'Betroth the Beast'],
             '不可視インク仕様' => ['mkm.json', 'Aurelia\'s Vindicator'],
             'シリアル番号付き' => ['mkm.json', 'Aurelia, the Law Above'],
-            'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat']
-
+            'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat'],
+            '拡張アート' => ['dsk.json', 'Overlord of the Mistmoors'],
+            'フラクチャー・Foil' => ['dsk.json', 'Enduring Innocence'],
+            'テクスチャー・Foil' => ['dsk.json', 'The Wandering Rescuer']
         ];
     }
 }

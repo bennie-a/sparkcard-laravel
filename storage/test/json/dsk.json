@@ -1,0 +1,1196 @@
+{
+    "meta": {
+        "date": "2024-09-17",
+        "version": "5.2.2+20240917"
+    },
+    "data": {
+        "baseSetSize": 302,
+        "booster": {},
+        "cards": [
+            {
+                "artist": "Bryan Sola",
+                "artistIds": [
+                    "e6879299-a28b-48bc-8db1-9cafcf36de09"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "U"
+                ],
+                "colors": [
+                    "U"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 24846,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302473",
+                    "cardKingdomId": "301692",
+                    "mcmId": "788264",
+                    "mcmMetaId": "440187",
+                    "mtgArenaId": "92104",
+                    "mtgjsonV4Id": "e4a5165e-a1af-5df9-a07f-62032bc7febd",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "d2705b43-a94a-44c0-8740-82e0b296820c",
+                    "scryfallIllustrationId": "6ec0c8c4-2639-4566-a748-13b7eac6f1a8",
+                    "scryfallOracleId": "b1a0e129-27f0-4a09-b00d-497e18777306",
+                    "tcgplayerProductId": "578053"
+                },
+                "keywords": [
+                    "Flying",
+                    "Manifest",
+                    "Manifest dread"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{2}{U}",
+                "manaValue": 3.0,
+                "name": "Abhorrent Oculus",
+                "number": "42",
+                "power": "5",
+                "printings": [
+                    "DSK"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/4443b200ac2d070d",
+                    "cardKingdomFoil": "https://mtgjson.com/links/ac101d108c05be6a",
+                    "cardmarket": "https://mtgjson.com/links/0b496dc22849c7b6",
+                    "tcgplayer": "https://mtgjson.com/links/bb2f71f7e1799209"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Eye"
+                ],
+                "supertypes": [],
+                "text": "As an additional cost to cast this spell, exile six cards from your graveyard.\nFlying\nAt the beginning of each opponent's upkeep, manifest dread. (Look at the top two cards of your library. Put one onto the battlefield face down as a 2/2 creature and the other into your graveyard. Turn it face up any time for its mana cost if it's a creature card.)",
+                "toughness": "5",
+                "type": "Creature — Eye",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "43ec1283-25da-5505-aa46-0c12c514471b",
+                "variations": [
+                    "d2074c78-c6f4-575b-8cd1-11fc33ca066b"
+                ]
+            },
+            {
+                "artist": "Joshua Raphael",
+                "artistIds": [
+                    "553b2a73-780f-414b-b2d7-3b7888821082"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B",
+                    "U"
+                ],
+                "colors": [
+                    "B",
+                    "U"
+                ],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 20624,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302338",
+                    "cardKingdomId": "301401",
+                    "mcmId": "786606",
+                    "mcmMetaId": "439705",
+                    "mtgArenaId": "92314",
+                    "mtgjsonV4Id": "4064102f-cb76-572d-b09b-ae5ddbe4304b",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "55a14f30-4ff9-4472-90a6-c3139f1c18e5",
+                    "scryfallIllustrationId": "a1ee2a49-c207-4e41-8a72-fdad57fec225",
+                    "scryfallOracleId": "fa43077b-5d8b-4fb1-8dda-2a9185e6715e",
+                    "tcgplayerProductId": "575076"
+                },
+                "keywords": [
+                    "Ninjutsu",
+                    "Surveil"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "loyalty": "4",
+                "manaCost": "{2}{U}{B}",
+                "manaValue": 4.0,
+                "name": "Kaito, Bane of Nightmares",
+                "number": "220",
+                "printings": [
+                    "DSK"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/0b4c9ee07ddd84eb",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f0d511665d34a2a2",
+                    "cardmarket": "https://mtgjson.com/links/d6b8bad24e473461",
+                    "tcgplayer": "https://mtgjson.com/links/68536212c993c592"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Kaito"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Ninjutsu {1}{U}{B} ({1}{U}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nDuring your turn, as long as Kaito has one or more loyalty counters on him, he's a 3/4 Ninja creature and has hexproof.\n[+1]: You get an emblem with \"Ninjas you control get +1/+1.\"\n[0]: Surveil 2. Then draw a card for each opponent who lost life this turn.\n[−2]: Tap target creature. Put two stun counters on it.",
+                "type": "Legendary Planeswalker — Kaito",
+                "types": [
+                    "Planeswalker"
+                ],
+                "uuid": "e28d871a-716f-5e8a-af8c-0034d114837d",
+                "variations": [
+                    "a49df111-8e54-5a95-9b48-6e923eaa7854",
+                    "5f44be78-a515-53c1-b985-ef1d1c1d05cd",
+                    "be1407df-ab32-5ed4-9834-5502738e6b99"
+                ]
+            },
+            {
+                "artist": "Scott Buoncristiano",
+                "artistIds": [
+                    "a3cfe4d8-dc7d-4e53-8f79-39678f49158c"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 24425,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [
+                    {
+                        "language":"Japanese",
+                        "name":"亡者の踊り手"
+                    }
+                ],
+                "frameEffects": [
+                    "showcase",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302659",
+                    "cardKingdomId": "301988",
+                    "mcmId": "788087",
+                    "mcmMetaId": "440165",
+                    "mtgjsonV4Id": "bcdcfcf2-89b1-5e6c-9c00-355b33b1e10c",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "851b9caa-bb70-4d84-8139-b70867193922",
+                    "scryfallIllustrationId": "7e50f4e9-2caf-4226-91ee-eb70fd7fd344",
+                    "scryfallOracleId": "c53d958a-f660-4d2e-87cd-87702f973b3a",
+                    "tcgplayerProductId": "578874"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Eerie",
+                    "Flying"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{3}{W}{W}",
+                "manaValue": 5.0,
+                "name": "Ghostly Dancers",
+                "number": "302",
+                "power": "2",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/2b1bc8e35fc37af7",
+                    "cardKingdomFoil": "https://mtgjson.com/links/38fc333744980f95",
+                    "cardmarket": "https://mtgjson.com/links/5338a4c11b2dba73",
+                    "tcgplayer": "https://mtgjson.com/links/8ffb30e1914fbb37"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Spirit"
+                ],
+                "supertypes": [],
+                "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
+                "toughness": "5",
+                "type": "Creature — Spirit",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "973ea2f6-d566-54ee-9f6f-52fa30003843",
+                "variations": [
+                    "67188047-40fb-5dc1-aaaf-41380c549e65"
+                ]
+            },
+            {
+                "artist": "Marta Nael",
+                "artistIds": [
+                    "266ab861-ed64-4ba5-865c-f18758421cc3"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "B",
+                    "U"
+                ],
+                "colors": [
+                    "B",
+                    "U"
+                ],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 20624,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302614",
+                    "cardKingdomId": "301423",
+                    "mtgjsonV4Id": "ad187954-30c9-5fcd-a0e9-6f355b2639e6",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "79d24cf8-107e-4b5b-a4f5-a7498647abef",
+                    "scryfallIllustrationId": "aee3ccd7-2b35-4be5-a5d9-5cf76913e2a5",
+                    "scryfallOracleId": "fa43077b-5d8b-4fb1-8dda-2a9185e6715e",
+                    "tcgplayerProductId": "575074"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Ninjutsu",
+                    "Surveil"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "loyalty": "4",
+                "manaCost": "{2}{U}{B}",
+                "manaValue": 4.0,
+                "name": "Kaito, Bane of Nightmares",
+                "number": "328",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/174fe566895987b2",
+                    "cardKingdomFoil": "https://mtgjson.com/links/2adfed740bcc692f",
+                    "tcgplayer": "https://mtgjson.com/links/bdb6f7965264118f"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Kaito"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Ninjutsu {1}{U}{B} ({1}{U}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nDuring your turn, as long as Kaito has one or more loyalty counters on him, he's a 3/4 Ninja creature and has hexproof.\n[+1]: You get an emblem with \"Ninjas you control get +1/+1.\"\n[0]: Surveil 2. Then draw a card for each opponent who lost life this turn.\n[−2]: Tap target creature. Put two stun counters on it.",
+                "type": "Legendary Planeswalker — Kaito",
+                "types": [
+                    "Planeswalker"
+                ],
+                "uuid": "a49df111-8e54-5a95-9b48-6e923eaa7854",
+                "variations": [
+                    "e28d871a-716f-5e8a-af8c-0034d114837d",
+                    "5f44be78-a515-53c1-b985-ef1d1c1d05cd",
+                    "be1407df-ab32-5ed4-9834-5502738e6b99"
+                ]
+            },
+            {
+                "artist": "Julian Kok Joon Wen",
+                "artistIds": [
+                    "7f1868e3-325f-4df9-8f27-a381fed4f0fc"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "B",
+                    "U"
+                ],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 20283,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "Here, the Floodpits languish like a corpse, the clear waters choked by the filthy hands of the bog.",
+                "foreignData": [{
+                    "language":"Japanese",
+                    "name":"グルームレイクの境界"
+                }],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302628",
+                    "cardKingdomId": "301523",
+                    "mcmId": "788117",
+                    "mcmMetaId": "439768",
+                    "mtgjsonV4Id": "de3ebdcb-4222-55f3-8b1b-43c13bc6dde2",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "b414e4bd-a443-4ab3-bee4-1ad1d039aa1a",
+                    "scryfallIllustrationId": "cefb355d-672a-4b24-8b6e-57e476818fa0",
+                    "scryfallOracleId": "d71bda4c-3dee-4398-8fd0-f77d8743b887",
+                    "tcgplayerProductId": "576519"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Gloomlake Verge",
+                "number": "331",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/4de6c6c1c4e5fffa",
+                    "cardKingdomFoil": "https://mtgjson.com/links/429ec7003a0f0809",
+                    "cardmarket": "https://mtgjson.com/links/a2868e52f5df7e7b",
+                    "tcgplayer": "https://mtgjson.com/links/06311fa1f4bef010"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "{T}: Add {U}.\n{T}: Add {B}. Activate only if you control an Island or a Swamp.",
+                "type": "Land",
+                "types": [
+                    "Land"
+                ],
+                "uuid": "70bf27f5-14a8-5acd-9355-51581511b8e8",
+                "variations": [
+                    "2197641e-f184-5d7a-ac13-c467fc2e4b0f"
+                ]
+            },
+            {
+                "artist": "Cacho Rubione",
+                "artistIds": [
+                    "1fe5e30c-6e33-4a59-a612-26f131ee9a68"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 8.0,
+                "edhrecRank": 19933,
+                "faceConvertedManaCost": 2.0,
+                "faceManaValue": 2.0,
+                "faceName": "Dollmaker's Shop",
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "人形作家の店"
+                      }
+                ],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302615",
+                    "cardKingdomId": "301424",
+                    "mcmId": "788123",
+                    "mcmMetaId": "439559",
+                    "mtgjsonV4Id": "7aba5cac-bd28-53b8-9341-ac1a1bec2cf6",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "4b9225ce-f29d-4235-8e9d-98a4fd159f73",
+                    "scryfallIllustrationId": "5021202f-8539-4f21-ae85-26571cf2e42a",
+                    "scryfallOracleId": "e633412b-e36b-4ec5-b0d0-7cb24c7503f4",
+                    "tcgplayerProductId": "575043"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "split",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{1}{W}",
+                "manaValue": 8.0,
+                "name": "Dollmaker's Shop // Porcelain Gallery",
+                "number": "335",
+                "otherFaceIds": [
+                    "84427b9c-7911-5254-bb94-a07a7bd36ebc"
+                ],
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/02b2a48f118b7897",
+                    "cardKingdomFoil": "https://mtgjson.com/links/177ca2f7425e50c1",
+                    "cardmarket": "https://mtgjson.com/links/8e02f46cdad7d176",
+                    "tcgplayer": "https://mtgjson.com/links/cf9578d9d8cfc239"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "side": "a",
+                "subtypes": [
+                    "Room"
+                ],
+                "supertypes": [],
+                "text": "(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)\nWhenever one or more non-Toy creatures you control attack a player, create a 1/1 white Toy artifact creature token.",
+                "type": "Enchantment — Room",
+                "types": [
+                    "Enchantment"
+                ],
+                "uuid": "43c9f704-7152-535e-ad83-994118eb0f65",
+                "variations": [
+                    "e9ec6f85-fe3f-513c-9752-2a20b326ee1c"
+                ]
+            },
+            {
+                "artist": "Cacho Rubione",
+                "artistIds": [
+                    "1fe5e30c-6e33-4a59-a612-26f131ee9a68"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 8.0,
+                "edhrecRank": 19933,
+                "faceConvertedManaCost": 6.0,
+                "faceManaValue": 6.0,
+                "faceName": "Porcelain Gallery",
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "陶磁器ギャラリー"
+                      }
+                ],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "mcmId": "788123",
+                    "mcmMetaId": "439559",
+                    "mtgjsonV4Id": "2a5d0c1f-1b88-5c84-892e-f7699651251c",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "4b9225ce-f29d-4235-8e9d-98a4fd159f73",
+                    "scryfallIllustrationId": "5021202f-8539-4f21-ae85-26571cf2e42a",
+                    "scryfallOracleId": "e633412b-e36b-4ec5-b0d0-7cb24c7503f4",
+                    "tcgplayerProductId": "575043"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "split",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{4}{W}{W}",
+                "manaValue": 8.0,
+                "name": "Dollmaker's Shop // Porcelain Gallery",
+                "number": "335",
+                "otherFaceIds": [
+                    "43c9f704-7152-535e-ad83-994118eb0f65"
+                ],
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardmarket": "https://mtgjson.com/links/4fc2c15a2bcdbea2",
+                    "tcgplayer": "https://mtgjson.com/links/af342f94bb77ed68"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "side": "b",
+                "subtypes": [
+                    "Room"
+                ],
+                "supertypes": [],
+                "text": "(You may cast either half. That door unlocks on the battlefield. As a sorcery, you may pay the mana cost of a locked door to unlock it.)\nCreatures you control have base power and toughness each equal to the number of creatures you control.",
+                "type": "Enchantment — Room",
+                "types": [
+                    "Enchantment"
+                ],
+                "uuid": "84427b9c-7911-5254-bb94-a07a7bd36ebc",
+                "variations": [
+                    "b03eb6db-5698-5935-b57e-144955934925"
+                ]
+            },
+            {
+                "artist": "Inkognit",
+                "artistIds": [
+                    "0ebd73e7-55c9-49d6-bf99-241f10801f89"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "R"
+                ],
+                "colors": [
+                    "R"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 18781,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "叫ぶ宿敵"
+                      }
+                ],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "302604",
+                    "cardKingdomId": "300774",
+                    "mcmId": "788146",
+                    "mcmMetaId": "439687",
+                    "mtgjsonV4Id": "28e5197a-9c42-5a74-ae00-2b90a2f523a4",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "ad3f4c72-ff6e-4d7f-8eb8-45a0a9605fc0",
+                    "scryfallIllustrationId": "e540596d-f570-48b6-97fe-06fdf7e5f3f5",
+                    "scryfallOracleId": "fcb7c93c-46ab-49b5-a6e0-35d73f3be8f0",
+                    "tcgplayerProductId": "557269"
+                },
+                "keywords": [
+                    "Haste"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{2}{R}",
+                "manaValue": 3.0,
+                "name": "Screaming Nemesis",
+                "number": "348",
+                "power": "3",
+                
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/89351d0c720bd2c9",
+                    "cardKingdomFoil": "https://mtgjson.com/links/24334df846b77aab",
+                    "cardmarket": "https://mtgjson.com/links/d97c30bedba44b6d",
+                    "tcgplayer": "https://mtgjson.com/links/8811ee2ba25d3c2c"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Spirit"
+                ],
+                "supertypes": [],
+                "text": "Haste\nWhenever Screaming Nemesis is dealt damage, it deals that much damage to any other target. If a player is dealt damage this way, they can't gain life for the rest of the game.",
+                "toughness": "3",
+                "type": "Creature — Spirit",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "1868eb33-898c-592e-8938-2762df5392df",
+                "variations": [
+                    "72056277-7cda-57af-ae3c-f313b0452b3f"
+                ]
+            },
+            {
+                "artist": "Pig Hands",
+                "artistIds": [
+                    "c5de930f-1f2f-4f5f-b6ba-b021d634365c"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "B"
+                ],
+                "colors": [
+                    "B"
+                ],
+                "convertedManaCost": 9.0,
+                "edhrecRank": 15983,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [
+                    {
+                        "language": "Japanese",
+                        "name": "恐怖を喰うもの、ヴァルガヴォス"
+                      }
+                ],
+                "frameEffects": [
+                    "legendary",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "301450",
+                    "mtgjsonV4Id": "170da17b-1f20-5062-8c2b-34bbfa6d4701",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "9ee79357-2488-41a1-8f8c-dfcb77206f8a",
+                    "scryfallIllustrationId": "136ad302-37e5-4219-b7ee-67903aed45ca",
+                    "scryfallOracleId": "cae3ec72-436d-4086-9dcb-17b3d92ad5c4",
+                    "tcgplayerProductId": "575063"
+                },
+                "isFullArt": true,
+                "isStarter": true,
+                "keywords": [
+                    "Flying",
+                    "Lifelink",
+                    "Ward"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{6}{B}{B}{B}",
+                "manaValue": 9.0,
+                "name": "Valgavoth, Terror Eater",
+                "number": "352",
+                "power": "9",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "doubleexposure",
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/b79dade786885f41",
+                    "tcgplayer": "https://mtgjson.com/links/46ea96fcdfef5841"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Elder",
+                    "Demon"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Flying, lifelink\nWard—Sacrifice three nonland permanents.\nIf a card you didn't control would be put into an opponent's graveyard from anywhere, exile it instead.\nDuring your turn, you may play cards exiled with Valgavoth. If you cast a spell this way, pay life equal to its mana value rather than pay its mana cost.",
+                "toughness": "9",
+                "type": "Legendary Creature — Elder Demon",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "672bd9fa-0986-5f36-aeed-378ee1a42483",
+                "variations": [
+                    "5f7c6a59-2960-5adf-9089-8d38fd4dc5c9",
+                    "3128d29a-1d2b-54f3-b372-ef82ee7beffc"
+                ]
+            },
+            {
+                "artist": "Richard Luong",
+                "artistIds": [
+                    "9e4c54c6-1f28-4ae7-8c85-f9c6787145c2"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "B",
+                    "U"
+                ],
+                "colors": [
+                    "B",
+                    "U"
+                ],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 20624,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "301454",
+                    "mtgjsonV4Id": "cbc436f5-3fde-54de-b1fe-5ab2235a9bd5",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "a7927a69-62a9-4f69-923d-f651bb03a7b4",
+                    "scryfallIllustrationId": "3bb4fc2e-7534-4a71-87cf-6448318f315e",
+                    "scryfallOracleId": "fa43077b-5d8b-4fb1-8dda-2a9185e6715e",
+                    "tcgplayerProductId": "575073"
+                },
+                "isAlternative": true,
+                "isFullArt": true,
+                "isStarter": true,
+                "keywords": [
+                    "Ninjutsu",
+                    "Surveil"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "loyalty": "4",
+                "manaCost": "{2}{U}{B}",
+                "manaValue": 4.0,
+                "name": "Kaito, Bane of Nightmares",
+                "number": "354",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "doubleexposure",
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/ef815f3cc6309631",
+                    "tcgplayer": "https://mtgjson.com/links/c74b54a0a204aa47"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Kaito"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Ninjutsu {1}{U}{B} ({1}{U}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nDuring your turn, as long as Kaito has one or more loyalty counters on him, he's a 3/4 Ninja creature and has hexproof.\n[+1]: You get an emblem with \"Ninjas you control get +1/+1.\"\n[0]: Surveil 2. Then draw a card for each opponent who lost life this turn.\n[−2]: Tap target creature. Put two stun counters on it.",
+                "type": "Legendary Planeswalker — Kaito",
+                "types": [
+                    "Planeswalker"
+                ],
+                "uuid": "5f44be78-a515-53c1-b985-ef1d1c1d05cd",
+                "variations": [
+                    "e28d871a-716f-5e8a-af8c-0034d114837d",
+                    "a49df111-8e54-5a95-9b48-6e923eaa7854",
+                    "be1407df-ab32-5ed4-9834-5502738e6b99"
+                ]
+            },
+            {
+                "artist": "Steven Belledin",
+                "artistIds": [
+                    "f07d73b9-52a0-4fe5-858b-61f7b42174a5"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 7.0,
+                "edhrecRank": 19007,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "extendedart",
+                    "nyxtouched"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "301447",
+                    "cardKingdomId": "301436",
+                    "mtgjsonV4Id": "615b0dde-0d14-5f18-8511-a6c6a82bd2e0",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "509735a5-2b41-4e52-9ab1-0e4a6fa41d1b",
+                    "scryfallIllustrationId": "0e9f0e86-3019-4070-b809-1d4d6a799092",
+                    "scryfallOracleId": "7e64b1dc-a238-4bff-98ff-2bea44340568",
+                    "tcgplayerProductId": "575051"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{5}{W}{W}",
+                "manaValue": 7.0,
+                "name": "Overlord of the Mistmoors",
+                "number": "370",
+                "power": "6",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/d5b7b8230710fb32",
+                    "cardKingdomFoil": "https://mtgjson.com/links/75ceeb56067c9981",
+                    "tcgplayer": "https://mtgjson.com/links/8677f493507a82dd"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Avatar",
+                    "Horror"
+                ],
+                "supertypes": [],
+                "text": "Impending 4—{2}{W}{W} (If you cast this spell for its impending cost, it enters with four time counters and isn't a creature until the last is removed. At the beginning of your end step, remove a time counter from it.)\nWhenever Overlord of the Mistmoors enters or attacks, create two 2/1 white Insect creature tokens with flying.",
+                "toughness": "6",
+                "type": "Enchantment Creature — Avatar Horror",
+                "types": [
+                    "Enchantment",
+                    "Creature"
+                ],
+                "uuid": "6e0eeee9-968f-5f52-a80f-ac9669ede1ca",
+                "variations": [
+                    "c80fdf27-bc65-51ea-b115-770821d565c0",
+                    "6ab6838d-e055-5d26-abef-b3b351095fed",
+                    "3925b792-cedf-5a10-84df-54801070f72f"
+                ]
+            },
+            {
+                "artist": "Kawasumi",
+                "artistIds": [
+                    "a2f9fd0d-dc30-4503-83d6-eaecfddd2fea"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 16779,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "301443",
+                    "mtgjsonV4Id": "524040d3-2b05-544b-96aa-26b137354380",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "dc36adbc-544c-46a1-9e99-92cc7b2b2af1",
+                    "scryfallIllustrationId": "fa5030a2-bf44-4388-962a-8e4cc576b71a",
+                    "scryfallOracleId": "98a389f4-2905-47f3-b60e-3d4afb3e5cb0",
+                    "tcgplayerProductId": "575045"
+                },
+                "isAlternative": true,
+                "isStarter": true,
+                "keywords": [
+                    "Lifelink"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{1}{W}{W}",
+                "manaValue": 3.0,
+                "name": "Enduring Innocence",
+                "number": "396",
+                "power": "2",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "fracturefoil",
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/4f6c65c8b37f9a6b",
+                    "tcgplayer": "https://mtgjson.com/links/f659a314f80e0074"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Sheep",
+                    "Glimmer"
+                ],
+                "supertypes": [],
+                "text": "Lifelink\nWhenever one or more other creatures you control with power 2 or less enter, draw a card. This ability triggers only once each turn.\nWhen Enduring Innocence dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)",
+                "toughness": "1",
+                "type": "Enchantment Creature — Sheep Glimmer",
+                "types": [
+                    "Enchantment",
+                    "Creature"
+                ],
+                "uuid": "ed600f8f-76d9-5f3a-bb05-bc67e6b503ae",
+                "variations": [
+                    "5b69d554-246f-5f61-9a2d-8578e513c310",
+                    "f0906ea0-800f-54ad-b1c4-651bad927053",
+                    "51496970-cd7a-5092-8259-064abf12ff21"
+                ]
+            },
+            {
+                "artist": "Vance Kelly",
+                "artistIds": [
+                    "c0e0548d-5992-4341-936d-8e2bbed3e923"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 19820,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase",
+                    "legendary",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "300787",
+                    "mtgjsonV4Id": "e5beafa3-1683-54ad-9ab3-17cef7994ba0",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "a9a4f2ba-2d16-4dda-85e8-dafce0d5ee1b",
+                    "scryfallIllustrationId": "daf46079-89b0-4b70-998c-83f6d7b7682d",
+                    "scryfallOracleId": "b8ef65df-f8e7-44e3-9864-9c127232a2b6",
+                    "tcgplayerProductId": "557265"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Convoke",
+                    "Double strike",
+                    "Flash"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{3}{W}{W}",
+                "manaValue": 5.0,
+                "name": "The Wandering Rescuer",
+                "number": "406",
+                "power": "3",
+                "printings": [
+                    "DSK"
+                ],
+                "promoTypes": [
+                    "textured",
+                    "doubleexposure",
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/25e7c0cd53c48c30",
+                    "tcgplayer": "https://mtgjson.com/links/d9e5264169fa686e"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "DSK",
+                "subtypes": [
+                    "Human",
+                    "Samurai",
+                    "Noble"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Flash\nConvoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDouble strike\nOther tapped creatures you control have hexproof.",
+                "toughness": "4",
+                "type": "Legendary Creature — Human Samurai Noble",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "ad242519-e249-5cb9-9b5c-49e5f7def9b1",
+                "variations": [
+                    "02c06897-69c5-5a92-bcb9-5121dbbb04b8",
+                    "5e9a11f3-2f98-57a4-8ca9-92364c87663d"
+                ]
+            }
+        ],
+        "code": "DSK"
+    }
+}

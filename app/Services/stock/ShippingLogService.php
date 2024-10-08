@@ -37,29 +37,38 @@ class ShippingLogService extends AbstractSmsService{
      */
     protected function store($row) {
         $stock = Stockpile::find($row->card_name(), $row->condition(), $row->language(), $row->isFoil());
-        if (!empty($stock)) {
-            if ($stock->quantity == 0) {
-                $this->addError($row->number(), '在庫が0枚です');
-                return;
-            }
-            $notionCard = CardBoard::findByOrderId($row->order_id());
-            if ($notionCard->isEmpty()) {
-                $this->addError($row->number(), '該当するNotionカードがありません');
-                return;
-            }
-    
-            $log = ['order_id' => $row->order_id(), Header::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
-                         'stock_id' => $stock['id'], Header::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
-                        'single_price' => $row->product_price(), 'total_price' => $row->total_price() ];
-            ShippingLog::create($log);
-
-            $stock->quantity = $stock->quantity - $row->quantity();
-            $stock->update();
-            $this->updateNotion($notionCard[0], $row);
-            $this->addSuccess($row->number());
-        } else {
-            $this->addError($row->number(), '在庫情報なし');
+        if (empty($stock)) {
+            $this->addError($row->number(), '在庫データがありません');
+            return;
         }
+        // 出荷ログから注文IDと氏名、在庫IDを検索。
+        // ➞あればエラー
+        $isExists = ShippingLog::isExists($row->order_id(), $row->buyer(), $stock->id);
+        if ($isExists) {
+            $this->addSkip($row->number(), '既に登録されています');
+            return;
+        }
+
+        if ($stock->quantity == 0) {
+            $this->addError($row->number(), '在庫が0枚です');
+            return;
+        }
+        $notionCard = CardBoard::findByOrderId($row->order_id());
+        if ($notionCard->isEmpty()) {
+            $this->addError($row->number(), '該当するNotionカードがありません');
+            return;
+        }
+
+    
+        $log = ['order_id' => $row->order_id(), Header::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
+                        'stock_id' => $stock['id'], Header::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
+                    'single_price' => $row->product_price(), 'total_price' => $row->total_price() ];
+        ShippingLog::create($log);
+
+        $stock->quantity = $stock->quantity - $row->quantity();
+        $stock->update();
+        $this->updateNotion($notionCard[0], $row);
+        $this->addSuccess($row->number());
     }
 
     private function updateNotion(Page $notionCard, ShippingRow $row) {

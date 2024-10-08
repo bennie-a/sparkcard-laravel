@@ -3,12 +3,15 @@ namespace App\Services\json;
 
 use App\Enum\CardColor;
 use App\Facades\WisdomGuild;
+use App\Factory\SpCardDetectorFactory;
 use App\Libs\MtgJsonUtil;
 use App\Models\CardInfo;
 use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
 use Closure;
+
+use function PHPUnit\Framework\isEmpty;
 
 abstract class AbstractCard implements CardInfoInterface {
     public function __construct($json)
@@ -111,7 +114,7 @@ abstract class AbstractCard implements CardInfoInterface {
             return 'draft';
         }
         $filterd = function($f) {
-            $excluded = ['textured', 'confettifoil'];
+            $excluded = ['confettifoil'];
             return !in_array($f, $excluded);
         };
         $promo = $this->filtering($this->promotypeKey(), $filterd);
@@ -119,18 +122,22 @@ abstract class AbstractCard implements CardInfoInterface {
             return $promo;
         }
         
-        // boosterfunの場合はframeeffectを取得する。
+        // boosterfunの場合はframe_effectsを取得する。
         $frame = $this->frameEffects();
+        $detector = SpCardDetectorFactory::create($this->getJson()["setCode"]);
         if ($frame != $booster) {
+            $frame = $detector->showcase($frame, $this);
             return $frame;
         }
-        $version = $this->frameVersion();
-        if ($version === '1997') {
-            return 'oldframe';
-        }
+
         $border = $this->borderColor();
-        if ($border == 'borderless') {
-            return $border;
+        if ($border == Con::BORDERLESS) {
+            return $detector->borderless($this);
+        }
+
+        $othercase = $detector->othercase($this);
+        if(!empty($othercase)) {
+            return $othercase;
         }
         return $booster;
     }
@@ -232,6 +239,24 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     /**
+     *  JSONファイルの"types"の値を取得する。
+     *
+     * @return array
+     */
+    public function types() {
+        return $this->getJson()["types"];
+    }
+
+    /**
+     * JSONファイルの"subtypes"の値を取得する。
+     *
+     * @return array
+     */
+    public function subtypes() {
+        return $this->getJson()["subtypes"];
+    }
+
+    /**
      * 英語版のmultiverse_idを返す。
      *
      * @return int
@@ -253,8 +278,14 @@ abstract class AbstractCard implements CardInfoInterface {
         return $this->getJson()[Con::IDENTIFIERS];
     }
 
+    /**
+     * カードがフルアート版かどうか判定する。
+     *
+     * @return boolean
+     */
     protected function isFullArt() {
-        return MtgJsonUtil::hasKey(self::IS_FULLART, $this->getJson());
+        $frameEffects = $this->frameEffects();
+        return $frameEffects === Con::FULLART;
     }
 
     protected function hasPromotype() {

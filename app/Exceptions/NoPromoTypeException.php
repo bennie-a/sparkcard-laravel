@@ -33,7 +33,7 @@ class NoPromoTypeException extends HttpException
      */
     public function report()
     {
-        Log::error('Not Found Promotype');
+        logger()->error('Not Found Promotype');
         return false;
     }
 }

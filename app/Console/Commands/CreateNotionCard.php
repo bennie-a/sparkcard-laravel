@@ -52,6 +52,10 @@ class CreateNotionCard extends Command
         $this->info("******************************************");
         $details = [Con::QUANTITY => '0', Con::MARKET_PRICE => '0', 'condition' => 'NM', 'language' => 'JP'];
         foreach($result as $r) {
+            if (CardBoard::exists($r->id)) {
+                $this->info(sprintf("「%s」をスキップしました", $r->name));
+                continue;
+            }
             $this->info(sprintf("「%s」作成", $r->name));
             CardBoard::store($r, $details);
         }

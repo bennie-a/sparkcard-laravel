@@ -35,7 +35,16 @@ class ShippingRow extends StockpileRow {
     }
 
     public function product_name() {
-        return $this->row[Header::PRODUCT_NAME];
+        return $this->row[$this->product_name_header()];
+    }
+
+    /**
+     * 商品名を取得する列のヘッダーを取得する。
+     *
+     * @return string
+     */
+    protected function product_name_header() {
+        return Header::PRODUCT_NAME;
     }
 
     public function postal_code() {

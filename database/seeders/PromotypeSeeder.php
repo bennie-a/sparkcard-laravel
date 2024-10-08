@@ -24,7 +24,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'textured', 'name' => 'テクスチャー']);
         Promotype::create(['attr' => 'bundle', 'name' => 'バンドル']);
         Promotype::create(['attr' => 'showcase', 'name' => 'ショーケース']);
-        Promotype::create(['attr' => 'extendedart', 'name' => '拡張アート']);
         Promotype::create(['attr' => 'neonink', 'name' => 'ネオンインク']);
         Promotype::create(['attr' => 'themepack', 'name' => 'テーマブースター限定']);
         Promotype::create(['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース']);
@@ -54,5 +53,8 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'profiles', 'name' => '「プロファイル」ボーダーレス']);
         Promotype::create(['attr' => 'flamebreak', 'name' => '「フレームブレイク」ボーダーレス']);
         Promotype::create(['attr' => 'oldframe', 'name' => '旧枠']);
+        Promotype::create(['attr' => 'doubleexposure', 'name' => '「二重露光」ショーケース']);
+        Promotype::create(['attr' => 'paranormal', 'name' => '「超常」フレーム']);
+        Promotype::create(['attr' => 'mirror', 'name' => '「鏡の怪物」ボーダーレス']);
     }
 }
