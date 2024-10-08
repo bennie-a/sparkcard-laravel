@@ -25,7 +25,7 @@ abstract class CsvReader {
         if (!file_exists($path)) {
             $response = response()->json([
                 'status' => 'File Not Found',
-                'error' => 'ファイルが存在しません。'
+                'error' => 'ファイルが存在しません'
             ], Response::HTTP_BAD_REQUEST);
             throw new HttpResponseException($response);
         }
@@ -48,7 +48,11 @@ abstract class CsvReader {
             }
         }
         if (count($exHeaders) !== $count) {
-            throw new CsvFormatException('CSVファイルのヘッダーが足りません');
+            $response = response()->json([
+                'status' => 'CSV Validation Error',
+                'error' => 'CSVファイルのヘッダーが足りません'
+            ], Response::HTTP_BAD_REQUEST);
+            throw new HttpResponseException($response);
         }
         
         // ヘッダーを除いて1行ずつ配列にする

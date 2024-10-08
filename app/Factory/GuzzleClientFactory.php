@@ -9,7 +9,8 @@ class GuzzleClientFactory {
         $urlMap = [
             'wisdom' => 'http://whisper.wisdom-guild.net',
             'mtgdev' => 'https://api.magicthegathering.io/v1/',
-            'scryfall' => 'https://api.scryfall.com/'
+            'scryfall' => 'https://api.scryfall.com/',
+            'base' => 'https://api.thebase.in/'
         ];
         if (!Arr::exists($urlMap, $path)) {
           throw new \Exception('invalid path');
@@ -20,7 +21,7 @@ class GuzzleClientFactory {
     }
 
     public static function createByUrl($url) {
-        $client = new Client(['base_uri' => $url]);
+        $client = new Client(['base_uri' => $url, 'allow_redirects' => ['track_redirects' => true]]);
         return $client;
     }
 }

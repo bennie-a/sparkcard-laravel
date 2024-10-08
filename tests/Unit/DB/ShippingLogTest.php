@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\tests\Unit\DB;
 
-use App\Http\Response\CustomResponse;
+use App\Files\Csv\CsvWriter;
+use App\Files\Stock\ShippingLogCsvReader;
+use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -69,6 +71,50 @@ class ShippingLogTest extends TestCase
     }
 
     /**
+     * 登録をスキップするケース
+     *@dataProvider skipprovider
+     * @return void
+     */
+    public function test_skipcase(string $filename, array $json) 
+    {
+        $this->execute($filename, 201, $json);
+    }
+
+    public function skipprovider() {
+        return [
+            '重複した出荷登録(在庫あり)' => ["duplicate.csv",
+            ['total_rows' => 2, 'successful_rows' => 1,
+            'failed_rows' => 0, 'failed_details' => [],
+            'skip_rows' => 1, "skip_details" => [["number" => "3", "reason" => "既に登録されています"]]]],
+            '重複した出荷登録(在庫が0枚)' => ["duplicate_stock0.csv",  
+            ['total_rows' => 2, 'successful_rows' => 1,
+            'failed_rows' => 0, 'failed_details' => [],
+            'skip_rows' => 1, "skip_details" => [["number" => "3", "reason" => "既に登録されています"]]]],
+
+        ];
+    }
+
+    /**
+     * CSVファイルのフォーマットに関するエラー
+     *@dataProvider fileprovider
+     * @return void
+     */
+    public function test_fileerror($filename, int $statusCode, string $status, string $error) {
+        $json = ["status" => $status, "error" => $error];
+        $this->execute($filename, $statusCode, $json);
+    }
+
+    public function fileprovider() {
+        return [
+            'CSVヘッダー不足' => ['ng-noheader.csv', Response::HTTP_BAD_REQUEST,
+                                                        'CSV Validation Error', 'CSVファイルのヘッダーが足りません'],
+            '指定したファイルが存在しない' => ['xxx.csv', Response::HTTP_BAD_REQUEST,
+                                                                            'File Not Found', 'ファイルが存在しません']
+
+        ];
+    }
+
+    /**
      * NGケース
      *
      * @param string $filename
@@ -76,30 +122,52 @@ class ShippingLogTest extends TestCase
      * @param array $json
      * @dataProvider ngprovider
      */
-    public function test_ng(string $filename, int $status, array $json) {
-        $this->execute($filename, $status, $json);
+    public function test_ng(string $item_name, int $status, array $json) {
+        $reader = new ShippingLogCsvReader();
+        $dir = config('csv.export');
+        $row = $reader->read("{$dir}shipping_log.csv");
+        $newRow = [];
+        $r = current($row);
+        foreach (Header::shippinglog_constants() as $h) {
+            if ($h === Header::PRODUCT_NAME) {
+                $newRow[0][$h] = $item_name;
+                continue;
+            }
+            $newRow[0][$h] = $r[$h];
+        }
+
+        $writer = new CsvWriter();
+        $newfile = 'tmp.csv';
+        $writer->write($newfile, Header::shippinglog_constants(), $newRow);
+        $this->execute($newfile, $status, $json);
     }
 
     public function ngprovider() {
         return [
-            'CSVヘッダー不足' => ['ng-noheader.csv', CustomResponse::HTTP_CSV_VALIDATION,
-                     ["title" => "CSV Validation Error", "detail" => 'CSVファイルのヘッダーが足りません']],
-            '重複した出荷登録(在庫あり)' => ["duplicate.csv", 201,  
-            ['total_rows' => 2, 'successful_rows' => 1,
-            'failed_rows' => 0, 'failed_details' => [],
-            'skip_rows' => 1, "skip_details" => [["number" => "3", "reason" => "既に登録されています"]]]],
-            '重複した出荷登録(在庫が0枚)' => ["duplicate_stock0.csv", 201,  
-            ['total_rows' => 2, 'successful_rows' => 1,
-            'failed_rows' => 0, 'failed_details' => [],
-            'skip_rows' => 1, "skip_details" => [["number" => "3", "reason" => "既に登録されています"]]]],
-            '在庫が0枚' => ["ng_stock0.csv", 445,  
+            '在庫が0枚' => ['【BRO】ドラゴンの運命[JP][赤]', 445,  
             ['total_rows' => 1, 'successful_rows' => 0,
             'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => "在庫が0枚です"]],
             'skip_rows' => 0, "skip_details" => []]],
-            '在庫情報が存在しない' => ["ng_nostock.csv", 445,  
+            '在庫情報が存在しない' => ['【NEO】【Foil】告別≪ショーケース≫[JP][白]', 445,  
             ['total_rows' => 1, 'successful_rows' => 0,
             'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => "在庫データがありません"]],
             'skip_rows' => 0, "skip_details" => []]],
         ];
+    }
+
+    protected function tearDown():void {
+        $tmpcsv  ="{config('csv.export')}tmp.csv";
+        $result = false;
+        if (!file_exists($tmpcsv)) {
+            return;
+        }
+        if (is_writable($tmpcsv)) {
+            $result = unlink($tmpcsv);
+            if ($result) {
+                logger()->info('tmp.csvを削除しました');
+            } else {
+                logger()->info('tmp.csvを削除できませんでした');
+            }
+        }
     }
 }
