@@ -7,39 +7,47 @@ use App\Http\Response\CustomResponse;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
 use App\Models\MainColor;
+use App\Models\Shipping;
 use App\Models\Stockpile;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
-use Tests\Unit\Concerns\RefreshDatabaseLite;
 
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEquals;
 use function PHPUnit\Framework\assertNotNull;
+use App\Services\Constant\NotionConstant as JA;
 
 /**
  * 入荷手続きに関するテスト
  */
 class ArrivalLogTest extends TestCase
 {
-    // use RefreshDatabaseLite;
 
-    private static  $isSetup = false;
+    // 事前にNotionからドラゴンのファイレクシア・エンジン[通常]を削除する。
+    private $repo;
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TestingDatabaseSeeder');
+        $this->seed('TruncateAllTables');
+        $this->seed('DatabaseSeeder');
+        $this->seed('TestExpansionSeeder');
+        $this->seed('TestCardInfoSeeder');
         $this->repo = new CardBoardRepository();
-        $page = $this->repo->findBySparkcardId(2);
+        $page = $this->repo->findBySparkcardId(3);
         $updatePage = new Page();
         $updatePage->setId($page->getId());
-        $updatePage->set('枚数', Number::value(1));
-        $updatePage->set('価格', Number::value(300));
+        $updatePage->set(JA::QTY, Number::value(3));
         CardBoard::updatePage($updatePage);
+
+        $storePage = $this->repo->findBySparkcardId(2);
+        if (!empty($storePage)) {
+            $storePage->setSelect(JA::STATUS, '取引完了');
+            CardBoard::updatePage($storePage);
+        }
     }
     /**
      * A basic feature test example.
@@ -64,7 +72,7 @@ class ArrivalLogTest extends TestCase
         if (!empty($before)) {
             $quantity += $before->quantity;
         }
-        assertEquals($quantity, $after->quantity, '数量');
+        assertEquals($quantity, $after->quantity, JA::QTY);
 
         $log = ArrivalLog::where('stock_id',  $after->id)->first();
         assertNotNull($log, '入荷ログ');
@@ -76,16 +84,43 @@ class ArrivalLogTest extends TestCase
         try {
             $repo = new CardBoardRepository();
             $card = $repo->findBySparkcardId($info->id);
-            assertEquals($quantity, $card->getProperty('枚数')->getNumber(), 'Notionの枚数');
-            assertEquals('日本語', $card->getProperty('言語')->getName());
-
+            assertEquals('日本語', $card->getProperty(JA::LANG)->getName());
+            
             $color = MainColor::find($info->color_id);
-            assertEquals($color->name, $card->getProperty("色")->getName(), '色');
+            assertEquals($color->name, $card->getProperty(JA::COLOR)->getName(), JA::COLOR);
+            
+            if ($card->getId() === 'b4c3cc34-ca79-4109-b26d-068e3975fd2f') {
+                assertNotEquals($market_price, $card->getProperty(JA::PRICE)->getNumber(), 'Notionの価格');
+                assertEquals(5, $card->getProperty(JA::QTY)->getNumber(), 'Notionの枚数');
+            } else {
+                assertEquals('要写真撮影', $card->getProperty(JA::STATUS)->getName(), 'Status');
+                assertEquals($market_price, $card->getProperty(JA::PRICE)->getNumber(), 'Notionの価格');
+                assertEquals($quantity, $card->getProperty(JA::QTY)->getNumber(), 'Notionの枚数');
 
-            assertEquals($market_price, $card->getProperty("価格")->getNumber(), 'Notionの価格');
+                // 発送方法
+                $shipt = $card->getProperty(JA::SHIPT)->getContent();
+                $shipt_id = str_replace('-', '', $shipt[0]['id']);
+                logger()->debug($shipt_id);
+                $item = Shipping::findByNotionId($shipt_id);
+                assertNotNull($item, '発送方法の有無');
+            }
         } catch(NotionException $e) {
             $this->fail($e->getMessage());
         }
+    }
+
+
+    /**
+     * OKケース
+     *
+     * @return void
+     */
+    public function okprovider() {
+        return [
+            // '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'NM', '2023-07-24', 23, 400],
+            '在庫情報なし_ミニレター' => ['BRO', 'ドラゴンの運命', false, 'NM', '2023-06-10', 23, 100],
+            '在庫情報なし_クリックポスト' => ['NEO', '告別≪ショーケース≫', true, 'NM', '2023-06-10', 23, 1500]
+        ];
     }
 
     /**
@@ -100,18 +135,6 @@ class ArrivalLogTest extends TestCase
                                                                                   'quantity' => 3, 'supplier' => '私物']);
 
         $response->assertStatus(CustomResponse::HTTP_NOT_FOUND_CARD);
-    }
-
-    /**
-     * OKケース
-     *
-     * @return void
-     */
-    public function okprovider() {
-        return [
-            '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', false, 'NM', '2023-07-24', 23, 400],
-            '在庫情報なし' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'EX+', '2023-06-10', 23, 100]
-        ];
     }
 
     public function ngprovider() {

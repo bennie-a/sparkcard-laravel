@@ -19,6 +19,7 @@ use App\Services\Stock\ArrivalLogService;
  */
 class ArrivalController extends Controller {
 
+    private $service;
     public function __construct(ArrivalLogService $service) 
     {
         $this->service = $service;        
