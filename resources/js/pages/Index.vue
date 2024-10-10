@@ -9,6 +9,7 @@ import FoilTag from "./component/FoilTag.vue";
 import ImageModal from "./component/ImageModal.vue";
 import SCDatePicker from "./component/SCDatePicker.vue";
 import PgList from "./component/PgList.vue";
+import { reactive } from "vue";
 
 export default {
     components: {
@@ -27,12 +28,25 @@ export default {
             color: "",
             isFoil: false,
             name: "",
-            supplier: "オリジナルパック",
             arrivalDate: new Date(),
             cost: 28,
             isLoading: false,
+            vendorTypeList:reactive([]),
+            vendorType:1,
+            vendor:'晴れる屋'
         };
     },
+    async created() {
+        await axios
+            .get("/api/vendor")
+            .then((response) => {
+                this.vendorTypeList.value = response.data;
+            })
+            .catch((e) => {
+                console.error(e);
+            })
+    },
+
     computed: {
         isDisabled: function () {
             let selected = this.$store.getters["csvOption/selectedList"];
@@ -245,15 +259,15 @@ export default {
 
         <div v-if="$store.getters.cardsLength != 0" class="mt-2 ui form">
             <div class="four fields">
-                <div class="four wide column field">
-                    <label for="">仕入れ先</label>
-                    <select v-model="supplier" class="mr-1 ui dropdown">
-                        <option>オリジナルパック</option>
-                        <option>私物</option>
-                        <option>返品</option>
-                        <option>棚卸し</option>
-                        <option>店舗購入</option>
+                <div class="three wide column field">
+                    <label for="">入荷カテゴリ</label>
+                    <select v-model="vendorType" class="mr-1 ui dropdown">
+                        <option v-for="t in vendorTypeList.value" :key="t.id" :value="t.id">{{t.name }}</option>
                     </select>
+                </div>
+                <div class="three wide column field">
+                    <label for="">入荷先名</label>
+                    <input type="text" :value="vendor" class="">
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
