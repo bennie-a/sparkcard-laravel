@@ -3,9 +3,10 @@ import search from "./vuex/searchForm";
 import message from "./vuex/messageForm";
 import csvOption from "./vuex/csvOption";
 import expansion from "./vuex/expansion.js";
+import loading from "./vuex/loading.js";
 
 export const store = createStore({
-    modules: { search, message, csvOption, expansion },
+    modules: { search, message, csvOption, expansion, loading },
     state: {
         isLoad: false,
         cards: [],

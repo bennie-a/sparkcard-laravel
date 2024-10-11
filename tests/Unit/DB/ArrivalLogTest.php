@@ -9,7 +9,9 @@ use App\Models\CardInfo;
 use App\Models\MainColor;
 use App\Models\Shipping;
 use App\Models\Stockpile;
+use App\Models\VendorType;
 use App\Repositories\Api\Notion\CardBoardRepository;
+use App\Services\CardBoardService;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
@@ -20,6 +22,8 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEquals;
 use function PHPUnit\Framework\assertNotNull;
 use App\Services\Constant\NotionConstant as JA;
+use App\Services\Constant\StockpileHeader as Header;
+use Mockery;
 
 /**
  * 入荷手続きに関するテスト
@@ -61,11 +65,11 @@ class ArrivalLogTest extends TestCase
         $info = CardInfo::findSingleCard($attr, $name, $isFoil);
         $before = Stockpile::findSpecificCard($info->id, $language, $condition);
         $quantity = 2;
-        $supplier = 'オリパ';
-        $response = $this->post('/api/arrival', ['card_id' => $info->id, 'language' => $language, 'condition' => $condition,
-                                                                                 'arrival_date' => $arrivalDate, 'cost' => $cost, 'market_price' => $market_price,
-                                                                                  'quantity' => $quantity, 'supplier' => $supplier]);
-        $response->assertStatus(Response::HTTP_CREATED);
+        $params = [Header::CARD_ID => $info->id, Header::LANGUAGE => $language, Header::CONDITION => $condition,
+                            Header::ARRIVAL_DATE => $arrivalDate, Header::COST => $cost, Header::MARKET_PRICE => $market_price,
+                            Header::QUANTITY => $quantity, Header::VENDOR_TYPE_ID => 1];
+        $log = $this->execute($params);
+
         // DB
         $after = Stockpile::findSpecificCard($info->id, $language, $condition);
         assertNotNull($after, '在庫情報');
@@ -74,10 +78,8 @@ class ArrivalLogTest extends TestCase
         }
         assertEquals($quantity, $after->quantity, JA::QTY);
 
-        $log = ArrivalLog::where('stock_id',  $after->id)->first();
         assertNotNull($log, '入荷ログ');
         assertEquals($cost, $log->cost, '原価');
-        assertEquals($supplier, $log->supplier, '仕入れ先');
         assertEquals($arrivalDate, $log->arrival_date, '入荷日');
 
         // Notion
@@ -109,7 +111,6 @@ class ArrivalLogTest extends TestCase
         }
     }
 
-
     /**
      * OKケース
      *
@@ -121,6 +122,48 @@ class ArrivalLogTest extends TestCase
             '在庫情報なし_ミニレター' => ['BRO', 'ドラゴンの運命', false, 'NM', '2023-06-10', 23, 100],
             '在庫情報なし_クリックポスト' => ['NEO', '告別≪ショーケース≫', true, 'NM', '2023-06-10', 23, 1500]
         ];
+    }
+
+    /**
+     * 入荷先に関するテスト
+     *
+     * @dataProvider vendorprovider
+     * @param integer $vender_type_id
+     * @param string $vendor
+     * @return void
+     */
+    public function test_vendor(int $vendor_type_id, string $vendor) {
+        $info = CardInfo::findSingleCard('BRO', 'ドラゴンの運命', false);
+
+        $params = [Header::CARD_ID => $info->id, Header::LANGUAGE => 'JP', Header::CONDITION => 'NM',
+                            Header::ARRIVAL_DATE => '2024/10/11', Header::COST => 22, Header::MARKET_PRICE => 400,
+                            Header::QUANTITY => 1, Header::VENDOR_TYPE_ID => $vendor_type_id, Header::VENDOR => $vendor];
+        Mockery::mock(CardBoardService::class)->shouldReceive('store')->with(Mockery::any(), [])->andReturn();
+        $log = $this->execute($params);
+
+        // 出荷先カテゴリ
+        assertEquals($vendor_type_id, $log->vendor_type_id, '入荷先カテゴリ');
+        assertEquals($vendor, $log->vendor, '入荷先名');
+        Mockery::close();
+    }
+
+    public function vendorprovider() {
+        return [
+            'オリジナルパック' =>[1, ''],
+            '私物' =>[2, ''],
+            '買取' =>[3, '駿河屋'],
+            '棚卸し' =>[4, ''],
+            '返品' =>[5, ''],
+        ];
+    }
+
+    private function execute(array $params) {
+        $response = $this->post('/api/arrival', $params);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $json = $response->json();
+        $log = ArrivalLog::find($json['arrival_id']);
+        assertNotNull($log, '入荷ログ');
+        return $log;
     }
 
     /**

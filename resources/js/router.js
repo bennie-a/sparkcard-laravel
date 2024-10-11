@@ -1,6 +1,5 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/config/ExpansionPage.vue";
@@ -11,6 +10,7 @@ import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
 import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import{ store} from './store';
 
 const routes = [
     {
@@ -44,16 +44,6 @@ const routes = [
             title: "メルカリ用CSVダウンロード",
             description:
                 "Notionの商品管理ボードからメルカリ用CSVを作成します。※300円未満の商品は除外します。",
-        },
-    },
-
-    {
-        path: "/notion/update/status",
-        component: UpdateStatus,
-        meta: {
-            title: "ステータス一括変更",
-            description:
-                "Notionの商品管理ボードあるカードのステータスを一括で変更します。",
         },
     },
     {
@@ -133,6 +123,15 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    store.dispatch("loading/start");
+    next();
+});
+
+router.afterEach(() => {
+    store.dispatch("loading/stop");
 });
 
 // VueRouterインスタンスをエクスポートする

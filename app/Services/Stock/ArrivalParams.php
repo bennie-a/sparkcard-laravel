@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
  */
 class ArrivalParams {
 
+    private $details = [];
     public function __construct(array $details) {
         $this->details = $details;
     }
@@ -31,11 +32,26 @@ class ArrivalParams {
     public function arrivalDate():Carbon {
         return $this->details[Header::ARRIVAL_DATE];
     }
-
+    /**
+     * Undocumented function
+     *@deprecated 4.9.0
+     * @return string
+     */
     public function supplier():string {
         return $this->details[Header::SUPPLIER];
     }
 
+    public function vendorType():int {
+        return $this->details[Header::VENDOR_TYPE_ID];
+    }
+
+    public function vendor():string {
+        if ($this->vendorType() !== 3) {
+            return '';
+        }
+        return $this->details[Header::VENDOR];
+    }
+    
     public function cost():int {
         return $this->details[Header::COST];
     }

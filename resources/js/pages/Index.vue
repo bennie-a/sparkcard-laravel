@@ -33,10 +33,11 @@ export default {
             isLoading: false,
             vendorTypeList:reactive([]),
             vendorType:1,
-            vendor:'晴れる屋'
+            vendor:''
         };
     },
     async created() {
+        // 入荷先カテゴリを取得
         await axios
             .get("/api/vendor")
             .then((response) => {
@@ -56,6 +57,13 @@ export default {
         suggestions: function () {
             return this.$store.getters["expansion/suggestions"];
         },
+        isVendorDisabled:function() {
+            if (this.vendorType != 3) {
+                this.vendor = '';
+                return true;
+            }
+            return false;
+        }
     },
     methods: {
         suggestSet() {
@@ -138,6 +146,8 @@ export default {
                         language: c.language,
                         quantity: c.stock,
                         cost: this.cost,
+                        vendor_type_id:this.vendorType,
+                        vendor:this.vendor,
                         market_price:this.formatPrice(c.price),
                         condition: c.condition,
                         attr: c.exp.attr,
@@ -267,7 +277,7 @@ export default {
                 </div>
                 <div class="three wide column field">
                     <label for="">入荷先名</label>
-                    <input type="text" :value="vendor" class="">
+                    <input type="text" :value="vendor" :disabled="isVendorDisabled">
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
