@@ -151,7 +151,6 @@ export default {
                         market_price:this.formatPrice(c.price),
                         condition: c.condition,
                         attr: c.exp.attr,
-                        supplier: this.supplier,
                         isFoil: c.isFoil,
                         arrival_date: this.arrivalDate,
                     };
@@ -170,7 +169,7 @@ export default {
                         })
                         .catch(({ response }) => {
                             const data = response.data;
-                            const msg = `${c.name}(${c.exp.attr}):${data.message}`;
+                            const msg = `ステータスコード:${response.status} ${c.name}(${c.exp.attr}):${data.message}`;
                             console.error(msg);
                             this.$store.dispatch("message/error", msg);
                         });
@@ -266,6 +265,7 @@ export default {
         >
             件数：{{ $store.getters.cardsLength }}件
         </h2>
+        {{ this.vendor }}
 
         <div v-if="$store.getters.cardsLength != 0" class="mt-2 ui form">
             <div class="four fields">
@@ -277,7 +277,7 @@ export default {
                 </div>
                 <div class="three wide column field">
                     <label for="">入荷先名</label>
-                    <input type="text" :value="vendor" :disabled="isVendorDisabled">
+                    <input type="text" v-model="vendor" :disabled="isVendorDisabled">
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
