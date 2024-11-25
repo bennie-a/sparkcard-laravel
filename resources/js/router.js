@@ -9,6 +9,7 @@ import PostExPage from "./pages/config/PostExPage.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
 import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
+import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import{ store} from './store';
 
@@ -19,6 +20,14 @@ const routes = [
         meta: {
             title: "入荷登録",
             description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
+        },
+    },
+    {
+        path:"/arrival/",
+        component:ArrivalLogPage,
+        meta:{
+            title:"入荷情報一覧",
+            description:"入荷情報を一覧表示します"
         },
     },
     {

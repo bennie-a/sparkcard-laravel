@@ -276,7 +276,7 @@ export default {
                     </select>
                 </div>
                 <div class="three wide column field">
-                    <label for="">入荷先名</label>
+                    <label for="">取引先</label>
                     <input type="text" v-model="vendor" :disabled="isVendorDisabled">
                 </div>
                 <div class="three wide column field">

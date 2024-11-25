@@ -33,7 +33,7 @@ const fetch =  async () => {
                                 resultCount.value = result.value.length;
                             })
                             .catch((e) => {
-                                console.error(e);
+                                console.error(e.statusCode);
                                 isLoading.value = false;
                             })
                             .finally(() => {
@@ -92,7 +92,6 @@ const toDateString = (date) => {
                     <scdatepicker :selectedDate="shippingStartDate" @update="handleStartDate"/>
                 </div>
             </div>
-            {{ buyer }}
             <!-- <div class="three wide field">
                 <label for="">発送日(終了)</label>
                 <div>

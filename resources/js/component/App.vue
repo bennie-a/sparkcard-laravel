@@ -57,7 +57,7 @@ import Loading from "vue-loading-overlay";
                 <router-view />
             </section>
             <loading
-            :active="isLoading" :can-cancel="false" :is-full-page="true" />
+            :active="$store.getters['loading/isLoad']" :can-cancel="false" :is-full-page="true" />
         </main>
     </div>
 </template>
