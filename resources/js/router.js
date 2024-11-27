@@ -12,6 +12,7 @@ import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
 import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import{ store} from './store';
+import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 
 const routes = [
     {
@@ -30,6 +31,16 @@ const routes = [
             description:"入荷情報を一覧表示します"
         },
     },
+    {
+        path:"/arrival/detail/:arrival_date/:vendor_id",
+        name:'ArrivalLogDss',
+        component:ArrivalLogDssPage,
+        meta:{
+            title:"入荷情報詳細",
+            description:"入荷情報詳細"
+        },
+    },
+
     {
         path: "/stockpile/",
         component: StockpilePage,
@@ -135,12 +146,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    console.log("start");
     store.dispatch("loading/start");
     next();
 });
 
 router.afterEach(() => {
     store.dispatch("loading/stop");
+    console.log("stop");
 });
 
 // VueRouterインスタンスをエクスポートする

@@ -34,7 +34,6 @@ const fetch =  async () => {
                             })
                             .catch((e) => {
                                 console.error(e.statusCode);
-                                isLoading.value = false;
                             })
                             .finally(() => {
                                 isLoading.value = false;

@@ -70,11 +70,20 @@ body {
     margin-left: 1rem !important;
 }
 
+.ml-half {
+    margin-left: 0.5rem !important;
+}
+
+
 .text-center {
     text-align: center;
 }
 .pl-2 {
     padding-left: 2em !important;
+}
+
+.ui.table tbody tr td.selectable {
+    cursor: pointer;
 }
 
 /* ロード中のアイコン */
