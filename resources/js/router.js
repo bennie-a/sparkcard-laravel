@@ -37,7 +37,13 @@ const routes = [
         component:ArrivalLogDssPage,
         meta:{
             title:"入荷情報詳細",
-            description:"入荷情報詳細"
+            description:"入荷情報詳細",
+            urls: [
+                {
+                    url:"/arrival/",
+                    title:"入荷情報一覧"
+                },
+            ]
         },
     },
 
