@@ -14,6 +14,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import{ store} from './store';
 import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 
+const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
+const arrivalDssLinks = {};
 const routes = [
     {
         path: "/",
@@ -24,10 +26,10 @@ const routes = [
         },
     },
     {
-        path:"/arrival/",
+        path:arrivalLinks.url,
         component:ArrivalLogPage,
         meta:{
-            title:"入荷情報一覧",
+            title:arrivalLinks.title,
             description:"入荷情報を一覧表示します"
         },
     },
@@ -38,12 +40,7 @@ const routes = [
         meta:{
             title:"入荷情報詳細",
             description:"入荷情報詳細",
-            urls: [
-                {
-                    url:"/arrival/",
-                    title:"入荷情報一覧"
-                },
-            ]
+            urls: [arrivalLinks]
         },
     },
 
