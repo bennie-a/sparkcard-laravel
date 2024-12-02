@@ -1,9 +1,16 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
+import cardlayout from "../component/CardLayout.vue";
 
 const route = useRoute();
 const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
+const card = {
+    cardname:'霜の暴君、アイシングデス[JP]',
+    foil:{isFoil:true, name:"Foil"},
+    setname:"フォーゴトン・レルム探訪",
+    image_url:'https://cards.scryfall.io/png/front/b/0/b009f231-6dd2-468d-8005-04715cb9df1d.png?1645529044'
+};
 
 </script>
 <template>
@@ -28,15 +35,15 @@ const vendor_id = route.params.vendor_id;
             <tbody>
                 <tr>
                     <td class="center aligned">523567</td>
-                    <td>霜の暴君、アイシングデス[JP]</td>
+                    <td><cardlayout :card="card"></cardlayout></td>
                     <td class="center aligned"><label class="ui horizonal label blue">NM</label></td>
                     <td class="center aligned">1枚</td>
                     <td class="center aligned"><i class="bi bi-currency-yen"></i>20</td>
                     <td class="center aligned selectable">
-                        <a style="font-size: 1.2rem;"><i class="bi bi-pencil-square"></i></a>
+                        <a><i class="large edit icon"></i></a>
                     </td>
                     <td class="center aligned selectable">
-                        <a style="font-size: 1.2rem;"><i class="bi bi-trash3"></i></a>
+                        <a class="icon"><i class="large trash alternate icon"></i></a>
                     </td>
                 </tr>
             </tbody>

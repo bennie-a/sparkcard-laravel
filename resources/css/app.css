@@ -119,6 +119,10 @@ input.dp_custom_input {
     padding-left: 2rem !important;
 }
 
+.ui.table tbody tr td.selectable>a:not(.ui) {
+    color: var(--teal)!important;
+}
+
 @-webkit-keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);
