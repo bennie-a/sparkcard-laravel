@@ -23,5 +23,8 @@ export default {
         stop(context) {
             context.commit("setLoad", false);
         },
+        isLoad(context){
+            return context.getters["loading/isLoad"];
+        }
     },
 };
