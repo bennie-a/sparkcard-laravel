@@ -1,5 +1,4 @@
 <script setup>
-import imagemodal from '../component/ImageModal.vue';
 import { defineProps } from 'vue';
 import foiltag from '../component/FoilTag.vue';
 

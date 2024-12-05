@@ -13,9 +13,10 @@ import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import{ store} from './store';
 import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
+import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {};
+const arrivalDssLinks = {url:"/arrival/detail/:arrival_date/:vendor_id", title:"入荷情報詳細"};
 const routes = [
     {
         path: "/",
@@ -34,16 +35,26 @@ const routes = [
         },
     },
     {
-        path:"/arrival/detail/:arrival_date/:vendor_id",
+        path:arrivalDssLinks.url,
         name:'ArrivalLogDss',
         component:ArrivalLogDssPage,
         meta:{
-            title:"入荷情報詳細",
+            title:arrivalDssLinks.title,
             description:"入荷情報詳細",
             urls: [arrivalLinks]
         },
     },
+    {
+        path:"/arival/edit/:arrival_id",
+        name:'ArrivalLogEdit',
+        component:ArrivalLogEditPage,
+        meta:{
+            title:"入荷情報編集",
+            description:"入荷情報編集",
+            urls: [arrivalLinks]
+        },
 
+    },
     {
         path: "/stockpile/",
         component: StockpilePage,

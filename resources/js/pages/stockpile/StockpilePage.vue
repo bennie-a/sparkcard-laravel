@@ -15,7 +15,8 @@ export default {
         pagination: ListPagination,
         foiltag: FoilTag,
         condition: ConditionTag,
-        cardlayout:CardLayout
+        cardlayout:CardLayout,
+        "image-modal":ImageModal
     },
     data() {
         return {
