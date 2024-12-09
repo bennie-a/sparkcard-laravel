@@ -78,13 +78,15 @@ onMounted(async() => {
         <h2 class="ui medium header">商品一覧</h2>
         <table class="ui table stripe">
             <thead>
-                <th class="one wide">在庫ID</th>
-                <th>カード</th>
-                <th class="center aligned">言語</th>
-                <th class="center aligned">状態</th>
-                <th class="center aligned">枚数</th>
-                <th class="center aligned">単価</th>
-                <th class="center aligned">小計</th>
+                <tr>
+                    <th class="one wide">在庫ID</th>
+                    <th>カード</th>
+                    <th class="center aligned">言語</th>
+                    <th class="center aligned">状態</th>
+                    <th class="center aligned">枚数</th>
+                    <th class="center aligned">単価</th>
+                    <th class="center aligned">小計</th>
+                </tr>
             </thead>
             <tbody>
                 <tr v-for="(i, index) in detail.items" :key="index">
