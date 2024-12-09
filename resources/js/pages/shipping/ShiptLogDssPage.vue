@@ -7,6 +7,7 @@ import { ref, onMounted } from 'vue';
 import condition from "../component/ConditionTag.vue";
 import imagemodal from '../component/ImageModal.vue';
 import foiltag from '../component/FoilTag.vue';
+import cardlayout from '../component/CardLayout.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -89,18 +90,8 @@ onMounted(async() => {
                 <tr v-for="(i, index) in detail.items" :key="index">
                 <td>{{ i.id }}</td>
                 <td>
-                    <h4 class="ui image header">
-                        <img :src="i.image_url" class="ui mini rounded image" @click="$refs.modal[index].showImage(i.id)">
-                        <div class="content">
-                            {{ i.cardname }}<foiltag :isFoil="i.foil.isFoil" :name="i.foil.name"/>
-                            <div class="sub header">{{ i.setname }}</div>
-                        </div>
-                        <imagemodal
-                                :url="i.image_url"
-                                :id="i.id"
-                                ref="modal"
-                            />
-                    </h4></td>
+                    <cardlayout :card="i"></cardlayout>
+                </td>
                 <td class="center aligned">{{ i.lang }}</td>
                 <td class="center aligned"><condition :name="i.condition"/></td>
                 <td class="center aligned">{{i.quantity}}枚</td>

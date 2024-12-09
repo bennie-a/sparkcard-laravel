@@ -1,6 +1,6 @@
 <?php
 namespace App\Enum;
-
+use App\Services\Constant\NotionConstant as JA;
 /**
  * カードの色を示すenum
  */
@@ -27,7 +27,7 @@ enum CardColor:string {
             self::LESS => "無色",
             self::ARTIFACT => "アーティファクト",
             self::LAND => "土地",
-            self::UNDEFINED => "不明"
+            self::UNDEFINED => JA::UNDEFINED
         };
     }
 

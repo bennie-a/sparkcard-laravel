@@ -1,5 +1,7 @@
 <script setup>
 import SideMenu from "../pages/component/SideMenu.vue";
+import Loading from "vue-loading-overlay";
+
 </script>
 <template>
     <header>
@@ -54,6 +56,8 @@ import SideMenu from "../pages/component/SideMenu.vue";
             <section class="mt-2 ui segment">
                 <router-view />
             </section>
+            <loading
+            :active="$store.dispatch['loading/isLoad']" :can-cancel="false" :is-full-page="true" />
         </main>
     </div>
 </template>
@@ -68,12 +72,18 @@ export default {
             urls:[]
         };
     },
+    components:{
+        Loading
+    },
     computed: {
         higherHeightPx() {
             return this.isMounted
                 ? Math.max(this.sidebarHeight, this.mainHeight) + "px"
                 : null;
         },
+        isLoading() {
+            return this.$store.dispatch('loading/isLoad');
+        }
     },
     watch: {
         $route(to, from) {

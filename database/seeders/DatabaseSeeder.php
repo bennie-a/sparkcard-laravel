@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FoiltypeSeeder::class);
         $this->call(CsvHeaderSeeder::class);
         $this->call(ExcludePromoSeeder::class);
+        $this->call(VendorTypeSeeder::class);
         logger()->info('マスタデータ登録終了');
     }
 }

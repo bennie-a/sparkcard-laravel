@@ -1,7 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@200;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap");
+
+/*******************************
+     User Global Variables
+*******************************/
 :root {
     --teal: #00b5ad;
+    --gray:#333333;
 }
 
 body {
@@ -27,6 +32,15 @@ body {
 .ui .header {
     font-family: "Noto Sans JP", sans-serif !important;
     padding-block: 0.8rem;
+}
+
+#main>.ui.header {   
+    color:var(--gray) !important;
+}
+
+.ui.form .field>label {
+    color:var(--gray) !important;
+    font-weight: 500 !important;
 }
 /* 余白 */
 .mt-1 {
@@ -56,11 +70,20 @@ body {
     margin-left: 1rem !important;
 }
 
+.ml-half {
+    margin-left: 0.5rem !important;
+}
+
+
 .text-center {
     text-align: center;
 }
 .pl-2 {
     padding-left: 2em !important;
+}
+
+.ui.table tbody tr td.selectable {
+    cursor: pointer;
 }
 
 /* ロード中のアイコン */
@@ -94,6 +117,10 @@ body {
 /* datepickerのレイアウト調整 */
 input.dp_custom_input {
     padding-left: 2rem !important;
+}
+
+.ui.table tbody tr td.selectable>a:not(.ui) {
+    color: var(--teal)!important;
 }
 
 @-webkit-keyframes load8 {

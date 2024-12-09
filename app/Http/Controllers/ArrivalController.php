@@ -19,6 +19,7 @@ use App\Services\Stock\ArrivalLogService;
  */
 class ArrivalController extends Controller {
 
+    private $service;
     public function __construct(ArrivalLogService $service) 
     {
         $this->service = $service;        
@@ -41,8 +42,8 @@ class ArrivalController extends Controller {
      */
     public function store(ArrivalRequest $request)
     {
-        $details = $request->only([Header::CARD_ID, 'language',  Header::QUANTITY, Header::COST,
-        Header::MARKET_PRICE, Header::CONDITION, Header::SUPPLIER]);
+        $details = $request->only([Header::CARD_ID, Header::LANGUAGE,  Header::QUANTITY, Header::COST,
+        Header::MARKET_PRICE, Header::CONDITION, Header::VENDOR_TYPE_ID, Header::VENDOR]);
         $details[Header::IS_FOIL] = $request->boolean(Header::IS_FOIL);
         $details[Header::ARRIVAL_DATE] = $request->date(Header::ARRIVAL_DATE);
         $params = new ArrivalParams($details);
@@ -57,7 +58,7 @@ class ArrivalController extends Controller {
             \App\Facades\CardBoard::store($info, $details);
         }
         logger()->info('End Arrival log', [$params->cardId()]);
-        return response()->json([], Response::HTTP_CREATED);
+        return response()->json([Header::CARD_ID => $params->cardId(), 'arrival_id' => $arrivalLog->id], Response::HTTP_CREATED);
     }
 
     /**

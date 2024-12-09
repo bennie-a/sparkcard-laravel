@@ -27,7 +27,7 @@ class ShiptLogRequest extends FormRequest
     {
         return [
             Header::BUYER => 'nullable',
-            Header::SHIPPING_DATE => 'date | before_or_equal:today',
+            Header::SHIPPING_DATE => 'date',
         ];
     }
 

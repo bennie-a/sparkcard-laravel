@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Enum\CardLanguage;
+use App\Enum\ShiptMethod;
 use App\Factory\NotionPageFactory;
 use App\Models\CardInfo;
 use App\Models\Expansion;
@@ -13,20 +14,13 @@ use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Collection;
+use App\Services\Constant\NotionConstant as JA;
 
 /**
  * Notionの販売管理ボードに関するServiceクラス
  */
 class CardBoardService {
     
-    private const JA_QTY = '枚数';
-
-    private const JA_PRICE = '価格';
-
-    private const JA_SET = 'エキスパンション';
-
-    private const JA_LANG = '言語';
-
     private $repo;
     public function __construct() {
         $this->repo = new CardBoardRepository();
@@ -54,20 +48,20 @@ class CardBoardService {
         foreach($pages as $page) {
             $card = new NotionCard();
             $card->setName($page->getTitle());
-            $price = $page->getProperty($this::JA_PRICE);
+            $price = $page->getProperty(JA::PRICE);
             $card->setPrice($price->getNumber());
             $card->setExpansion($this->getExpansion($page));
 
-            $lang = $page->getProperty($this::JA_LANG);
+            $lang = $page->getProperty(JA::LANG);
             $card->setLang($lang->getName());
 
-            $stock = $page->getProperty($this::JA_QTY);
+            $stock = $page->getProperty(JA::QTY);
             $card->setStock($stock->getNumber());
 
-            $buyer = $page->getProperty("購入者名");
+            $buyer = $page->getProperty(JA::BUYER);
             $card->setBuyer($buyer->getPlainText());
 
-            $shipping = $page->getProperty("発送日");
+            $shipping = $page->getProperty(JA::SHIPT_DATE);
             $card->setShippingDate($shipping->getStart());
             array_push($resultList, $card);
         }
@@ -88,20 +82,20 @@ class CardBoardService {
         }
         foreach($pages as $page) {
             $array = $page->toArray();
-            $price = $page->getProperty($this::JA_PRICE);
-            $cardIndex = $page->getProperty('カード番号');
-            $color = $page->getProperty('色');
-            $stock = $page->getProperty($this::JA_QTY);
-            $url = $page->getProperty('画像URL');
-            $lang = $page->getProperty($this::JA_LANG);
-            $condition = $page->getProperty('状態');
-            $properties = $array['rawProperties'];
-            $descArray = $properties['説明文']['rich_text'];
-            $ennameArray = $properties['英名']['rich_text'];
+            $price = $page->getProperty(JA::PRICE);
+            $cardIndex = $page->getProperty(JA::NUMBER);
+            $color = $page->getProperty(JA::COLOR);
+            $stock = $page->getProperty(JA::QTY);
+            $url = $page->getProperty(JA::IMAGE);
+            $lang = $page->getProperty(JA::LANG);
+            $condition = $page->getProperty(JA::CONDITION);
+            $properties = $array[JA::RAW];
+            $descArray = $properties[JA::DESC][JA::RICH];
+            $ennameArray = $properties[JA::EN_NAME][JA::RICH];
             $card = new NotionCard();
             $card->setId($page->getId());
             $card->setName($page->getTitle());
-            $isFoilProperty = $page->getProperty('Foil');
+            $isFoilProperty = $page->getProperty(JA::FOIL);
             $isFoil = $isFoilProperty->getContent();
             $exp = $this->getExpansion($page);
             $card->setExpansion($exp);
@@ -119,7 +113,7 @@ class CardBoardService {
             if (!is_null($color)) {
                 $card->setColor($color->getName());
             } else {
-                $card->setColor("不明");
+                $card->setColor(JA::UNDEFINED);
             }
             if (!is_null($stock)) {
                 $card->setStock($stock->getContent());
@@ -131,10 +125,10 @@ class CardBoardService {
             }
 
             if(!empty($descArray)) {
-                $card->setDesc($descArray[0]['plain_text']);
+                $card->setDesc($descArray[0][JA::PLAIN]);
             }
             if(!empty($ennameArray)) {
-                $card->setEnname($ennameArray[0]['plain_text']);
+                $card->setEnname($ennameArray[0][JA::PLAIN]);
             }
 
             $card->setFoil($isFoil);
@@ -145,13 +139,13 @@ class CardBoardService {
     }
 
     private function getExpansion($page) {
-        $exp = $page->getProperty($this::JA_SET);
+        $exp = $page->getProperty(JA::SET);
         $exp_id = $exp->getContent()[0]['id'];
         $expModel = Expansion::findByNotionId($exp_id);
         if (!is_null($expModel)) {
             return ['name' => $expModel['name'], 'attr' => $expModel['attr']];
         } else {
-            return ['name' => '不明', 'attr' => 'undefined'];
+            return ['name' => JA::UNDEFINED, 'attr' => 'undefined'];
         }
     }
 
@@ -167,42 +161,40 @@ class CardBoardService {
             logger()->debug($info->name);
             $duplicated = $this->repo->findBySparkcardId($info->id);
             $priceVal = intval($details[Header::MARKET_PRICE]);
-            if (!empty($duplicated)) {
-                $stock = $duplicated->getProperty("枚数")->getNumber() + intval($details[Header::QUANTITY]);
-                $page->set("枚数", Number::value($stock));
+            if (!empty($duplicated) && $duplicated->getProperty(JA::STATUS)->getName() !== '取引完了') {
+                $stock = $duplicated->getProperty(JA::QTY)->getNumber() + intval($details[Header::QUANTITY]);
+                $page->set(JA::QTY, Number::value($stock));
                 $page->setId($duplicated->getId());
                 $this->updatePage($page);
             } else {
-                $page->setTitle("名前", $info->name);
-                $page->setText("英名", $info->en_name);
-                $page->setSelect("Status", "要写真撮影");
-                $page->setNumber("枚数", $details[Header::QUANTITY]);
-                $page->setNumber("カード番号", $info->number);
+                $page->setTitle(JA::NAME, $info->name);
+                $page->setText(JA::EN_NAME, $info->en_name);
+                $page->setSelect(JA::STATUS, "要写真撮影");
+                $page->setNumber(JA::QTY, $details[Header::QUANTITY]);
+                $page->setNumber(JA::NUMBER, $info->number);
                 $language = CardLanguage::find($details[Header::LANGUAGE]);
-                $page->setSelect("言語", $language->text());
-                $page->setCheckbox("Foil", $info->isFoil);
+                $page->setSelect(JA::LANG, $language->text());
+                $page->setCheckbox(JA::FOIL, $info->isFoil);
 
                 $color = MainColor::find($info->color_id);
-                $page->setSelect("色", $color->name);
-                $page->setSelect("状態", $details[Header::CONDITION]);
+                $page->setSelect(JA::COLOR, $color->name);
+                $page->setSelect(JA::CONDITION, $details[Header::CONDITION]);
                 if (!empty($info->image_url)) {
-                    $page->setUrl('画像URL', $info->image_url);
+                    $page->setUrl(JA::IMAGE, $info->image_url);
                 }
-                // $expansion = Expansion::where('attr', $details['attr'])->first();
-                $page->setRelation($this::JA_SET, [$info->exp_id]);
-                $page->setRelation("プラットフォーム",['e411d9c6acce4e82988230a12668e78d']);
-                // ミニレター
-                $sends = [];
-                if ($priceVal >= 1500) {
-                    // クリックポスト
-                    array_push($sends, '29c8c95ed21645909cafea172a5dd2f7');
-                } else {
-                    array_push($sends, 'e7db5d1cf759498fb66bac08644885da');
-                }
-                $page->setRelation('発送方法', $sends);
-                $page->set('sparkcard_id', Number::value($info->id));
-                $page->set($this::JA_PRICE, Number::value($priceVal));
+                $page->setRelation(JA::SET, [$info->exp_id]);
+                $page->setRelation(JA::FORM,['e411d9c6acce4e82988230a12668e78d']);
+                // 発送方法
+                $method = ShiptMethod::findByPrice($priceVal);
 
+                $page->setRelation(JA::SHIPT, [$method->notion_id]);
+                $page->set(JA::SPARK_ID, Number::value($info->id));
+                $page->set(JA::PRICE, Number::value($priceVal));
+
+                /**
+                 * PHP Intelephenseに型通知
+                 * @var Page
+                 */
                 $page = $this->repo->store($page);
                 // ページID
                 logger()->info($page->getId());

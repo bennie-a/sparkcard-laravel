@@ -6,8 +6,6 @@ use app\Services\Stock\ArrivalParams;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
 use App\Services\Constant\StockpileHeader as Header;
-use App\Http\Response\CustomResponse;
-use App\Exceptions\NotFoundException;
 
 /**
  * 入荷手続きに関するServiceクラス
@@ -25,15 +23,16 @@ class ArrivalLogService {
         $stockpile = Stockpile::findSpecificCard($params->cardId(), $params->language(), $params->condition());
         if (empty($stockpile->id)) {
             // 在庫情報なし
-            $stockpile = Stockpile::create(['card_id' => $params->cardId(), 'language' => $params->language(),
+            $stockpile = Stockpile::create([Header::CARD_ID => $params->cardId(), Header::LANGUAGE => $params->language(),
             Header::CONDITION => $params->condition(), Header::QUANTITY => $params->quantity()]);
         } else {
             //在庫情報あり
             $stockpile->quantity += $params->quantity();
             $stockpile->update();
         }
-        $arrivalLog = ArrivalLog::create(['stock_id' => $stockpile->id, 'arrival_date' => $params->arrivalDate(), 
-                                        'supplier' => $params->supplier(), 'quantity' => $params->quantity(), 'cost' => $params->cost()]);
+        $arrivalLog = ArrivalLog::create(['stock_id' => $stockpile->id, Header::ARRIVAL_DATE => $params->arrivalDate(), 
+                                        Header::VENDOR_TYPE_ID => $params->vendorType(), Header::VENDOR => $params->vendor(), 
+                                        Header::QUANTITY => $params->quantity(), Header::COST => $params->cost()]);
         return $arrivalLog;
     }
 }

@@ -22,7 +22,7 @@
                             :class="{ active: $route.path === '/arrival' }"
                             aria-current="page"
                             to="/arrival"
-                            ><i class="bi bi-search"></i>入荷ログ一覧</router-link
+                            ><i class="bi bi-search"></i>入荷情報一覧</router-link
                         >
                     </li>
                 </ul>

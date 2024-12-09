@@ -9,6 +9,7 @@ import FoilTag from "./component/FoilTag.vue";
 import ImageModal from "./component/ImageModal.vue";
 import SCDatePicker from "./component/SCDatePicker.vue";
 import PgList from "./component/PgList.vue";
+import { reactive } from "vue";
 
 export default {
     components: {
@@ -27,12 +28,26 @@ export default {
             color: "",
             isFoil: false,
             name: "",
-            supplier: "オリジナルパック",
             arrivalDate: new Date(),
             cost: 28,
             isLoading: false,
+            vendorTypeList:reactive([]),
+            vendorType:1,
+            vendor:''
         };
     },
+    async created() {
+        // 入荷先カテゴリを取得
+        await axios
+            .get("/api/vendor")
+            .then((response) => {
+                this.vendorTypeList.value = response.data;
+            })
+            .catch((e) => {
+                console.error(e);
+            })
+    },
+
     computed: {
         isDisabled: function () {
             let selected = this.$store.getters["csvOption/selectedList"];
@@ -42,6 +57,13 @@ export default {
         suggestions: function () {
             return this.$store.getters["expansion/suggestions"];
         },
+        isVendorDisabled:function() {
+            if (this.vendorType != 3) {
+                this.vendor = '';
+                return true;
+            }
+            return false;
+        }
     },
     methods: {
         suggestSet() {
@@ -124,10 +146,11 @@ export default {
                         language: c.language,
                         quantity: c.stock,
                         cost: this.cost,
+                        vendor_type_id:this.vendorType,
+                        vendor:this.vendor,
                         market_price:this.formatPrice(c.price),
                         condition: c.condition,
                         attr: c.exp.attr,
-                        supplier: this.supplier,
                         isFoil: c.isFoil,
                         arrival_date: this.arrivalDate,
                     };
@@ -146,7 +169,7 @@ export default {
                         })
                         .catch(({ response }) => {
                             const data = response.data;
-                            const msg = `${c.name}(${c.exp.attr}):${data.message}`;
+                            const msg = `ステータスコード:${response.status} ${c.name}(${c.exp.attr}):${data.message}`;
                             console.error(msg);
                             this.$store.dispatch("message/error", msg);
                         });
@@ -242,18 +265,19 @@ export default {
         >
             件数：{{ $store.getters.cardsLength }}件
         </h2>
+        {{ this.vendor }}
 
         <div v-if="$store.getters.cardsLength != 0" class="mt-2 ui form">
             <div class="four fields">
-                <div class="four wide column field">
-                    <label for="">仕入れ先</label>
-                    <select v-model="supplier" class="mr-1 ui dropdown">
-                        <option>オリジナルパック</option>
-                        <option>私物</option>
-                        <option>返品</option>
-                        <option>棚卸し</option>
-                        <option>店舗購入</option>
+                <div class="three wide column field">
+                    <label for="">入荷カテゴリ</label>
+                    <select v-model="vendorType" class="mr-1 ui dropdown">
+                        <option v-for="t in vendorTypeList.value" :key="t.id" :value="t.id">{{t.name }}</option>
                     </select>
+                </div>
+                <div class="three wide column field">
+                    <label for="">取引先</label>
+                    <input type="text" v-model="vendor" :disabled="isVendorDisabled">
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>

@@ -1,6 +1,5 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import UpdateStatus from "./pages/notion/UpdateStatus.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/config/ExpansionPage.vue";
@@ -10,8 +9,14 @@ import PostExPage from "./pages/config/PostExPage.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
 import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
+import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import{ store} from './store';
+import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
+import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 
+const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
+const arrivalDssLinks = {url:"/arrival/detail/:arrival_date/:vendor_id", title:"入荷情報詳細"};
 const routes = [
     {
         path: "/",
@@ -20,6 +25,35 @@ const routes = [
             title: "入荷登録",
             description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
         },
+    },
+    {
+        path:arrivalLinks.url,
+        component:ArrivalLogPage,
+        meta:{
+            title:arrivalLinks.title,
+            description:"入荷情報を一覧表示します"
+        },
+    },
+    {
+        path:arrivalDssLinks.url,
+        name:'ArrivalLogDss',
+        component:ArrivalLogDssPage,
+        meta:{
+            title:arrivalDssLinks.title,
+            description:"入荷情報詳細",
+            urls: [arrivalLinks]
+        },
+    },
+    {
+        path:"/arival/edit/:arrival_id",
+        name:'ArrivalLogEdit',
+        component:ArrivalLogEditPage,
+        meta:{
+            title:"入荷情報編集",
+            description:"入荷情報編集",
+            urls: [arrivalLinks]
+        },
+
     },
     {
         path: "/stockpile/",
@@ -44,16 +78,6 @@ const routes = [
             title: "メルカリ用CSVダウンロード",
             description:
                 "Notionの商品管理ボードからメルカリ用CSVを作成します。※300円未満の商品は除外します。",
-        },
-    },
-
-    {
-        path: "/notion/update/status",
-        component: UpdateStatus,
-        meta: {
-            title: "ステータス一括変更",
-            description:
-                "Notionの商品管理ボードあるカードのステータスを一括で変更します。",
         },
     },
     {
@@ -133,6 +157,17 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    console.log("start");
+    store.dispatch("loading/start");
+    next();
+});
+
+router.afterEach(() => {
+    store.dispatch("loading/stop");
+    console.log("stop");
 });
 
 // VueRouterインスタンスをエクスポートする
