@@ -23,16 +23,19 @@ const toList = () => {
 
 </script>
 <template>
-    {{ arrival_date }}{{ vendor_id }}
+    <article>
+        <h2 class="ui medium header">入荷先</h2>
+        <label class="ui label basic orange">買取</label><span class="ml-half">晴れる屋トーナメントセンター大阪</span>
+    </article>
     <article class="mt-2">
-        <h2 class="ui header">入荷商品</h2>
+        <h2 class="ui medium header">入荷商品</h2>
         <h3 class="ui medium dividing header">
             件数：5件
         </h3>
         <table class="ui striped table">
             <thead>
                 <tr>
-                    <th class="two wide center aligned">入荷ID</th>
+                    <th class="two wide center aligned">ID</th>
                     <th class="six wide">商品名</th>
                     <th class="two wide center aligned">状態</th>
                     <th class="center aligned">枚数</th>
