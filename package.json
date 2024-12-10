@@ -1,6 +1,6 @@
 {
     "private": true,
-    "version": "4.9.0",
+    "version": "5.0.0",
     "scripts": {
         "dev": "vite --host",
         "build": "vite build",
@@ -40,5 +40,5 @@
         "vuejs-paginate-next": "^1.0.2",
         "vuex": "^4.1.0"
     },
-    "type":"module"
+    "type": "module"
 }

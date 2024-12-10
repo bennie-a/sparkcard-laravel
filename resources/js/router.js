@@ -38,9 +38,11 @@ const routes = [
         path:arrivalDssLinks.url,
         name:'ArrivalLogDss',
         component:ArrivalLogDssPage,
+        beforeEnter:(to, from, next) => {
+            to.meta.title = to.params.arrival_date;
+            next();
+        },
         meta:{
-            title:arrivalDssLinks.title,
-            description:"入荷情報詳細",
             urls: [arrivalLinks]
         },
     },
