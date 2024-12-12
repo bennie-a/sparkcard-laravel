@@ -21,6 +21,14 @@ const toList = () => {
     router.push("/arrival");
 }
 
+// 入荷情報編集ページに遷移する
+ const toEditPage = (arrival_id) => {
+        router.push({
+            name: "ArrivalLogEdit",
+            params: { arrival_id: arrival_id},
+        });
+    }
+
 </script>
 <template>
     <article>
@@ -46,13 +54,13 @@ const toList = () => {
             </thead>
             <tbody>
                 <tr>
-                    <td class="center aligned">523567</td>
+                    <td class="center aligned">{{card.id}}</td>
                     <td><cardlayout :card="card"></cardlayout></td>
                     <td class="center aligned"><label class="ui horizonal label blue">NM</label></td>
                     <td class="center aligned">1枚</td>
                     <td class="center aligned"><i class="bi bi-currency-yen"></i>20</td>
                     <td class="center aligned selectable">
-                        <a><i class="edit icon"></i></a>
+                        <a @click="toEditPage(card.id)"><i class="edit icon"></i></a>
                     </td>
                     <td class="center aligned selectable">
                         <a class="icon"><i class="trash alternate icon"></i></a>
