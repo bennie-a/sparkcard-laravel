@@ -41,3 +41,8 @@ export default {
 }
  
 </script>
+<style>
+.dp__input {
+    padding-left: 2rem!important;
+}
+</style>
