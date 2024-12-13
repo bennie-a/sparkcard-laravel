@@ -16,7 +16,7 @@ import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {url:"/arrival/detail/:arrival_date/:vendor_id", title:"入荷情報詳細"};
+const arrivalDssLinks = {url:"/arrival/detail/:arrival_date/:vendor_id", title:""};
 const routes = [
     {
         path: "/",
@@ -50,10 +50,13 @@ const routes = [
         path:"/arival/edit/:arrival_id",
         name:'ArrivalLogEdit',
         component:ArrivalLogEditPage,
+        beforeEnter:(to, from, next) => {
+            to.meta.title = 'No.' + to.params.arrival_id;
+            arrivalDssLinks.title = '2024/10/31';
+            next();
+        },
         meta:{
-            title:"入荷情報編集",
-            description:"入荷情報編集",
-            urls: [arrivalLinks]
+            urls: [arrivalLinks, arrivalDssLinks]
         },
 
     },

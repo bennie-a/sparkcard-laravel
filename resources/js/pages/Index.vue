@@ -265,8 +265,6 @@ export default {
         >
             件数：{{ $store.getters.cardsLength }}件
         </h2>
-        {{ this.vendor }}
-
         <div v-if="$store.getters.cardsLength != 0" class="mt-2 ui form">
             <div class="four fields">
                 <div class="three wide column field">

@@ -56,7 +56,7 @@ const toDssPage = (arrivalDate, vendorId) => {
                     <td class=" center aligned"><i class="bi bi-currency-yen"></i>1600</td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage('2024/10/31', 1)">
-                            <i class="bi bi-chevron-double-right"></i>
+                            <i class="angle double right icon"></i>
                         </a>
                     </td>
                 </tr>

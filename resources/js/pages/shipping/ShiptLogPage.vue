@@ -136,7 +136,7 @@ const toDateString = (date) => {
                     <td :class="[isToday(r.shipping_date) ? 'positive': '', isToday(r.shipping_date)?'tobold':'']">{{ r.shipping_date }}</td>
                     <td class="one wide center aligned">{{r.item_count}}点</td>
                     <td class="center aligned selectable">
-                        <a @click="toDssPage(r.order_id)"><i class="bi bi-chevron-double-right"></i></a>
+                        <a @click="toDssPage(r.order_id)"><i class="angle double right icon"></i></a>
                     </td>
                 </tr>
             </tbody>
