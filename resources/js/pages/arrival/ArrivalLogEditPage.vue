@@ -1,10 +1,16 @@
-<script setup></script>
+<script setup>
+import vendorType from '../component/VendorType.vue';
+
+</script>
 <template>
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
             <div class="field">
                 <label>カード名</label>
-                <span>アスモラノマルディカダイスティナカルダカール</span>
+                <div class="emphasis">
+                    アスモラノマルディカダイスティナカルダカール
+                </div>
+                <span class="setname">モダンホライゾン2[MH2]</span>
             </div>
             <div class="two fields">
                 <div class="field">
@@ -17,9 +23,11 @@
             <div class="two fields">
                 <div class="field">
                     <label>入荷カテゴリ</label>
+                    <vendorType></vendorType>
                 </div>
                 <div class="field">
                     <label>取引先</label>
+                    <input type="text">
                 </div>
             </div>
             <div class="two fields">
@@ -48,3 +56,14 @@
         </div>
     </div>
 </template>
+<style scoped>
+
+/* 強調 */
+.emphasis {
+    font-weight: 500;
+}
+
+.setname {
+    color:var(--gray);
+}
+</style>
