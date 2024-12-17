@@ -1,8 +1,8 @@
-<script setup>
+<script  setup>
 import { onBeforeMount, reactive } from "vue";
 import axios from "axios";
+const vendorType = defineModel({type:Number, default:1});
 const vendorTypeList = reactive([]);
-const vendorType = 1;
 onBeforeMount(async() => {
         // 入荷先カテゴリを取得
         await axios
