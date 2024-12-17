@@ -1,197 +1,164 @@
-<script>
-import axios from "axios";
-import Loading from "vue-loading-overlay";
-import MessageArea from "./component/MessageArea.vue";
-import { AxiosTask } from "../component/AxiosTask";
-import ListPagination from "./component/ListPagination.vue";
-import ModalButton from "./component/ModalButton.vue";
-import FoilTag from "./component/FoilTag.vue";
-import ImageModal from "./component/ImageModal.vue";
-import SCDatePicker from "./component/SCDatePicker.vue";
-import PgList from "./component/PgList.vue";
-import { reactive } from "vue";
+<script setup>
+    import { ref, reactive, computed, onMounted } from "vue";
+    import axios from "axios";
+    import loading from "vue-loading-overlay";
+    import MessageArea from "./component/MessageArea.vue";
+    import pagination from "./component/ListPagination.vue";
+    import ModalButton from "./component/ModalButton.vue";
+    import foiltag from "./component/FoilTag.vue";
+    import ImageModal from "./component/ImageModal.vue";
+    import scdatepicker from "./component/SCDatePicker.vue";
+    import PgList from "./component/PgList.vue";
+    import { AxiosTask } from "../component/AxiosTask";
+    import vendorType from './component/VendorType.vue';
 
-export default {
-    components: {
-        Loading,
-        "message-area": MessageArea,
-        pagination: ListPagination,
-        ModalButton: ModalButton,
-        foiltag: FoilTag,
-        "image-modal": ImageModal,
-        scdatepicker:SCDatePicker,
-        pglist:PgList
+// コンポーネントの登録
+const components = {
+  MessageArea,
+  ModalButton,
+  ImageModal,
+  PgList,
+};
+
+// リアクティブデータの定義
+const selectedSet = ref("");
+const color = ref("");
+const isFoil = ref(false);
+const name = ref("");
+const arrivalDate = ref(new Date());
+const cost = ref(28);
+const isLoading = ref(false);
+const vendorNum = ref(1);
+const vendor = ref("");
+
+// Vuex Storeへのアクセス（例: 仮想的なuseStore）
+import { useStore } from "vuex";
+const store = useStore();
+
+// 計算プロパティ
+const isDisabled = computed(() => {
+  const selected = store.getters["csvOption/selectedList"];
+  return selected.length === 0;
+});
+
+const suggestions = computed(() => {
+  return store.getters["expansion/suggestions"];
+});
+
+const isVendorDisabled = computed(() => {
+  if (vendorType.value !== 3) {
+    vendor.value = "";
+    return true;
+  }
+  return false;
+});
+
+// メソッド
+const suggestSet = () => {
+  if (selectedSet.value === "") return;
+
+  store.dispatch("expansion/clear");
+  const task = new AxiosTask(store);
+  const query = { params: { query: selectedSet.value } };
+
+  task.get(
+    "/database/exp",
+    query,
+    (response) => {
+      store.dispatch("expansion/setSuggestions", response.data);
+      console.log(response.data);
     },
-    data() {
-        return {
-            selectedSet: "",
-            color: "",
-            isFoil: false,
-            name: "",
-            arrivalDate: new Date(),
-            cost: 28,
-            isLoading: false,
-            vendorTypeList:reactive([]),
-            vendorType:1,
-            vendor:''
-        };
-    },
-    async created() {
-        // 入荷先カテゴリを取得
-        await axios
-            .get("/api/vendor")
-            .then((response) => {
-                this.vendorTypeList.value = response.data;
-            })
-            .catch((e) => {
-                console.error(e);
-            })
-    },
-
-    computed: {
-        isDisabled: function () {
-            let selected = this.$store.getters["csvOption/selectedList"];
-            return selected.length == 0;
-        },
-        // セット名の候補を取得する。
-        suggestions: function () {
-            return this.$store.getters["expansion/suggestions"];
-        },
-        isVendorDisabled:function() {
-            if (this.vendorType != 3) {
-                this.vendor = '';
-                return true;
-            }
-            return false;
-        }
-    },
-    methods: {
-        suggestSet() {
-            if (this.selectedSet == "") {
-                return;
-            }
-            this.$store.dispatch("expansion/clear");
-            this.options = [];
-            console.log(this.selectedSet);
-            const task = new AxiosTask(this.$store);
-            const query = { params: { query: this.selectedSet } };
-            const success = function (response, store, query) {
-                store.dispatch("expansion/setSuggestions", response.data);
-                console.log(response.data);
-            };
-            const fail = function (e, store, query) {
-                console.error(e);
-            };
-            task.get("/database/exp", query, success, fail);
-        },
-        async search() {
-            this.isLoading = true;
-            console.log("wisdom guild search");
-            this.$store.dispatch("clearMessage");
-            this.$store.dispatch("clearCards");
-            const query = {
-                params: {
-                    name: this.name,
-                    set: this.selectedSet,
-                    color: this.color,
-                    isFoil: this.isFoil,
-                },
-            };
-            await axios
-                .get("/api/database/card", query)
-                .then((response) => {
-                    if (response.status == 204) {
-                        this.$store.dispatch(
-                            "message/error",
-                            "検索結果がありません。"
-                        );
-                        return;
-                    }
-                    let filterd = response.data;
-                    filterd.map((f) => {
-                        f.language = "JP";
-                    });
-                    this.$store.dispatch("setCard", filterd);
-                })
-                .catch((e) => {
-                    console.error(e);
-                    this.$store.dispatch(
-                        "message/error",
-                        "予期せぬエラーが発生しました。"
-                    );
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                });
-        },
-        filterdCard: function (keyword) {
-            console.log(keyword);
-        },
-
-        // 入荷情報を登録する。
-        async regist() {
-            this.$store.dispatch("setLoad", true);
-            this.$store.dispatch("message/clear");
-            console.log("Arrival Start");
-
-            const card = this.$store.getters.card;
-            const filterd = card.filter((c) => {
-                return c.stock != null && c.stock > 0;
-            });
-
-            await Promise.all(
-                filterd.map(async (c) => {
-                    let query = {
-                        card_id: c.id,
-                        language: c.language,
-                        quantity: c.stock,
-                        cost: this.cost,
-                        vendor_type_id:this.vendorType,
-                        vendor:this.vendor,
-                        market_price:this.formatPrice(c.price),
-                        condition: c.condition,
-                        attr: c.exp.attr,
-                        isFoil: c.isFoil,
-                        arrival_date: this.arrivalDate,
-                    };
-                    await axios
-                        .post("api/arrival", query)
-                        .then((response) => {
-                            if (response.status == 201) {
-                                console.log(c.name + ":登録完了");
-                            } else {
-                                console.log(response.status);
-                            }
-                            this.$store.dispatch(
-                                "setSuccessMessage",
-                                "登録が完了しました。"
-                            );
-                        })
-                        .catch(({ response }) => {
-                            const data = response.data;
-                            const msg = `ステータスコード:${response.status} ${c.name}(${c.exp.attr}):${data.message}`;
-                            console.error(msg);
-                            this.$store.dispatch("message/error", msg);
-                        });
-                })
-            );
-            let ul = this.$store.getters["message/errorlist"];
-            if (!ul) {
-                this.$store.dispatch("message/errorhtml", ul);
-            }
-            this.$store.dispatch("setLoad", false);
-        },
-        handleupdate:function(value) {
-            this.arrivalDate = value;
-        },
-
-        formatPrice:function(price) {
-            let formattedPrice = String(price);
-            return formattedPrice.indexOf(",") != -1
-                                ? formattedPrice.replace(",", "")
-                                : formattedPrice
-        }
+    (e) => {
+      console.error(e);
     }
+  );
+};
+
+const search = async () => {
+  isLoading.value = true;
+  store.dispatch("clearMessage");
+  store.dispatch("clearCards");
+
+  const query = {
+    params: {
+      name: name.value,
+      set: selectedSet.value,
+      color: color.value,
+      isFoil: isFoil.value,
+    },
+  };
+
+  try {
+    const response = await axios.get("/api/database/card", query);
+    if (response.status === 204) {
+      store.dispatch("message/error", "検索結果がありません。");
+      return;
+    }
+
+    const filterd = response.data.map((f) => {
+      f.language = "JP";
+      return f;
+    });
+
+    store.dispatch("setCard", filterd);
+  } catch (e) {
+    console.error(e);
+    store.dispatch("message/error", "予期せぬエラーが発生しました。");
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+    const regist = async () => {
+    store.dispatch("setLoad", true);
+    store.dispatch("message/clear");
+
+    const card = store.getters.card;
+    const filtered = card.filter((c) => c.stock != null && c.stock > 0);
+
+    try {
+        await Promise.all(
+        filtered.map(async (c) => {
+            const query = {
+            card_id: c.id,
+            language: c.language,
+            quantity: c.stock,
+            cost: cost.value,
+            vendor_type_id: vendorNum.value,
+            vendor: vendor.value,
+            market_price: formatPrice(c.price),
+            condition: c.condition,
+            attr: c.exp.attr,
+            isFoil: c.isFoil,
+            arrival_date: arrivalDate.value,
+            };
+
+            const response = await axios.post("api/arrival", query);
+            if (response.status === 201) {
+            console.log(c.name + ": 登録完了");
+            }
+        })
+        );
+        store.dispatch("setSuccessMessage", "登録が完了しました。");
+    } catch ({ response }) {
+        const data = response.data;
+        const msg = `ステータスコード: ${response.status} ${data.message}`;
+        console.error(msg);
+        store.dispatch("message/error", msg);
+    } finally {
+        store.dispatch("setLoad", false);
+    }
+    };
+
+    const handleArrivalDate = (value) => {
+       arrivalDate.value = value;
+    };
+
+const formatPrice = (price) => {
+  const formattedPrice = String(price);
+  return formattedPrice.includes(",")
+    ? formattedPrice.replace(",", "")
+    : formattedPrice;
 };
 </script>
 
@@ -212,7 +179,6 @@ export default {
                         type="text"
                         autocomplete="on"
                         list="setlist"
-                        @input="suggestSet"
                     />
                     <datalist id="setlist">
                         <option v-for="n in suggestions"
@@ -269,9 +235,7 @@ export default {
             <div class="four fields">
                 <div class="three wide column field">
                     <label for="">入荷カテゴリ</label>
-                    <select v-model="vendorType" class="mr-1 ui dropdown">
-                        <option v-for="t in vendorTypeList.value" :key="t.id" :value="t.id">{{t.name }}</option>
-                    </select>
+                    <vendorType v-model="vendorNum"></vendorType>
                 </div>
                 <div class="three wide column field">
                     <label for="">取引先</label>
@@ -279,7 +243,7 @@ export default {
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
-                    <scdatepicker :selectedDate="arrivalDate" @update="handleupdate"/>
+                    <scdatepicker :selectedDate="arrivalDate" @update="handleArrivalDate"></scdatepicker>
 
                 </div>
                 <div class="two wide column field">

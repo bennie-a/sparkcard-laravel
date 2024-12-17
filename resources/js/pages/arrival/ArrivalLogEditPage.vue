@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
-import vendorType from '../component/VendorType.vue';
-const vendorNum = ref(2);
+    import { ref } from 'vue';
+    import vendorType from '../component/VendorType.vue';
+    const vendorNum = ref(2);
 </script>
 <template>
     <div class="ui grid">
