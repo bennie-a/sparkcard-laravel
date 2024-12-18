@@ -46,7 +46,7 @@ const suggestions = computed(() => {
 });
 
 const isVendorDisabled = computed(() => {
-  if (vendorType.value !== 3) {
+  if (vendorNum.value !== 3) {
     vendor.value = "";
     return true;
   }
@@ -75,18 +75,18 @@ const suggestSet = () => {
 };
 
 const search = async () => {
-  isLoading.value = true;
-  store.dispatch("clearMessage");
-  store.dispatch("clearCards");
+    isLoading.value = true;
+    store.dispatch("clearMessage");
+    store.dispatch("clearCards");
 
-  const query = {
-    params: {
-      name: name.value,
-      set: selectedSet.value,
-      color: color.value,
-      isFoil: isFoil.value,
-    },
-  };
+    const query = {
+        params: {
+        name: name.value,
+        set: selectedSet.value,
+        color: color.value,
+        isFoil: isFoil.value,
+        },
+    };
 
   try {
     const response = await axios.get("/api/database/card", query);
@@ -148,10 +148,6 @@ const search = async () => {
     } finally {
         store.dispatch("setLoad", false);
     }
-    };
-
-    const handleArrivalDate = (value) => {
-       arrivalDate.value = value;
     };
 
 const formatPrice = (price) => {
@@ -243,8 +239,7 @@ const formatPrice = (price) => {
                 </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
-                    <scdatepicker :selectedDate="arrivalDate" @update="handleArrivalDate"></scdatepicker>
-
+                    <scdatepicker v-model="arrivalDate"></scdatepicker>
                 </div>
                 <div class="two wide column field">
                     <label>原価</label>

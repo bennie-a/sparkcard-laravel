@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
+import scdatepicker from "../component/SCDatePicker.vue";
 
-    const itemname = ref("");
-    const date = ref("");
-    
-    const router = useRouter();
+const itemname = ref("");
+const date = ref("");
+const arrivalDate = ref(new Date());
+
+const router = useRouter();
 
     // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendorId) => {
@@ -25,7 +27,7 @@ const toDssPage = (arrivalDate, vendorId) => {
             <div class="three wide field">
                 <label for="">入荷日</label>
                 <div>
-                    <input v-model="date" type="text">
+                    <scdatepicker v-model="arrivalDate"></scdatepicker>
                 </div>
             </div>
         </div>

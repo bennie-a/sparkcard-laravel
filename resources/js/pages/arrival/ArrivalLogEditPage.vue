@@ -1,11 +1,17 @@
 <script setup>
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
     import vendorType from '../component/VendorType.vue';
+    import scdatepicker from "../component/SCDatePicker.vue";
+
+    const detail = ref({});
     const vendorNum = ref(2);
+    onMounted(() => {
+        detail.value = {arrivalDate: ref(new Date())};
+    });
 </script>
 <template>
     <div class="ui grid">
-        <div class="mt-1 ui eight wide column form">
+        <div class="mt-1 ui seven wide column form">
             <div class="field">
                 <label>カード名</label>
                 <div class="emphasis">
@@ -14,8 +20,9 @@
                 <span class="setname">モダンホライゾン2[MH2]</span>
             </div>
             <div class="two fields">
-                <div class="field">
+                <div class="seven wide field">
                     <label>入荷日</label>
+                    <scdatepicker v-model="detail.arrivalDate"></scdatepicker>
                 </div>
                 <div class="field">
                     <label>言語</label>
@@ -26,7 +33,7 @@
                     <label>入荷カテゴリ</label>
                     <vendorType v-model="vendorNum"></vendorType>
                 </div>
-                <div class="field">
+                <div class="ten wide field">
                     <label>取引先</label>
                     <input type="text">
                 </div>
