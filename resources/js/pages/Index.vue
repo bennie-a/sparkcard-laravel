@@ -11,6 +11,7 @@
     import PgList from "./component/PgList.vue";
     import { AxiosTask } from "../component/AxiosTask";
     import vendorType from './component/VendorType.vue';
+    import lang from './component/Language.vue';
 
 // コンポーネントの登録
 const components = {
@@ -294,43 +295,7 @@ const formatPrice = (price) => {
                 </div>
                 <div class="content">
                     <div class="ui form">
-                        <div class="inline field radio-button">
-                            <label
-                                ><input
-                                    v-model="card.language"
-                                    type="radio"
-                                    value="JP"
-                                /><span>JP</span></label
-                            >
-                            <label
-                                ><input
-                                    v-model="card.language"
-                                    type="radio"
-                                    value="EN"
-                                /><span>EN</span></label
-                            >
-                            <label
-                                ><input
-                                    v-model="card.language"
-                                    type="radio"
-                                    value="IT"
-                                /><span>IT</span></label
-                            >
-                            <label
-                                ><input
-                                    v-model="card.language"
-                                    type="radio"
-                                    value="CS"
-                                /><span>CS</span></label
-                            >
-                            <label
-                                ><input
-                                    v-model="card.language"
-                                    type="radio"
-                                    value="CT"
-                                /><span>CT</span></label
-                            >
-                        </div>
+                        <lang v-model="card.language"></lang>
                         <div class="two fields">
                             <div class="eight wide field">
                                 <label for="">状態</label>
