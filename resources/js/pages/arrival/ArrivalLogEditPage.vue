@@ -2,11 +2,12 @@
     import { onMounted, ref } from 'vue';
     import vendorType from '../component/VendorType.vue';
     import scdatepicker from "../component/SCDatePicker.vue";
+    import lang from "../component/Language.vue";
 
     const detail = ref({});
     const vendorNum = ref(2);
     onMounted(() => {
-        detail.value = {arrivalDate: ref(new Date())};
+        detail.value = {lang:"EN", arrivalDate: ref(new Date())};
     });
 </script>
 <template>
@@ -26,6 +27,7 @@
                 </div>
                 <div class="field">
                     <label>言語</label>
+                    <lang v-model="detail.lang"></lang>
                 </div>
             </div>
             <div class="two fields">
