@@ -3,8 +3,8 @@ import MessageArea from "../component/MessageArea.vue";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 import ListPagination from "../component/ListPagination.vue";
-import FoilTag from "../component/FoilTag.vue";
-import ConditionTag from "../component/ConditionTag.vue";
+import FoilTag from "../component/tag/FoilTag.vue";
+import ConditionTag from "../component/tag/ConditionTag.vue";
 import ImageModal from "../component/ImageModal.vue";
 import CardLayout from "../component/CardLayout.vue";
 

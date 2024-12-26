@@ -47,12 +47,12 @@ const routes = [
         },
     },
     {
-        path:"/arival/edit/:arrival_id",
+        path:"/arival/edit/:arrival_date/:arrival_id",
         name:'ArrivalLogEdit',
         component:ArrivalLogEditPage,
         beforeEnter:(to, from, next) => {
             to.meta.title = 'No.' + to.params.arrival_id;
-            arrivalDssLinks.title = '2024/10/31';
+            arrivalDssLinks.title = to.params.arrival_date;
             next();
         },
         meta:{

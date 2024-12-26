@@ -1,5 +1,5 @@
 <script setup>
-import shop from "../component/ShopTag.vue";
+import shop from "../component/tag/ShopTag.vue";
 import scdatepicker from "../component/SCDatePicker.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted, reactive } from "vue";

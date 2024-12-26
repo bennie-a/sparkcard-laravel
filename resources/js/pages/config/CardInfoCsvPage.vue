@@ -117,7 +117,7 @@ import MessageArea from "../component/MessageArea.vue";
 import ListPagination from "../component/ListPagination.vue";
 import ModalButton from "../component/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
-import FoilTag from "../component/FoilTag.vue";
+import FoilTag from "../component/tag/FoilTag.vue";
 
 import axios from "axios";
 export default {

@@ -1,12 +1,12 @@
 <script setup>
-import shop from '../component/ShopTag.vue';
+import shop from '../component/tag/ShopTag.vue';
 import Loading from "vue-loading-overlay";
 import {useRoute, useRouter} from "vue-router";
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-import condition from "../component/ConditionTag.vue";
+import condition from "../component/tag/ConditionTag.vue";
 import imagemodal from '../component/ImageModal.vue';
-import foiltag from '../component/FoilTag.vue';
+import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
 
 const route = useRoute();

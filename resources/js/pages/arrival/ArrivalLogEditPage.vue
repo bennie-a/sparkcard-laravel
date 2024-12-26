@@ -3,11 +3,21 @@
     import vendorType from '../component/VendorType.vue';
     import scdatepicker from "../component/SCDatePicker.vue";
     import lang from "../component/Language.vue";
+    import { useRoute, useRouter } from 'vue-router';
 
+    const router = useRouter();
+    const route = useRoute();
     const detail = ref({});
     const vendorNum = ref(2);
+    const toDssPage = () => {
+        console.log(detail.value.vendorId);
+        router.push({
+            name: "ArrivalLogDss",
+            params: { arrival_date: detail.value.arrivalDate, vendor_id:detail.value.vendorId},
+        });
+    };
     onMounted(() => {
-        detail.value = {lang:"EN", arrivalDate: ref(new Date())};
+        detail.value = {lang:"EN", arrivalDate: ref(new Date(route.params.arrival_date)), vendorId:3};
     });
 </script>
 <template>
@@ -33,7 +43,8 @@
             <div class="two fields">
                 <div class="six wide field">
                     <label>入荷カテゴリ</label>
-                    <vendorType v-model="vendorNum"></vendorType>
+                    <vendorType v-model="detail.vendorId"></vendorType>
+                    {{ detail.vendorId }}
                 </div>
                 <div class="ten wide field">
                     <label>取引先</label>
@@ -57,7 +68,7 @@
                 </div>
             </div>
             <div class="field">
-                <button class="ui basic teal button"><i class="angle double left icon"></i>入荷詳細に戻る</button>
+                <button class="ui basic teal button" @click="toDssPage"><i class="angle double left icon"></i>入荷詳細に戻る</button>
                 <button class="ui teal button ml-1"><i class="pencil alternate icon"></i>変更する</button>                    
             </div>
         </div>

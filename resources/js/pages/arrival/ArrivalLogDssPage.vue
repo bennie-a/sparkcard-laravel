@@ -25,7 +25,7 @@ const toList = () => {
  const toEditPage = (arrival_id) => {
         router.push({
             name: "ArrivalLogEdit",
-            params: { arrival_id: arrival_id},
+            params: { arrival_date:arrival_date, arrival_id: arrival_id},
         });
     }
 

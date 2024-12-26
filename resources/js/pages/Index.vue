@@ -5,7 +5,7 @@
     import MessageArea from "./component/MessageArea.vue";
     import pagination from "./component/ListPagination.vue";
     import ModalButton from "./component/ModalButton.vue";
-    import foiltag from "./component/FoilTag.vue";
+    import foiltag from "./component/tag/FoilTag.vue";
     import ImageModal from "./component/ImageModal.vue";
     import scdatepicker from "./component/SCDatePicker.vue";
     import PgList from "./component/PgList.vue";

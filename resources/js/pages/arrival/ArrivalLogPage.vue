@@ -2,13 +2,14 @@
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import scdatepicker from "../component/SCDatePicker.vue";
+import vendortag from "../component/tag/VendorTag.vue"
 
 const itemname = ref("");
 const date = ref("");
 const arrivalDate = ref(new Date());
 
 const router = useRouter();
-
+const vendorId =3;
     // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendorId) => {
     router.push({
@@ -53,7 +54,7 @@ const toDssPage = (arrivalDate, vendorId) => {
             <tbody>
                 <tr>
                     <td class="center aligned">2024/10/31</td>
-                    <td><label class="ui label basic orange">買取</label><span class="ml-half">晴れる屋トーナメントセンター大阪</span></td>
+                    <td><vendortag v-model="vendorId"></vendortag><span class="ml-half">晴れる屋トーナメントセンター大阪</span></td>
                     <td>【DSK】不浄なる者、ミケウス[JP]ほか<label class="ui label ml-half">40</label></td>
                     <td class=" center aligned"><i class="bi bi-currency-yen"></i>1600</td>
                     <td class="center aligned selectable">
