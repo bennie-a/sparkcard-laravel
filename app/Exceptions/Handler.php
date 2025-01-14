@@ -6,6 +6,7 @@ use App\Http\Response\CustomResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -51,6 +52,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e): JsonResponse {
         $statusCode = match (true) {
             $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
+            $e instanceof ValidationException => Response::HTTP_BAD_REQUEST,
             default =>  Response::HTTP_INTERNAL_SERVER_ERROR,
         };
 

@@ -8,4 +8,7 @@ class SearchConstant {
 
     const STATUS = 'status';
     const PRICE = 'price';
+
+    const START_DATE = 'start_date';
+    const END_DATE = 'end_date';
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundException;
-use App\Facades\CardBoard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
+use App\Http\Requests\ArrivalSearchRequest;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
 use Illuminate\Http\Request;
@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
+use App\Services\Constant\SearchConstant as Con;
 
 /**
  * 入荷手続きAPI
@@ -25,17 +26,18 @@ class ArrivalController extends Controller {
         $this->service = $service;        
     }
     /**
-     * Display a listing of the resource.
+     * 入荷情報を検索する。
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ArrivalSearchRequest $request)
     {
-        //
+        $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
+        return response($details, Response::HTTP_OK);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 入荷情報と在庫情報を登録する。
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
