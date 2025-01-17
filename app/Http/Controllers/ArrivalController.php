@@ -23,8 +23,9 @@ class ArrivalController extends Controller {
     private $service;
     public function __construct(ArrivalLogService $service) 
     {
-        $this->service = $service;        
+        $this->service = $service;
     }
+
     /**
      * 入荷情報を検索する。
      *
@@ -33,7 +34,9 @@ class ArrivalController extends Controller {
     public function index(ArrivalSearchRequest $request)
     {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
-        return response($details, Response::HTTP_OK);
+        logger()->debug('Start to search arrival log', $details);
+        $results = $this->service->fetch($details);
+        return response($results, Response::HTTP_OK);
     }
 
     /**
