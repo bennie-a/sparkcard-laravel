@@ -36,7 +36,7 @@ class MtgJsonUtil {
      */
     public static function getIfExists($key, $json) {
         $isTrue = self::hasKey($key, $json);
-        return $isTrue ? $json[$key] : null;
+        return $isTrue ? $json[$key] : "";
     }
 
     /**
