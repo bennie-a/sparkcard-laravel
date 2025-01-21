@@ -42,14 +42,15 @@ export default {
             await axios
                 .get("/api/stockpile", query)
                 .then((response) => {
-                    if (response.status != 200) {
+                    console.log(response.data);
+                    
+                    if (response.status == 204) {
                         this.$store.dispatch(
                             "message/error",
                             "検索結果がありません。"
                         );
                         return;
                     }
-                    console.log(response.status);
                     let data = response.data;
                     this.stock = data;
                     this.$store.dispatch("setCard", this.stock);

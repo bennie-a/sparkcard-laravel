@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Http\Response\CustomResponse;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -53,7 +54,8 @@ class Handler extends ExceptionHandler
         $statusCode = match (true) {
             $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
             $e instanceof ValidationException => Response::HTTP_BAD_REQUEST,
-            default =>  Response::HTTP_INTERNAL_SERVER_ERROR,
+            $e instanceof HttpException => $e->getStatusCode(),
+            default =>  Response::HTTP_INTERNAL_SERVER_ERROR
         };
 
         $title = "";
