@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
@@ -14,6 +15,8 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
+
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * 入荷手続きAPI
@@ -36,6 +39,9 @@ class ArrivalController extends Controller {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
         logger()->debug('Start to search arrival log', $details);
         $results = $this->service->fetch($details);
+        if (isEmpty($results)) {
+            throw new NoContentException();
+        }
         return response($results, Response::HTTP_OK);
     }
 

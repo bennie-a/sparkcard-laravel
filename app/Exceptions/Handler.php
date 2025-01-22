@@ -31,7 +31,8 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
-        ConflictException::class
+        ConflictException::class,
+        ApiException::class
     ];
 
     /**
@@ -55,17 +56,27 @@ class Handler extends ExceptionHandler
             $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
             $e instanceof ValidationException => Response::HTTP_BAD_REQUEST,
             $e instanceof HttpException => $e->getStatusCode(),
+            $e instanceof ApiExceptionInterface => $e->getStatusCode(),
             default =>  Response::HTTP_INTERNAL_SERVER_ERROR
         };
 
         $title = "";
+        $detail = "";
         if ($e instanceof CsvFormatException) {
             $title = 'CSV Validation Error';
+            $detail = $e->getMessage();
+        } else if ($e instanceof ApiExceptionInterface) {
+            $title = $e->getTitle();
+            $detail = $e->getDetail();
         }
         return response()->json([
             'title' => $title,
-            'detail' => $e->getMessage(),
-        ], $statusCode);
+            'status' => $statusCode,
+            'detail' => $detail,
+            'request' => $request->path()
+        ], $statusCode,  [
+            'Content-Type' => 'application/problem+json',
+        ]);
     }
 
     /**
