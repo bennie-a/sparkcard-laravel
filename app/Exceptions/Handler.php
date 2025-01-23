@@ -69,12 +69,15 @@ class Handler extends ExceptionHandler
             $title = $e->getTitle();
             $detail = $e->getDetail();
         }
-        return response()->json([
-            'title' => $title,
-            'status' => $statusCode,
-            'detail' => $detail,
-            'request' => $request->path()
-        ], $statusCode,  [
+
+        $json =[
+                'title' => $title,
+                'status' => $statusCode,
+                'detail' => $detail,
+                'request' => $request->path()
+            ];
+        logger()->info('エラー：', $json);
+        return response()->json($json, $statusCode,  [
             'Content-Type' => 'application/problem+json',
         ]);
     }

@@ -30,8 +30,7 @@ export default {
         async search() {
             this.$store.dispatch("message/clear");
             this.$store.dispatch("clearCards");
-            let self = this;
-            self.isLoading = true;
+            this.isLoading = true;
             console.log("start search stockpile");
             const query = {
                 params: {
@@ -43,23 +42,20 @@ export default {
                 .get("/api/stockpile", query)
                 .then((response) => {
                     console.log(response.data);
-                    
-                    if (response.status == 204) {
-                        this.$store.dispatch(
-                            "message/error",
-                            "検索結果がありません。"
-                        );
-                        return;
-                    }
                     let data = response.data;
                     this.stock = data;
                     this.$store.dispatch("setCard", this.stock);
                 })
                 .catch((e) => {
-                    console.error(e);
+                    let data = e.response.data;
+                    console.error(data);
+                    this.$store.dispatch(
+                            "message/error",
+                            data.detail
+                        );
                 })
                 .finally(() => {
-                    self.isLoading = false;
+                    this.isLoading = false;
                     console.log("end search stockpile");
                 });
         },
