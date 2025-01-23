@@ -6,7 +6,7 @@ import vendortag from "../component/tag/VendorTag.vue"
 
 const itemname = ref("");
 const date = ref("");
-const arrivalDate = ref(new Date());
+const startDate = ref(new Date());
 
 const router = useRouter();
 const vendorId =3;
@@ -25,10 +25,18 @@ const toDssPage = (arrivalDate, vendorId) => {
                 <label>商品名(一部)</label>
                 <input v-model="itemname" type="text">
             </div>
-            <div class="three wide field">
+            <div class="seven wide field">
                 <label for="">入荷日</label>
-                <div>
-                    <scdatepicker v-model="arrivalDate"></scdatepicker>
+                <div class="three fields">
+                    <div class="field">
+                        <scdatepicker v-model="startDate"></scdatepicker>
+                    </div>
+                    <div class="one wide field middle">
+                        <i class="arrow alternate circle right outline icon"></i>
+                    </div>
+                    <div class="field">
+                        <scdatepicker v-model="startDate"></scdatepicker>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,3 +75,8 @@ const toDssPage = (arrivalDate, vendorId) => {
         </table>
     </article>
 </template>
+<style scoped>
+.middle {
+    align-items: center;display: flex;
+}
+</style>
