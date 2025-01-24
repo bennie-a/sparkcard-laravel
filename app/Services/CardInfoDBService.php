@@ -10,12 +10,19 @@ use App\Facades\ScryfallServ;
 use App\Facades\WisdomGuild;
 use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * card_infoテーブルのロジッククラス
  */
 class CardInfoDBService {
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $details
+     * @return Collection
+     */
     public function fetch($details)
     {
         $condition = [

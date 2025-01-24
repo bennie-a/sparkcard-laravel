@@ -119,6 +119,10 @@ body {
     color: var(--teal)!important;
 }
 
+label.hidden {
+    visibility: hidden;
+}
+
 @-webkit-keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);

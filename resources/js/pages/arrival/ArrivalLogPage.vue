@@ -7,10 +7,17 @@ import vendortag from "../component/tag/VendorTag.vue"
 const itemname = ref("");
 const date = ref("");
 const startDate = ref(new Date());
+const endDate = ref(new Date());
 
 const router = useRouter();
 const vendorId =3;
-    // 詳細画面を表示する。
+
+// 入荷情報検索
+const search = () => {
+    console.log('!!!!');
+}
+
+// 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendorId) => {
     router.push({
         name: "ArrivalLogDss",
@@ -20,30 +27,33 @@ const toDssPage = (arrivalDate, vendorId) => {
 </script>
 <template>
         <article class="mt-1 ui form segment">
-        <div class="two fields">
+        <div class="three fields">
             <div class="four wide field">
                 <label>商品名(一部)</label>
                 <input v-model="itemname" type="text">
             </div>
-            <div class="seven wide field">
+            <div class="five wide field">
                 <label for="">入荷日</label>
                 <div class="three fields">
-                    <div class="field">
+                    <div class="seven wide field">
                         <scdatepicker v-model="startDate"></scdatepicker>
                     </div>
                     <div class="one wide field middle">
-                        <i class="arrow alternate circle right outline icon"></i>
+                        <i class="bi bi-arrow-right"></i>
                     </div>
-                    <div class="field">
-                        <scdatepicker v-model="startDate"></scdatepicker>
+                    <div class="seven wide field">
+                        <scdatepicker v-model="endDate"></scdatepicker>
                     </div>
                 </div>
             </div>
+            <div class="field">
+                <label class="hidden">ボタン</label>
+                <button
+                    id="search" class="ui button teal" @click="search">
+                    検索
+                    </button>
+            </div>
         </div>
-        <button
-            id="search" class="ui button teal">
-            検索
-            </button>
     </article>
     <article class="mt-2">
         <h2 class="ui medium dividing header">

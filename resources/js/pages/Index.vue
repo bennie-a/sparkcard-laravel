@@ -91,11 +91,6 @@ const search = async () => {
 
   try {
     const response = await axios.get("/api/database/card", query);
-    if (response.status === 204) {
-      store.dispatch("message/error", "検索結果がありません。");
-      return;
-    }
-
     const filterd = response.data.map((f) => {
       f.language = "JP";
       return f;
@@ -103,8 +98,9 @@ const search = async () => {
 
     store.dispatch("setCard", filterd);
   } catch (e) {
-    console.error(e);
-    store.dispatch("message/error", "予期せぬエラーが発生しました。");
+    let data = e.response.data;
+    console.log(data);
+    store.dispatch("message/error", data.detail);
   } finally {
     isLoading.value = false;
   }
@@ -208,7 +204,7 @@ const formatPrice = (price) => {
                 </div>
             </div>
             <div class="field">
-                <label style="visibility: hidden">検索ボタン</label>
+                <label class="hidden">検索ボタン</label>
                 <button
                     id="search"
                     class="ui button teal ml-1"

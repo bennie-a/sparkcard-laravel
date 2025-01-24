@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DB;
 
+use App\Exceptions\api\NoContentException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CsvFileRequest;
 use App\Http\Requests\PostCardDBRequest;
@@ -38,8 +39,8 @@ class CardInfoDBController extends Controller
         $condition = $request->only(['name', 'set', 'color', 'isFoil']);
         logger()->info('search condition:',$condition);
         $result = $this->service->fetch($condition);
-        if (empty($result)) {
-            throw new HttpResponseException(response(['message' => '検索結果なし'], Response::HTTP_NO_CONTENT));
+        if ($result->isEmpty()) {
+            throw new NoContentException();
         }
         $json = CardInfoResource::collection($result);
         logger()->info('search finished.');
