@@ -82,9 +82,9 @@
                         <select class="ui dropdown" v-model="promotype">
                             <option value="">通常</option>
                             <option value="ボーダーレス">ボーダーレス</option>
-                            <option value="「プロファイル」ボーダーレス">「プロファイル」ボーダーレス</option>
-                            <option value="「フレームブレイク」ボーダーレス">「フレームブレイク」ボーダーレス</option>
-                            <option value="旧枠">旧枠</option>
+                            <option value="「グラフィティ・ジャイアント」ボーダーレス">「グラフィティ・ジャイアント」ボーダーレス</option>
+                            <option value="「最大出力」ボーダーレス">「最大出力」ボーダーレス</option>
+                            <option value="「ワルなライダー」ボーダーレス">「ワルなライダー」ボーダーレス</option>
                             <option value="フルアート">フルアート</option>
                             <option value="プレリリース">プレリリース</option>
                             <option value="トーナメント景品">

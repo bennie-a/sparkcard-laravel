@@ -32,11 +32,11 @@ class MtgJsonUtil {
      *
      * @param string $key
      * @param array $json
-     * @return string
+     * @return array
      */
     public static function getIfExists($key, $json) {
         $isTrue = self::hasKey($key, $json);
-        return $isTrue ? $json[$key] : "";
+        return $isTrue ? $json[$key] : [];
     }
 
     /**

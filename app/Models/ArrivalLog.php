@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ArrivalLog extends Model
 {
@@ -14,7 +15,7 @@ class ArrivalLog extends Model
 
     protected $fillable = ['id', 'stock_id',  Header::ARRIVAL_DATE, Header::QUANTITY,
                                             Header::COST, Header::VENDOR_TYPE_ID, Header::VENDOR];
-
+    use HasFactory;
 
     /**
      * カード情報を含む入荷情報を取得する。
@@ -41,7 +42,7 @@ class ArrivalLog extends Model
                 'a.rank_number',
                 'b.item_count',
                 'b.sum_cost']
-        )->fromSub(self::getLogQuery($keyword), 'a')->
+        )->fromSub(self::getLogQuery(current($keyword)), 'a')->
         joinSub(self::getCountQuery(), 'b', function($join) {
             $join->on('a.arrival_date', '=', 'b.arrival_date')
                          ->on('a.vendor_type_id', '=', 'b.vendor_type_id');

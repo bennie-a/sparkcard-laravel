@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\DB;
+namespace Tests\Unit\DB\Arrival;
 
 use App\Facades\CardBoard;
 use App\Http\Response\CustomResponse;
@@ -26,9 +26,9 @@ use App\Services\Constant\StockpileHeader as Header;
 use Mockery;
 
 /**
- * 入荷手続きに関するテスト
+ * 入荷情報登録に関するテスト
  */
-class ArrivalLogTest extends TestCase
+class ArrivalLogPostTest extends TestCase
 {
 
     // 事前にNotionからドラゴンのファイレクシア・エンジン[通常]を削除する。

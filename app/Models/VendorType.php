@@ -9,5 +9,8 @@ class VendorType extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['id', 'name'];
+
+
     protected $table = 'vendor_type';
 }

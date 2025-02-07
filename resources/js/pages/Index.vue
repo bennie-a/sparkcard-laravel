@@ -77,7 +77,7 @@ const suggestSet = () => {
 
 const search = async () => {
     isLoading.value = true;
-    store.dispatch("clearMessage");
+    store.dispatch("message/clear");
     store.dispatch("clearCards");
 
     const query = {
@@ -109,7 +109,7 @@ const search = async () => {
     const regist = async () => {
     store.dispatch("setLoad", true);
     store.dispatch("message/clear");
-
+    store.dispatch("clearMessage");
     const card = store.getters.card;
     const filtered = card.filter((c) => c.stock != null && c.stock > 0);
 

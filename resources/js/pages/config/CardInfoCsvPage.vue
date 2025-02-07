@@ -59,10 +59,10 @@
                                 <select v-model="card.promotype">
                                     <option value="">通常版</option>
                                     <option value="ショーケース">ショーケース</option>
-                                    <option value="「二重露光」ショーケース">「二重露光」ショーケース</option>
-                                    <option value="「超常」フレーム">「超常」フレーム</option>
                                     <option value="ボーダーレス">ボーダーレス</option>
-                                    <option value="「鏡の怪物」ボーダーレス">「鏡の怪物」ボーダーレス</option>
+                                    <option value="「最大出力」ボーダーレス">「最大出力」ボーダーレス</option>
+                                    <option value="「ワルなライダー」ボーダーレス">「ワルなライダー」ボーダーレス</option>
+                                    <option value="「グラフィティ・ジャイアント」ボーダーレス">「グラフィティ・ジャイアント」ボーダーレス</option>
                                     <option value="フルアート">フルアート</option>
                                 </select>
                             </td>

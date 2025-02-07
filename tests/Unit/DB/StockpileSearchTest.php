@@ -31,6 +31,7 @@ class StockpileSearchTest extends TestCase
      */
     public function setup():void {
         parent::setup();
+        $this->seed('TruncateAllTables');
         $this->seed('DatabaseSeeder');
         $this->seed('TestExpansionSeeder');
         $this->seed('TestCardInfoSeeder');

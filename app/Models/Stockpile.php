@@ -18,7 +18,7 @@ class Stockpile extends Model
 
     protected $table = 'stockpile';
 
-    protected $fillable = ['card_id', 'language',  'condition', 'quantity', 'updated_at'];
+    protected $fillable = ['id', 'card_id', 'language',  'condition', 'quantity', 'updated_at'];
 
     public function cardinfo() {
         return $this->belongsTo('App\Models\CardInfo');

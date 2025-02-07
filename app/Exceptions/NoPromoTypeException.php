@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 /**
  * カードマスタ登録：プロモタイプが該当しない時に発生する例外クラス
  */
-class NoPromoTypeException extends HttpException
+class NoPromoTypeException extends ApiException
 {
     protected $message = '';
     public function __construct(string $name, string $number, string $promotype)
@@ -18,7 +18,7 @@ class NoPromoTypeException extends HttpException
 
   /**
    * @version 2.2.0
-   * @override HttpException
+   * @override ApiException
    * @return integer
    */
   public function getStatusCode(): int
@@ -26,6 +26,16 @@ class NoPromoTypeException extends HttpException
       return CustomResponse::HTTP_NO_PROMOTYPE;
   }
 
+  
+  public function getTitle(): string
+  {
+      return 'プロモタイプ未登録';
+  }
+
+  public function getDetail(): string
+  {
+    return $this->message;
+  }
       /**
      * ログの出力
      * 
