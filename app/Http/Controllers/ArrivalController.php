@@ -39,7 +39,7 @@ class ArrivalController extends Controller {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
         logger()->debug('Start to search arrival log', $details);
         $results = $this->service->fetch($details);
-        if (isEmpty($results)) {
+        if ($results->isEmpty()) {
             throw new NoContentException();
         }
         return response($results, Response::HTTP_OK);

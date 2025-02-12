@@ -8,6 +8,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Collection;
 
 class ArrivalLog extends Model
 {
@@ -17,13 +18,73 @@ class ArrivalLog extends Model
                                             Header::COST, Header::VENDOR_TYPE_ID, Header::VENDOR];
     use HasFactory;
 
+
+        /**
+     * カード情報を含む入荷情報を取得する。
+     *
+     * @param array $details
+     * @return Collection
+     */
+    public static function fetch(array $details) {
+        // 動的に条件を設定
+        $startDate = MtgJsonUtil::getIfExists(Con::START_DATE, $details);
+        $endDate = MtgJsonUtil::getIfExists(Con::END_DATE, $details);
+        $keyword = MtgJsonUtil::getIfExists(Con::CARD_NAME, $details);
+
+        $subQuery = DB::table('arrival_log as alog')
+                        ->select([
+                            'alog.id',
+                            'e.attr as attr',
+                            'c.name as cardname',
+                            's.language as lang',
+                            'alog.arrival_date',
+                            'alog.vendor_type_id',
+                            'v.name as vcat',
+                            'alog.vendor',
+                            DB::raw("ROW_NUMBER() OVER (PARTITION BY alog.arrival_date, alog.vendor_type_id ORDER BY alog.id) as rank_number")
+                        ])
+                        ->join('stockpile as s', 's.id', '=', 'alog.stock_id')
+                        ->join('card_info as c', 'c.id', '=', 's.card_id')
+                        ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
+                        ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id')
+                        ->when($startDate, function($query, $startDate) {// 入荷日(開始)
+                            $query->where('a.arrival_date', '>=', $startDate);
+                        })->when($endDate, function($query, $endDate) {// 入荷日(終了)
+                            $query->where('a.arrival_date', '<=', $endDate);
+                        })->when($keyword, function($query, $keyword) {
+                            $query->where('a.arrival_date', 'like', "%$keyword%");
+                        });
+
+    $itemSummaryQuery = DB::table('arrival_log')
+                                                        ->select([
+                                                            DB::raw('COUNT(id) as item_count'),
+                                                            DB::raw('SUM(cost) as sum_cost'),
+                                                            'arrival_date',
+                                                            'vendor_type_id'
+                                                        ])->when($startDate, function($query, $startDate) {// 入荷日(開始)
+                                                            $query->where('a.arrival_date', '>=', $startDate);
+                                                        })->when($endDate, function($query, $endDate) {// 入荷日(終了)
+                                                            $query->where('a.arrival_date', '<=', $endDate);
+                                                        })->groupBy('arrival_date', 'vendor_type_id');
+
+    $result = DB::table(DB::raw("({$subQuery->toSql()}) as ranked_data"))
+                        ->mergeBindings($subQuery)
+                        ->joinSub($itemSummaryQuery, 'item_summary', function ($join) {
+                            $join->on('ranked_data.arrival_date', '=', 'item_summary.arrival_date')
+                                ->on('ranked_data.vendor_type_id', '=', 'item_summary.vendor_type_id');
+                        })
+                        ->where('ranked_data.rank_number', 1)->orderBy('ranked_data.arrival_date', 'desc')
+                        ->get();
+    return $result;
+}
+    
     /**
      * カード情報を含む入荷情報を取得する。
      *
      * @param array $details
      * @return void
      */
-    public static function fetch(array $details) {
+    public static function fetch_deprecated(array $details) {
 
         // 動的に条件を設定
         $startDate = MtgJsonUtil::getIfExists(Con::START_DATE, $details);

@@ -24,9 +24,8 @@ class ArrivalLogFactory extends Factory
         return [
             'stock_id' => Stockpile::inRandomOrder()->first()->id,
             'cost' => fake()->numberBetween(1, 100),
-            'quantity' => fake()->randomBetween(1, 10),
-            'arrival_date' => fake()->dateTimeBetween('-5days', '5days')->format('Y-m-d'),
-            // 'vendor_type_id' => VendorType::inRandomOrder()->first()->id(),
+            'quantity' => fake()->numberBetween(1, 10),
+            'arrival_date' => fake()->dateTimeBetween('-5days', '-1days')->format('Y-m-d'),
         ];
     }
 }

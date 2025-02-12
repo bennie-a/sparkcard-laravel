@@ -14,6 +14,7 @@ class ArrivalLogService {
 
     /**
      * カード情報を含む入荷情報を取得する。
+     * @return Collection
      */
     public function fetch($details) {
         $results = ArrivalLog::fetch($details);
