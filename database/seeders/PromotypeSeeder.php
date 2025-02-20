@@ -59,5 +59,6 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'maxspeed', 'name' => '「最大出力」ボーダーレス']);
         Promotype::create(['attr' => 'badassrider', 'name' => '「ワルなライダー」ボーダーレス']);
         Promotype::create(['attr' => 'graffgiant', 'name' => '「グラフィティ・ジャイアント」ボーダーレス']);
+        Promotype::create(['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil']);
     }
 }

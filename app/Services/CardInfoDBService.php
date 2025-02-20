@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;

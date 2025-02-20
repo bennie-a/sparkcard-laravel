@@ -52,7 +52,7 @@ class ArrivalLog extends Model
                         })->when($endDate, function($query, $endDate) {// 入荷日(終了)
                             $query->where('a.arrival_date', '<=', $endDate);
                         })->when($keyword, function($query, $keyword) {
-                            $query->where('a.arrival_date', 'like', "%$keyword%");
+                            $query->where('c.name', 'like', "%$keyword%");
                         });
 
     $itemSummaryQuery = DB::table('arrival_log')
