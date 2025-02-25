@@ -23,8 +23,13 @@ class ArrivalSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            Con::START_DATE => 'date | before_or_equal:end_date',
-            Con::END_DATE => 'date',
+            Con::START_DATE =>  ['nullable', 'date', function($attribute, $value, $fail){
+                $endDate = $this->input(Con::END_DATE);
+                if (!empty($endDate) && !empty($value) && $endDate < $value) {
+                    $fail(__('validation.before_or_equal', ['attribute' => __('validation.attributes.end_date'), 'date' => __('validation.attributes.start_date')]));
+                }
+            }],
+            Con::END_DATE => ['nullable', 'date'],
         ];
     }
 

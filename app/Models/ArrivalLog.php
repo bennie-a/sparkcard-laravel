@@ -48,9 +48,9 @@ class ArrivalLog extends Model
                         ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
                         ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id')
                         ->when($startDate, function($query, $startDate) {// 入荷日(開始)
-                            $query->where('a.arrival_date', '>=', $startDate);
+                            $query->where('alog.arrival_date', '>=', $startDate);
                         })->when($endDate, function($query, $endDate) {// 入荷日(終了)
-                            $query->where('a.arrival_date', '<=', $endDate);
+                            $query->where('alog.arrival_date', '<=', $endDate);
                         })->when($keyword, function($query, $keyword) {
                             $query->where('c.name', 'like', "%$keyword%");
                         });
@@ -62,9 +62,9 @@ class ArrivalLog extends Model
                                                             'arrival_date',
                                                             'vendor_type_id'
                                                         ])->when($startDate, function($query, $startDate) {// 入荷日(開始)
-                                                            $query->where('a.arrival_date', '>=', $startDate);
+                                                            $query->where('arrival_date', '>=', $startDate);
                                                         })->when($endDate, function($query, $endDate) {// 入荷日(終了)
-                                                            $query->where('a.arrival_date', '<=', $endDate);
+                                                            $query->where('arrival_date', '<=', $endDate);
                                                         })->groupBy('arrival_date', 'vendor_type_id');
 
     $result = DB::table(DB::raw("({$subQuery->toSql()}) as ranked_data"))

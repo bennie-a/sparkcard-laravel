@@ -68,6 +68,9 @@ class Handler extends ExceptionHandler
         } else if ($e instanceof ApiExceptionInterface) {
             $title = $e->getTitle();
             $detail = $e->getDetail();
+        } else if ($statusCode === Response::HTTP_BAD_REQUEST) {
+            $title = "Validation Error";
+            $detail = $e->getMessage();
         }
 
         $json =[

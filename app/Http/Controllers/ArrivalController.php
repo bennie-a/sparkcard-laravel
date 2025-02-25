@@ -37,6 +37,7 @@ class ArrivalController extends Controller {
     public function index(ArrivalSearchRequest $request)
     {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
+
         logger()->info('Start to search arrival log', $details);
         $results = $this->service->fetch($details);
         if ($results->isEmpty()) {
