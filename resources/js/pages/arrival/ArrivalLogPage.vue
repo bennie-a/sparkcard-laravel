@@ -1,21 +1,73 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from "vue-router";
 import scdatepicker from "../component/SCDatePicker.vue";
 import vendortag from "../component/tag/VendorTag.vue"
+import Loading from "vue-loading-overlay";
+import axios from 'axios';
+import UseDateFormatter from '../../functions/UseDateFormatter.js';
+import { useStore } from 'vuex';
+import pglist from "../component/PgList.vue";
 
+// 検索条件
 const itemname = ref("");
 const date = ref("");
-const startDate = ref(new Date());
+const startD  = new Date();
+startD.setDate(startD.getDate() - 7);
+const startDate = ref(startD);
 const endDate = ref(new Date());
 
+// 検索結果
+let result = reactive([]);
+const resultCount = ref(0);
+const currentList = reactive([]);
+const isLoading = ref(false);
+
+
 const router = useRouter();
+const {toString} = UseDateFormatter();
+
 const vendorId =3;
+const store = useStore();
 
 // 入荷情報検索
-const search = () => {
-    console.log('!!!!');
+const fetch =  async () => {
+    isLoading.value = true;
+    const query = {
+                params: {
+                    "card_name": itemname.value,
+                    "start_date": toString(startDate.value),
+                    "end_date" : toString(endDate.value)
+                },
+            };
+   await axios.get('/api/arrival/', query)
+                            .then((response) => {
+                                console.log(response.data);
+                                result.value = response.data;
+                                resultCount.value = result.value.length;
+                            })
+                            .catch((e) => {
+                                // let data = e.response.data;
+                                // store.dispatch(
+                                // "message/error",
+                                // data.detail
+                                // );
+                                console.log(e);
+                            })
+                            .finally(() => {
+                                isLoading.value = false;
+                            });    
+
 }
+
+onMounted(async() => {
+    await fetch();
+});
+
+const current = (data) => {
+    currentList.value = data.response;
+}
+
 
 // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendorId) => {
@@ -32,7 +84,7 @@ const toDssPage = (arrivalDate, vendorId) => {
                 <label>商品名(一部)</label>
                 <input v-model="itemname" type="text">
             </div>
-            <div class="five wide field">
+            <div class="six wide field">
                 <label for="">入荷日</label>
                 <div class="three fields">
                     <div class="seven wide field">
@@ -57,8 +109,9 @@ const toDssPage = (arrivalDate, vendorId) => {
     </article>
     <article class="mt-2">
         <h2 class="ui medium dividing header">
-            件数：5件
+            件数：{{resultCount}}件
         </h2>
+        {{ result.value }}
         <table class="ui striped table">
             <thead>
                 <tr>
@@ -82,8 +135,20 @@ const toDssPage = (arrivalDate, vendorId) => {
                     </td>
                 </tr>
             </tbody>
+            <tfoot class="full-width">
+                <tr>
+                    <th colspan="10">
+                        <div class="right aligned">
+                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
         </table>
     </article>
+    <loading
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 .middle {

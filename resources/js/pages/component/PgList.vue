@@ -1,7 +1,7 @@
 <script setup>
     import paginate from "vuejs-paginate-next";
     import {reactive, ref, watch } from "vue";
-    const list = defineModel('list', {type:Array, required:true});
+    const list = defineModel('list', {type:Array, required:true, default:() => []});
     const emit = defineEmits(['loadPage']);
     const execEmit = () => {
         emit('loadPage', { 'response': currentList.value });

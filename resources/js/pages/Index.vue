@@ -15,11 +15,11 @@
 
 // コンポーネントの登録
 const components = {
-  MessageArea,
-  ModalButton,
-  ImageModal,
-  PgList,
-};
+        MessageArea,
+        ModalButton,
+        ImageModal,
+        PgList,
+        };
 
 // リアクティブデータの定義
 const selectedSet = ref("");
@@ -92,19 +92,19 @@ const search = async () => {
   try {
     const response = await axios.get("/api/database/card", query);
     const filterd = response.data.map((f) => {
-      f.language = "JP";
-      return f;
-    });
+            f.language = "JP";
+            return f;
+            });
 
-    store.dispatch("setCard", filterd);
-  } catch (e) {
-    let data = e.response.data;
-    console.log(data);
-    store.dispatch("message/error", data.detail);
-  } finally {
-    isLoading.value = false;
-  }
-};
+            store.dispatch("setCard", filterd);
+        } catch (e) {
+            let data = e.response.data;
+            console.log(data);
+            store.dispatch("message/error", data.detail);
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     const regist = async () => {
     store.dispatch("setLoad", true);
