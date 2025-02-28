@@ -59,6 +59,9 @@ class ArrivalLogFetchTest extends TestCase {
             '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => $this->formatDate(self::two_days_before()),
                                                                                     Con::END_DATE => $this->formatDate(self::today())],
                                                                                     self::today(), self::two_days_before()],
+            '入荷日_開始日と終了日が同じ日' =>  [[Con::START_DATE => $this->formatDate(self::today()),
+                                                                                    Con::END_DATE => $this->formatDate(self::today())],
+                                                                                    self::today(), self::today()],
         ];
     }
 
