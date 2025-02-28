@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;
 
@@ -17,7 +19,6 @@ class ArrivalLog extends Model
     protected $fillable = ['id', 'stock_id',  Header::ARRIVAL_DATE, Header::QUANTITY,
                                             Header::COST, Header::VENDOR_TYPE_ID, Header::VENDOR];
     use HasFactory;
-
 
         /**
      * カード情報を含む入荷情報を取得する。
@@ -158,4 +159,16 @@ class ArrivalLog extends Model
 
         return $query;
     }
+
+    /**
+     * 入荷日を'Y/m/d'に変換する。
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getArrivalDateAttribute(string $value):string
+    {
+        return CarbonFormatUtil::toDateString($value);
+    }
+
 }

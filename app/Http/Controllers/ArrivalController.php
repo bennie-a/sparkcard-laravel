@@ -7,6 +7,7 @@ use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArrivalRequest;
 use App\Http\Requests\ArrivalSearchRequest;
+use App\Http\Resources\ArrivalLogResource;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
 use Illuminate\Http\Request;
@@ -46,7 +47,8 @@ class ArrivalController extends Controller {
         }
         $count = $results->count();
         logger()->info("End to search $count arrival log");
-        return response($results, Response::HTTP_OK);
+        $json = ArrivalLogResource::collection($results);
+        return response($json, Response::HTTP_OK);
     }
 
     /**

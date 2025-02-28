@@ -8,6 +8,7 @@ import axios from 'axios';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import { useStore } from 'vuex';
 import pglist from "../component/PgList.vue";
+import MessageArea from "../component/MessageArea.vue";
 
 // 検索条件
 const itemname = ref("");
@@ -33,6 +34,8 @@ const store = useStore();
 // 入荷情報検索
 const fetch =  async () => {
     isLoading.value = true;
+    result.value = [];
+    resultCount.value = 0;
     const query = {
                 params: {
                     "card_name": itemname.value,
@@ -47,12 +50,8 @@ const fetch =  async () => {
                                 resultCount.value = result.value.length;
                             })
                             .catch((e) => {
-                                // let data = e.response.data;
-                                // store.dispatch(
-                                // "message/error",
-                                // data.detail
-                                // );
-                                console.log(e);
+                                let data = e.response.data;
+                                store.dispatch("message/error", data.detail);
                             })
                             .finally(() => {
                                 isLoading.value = false;
@@ -78,7 +77,8 @@ const toDssPage = (arrivalDate, vendorId) => {
 }
 </script>
 <template>
-        <article class="mt-1 ui form segment">
+    <message-area />
+    <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">
                 <label>商品名(一部)</label>
@@ -101,7 +101,7 @@ const toDssPage = (arrivalDate, vendorId) => {
             <div class="field">
                 <label class="hidden">ボタン</label>
                 <button
-                    id="search" class="ui button teal" @click="search">
+                    id="search" class="ui button teal" @click="fetch">
                     検索
                     </button>
             </div>
@@ -111,23 +111,22 @@ const toDssPage = (arrivalDate, vendorId) => {
         <h2 class="ui medium dividing header">
             件数：{{resultCount}}件
         </h2>
-        {{ result.value }}
         <table class="ui striped table">
             <thead>
                 <tr>
                     <th class="two wide center aligned">入荷日</th>
-                    <th class="">取引先</th>
+                    <th class="" colspan="2">取引先</th>
                     <th class="">商品名</th>
                     <th class="one side center aligned">原価合計</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="center aligned">2024/10/31</td>
-                    <td><vendortag v-model="vendorId"></vendortag><span class="ml-half">晴れる屋トーナメントセンター大阪</span></td>
-                    <td>【DSK】不浄なる者、ミケウス[JP]ほか<label class="ui label ml-half">40</label></td>
-                    <td class=" center aligned"><i class="bi bi-currency-yen"></i>1600</td>
+                <tr v-for="(r, index) in currentList.value" :key="index">
+                    <td class="center aligned">{{ r.arrival_date }}</td>
+                    <td colspan="2"><vendortag v-model="r.vendor.vendor_type_id"></vendortag><span class="ml-half">{{ r.vendor.name }}</span></td>
+                    <td>【{{r.attr}}】{{r.cardname}}[{{ r.lang }}]<span v-if="r.item_count !== 1">ほか</span><label class="ui label ml-half">{{r.item_count}}点</label></td>
+                    <td class=" center aligned"><i class="bi bi-currency-yen"></i>{{ r.sum_cost }}</td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage('2024/10/31', 1)">
                             <i class="angle double right icon"></i>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
 use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,7 +81,7 @@ class Stockpile extends Model
 
     public function getUpdatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format("Y/m/d");
+        return CarbonFormatUtil::toDateString($value);
     }
 
 }

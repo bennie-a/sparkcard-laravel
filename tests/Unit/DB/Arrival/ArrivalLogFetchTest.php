@@ -117,7 +117,7 @@ class ArrivalLogFetchTest extends TestCase {
         $this->verifyJson($last, $three_days_before);
     }
 
-    public function test_検索結果なし() {
+    public function test_検索結果なし_入荷日に該当する結果が無い() {
         $four_days_before = CarbonImmutable::today()->subDays(4);
         $condition = [Con::END_DATE => $this->formatDate($four_days_before)];
 
@@ -125,6 +125,9 @@ class ArrivalLogFetchTest extends TestCase {
         $response->assertStatus(Response::HTTP_NOT_FOUND);
         $data = $response->json();
         $this->assertEquals('検索結果がありません。', $data['detail']);
+    }
+
+    public function test_検索結果なし_カード名に一致する結果が無い() {
     }
 
     private function assert_OK(array $condition) {
@@ -150,13 +153,15 @@ class ArrivalLogFetchTest extends TestCase {
         logger()->debug("入荷ログ検証：$day_string");
         $this->assertEquals($day_string, $json[Header::ARRIVAL_DATE], "入荷日:$day_string");
         $this->assertEquals(3, $json['item_count'], "入荷件数:$day_string");
-        $vendor_type_id = $json[Header::VENDOR_TYPE_ID];
-        $this->assertNotNull($vendor_type_id, '入荷カテゴリID');
+        $vendor = $json[Header::VENDOR];
+        $this->assertNotNull($vendor, '取引先');
+
+        $vendor_type_id = $vendor[Header::VENDOR_TYPE_ID];
+        $type = VendorType::find($vendor_type_id);
+
         $cost = $this->getCostSum($json[Header::ARRIVAL_DATE], $vendor_type_id);
         $this->assertEquals(current($cost)->sum_cost, $json['sum_cost'], "原価合計:$day_string");
         
-        $type = VendorType::find($vendor_type_id);
-        $this->assertEquals($type->name, $json['vcat'], "入荷カテゴリ名:$day_string");
 
         $cardname = $json['cardname'];
         $log = $this->getCardInfoFromArrivalId($json['id']);
@@ -198,7 +203,7 @@ class ArrivalLogFetchTest extends TestCase {
     }
 
     private function formatDate(CarbonImmutable $day):string {
-        $format = 'Y-m-d';
+        $format = 'Y/m/d';
         return $day->format($format);
     }
 }
