@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\DB\Arrival;
 
+use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
 use App\Models\VendorType;
 use Carbon\Carbon;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
 
 use function PHPUnit\Framework\assertTrue;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * 入荷情報検索のテストケース
@@ -37,32 +39,68 @@ class ArrivalLogFetchTest extends TestCase {
      * OKパターン
      * @dataProvider okProvider
      */
-    public function test_ok(array $condtion, CarbonImmutable $firstDay, CarbonImmutable $lastDay) {
-        $response = $this->assert_OK($condtion);
+    public function test_ok(array $condition) {
+        $response = $this->assert_OK($condition);
         $json = $response->json();
 
+        if (MtgJsonUtil::isEmpty(Con::START_DATE, $condition)) {
+            $condition[Con::START_DATE] = $this->formatDate(self::three_days_before());
+        }
+        
+        if (MtgJsonUtil::isEmpty(Con::END_DATE, $condition)) {
+            $condition[Con::END_DATE] = $this->formatDate(self::today());
+        }
+        
         // 並び順確認
         $first = current($json);
+        $firstDay = CarbonImmutable::parse($condition[Con::END_DATE]);
         $this->verifyJson($first, $firstDay);
         
         $last = end($json);
+        $lastDay = CarbonImmutable::parse($condition[Con::START_DATE]);
         $this->verifyJson($last, $lastDay);
     }
 
     public function okProvider() {
         return [
-            '全件検索' => [[], self::today(), self::three_days_before()],
-            '入荷日_開始日のみ入力' => [[Con::START_DATE => $this->formatDate(self::yesterday())],
-                                                                                                                 self::today(), self::yesterday()],
-            '入荷日_終了日のみ入力' => [[Con::END_DATE => $this->formatDate(self::two_days_before())],
-                                                                                                self::two_days_before(), self::three_days_before()],
-            '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => $this->formatDate(self::two_days_before()),
-                                                                                    Con::END_DATE => $this->formatDate(self::today())],
-                                                                                    self::today(), self::two_days_before()],
-            '入荷日_開始日と終了日が同じ日' =>  [[Con::START_DATE => $this->formatDate(self::today()),
-                                                                                    Con::END_DATE => $this->formatDate(self::today())],
-                                                                                    self::today(), self::today()],
+            '全件検索' => [[]],
+            '入荷日_開始日のみ入力' => [[Con::START_DATE => $this->formatYesterday()]],
+            '入荷日_終了日のみ入力' => [[Con::END_DATE => $this->formatTwoDateBefore()]],
+            '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => $this->formatTwoDateBefore(),
+                                                                                    Con::END_DATE => $this->formatToday()]],
+            '入荷日_開始日と終了日が同じ日' =>  [[Con::START_DATE => $this->formatToday(),
+                                                                                    Con::END_DATE => $this->formatToday()]],
+            '全検索項目入力' => [[Con::CARD_NAME => '神', Con::START_DATE => $this->formatYesterday(),
+                                                        Con::END_DATE => $this->formatYesterday()]]
         ];
+    }
+
+    /**
+     * 検索結果がない場合のテストケース
+     * @dataProvider noResultProvider
+     * @param array $condition
+     * @return void
+     */
+    public function test_NoResult(array $condition) {
+        $response = $this->execute($condition);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $data = $response->json();
+        $this->assertEquals('検索結果がありません。', $data['detail']);
+    }
+
+    public function noResultProvider() {
+        $four_days_before = CarbonImmutable::today()->subDays(4);
+        return [
+            '検索結果なし_入荷日に該当する結果がない'
+                 =>[ [Con::END_DATE => $this->formatDate($four_days_before)]],
+            '検索結果なし_カード名に一致する結果がない'
+                =>[ [Con::CARD_NAME => 'aaaa']]
+        ];
+    }
+
+    private function formatToday() {
+        $today = self::today();
+        return $this->formatDate($today);
     }
 
     /**
@@ -74,6 +112,11 @@ class ArrivalLogFetchTest extends TestCase {
         return CarbonImmutable::today();
     }
 
+    private function formatYesterday() {
+        $yesterday = self::yesterday();
+        return $this->formatDate($yesterday);
+    }
+
     /**
      * 昨日の日付を取得する。
      *
@@ -81,6 +124,11 @@ class ArrivalLogFetchTest extends TestCase {
      */
     private static function yesterday():CarbonImmutable {
         return CarbonImmutable::yesterday();
+    }
+
+    private function formatTwoDateBefore() {
+        $two_days_before = self::two_days_before();
+        return $this->formatDate($two_days_before);
     }
 
     /**
@@ -106,29 +154,10 @@ class ArrivalLogFetchTest extends TestCase {
         $response = $this->assert_OK($condition);
         $json = $response->json();
         foreach($json as $j) {
-            assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
+            $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
         }
-        $first = current($json);
-        $today = CarbonImmutable::today();
-        $this->verifyJson($first, $today);
-
-        $last = end($json);
-        $three_days_before = $today->subDays(3);
-        $this->verifyJson($last, $three_days_before);
     }
 
-    public function test_検索結果なし_入荷日に該当する結果が無い() {
-        $four_days_before = CarbonImmutable::today()->subDays(4);
-        $condition = [Con::END_DATE => $this->formatDate($four_days_before)];
-
-        $response = $this->execute($condition);
-        $response->assertStatus(Response::HTTP_NOT_FOUND);
-        $data = $response->json();
-        $this->assertEquals('検索結果がありません。', $data['detail']);
-    }
-
-    public function test_検索結果なし_カード名に一致する結果が無い() {
-    }
 
     private function assert_OK(array $condition) {
         $response = $this->execute($condition);

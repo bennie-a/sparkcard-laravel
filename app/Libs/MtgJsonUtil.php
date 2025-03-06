@@ -39,6 +39,11 @@ class MtgJsonUtil {
         return $isTrue ? $json[$key] : [];
     }
 
+    public static function getValueOrEmpty(string $key, array $array): string
+    {
+        return $array[$key] ?? '';
+    }
+
     /**
      * JSONファイルの項目が空ではないか判別する。
      *
