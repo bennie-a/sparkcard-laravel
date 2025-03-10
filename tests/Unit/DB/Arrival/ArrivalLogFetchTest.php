@@ -98,6 +98,27 @@ class ArrivalLogFetchTest extends TestCase {
         ];
     }
 
+    /**
+     * NGケース
+     *
+     * @dataProvider ng
+     * @param array $condition
+     * @param [type] $msg
+     * @return void
+     */
+    public function test_ng(array $condition, $msg) {
+        $response = $this->execute($condition);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+    }
+
+    public function ngProvider() {
+        return [
+            '入荷日(開始日)が入荷日(終了日)以降' =>
+                            [[Con::START_DATE => '2025/03/10', 'end_date' => '2025/03/01'], 
+                                '入荷日(開始日)は入荷日(終了日)以前の日付を入力してください。']
+        ];
+    }
+
     private function formatToday() {
         $today = self::today();
         return $this->formatDate($today);
@@ -157,7 +178,6 @@ class ArrivalLogFetchTest extends TestCase {
             $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
         }
     }
-
 
     private function assert_OK(array $condition) {
         $response = $this->execute($condition);
