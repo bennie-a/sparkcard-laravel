@@ -56,5 +56,9 @@ class PromotypeSeeder extends Seeder
         Promotype::create(['attr' => 'doubleexposure', 'name' => '「二重露光」ショーケース']);
         Promotype::create(['attr' => 'paranormal', 'name' => '「超常」フレーム']);
         Promotype::create(['attr' => 'mirror', 'name' => '「鏡の怪物」ボーダーレス']);
+        Promotype::create(['attr' => 'maxspeed', 'name' => '「最大出力」ボーダーレス']);
+        Promotype::create(['attr' => 'badassrider', 'name' => '「ワルなライダー」ボーダーレス']);
+        Promotype::create(['attr' => 'graffgiant', 'name' => '「グラフィティ・ジャイアント」ボーダーレス']);
+        Promotype::create(['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil']);
     }
 }

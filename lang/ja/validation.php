@@ -27,7 +27,7 @@ return [
     'between' => [
         'array' => 'The :attribute must have between :min and :max items.',
         'file' => 'The :attribute must be between :min and :max kilobytes.',
-        'numeric' => 'The :attribute must be between :min and :max.',
+        'numeric' => ':attributeは:min ～:maxの間の数字を設定してください。',
         'string' => 'The :attribute must be between :min and :max characters.',
     ],
     'boolean' => ':attributeはtrueかfalseを入力してください。',
@@ -124,7 +124,7 @@ return [
     'required_with' => 'The :attribute field is required when :values is present.',
     'required_with_all' => 'The :attribute field is required when :values are present.',
     'required_without' => 'The :attribute field is required when :values is not present.',
-    'required_without_all' => 'The :attribute field is required when none of :values are present.',
+    'required_without_all' => ':attribute field is required when none of :values are present.',
     'same' => 'The :attribute and :other must match.',
     'size' => [
         'array' => 'The :attribute must contain :size items.',

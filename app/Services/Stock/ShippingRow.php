@@ -54,7 +54,7 @@ class ShippingRow extends StockpileRow {
     public function setcode()
     {
         if (empty($this->setcode)) {
-            \preg_match("/(?<=【)[A-Z]+(?=】)/", $this->product_name(), $match);
+            \preg_match("/(?<=【)[A-Z0-9]+(?=】)/", $this->product_name(), $match);
             $this->setcode = current($match);
         }
         return $this->setcode;

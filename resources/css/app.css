@@ -86,6 +86,7 @@ body {
     cursor: pointer;
 }
 
+
 /* ロード中のアイコン */
 .loader,
 .loader:after {
@@ -114,13 +115,12 @@ body {
     max-width: 400px;
 }
 
-/* datepickerのレイアウト調整 */
-input.dp_custom_input {
-    padding-left: 2rem !important;
-}
-
 .ui.table tbody tr td.selectable>a:not(.ui) {
     color: var(--teal)!important;
+}
+
+label.hidden {
+    visibility: hidden;
 }
 
 @-webkit-keyframes load8 {

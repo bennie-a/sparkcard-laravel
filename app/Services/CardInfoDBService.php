@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
@@ -10,12 +11,19 @@ use App\Facades\ScryfallServ;
 use App\Facades\WisdomGuild;
 use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * card_infoテーブルのロジッククラス
  */
 class CardInfoDBService {
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $details
+     * @return Collection
+     */
     public function fetch($details)
     {
         $condition = [

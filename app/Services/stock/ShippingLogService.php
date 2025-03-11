@@ -36,7 +36,7 @@ class ShippingLogService extends AbstractSmsService{
      * @return void
      */
     protected function store($row) {
-        $stock = Stockpile::find($row->card_name(), $row->condition(), $row->language(), $row->isFoil());
+        $stock = Stockpile::find($row->card_name(), $row->setcode(), $row->condition(), $row->language(), $row->isFoil());
         if (empty($stock)) {
             $this->addError($row->number(), '在庫データがありません');
             return;

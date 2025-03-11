@@ -1,5 +1,5 @@
 <script setup>
-import shop from "../component/ShopTag.vue";
+import shop from "../component/tag/ShopTag.vue";
 import scdatepicker from "../component/SCDatePicker.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
@@ -7,13 +7,12 @@ import axios from 'axios';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
 
-const shippingDate = ref(new Date());
 const router = useRouter();
 const buyer = ref("");
 let result = reactive([]);
 const isLoading = ref(false);
 const today = new Date();
-let shippingStartDate = new Date();
+const shippingStartDate = ref(new Date());
 const currentList = reactive([]);
 const resultCount = ref(0);
 
@@ -24,7 +23,7 @@ const fetch =  async () => {
     const query = {
                 params: {
                     "buyer_name": buyer.value,
-                    "shipping_date": toDateString(shippingStartDate),
+                    "shipping_date": toDateString(shippingStartDate.value),
                 },
             };
    await axios.get('/api/shipping/', query)
@@ -47,15 +46,6 @@ const toDssPage = (orderId) => {
         params: { order_id: orderId},
     });
 }
-
-// SCDatePickerで選択した日付を設定する。
-const handleStartDate = (date) => {
-    shippingStartDate = date;
-}
-
-// const handleEndDate = (date) => {
-//     shippingEndDate.value = date;
-// }
 
 onMounted(async() => {
     await fetch();
@@ -88,7 +78,7 @@ const toDateString = (date) => {
             <div class="three wide field">
                 <label for="">発送日(開始)</label>
                 <div>
-                    <scdatepicker :selectedDate="shippingStartDate" @update="handleStartDate"/>
+                    <scdatepicker v-model="shippingStartDate"></scdatepicker>
                 </div>
             </div>
             <!-- <div class="three wide field">
@@ -136,7 +126,7 @@ const toDateString = (date) => {
                     <td :class="[isToday(r.shipping_date) ? 'positive': '', isToday(r.shipping_date)?'tobold':'']">{{ r.shipping_date }}</td>
                     <td class="one wide center aligned">{{r.item_count}}点</td>
                     <td class="center aligned selectable">
-                        <a @click="toDssPage(r.order_id)"><i class="bi bi-chevron-double-right"></i></a>
+                        <a @click="toDssPage(r.order_id)"><i class="angle double right icon"></i></a>
                     </td>
                 </tr>
             </tbody>

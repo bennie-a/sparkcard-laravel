@@ -3,9 +3,11 @@
 namespace App\Exceptions;
 
 use App\Http\Response\CustomResponse;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -29,7 +31,8 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
-        ConflictException::class
+        ConflictException::class,
+        ApiException::class
     ];
 
     /**
@@ -51,17 +54,35 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e): JsonResponse {
         $statusCode = match (true) {
             $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
-            default =>  Response::HTTP_INTERNAL_SERVER_ERROR,
+            $e instanceof ValidationException => Response::HTTP_BAD_REQUEST,
+            $e instanceof HttpException => $e->getStatusCode(),
+            $e instanceof ApiExceptionInterface => $e->getStatusCode(),
+            default =>  Response::HTTP_INTERNAL_SERVER_ERROR
         };
 
         $title = "";
+        $detail = "";
         if ($e instanceof CsvFormatException) {
             $title = 'CSV Validation Error';
+            $detail = $e->getMessage();
+        } else if ($e instanceof ApiExceptionInterface) {
+            $title = $e->getTitle();
+            $detail = $e->getDetail();
+        } else if ($statusCode === Response::HTTP_BAD_REQUEST) {
+            $title = "Validation Error";
+            $detail = $e->getMessage();
         }
-        return response()->json([
-            'title' => $title,
-            'detail' => $e->getMessage(),
-        ], $statusCode);
+
+        $json =[
+                'title' => $title,
+                'status' => $statusCode,
+                'detail' => $detail,
+                'request' => $request->path()
+            ];
+        logger()->info('エラー：', $json);
+        return response()->json($json, $statusCode,  [
+            'Content-Type' => 'application/problem+json',
+        ]);
     }
 
     /**

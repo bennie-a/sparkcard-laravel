@@ -20,12 +20,30 @@ class MtgJsonUtil {
         if (empty($json)) {
             return false;
         }
-        return array_key_exists($key, $json);
+        return isset($json[$key]);
     }
 
     public static function isEmpty($key, $json) {
         return !self::isNotEmpty($key, $json);
     }
+
+    /**
+     * 配列にキーが存在すれば該当する値を、なければnullを取得する。
+     *
+     * @param string $key
+     * @param array $json
+     * @return array
+     */
+    public static function getIfExists($key, $json) {
+        $isTrue = self::hasKey($key, $json);
+        return $isTrue ? $json[$key] : [];
+    }
+
+    public static function getValueOrEmpty(string $key, array $array): string
+    {
+        return $array[$key] ?? '';
+    }
+
     /**
      * JSONファイルの項目が空ではないか判別する。
      *

@@ -3,8 +3,8 @@ import MessageArea from "../component/MessageArea.vue";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 import ListPagination from "../component/ListPagination.vue";
-import FoilTag from "../component/FoilTag.vue";
-import ConditionTag from "../component/ConditionTag.vue";
+import FoilTag from "../component/tag/FoilTag.vue";
+import ConditionTag from "../component/tag/ConditionTag.vue";
 import ImageModal from "../component/ImageModal.vue";
 import CardLayout from "../component/CardLayout.vue";
 
@@ -30,8 +30,7 @@ export default {
         async search() {
             this.$store.dispatch("message/clear");
             this.$store.dispatch("clearCards");
-            let self = this;
-            self.isLoading = true;
+            this.isLoading = true;
             console.log("start search stockpile");
             const query = {
                 params: {
@@ -42,23 +41,21 @@ export default {
             await axios
                 .get("/api/stockpile", query)
                 .then((response) => {
-                    if (response.status != 200) {
-                        this.$store.dispatch(
-                            "message/error",
-                            "検索結果がありません。"
-                        );
-                        return;
-                    }
-                    console.log(response.status);
+                    console.log(response.data);
                     let data = response.data;
                     this.stock = data;
                     this.$store.dispatch("setCard", this.stock);
                 })
                 .catch((e) => {
-                    console.error(e);
+                    let data = e.response.data;
+                    console.error(data);
+                    this.$store.dispatch(
+                            "message/error",
+                            data.detail
+                        );
                 })
                 .finally(() => {
-                    self.isLoading = false;
+                    this.isLoading = false;
                     console.log("end search stockpile");
                 });
         },

@@ -13,6 +13,15 @@ use App\Services\Constant\StockpileHeader as Header;
 class ArrivalLogService {
 
     /**
+     * カード情報を含む入荷情報を取得する。
+     * @return Collection
+     */
+    public function fetch($details) {
+        $results = ArrivalLog::fetch($details);
+        return $results;
+    }
+
+    /**
      * 入荷ログを1件登録する。
      *
      * @param array $details

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
 use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,18 +19,18 @@ class Stockpile extends Model
 
     protected $table = 'stockpile';
 
-    protected $fillable = ['card_id', 'language',  'condition', 'quantity', 'updated_at'];
+    protected $fillable = ['id', 'card_id', 'language',  'condition', 'quantity', 'updated_at'];
 
     public function cardinfo() {
         return $this->belongsTo('App\Models\CardInfo');
     }
 
-    public static function find(string $cardname, string $condition, string $language, bool $isFoil)  {
+    public static function find(string $cardname, string $setcode, string $condition, string $language, bool $isFoil)  {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
-        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id');
+        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
         $stock = $query->where(['c.name' => $cardname, 'c.isFoil' => $isFoil,
-                                             's.condition' => $condition, 's.language' => $language])->first();
+                                             's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
         return $stock;
     }
 
@@ -80,7 +81,7 @@ class Stockpile extends Model
 
     public function getUpdatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format("Y/m/d");
+        return CarbonFormatUtil::toDateString($value);
     }
 
 }

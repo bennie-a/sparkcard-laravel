@@ -1,3 +1,16 @@
+<script setup>
+import datepicker from "@vuepic/vue-datepicker";
+import { ref} from "vue";
+const newSelectedDate = defineModel({type:Date, required:true});
+
+// 日付をYYYY/MM/dd形式に整形する。
+const dateFormat = (date) => {
+    const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}/${month}/${day}`;
+}
+</script>
 <template>
         <datepicker
         v-model="newSelectedDate"
@@ -5,39 +18,11 @@
         locale="jp"
         :enable-time-picker="false"
         :format="dateFormat"
-        @update:model-value="handleUpdate"
         auto-apply
     />
 </template>
-<script>
-import Datepicker from "@vuepic/vue-datepicker";
-import { ref} from "vue";
-export default {
-    components:{
-        datepicker:Datepicker
-    },
-    props: {
-        selectedDate:{type:Date, required:true},
-    },
-    emits:[
-        'update'
-    ],
-    data(){
-        return {
-            newSelectedDate:ref(this.$props.selectedDate),
-        };
-    },
-    methods:{
-        dateFormat: function (date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
-            return `${year}/${month}/${day}`;
-        },
-        handleUpdate:function() {
-            this.$emit('update', this.newSelectedDate);
-        }
-    },
+<style>
+.dp__input {
+    padding-left: 2rem!important;
 }
- 
-</script>
+</style>

@@ -103,8 +103,8 @@
 </template>
 <script>
 import ListPagination from "./ListPagination.vue";
-import FoilTag from "../component/FoilTag.vue";
-import ConditionTag from "./ConditionTag.vue";
+import FoilTag from "./tag/FoilTag.vue";
+import ConditionTag from "./tag/ConditionTag.vue";
 import ImageModal from "./ImageModal.vue";
 
 export default {

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\CardConstant as Con;
+use Illuminate\Database\Eloquent\Collection;
 
 class CardInfo extends Model
 {
@@ -31,7 +32,7 @@ class CardInfo extends Model
      * 検索条件に該当するデータを取得する。
      *
      * @param array $condition
-     * @return array 検索結果
+     * @return Collection 検索結果
      */
     public static function fetchByCondition($condition)
     {

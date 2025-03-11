@@ -59,10 +59,12 @@
                                 <select v-model="card.promotype">
                                     <option value="">通常版</option>
                                     <option value="ショーケース">ショーケース</option>
-                                    <option value="「二重露光」ショーケース">「二重露光」ショーケース</option>
-                                    <option value="「超常」フレーム">「超常」フレーム</option>
                                     <option value="ボーダーレス">ボーダーレス</option>
-                                    <option value="「鏡の怪物」ボーダーレス">「鏡の怪物」ボーダーレス</option>
+                                    <option value="ボックストッパー">ボックストッパー</option>
+                                    <option value="ファーストプレイス・Foil">ファーストプレイス・Foil</option>
+                                    <option value="「最大出力」ボーダーレス">「最大出力」ボーダーレス</option>
+                                    <option value="「ワルなライダー」ボーダーレス">「ワルなライダー」ボーダーレス</option>
+                                    <option value="「グラフィティ・ジャイアント」ボーダーレス">「グラフィティ・ジャイアント」ボーダーレス</option>
                                     <option value="フルアート">フルアート</option>
                                 </select>
                             </td>
@@ -117,7 +119,7 @@ import MessageArea from "../component/MessageArea.vue";
 import ListPagination from "../component/ListPagination.vue";
 import ModalButton from "../component/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
-import FoilTag from "../component/FoilTag.vue";
+import FoilTag from "../component/tag/FoilTag.vue";
 
 import axios from "axios";
 export default {

@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
-import foiltag from '../component/FoilTag.vue';
+import foiltag from './tag/FoilTag.vue';
 
 
 const props = defineProps({

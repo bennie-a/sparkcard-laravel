@@ -30,5 +30,14 @@ class TestStockpileSeeder extends Seeder
 
         $jace = CardInfo::findSingleCard('ONE', '完成化した精神、ジェイス', false);
         Stockpile::create(['card_id' => $jace->id, 'condition' => 'NM-', 'quantity' => 2, 'language' => 'JP']);
+ 
+        for($i = 4; $i <= 12; $i++) {
+            if ($i == 9) {
+                continue;
+            }
+            Stockpile::factory()->create([
+                'card_id'=> $i,
+            ]);
+        }
     }
 }
