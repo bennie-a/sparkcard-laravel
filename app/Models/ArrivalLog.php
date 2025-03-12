@@ -8,6 +8,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 use function PHPUnit\Framework\isEmpty;
@@ -32,7 +33,7 @@ class ArrivalLog extends Model
         $endDate = MtgJsonUtil::getValueOrEmpty(Con::END_DATE, $details);
         $keyword = MtgJsonUtil::getValueOrEmpty(Con::CARD_NAME, $details);
 
-        $subQuery = DB::table('arrival_log as alog')
+        $subQuery = self::getTableQuery()
                         ->select([
                             'alog.id',
                             'e.attr as attr',
@@ -43,11 +44,8 @@ class ArrivalLog extends Model
                             'v.name as vcat',
                             'alog.vendor',
                             DB::raw("ROW_NUMBER() OVER (PARTITION BY alog.arrival_date, alog.vendor_type_id ORDER BY alog.id) as rank_number")
-                        ])
-                        ->join('stockpile as s', 's.id', '=', 'alog.stock_id')
-                        ->join('card_info as c', 'c.id', '=', 's.card_id')
-                        ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
-                        ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id');
+                        ]);
+        $subQuery = self::join($subQuery);
         if(!empty($keyword)) {
             $pat = '%' . addcslashes($keyword, '%_\\') . '%';
             $subQuery->where('c.name', 'LIKE', $pat);
@@ -78,6 +76,42 @@ class ArrivalLog extends Model
     return $result;
 }
 
+/**
+ * 複数条件に該当する入荷情報を取得する。
+ *
+ * @param array $details
+ * @return Collection
+ */
+public static function filtering(array $details) {
+    $log_conditions = array_filter($details, function($key) {
+        return $key !== Con::CARD_NAME;
+    }, ARRAY_FILTER_USE_KEY);
+    $cardname = $details[Con::CARD_NAME];
+    $columns = ['arrival_log.id', 'e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
+    'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
+    'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
+    $query = self::table('arrival_log as alog')->select($columns);
+    $query = self::join($query)->where($log_conditions)->where('card_info.name', $cardname);
+    return $query->get();
+}
+
+/**
+ * 内部結合のクエリを取得する。
+ *
+ * @param [type] $query
+ * @return Builder
+ */
+private static function join($query):Builder {
+    $query->join('stockpile as s', 's.id', '=', 'alog.stock_id')
+    ->join('card_info as c', 'c.id', '=', 's.card_id')
+    ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
+    ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id');
+    return $query;
+}
+
+private static function getTableQuery() {
+    return DB::table('arrival_log as alog');
+}
 /**
  * 入荷日(開始日)の条件を追加する。
  *
@@ -125,4 +159,6 @@ private static function addArrivalDateWhere(string $alias, $query, string $opera
 
         return $query;
     }
+
+
 }

@@ -38,8 +38,8 @@ Route::resource('scryfall', ScryfallController::class);
 Route::post('stockpile/import', [StockpileController::class, 
 'import']);
 Route::post('shipping/import', [ShippingLogController::class, 'import']);
-Route::resource('translate', TranslateController::class);
 Route::apiResource('arrival', ArrivalController::class);
+Route::get('arrival/filtering', [ArrivalController::class, 'filterArrivals']);
 Route::apiResource('shipping', ShippingLogController::class);
 Route::get('stockpile', [StockpileController::class, 'index']);
 Route::get('vendor', [VendorTypeController::class, 'index']);

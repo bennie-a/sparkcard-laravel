@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArrivalFilterRequest;
 use App\Http\Requests\ArrivalRequest;
 use App\Http\Requests\ArrivalSearchRequest;
 use App\Http\Resources\ArrivalLogResource;
@@ -16,6 +17,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
+use Closure;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -38,17 +40,34 @@ class ArrivalController extends Controller {
     public function index(ArrivalSearchRequest $request)
     {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
+        $search = fn($details) => $this->service->fetch($details);  // 検索処理
+        $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
+        return $this->handleSearch($details, $search, $transformer);
+    }
 
+    /**
+     * 設定した条件を元に入荷情報を取得する。
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function filterArrivals(ArrivalFilterRequest $request) {
+        $details = $request->only([Con::CARD_NAME, Header::ARRIVAL_DATE, Header::VENDOR_TYPE_ID]);
+        $search = fn($details) => $this->service->filtering($details);  // 検索処理
+        $transformer = fn($results) => $results; // 変換処理
+        return $this->handleSearch($details, $search, $transformer);
+    }
+
+    private function handleSearch(array $details, callable $fetchMethod, ?callable $transformer) {
         logger()->info('Start to search arrival log', $details);
-        $results = $this->service->fetch($details);
+        $results = $fetchMethod($details);
         if ($results->isEmpty()) {
             logger()->info('No Result');
             throw new NoContentException();
         }
         $count = $results->count();
         logger()->info("End to search $count arrival log");
-        $json = ArrivalLogResource::collection($results);
-        return response($json, Response::HTTP_OK);
+        return response($transformer($results), Response::HTTP_OK);
     }
 
     /**

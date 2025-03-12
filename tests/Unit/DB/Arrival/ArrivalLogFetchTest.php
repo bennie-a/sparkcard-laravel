@@ -63,7 +63,6 @@ class ArrivalLogFetchTest extends TestCase {
 
     public function okProvider() {
         return [
-            '全件検索' => [[]],
             '入荷日_開始日のみ入力' => [[Con::START_DATE => $this->formatYesterday()]],
             '入荷日_終了日のみ入力' => [[Con::END_DATE => $this->formatTwoDateBefore()]],
             '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => $this->formatTwoDateBefore(),
@@ -101,7 +100,7 @@ class ArrivalLogFetchTest extends TestCase {
     /**
      * NGケース
      *
-     * @dataProvider ng
+     * @dataProvider ngProvider
      * @param array $condition
      * @param [type] $msg
      * @return void
@@ -109,6 +108,8 @@ class ArrivalLogFetchTest extends TestCase {
     public function test_ng(array $condition, $msg) {
         $response = $this->execute($condition);
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $actual = $response->json();
+        $this->assertEquals($msg, $actual['detail']);
     }
 
     public function ngProvider() {

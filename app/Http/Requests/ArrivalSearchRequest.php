@@ -29,7 +29,7 @@ class ArrivalSearchRequest extends FormRequest
                 $endDate = $this->input(Con::END_DATE);
                 if (request()->has(Con::END_DATE) && !empty($value) && $endDate < $value) {
                     $fail(__('validation.before_or_equal', 
-                    ['attribute' => $this->attributes()[Con::END_DATE], 'date' => $this->attributes()[Con::END_DATE]]));
+                    ['attribute' => $this->attributes()[Con::START_DATE], 'date' => $this->attributes()[Con::END_DATE]]));
                 }
             }],
             Con::END_DATE => ['nullable', 'date'],

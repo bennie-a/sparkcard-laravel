@@ -21,6 +21,11 @@ class ArrivalLogService {
         return $results;
     }
 
+    public function filtering($details) {
+        $results = ArrivalLog::filtering($details);
+        return $results;
+    }
+
     /**
      * 入荷ログを1件登録する。
      *
