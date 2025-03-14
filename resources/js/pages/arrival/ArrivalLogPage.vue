@@ -43,7 +43,7 @@ const fetch =  async () => {
                     "end_date" : toString(endDate.value)
                 },
             };
-   await axios.get('/api/arrival/', query)
+   await axios.get('/api/arrival/grouping', query)
                             .then((response) => {
                                 console.log(response.data);
                                 result.value = response.data;

@@ -5,7 +5,7 @@ namespace Tests\Unit\DB\Arrival;
 use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
 use App\Models\VendorType;
-use Carbon\Carbon;
+
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -14,13 +14,10 @@ use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
 
-use function PHPUnit\Framework\assertTrue;
-use function PHPUnit\Framework\isEmpty;
-
 /**
- * 入荷情報検索のテストケース
+ * 入荷情報日付別検索のテストケース
  */
-class ArrivalLogFetchTest extends TestCase {
+class ArrivalLogGroupingTest extends TestCase {
 
     public function setUp(): void
     {
@@ -33,8 +30,14 @@ class ArrivalLogFetchTest extends TestCase {
         $this->seed('TestArrivalLogSeeder');
     }
 
-    private $url =  'api/arrival';
-
+    /**
+     * エンドポイントを取得する。
+     *
+     * @return string
+     */
+    protected function getEndPoint():string {
+        return  'api/arrival/grouping';
+    }
     /**
      * OKパターン
      * @dataProvider okProvider
@@ -120,7 +123,7 @@ class ArrivalLogFetchTest extends TestCase {
         ];
     }
 
-    private function formatToday() {
+    protected function formatToday() {
         $today = self::today();
         return $this->formatDate($today);
     }
@@ -130,11 +133,11 @@ class ArrivalLogFetchTest extends TestCase {
      *
      * @return CarbonImmutable
      */
-    private static function today():CarbonImmutable {
+    protected static function today():CarbonImmutable {
         return CarbonImmutable::today();
     }
 
-    private function formatYesterday() {
+    protected function formatYesterday() {
         $yesterday = self::yesterday();
         return $this->formatDate($yesterday);
     }
@@ -167,7 +170,7 @@ class ArrivalLogFetchTest extends TestCase {
      *
      * @return CarbonImmutable
      */
-    private static function three_days_before():CarbonImmutable {
+    protected static function three_days_before():CarbonImmutable {
         return CarbonImmutable::today()->subDays(3);
     }
 
@@ -180,14 +183,14 @@ class ArrivalLogFetchTest extends TestCase {
         }
     }
 
-    private function assert_OK(array $condition) {
+    protected function assert_OK(array $condition) {
         $response = $this->execute($condition);
         $response->assertOk();
         return $response;
     }
 
     private function execute(array $condition) {
-        $response = $this->json('GET', $this->url, $condition);
+        $response = $this->json('GET', $this->getEndPoint(), $condition);
         return $response;
     }
 
@@ -252,7 +255,7 @@ class ArrivalLogFetchTest extends TestCase {
             return current($sum);
     }
 
-    private function formatDate(CarbonImmutable $day):string {
+    protected function formatDate(CarbonImmutable $day):string {
         $format = 'Y/m/d';
         return $day->format($format);
     }

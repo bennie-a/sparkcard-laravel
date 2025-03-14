@@ -86,12 +86,14 @@ public static function filtering(array $details) {
     $log_conditions = array_filter($details, function($key) {
         return $key !== Con::CARD_NAME;
     }, ARRAY_FILTER_USE_KEY);
-    $cardname = $details[Con::CARD_NAME];
-    $columns = ['arrival_log.id', 'e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
-    'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
-    'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
-    $query = self::table('arrival_log as alog')->select($columns);
-    $query = self::join($query)->where($log_conditions)->where('card_info.name', $cardname);
+    $cardname = MtgJsonUtil::getValueOrEmpty(Con::CARD_NAME, $details);
+    $columns = ['alog.id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.number',
+    'c.name','c.image_url', 'c.isFoil', 's.condition', 's.quantity'];
+    $query = self::getTableQuery()->select($columns);
+    $query = self::join($query)->where($log_conditions)->
+                    when($cardname, function($query, $cardname) {
+                        return $query->where('c.name', $cardname);
+                    });
     return $query->get();
 }
 
