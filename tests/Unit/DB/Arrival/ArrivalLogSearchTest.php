@@ -10,7 +10,7 @@ use App\Services\Constant\StockpileHeader as Header;
 
 use function PHPUnit\Framework\assertTrue;
 
-class ArrivalFilteringTest extends ArrivalLogFetchTest
+class ArrivalLogSearchTest extends ArrivalLogGroupingTest
 {
 
         /**
