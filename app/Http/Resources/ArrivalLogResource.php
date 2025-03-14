@@ -22,6 +22,7 @@ class ArrivalLogResource extends JsonResource {
                 Header::VENDOR_TYPE_ID => $this->vendor_type_id,
                 Header::NAME => $this->vendor
             ],
+            'foiltag' => $this->foiltag == '通常版' ? '' :$this->foiltag
         ];
     }
 }

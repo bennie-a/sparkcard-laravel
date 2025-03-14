@@ -43,6 +43,7 @@ class ArrivalLog extends Model
                             'alog.vendor_type_id',
                             'v.name as vcat',
                             'alog.vendor',
+                            'f.name as foiltag',
                             DB::raw("ROW_NUMBER() OVER (PARTITION BY alog.arrival_date, alog.vendor_type_id ORDER BY alog.id) as rank_number")
                         ]);
         $subQuery = self::join($subQuery);
@@ -107,7 +108,8 @@ private static function join($query):Builder {
     $query->join('stockpile as s', 's.id', '=', 'alog.stock_id')
     ->join('card_info as c', 'c.id', '=', 's.card_id')
     ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
-    ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id');
+    ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id')
+    ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id');
     return $query;
 }
 

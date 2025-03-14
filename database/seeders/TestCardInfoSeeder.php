@@ -20,6 +20,8 @@ class TestCardInfoSeeder extends Seeder
     {
         $nonfoil = Foiltype::findByAttr('nonfoil');
         $foil = Foiltype::findByAttr('foil');
+        // S&C・Foil
+        $scfoil = Foiltype::findByAttr('stepandcompleat');
 
         // 兄弟戦争
         $bro = $this->findNotionId('BRO');
@@ -56,7 +58,7 @@ class TestCardInfoSeeder extends Seeder
         $one = $this->findNotionId('ONE');
         CardInfo::factory()->createOne(['exp_id' => $one, 'name' => '機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫',
         'en_name' => 'Elesh Norn, Mother of Machines', 'color_id' => 'W', 'number' => '298',
-        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
+        'isFoil' => true, 'foiltype_id' => $scfoil->id]);
         CardInfo::factory()->createOne(['exp_id' => $one, 'name' => '完成化した精神、ジェイス',
         'en_name' => 'Jace, the Perfected Mind', 'color_id' => 'U', 'number' => '57',
         'isFoil' => false, 'foiltype_id' => $nonfoil->id]);

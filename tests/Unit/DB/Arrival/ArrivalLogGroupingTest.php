@@ -39,10 +39,10 @@ class ArrivalLogGroupingTest extends TestCase {
         return  'api/arrival/grouping';
     }
     /**
-     * OKパターン
-     * @dataProvider okProvider
+     * 入荷日検索に関するテストケース
+     * @dataProvider arrivalDateProvider
      */
-    public function test_ok(array $condition) {
+    public function test_ok_arrival_date(array $condition) {
         $response = $this->assert_OK($condition);
         $json = $response->json();
 
@@ -64,7 +64,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $this->verifyJson($last, $lastDay);
     }
 
-    public function okProvider() {
+    public function arrivalDateProvider() {
         return [
             '入荷日_開始日のみ入力' => [[Con::START_DATE => $this->formatYesterday()]],
             '入荷日_終了日のみ入力' => [[Con::END_DATE => $this->formatTwoDateBefore()]],
@@ -74,6 +74,40 @@ class ArrivalLogGroupingTest extends TestCase {
                                                                                     Con::END_DATE => $this->formatToday()]],
             '全検索項目入力' => [[Con::CARD_NAME => '神', Con::START_DATE => $this->formatYesterday(),
                                                         Con::END_DATE => $this->formatYesterday()]]
+        ];
+    }
+
+
+    /**
+     * カード名のみ検索に関するテストケース
+     *
+     * @param string $cardname カード名
+     * @dataProvider cardnameProvider
+     * @return void
+     */
+    public function test_ok_cardname(string $cardname) {
+        $condition = [Con::CARD_NAME => $cardname];
+        $response = $this->assert_OK($condition);
+        $json = $response->json();
+        foreach($json as $j) {
+            $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
+            
+            $log = $this->getCardInfoFromArrivalId($j['id']);
+            $actual_foil_tag = $j['foiltag'];
+            if ($log->foiltag == '通常版') {
+                $this->assertEmpty($actual_foil_tag);
+            } else {
+                $this->assertEquals($log->foiltag, $actual_foil_tag, 'Foil名');
+            }
+        }
+    }
+
+    public function cardnameProvider() {
+        return [
+            '部分一致検索' => ['ジン＝ギタクシアス'],
+            '通常版のみ検索' => ['ドロスの魔神'],
+            'Foil版のみ検索' => ['告別≪ショーケース≫'],
+            '特殊Foil版のみ検索' => ['機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫'],
         ];
     }
 
@@ -174,15 +208,6 @@ class ArrivalLogGroupingTest extends TestCase {
         return CarbonImmutable::today()->subDays(3);
     }
 
-    public function test_カード名検索() {
-        $condition = [Con::CARD_NAME => 'ドラゴン'];
-        $response = $this->assert_OK($condition);
-        $json = $response->json();
-        foreach($json as $j) {
-            $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
-        }
-    }
-
     protected function assert_OK(array $condition) {
         $response = $this->execute($condition);
         $response->assertOk();
@@ -234,8 +259,9 @@ class ArrivalLogGroupingTest extends TestCase {
         $log = ArrivalLog::join('stockpile as s', 'arrival_log.stock_id', '=', 's.id')
                                         ->join('card_info as c', 's.card_id', '=', 'c.id')
                                         ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
+                                        ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id')
                                         ->where('arrival_log.id', $id)
-                                        ->select('arrival_log.id', 'e.attr as attr', 'c.name as cardname', 's.language as lang')
+                                        ->select('arrival_log.id', 'e.attr as attr', 'c.name as cardname', 's.language as lang', 'f.name as foiltag')
                                         ->first();
         return $log;
     }
