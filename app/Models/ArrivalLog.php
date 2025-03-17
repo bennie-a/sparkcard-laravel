@@ -38,6 +38,7 @@ class ArrivalLog extends Model
                             'alog.id',
                             'e.attr as attr',
                             'c.name as cardname',
+                            'c.isFoil as is_foil',
                             's.language as lang',
                             'alog.arrival_date',
                             'alog.vendor_type_id',

@@ -5,7 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Services\Constant\SearchConstant as Con;
 use Illuminate\Validation\Validator;
-
+/**
+ * エンドポイントがapi/arrival/grouping/のリクエストクラス
+ */
 class ArrivalGroupRequest extends FormRequest
 {
     /**

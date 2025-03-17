@@ -93,11 +93,12 @@ class ArrivalLogGroupingTest extends TestCase {
             $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
             
             $log = $this->getCardInfoFromArrivalId($j['id']);
-            $actual_foil_tag = $j['foiltag'];
+            $actual_foil = $j['foil'];
+            $this->assertEquals($log['is_foil'], $actual_foil['is_foil']);
             if ($log->foiltag == '通常版') {
-                $this->assertEmpty($actual_foil_tag);
+                $this->assertEmpty($actual_foil['name']);
             } else {
-                $this->assertEquals($log->foiltag, $actual_foil_tag, 'Foil名');
+                $this->assertEquals($log->foiltag, $actual_foil['name'], 'Foil名');
             }
         }
     }
@@ -261,7 +262,7 @@ class ArrivalLogGroupingTest extends TestCase {
                                         ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
                                         ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id')
                                         ->where('arrival_log.id', $id)
-                                        ->select('arrival_log.id', 'e.attr as attr', 'c.name as cardname', 's.language as lang', 'f.name as foiltag')
+                                        ->select('arrival_log.id', 'e.attr as attr', 'c.name as cardname', 's.language as lang', 'c.isFoil as is_foil', 'f.name as foiltag')
                                         ->first();
         return $log;
     }
