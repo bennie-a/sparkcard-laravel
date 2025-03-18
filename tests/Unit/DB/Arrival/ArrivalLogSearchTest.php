@@ -7,11 +7,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Constant\StockpileHeader as Header;
+use Tests\Trait\GetApiAssertions;
 
 use function PHPUnit\Framework\assertTrue;
 
-class ArrivalLogSearchTest extends ArrivalLogGroupingTest
+class ArrivalLogSearchTest extends TestCase
 {
+    use GetApiAssertions;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed('TruncateAllTables');
+        $this->seed('DatabaseSeeder');
+        $this->seed('TestExpansionSeeder');
+        $this->seed('TestCardInfoSeeder');
+        $this->seed('TestStockpileSeeder');
+        $this->seed('TestArrivalLogSeeder');
+    }
 
         /**
      * OKパターン
@@ -33,7 +46,7 @@ class ArrivalLogSearchTest extends ArrivalLogGroupingTest
     public function okProvider() {
         return [
             '入荷先カテゴリが買取以外' => 
-                [[Header::ARRIVAL_DATE =>$this->formatToday(), Header::VENDOR_TYPE_ID => 1]],
+                [[Header::ARRIVAL_DATE => '2025/03/17', Header::VENDOR_TYPE_ID => 1]],
         ];
     }
     /**
@@ -42,6 +55,6 @@ class ArrivalLogSearchTest extends ArrivalLogGroupingTest
      * @return string
      */
     protected function getEndPoint():string {
-        return  'api/arrival/filtering';
+        return  'api/arrival/';
     }
 }

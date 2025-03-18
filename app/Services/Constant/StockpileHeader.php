@@ -18,6 +18,7 @@ class StockpileHeader {
     const LANGUAGE = 'language';
     const VENDOR_TYPE_ID = 'vendor_type_id';
     const VENDOR = 'vendor';
+    const FOIL = 'foil';
 
     // 出荷CSV(メルカリ)
     public const ORDER_ID = "order_id";

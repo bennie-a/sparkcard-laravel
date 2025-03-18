@@ -5,6 +5,7 @@ use App\Libs\CarbonFormatUtil;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Libs\CardInfoJsonUtil;
 
 class ArrivalLogResource extends JsonResource {
 
@@ -22,10 +23,7 @@ class ArrivalLogResource extends JsonResource {
                 Header::VENDOR_TYPE_ID => $this->vendor_type_id,
                 Header::NAME => $this->vendor
             ],
-            'foil' => [
-                'is_foil' => $this->is_foil,
-                'name' => $this->foiltag == '通常版' ? '' :$this->foiltag
-            ]
+            Header::FOIL => CardInfoJsonUtil::toFoil($this->is_foil, $this->foiltag)
         ];
     }
 }

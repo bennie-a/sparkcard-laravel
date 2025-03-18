@@ -13,11 +13,14 @@ use Tests\TestCase;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
+use Tests\Trait\GetApiAssertions;
 
 /**
  * 入荷情報日付別検索のテストケース
  */
 class ArrivalLogGroupingTest extends TestCase {
+
+    use GetApiAssertions;
 
     public function setUp(): void
     {
@@ -93,12 +96,12 @@ class ArrivalLogGroupingTest extends TestCase {
             $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
             
             $log = $this->getCardInfoFromArrivalId($j['id']);
-            $actual_foil = $j['foil'];
+            $actual_foil = $j[Header::FOIL];
             $this->assertEquals($log['is_foil'], $actual_foil['is_foil']);
             if ($log->foiltag == '通常版') {
-                $this->assertEmpty($actual_foil['name']);
+                $this->assertEmpty($actual_foil[Header::NAME]);
             } else {
-                $this->assertEquals($log->foiltag, $actual_foil['name'], 'Foil名');
+                $this->assertEquals($log->foiltag, $actual_foil[Header::NAME], 'Foil名');
             }
         }
     }
@@ -209,16 +212,6 @@ class ArrivalLogGroupingTest extends TestCase {
         return CarbonImmutable::today()->subDays(3);
     }
 
-    protected function assert_OK(array $condition) {
-        $response = $this->execute($condition);
-        $response->assertOk();
-        return $response;
-    }
-
-    private function execute(array $condition) {
-        $response = $this->json('GET', $this->getEndPoint(), $condition);
-        return $response;
-    }
 
     /**
      * 検索結果のJSONデータを検索する。
@@ -286,4 +279,5 @@ class ArrivalLogGroupingTest extends TestCase {
         $format = 'Y/m/d';
         return $day->format($format);
     }
+    
 }
