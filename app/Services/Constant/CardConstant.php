@@ -2,6 +2,7 @@
 namespace App\Services\Constant;
 
 class CardConstant {
+    const ID = 'id';
 
     const SET = 'set';
     
@@ -42,4 +43,8 @@ class CardConstant {
     const FULLART = 'fullart';
 
     const BORDERLESS = 'borderless';
+
+    const EXP = 'exp';
+
+    const ATTR = 'attr';
 }

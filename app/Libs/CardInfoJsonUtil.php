@@ -7,16 +7,19 @@ use App\Services\Constant\StockpileHeader as Header;
 class CardInfoJsonUtil {
 
     /**
-     * Foil情報を配列にして返す。
+     * Foil情報を配列に設定する。
      *
+     * @param array $array
      * @param boolean $isFoil
      * @param string $foiltype
      * @return array
      */
-    public static function toFoil(bool $isFoil, string $foiltype):array {
-        return [
+    public static function setFoilInfo($array, bool $isFoil, string $foiltype):array {
+        $foils = [
                 'is_foil' => $isFoil,
                 Header::NAME => $foiltype == '通常版' ? '' :$foiltype
             ];
+        $array[Header::FOIL] = $foils;
+        return $array;
     }
 }

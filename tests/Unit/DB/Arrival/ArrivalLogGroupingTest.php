@@ -14,6 +14,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
 use Tests\Trait\GetApiAssertions;
+use Tests\Util\TestDateUtil;
 
 /**
  * 入荷情報日付別検索のテストケース
@@ -50,11 +51,11 @@ class ArrivalLogGroupingTest extends TestCase {
         $json = $response->json();
 
         if (MtgJsonUtil::isEmpty(Con::START_DATE, $condition)) {
-            $condition[Con::START_DATE] = $this->formatDate(self::three_days_before());
+            $condition[Con::START_DATE] = TestDateUtil::formatThreeDateBefore();
         }
         
         if (MtgJsonUtil::isEmpty(Con::END_DATE, $condition)) {
-            $condition[Con::END_DATE] = $this->formatDate(self::today());
+            $condition[Con::END_DATE] = TestDateUtil::formatThreeDateBefore();
         }
         
         // 並び順確認
@@ -69,17 +70,16 @@ class ArrivalLogGroupingTest extends TestCase {
 
     public function arrivalDateProvider() {
         return [
-            '入荷日_開始日のみ入力' => [[Con::START_DATE => $this->formatYesterday()]],
-            '入荷日_終了日のみ入力' => [[Con::END_DATE => $this->formatTwoDateBefore()]],
-            '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => $this->formatTwoDateBefore(),
-                                                                                    Con::END_DATE => $this->formatToday()]],
-            '入荷日_開始日と終了日が同じ日' =>  [[Con::START_DATE => $this->formatToday(),
-                                                                                    Con::END_DATE => $this->formatToday()]],
-            '全検索項目入力' => [[Con::CARD_NAME => '神', Con::START_DATE => $this->formatYesterday(),
-                                                        Con::END_DATE => $this->formatYesterday()]]
+            '入荷日_開始日のみ入力' => [[Con::START_DATE => TestDateUtil::formatYesterday()]],
+            '入荷日_終了日のみ入力' => [[Con::END_DATE => TestDateUtil::formatTwoDateBefore()]],
+            '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => TestDateUtil::formatTwoDateBefore(),
+                                                                                    Con::END_DATE => TestDateUtil::formatToday()]],
+            '入荷日_開始日と終了日が同じ日' =>  [[Con::START_DATE => TestDateUtil::formatToday(),
+                                                                                    Con::END_DATE => TestDateUtil::formatToday()]],
+            '全検索項目入力' => [[Con::CARD_NAME => '神', Con::START_DATE => TestDateUtil::formatYesterday(),
+                                                        Con::END_DATE => TestDateUtil::formatYesterday()]]
         ];
     }
-
 
     /**
      * カード名のみ検索に関するテストケース
@@ -132,7 +132,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $four_days_before = CarbonImmutable::today()->subDays(4);
         return [
             '検索結果なし_入荷日に該当する結果がない'
-                 =>[ [Con::END_DATE => $this->formatDate($four_days_before)]],
+                 =>[ [Con::END_DATE => TestDateUtil::formatDate($four_days_before)]],
             '検索結果なし_カード名に一致する結果がない'
                 =>[ [Con::CARD_NAME => 'aaaa']]
         ];
@@ -161,58 +161,6 @@ class ArrivalLogGroupingTest extends TestCase {
         ];
     }
 
-    protected function formatToday() {
-        $today = self::today();
-        return $this->formatDate($today);
-    }
-
-    /**
-     * 今日の日付を取得する。
-     *
-     * @return CarbonImmutable
-     */
-    protected static function today():CarbonImmutable {
-        return CarbonImmutable::today();
-    }
-
-    protected function formatYesterday() {
-        $yesterday = self::yesterday();
-        return $this->formatDate($yesterday);
-    }
-
-    /**
-     * 昨日の日付を取得する。
-     *
-     * @return CarbonImmutable
-     */
-    private static function yesterday():CarbonImmutable {
-        return CarbonImmutable::yesterday();
-    }
-
-    private function formatTwoDateBefore() {
-        $two_days_before = self::two_days_before();
-        return $this->formatDate($two_days_before);
-    }
-
-    /**
-     * 2日前の日付を取得する。
-     *
-     * @return CarbonImmutable
-     */
-    private static function two_days_before():CarbonImmutable {
-        return CarbonImmutable::today()->subDays(2);
-    }
-
-    /**
-     * 3日前の日付を取得する。
-     *
-     * @return CarbonImmutable
-     */
-    protected static function three_days_before():CarbonImmutable {
-        return CarbonImmutable::today()->subDays(3);
-    }
-
-
     /**
      * 検索結果のJSONデータを検索する。
      *
@@ -221,7 +169,7 @@ class ArrivalLogGroupingTest extends TestCase {
      * @return void
      */
     private function verifyJson(array $json, CarbonImmutable $day) {
-        $day_string = $this->formatDate($day);
+        $day_string = TestDateUtil::formatDate($day);
         logger()->debug("入荷ログ検証：$day_string");
         $this->assertEquals($day_string, $json[Header::ARRIVAL_DATE], "入荷日:$day_string");
         $this->assertEquals(3, $json['item_count'], "入荷件数:$day_string");
@@ -275,9 +223,5 @@ class ArrivalLogGroupingTest extends TestCase {
             return current($sum);
     }
 
-    protected function formatDate(CarbonImmutable $day):string {
-        $format = 'Y/m/d';
-        return $day->format($format);
-    }
     
 }
