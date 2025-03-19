@@ -93,7 +93,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $response = $this->assert_OK($condition);
         $json = $response->json();
         foreach($json as $j) {
-            $this->assertTrue(str_contains($j['cardname'], $condition[Con::CARD_NAME]));
+            $this->assertTrue(str_contains($j[Header::NAME], $condition[Con::CARD_NAME]));
             
             $log = $this->getCardInfoFromArrivalId($j['id']);
             $actual_foil = $j[Header::FOIL];
@@ -183,7 +183,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $this->assertEquals(current($cost)->sum_cost, $json['sum_cost'], "原価合計:$day_string");
         
 
-        $cardname = $json['cardname'];
+        $cardname = $json[Header::NAME];
         $log = $this->getCardInfoFromArrivalId($json['id']);
 
         $this->assertEquals($log->attr, $json['attr'], 'セット略称');

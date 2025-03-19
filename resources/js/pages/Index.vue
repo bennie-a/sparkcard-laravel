@@ -264,7 +264,7 @@ const formatPrice = (price) => {
                 class="card gallery"
             >
                 <div class="content">
-                    <foiltag :is-foil="card.isFoil" :foiltype="card.foiltype" />
+                    <foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" />
                     <div class="right floated meta">#{{ card.id }}</div>
                 </div>
                 <div class="image">

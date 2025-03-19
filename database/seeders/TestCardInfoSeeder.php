@@ -73,7 +73,12 @@ class TestCardInfoSeeder extends Seeder
         'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
         CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '軍団の上陸≪プレリリース≫',
         'en_name' => 'Legion\'s Landing  Adanto', 'color_id' => 'W', 'number' => '22s',
-        'isFoil' => true, 'foiltype_id' => $nonfoil->id]);
+        'isFoil' => true, 'foiltype_id' => $foil->id]);
+
+        CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '在庫情報なし',
+        'en_name' => 'No Info', 'color_id' => 'W', 'number' => '1',
+        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
+
     }
         
         private function findNotionId(string $attr) : string {

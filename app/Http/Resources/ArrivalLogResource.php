@@ -15,7 +15,7 @@ class ArrivalLogResource extends JsonResource {
         $array =  [
              Con::ID => $this->id,
             Con::ATTR => $this->attr,
-            'cardname' => $this->cardname,
+            Header::NAME => $this->cardname,
             Header::LANG => $this->lang,
             Header::ARRIVAL_DATE => CarbonFormatUtil::toDateString($this->arrival_date),
             'sum_cost' => $this->sum_cost,
