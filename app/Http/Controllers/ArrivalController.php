@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ArrivalFilterRequest;
 use App\Http\Requests\ArrivalGroupRequest;
 use App\Http\Requests\ArrivalRequest;
 use App\Http\Requests\ArrivalSearchRequest;
+use App\Http\Resources\ArrivalGroupingLogResource;
 use App\Http\Resources\ArrivalLogResource;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
@@ -18,9 +18,6 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
-use Closure;
-
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * 入荷手続きAPI
@@ -42,7 +39,7 @@ class ArrivalController extends Controller {
     {
         $details = $request->only([Con::CARD_NAME, Header::ARRIVAL_DATE, Header::VENDOR_TYPE_ID]);
         $search = fn($details) => $this->service->filtering($details);  // 検索処理
-        $transformer = fn($results) => $results; // 変換処理
+        $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
         return $this->handleSearch($details, $search, $transformer);
     }
 
@@ -55,7 +52,7 @@ class ArrivalController extends Controller {
     public function grouping(ArrivalGroupRequest $request) {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
         $search = fn($details) => $this->service->fetch($details);  // 検索処理
-        $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
+        $transformer = fn($results) => ArrivalGroupingLogResource::collection($results); // 変換処理
         return $this->handleSearch($details, $search, $transformer);
 
     }

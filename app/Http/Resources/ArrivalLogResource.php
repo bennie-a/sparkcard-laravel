@@ -1,31 +1,30 @@
 <?php
+
 namespace App\Http\Resources;
 
 use App\Libs\CarbonFormatUtil;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\StockpileHeader as Header;
-use App\Services\Constant\CardConstant as Con;
-use App\Libs\CardInfoJsonUtil;
 
-class ArrivalLogResource extends JsonResource {
-
-    public function toArray(Request $request)
+/**
+ * 入荷情報をJSON形式で整形するクラス
+ */
+class ArrivalLogResource extends CardInfoResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
     {
-        $array =  [
-             Con::ID => $this->id,
-            Con::ATTR => $this->attr,
-            Header::NAME => $this->cardname,
-            Header::LANG => $this->lang,
-            Header::ARRIVAL_DATE => CarbonFormatUtil::toDateString($this->arrival_date),
-            'sum_cost' => $this->sum_cost,
-            'item_count' => $this->item_count,
-            Header::VENDOR => [
-                Header::VENDOR_TYPE_ID => $this->vendor_type_id,
-                Header::NAME => $this->vendor
-            ],
-        ];
-        $array = CardInfoJsonUtil::setFoilInfo($array, $this->is_foil, $this->foiltag);
+        $array = parent::toArray($request);
+        $array[Header::ARRIVAL_DATE] = CarbonFormatUtil::toDateString($this->arrival_date);
+        $array[Header::VENDOR] = [
+                                        Header::VENDOR_TYPE_ID => $this->vendor_type_id,
+                                        Header::NAME => $this->vendor
+                                    ];
         return $array;
     }
 }
