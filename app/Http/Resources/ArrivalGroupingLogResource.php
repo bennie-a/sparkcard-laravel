@@ -22,7 +22,8 @@ class ArrivalGroupingLogResource extends JsonResource {
             'item_count' => $this->item_count,
             Header::VENDOR => [
                 Header::VENDOR_TYPE_ID => $this->vendor_type_id,
-                Header::NAME => $this->vendor
+                Header::NAME => $this->vcat,
+                Header::SUPPLIER => $this->vendor
             ],
         ];
         $array = CardInfoJsonUtil::setFoilInfo($array, $this->is_foil, $this->foiltag);

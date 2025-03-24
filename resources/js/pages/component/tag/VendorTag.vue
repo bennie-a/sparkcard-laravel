@@ -1,20 +1,20 @@
 <script setup>
 import { computed, onMounted } from "vue";
 
-const vendorId = defineModel({required:true});
+const name = defineModel({required:true});
 
 const colorkind = [
-                    {"id":1, "color":"purple", "label":"オリジナルパック"},
-                    {"id":2, "color":"green", "label":"私物"},
-                    {"id":3, "color":"orange", "label":"買取"},
-                    {"id":4, "color":"grey", "label":"棚卸し"},
-                    {"id":5, "color":"brown", "label":"返品"}
+                    { "color":"purple", "label":"オリジナルパック"},
+                    {"color":"green", "label":"私物"},
+                    {"color":"orange", "label":"買取"},
+                    {"color":"grey", "label":"棚卸し"},
+                    {"color":"brown", "label":"返品"}
                 ];
 const color = computed(() => {
-    const item = colorkind.find(c => c.id == vendorId.value);
-    return item;
+    const item = colorkind.find(c => c.label == name.value);
+    return item.color;
 });
 </script>
 <template>
-    <label class="ui label basic" :class="color.color">{{color.label}}</label><span class="ml-half"></span>
+    <label class="ui label basic" :class="color">{{name}}</label><span class="ml-half"></span>
 </template>
