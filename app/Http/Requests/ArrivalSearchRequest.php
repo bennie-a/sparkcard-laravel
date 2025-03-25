@@ -29,7 +29,7 @@ class ArrivalSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            HEAD::ARRIVAL_DATE => ['required', 'date'],
+            HEAD::ARRIVAL_DATE => ['date'],
             HEAD::VENDOR_TYPE_ID => self::vendorTypeIdRules(),
             SearchConstant::CARD_NAME => ['nullable', 'string', 'max:255']
         ];

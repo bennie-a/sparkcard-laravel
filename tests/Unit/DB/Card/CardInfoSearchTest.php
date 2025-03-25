@@ -49,13 +49,21 @@ class CardInfoSearchTest extends TestCase
     public function stockpileprovider() {
         return [
             '在庫情報なし' => [['在庫情報なし', '', '', false], 0],
-            // '在庫が0' => [['ドラゴンの運命', '', '', false], 0],
-            // '在庫が1以上' => [['ドロスの魔神', '', '', false], 1],
-            // 'カード番号に\'s\'が含まれている' => [['', 'XLN', 'W', true], 0],
-            // '色のみ' => [],
-            // 'Foilのみ' => [],
-            // '全入力' => []
+            '在庫が0' => [['ドラゴンの運命', '', '', false], 0],
+            '在庫が1以上' => [['ドロスの魔神', '', '', false], 1],
+            'カード番号に\'s\'が含まれている' => [['', 'XLN', 'W', true], 0],
+            '色のみ' => [],
+            'Foilのみ' => [],
+            '全入力' => []
         ];
+    }
+
+    public function test_card() {
+
+    }
+
+    public function cardProvider() {
+        
     }
 
     /**

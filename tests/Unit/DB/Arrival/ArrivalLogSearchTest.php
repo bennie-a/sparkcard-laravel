@@ -27,29 +27,62 @@ class ArrivalLogSearchTest extends TestCase
         $this->seed('TestArrivalLogSeeder');
     }
 
-        /**
-     * OKパターン
-     * @dataProvider okProvider
+    /**
+     * 検索条件について検証する。
+     *
+     * @dataProvider conditionProvider
+     * @param array $condition
+     * @return void
      */
-    public function test_ok(array $condition) {
-        $response = $this->assert_OK($condition);
-        $json = $response->json();
-        logger()->debug($json);
-        // if (MtgJsonUtil::isEmpty(Con::START_DATE, $condition)) {
-        //     $condition[Con::START_DATE] = $this->formatDate(self::three_days_before());
-        // }
-        
-        // if (MtgJsonUtil::isEmpty(Con::END_DATE, $condition)) {
-        //     $condition[Con::END_DATE] = $this->formatDate(self::today());
-        // }
+    public function test_condition(array $condition) {
+        $method = function($condition, $j){
+            $this->assertEquals($condition[Header::ARRIVAL_DATE], $j[Header::ARRIVAL_DATE], '入荷日');
+            $this->verifyCard($j['card']);
+        };
+
+        $this->assertResult($condition, $method);
     }
 
-    public function okProvider() {
+    public function conditionProvider() {
         return [
-            '入荷先カテゴリが買取以外' => 
-                [[Header::ARRIVAL_DATE => TestDateUtil::formatToday(), Header::VENDOR_TYPE_ID => 1]],
+            '検索条件が入荷日と取引先カテゴリ' =>
+            [[Header::ARRIVAL_DATE => TestDateUtil::formatToday(), Header::VENDOR_TYPE_ID => 1]]
+        ];       
+    }
+
+    /**
+     * 取引先に関するテストケース
+     * @dataProvider vendorProvider
+     */
+    public function test_vendor(int $vendor_type_id) {
+        $condition = [Header::VENDOR_TYPE_ID => $vendor_type_id];
+        $method = fn($condition, $j) => 
+                $this->verifyVendor($condition[Header::VENDOR_TYPE_ID], $j[Header::VENDOR]);
+        $this->assertResult($condition, $method);
+    }
+
+    private function assertResult(array $condition, callable $method) {
+        $response = $this->assert_OK($condition);
+        $json = $response->json();
+
+        foreach($json as $j) {
+            $method($condition, $j);
+        }
+    }
+
+    public function vendorProvider() {
+        return [
+            '入荷先カテゴリがオリジナルパック' => [1],
+            '入荷先カテゴリが私物' => [2],
+            '入荷先カテゴリが買取' => [3],
+            '入荷先カテゴリが棚卸し' => [4],
+            '入荷先カテゴリが返品' => [5],
         ];
     }
+
+    // 検索条件が入荷日のみ、
+    // 検索条件がカード名のみ、カード情報が通常版、Foil、特殊Foil
+    
     /**
      * エンドポイントを取得する。
      *

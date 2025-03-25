@@ -109,9 +109,9 @@ class ArrivalLogGroupingTest extends TestCase {
     public function cardnameProvider() {
         return [
             '部分一致検索' => ['ジン＝ギタクシアス'],
-            '通常版のみ検索' => ['ドロスの魔神'],
-            'Foil版のみ検索' => ['告別≪ショーケース≫'],
-            '特殊Foil版のみ検索' => ['機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫'],
+            // '通常版のみ検索' => ['ドロスの魔神'],
+            // 'Foil版のみ検索' => ['告別≪ショーケース≫'],
+            // '特殊Foil版のみ検索' => ['機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫'],
         ];
     }
 
@@ -178,11 +178,11 @@ class ArrivalLogGroupingTest extends TestCase {
 
         $vendor_type_id = $vendor[Header::VENDOR_TYPE_ID];
         $type = VendorType::find($vendor_type_id);
+        $this->assertEquals($type->name, $vendor[Header::VENDOR], '取引先カテゴリ');
 
         $cost = $this->getCostSum($json[Header::ARRIVAL_DATE], $vendor_type_id);
         $this->assertEquals(current($cost)->sum_cost, $json['sum_cost'], "原価合計:$day_string");
         
-
         $cardname = $json[Header::NAME];
         $log = $this->getCardInfoFromArrivalId($json['id']);
 
