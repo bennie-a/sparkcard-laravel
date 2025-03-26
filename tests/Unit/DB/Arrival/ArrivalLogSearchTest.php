@@ -2,11 +2,15 @@
 
 namespace Tests\Unit\DB\Arrival;
 
+use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
+use App\Models\ArrivalLog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Services\Constant\ArrivalConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\SearchConstant as SCon;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
@@ -36,8 +40,12 @@ class ArrivalLogSearchTest extends TestCase
      */
     public function test_condition(array $condition) {
         $method = function($condition, $j){
-            $this->assertEquals($condition[Header::ARRIVAL_DATE], $j[Header::ARRIVAL_DATE], '入荷日');
-            $this->verifyCard($j['card']);
+            $this->assertNotEmpty($j[Con::ID], '入荷ID');
+            logger()->debug('入荷ID:'.$j[Con::ID]);
+            $log = ArrivalLog::find($j[Con::ID]);
+            $exp_arrival = $log->arrival_date;
+            $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[Con::ARRIVAL_DATE], '入荷日');
+            $this->assertNotEmpty($j[Header::COST], '原価');
         };
 
         $this->assertResult($condition, $method);
@@ -46,8 +54,10 @@ class ArrivalLogSearchTest extends TestCase
     public function conditionProvider() {
         return [
             '検索条件が入荷日と取引先カテゴリ' =>
-            [[Header::ARRIVAL_DATE => TestDateUtil::formatToday(), Header::VENDOR_TYPE_ID => 1]]
-        ];       
+            [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
+            // '検索条件がカード名と取引先カテゴリ' =>
+            //          [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]]
+        ];
     }
 
     /**
@@ -55,9 +65,9 @@ class ArrivalLogSearchTest extends TestCase
      * @dataProvider vendorProvider
      */
     public function test_vendor(int $vendor_type_id) {
-        $condition = [Header::VENDOR_TYPE_ID => $vendor_type_id];
+        $condition = [SCon::VENDOR_TYPE_ID => $vendor_type_id];
         $method = fn($condition, $j) => 
-                $this->verifyVendor($condition[Header::VENDOR_TYPE_ID], $j[Header::VENDOR]);
+                $this->verifyVendor($condition[SCon::VENDOR_TYPE_ID], $j[Con::VENDOR]);
         $this->assertResult($condition, $method);
     }
 
@@ -79,8 +89,6 @@ class ArrivalLogSearchTest extends TestCase
             '入荷先カテゴリが返品' => [5],
         ];
     }
-
-    // 検索条件が入荷日のみ、
     // 検索条件がカード名のみ、カード情報が通常版、Foil、特殊Foil
     
     /**

@@ -7,6 +7,7 @@ use App\Services\Constant\CardConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\ArrivalConstant as Con;
 
 /**
  * 入荷情報をJSON形式で整形するクラス
@@ -20,14 +21,15 @@ class ArrivalLogResource extends CardInfoResource
      */
     public function toArray(Request $request): array
     {
-        $array['card'] = parent::toArray($request);
-        $array[CardConstant::ID] = $this->id; 
-        $array[Header::ARRIVAL_DATE] = CarbonFormatUtil::toDateString($this->arrival_date);
-        $array[Header::VENDOR] = [
-                                        Header::VENDOR_TYPE_ID => $this->vendor_type_id,
-                                        Header::NAME => $this->vcat,
-                                        Header::SUPPLIER => $this->vendor
-                                    ];
+        $array[Con::ID] = $this->id; 
+        $array[Con::ARRIVAL_DATE] = CarbonFormatUtil::toDateString($this->arrival_date);
+        $array[Con::VENDOR] = [
+            Con::ID => $this->vendor_type_id,
+            Con::NAME => $this->vcat,
+            Header::SUPPLIER => $this->vendor
+        ];
+        $array[Header::COST] = $this->cost;
+        $array[Con::CARD] = parent::toArray($request);
         return $array;
     }
 }

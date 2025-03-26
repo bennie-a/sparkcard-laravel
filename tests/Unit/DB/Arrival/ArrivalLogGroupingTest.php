@@ -13,6 +13,7 @@ use Tests\TestCase;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as Con;
+use App\Services\Constant\ArrivalConstant as ACon;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
@@ -171,16 +172,16 @@ class ArrivalLogGroupingTest extends TestCase {
     private function verifyJson(array $json, CarbonImmutable $day) {
         $day_string = TestDateUtil::formatDate($day);
         logger()->debug("入荷ログ検証：$day_string");
-        $this->assertEquals($day_string, $json[Header::ARRIVAL_DATE], "入荷日:$day_string");
+        $this->assertEquals($day_string, $json[ACon::ARRIVAL_DATE], "入荷日:$day_string");
         $this->assertEquals(3, $json['item_count'], "入荷件数:$day_string");
-        $vendor = $json[Header::VENDOR];
+        $vendor = $json[ACon::VENDOR];
         $this->assertNotNull($vendor, '取引先');
 
-        $vendor_type_id = $vendor[Header::VENDOR_TYPE_ID];
+        $vendor_type_id = $vendor[Con::VENDOR_TYPE_ID];
         $type = VendorType::find($vendor_type_id);
-        $this->assertEquals($type->name, $vendor[Header::VENDOR], '取引先カテゴリ');
+        $this->assertEquals($type->name, $vendor[ACon::VENDOR], '取引先カテゴリ');
 
-        $cost = $this->getCostSum($json[Header::ARRIVAL_DATE], $vendor_type_id);
+        $cost = $this->getCostSum($json[ACon::ARRIVAL_DATE], $vendor_type_id);
         $this->assertEquals(current($cost)->sum_cost, $json['sum_cost'], "原価合計:$day_string");
         
         $cardname = $json[Header::NAME];

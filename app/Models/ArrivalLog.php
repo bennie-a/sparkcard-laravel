@@ -4,21 +4,20 @@ namespace App\Models;
 
 use App\Libs\MtgJsonUtil;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\SearchConstant as SCon;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\SearchConstant as Con;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-
-use function PHPUnit\Framework\isEmpty;
 
 class ArrivalLog extends Model
 {
     protected $table = 'arrival_log';
 
-    protected $fillable = ['id', 'stock_id',  Header::ARRIVAL_DATE, Header::QUANTITY,
-                                            Header::COST, Header::VENDOR_TYPE_ID, Header::VENDOR];
+    protected $fillable = ['id', 'stock_id',  ACon::ARRIVAL_DATE, Header::QUANTITY,
+                                            Header::COST, SCon::VENDOR_TYPE_ID, ACon::VENDOR];
     use HasFactory;
 
         /**
@@ -29,9 +28,9 @@ class ArrivalLog extends Model
      */
     public static function fetch(array $details) {
         // 動的に条件を設定
-        $startDate = MtgJsonUtil::getValueOrEmpty(Con::START_DATE, $details);
-        $endDate = MtgJsonUtil::getValueOrEmpty(Con::END_DATE, $details);
-        $keyword = MtgJsonUtil::getValueOrEmpty(Con::CARD_NAME, $details);
+        $startDate = MtgJsonUtil::getValueOrEmpty(SCon::START_DATE, $details);
+        $endDate = MtgJsonUtil::getValueOrEmpty(SCon::END_DATE, $details);
+        $keyword = MtgJsonUtil::getValueOrEmpty(SCon::CARD_NAME, $details);
 
         $subQuery = self::getTableQuery()
                         ->select([
@@ -60,12 +59,12 @@ class ArrivalLog extends Model
                                                         ->select([
                                                             DB::raw('COUNT(id) as item_count'),
                                                             DB::raw('SUM(cost) as sum_cost'),
-                                                            Header::ARRIVAL_DATE,
-                                                            Header::VENDOR_TYPE_ID
+                                                            ACon::ARRIVAL_DATE,
+                                                            SCon::VENDOR_TYPE_ID
                                                         ]);
     $itemSummaryQuery = self::addStartDateWhere('', $itemSummaryQuery, $startDate);
     $itemSummaryQuery = self::addEndDateWhere('', $itemSummaryQuery, $endDate);
-    $itemSummaryQuery->groupBy(Header::ARRIVAL_DATE, Header::VENDOR_TYPE_ID);
+    $itemSummaryQuery->groupBy(ACon::ARRIVAL_DATE, SCon::VENDOR_TYPE_ID);
 
     $mainQuery = DB::query()
                                     ->fromSub($subQuery, 'ranked_data')
@@ -86,16 +85,17 @@ class ArrivalLog extends Model
  */
 public static function filtering(array $details) {
     $log_conditions = array_filter($details, function($key) {
-        return $key !== Con::CARD_NAME;
+        return $key !== SCon::CARD_NAME;
     }, ARRAY_FILTER_USE_KEY);
-    $cardname = MtgJsonUtil::getValueOrEmpty(Con::CARD_NAME, $details);
+    $cardname = MtgJsonUtil::getValueOrEmpty(SCon::CARD_NAME, $details);
     $columns = ['alog.id', 'alog.arrival_date', 'alog.quantity', 'alog.cost', 'e.name as exp_name', 'alog.vendor',
                             'e.attr as exp_attr', 'c.id', 'c.number', 'c.name', 'c.image_url', 'c.color_id', 'c.isFoil',
                             's.condition', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
     $query = self::getTableQuery()->select($columns);
     $query = self::join($query)->where($log_conditions)->
                     when($cardname, function($query, $cardname) {
-                        return $query->where('c.name', $cardname);
+                        $pat = '%' . addcslashes($cardname, '%_\\') . '%';
+                        return $query->where('c.name', 'LIKE', $pat);
                     });
     return $query->get();
 }
@@ -141,7 +141,7 @@ private static function addEndDateWhere(string $alias, $query, ?string $arrivalD
 }
 
 private static function addArrivalDateWhere(string $alias, $query, string $operator, ?string $arrivalDate) {
-    $column = empty($alias)  ? Header::ARRIVAL_DATE : $alias.".".Header::ARRIVAL_DATE;
+    $column = empty($alias)  ? ACon::ARRIVAL_DATE : $alias.".".ACon::ARRIVAL_DATE;
     return $query->when(!empty($arrivalDate), function ($q) use ($column, $operator, $arrivalDate) {
         $q->where($column, $operator, $arrivalDate);
     });

@@ -18,6 +18,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
+use App\Services\Constant\ArrivalConstant as ACon;
 
 /**
  * 入荷手続きAPI
@@ -37,7 +38,7 @@ class ArrivalController extends Controller {
      */
     public function index(ArrivalSearchRequest $request)
     {
-        $details = $request->only([Con::CARD_NAME, Header::ARRIVAL_DATE, Header::VENDOR_TYPE_ID]);
+        $details = $request->only([Con::CARD_NAME, ACon::ARRIVAL_DATE, Con::VENDOR_TYPE_ID]);
         $search = fn($details) => $this->service->filtering($details);  // 検索処理
         $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
         return $this->handleSearch($details, $search, $transformer);
@@ -78,9 +79,9 @@ class ArrivalController extends Controller {
     public function store(ArrivalRequest $request)
     {
         $details = $request->only([Header::CARD_ID, Header::LANGUAGE,  Header::QUANTITY, Header::COST,
-        Header::MARKET_PRICE, Header::CONDITION, Header::VENDOR_TYPE_ID, Header::VENDOR]);
+        Header::MARKET_PRICE, Header::CONDITION, Con::VENDOR_TYPE_ID, ACon::VENDOR]);
         $details[Header::IS_FOIL] = $request->boolean(Header::IS_FOIL);
-        $details[Header::ARRIVAL_DATE] = $request->date(Header::ARRIVAL_DATE);
+        $details[ACon::ARRIVAL_DATE] = $request->date(ACon::ARRIVAL_DATE);
         $params = new ArrivalParams($details);
         logger()->info('Start Arrival log', [$params->cardId()]);
         $info = CardInfo::find($params->cardId());

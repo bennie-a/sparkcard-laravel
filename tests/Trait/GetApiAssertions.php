@@ -6,8 +6,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
 use App\Models\VendorType;
-use App\Services\Constant\CardConstant as Con;
-use App\Services\Constant\CardConstant;
+use App\Services\Constant\ArrivalConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 
 /**
@@ -51,8 +50,8 @@ trait GetApiAssertions
         $this->assertEquals($exp_expansion->name, $act_expansion[Con::NAME], 'セット名');
 
         $act_foil = $json[Header::FOIL];
-        $this->assertEquals($expected->is_foil, $act_foil['is_foil']);
-        if ($expected->is_foil) {
+        $this->assertEquals($expected->isFoil, $act_foil['is_foil']);
+        if ($expected->isFoil) {
             $exp_foil = Foiltype::find($expected->foiltype_id);
             $this->assertEquals($exp_foil->name, $act_foil[Header::NAME]);
         } else {
@@ -71,7 +70,7 @@ trait GetApiAssertions
         $this->assertNotNull($vendor, 'vendor要素の有無');
 
         $type = VendorType::find($vendor_type_id);
-        $this->assertEquals($vendor_type_id, $vendor[Header::VENDOR_TYPE_ID], '取引先カテゴリID');
+        $this->assertEquals($vendor_type_id, $vendor[Con::ID], '取引先カテゴリID');
         $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
         if ($vendor_type_id === '3') {
             $this->assertNotNull($vendor['supplier']);

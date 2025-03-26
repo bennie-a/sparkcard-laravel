@@ -6,6 +6,8 @@ use app\Services\Stock\ArrivalParams;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\ArrivalConstant as Con;
+use App\Services\Constant\SearchConstant;
 
 /**
  * 入荷手続きに関するServiceクラス
@@ -44,8 +46,8 @@ class ArrivalLogService {
             $stockpile->quantity += $params->quantity();
             $stockpile->update();
         }
-        $arrivalLog = ArrivalLog::create(['stock_id' => $stockpile->id, Header::ARRIVAL_DATE => $params->arrivalDate(), 
-                                        Header::VENDOR_TYPE_ID => $params->vendorType(), Header::VENDOR => $params->vendor(), 
+        $arrivalLog = ArrivalLog::create(['stock_id' => $stockpile->id, Con::ARRIVAL_DATE => $params->arrivalDate(), 
+                                        SearchConstant::VENDOR_TYPE_ID => $params->vendorType(), Con::VENDOR => $params->vendor(), 
                                         Header::QUANTITY => $params->quantity(), Header::COST => $params->cost()]);
         return $arrivalLog;
     }

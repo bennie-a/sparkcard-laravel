@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Services\Constant\SearchConstant;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Services\Constant\ArrivalConstant as Con;
+use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\StockpileHeader as HEAD;
 use App\Traits\VendorTypeIdRules;
 
@@ -29,8 +31,8 @@ class ArrivalSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            HEAD::ARRIVAL_DATE => ['date'],
-            HEAD::VENDOR_TYPE_ID => self::vendorTypeIdRules(),
+            Con::ARRIVAL_DATE => ['date'],
+            SCon::VENDOR_TYPE_ID => self::vendorTypeIdRules(),
             SearchConstant::CARD_NAME => ['nullable', 'string', 'max:255']
         ];
     }

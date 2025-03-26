@@ -5,7 +5,7 @@ use App\Libs\CarbonFormatUtil;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\StockpileHeader as Header;
-use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\ArrivalConstant as Con;
 use App\Libs\CardInfoJsonUtil;
 
 class ArrivalGroupingLogResource extends JsonResource {
@@ -17,7 +17,7 @@ class ArrivalGroupingLogResource extends JsonResource {
             Con::ATTR => $this->attr,
             Header::NAME => $this->cardname,
             Header::LANG => $this->lang,
-            Header::ARRIVAL_DATE => CarbonFormatUtil::toDateString($this->arrival_date),
+            Con::ARRIVAL_DATE => CarbonFormatUtil::toDateString($this->arrival_date),
             'sum_cost' => $this->sum_cost,
             'item_count' => $this->item_count,
             Header::VENDOR => [
