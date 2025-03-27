@@ -21,7 +21,7 @@ class ArrivalLogResource extends CardInfoResource
      */
     public function toArray(Request $request): array
     {
-        $array[Con::ID] = $this->id; 
+        $array[Con::ID] = $this->arrival_id; 
         $array[Con::ARRIVAL_DATE] = CarbonFormatUtil::toDateString($this->arrival_date);
         $array[Con::VENDOR] = [
             Con::ID => $this->vendor_type_id,
@@ -29,7 +29,10 @@ class ArrivalLogResource extends CardInfoResource
             Header::SUPPLIER => $this->vendor
         ];
         $array[Header::COST] = $this->cost;
+        $array[Header::QUANTITY] = $this->alog_quan;
         $array[Con::CARD] = parent::toArray($request);
+        $array[Con::CARD][Header::LANG] = $this->language;
+        $array[Con::CARD][Header::CONDITION] = $this->condition;
         return $array;
     }
 }

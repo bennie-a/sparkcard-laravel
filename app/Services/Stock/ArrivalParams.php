@@ -1,6 +1,8 @@
 <?php
 namespace app\Services\Stock;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\SearchConstant as SCon;
+use App\Services\Constant\ArrivalConstant as Con;
 use Illuminate\Support\Carbon;
 
 /**
@@ -30,18 +32,18 @@ class ArrivalParams {
     }
 
     public function arrivalDate():Carbon {
-        return $this->details[Header::ARRIVAL_DATE];
+        return $this->details[Con::ARRIVAL_DATE];
     }
  
     public function vendorType():int {
-        return $this->details[Header::VENDOR_TYPE_ID];
+        return $this->details[SCon::VENDOR_TYPE_ID];
     }
 
     public function vendor():string {
         if ($this->vendorType() !== 3) {
             return '';
         }
-        return $this->details[Header::VENDOR];
+        return $this->details[Con::VENDOR];
     }
     
     public function cost():int {

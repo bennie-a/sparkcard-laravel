@@ -22,17 +22,19 @@ class CardInfoResource extends JsonResource
     {
         $array =  [
             Con::ID => $this->id,
+            Con::NAME => $this->name,
             Con::EXP => [Con::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
-            'number' => $this->number,
-            'name' => $this->name,
-            'color' => CardColor::tryFrom($this->color_id)->text(),
+            Con::NUMBER => $this->number,
+            Con::COLOR => CardColor::tryFrom($this->color_id)->text(),
             'image' => $this->image_url,
-            'condition' => $this->condition,
-            'quantity' => $this->quantity
+            Header::CONDITION => $this->condition,
         ];
         $resources = json_decode(json_encode($this->resource), true);
         if (MtgJsonUtil::isNotEmpty(Con::PRICE, $resources)) {
             $array[Con::PRICE] = $this->price;
+        }
+        if (MtgJsonUtil::isNotEmpty(Header::QUANTITY, $resources)) {
+            $array[Con::QUANTITY] = $this->quantity;
         }
         $array = CardInfoJsonUtil::setFoilInfo($array, $this->isFoil, $this->foiltype);
         return $array;

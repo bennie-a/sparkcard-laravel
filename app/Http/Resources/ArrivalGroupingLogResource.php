@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\ArrivalConstant as Con;
+use App\Services\Constant\SearchConstant as SCon;
 use App\Libs\CardInfoJsonUtil;
 
 class ArrivalGroupingLogResource extends JsonResource {
@@ -20,8 +21,8 @@ class ArrivalGroupingLogResource extends JsonResource {
             Con::ARRIVAL_DATE => CarbonFormatUtil::toDateString($this->arrival_date),
             'sum_cost' => $this->sum_cost,
             'item_count' => $this->item_count,
-            Header::VENDOR => [
-                Header::VENDOR_TYPE_ID => $this->vendor_type_id,
+            Con::VENDOR => [
+                SCon::VENDOR_TYPE_ID => $this->vendor_type_id,
                 Header::NAME => $this->vcat,
                 Header::SUPPLIER => $this->vendor
             ],

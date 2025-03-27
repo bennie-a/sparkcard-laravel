@@ -5,6 +5,7 @@ namespace Tests\Unit\DB\Arrival;
 use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
+use App\Models\Stockpile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -45,7 +46,16 @@ class ArrivalLogSearchTest extends TestCase
             $log = ArrivalLog::find($j[Con::ID]);
             $exp_arrival = $log->arrival_date;
             $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[Con::ARRIVAL_DATE], '入荷日');
-            $this->assertNotEmpty($j[Header::COST], '原価');
+            $this->assertEquals($log->cost, $j[Header::COST], '原価');
+            logger()->debug("原価：expected:{$log->cost}, actual:{$j[Header::COST]}");
+
+            $this->assertEquals($log->quantity, $j[Header::QUANTITY], '枚数');
+            $exp_stock = Stockpile::where(Con::ID, $log->stock_id)->first();
+
+            $act_card = $j[Con::CARD];
+            $this->assertEquals($exp_stock->language, $act_card[Header::LANG], '言語');
+            $this->assertEquals($exp_stock->condition, $act_card[Header::CONDITION], '状態');
+            $this->verifyCard($act_card);
         };
 
         $this->assertResult($condition, $method);
@@ -55,8 +65,8 @@ class ArrivalLogSearchTest extends TestCase
         return [
             '検索条件が入荷日と取引先カテゴリ' =>
             [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
-            // '検索条件がカード名と取引先カテゴリ' =>
-            //          [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]]
+            '検索条件がカード名と取引先カテゴリ' =>
+                     [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]]
         ];
     }
 

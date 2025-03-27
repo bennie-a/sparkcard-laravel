@@ -37,8 +37,9 @@ trait GetApiAssertions
      * @param array $json
      * @return void
      */
-    private function verifyCard(array $json) {
+    protected function verifyCard(array $json) {
         $expected = CardInfo::find($json[Con::ID]);
+        logger()->debug('カード名:'.$json[Con::NAME]);
         $this->assertEquals($expected->name, $json[Con::NAME], 'カード名');
         $this->assertEquals($expected->number, $json[Con::NUMBER], 'カード番号');
         $this->assertEquals($expected->image_url, $json['image'], '画像URL');
