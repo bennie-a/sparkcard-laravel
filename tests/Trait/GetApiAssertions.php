@@ -37,7 +37,7 @@ trait GetApiAssertions
      * @param array $json
      * @return void
      */
-    protected function verifyCard(array $json) {
+    protected function verifyCard(string $stock_id, array $json) {
         $expected = CardInfo::find($json[Con::ID]);
         logger()->debug('カード名:'.$json[Con::NAME]);
         $this->assertEquals($expected->name, $json[Con::NAME], 'カード名');

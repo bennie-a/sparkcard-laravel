@@ -34,8 +34,9 @@ class CardInfoResource extends JsonResource
             $array[Con::PRICE] = $this->price;
         }
         if (MtgJsonUtil::isNotEmpty(Header::QUANTITY, $resources)) {
-            $array[Con::QUANTITY] = $this->quantity;
+            $array[Header::QUANTITY] = $this->quantity;
         }
+
         $array = CardInfoJsonUtil::setFoilInfo($array, $this->isFoil, $this->foiltype);
         return $array;
     }

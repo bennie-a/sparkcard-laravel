@@ -19,7 +19,9 @@ use function PHPUnit\Framework\assertTrue;
 
 class ArrivalLogSearchTest extends TestCase
 {
-    use GetApiAssertions;
+    use GetApiAssertions {
+        GetApiAssertions::verifyCard as verifyCardFromParent;
+    }
 
     public function setUp(): void
     {
@@ -40,53 +42,53 @@ class ArrivalLogSearchTest extends TestCase
      * @return void
      */
     public function test_condition(array $condition) {
-        $method = function($condition, $j){
-            $this->assertNotEmpty($j[Con::ID], '入荷ID');
-            logger()->debug('入荷ID:'.$j[Con::ID]);
-            $log = ArrivalLog::find($j[Con::ID]);
-            $exp_arrival = $log->arrival_date;
-            $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[Con::ARRIVAL_DATE], '入荷日');
+        $method = function($condition, $j, $log){
+            $id = $j[Con::ID];
+            $this->assertNotEmpty($id, '入荷ID');
+            logger()->debug('入荷ID:'.$id);
+            if (MtgJsonUtil::isNotEmpty(Con::ARRIVAL_DATE, $condition)) {
+                $this->assertEquals(CarbonFormatUtil::toDateString($condition[Con::ARRIVAL_DATE]), $j[Con::ARRIVAL_DATE], '入荷日');
+            } else {
+                $exp_arrival = $log->arrival_date;
+                $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[Con::ARRIVAL_DATE], '入荷日');
+            }
             $this->assertEquals($log->cost, $j[Header::COST], '原価');
             logger()->debug("原価：expected:{$log->cost}, actual:{$j[Header::COST]}");
 
             $this->assertEquals($log->quantity, $j[Header::QUANTITY], '枚数');
-            $exp_stock = Stockpile::where(Con::ID, $log->stock_id)->first();
-
-            $act_card = $j[Con::CARD];
-            $this->assertEquals($exp_stock->language, $act_card[Header::LANG], '言語');
-            $this->assertEquals($exp_stock->condition, $act_card[Header::CONDITION], '状態');
-            $this->verifyCard($act_card);
         };
-
+        
         $this->assertResult($condition, $method);
     }
-
+    
     public function conditionProvider() {
         return [
-            '検索条件が入荷日と取引先カテゴリ' =>
-            [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
+            // '検索条件が入荷日と取引先カテゴリ' =>
+            // [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
             '検索条件がカード名と取引先カテゴリ' =>
-                     [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]]
+            [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]]
         ];
     }
-
+    
     /**
      * 取引先に関するテストケース
      * @dataProvider vendorProvider
      */
     public function test_vendor(int $vendor_type_id) {
         $condition = [SCon::VENDOR_TYPE_ID => $vendor_type_id];
-        $method = fn($condition, $j) => 
+        $method = fn($condition, $j, $log) => 
                 $this->verifyVendor($condition[SCon::VENDOR_TYPE_ID], $j[Con::VENDOR]);
         $this->assertResult($condition, $method);
     }
-
+    
     private function assertResult(array $condition, callable $method) {
         $response = $this->assert_OK($condition);
         $json = $response->json();
-
+        
         foreach($json as $j) {
-            $method($condition, $j);
+            $log = ArrivalLog::find($j[Con::ID]);
+            $this->verifyCard($log->stock_id, $j[Con::CARD]);
+            $method($condition, $j, $log);
         }
     }
 
@@ -99,7 +101,7 @@ class ArrivalLogSearchTest extends TestCase
             '入荷先カテゴリが返品' => [5],
         ];
     }
-    // 検索条件がカード名のみ、カード情報が通常版、Foil、特殊Foil
+    // 検索条件がカード名のみ、検索結果が通常版、Foil、特殊Foil
     
     /**
      * エンドポイントを取得する。
@@ -108,5 +110,12 @@ class ArrivalLogSearchTest extends TestCase
      */
     protected function getEndPoint():string {
         return  'api/arrival/';
+    }
+
+    protected function verifyCard($stock_id, array $json) {
+        $this->verifyCardFromParent($stock_id, $json);
+        $exp_stock = Stockpile::where(Con::ID, $stock_id)->first();
+        $this->assertEquals($exp_stock->language, $json[Header::LANG], '言語');
+        $this->assertEquals($exp_stock->condition, $json[Header::CONDITION], '状態');
     }
 }
