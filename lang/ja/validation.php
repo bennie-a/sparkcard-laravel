@@ -1,5 +1,6 @@
 <?php
-
+use App\Services\Constant\SearchConstant as Scon;
+use App\Services\Constant\ArrivalConstant as Acon;
 return [
 
     /*
@@ -33,7 +34,7 @@ return [
     'boolean' => ':attributeはtrueかfalseを入力してください。',
     'confirmed' => 'The :attribute confirmation does not match.',
     'current_password' => 'The password is incorrect.',
-    'date' => ':attributeが日付形式ではありません',
+    'date' => ':attributeが日付形式ではありません。',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',
     'declined' => 'The :attribute must be declined.',
@@ -171,6 +172,8 @@ return [
     */
 
     'attributes' => [
+        Scon::VENDOR_TYPE_ID => '取引先カテゴリID',
+        Acon::ARRIVAL_DATE => '入荷日'
     ],
 
     'values' => [

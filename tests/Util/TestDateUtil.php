@@ -72,6 +72,25 @@ class TestDateUtil {
         return CarbonImmutable::today()->subDays(3);
     }
 
+    /**
+     * 4日前の日付を取得する。
+     *
+     * @return string
+     */
+    public static function formatFourDateBefore():string {
+        return self::formatDate(self::four_days_before());
+    }
+
+    /**
+     * 4日前の日付を取得する。
+     *
+     * @return CarbonImmutable
+     */
+    public static function four_days_before():CarbonImmutable {
+        return CarbonImmutable::today()->subDays(4);
+    }
+
+
     public static function formatDate(CarbonImmutable $day):string {
         $format = 'Y/m/d';
         return $day->format($format);

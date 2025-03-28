@@ -22,7 +22,7 @@ class ArrivalLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'stock_id' => fake()->unique(true)->numberBetween(1, 13),
+            'stock_id' => fake()->unique(true)->numberBetween(1, 12),
             'cost' => fake()->numberBetween(1, 100),
             'quantity' => fake()->numberBetween(1, 10),
         ];

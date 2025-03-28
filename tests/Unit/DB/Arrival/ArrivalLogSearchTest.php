@@ -6,17 +6,17 @@ use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
 use App\Models\Stockpile;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Constant\ArrivalConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
+use Illuminate\Http\Response;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
-use function PHPUnit\Framework\assertTrue;
-
+/**
+ * エンドポイントが'/api/arrival'のテストクラス
+ */
 class ArrivalLogSearchTest extends TestCase
 {
     use GetApiAssertions {
@@ -63,10 +63,14 @@ class ArrivalLogSearchTest extends TestCase
     
     public function conditionProvider() {
         return [
-            // '検索条件が入荷日と取引先カテゴリ' =>
-            // [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
+            '検索条件が入荷日と取引先カテゴリ' =>
+            [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
             '検索条件がカード名と取引先カテゴリ' =>
-            [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]]
+            [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]],
+            '検索結果が通常版' => [[SCon::CARD_NAME => 'ドロスの魔神', SCon::VENDOR_TYPE_ID => 1]],
+            '検索結果がFoil版' => [[SCon::CARD_NAME => '告別≪ショーケース≫', SCon::VENDOR_TYPE_ID => 2]],
+            '検索結果が特殊Foil版' => 
+                    [[SCon::CARD_NAME => '機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫', SCon::VENDOR_TYPE_ID => 1]]
         ];
     }
     
@@ -101,7 +105,33 @@ class ArrivalLogSearchTest extends TestCase
             '入荷先カテゴリが返品' => [5],
         ];
     }
-    // 検索条件がカード名のみ、検索結果が通常版、Foil、特殊Foil
+
+    /**
+     * 検索結果が無い場合のテストケース
+     *
+     * @return void
+     */
+    public function test_NoResult() {
+        $condition = [Con::ARRIVAL_DATE => TestDateUtil::formatFourDateBefore(), SCon::VENDOR_TYPE_ID => 1];
+        $this->assert_NG($condition, Response::HTTP_NOT_FOUND, '検索結果がありません。');
+    }
+
+    /**
+     * その他NGケース
+     * @dataProvider ngProvider
+     * @return void
+     */
+    public function test_NG(array $condition, string $message) {
+        $this->assert_NG($condition, Response::HTTP_BAD_REQUEST, $message);
+    }
+    
+    public function ngProvider() {
+        return [
+            '取引先カテゴリIDが未入力' => [[], '取引先カテゴリIDは必ず入力してください。'],
+            '入荷日が日付形式ではない' => 
+                    [[Con::ARRIVAL_DATE => 'aaa', SCon::VENDOR_TYPE_ID => 1], '入荷日が日付形式ではありません。']
+        ];
+    }
     
     /**
      * エンドポイントを取得する。
@@ -109,7 +139,7 @@ class ArrivalLogSearchTest extends TestCase
      * @return string
      */
     protected function getEndPoint():string {
-        return  'api/arrival/';
+        return  'api/arrival';
     }
 
     protected function verifyCard($stock_id, array $json) {

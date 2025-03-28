@@ -20,6 +20,15 @@ trait GetApiAssertions
         return $response;
     }
 
+    protected function assert_NG(array $condition, int $status, string $message) {
+        $response = $this->execute($condition);
+        $response->assertStatus($status);
+        $data = $response->json();
+        $this->assertEquals($status, $data['status'], 'HTTPステータスコード');
+        $this->assertEquals($message, $data['detail'], 'メッセージ');
+        $this->assertEquals($this->getEndPoint(), $data['request'], 'エンドポイント');
+    }
+
     /**
      * メソッドを'GET'で指定してAPIを実行する。
      *
