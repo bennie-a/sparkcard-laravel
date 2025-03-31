@@ -5,7 +5,7 @@ use App\Services\Constant\CardConstant;
 /**
  * 入荷情報の定数クラス
  */
-class ArrivalConstant extends CardConstant {
+class ArrivalConstant {
 
     const ARRIVAL_DATE = 'arrival_date';
 

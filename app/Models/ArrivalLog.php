@@ -34,16 +34,22 @@ class ArrivalLog extends Model
 
         $subQuery = self::getTableQuery()
                         ->select([
-                            'alog.id',
-                            'e.attr as attr',
-                            'c.name as cardname',
-                            'c.isFoil as is_foil',
+                            'alog.id as arrival_id',
+                            'e.attr as exp_attr',
+                            'e.name as exp_name',
+                            'c.id',
+                            'c.name',
+                            'c.number',
+                            'c.isFoil',
+                            'c.color_id',
+                            'c.image_url',
+                            's.condition',
                             's.language as lang',
                             'alog.arrival_date',
                             'alog.vendor_type_id',
                             'v.name as vcat',
                             'alog.vendor',
-                            'f.name as foiltag',
+                            'f.name as foiltype',
                             DB::raw("ROW_NUMBER() OVER (PARTITION BY alog.arrival_date, alog.vendor_type_id ORDER BY alog.id) as rank_number")
                         ]);
         $subQuery = self::join($subQuery);

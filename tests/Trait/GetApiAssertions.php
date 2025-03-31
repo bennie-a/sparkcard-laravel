@@ -6,7 +6,8 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
 use App\Models\VendorType;
-use App\Services\Constant\ArrivalConstant as Con;
+use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 
 /**

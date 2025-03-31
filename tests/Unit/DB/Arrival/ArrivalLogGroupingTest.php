@@ -12,8 +12,9 @@ use Tests\TestCase;
 
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\SearchConstant as Con;
+use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\CardConstant as Con;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
@@ -51,34 +52,35 @@ class ArrivalLogGroupingTest extends TestCase {
         $response = $this->assert_OK($condition);
         $json = $response->json();
 
-        if (MtgJsonUtil::isEmpty(Con::START_DATE, $condition)) {
-            $condition[Con::START_DATE] = TestDateUtil::formatThreeDateBefore();
+        if (MtgJsonUtil::isEmpty(SCon::START_DATE, $condition)) {
+            $condition[SCon::START_DATE] = TestDateUtil::formatThreeDateBefore();
         }
         
-        if (MtgJsonUtil::isEmpty(Con::END_DATE, $condition)) {
-            $condition[Con::END_DATE] = TestDateUtil::formatThreeDateBefore();
+        if (MtgJsonUtil::isEmpty(SCon::END_DATE, $condition)) {
+            $condition[SCon::END_DATE] = TestDateUtil::formatToday();
         }
         
         // 並び順確認
         $first = current($json);
-        $firstDay = CarbonImmutable::parse($condition[Con::END_DATE]);
+        $firstDay = CarbonImmutable::parse($condition[SCon::END_DATE]);
         $this->verifyJson($first, $firstDay);
         
         $last = end($json);
-        $lastDay = CarbonImmutable::parse($condition[Con::START_DATE]);
+        $lastDay = CarbonImmutable::parse($condition[SCon::START_DATE]);
         $this->verifyJson($last, $lastDay);
     }
 
     public function arrivalDateProvider() {
         return [
-            '入荷日_開始日のみ入力' => [[Con::START_DATE => TestDateUtil::formatYesterday()]],
-            '入荷日_終了日のみ入力' => [[Con::END_DATE => TestDateUtil::formatTwoDateBefore()]],
-            '入荷日_開始日と終了日の両方入力' => [[Con::START_DATE => TestDateUtil::formatTwoDateBefore(),
-                                                                                    Con::END_DATE => TestDateUtil::formatToday()]],
-            '入荷日_開始日と終了日が同じ日' =>  [[Con::START_DATE => TestDateUtil::formatToday(),
-                                                                                    Con::END_DATE => TestDateUtil::formatToday()]],
-            '全検索項目入力' => [[Con::CARD_NAME => '神', Con::START_DATE => TestDateUtil::formatYesterday(),
-                                                        Con::END_DATE => TestDateUtil::formatYesterday()]]
+            '入荷日_開始日のみ入力' => [[SCon::START_DATE => TestDateUtil::formatYesterday()]],
+            '入荷日_終了日のみ入力' => [[SCon::END_DATE => TestDateUtil::formatTwoDateBefore()]],
+            '入荷日_開始日と終了日の両方入力' => [[SCon::START_DATE => TestDateUtil::formatTwoDateBefore(),
+            SCon::END_DATE => TestDateUtil::formatToday()]],
+            '入荷日_開始日と終了日が同じ日' =>  [[SCon::START_DATE => TestDateUtil::formatToday(),
+            SCon::END_DATE => TestDateUtil::formatToday()]],
+            'カード名のみ入力' => [[SCon::CARD_NAME => 'ジン＝ギタクシアス']],
+            '全検索項目入力' => [[SCon::CARD_NAME => '神', SCon::START_DATE => TestDateUtil::formatYesterday(),
+            SCon::END_DATE => TestDateUtil::formatYesterday()]]
         ];
     }
 
@@ -90,11 +92,11 @@ class ArrivalLogGroupingTest extends TestCase {
      * @return void
      */
     public function test_ok_cardname(string $cardname) {
-        $condition = [Con::CARD_NAME => $cardname];
+        $condition = [SCon::CARD_NAME => $cardname];
         $response = $this->assert_OK($condition);
         $json = $response->json();
         foreach($json as $j) {
-            $this->assertTrue(str_contains($j[Header::NAME], $condition[Con::CARD_NAME]));
+            $this->assertTrue(str_contains($j[Header::NAME], $condition[SCon::CARD_NAME]));
             
             $log = $this->getCardInfoFromArrivalId($j['id']);
             $actual_foil = $j[Header::FOIL];
@@ -109,7 +111,6 @@ class ArrivalLogGroupingTest extends TestCase {
 
     public function cardnameProvider() {
         return [
-            '部分一致検索' => ['ジン＝ギタクシアス'],
             '通常版のみ検索' => ['ドロスの魔神'],
             'Foil版のみ検索' => ['告別≪ショーケース≫'],
             '特殊Foil版のみ検索' => ['機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫'],
@@ -133,9 +134,9 @@ class ArrivalLogGroupingTest extends TestCase {
         $four_days_before = CarbonImmutable::today()->subDays(4);
         return [
             '検索結果なし_入荷日に該当する結果がない'
-                 =>[ [Con::END_DATE => TestDateUtil::formatDate($four_days_before)]],
+                 =>[ [SCon::END_DATE => TestDateUtil::formatDate($four_days_before)]],
             '検索結果なし_カード名に一致する結果がない'
-                =>[ [Con::CARD_NAME => 'aaaa']]
+                =>[ [SCon::CARD_NAME => 'aaaa']]
         ];
     }
 
@@ -157,7 +158,7 @@ class ArrivalLogGroupingTest extends TestCase {
     public function ngProvider() {
         return [
             '入荷日(開始日)が入荷日(終了日)以降' =>
-                            [[Con::START_DATE => '2025/03/10', 'end_date' => '2025/03/01'], 
+                            [[SCon::START_DATE => '2025/03/10', 'end_date' => '2025/03/01'], 
                                 '入荷日(開始日)は入荷日(終了日)以前の日付を入力してください。']
         ];
     }
@@ -171,25 +172,23 @@ class ArrivalLogGroupingTest extends TestCase {
      */
     private function verifyJson(array $json, CarbonImmutable $day) {
         $day_string = TestDateUtil::formatDate($day);
+        $log = $this->getCardInfoFromArrivalId($json[Con::ID]);
+
+        $this->verifyCard($log->stock_id, $json[Con::CARD]);
         logger()->debug("入荷ログ検証：$day_string");
         $this->assertEquals($day_string, $json[ACon::ARRIVAL_DATE], "入荷日:$day_string");
-        $this->assertEquals(3, $json['item_count'], "入荷件数:$day_string");
+
         $vendor = $json[ACon::VENDOR];
         $this->assertNotNull($vendor, '取引先');
-
-        $vendor_type_id = $vendor[Con::VENDOR_TYPE_ID];
-        $type = VendorType::find($vendor_type_id);
-        $this->assertEquals($type->name, $vendor[ACon::VENDOR], '取引先カテゴリ');
+        $vendor_type_id = $vendor[SCon::VENDOR_TYPE_ID];
 
         $cost = $this->getCostSum($json[ACon::ARRIVAL_DATE], $vendor_type_id);
-        $this->assertEquals(current($cost)->sum_cost, $json['sum_cost'], "原価合計:$day_string");
-        
-        $cardname = $json[Header::NAME];
-        $log = $this->getCardInfoFromArrivalId($json['id']);
+        $this->assertEquals($cost->item_count, $json['item_count'], "入荷件数:$day_string");
 
-        $this->assertEquals($log->attr, $json['attr'], 'セット略称');
-        $this->assertEquals($log->cardname, $cardname, 'カード名');
-        $this->assertEquals($log->lang, $json[Header::LANG], '言語');
+        $type = VendorType::find($vendor_type_id);
+        $this->assertEquals($type->name, $vendor[Con::NAME], '取引先カテゴリ');
+
+        $this->assertEquals($cost->sum_cost, $json['sum_cost'], "原価合計:$day_string");
     }
 
     /**
@@ -204,7 +203,8 @@ class ArrivalLogGroupingTest extends TestCase {
                                         ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
                                         ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id')
                                         ->where('arrival_log.id', $id)
-                                        ->select('arrival_log.id', 'e.attr as attr', 'c.name as cardname', 's.language as lang', 'c.isFoil as is_foil', 'f.name as foiltag')
+                                        ->select('arrival_log.id', 'arrival_log.stock_id', 'e.attr as attr', 'c.name as cardname',
+                                                                                         's.language as lang', 'c.isFoil as is_foil', 'f.name as foiltag')
                                         ->first();
         return $log;
     }
@@ -218,11 +218,9 @@ class ArrivalLogGroupingTest extends TestCase {
      */
     private function getCostSum(String $arrival_date, int $vendor_type_id) {
         $sum = DB::table('arrival_log')->
-            select([DB::raw('SUM(cost) as sum_cost')])->
+            select([DB::raw('SUM(cost) as sum_cost'), DB::raw('COUNT(id) as item_count')])->
             where('vendor_type_id', $vendor_type_id)->where('arrival_date', $arrival_date)
-            ->groupBy('arrival_date', 'vendor_type_id')->get();
-            return current($sum);
+            ->groupBy('arrival_date', 'vendor_type_id')->first();
+            return $sum;
     }
-
-    
 }

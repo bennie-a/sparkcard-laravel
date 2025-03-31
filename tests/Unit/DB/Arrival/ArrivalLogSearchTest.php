@@ -7,7 +7,8 @@ use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
 use App\Models\Stockpile;
 use Tests\TestCase;
-use App\Services\Constant\ArrivalConstant as Con;
+use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
 use Illuminate\Http\Response;
@@ -46,11 +47,11 @@ class ArrivalLogSearchTest extends TestCase
             $id = $j[Con::ID];
             $this->assertNotEmpty($id, '入荷ID');
             logger()->debug('入荷ID:'.$id);
-            if (MtgJsonUtil::isNotEmpty(Con::ARRIVAL_DATE, $condition)) {
-                $this->assertEquals(CarbonFormatUtil::toDateString($condition[Con::ARRIVAL_DATE]), $j[Con::ARRIVAL_DATE], '入荷日');
+            if (MtgJsonUtil::isNotEmpty(ACon::ARRIVAL_DATE, $condition)) {
+                $this->assertEquals(CarbonFormatUtil::toDateString($condition[ACon::ARRIVAL_DATE]), $j[ACon::ARRIVAL_DATE], '入荷日');
             } else {
                 $exp_arrival = $log->arrival_date;
-                $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[Con::ARRIVAL_DATE], '入荷日');
+                $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[ACon::ARRIVAL_DATE], '入荷日');
             }
             $this->assertEquals($log->cost, $j[Header::COST], '原価');
             logger()->debug("原価：expected:{$log->cost}, actual:{$j[Header::COST]}");
@@ -64,7 +65,7 @@ class ArrivalLogSearchTest extends TestCase
     public function conditionProvider() {
         return [
             '検索条件が入荷日と取引先カテゴリ' =>
-            [[Con::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
+            [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
             '検索条件がカード名と取引先カテゴリ' =>
             [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]],
             '検索結果が通常版' => [[SCon::CARD_NAME => 'ドロスの魔神', SCon::VENDOR_TYPE_ID => 1]],
@@ -81,7 +82,7 @@ class ArrivalLogSearchTest extends TestCase
     public function test_vendor(int $vendor_type_id) {
         $condition = [SCon::VENDOR_TYPE_ID => $vendor_type_id];
         $method = fn($condition, $j, $log) => 
-                $this->verifyVendor($condition[SCon::VENDOR_TYPE_ID], $j[Con::VENDOR]);
+                $this->verifyVendor($condition[SCon::VENDOR_TYPE_ID], $j[ACon::VENDOR]);
         $this->assertResult($condition, $method);
     }
     
@@ -112,7 +113,7 @@ class ArrivalLogSearchTest extends TestCase
      * @return void
      */
     public function test_NoResult() {
-        $condition = [Con::ARRIVAL_DATE => TestDateUtil::formatFourDateBefore(), SCon::VENDOR_TYPE_ID => 1];
+        $condition = [ACon::ARRIVAL_DATE => TestDateUtil::formatFourDateBefore(), SCon::VENDOR_TYPE_ID => 1];
         $this->assert_NG($condition, Response::HTTP_NOT_FOUND, '検索結果がありません。');
     }
 
@@ -129,7 +130,7 @@ class ArrivalLogSearchTest extends TestCase
         return [
             '取引先カテゴリIDが未入力' => [[], '取引先カテゴリIDは必ず入力してください。'],
             '入荷日が日付形式ではない' => 
-                    [[Con::ARRIVAL_DATE => 'aaa', SCon::VENDOR_TYPE_ID => 1], '入荷日が日付形式ではありません。']
+                    [[ACon::ARRIVAL_DATE => 'aaa', SCon::VENDOR_TYPE_ID => 1], '入荷日が日付形式ではありません。']
         ];
     }
     
