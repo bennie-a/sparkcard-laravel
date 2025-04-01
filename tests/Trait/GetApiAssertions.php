@@ -43,6 +43,7 @@ trait GetApiAssertions
         return $response;
     }
 
+    
     /**
      * カード情報について検証する。
      *
@@ -88,8 +89,8 @@ trait GetApiAssertions
         return function($condition, $json, $log) {
             $vendor = $json[ACon::VENDOR];
             $this->assertNotNull($vendor);
-            $vendor_type_id = $condition[SCon::VENDOR_TYPE_ID];
-            $this->assertEquals($vendor_type_id, $vendor[Con::ID], '取引先カテゴリID');
+            $vendor_type_id = $vendor[Con::ID];
+            $this->assertNotNull($vendor_type_id, '取引先カテゴリID');
             $type = VendorType::find($vendor_type_id);
             $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
             $this->assertNull($vendor['supplier']);

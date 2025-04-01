@@ -116,7 +116,7 @@ class ArrivalLogSearchTest extends TestCase
         ];
     }
     
-    private function assertResult(array $condition, callable $method) {
+    protected function assertResult(array $condition, callable $method) {
         $response = $this->assert_OK($condition);
         $json = $response->json();
         

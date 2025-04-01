@@ -23,6 +23,8 @@ use function PHPUnit\Framework\assertNotEquals;
 use function PHPUnit\Framework\assertNotNull;
 use App\Services\Constant\NotionConstant as JA;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\SearchConstant as Scon;
 use Mockery;
 
 /**
@@ -66,8 +68,8 @@ class ArrivalLogPostTest extends TestCase
         $before = Stockpile::findSpecificCard($info->id, $language, $condition);
         $quantity = 2;
         $params = [Header::CARD_ID => $info->id, Header::LANGUAGE => $language, Header::CONDITION => $condition,
-                            Header::ARRIVAL_DATE => $arrivalDate, Header::COST => $cost, Header::MARKET_PRICE => $market_price,
-                            Header::QUANTITY => $quantity, Header::VENDOR_TYPE_ID => 1];
+                              ACon::ARRIVAL_DATE => $arrivalDate, Header::COST => $cost, Header::MARKET_PRICE => $market_price,
+                            Header::QUANTITY => $quantity, SCon::VENDOR_TYPE_ID => 1];
         $log = $this->execute($params);
 
         // DB
@@ -136,8 +138,8 @@ class ArrivalLogPostTest extends TestCase
         $info = CardInfo::findSingleCard('BRO', 'ドラゴンの運命', false);
 
         $params = [Header::CARD_ID => $info->id, Header::LANGUAGE => 'JP', Header::CONDITION => 'NM',
-                            Header::ARRIVAL_DATE => '2024/10/11', Header::COST => 22, Header::MARKET_PRICE => 400,
-                            Header::QUANTITY => 1, Header::VENDOR_TYPE_ID => $vendor_type_id, Header::VENDOR => $vendor];
+        ACon::ARRIVAL_DATE => '2024/10/11', Header::COST => 22, Header::MARKET_PRICE => 400,
+                            Header::QUANTITY => 1, SCon::VENDOR_TYPE_ID => $vendor_type_id, ACon::VENDOR => $vendor];
         Mockery::mock(CardBoardService::class)->shouldReceive('store')->with(Mockery::any(), [])->andReturn();
         $log = $this->execute($params);
 

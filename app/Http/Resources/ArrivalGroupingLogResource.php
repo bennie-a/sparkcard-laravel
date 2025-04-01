@@ -20,12 +20,13 @@ class ArrivalGroupingLogResource extends CardInfoResource {
             'sum_cost' => $this->sum_cost,
             'item_count' => $this->item_count,
             ACon::VENDOR => [
-                SCon::VENDOR_TYPE_ID => $this->vendor_type_id,
+                Con::ID => $this->vendor_type_id,
                 Header::NAME => $this->vcat,
                 Header::SUPPLIER => $this->vendor
             ],
         ];
         $array[Con::CARD] = parent::toArray($request);
+        $array[Con::CARD][Header::LANG] = $this->lang;
         return $array;
     }
 }

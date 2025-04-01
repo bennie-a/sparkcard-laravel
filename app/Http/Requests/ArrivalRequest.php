@@ -50,10 +50,8 @@ class ArrivalRequest extends FormRequest
             'market_price' =>'相場価格',
             'quantity' => '枚数',
             'condition' => '状態',
-            'vendor_type_id' => '入荷カテゴリ',
             'vendor' =>'入荷先名',
             'isFoil' =>'通常/Foil',
-            'arrival_date' => '入荷日'
         ];
     }
 

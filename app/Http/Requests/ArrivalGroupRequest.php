@@ -40,7 +40,6 @@ class ArrivalGroupRequest extends FormRequest
     public function attributes()
     {
         return [
-            Con::CARD_NAME => 'カード名',
             Con::START_DATE => '入荷日(開始日)',
             Con::END_DATE => '入荷日(終了日)',
         ];

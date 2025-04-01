@@ -173,7 +173,8 @@ return [
 
     'attributes' => [
         Scon::VENDOR_TYPE_ID => '取引先カテゴリID',
-        Acon::ARRIVAL_DATE => '入荷日'
+        Acon::ARRIVAL_DATE => '入荷日',
+        Scon::CARD_NAME => 'カード名'
     ],
 
     'values' => [
