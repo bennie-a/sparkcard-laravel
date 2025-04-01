@@ -17,8 +17,6 @@ class StockpileFactory extends Factory
     public function definition()
     {
         return [
-        'language' => fake()->unique(true)->randomElement(['JP', 'EN', 'IT', 'CS', 'CT']),
-        'condition' => fake()->randomElement(['NM', 'NM-', 'EX+', 'EX', 'PLD']),
         'quantity' => fake()->numberBetween(0, 10)
         ];
     }

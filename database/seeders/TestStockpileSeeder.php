@@ -31,13 +31,13 @@ class TestStockpileSeeder extends Seeder
         $jace = CardInfo::findSingleCard('ONE', '完成化した精神、ジェイス', false);
         Stockpile::create(['card_id' => $jace->id, 'condition' => 'NM-', 'quantity' => 2, 'language' => 'JP']);
  
-        for($i = 4; $i <= 12; $i++) {
-            if ($i == 9) {
-                continue;
-            }
-            Stockpile::factory()->create([
-                'card_id'=> $i,
-            ]);
-        }
+        $cardIds = range(4, 12);
+        $cardIds = array_diff($cardIds, array(9, 10));
+        $cardIds = array_values(($cardIds));
+        $stocks = array_map(function($c) {
+            return ['card_id' => $c, 'condition' => 'NM', 'language' => 'JP'];
+        }, $cardIds);
+
+        Stockpile::factory()->createMany($stocks);
     }
 }

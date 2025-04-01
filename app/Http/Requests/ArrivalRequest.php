@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\VendorTypeIdRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class ArrivalRequest extends FormRequest
 {
+    use VendorTypeIdRules;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,7 +32,7 @@ class ArrivalRequest extends FormRequest
             'card_id' =>'required|numeric',
             'language' =>'required|in:JP,EN,IT,CS,CT',
             'cost' =>'required|numeric|min:1',
-            'vendor_type_id' => ['required', 'integer', 'between:1,5'],
+            'vendor_type_id' => self::vendorTypeIdRules(),
             'vendor' =>['nullable', 'string', 'required_if:vendor_type_id,3'],
             'market_price' =>'required|numeric|min:1',
             'quantity' =>'required|numeric|min:1',
@@ -48,10 +50,8 @@ class ArrivalRequest extends FormRequest
             'market_price' =>'相場価格',
             'quantity' => '枚数',
             'condition' => '状態',
-            'vendor_type_id' => '入荷カテゴリ',
             'vendor' =>'入荷先名',
             'isFoil' =>'通常/Foil',
-            'arrival_date' => '入荷日'
         ];
     }
 

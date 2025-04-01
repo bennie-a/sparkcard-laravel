@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArrivalGroupRequest;
 use App\Http\Requests\ArrivalRequest;
 use App\Http\Requests\ArrivalSearchRequest;
+use App\Http\Resources\ArrivalGroupingLogResource;
 use App\Http\Resources\ArrivalLogResource;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
@@ -16,8 +18,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
-
-use function PHPUnit\Framework\isEmpty;
+use App\Services\Constant\ArrivalConstant as ACon;
 
 /**
  * 入荷手続きAPI
@@ -37,18 +38,36 @@ class ArrivalController extends Controller {
      */
     public function index(ArrivalSearchRequest $request)
     {
-        $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
+        $details = $request->only([Con::CARD_NAME, ACon::ARRIVAL_DATE, Con::VENDOR_TYPE_ID]);
+        $search = fn($details) => $this->service->filtering($details);  // 検索処理
+        $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
+        return $this->handleSearch($details, $search, $transformer);
+    }
 
+    /**
+     * 設定した条件を元に入荷情報を取得する。
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function grouping(ArrivalGroupRequest $request) {
+        $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
+        $search = fn($details) => $this->service->fetch($details);  // 検索処理
+        $transformer = fn($results) => ArrivalGroupingLogResource::collection($results); // 変換処理
+        return $this->handleSearch($details, $search, $transformer);
+
+    }
+
+    private function handleSearch(array $details, callable $fetchMethod, ?callable $transformer) {
         logger()->info('Start to search arrival log', $details);
-        $results = $this->service->fetch($details);
+        $results = $fetchMethod($details);
         if ($results->isEmpty()) {
             logger()->info('No Result');
             throw new NoContentException();
         }
         $count = $results->count();
         logger()->info("End to search $count arrival log");
-        $json = ArrivalLogResource::collection($results);
-        return response($json, Response::HTTP_OK);
+        return response($transformer($results), Response::HTTP_OK);
     }
 
     /**
@@ -60,9 +79,9 @@ class ArrivalController extends Controller {
     public function store(ArrivalRequest $request)
     {
         $details = $request->only([Header::CARD_ID, Header::LANGUAGE,  Header::QUANTITY, Header::COST,
-        Header::MARKET_PRICE, Header::CONDITION, Header::VENDOR_TYPE_ID, Header::VENDOR]);
+        Header::MARKET_PRICE, Header::CONDITION, Con::VENDOR_TYPE_ID, ACon::VENDOR]);
         $details[Header::IS_FOIL] = $request->boolean(Header::IS_FOIL);
-        $details[Header::ARRIVAL_DATE] = $request->date(Header::ARRIVAL_DATE);
+        $details[ACon::ARRIVAL_DATE] = $request->date(ACon::ARRIVAL_DATE);
         $params = new ArrivalParams($details);
         logger()->info('Start Arrival log', [$params->cardId()]);
         $info = CardInfo::find($params->cardId());

@@ -13,4 +13,8 @@ class SearchConstant {
     const START_DATE = 'start_date';
     // 終了日
     const END_DATE = 'end_date';
+
+    // 取引先カテゴリID    
+    const VENDOR_TYPE_ID = 'vendor_type_id';
+
 }

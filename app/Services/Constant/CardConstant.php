@@ -2,9 +2,12 @@
 namespace App\Services\Constant;
 
 class CardConstant {
+    const CARD = 'card';
 
-    const SET = 'set';
-    
+    const ID = 'id';
+
+    const SET = 'set';  
+
     const NAME = 'name';
 
     const EN_NAME = 'en_name';
@@ -42,4 +45,8 @@ class CardConstant {
     const FULLART = 'fullart';
 
     const BORDERLESS = 'borderless';
+
+    const EXP = 'exp';
+
+    const ATTR = 'attr';
 }

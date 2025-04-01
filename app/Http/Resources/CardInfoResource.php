@@ -3,7 +3,12 @@
 namespace App\Http\Resources;
 
 use App\Enum\CardColor;
+use App\Libs\CardInfoJsonUtil;
+use App\Libs\MtgJsonUtil;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\CardConstant as Con;
+use Illuminate\Http\Request;
 
 class CardInfoResource extends JsonResource
 {
@@ -13,21 +18,26 @@ class CardInfoResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request)
     {
-        return [
-                'id' => $this->id,
-                'exp' => ['name' => $this->exp_name, 'attr' => $this->exp_attr],
-                'number' => $this->number,
-                'name' => $this->name,
-                'enname' => $this->en_name,
-                'price' => $this->price,
-                'color' => CardColor::tryFrom($this->color_id)->text(),
-                'image' => $this->image_url,
-                'isFoil' => $this->isFoil,
-                'foiltype' => $this->foiltype,
-                'condition' => $this->condition,
-                'quantity' => $this->quantity
-            ];
+        $array =  [
+            Con::ID => $this->id,
+            Con::NAME => $this->name,
+            Con::EXP => [Con::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
+            Con::NUMBER => $this->number,
+            Con::COLOR => CardColor::tryFrom($this->color_id)->text(),
+            'image' => $this->image_url,
+            Header::CONDITION => $this->condition,
+        ];
+        $resources = json_decode(json_encode($this->resource), true);
+        if (MtgJsonUtil::isNotEmpty(Con::PRICE, $resources)) {
+            $array[Con::PRICE] = $this->price;
+        }
+        if (MtgJsonUtil::isNotEmpty(Header::QUANTITY, $resources)) {
+            $array[Header::QUANTITY] = $this->quantity;
+        }
+
+        $array = CardInfoJsonUtil::setFoilInfo($array, $this->isFoil, $this->foiltype);
+        return $array;
     }
 }

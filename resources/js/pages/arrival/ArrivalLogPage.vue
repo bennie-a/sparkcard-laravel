@@ -9,6 +9,7 @@ import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import { useStore } from 'vuex';
 import pglist from "../component/PgList.vue";
 import MessageArea from "../component/MessageArea.vue";
+import foiltag from "../component/tag/FoilTag.vue";
 
 // 検索条件
 const itemname = ref("");
@@ -43,9 +44,8 @@ const fetch =  async () => {
                     "end_date" : toString(endDate.value)
                 },
             };
-   await axios.get('/api/arrival/', query)
+   await axios.get('/api/arrival/grouping', query)
                             .then((response) => {
-                                console.log(response.data);
                                 result.value = response.data;
                                 resultCount.value = result.value.length;
                             })
@@ -124,8 +124,8 @@ const toDssPage = (arrivalDate, vendorId) => {
             <tbody>
                 <tr v-for="(r, index) in currentList.value" :key="index">
                     <td class="center aligned">{{ r.arrival_date }}</td>
-                    <td colspan="2"><vendortag v-model="r.vendor.vendor_type_id"></vendortag><span class="ml-half">{{ r.vendor.name }}</span></td>
-                    <td>【{{r.attr}}】{{r.cardname}}[{{ r.lang }}]<span v-if="r.item_count !== 1">ほか</span><label class="ui label ml-half">{{r.item_count}}点</label></td>
+                    <td colspan="2"><vendortag v-model="r.vendor.name"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
+                    <td><foiltag :isFoil="r.foil.is_foil" :foiltype="r.foil.name"></foiltag>【{{r.attr}}】{{r.name}}[{{ r.lang }}]<span v-if="r.item_count !== 1">ほか</span><label class="ui label ml-half">{{r.item_count}}点</label></td>
                     <td class=" center aligned"><i class="bi bi-currency-yen"></i>{{ r.sum_cost }}</td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage('2024/10/31', 1)">

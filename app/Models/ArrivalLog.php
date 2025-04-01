@@ -4,20 +4,20 @@ namespace App\Models;
 
 use App\Libs\MtgJsonUtil;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\SearchConstant as SCon;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\SearchConstant as Con;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-
-use function PHPUnit\Framework\isEmpty;
 
 class ArrivalLog extends Model
 {
     protected $table = 'arrival_log';
 
-    protected $fillable = ['id', 'stock_id',  Header::ARRIVAL_DATE, Header::QUANTITY,
-                                            Header::COST, Header::VENDOR_TYPE_ID, Header::VENDOR];
+    protected $fillable = ['id', 'stock_id',  ACon::ARRIVAL_DATE, Header::QUANTITY,
+                                            Header::COST, SCon::VENDOR_TYPE_ID, ACon::VENDOR];
     use HasFactory;
 
         /**
@@ -28,26 +28,31 @@ class ArrivalLog extends Model
      */
     public static function fetch(array $details) {
         // 動的に条件を設定
-        $startDate = MtgJsonUtil::getValueOrEmpty(Con::START_DATE, $details);
-        $endDate = MtgJsonUtil::getValueOrEmpty(Con::END_DATE, $details);
-        $keyword = MtgJsonUtil::getValueOrEmpty(Con::CARD_NAME, $details);
+        $startDate = MtgJsonUtil::getValueOrEmpty(SCon::START_DATE, $details);
+        $endDate = MtgJsonUtil::getValueOrEmpty(SCon::END_DATE, $details);
+        $keyword = MtgJsonUtil::getValueOrEmpty(SCon::CARD_NAME, $details);
 
-        $subQuery = DB::table('arrival_log as alog')
+        $subQuery = self::getTableQuery()
                         ->select([
-                            'alog.id',
-                            'e.attr as attr',
-                            'c.name as cardname',
+                            'alog.id as arrival_id',
+                            'e.attr as exp_attr',
+                            'e.name as exp_name',
+                            'c.id',
+                            'c.name',
+                            'c.number',
+                            'c.isFoil',
+                            'c.color_id',
+                            'c.image_url',
+                            's.condition',
                             's.language as lang',
                             'alog.arrival_date',
                             'alog.vendor_type_id',
                             'v.name as vcat',
                             'alog.vendor',
+                            'f.name as foiltype',
                             DB::raw("ROW_NUMBER() OVER (PARTITION BY alog.arrival_date, alog.vendor_type_id ORDER BY alog.id) as rank_number")
-                        ])
-                        ->join('stockpile as s', 's.id', '=', 'alog.stock_id')
-                        ->join('card_info as c', 'c.id', '=', 's.card_id')
-                        ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
-                        ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id');
+                        ]);
+        $subQuery = self::join($subQuery);
         if(!empty($keyword)) {
             $pat = '%' . addcslashes($keyword, '%_\\') . '%';
             $subQuery->where('c.name', 'LIKE', $pat);
@@ -60,12 +65,12 @@ class ArrivalLog extends Model
                                                         ->select([
                                                             DB::raw('COUNT(id) as item_count'),
                                                             DB::raw('SUM(cost) as sum_cost'),
-                                                            Header::ARRIVAL_DATE,
-                                                            Header::VENDOR_TYPE_ID
+                                                            ACon::ARRIVAL_DATE,
+                                                            SCon::VENDOR_TYPE_ID
                                                         ]);
     $itemSummaryQuery = self::addStartDateWhere('', $itemSummaryQuery, $startDate);
     $itemSummaryQuery = self::addEndDateWhere('', $itemSummaryQuery, $endDate);
-    $itemSummaryQuery->groupBy(Header::ARRIVAL_DATE, Header::VENDOR_TYPE_ID);
+    $itemSummaryQuery->groupBy(ACon::ARRIVAL_DATE, SCon::VENDOR_TYPE_ID);
 
     $mainQuery = DB::query()
                                     ->fromSub($subQuery, 'ranked_data')
@@ -78,6 +83,46 @@ class ArrivalLog extends Model
     return $result;
 }
 
+/**
+ * 複数条件に該当する入荷情報を取得する。
+ *
+ * @param array $details
+ * @return Collection
+ */
+public static function filtering(array $details) {
+    $log_conditions = array_filter($details, function($key) {
+        return $key !== SCon::CARD_NAME;
+    }, ARRAY_FILTER_USE_KEY);
+    $cardname = MtgJsonUtil::getValueOrEmpty(SCon::CARD_NAME, $details);
+    $columns = ['alog.id as arrival_id', 'alog.arrival_date', 'alog.quantity as alog_quan', 'alog.cost', 'e.name as exp_name', 'alog.vendor',
+                            'e.attr as exp_attr', 'c.id', 'c.name', 'c.number', 'c.image_url', 'c.color_id', 'c.isFoil','s.language',
+                            's.condition', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
+    $query = self::getTableQuery()->select($columns)->where($log_conditions);
+    $query = self::join($query)->when($cardname, function($query, $cardname) {
+                                                            $pat = '%' . addcslashes($cardname, '%_\\') . '%';
+                                                            return $query->where('c.name', 'LIKE', $pat);
+                                                        });
+    return $query->get();
+}
+
+/**
+ * 内部結合のクエリを取得する。
+ *
+ * @param [type] $query
+ * @return Builder
+ */
+private static function join($query):Builder {
+    $query->join('stockpile as s', 's.id', '=', 'alog.stock_id')
+    ->join('card_info as c', 'c.id', '=', 's.card_id')
+    ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
+    ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id')
+    ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id');
+    return $query;
+}
+
+private static function getTableQuery() {
+    return DB::table('arrival_log as alog');
+}
 /**
  * 入荷日(開始日)の条件を追加する。
  *
@@ -101,7 +146,7 @@ private static function addEndDateWhere(string $alias, $query, ?string $arrivalD
 }
 
 private static function addArrivalDateWhere(string $alias, $query, string $operator, ?string $arrivalDate) {
-    $column = empty($alias)  ? Header::ARRIVAL_DATE : $alias.".".Header::ARRIVAL_DATE;
+    $column = empty($alias)  ? ACon::ARRIVAL_DATE : $alias.".".ACon::ARRIVAL_DATE;
     return $query->when(!empty($arrivalDate), function ($q) use ($column, $operator, $arrivalDate) {
         $q->where($column, $operator, $arrivalDate);
     });
@@ -125,4 +170,6 @@ private static function addArrivalDateWhere(string $alias, $query, string $opera
 
         return $query;
     }
+
+
 }
