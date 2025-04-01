@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ArrivalLog;
+use App\Models\Stockpile;
 use App\Models\VendorType;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -22,33 +23,36 @@ class TestArrivalLogSeeder extends Seeder
      */
     public function run(): void
     {
-        $current_date =TestDateUtil::today();
-        $yesterday = Carbon::yesterday();
-        $two_days_before = $current_date->subDays(2);
-        $three_days_before = $current_date->subDays(3);
+        $current_date =TestDateUtil::formatToday();
+        $yesterday = TestDateUtil::formatYesterday();
+        $two_days_before = TestDateUtil::formatTwoDateBefore();
+        $three_days_before = TestDateUtil::formatThreeDateBefore();
         $arrival_dates  = [$current_date, $yesterday, $two_days_before, $three_days_before];
-        $numbers = range(1, 5);
-        $vendor_type_ids = array_diff($numbers, [3]);
 
-        // 告別≪ショーケース≫
-        ArrivalLog::factory()
-            ->createOne([ACon::ARRIVAL_DATE => $current_date, 'stock_id' => 7, SCon::VENDOR_TYPE_ID => 1]);
-        // 機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫
-        ArrivalLog::factory()
-            ->createOne([ACon::ARRIVAL_DATE => $current_date, 'stock_id' => 10, SCon::VENDOR_TYPE_ID => 1]);
+        $all_stock = Stockpile::all()->toArray();
+        // 買取カテゴリ
+        $buy_items = array_map(function($s) {
+            return ['stock_id' => $s['id'],
+                         SCon::VENDOR_TYPE_ID => 3, 'vendor' => fake()->unique()->word()];
+        }, $all_stock);
+        
+        foreach(range(1, 5) as $i) {
+            if ($i == 3) {
+                continue;
+            }
+            $items = array_map(function($s) use($i) {
+                return ['stock_id' => $s['id'],
+                             SCon::VENDOR_TYPE_ID => $i];
+            }, $all_stock);
+            $buy_items = array_merge($buy_items, $items);
+        }
+
         foreach($arrival_dates as $d) {
-            ArrivalLog::factory()->count(3)->create([
-                'vendor_type_id'=> 3,
-                'vendor'=> fake()->unique()->word(),
-                'arrival_date' => $d
-            ]);
-    
-            foreach($vendor_type_ids as $i) {
-                ArrivalLog::factory()->count(3)->create([
-                    'vendor_type_id'=> $i,
-                    'arrival_date' => $d
-                ]);
-                }
+            $logs = array_map(function($item) use ($d) {
+                $item[ACon::ARRIVAL_DATE] = $d;
+                return $item;
+            }, $buy_items);
+            ArrivalLog::factory()->createMany($logs);
         }
     }
 }

@@ -5,8 +5,10 @@ use App\Enum\CardColor;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
+use App\Models\Stockpile;
 use App\Models\VendorType;
 use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 
@@ -59,34 +61,73 @@ trait GetApiAssertions
         $act_expansion = $json[Con::EXP];
         $this->assertEquals($exp_expansion->attr, $act_expansion[Con::ATTR], 'セット略称');
         $this->assertEquals($exp_expansion->name, $act_expansion[Con::NAME], 'セット名');
-
-        $act_foil = $json[Header::FOIL];
-        $this->assertEquals($expected->isFoil, $act_foil['is_foil']);
-        if ($expected->isFoil) {
-            $exp_foil = Foiltype::find($expected->foiltype_id);
-            $this->assertEquals($exp_foil->name, $act_foil[Header::NAME]);
-        } else {
-            $this->assertEmpty($act_foil[Header::NAME]);
-        }
     }
     
     /**
-     * vendor要素を検証する。
+     * 取引先カテゴリIDが買取の場合を検証する。
      *
-     * @param string $vendor_type_id
-     * @param array $vendor
      * @return void
      */
-    public function verifyVendor(string $vendor_type_id, array $vendor) {
-        $this->assertNotNull($vendor, 'vendor要素の有無');
-
-        $type = VendorType::find($vendor_type_id);
-        $this->assertEquals($vendor_type_id, $vendor[Con::ID], '取引先カテゴリID');
-        $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
-        if ($vendor_type_id === '3') {
+    protected function verifyBuyVendor() {
+        return function($condition, $json, $log) {
+            $vendor = $json[ACon::VENDOR];
+            $this->assertNotNull($vendor);
+            $this->assertEquals(3, $vendor[Con::ID], '取引先カテゴリID');
+            $type = VendorType::find(3);
+            $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
             $this->assertNotNull($vendor['supplier']);
-        } else {
-            $this->assertEmpty($vendor['supplier']);
-        }
+        };
     }
+
+    /**
+     * 取引先カテゴリが「買取」以外の場合を検証する。
+     *
+     * @return void
+     */
+    protected function verifyOtherVendor() {
+        return function($condition, $json, $log) {
+            $vendor = $json[ACon::VENDOR];
+            $this->assertNotNull($vendor);
+            $vendor_type_id = $condition[SCon::VENDOR_TYPE_ID];
+            $this->assertEquals($vendor_type_id, $vendor[Con::ID], '取引先カテゴリID');
+            $type = VendorType::find($vendor_type_id);
+            $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
+            $this->assertNull($vendor['supplier']);
+        };
+    }
+
+
+    /**
+     * カード情報のFoil要素が通常版か検証するクロージャを取得する。
+     *
+     * @param array $json
+     * @return callable
+     */
+    public function verifyNonFoil() {
+        return function($condition, $json, $log) {
+            $foils = $json[Con::CARD][Header::FOIL];
+            $this->assertFalse($foils['is_foil']);
+            $this->assertEmpty($foils[Con::NAME]);
+        };
+    }
+
+    /**
+     * カード情報のFoil要素がFoil版か検証するクロージャを取得する。
+     *
+     * @param array $json
+     * @return callable
+     */
+    public function verifyFoil() {
+        return function($condition, $json, $log) {
+            $card = $json[Con::CARD];
+            $foils = $card[Header::FOIL];
+            $this->assertTrue($foils['is_foil']);
+
+            $cardinfo = CardInfo::find($card[Con::ID]);
+            $foiltype = Foiltype::find($cardinfo->foiltype_id);
+            $this->assertEquals($foiltype->name, $foils[Con::NAME]);
+        };
+    }
+    
+
 }

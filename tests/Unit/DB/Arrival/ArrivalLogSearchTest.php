@@ -68,22 +68,52 @@ class ArrivalLogSearchTest extends TestCase
             [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
             '検索条件がカード名と取引先カテゴリ' =>
             [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]],
-            '検索結果が通常版' => [[SCon::CARD_NAME => 'ドロスの魔神', SCon::VENDOR_TYPE_ID => 1]],
-            '検索結果がFoil版' => [[SCon::CARD_NAME => '告別≪ショーケース≫', SCon::VENDOR_TYPE_ID => 2]],
-            '検索結果が特殊Foil版' => 
-                    [[SCon::CARD_NAME => '機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫', SCon::VENDOR_TYPE_ID => 1]]
         ];
+    }
+    
+    /**
+     * 取引先カテゴリについて検証する。
+     * @dataProvider vendorProvider
+     * @param integer $vendor_type_id
+     * @param callable $method
+     * @return void
+     */
+    public function test_vendor(int $vendor_type_id, callable $method) {
+        $condition = [SCon::VENDOR_TYPE_ID => $vendor_type_id,
+                         ACon::ARRIVAL_DATE => TestDateUtil::formatToday()];
+        $this->assertResult($condition, $method);
     }
     
     /**
      * 取引先に関するテストケース
      * @dataProvider vendorProvider
      */
-    public function test_vendor(int $vendor_type_id) {
-        $condition = [SCon::VENDOR_TYPE_ID => $vendor_type_id];
-        $method = fn($condition, $j, $log) => 
-                $this->verifyVendor($condition[SCon::VENDOR_TYPE_ID], $j[ACon::VENDOR]);
+    public function vendorProvider() {
+        return [
+                '入荷先カテゴリがオリジナルパック' => [1, $this->verifyOtherVendor()],
+                '入荷先カテゴリが私物' => [2, $this->verifyOtherVendor()],
+                '入荷先カテゴリが買取' => [3, $this->verifyBuyVendor()],
+                '入荷先カテゴリが棚卸し' => [4, $this->verifyOtherVendor()],
+                '入荷先カテゴリが返品' => [5, $this->verifyOtherVendor()],
+        ];
+    }
+
+    /**
+     * カードのFoil要素について検証する。
+     * @dataProvider isFoilProvider
+     * @return void
+     */
+    public function test_isFoil(string $name, callable $method) {
+        $condition = [SCon::CARD_NAME => $name, SCon::VENDOR_TYPE_ID => 1];
         $this->assertResult($condition, $method);
+    }
+
+    private function isFoilProvider() {
+        return [
+            'カード情報が通常版' => ['ドロスの魔神', $this->verifyNonFoil()],
+            'カード情報がFoil版' => ['告別≪ショーケース≫', $this->verifyFoil()],
+            'カード情報が特殊Foil版' => ['機械の母、エリシュ・ノーン', $this->verifyFoil()]
+        ];
     }
     
     private function assertResult(array $condition, callable $method) {
@@ -95,16 +125,6 @@ class ArrivalLogSearchTest extends TestCase
             $this->verifyCard($log->stock_id, $j[Con::CARD]);
             $method($condition, $j, $log);
         }
-    }
-
-    public function vendorProvider() {
-        return [
-            '入荷先カテゴリがオリジナルパック' => [1],
-            '入荷先カテゴリが私物' => [2],
-            '入荷先カテゴリが買取' => [3],
-            '入荷先カテゴリが棚卸し' => [4],
-            '入荷先カテゴリが返品' => [5],
-        ];
     }
 
     /**
