@@ -2,6 +2,8 @@
 import { useRoute, useRouter } from "vue-router";
 import cardlayout from "../component/CardLayout.vue";
 import pagination from "../component/ListPagination.vue";
+import vendortag from "../component/tag/VendorTag.vue"
+
 
 const route = useRoute();
 const router = useRouter();
@@ -13,7 +15,8 @@ const card = {
     cardname:'霜の暴君、アイシングデス[JP]',
     foil:{isFoil:true, name:"Foil"},
     setname:"フォーゴトン・レルム探訪",
-    image_url:'https://cards.scryfall.io/png/front/b/0/b009f231-6dd2-468d-8005-04715cb9df1d.png?1645529044'
+    image_url:'https://cards.scryfall.io/png/front/b/0/b009f231-6dd2-468d-8005-04715cb9df1d.png?1645529044',
+    vendor:{id:vendor_id, name:'オリジナルパック'},
 };
 
 // 入荷情報一覧ページに戻る
@@ -33,7 +36,8 @@ const toList = () => {
 <template>
     <article>
         <h2 class="ui medium header">入荷先</h2>
-        <label class="ui label basic orange">買取</label><span class="ml-half">晴れる屋トーナメントセンター大阪</span>
+        <vendortag v-model="card.vendor"></vendortag>
+        <span class="ml-half">晴れる屋トーナメントセンター大阪</span>
     </article>
     <article class="mt-2">
         <h2 class="ui medium header">入荷商品</h2>

@@ -29,7 +29,6 @@ const isLoading = ref(false);
 const router = useRouter();
 const {toString} = UseDateFormatter();
 
-const vendorId =3;
 const store = useStore();
 
 // 入荷情報検索
@@ -69,10 +68,10 @@ const current = (data) => {
 
 
 // 詳細画面を表示する。
-const toDssPage = (arrivalDate, vendorId) => {
+const toDssPage = (arrivalDate, vendor_id) => {
     router.push({
         name: "ArrivalLogDss",
-        params: { arrival_date: arrivalDate, vendor_id:vendorId},
+        params: { arrival_date: arrivalDate, vendor_id:vendor_id},
     });
 }
 </script>
@@ -125,7 +124,7 @@ const toDssPage = (arrivalDate, vendorId) => {
             <tbody>
                 <tr v-for="(r, index) in currentList.value" :key="index">
                     <td class="center aligned">{{ r.arrival_date }}</td>
-                    <td colspan="2"><vendortag v-model="r.vendor.name"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
+                    <td colspan="2"><vendortag v-model="r.vendor"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
                     <td>
                         <foiltag :isFoil="r.card.foil.is_foil" :foiltype="r.card.foil.name"></foiltag>
                         【{{r.card.exp.attr}}】{{r.card.name}}[{{ r.card.lang }}]<span v-if="r.item_count !== 1">ほか</span>
@@ -135,7 +134,7 @@ const toDssPage = (arrivalDate, vendorId) => {
                     </td>
                     <td class=" center aligned"><i class="bi bi-currency-yen"></i>{{ r.sum_cost }}</td>
                     <td class="center aligned selectable">
-                        <a @click="toDssPage('2024/10/31', 1)">
+                        <a @click="toDssPage(r.arrival_date, r.vendor.id)">
                             <i class="angle double right icon"></i>
                         </a>
                     </td>
