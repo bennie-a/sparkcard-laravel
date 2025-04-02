@@ -117,7 +117,8 @@ const toDssPage = (arrivalDate, vendorId) => {
                     <th class="two wide center aligned">入荷日</th>
                     <th class="" colspan="2">取引先</th>
                     <th class="">商品名</th>
-                    <th class="one side center aligned">原価合計</th>
+                    <th class="two wide center aligned">入荷数</th>
+                    <th class="two wide center aligned">原価合計</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
@@ -125,7 +126,13 @@ const toDssPage = (arrivalDate, vendorId) => {
                 <tr v-for="(r, index) in currentList.value" :key="index">
                     <td class="center aligned">{{ r.arrival_date }}</td>
                     <td colspan="2"><vendortag v-model="r.vendor.name"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
-                    <td><foiltag :isFoil="r.foil.is_foil" :foiltype="r.foil.name"></foiltag>【{{r.attr}}】{{r.name}}[{{ r.lang }}]<span v-if="r.item_count !== 1">ほか</span><label class="ui label ml-half">{{r.item_count}}点</label></td>
+                    <td>
+                        <foiltag :isFoil="r.card.foil.is_foil" :foiltype="r.card.foil.name"></foiltag>
+                        【{{r.card.exp.attr}}】{{r.card.name}}[{{ r.card.lang }}]<span v-if="r.item_count !== 1">ほか</span>
+                    </td>
+                    <td class="center aligned">
+                        {{r.item_count}}点
+                    </td>
                     <td class=" center aligned"><i class="bi bi-currency-yen"></i>{{ r.sum_cost }}</td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage('2024/10/31', 1)">
