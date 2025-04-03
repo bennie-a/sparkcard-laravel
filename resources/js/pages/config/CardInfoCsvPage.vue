@@ -1,5 +1,7 @@
 <template>
     <message-area></message-area>
+    <label class="ui header">エキスパンション名:{{setCode}}
+    </label>
     <article class="mt-1 ui grid segment">
         <div
             class="three wide column middle aligned content ui toggle checkbox"
@@ -28,9 +30,6 @@
     </article>
     <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
-            <div class="inline field">
-                <label>エキスパンション名：</label>{{ setCode }}
-            </div>
             <div class="field">
                 <table class="ui table striped six column">
                     <thead>
@@ -134,7 +133,7 @@ export default {
     data() {
         return {
             filename: "ファイルを選択してください",
-            setCode: "",
+            setCode: this.$route.params.attr,
             isSkip: false,
             isLoading: false,
             isDraftOnly: false,

@@ -18,15 +18,7 @@ import Loading from "vue-loading-overlay";
                     :class="{
                         active: $route.path === '/config/expansion',
                     }"
-                    >エキスパンション一覧</router-link
-                >
-                <router-link
-                    to="/config/cardinfo/csv"
-                    class="item"
-                    :class="{
-                        active: $route.path === '/config/cardinfo/csv',
-                    }"
-                    >カード情報マスタ登録</router-link
+                    ><i class="cogs icon"></i>マスタ設定</router-link
                 >
             </div>
         </div>

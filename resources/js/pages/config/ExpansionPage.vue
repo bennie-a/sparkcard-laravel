@@ -47,7 +47,8 @@
                         {{ ex.count }}件
                     </td>
                     <td class="two wide right aligned">
-                        <button class="ui button teal basic"><i class="file alternate icon"></i>一括登録</button>
+                        <button class="ui button teal basic" @click="toCsvCardPage(ex.attr)">
+                            <i class="file alternate icon"></i>一括登録</button>
                         <button
                             class="ui button teal basic"
                             @click="toPostCardPage(ex.name, ex.attr)"
@@ -81,12 +82,21 @@ export default {
         show: function () {
             this.$router.push("/config/expansion/post");
         },
+        // カード登録画面に遷移する。
         toPostCardPage: function (setname, attr) {
-            console.log(attr);
             this.$router.push({
                 name: "PostCardInfo",
                 params: { setname: setname, attr: attr },
             });
+        },
+        // カードCSV登録画面に遷移する。
+        toCsvCardPage:function(attr) {
+            this.$router.push(
+                {
+                    name:"CardInfoCsvPage",
+                    params:{attr:attr}
+                }
+            );
         },
         search: async function () {
             console.log(this.keyword);
