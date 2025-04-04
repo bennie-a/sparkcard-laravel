@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         logger()->info('マスタデータ登録開始');
+        $this->call(ExpansionSeeder::class);
         $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
         $this->call(PromotypeSeeder::class);
