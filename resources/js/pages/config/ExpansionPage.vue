@@ -102,13 +102,11 @@ export default {
             );
         },
         search: async function () {
-            console.log(this.keyword);
             this.$store.dispatch("clearCards");
             this.$store.dispatch("setLoad", true);
             const query = { params: { query: this.keyword } };
             const success = function (response, store, query) {
                 store.dispatch("setCard", response.data);
-                // store.dispatch("expansion/result", response.data);
             };
             const fail = function (e, store, query) {
                 const data = e.response.data;

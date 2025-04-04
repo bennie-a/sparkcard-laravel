@@ -1,6 +1,7 @@
 <template>
     <message-area></message-area>
-    <label class="ui header">エキスパンション名:{{setCode}}
+    <div v-if="setName != ''">
+    <label class="ui label">{{setName}}[{{setCode}}]
     </label>
     <article class="mt-1 ui grid segment">
         <div
@@ -104,12 +105,13 @@
                 </div>
             </div>
         </div>
-        <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        ></loading>
     </article>
+</div>
+    <loading
+        :active="isLoading"
+        :can-cancel="false"
+        :is-full-page="true"
+    ></loading>
 </template>
 <script>
 import Loading from "vue-loading-overlay";
@@ -125,7 +127,7 @@ export default {
     components: {
         "file-upload": FileUpload,
         "message-area": MessageArea,
-        Loading,
+        "loading":Loading,
         pagination: ListPagination,
         ModalButton: ModalButton,
         foiltag: FoilTag,
@@ -134,6 +136,7 @@ export default {
         return {
             filename: "ファイルを選択してください",
             setCode: this.$route.params.attr,
+            setName:"",
             isSkip: false,
             isLoading: false,
             isDraftOnly: false,
@@ -182,8 +185,21 @@ export default {
             };
         },
     },
-    mounted: function () {
-        // this.$store.dispatch("setLoad", true);
+    created() {
+        this.isLoading = true;
+    },
+    mounted: async function () {
+        this.isLoading = true;
+        await axios.get('/api/database/exp/' + this.setCode, {})
+                            .then((response) => {
+                                this.setName = response.data.name;
+                            })
+                            .catch((e) => {
+                                console.error(e.statusCode);
+                            })
+                            .finally(() => {
+                                this.isLoading = false;
+                            });    
     },
     methods: {
         upload: async function (file) {
