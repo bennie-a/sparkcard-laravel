@@ -47,14 +47,17 @@
                         {{ ex.count }}件
                     </td>
                     <td class="two wide right aligned">
-                        <button class="ui button teal basic" @click="toCsvCardPage(ex.attr)">
-                            <i class="file alternate icon"></i>一括登録</button>
-                        <button
-                            class="ui button teal basic"
-                            @click="toPostCardPage(ex.name, ex.attr)"
-                        >
-                        <i class="plus circle icon"></i>1件登録
-                        </button>
+                        <div class="ui buttons">
+                            <button
+                                class="ui button teal"
+                                @click="toPostCardPage(ex.name, ex.attr)"
+                            >
+                            <i class="plus circle icon"></i>1件登録
+                            </button>
+                            <div class="or"></div>
+                            <button class="ui button teal" @click="toCsvCardPage(ex.attr)">
+                                <i class="file alternate icon"></i>一括登録</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>

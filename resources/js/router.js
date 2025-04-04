@@ -109,7 +109,7 @@ const routes = [
         prop: true,
     },
     {
-        path: "/config/cardinfo/csv/:attr",
+        path: "/config/cardinfo/csv/:id",
         name:"CardInfoCsvPage",
         component: CardInfoCsvPage,
         meta: {

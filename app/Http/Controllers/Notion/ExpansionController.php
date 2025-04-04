@@ -27,5 +27,9 @@ class ExpansionController extends Controller
         $json = ExpansionResource::collection($result);
         return response()->json($json, Response::HTTP_OK);
     }
+
+    public function show($id) {
+
+    }
 }
 ?>

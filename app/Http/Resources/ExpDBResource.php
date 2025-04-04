@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Libs\CarbonFormatUtil;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpDBResource extends JsonResource
@@ -17,6 +18,7 @@ class ExpDBResource extends JsonResource
         return [
                 'name' => $this->name,
                 'attr' => $this->attr,
+                'release_date' => CarbonFormatUtil::toDateString($this->release_date)
             ];
     }
 }

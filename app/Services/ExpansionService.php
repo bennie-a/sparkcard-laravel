@@ -9,14 +9,21 @@ use App\Models\notion\NotionExp;
 use App\Services\ScryfallService;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\DB;
 
 /**
- * エキスパンション一覧を操作するクラス
+ * エキスパンションを操作するクラス
  */
 class ExpansionService {
+    private $repo;
     public function __construct() {
         $this->repo = new ExpansionRepository();
+    }
+
+    public function fetch(string $query) {
+        $columns = ['id', 'notion_id', 'name', 'attr', 'release_date'];
+        $list = Expansion::where('attr', 'like', '%'.$query.'%')->limit(5)->get();
+        return $list;
     }
 
     public function findAll() {
@@ -71,12 +78,12 @@ class ExpansionService {
      */
     public function storeByScryfall(string $setcode, string $format) {
             // エキスパンション登録
-            $contents = \ScryfallServ::findSet($setcode);
+            $contents = \App\Facades\ScryfallServ::findSet($setcode);
             $block = MtgJsonUtil::hasKey('block', $contents) ? $contents['block'] : 'その他';
             $details = ['attr' => strtoupper($setcode), 'name' => $contents['name'],
                                     'block' => $block, 'format' => $format,
                                     'release_date' => $contents['released_at']];
-            \ExService::store($details);
+            $this->store($details);
 
     }
     /**
