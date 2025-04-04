@@ -29,6 +29,7 @@
             {{ filename }}
         </div>
     </article>
+    <promo v-model:name="name" v-model:setcode="setCode"></promo>
     <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="field">
@@ -49,11 +50,6 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
-                                <!-- <span
-                                    v-if="card.promotype != ''"
-                                    class="sub header"
-                                    >≪{{ card.promotype }}≫</span
-                                > -->
                             </td>
                             <td>
                                 <select v-model="card.promotype">
@@ -121,6 +117,8 @@ import ListPagination from "../component/ListPagination.vue";
 import ModalButton from "../component/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
 import FoilTag from "../component/tag/FoilTag.vue";
+import PromoDropdown from "../component/PromoDropdown.vue";
+import {ref} from 'vue';
 
 import axios from "axios";
 export default {
@@ -131,16 +129,19 @@ export default {
         pagination: ListPagination,
         ModalButton: ModalButton,
         foiltag: FoilTag,
+        promo:PromoDropdown
     },
     data() {
         return {
             filename: "ファイルを選択してください",
-            setCode: this.$route.params.attr,
+            setCode: ref(this.$route.params.attr),
             setName:"",
             isSkip: false,
             isLoading: false,
             isDraftOnly: false,
             color: "",
+            promoItems:[],
+            name:ref("通常版")
         };
     },
     computed: {
@@ -185,9 +186,6 @@ export default {
             };
         },
     },
-    created() {
-        this.isLoading = true;
-    },
     mounted: async function () {
         this.isLoading = true;
         await axios.get('/api/database/exp/' + this.setCode, {})
@@ -199,7 +197,7 @@ export default {
                             })
                             .finally(() => {
                                 this.isLoading = false;
-                            });    
+                            });
     },
     methods: {
         upload: async function (file) {

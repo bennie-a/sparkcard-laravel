@@ -48,7 +48,7 @@ class Promotype extends Model
         $result = $query->join('expansion as e', function($join) {
                                     $join->on('p.exp_id', 'e.notion_id');
                                 })->whereIn('e.attr', $condition)
-                                ->orderBy('e.release_date', 'desc')->orderBy('p.id')->get();
+                                ->orderBy('e.release_date')->orderBy('p.id')->get();
         return $result;
     }
 }
