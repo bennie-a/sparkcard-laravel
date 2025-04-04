@@ -29,7 +29,6 @@
             {{ filename }}
         </div>
     </article>
-    <promo v-model:name="name" v-model:setcode="setCode"></promo>
     <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="field">
@@ -42,7 +41,6 @@
                             <th class="three wide">英名</th>
                             <th>カード仕様</th>
                             <th class="one wide">色</th>
-                            <th class="one wide">言語</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,17 +50,7 @@
                                 <input type="text" v-model="card.name" />
                             </td>
                             <td>
-                                <select v-model="card.promotype">
-                                    <option value="">通常版</option>
-                                    <option value="ショーケース">ショーケース</option>
-                                    <option value="ボーダーレス">ボーダーレス</option>
-                                    <option value="ボックストッパー">ボックストッパー</option>
-                                    <option value="ファーストプレイス・Foil">ファーストプレイス・Foil</option>
-                                    <option value="「最大出力」ボーダーレス">「最大出力」ボーダーレス</option>
-                                    <option value="「ワルなライダー」ボーダーレス">「ワルなライダー」ボーダーレス</option>
-                                    <option value="「グラフィティ・ジャイアント」ボーダーレス">「グラフィティ・ジャイアント」ボーダーレス</option>
-                                    <option value="フルアート">フルアート</option>
-                                </select>
+                                <promo v-model:name="card.promotype" v-model:setcode="setCode"></promo>
                             </td>
                             <td>
                                 {{ card.en_name }}
@@ -74,9 +62,6 @@
                                     :class="colorlabel(card.color)"
                                     >{{ colortext(card.color) }}</label
                                 >
-                            </td>
-                            <td>
-                                {{ card.language }}
                             </td>
                         </tr>
                     </tbody>
