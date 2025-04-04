@@ -66,8 +66,8 @@ class ArrivalLogSearchTest extends TestCase
         return [
             '検索条件が入荷日と取引先カテゴリ' =>
             [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
-            // '検索条件がカード名と取引先カテゴリ' =>
-            // [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]],
+            '検索条件がカード名と取引先カテゴリ' =>
+            [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]],
         ];
     }
     
