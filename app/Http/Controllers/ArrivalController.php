@@ -19,6 +19,7 @@ use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
 use App\Services\Constant\ArrivalConstant as ACon;
+use App\Facades\APIHand;
 
 /**
  * 入荷手続きAPI
@@ -41,7 +42,7 @@ class ArrivalController extends Controller {
         $details = $request->only([Con::CARD_NAME, ACon::ARRIVAL_DATE, Con::VENDOR_TYPE_ID]);
         $search = fn($details) => $this->service->filtering($details);  // 検索処理
         $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
-        return $this->handleSearch($details, $search, $transformer);
+        return APIHand::handleSearch($details, $search, $transformer);
     }
 
     /**
@@ -54,21 +55,9 @@ class ArrivalController extends Controller {
         $details = $request->only([Con::CARD_NAME, Con::START_DATE, Con::END_DATE]);
         $search = fn($details) => $this->service->fetch($details);  // 検索処理
         $transformer = fn($results) => ArrivalGroupingLogResource::collection($results); // 変換処理
-        return $this->handleSearch($details, $search, $transformer);
-
+        return APIHand::handleSearch($details, $search, $transformer);
     }
 
-    private function handleSearch(array $details, callable $fetchMethod, ?callable $transformer) {
-        logger()->info('Start to search arrival log', $details);
-        $results = $fetchMethod($details);
-        if ($results->isEmpty()) {
-            logger()->info('No Result');
-            throw new NoContentException();
-        }
-        $count = $results->count();
-        logger()->info("End to search $count arrival log");
-        return response($transformer($results), Response::HTTP_OK);
-    }
 
     /**
      * 入荷情報と在庫情報を登録する。

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\BaseApiController;
+use App\Http\Controllers\PromotypeController;
 use App\Http\Controllers\VendorTypeController;
 
 /*
@@ -44,3 +45,4 @@ Route::apiResource('shipping', ShippingLogController::class);
 Route::get('stockpile', [StockpileController::class, 'index']);
 Route::get('vendor', [VendorTypeController::class, 'index']);
 Route::apiResource('base', BaseApiController::class);
+Route::apiResource('promo', PromotypeController::class);

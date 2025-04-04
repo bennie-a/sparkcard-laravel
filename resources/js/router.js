@@ -109,12 +109,20 @@ const routes = [
         prop: true,
     },
     {
-        path: "/config/cardinfo/csv",
+        path: "/config/cardinfo/csv/:attr",
+        name:"CardInfoCsvPage",
         component: CardInfoCsvPage,
         meta: {
-            title: "カード情報マスタ一括登録",
+            title: "カード情報一括登録",
             description:
-                "MTGJSONからダウンロードしたファイルのカード情報をDBに登録します。",
+                "MTGJSONからDLしたファイルのカード情報をDBに登録します。",
+            urls:[
+                {
+                    url:"/config/expansion",
+                    title:"エキスパンション一覧"
+
+                }
+            ]
         },
     },
     {
@@ -165,14 +173,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    console.log("start");
     store.dispatch("loading/start");
     next();
 });
 
 router.afterEach(() => {
     store.dispatch("loading/stop");
-    console.log("stop");
 });
 
 // VueRouterインスタンスをエクスポートする

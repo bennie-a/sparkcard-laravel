@@ -29,7 +29,6 @@ class ArrivalLogGroupingTest extends TestCase {
         GetApiAssertions::verifyCard as verifyCardFromParent;
     }
 
-
     public function setUp(): void
     {
         parent::setUp();
@@ -66,13 +65,13 @@ class ArrivalLogGroupingTest extends TestCase {
 
     public function arrivalDateProvider() {
         return [
-            // '入荷日_開始日のみ入力' => [[SCon::START_DATE => TestDateUtil::formatYesterday()], $this->equalBefore()],
-            // '入荷日_終了日のみ入力' => [[SCon::END_DATE => TestDateUtil::formatTwoDateBefore()], $this->equalAfter()],
-            // '入荷日_開始日と終了日の両方入力' => [[SCon::START_DATE => TestDateUtil::formatTwoDateBefore(),
-            // SCon::END_DATE => TestDateUtil::formatToday()], $this->between()],
-            // '入荷日_開始日と終了日が同じ日' =>  [[SCon::START_DATE => TestDateUtil::formatToday(),
-            // SCon::END_DATE => TestDateUtil::formatToday()], $this->equals()],
-            // 'カード名のみ入力' => [[SCon::CARD_NAME => 'ジン＝ギタクシアス'], $this->cardname()],
+            '入荷日_開始日のみ入力' => [[SCon::START_DATE => TestDateUtil::formatYesterday()], $this->equalBefore()],
+            '入荷日_終了日のみ入力' => [[SCon::END_DATE => TestDateUtil::formatTwoDateBefore()], $this->equalAfter()],
+            '入荷日_開始日と終了日の両方入力' => [[SCon::START_DATE => TestDateUtil::formatTwoDateBefore(),
+            SCon::END_DATE => TestDateUtil::formatToday()], $this->between()],
+            '入荷日_開始日と終了日が同じ日' =>  [[SCon::START_DATE => TestDateUtil::formatToday(),
+            SCon::END_DATE => TestDateUtil::formatToday()], $this->equals()],
+            'カード名のみ入力' => [[SCon::CARD_NAME => 'ジン＝ギタクシアス'], $this->cardname()],
             '全検索項目入力' => [[SCon::CARD_NAME => '神', SCon::START_DATE => TestDateUtil::formatYesterday(),
             SCon::END_DATE => TestDateUtil::formatYesterday()], $this->condition_all()]
         ];
