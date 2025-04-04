@@ -28,8 +28,8 @@ class ArrivalLogSearchTest extends TestCase
     {
         parent::setUp();
         $this->seed('TruncateAllTables');
-        $this->seed('DatabaseSeeder');
         $this->seed('TestExpansionSeeder');
+        $this->seed('DatabaseSeeder');
         $this->seed('TestCardInfoSeeder');
         $this->seed('TestStockpileSeeder');
         $this->seed('TestArrivalLogSeeder');

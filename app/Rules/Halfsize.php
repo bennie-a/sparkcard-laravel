@@ -22,14 +22,4 @@ class Halfsize implements ValidationRule
             $fail('validation.halfsize')->translate();
         }
      }
-
-    // /**
-    //  * Get the validation error message.
-    //  *
-    //  * @return string
-    //  */
-    // public function message()
-    // {
-    //     return trans('validation.halfsize');
-    // }
 }

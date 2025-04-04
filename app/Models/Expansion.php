@@ -16,7 +16,7 @@ class Expansion extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = ['notion_id', 'base_id', 'name', 'attr', 'release_date'];
+    protected $fillable = ['id', 'notion_id', 'name', 'attr', 'release_date'];
 
     public function cardinfo()
     {
@@ -39,6 +39,11 @@ class Expansion extends Model
      */
     public static function findByNotionId(string $notionId) {
         return Expansion::where('notion_id', $notionId)->first();
+    }
+
+    public static function findBySetCode(string $setCode) {
+        return Expansion::where('attr', $setCode)->first();
+
     }
 
 }

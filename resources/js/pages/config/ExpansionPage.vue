@@ -28,31 +28,36 @@
         >
             <thead>
                 <tr>
-                    <th class="five wide">名称</th>
-                    <th>略称</th>
+                    <th class="">名称</th>
+                    <th class="">略称</th>
                     <th>リリース日</th>
-                    <th class="center aligned">カード登録件数</th>
-                    <th class="">カード追加</th>
+                    <th class="one wide center aligned">カード件数</th>
+                    <th class="center aligned">カード登録</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="ex in this.$store.getters.card" :key="ex">
                     <td>{{ ex.name }}</td>
-                    <td>{{ ex.attr }}</td>
-                    <td>{{ ex.release_date }}</td>
-                    <td v-if="ex.count != 0" class="positive center aligned">
-                        {{ ex.count }}
+                    <td class="one wide">{{ ex.attr }}</td>
+                    <td class="one wide">{{ ex.release_date }}</td>
+                    <td v-if="ex.count != 0" class="one wide positive center aligned">
+                        {{ ex.count }}件
                     </td>
                     <td v-else class="negative center aligned">
-                        {{ ex.count }}
+                        {{ ex.count }}件
                     </td>
-                    <td>
-                        <button
-                            class="ui button teal basic"
-                            @click="toPostCardPage(ex.name, ex.attr)"
-                        >
-                            追加する
-                        </button>
+                    <td class="two wide right aligned">
+                        <div class="ui buttons">
+                            <button
+                                class="ui button teal"
+                                @click="toPostCardPage(ex.name, ex.attr)"
+                            >
+                            <i class="plus circle icon"></i>1件登録
+                            </button>
+                            <div class="or"></div>
+                            <button class="ui button teal" @click="toCsvCardPage(ex.attr)">
+                                <i class="file alternate icon"></i>一括登録</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -80,21 +85,28 @@ export default {
         show: function () {
             this.$router.push("/config/expansion/post");
         },
+        // カード登録画面に遷移する。
         toPostCardPage: function (setname, attr) {
-            console.log(attr);
             this.$router.push({
                 name: "PostCardInfo",
                 params: { setname: setname, attr: attr },
             });
         },
+        // カードCSV登録画面に遷移する。
+        toCsvCardPage:function(attr) {
+            this.$router.push(
+                {
+                    name:"CardInfoCsvPage",
+                    params:{attr:attr}
+                }
+            );
+        },
         search: async function () {
-            console.log(this.keyword);
             this.$store.dispatch("clearCards");
             this.$store.dispatch("setLoad", true);
             const query = { params: { query: this.keyword } };
             const success = function (response, store, query) {
                 store.dispatch("setCard", response.data);
-                // store.dispatch("expansion/result", response.data);
             };
             const fail = function (e, store, query) {
                 const data = e.response.data;

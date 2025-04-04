@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Libs\CarbonFormatUtil;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpDBResource extends JsonResource
@@ -15,8 +16,10 @@ class ExpDBResource extends JsonResource
     public function toArray($request)
     {
         return [
+                'notion_id' => $this->notion_id,
                 'name' => $this->name,
                 'attr' => $this->attr,
+                'release_date' => CarbonFormatUtil::toDateString($this->release_date)
             ];
     }
 }
