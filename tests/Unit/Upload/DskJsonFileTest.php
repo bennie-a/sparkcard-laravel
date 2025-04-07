@@ -24,6 +24,8 @@ class DskJsonFileTest extends AbstractCardJsonFileTest {
     public function excludeprovider() {
         return [
             '拡張アート' => ['370'],
+            'フラクチャー・Foil' => ['396'],
+            'テクスチャー・Foil' => ['406']
         ];
     }
    
