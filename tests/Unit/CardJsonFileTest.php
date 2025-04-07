@@ -3,10 +3,7 @@
 namespace Tests\Unit;
 
 use App\Enum\CardColor;
-use App\Facades\ScryfallServ;
-use App\Models\CardInfo;
 use Illuminate\Http\Response;
-use Tests\TestCase;
 use Tests\Trait\PostApiAssertions;
 use Tests\Unit\Upload\AbstractCardJsonFileTest;
 
@@ -16,7 +13,6 @@ use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNotSame;
 use App\Services\Constant\CardConstant as Con;
-use App\Services\Constant\StockpileHeader;
 
 /**
  * カード情報ファイルアップロードのテスト
@@ -92,17 +88,6 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         ];
     }
 
-    /**
-     * 特別版の特定に関するテスト
-     * @dataProvider specialdataprovider
-     */
-    public function test_promotype(string $filename, array $expected) {
-        $result = $this->execute($filename);
-        $actualcard = $this->filtering_card($result, $expected);
-        assertNotEmpty($actualcard, '該当カードの有無');
-        assertEquals($expected[Con::PROMOTYPE], $actualcard[Con::PROMOTYPE], 'プロモタイプ');
-    }
-
     protected function filtering_card(array $result, array $expected) {
         $filterd = array_filter($result, function($a) use($expected){
             if ($a[self::NAME] == $expected[self::NAME] && $a[Con::PROMOTYPE] == $expected[Con::PROMOTYPE]) {
@@ -113,20 +98,8 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         return $actualcard;
     }
 
-    /**
-     * プロモタイプ別のテスト
-     *
-     * @return array 各テストの入力値
-     */
-    public function specialdataprovider() {
-        return [
-            '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', Con::PROMOTYPE => '絵違い']],
-            'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', Con::PROMOTYPE => 'ハロー・Foil']],
-            'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', Con::PROMOTYPE => 'ボーダレス']],
-        ];
-    }
-
     public function promoProvider() {
+        $this->markTestSkipped('各Exceptionクラスにて実施する');
         return [];
     }
 
@@ -155,47 +128,63 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
     }
 
     /**
-     * 読み込みフィルターの確認テスト
-     * @dataProvider filterProvider
+     * 検索条件に関するテストケース
+     * @dataProvider isDraftProvider
      * @return void
      */
-    public function test_uploadfilter(string $filename, bool $isDraft = false, string $color = '') {
-        $result = $this->execute($filename, 201, $isDraft, $color);
+    public function test_isDraft(string $setcode, bool $isDraft, callable $method) {
+        $result = $this->ok($setcode, $isDraft);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
-            if ($isDraft) {
-                assertEmpty($r[Con::PROMOTYPE], '通常版の確認');
-            }
-            if (!empty($color)) {
-                assertEquals($color, $r['color'], '指定した色の確認');
-            }
+            $method($r);
         }
     }
 
     /**
-     * フィルターのデータ
+     * 絞り込みのテストケース
      *
      * @return void
      */
-    public function filterProvider() {
+    public function isDraftProvider() {
         return [
-            '通常版フィルターのみ' => ['war_short.json', true, ''],
-            '色フィルターのみ' => ['war_short.json', false, 'B'],
-            '通常版フィルターと色フィルター両方' => ['war_short.json', true, 'B']
+            '通常版フィルタがtrue' => ['WAR', true, $this->isOnlyDraft()],
+            '通常版フィルタがfalse' => ['WAR', false, $this->hasPromotype()],
         ];
     }
+
+    /**
+     * カード情報が通常版かどうか検証する。
+     *
+     * @return boolean
+     */
+    private function isOnlyDraft() {
+        return function($r) {
+            $this->assertEmpty($r[Con::PROMOTYPE]);
+        };
+    }
+
+    /**
+     * カード情報に特別版が含まれるか検証する。
+     *
+     * @return boolean
+     */
+    private function hasPromotype() {
+        return function($r) {
+            $this->assertContains($r[Con::PROMOTYPE], ['', '絵違い']);
+        };
+    }
+
 
     /**
      * 色の判別を検証する
      * @dataProvider colorprovider
      * @return void
      */
-    public function test_color(string $filename, string $name, string $scryfallId, string $color) {
-        $result = $this->execute($filename);
-        $actual = $this->findCardById($result, 0, $scryfallId);
-        assertNotNull($actual, "該当カード");
-        assertEquals($name, $actual[self::NAME], "カード名");
-        assertEquals($color, $actual['color']);
+    public function test_color(CardColor $color) {
+        $result = $this->ok('WAR', false, $color->value);
+        foreach($result as $r) {
+            $this->assertEquals($color->value, $r[Con::COLOR], '違う色が抽出された');
+        }
     }
 
     /**
@@ -206,16 +195,14 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      */
     public function colorprovider() {
         return [
-            '白' => ['war_short.json', '規律の絆', 'bb7c78bb-9f2a-47a4-adc4-b497bb38f46f', 'W'],
-            '黒' => ['war_short.json', '鮮血の刃先', 'ac82422c-8ac8-4fbb-b9b9-d0aa23dded61', 'B'],
-            '青' => ['war_short.json', 'ジェイスの投影', 'c4d35a34-01b7-41e1-8491-a6589175d027', 'U'],
-            '赤' => ['war_short.json', '炎の職工、チャンドラ', 'd21a7b23-8827-49f2-ade4-75a602d17743', 'R'],
-            '緑' => ['war_short.json', '群れの声、アーリン', '43261927-7655-474b-ac61-dfef9e63f428', 'G'],
-            '多色' => ['war_short.json', '龍神、ニコル・ボーラス', '98b68dea-a7be-4f99-8a50-4c8cf0e0f7a9', 'M'],
-            'アーティファクト' => ['war_short.json', '静かな潜水艇', 'ae2f3dee-1768-4562-9333-a50b9ee7570f', 'A'],
-            '無色' => ['war_short.json', '大いなる創造者、カーン', '3ec0c0fb-1a4f-45f4-85b7-346a6d3ce2c5', 'L'],
-            '単色の出来事付きカード' => ['woe.json', '恋に落ちた騎士', '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'W'],
-            '多色の出来事付きカード' => ['woe.json', 'イモデーンの徴募兵', '4dbaa855-3f8e-42e6-8ec8-5ffbc5c8acf0', 'M']
+            '色フィルター_白' => [CardColor::WHITE],
+            '色フィルター_黒' => [CardColor::BLACK],
+            '色フィルター_青' => [CardColor::BLUE],
+            '色フィルター_赤' => [CardColor::RED],
+            '色フィルター_緑' => [CardColor::GREEN],
+            '色フィルター_多色' => [CardColor::MULTI],
+            '色フィルター_茶' => [CardColor::ARTIFACT],
+            '色フィルター_無色' => [CardColor::LESS],
         ];
     }
 
@@ -256,30 +243,6 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         $response->assertStatus($statusCode);
         return $response->json();
     }
-
-    private function execute(string $filename, bool $isDraft = false, ?string $color = '') {
-        $header = [
-            'headers' => [
-                "Content-Type" => "application/json",
-                ]
-            ];
-            $json = $this->json_decode($filename);
-            $cards = $json['data']['cards'];
-            $data = [
-                'data' => [
-                    'cards' => $cards,
-                'code' => $json['data']['code']
-                ]
-            ];
-            $query = sprintf('?isDraft=%s&color=%s', $isDraft, $color);
-
-            $response = $this->post('/api/upload/card'.$query, $data, $header);
-            logger()->error($response->json('detail'));
-            $response->assertStatus(Response::HTTP_CREATED);
-            assertEquals($data['data']['code'], $response->json('setCode'), 'Ex略称');
-            $result = $response->json('cards');
-            return $result;
-        }
         
         /**
          * ファイルパスからjsonファイルを取得する。
@@ -294,6 +257,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         }
         
         public function excludeprovider() {
+            $this->markTestSkipped('各Exceptionクラスにて実施する');
             return [
                 // 'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat'],
             ];

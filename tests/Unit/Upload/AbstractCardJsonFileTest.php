@@ -32,7 +32,7 @@ abstract class AbstractCardJsonFileTest extends TestCase{
                 'code' => $json['data']['code']
             ]
         ];
-        $query = sprintf('?setcode=%s&?isDraft=%s&color=%s', $setcode, $isDraft, $color);
+        $query = sprintf('?setcode=%s&isDraft=%s&color=%s', $setcode, $isDraft, $color);
         $response = $this->upload_OK($query, $data);
         $actualCode = $response->json('setCode');
         $this->assertEquals($setcode, $actualCode, 'Ex略称');

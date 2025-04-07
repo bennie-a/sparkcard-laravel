@@ -13,7 +13,8 @@ class WoeJsonFileTest extends AbstractCardJsonFileTest {
      */
     public function promoProvider() {
         return [
-            '出来事付きカード' => ['4', 'draft'],
+            '単色の出来事付きカード' => ['4', 'draft'],
+            '多色の出来事付きカード' => ['229', 'draft']
         ];
     }
 
