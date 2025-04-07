@@ -1,6 +1,8 @@
 <?php
 use App\Services\Constant\SearchConstant as Scon;
 use App\Services\Constant\ArrivalConstant as Acon;
+use App\Services\Constant\StockpileHeader;
+
 return [
 
     /*
@@ -157,7 +159,7 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-        ],
+        ]
     ],
 
     /*
@@ -174,7 +176,8 @@ return [
     'attributes' => [
         Scon::VENDOR_TYPE_ID => '取引先カテゴリID',
         Acon::ARRIVAL_DATE => '入荷日',
-        Scon::CARD_NAME => 'カード名'
+        Scon::CARD_NAME => 'カード名',
+        StockpileHeader::SETCODE => 'エキスパンション略称'
     ],
 
     'values' => [
