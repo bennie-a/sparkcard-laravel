@@ -37,6 +37,7 @@ class TestExpansionSeeder extends Seeder
         Expansion::create(['attr' => 'MH3', 'name' => 'モダンホライゾン3', 'notion_id' => 'xxxxssss-xxxxxe', 'release_date' => '2024-06-14']);
         Expansion::create(['attr' => 'DSK', 'name' => 'ダスクモーン：戦慄の館', 'notion_id' => '132258ea-f797-4913-b107-60d6b2c0505c', 'release_date' => '2024-09-27']);
         Expansion::create(['attr' => 'DFT', 'name' => '霊気走破', 'notion_id' => 'b6e4f2a2-93c8-489c-b1f0-2d7c9azb5f8b', 'release_date' => '2025-02-23']);
+        Expansion::create(['attr' => 'TDM', 'name' => 'タルキール:龍嵐録', 'notion_id' => 'b6e4f2a2-93c8-489c-b1f0-2d7c9azb5fea', 'release_date' => '2025-04-11']);
 
         Expansion::create(['attr' => 'AER', 'name' => '霊気紛争', 'notion_id' => 'd1a7b3c9-82f4-4e1a-b5d2-90c6e8f7a4bd', 'release_date' => '2017-01-20']);
         Expansion::create(['attr' => 'ELD', 'name' => 'エルドレインの王権', 'notion_id' => 'f3c9e1d4-6a2b-47d8-a0c3-b7e5d2f6c8a1', 'release_date' => '2019-10-04']);
