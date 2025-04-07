@@ -1,11 +1,11 @@
 <?php
-
+namespace Tests\Unit\Upload\Rel2023;
 use Tests\Unit\Upload\AbstractCardJsonFileTest;
 
 /**
- * WOTのプロモタイプに関するテストクラス
+ * WOEのプロモタイプに関するテストクラス
  */
-class WotJsonFileTest extends AbstractCardJsonFileTest {
+class WoeJsonFileTest extends AbstractCardJsonFileTest {
     /**
      * 特定の特別版が含まれるか検証するテストデータ
      *
@@ -13,8 +13,7 @@ class WotJsonFileTest extends AbstractCardJsonFileTest {
      */
     public function promoProvider() {
         return [
-            'おとぎ話' => ['1', 'adventure'],
-            'アニメ・ボーダレス' => ['90', 'anime'],
+            '出来事付きカード' => ['4', 'draft'],
         ];
     }
 
@@ -42,6 +41,6 @@ class WotJsonFileTest extends AbstractCardJsonFileTest {
     
     protected function getSetCode():string
     {
-        return 'WOT';
+        return 'WOE';
     }
 }

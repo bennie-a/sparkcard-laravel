@@ -1,8 +1,7 @@
 <?php
-namespace Tests\Unit\Upload;
+namespace Tests\Unit\Upload\Rel2024;
 
-use Tests\Unit\CardJsonFileTest;
-use App\Services\Constant\CardConstant as Con;
+use Tests\Unit\Upload\AbstractCardJsonFileTest;
 
 /**
  * 『ダスクモーン：戦慄の館』のテストケース

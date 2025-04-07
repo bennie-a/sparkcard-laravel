@@ -63,8 +63,6 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             '日本語表記あり_multiverseIdなし' => ['MIR', [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84']],
             '日本語表記なし' =>['BRO',  [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c']],
             '両面カード' => ['MH3' ,[Con::NUMBER => '242', 'multiverseId' => 0,  'scryfallId' => '2a717b98-cdac-416d-bf6c-f6b6638e65d1']],
-            // 'ファイレクシア語' => ['neo.json', ['name' => '発展の暴君、ジン＝ギタクシアス', 'multiverseId' => 0,  'scryfallId' => 'ffa7cbf8-64b2-428e-8991-d8454d724f9f', 'language' => 'PH']],
-            // '出来事付きカード' => ['woe.json', ['name' => '恋に落ちた騎士', self::MULTIVERSEID => 0,  'scryfallId' => '5980a930-c7f8-45e1-a18a-87734d9ed09e', 'language' => 'JP']],
         ];
     }
 
@@ -122,27 +120,9 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      */
     public function specialdataprovider() {
         return [
-            '通常版' => ['war_short.json', [self::NAME => '鮮血の刃先', Con::PROMOTYPE => '']],
             '日本限定カード' => ['war_short.json', [self::NAME => '群れの声、アーリン', Con::PROMOTYPE => '絵違い']],
-            '拡張カード' => ['neo.json', [self::NAME => '発展の暴君、ジン＝ギタクシアス', Con::PROMOTYPE => '拡張アート']],
-            'ブースターファン' => ['neo.json', [self::NAME => '夜明けの空、猗旺', Con::PROMOTYPE => 'ブースターファン']],
-            'ショーケース' => ['neo.json', [self::NAME =>  '発展の暴君、ジン＝ギタクシアス', Con::PROMOTYPE => 'ショーケース']],
-            'フルアート' =>  ['neo.json', [self::NAME =>  '平地(293)', Con::PROMOTYPE => 'フルアート']],
-            'ネオンインク' => ['neo.json', [self::NAME =>  '貪る混沌、碑出告', Con::PROMOTYPE => 'ネオンインク']],
-            'ボーダレス「胆液」ショーケース' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', Con::PROMOTYPE => 'ボーダレス「胆液」ショーケース']],
-            'コンセプトアート' => ['one.json', [self::NAME =>  '機械の母、エリシュ・ノーン', Con::PROMOTYPE => 'コンセプトアート']],
-            'ステップアンドコンプリート' => ['one.json', [self::NAME =>  '永遠の放浪者', Con::PROMOTYPE => 'S&C']],
             'ハロー・Foil' => ['mul.json', [self::NAME =>  '族樹の精霊、アナフェンザ', Con::PROMOTYPE => 'ハロー・Foil']],
-            'テキストレス・フルアート' => ['sch.json', [self::NAME => '月揺らしの騎兵隊', Con::PROMOTYPE => 'テキストレス・フルアート']],
             'ボーダレス' => ['mul.json', [self::NAME => '最後の望み、リリアナ', Con::PROMOTYPE => 'ボーダレス']],
-            '「事件簿」ショーケース' => ['mkm.json', [self::NAME => '古き神々の咆哮、ヤラス', Con::PROMOTYPE => '「事件簿」ショーケース']],
-            '「拡大鏡」ショーケース' => ['mkm.json', [self::NAME => '戦導者の号令', Con::PROMOTYPE => '「拡大鏡」ショーケース']],
-            '大都市ラヴニカ' => ['mkm.json', [self::NAME => '顔を繕う者、ラザーヴ', Con::PROMOTYPE => '大都市ラヴニカ']],
-            '旧枠' => ['mh3.json', [self::NAME => '護衛募集員', Con::PROMOTYPE => '旧枠']],
-            '「プロファイル」ボーダーレス' => ['mh3.json', [self::NAME => '皇国の相談役、真珠耳', Con::PROMOTYPE => '「プロファイル」ボーダーレス']],
-            '「フレームブレイク」ボーダーレス' => ['mh3.json', [self::NAME => '巨大なるカーリア', Con::PROMOTYPE => '「フレームブレイク」ボーダーレス']],
-            '「コンセプトアート」ボーダーレス版エルドラージ' =>
-                     ['mh3.json', [self::NAME => '再誕世界、エムラクール', Con::PROMOTYPE => 'コンセプトアート']],
         ];
     }
 
@@ -171,8 +151,6 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             'エッチングFoil' => ['MUL', "66", ["エッチングFoil"]],
             'S&C・Foil' => ['ONE', "422", ['S&C・Foil']],
             'オイルスリックFoil' => ['ONE', "345", ['Foil']],
-            // 'テクスチャーFoil' => ['ONE', "573",[ 'テクスチャーFoil']],
-            // 'コンフェッティFoil' => ['ONE', "90",[ 'コンフェッティFoil']]
         ];
     }
 
@@ -317,8 +295,6 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         
         public function excludeprovider() {
             return [
-                // '不可視インク仕様' => ['mkm.json', 'Aurelia\'s Vindicator'],
-                // 'シリアル番号付き' => ['mkm.json', 'Aurelia, the Law Above'],
                 // 'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat'],
             ];
         }
