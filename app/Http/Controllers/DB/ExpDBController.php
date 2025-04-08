@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DB;
 
+use App\Exceptions\api\NoContentException;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostExRequest;
@@ -21,8 +22,8 @@ use function Spatie\Ignition\ErrorPage\report;
  * DBのエキスパンション用コントローラークラス
  */
 class ExpDBController extends Controller
-
 {
+    private $service;
     public function __construct (ExpansionService $service) {
         $this->service = $service;
     }
@@ -35,9 +36,9 @@ class ExpDBController extends Controller
     public function index(Request $request) {
         $query = $request->input("query");
         logger()->info('入力パラメータ', [$query]);
-        $list = Expansion::where('attr', 'like', '%'.$query.'%')->limit(5)->get();
+        $list = $this->service->fetch($query);
         if (count($list) == 0) {
-            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_EXPANSION, '検索結果がありません。');
+            throw new NoContentException();
         }
         foreach($list as $exp) {
             logger()->debug($exp->name.':'.$exp->notion_id);
@@ -45,6 +46,11 @@ class ExpDBController extends Controller
             $exp['count'] = $count;
         }
         return response()->json($list, Response::HTTP_OK);
+    }
+
+    public function show($setCode) {
+        $ex = Expansion::findBySetCode($setCode);
+        return response()->json(new ExpDBResource($ex), Response::HTTP_OK);
     }
 
     /**

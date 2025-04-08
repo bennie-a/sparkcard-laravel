@@ -1,5 +1,8 @@
 <template>
     <message-area></message-area>
+    <div v-if="setName != ''">
+    <label class="ui label">{{setName}}[{{setCode}}]
+    </label>
     <article class="mt-1 ui grid segment">
         <div
             class="three wide column middle aligned content ui toggle checkbox"
@@ -28,9 +31,6 @@
     </article>
     <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
-            <div class="inline field">
-                <label>エキスパンション名：</label>{{ setCode }}
-            </div>
             <div class="field">
                 <table class="ui table striped six column">
                     <thead>
@@ -41,7 +41,6 @@
                             <th class="three wide">英名</th>
                             <th>カード仕様</th>
                             <th class="one wide">色</th>
-                            <th class="one wide">言語</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,24 +48,9 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
-                                <!-- <span
-                                    v-if="card.promotype != ''"
-                                    class="sub header"
-                                    >≪{{ card.promotype }}≫</span
-                                > -->
                             </td>
                             <td>
-                                <select v-model="card.promotype">
-                                    <option value="">通常版</option>
-                                    <option value="ショーケース">ショーケース</option>
-                                    <option value="ボーダーレス">ボーダーレス</option>
-                                    <option value="ボックストッパー">ボックストッパー</option>
-                                    <option value="ファーストプレイス・Foil">ファーストプレイス・Foil</option>
-                                    <option value="「最大出力」ボーダーレス">「最大出力」ボーダーレス</option>
-                                    <option value="「ワルなライダー」ボーダーレス">「ワルなライダー」ボーダーレス</option>
-                                    <option value="「グラフィティ・ジャイアント」ボーダーレス">「グラフィティ・ジャイアント」ボーダーレス</option>
-                                    <option value="フルアート">フルアート</option>
-                                </select>
+                                <promo v-model:name="card.promotype" v-model:setcode="setCode"></promo>
                             </td>
                             <td>
                                 {{ card.en_name }}
@@ -78,9 +62,6 @@
                                     :class="colorlabel(card.color)"
                                     >{{ colortext(card.color) }}</label
                                 >
-                            </td>
-                            <td>
-                                {{ card.language }}
                             </td>
                         </tr>
                     </tbody>
@@ -105,12 +86,13 @@
                 </div>
             </div>
         </div>
-        <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        ></loading>
     </article>
+</div>
+    <loading
+        :active="isLoading"
+        :can-cancel="false"
+        :is-full-page="true"
+    ></loading>
 </template>
 <script>
 import Loading from "vue-loading-overlay";
@@ -120,25 +102,31 @@ import ListPagination from "../component/ListPagination.vue";
 import ModalButton from "../component/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
 import FoilTag from "../component/tag/FoilTag.vue";
+import PromoDropdown from "../component/PromoDropdown.vue";
+import {ref} from 'vue';
 
 import axios from "axios";
 export default {
     components: {
         "file-upload": FileUpload,
         "message-area": MessageArea,
-        Loading,
+        "loading":Loading,
         pagination: ListPagination,
         ModalButton: ModalButton,
         foiltag: FoilTag,
+        promo:PromoDropdown
     },
     data() {
         return {
             filename: "ファイルを選択してください",
-            setCode: "",
+            setCode: ref(this.$route.params.attr),
+            setName:"",
             isSkip: false,
             isLoading: false,
             isDraftOnly: false,
             color: "",
+            promoItems:[],
+            name:ref("通常版")
         };
     },
     computed: {
@@ -183,8 +171,18 @@ export default {
             };
         },
     },
-    mounted: function () {
-        // this.$store.dispatch("setLoad", true);
+    mounted: async function () {
+        this.isLoading = true;
+        await axios.get('/api/database/exp/' + this.setCode, {})
+                            .then((response) => {
+                                this.setName = response.data.name;
+                            })
+                            .catch((e) => {
+                                console.error(e.statusCode);
+                            })
+                            .finally(() => {
+                                this.isLoading = false;
+                            });
     },
     methods: {
         upload: async function (file) {
@@ -195,7 +193,7 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
-            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color;
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color+"&setcode=" + this.setCode;
 
             await axios
                 .post("/api/upload/card" + query, file, config)

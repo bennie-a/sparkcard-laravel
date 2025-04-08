@@ -3,10 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Rules\Halfsize;
+use App\Traits\UuidRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostCardDBRequest extends FormRequest
 {
+    use UuidRules;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,7 +32,7 @@ class PostCardDBRequest extends FormRequest
             'en_name'=>'required',
             'color'=>'required',
             'multiverseId' => 'required_without_all:scryfallId,imageurl|integer',
-            'scryfallId' => ['required_without_all:multiverseId,imageurl', new Halfsize],
+            'scryfallId' => ['required_without_all:multiverseId,imageurl', self::uuidrules()],
             'number' => 'required',
             'imageurl' => 'required_without_all:multiverseId,scryfallId',
             'isSkip' => 'nullable|boolean',

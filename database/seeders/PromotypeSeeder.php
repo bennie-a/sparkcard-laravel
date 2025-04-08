@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Expansion;
 use App\Models\Promotype;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,48 +18,86 @@ class PromotypeSeeder extends Seeder
     public function run()
     {
         DB::table('promotype')->truncate();
-        Promotype::create(['attr' => 'jpwalker', 'name' => '絵違い']);
-        Promotype::create(['attr' => 'boosterfun', 'name' => 'ブースターファン']);
-        Promotype::create(['attr' => 'draft', 'name' => '']);
-        Promotype::create(['attr' => 'buyabox', 'name' => 'BOXプロモ特典']);
-        Promotype::create(['attr' => 'textured', 'name' => 'テクスチャー']);
-        Promotype::create(['attr' => 'bundle', 'name' => 'バンドル']);
-        Promotype::create(['attr' => 'showcase', 'name' => 'ショーケース']);
-        Promotype::create(['attr' => 'neonink', 'name' => 'ネオンインク']);
-        Promotype::create(['attr' => 'themepack', 'name' => 'テーマブースター限定']);
-        Promotype::create(['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース']);
-        Promotype::create(['attr' => 'concept', 'name' => 'コンセプトアート']);
-        Promotype::create(['attr' => 'stepandcompleat', 'name' => 'S&C']);
-        Promotype::create(['attr' => 'halofoil', 'name' => 'ハロー・Foil']);
-        Promotype::create(['attr' => 'intropack', 'name' => 'エントリーセット']);
-        Promotype::create(['attr' => 'brawldeck', 'name' => 'ブロールデッキ']);
-        Promotype::create(['attr' => 'fullart', 'name' => 'フルアート']);
-        Promotype::create(['attr' => 'gameday', 'name' => 'ゲームデー']);
-        Promotype::create(['attr' => 'datestamped', 'name' => '日付入りプロモカード']);
-        Promotype::create(['attr' => 'tourney', 'name' => 'トーナメント景品']);
-        Promotype::create(['attr' => 'jpainting', 'name' => '日本画ミスティカルアーカイブ']);
-        Promotype::create(['attr' => 'setpromo', 'name' => 'プレリリース']);
-        Promotype::create(['attr' => 'stamped', 'name' => 'プレリリース']);
-        Promotype::create(['attr' => 'borderless', 'name' => 'ボーダレス']);
-        Promotype::create(['attr' => 'bringafriend', 'name' => 'Bring-a-Friend']);
-        Promotype::create(['attr' => 'textless', 'name' => 'テキストレス・フルアート']);
-        Promotype::create(['attr' => 'adventure', 'name' => 'おとぎ話']);
-        Promotype::create(['attr' => 'anime', 'name' => 'アニメ・ボーダレス']);
-        Promotype::create(['attr' => 'phoilslick', 'name' => 'ファイレクシア語「胆液」']);
-        Promotype::create(['attr' => 'oilslickshowcase', 'name' => 'ショーケース「胆液」']);
-        Promotype::create(['attr' => 'boxtopper', 'name' => 'ボックストッパー']);
-        Promotype::create(['attr' => 'magnified', 'name' => '「拡大鏡」ショーケース']);
-        Promotype::create(['attr' => 'dossier', 'name' => '「事件簿」ショーケース']);
-        Promotype::create(['attr' => 'ravnicacity', 'name' => '大都市ラヴニカ']);
-        Promotype::create(['attr' => 'profiles', 'name' => '「プロファイル」ボーダーレス']);
-        Promotype::create(['attr' => 'flamebreak', 'name' => '「フレームブレイク」ボーダーレス']);
-        Promotype::create(['attr' => 'oldframe', 'name' => '旧枠']);
-        Promotype::create(['attr' => 'doubleexposure', 'name' => '「二重露光」ショーケース']);
-        Promotype::create(['attr' => 'paranormal', 'name' => '「超常」フレーム']);
-        Promotype::create(['attr' => 'mirror', 'name' => '「鏡の怪物」ボーダーレス']);
-        Promotype::create(['attr' => 'maxspeed', 'name' => '「最大出力」ボーダーレス']);
-        Promotype::create(['attr' => 'badassrider', 'name' => '「ワルなライダー」ボーダーレス']);
-        Promotype::create(['attr' => 'graffgiant', 'name' => '「グラフィティ・ジャイアント」ボーダーレス']);
-        Promotype::create(['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil']);
+        
+        $exp_id = 'exp_id';
+        
+        // 共通
+        $com = Expansion::findBySetCode('COM');
+        // WAR
+        $war = Expansion::findBySetCode('WAR');
+        // NEO
+        $neo = Expansion::findBySetCode('NEO');
+        // MOM
+        $mom = Expansion::findBySetCode('MOM');
+        // AER
+        $aer = Expansion::findBySetCode('AER');
+        // ELD
+        $eld = Expansion::findBySetCode('ELD');
+        // STX
+        $stx = Expansion::findBySetCode('STX');      
+        // SCH(Store Championship)
+        $sch = Expansion::findBySetCode('SCH');
+        // WOE
+        $woe = Expansion::findBySetCode('WOE');
+        
+        // ONE
+        $one = Expansion::findBySetCode('ONE');
+        // MKM
+        $mkm = Expansion::findBySetCode('MKM');
+        // MH3
+        $mh3 = Expansion::findBySetCode('MH3');
+        // DSK
+        $dsk = Expansion::findBySetCode('DSK');
+        // DFT
+        $dft = Expansion::findBySetCode('DFT');
+        // TDM
+        $tdm = Expansion::findBySetCode('TDM');
+        $items = [
+            ['attr' => 'draft', 'name' => '', $exp_id => $com->notion_id],
+            ['attr' => 'showcase', 'name' => 'ショーケース', $exp_id => $com->notion_id],
+            ['attr' => 'buyabox', 'name' => 'BOXプロモ特典', $exp_id => $com->notion_id],
+            ['attr' => 'boosterfun', 'name' => 'ブースターファン', $exp_id => $com->notion_id],
+            ['attr' => 'fullart', 'name' => 'フルアート', $exp_id => $com->notion_id],
+            ['attr' => 'boxtopper', 'name' => 'ボックストッパー', $exp_id => $com->notion_id],
+            ['attr' => 'borderless', 'name' => 'ボーダーレス', $exp_id => $com->notion_id],
+            ['attr' => 'bundle', 'name' => 'バンドル', $exp_id => $com->notion_id],
+            ['attr' => 'tourney', 'name' => 'トーナメント景品', $exp_id => $com->notion_id],
+            ['attr' => 'stamped', 'name' => 'プレリリース', $exp_id => $com->notion_id],
+            ['attr' => 'jpwalker', 'name' => '絵違い', $exp_id => $war->notion_id],
+            ['attr' => 'neonink', 'name' => 'ネオンインク', $exp_id => $neo->notion_id],
+            ['attr' => 'halofoil', 'name' => 'ハロー・Foil', $exp_id => $mom->notion_id],
+            ['attr' => 'intropack', 'name' => 'エントリーセット', $exp_id => $aer->notion_id],
+            ['attr' => 'brawldeck', 'name' => 'ブロールデッキ', $exp_id => $eld->notion_id],
+            ['attr' => 'jpainting', 'name' => '日本画ミスティカルアーカイブ', $exp_id => $stx->notion_id],
+            ['attr' => 'textless', 'name' => 'テキストレス・フルアート', $exp_id => $sch->notion_id],
+            ['attr' => 'bringafriend', 'name' => 'Bring-a-Friend', $exp_id => $sch->notion_id],
+            ['attr' => 'adventure', 'name' => 'おとぎ話', $exp_id => $woe->notion_id],
+            ['attr' => 'anime', 'name' => 'アニメ・ボーダーレス', $exp_id => $woe->notion_id],
+            ['attr' => 'phoilslick', 'name' => 'ファイレクシア語「胆液」', $exp_id => $one->notion_id],
+            ['attr' => 'oilslickshowcase', 'name' => 'ショーケース「胆液」', $exp_id => $one->notion_id],
+            ['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース', $exp_id => $one->notion_id],
+            ['attr' => 'stepandcompleat', 'name' => 'S&C', $exp_id => $one->notion_id],
+            ['attr' => 'concept', 'name' => 'コンセプトアート', $exp_id => $one->notion_id],
+            ['attr' => 'magnified', 'name' => '「拡大鏡」ショーケース', $exp_id => $mkm->notion_id],
+            ['attr' => 'dossier', 'name' => '「事件簿」ショーケース', $exp_id => $mkm->notion_id],
+            ['attr' => 'ravnicacity', 'name' => '大都市ラヴニカ', $exp_id => $mkm->notion_id],
+            ['attr' => 'profiles', 'name' => '「プロファイル」ボーダーレス', $exp_id => $mkm->notion_id],
+            ['attr' => 'flamebreak', 'name' => '「フレームブレイク」ボーダーレス', $exp_id => $mh3->notion_id],
+            ['attr' => 'oldframe', 'name' => '旧枠', $exp_id => $mh3->notion_id],
+            ['attr' => 'doubleexposure', 'name' => '「二重露光」ショーケース', $exp_id => $dsk->notion_id],
+            ['attr' => 'paranormal', 'name' => '「超常」フレーム', $exp_id => $dsk->notion_id],
+            ['attr' => 'mirror', 'name' => '「鏡の怪物」ボーダーレス', $exp_id => $dsk->notion_id],
+            ['attr' => 'maxspeed', 'name' => '「最大出力」ボーダーレス', $exp_id => $dft->notion_id],
+            ['attr' => 'badassrider', 'name' => '「ワルなライダー」ボーダーレス', $exp_id => $dft->notion_id],
+            ['attr' => 'graffgiant', 'name' => '「グラフィティ・ジャイアント」ボーダーレス', $exp_id => $dft->notion_id],
+            ['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil', $exp_id => $dft->notion_id],
+            ['attr' => 'reversible_card', 'name' => 'リバーシブル・ボーダーレス', $exp_id => $tdm->notion_id],
+            ['attr' => 'dragonic', 'name' => '「ドラコニック」ショーケース', $exp_id => $tdm->notion_id],
+            ['attr' => 'clan', 'name' => '「氏族」ショーケース', $exp_id => $tdm->notion_id],
+        ]; 
+
+        foreach($items as $i ){
+            Promotype::create($i);
+        }
     }
 }

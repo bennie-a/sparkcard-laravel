@@ -283,7 +283,7 @@ abstract class AbstractCard implements CardInfoInterface {
      *
      * @return boolean
      */
-    protected function isFullArt() {
+    public function isFullArt() {
         $frameEffects = $this->frameEffects();
         return $frameEffects === Con::FULLART;
     }

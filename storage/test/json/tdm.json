@@ -1,0 +1,1828 @@
+{
+    "data": {
+        "baseSetSize": 291,
+        "code": "TDM",
+        "cards": [
+            {
+                "artist": "Matt Stewart",
+                "artistIds": [
+                    "20871267-2d8a-41d5-b03a-be3d557c5734"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 23392,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "\"Kin and clan call to me—and I will always answer.\"",
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "311987",
+                    "cardKingdomId": "311041",
+                    "mcmId": "817810",
+                    "mcmMetaId": "447308",
+                    "mtgjsonV4Id": "21b73272-ec1b-5902-97e3-d25e84eaa772",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "29957f49-9a6b-42f6-b2fb-b48f653ab725",
+                    "scryfallIllustrationId": "0a5e1f80-862e-40a9-ada2-8e0726cc5eda",
+                    "scryfallOracleId": "659bc01c-fa60-4d00-bdad-5bca1d2a978f",
+                    "tcgplayerProductId": "623879"
+                },
+                "keywords": [
+                    "First strike",
+                    "Flash"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{2}{W}",
+                "manaValue": 3.0,
+                "name": "Anafenza, Unyielding Lineage",
+                "number": "2",
+                "power": "2",
+                "printings": [
+                    "TDM"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/9749e3a44f4992f0",
+                    "cardKingdomFoil": "https://mtgjson.com/links/9876a3ca84408f1d",
+                    "cardmarket": "https://mtgjson.com/links/19281d4de21d3c76",
+                    "tcgplayer": "https://mtgjson.com/links/2938e6f994408ff5"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Spirit",
+                    "Soldier"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Flash\nFirst strike\nWhenever another nontoken creature you control dies, Anafenza endures 2. (Put two +1/+1 counters on it or create a 2/2 white Spirit creature token.)",
+                "toughness": "2",
+                "type": "Legendary Creature — Spirit Soldier",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "760e6b1a-c1c9-5f1a-be46-a1fb6b85245b",
+                "variations": [
+                    "82df3262-c519-5a46-a8e4-fb3ad5cc03ed"
+                ],
+                "watermark": "abzan"
+            },
+            {
+                "artist": "Ron Spencer",
+                "artistIds": [
+                    "dab52c11-0564-4207-a4a1-c1735c946a65"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecSaltiness": 0.45,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312001",
+                    "cardKingdomId": "311055",
+                    "mtgjsonV4Id": "cad4e166-efe8-5e08-a7d7-28ad0641c7dc",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "3e8c67e5-587a-43b2-af47-bbad1f8b52e9",
+                    "scryfallIllustrationId": "6e087143-8985-4a8d-bbba-3b2b64dd852e",
+                    "scryfallOracleId": "bc71ebf6-2056-41f7-be35-b2e5c34afa99",
+                    "tcgplayerProductId": "623901"
+                },
+                "isFullArt": true,
+                "isReprint": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "predh": "Legal",
+                    "premodern": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Plains",
+                "number": "287",
+                "printings": [
+                    "10E",
+                    "2ED",
+                    "2XM",
+                    "30A",
+                    "3ED",
+                    "40K",
+                    "4BB",
+                    "4ED",
+                    "5ED",
+                    "6ED",
+                    "7ED",
+                    "8ED",
+                    "9ED",
+                    "ACR",
+                    "AFR",
+                    "AKH",
+                    "AKR",
+                    "ALA",
+                    "ANA",
+                    "ANB",
+                    "ARC",
+                    "ATH",
+                    "AVR",
+                    "BBD",
+                    "BFZ",
+                    "BLB",
+                    "BRB",
+                    "BRC",
+                    "BRO",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "C19",
+                    "CED",
+                    "CEI",
+                    "CHK",
+                    "CLB",
+                    "CLU",
+                    "CM2",
+                    "CMA",
+                    "CMD",
+                    "CMM",
+                    "CMR",
+                    "CST",
+                    "DDC",
+                    "DDE",
+                    "DDF",
+                    "DDG",
+                    "DDH",
+                    "DDI",
+                    "DDK",
+                    "DDL",
+                    "DDN",
+                    "DDO",
+                    "DDP",
+                    "DDQ",
+                    "DFT",
+                    "DMR",
+                    "DMU",
+                    "DOM",
+                    "DSK",
+                    "DTK",
+                    "DVD",
+                    "E01",
+                    "ELD",
+                    "FBB",
+                    "FDN",
+                    "FRF",
+                    "G17",
+                    "GK1",
+                    "GK2",
+                    "GN2",
+                    "GN3",
+                    "GNT",
+                    "GRN",
+                    "GS1",
+                    "H09",
+                    "HBG",
+                    "HOP",
+                    "HOU",
+                    "ICE",
+                    "IKO",
+                    "INR",
+                    "INV",
+                    "ISD",
+                    "ITP",
+                    "J14",
+                    "J22",
+                    "J25",
+                    "JMP",
+                    "KHM",
+                    "KLD",
+                    "KLR",
+                    "KTK",
+                    "LCI",
+                    "LEA",
+                    "LEB",
+                    "LRW",
+                    "LTR",
+                    "M10",
+                    "M11",
+                    "M12",
+                    "M13",
+                    "M14",
+                    "M15",
+                    "M19",
+                    "M20",
+                    "M21",
+                    "MBS",
+                    "MD1",
+                    "ME1",
+                    "ME3",
+                    "MH2",
+                    "MH3",
+                    "MID",
+                    "MIR",
+                    "MKM",
+                    "MMQ",
+                    "MOM",
+                    "MRD",
+                    "NEO",
+                    "NPH",
+                    "ODY",
+                    "OLEP",
+                    "ONE",
+                    "ONS",
+                    "ORI",
+                    "OTJ",
+                    "P02",
+                    "P23",
+                    "PAL00",
+                    "PAL01",
+                    "PAL03",
+                    "PAL04",
+                    "PAL05",
+                    "PAL06",
+                    "PAL99",
+                    "PALP",
+                    "PANA",
+                    "PARL",
+                    "PC2",
+                    "PCA",
+                    "PDGM",
+                    "PELP",
+                    "PF19",
+                    "PF20",
+                    "PGPX",
+                    "PGRU",
+                    "PIP",
+                    "PLST",
+                    "PMPS",
+                    "PMPS06",
+                    "PMPS07",
+                    "PMPS08",
+                    "PMPS09",
+                    "PMPS10",
+                    "PMPS11",
+                    "POR",
+                    "PPP1",
+                    "PRM",
+                    "PRW2",
+                    "PRWK",
+                    "PS11",
+                    "PSAL",
+                    "PSS2",
+                    "PSS3",
+                    "PSS4",
+                    "PTC",
+                    "PTK",
+                    "PZ2",
+                    "RAV",
+                    "REX",
+                    "RIX",
+                    "RNA",
+                    "ROE",
+                    "RQS",
+                    "RTR",
+                    "S99",
+                    "SCD",
+                    "SHM",
+                    "SIR",
+                    "SLD",
+                    "SLP",
+                    "SNC",
+                    "SOI",
+                    "SOM",
+                    "STX",
+                    "SUM",
+                    "TD0",
+                    "TD2",
+                    "TDM",
+                    "THB",
+                    "THS",
+                    "TMP",
+                    "TPR",
+                    "TSP",
+                    "UGL",
+                    "UND",
+                    "UNF",
+                    "UNH",
+                    "USG",
+                    "UST",
+                    "VOW",
+                    "WAR",
+                    "WC00",
+                    "WC02",
+                    "WC03",
+                    "WC04",
+                    "WC97",
+                    "WC98",
+                    "WHO",
+                    "WOE",
+                    "XANA",
+                    "XLN",
+                    "ZEN",
+                    "ZNR"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/f25460ee5f356abe",
+                    "cardKingdomFoil": "https://mtgjson.com/links/dd0e82d7b85f1945",
+                    "tcgplayer": "https://mtgjson.com/links/9b83c9551affb303"
+                },
+                "rarity": "common",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Plains"
+                ],
+                "supertypes": [
+                    "Basic"
+                ],
+                "text": "({T}: Add {W}.)",
+                "type": "Basic Land — Plains",
+                "types": [
+                    "Land"
+                ],
+                "uuid": "0812ab63-65f6-5923-a54b-18ddf265ea3a",
+                "variations": [
+                    "14d18dda-5a48-5bb3-adc9-b8223560cbd2",
+                    "17166409-51ab-50bc-8259-35c538537473",
+                    "1cfa64b7-ea43-5b5f-ac64-121ec8b622e3"
+                ]
+            },
+            {
+                "artist": "Ron Spencer",
+                "artistIds": [
+                    "dab52c11-0564-4207-a4a1-c1735c946a65"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "G"
+                ],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecSaltiness": 0.38,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312017",
+                    "cardKingdomId": "311071",
+                    "mtgjsonV4Id": "59116fbf-b8d2-50a4-99ad-cbc868975bd9",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "7e33e540-2828-46ad-a441-366552843d9c",
+                    "scryfallIllustrationId": "eabf3f1f-cd65-4051-b97f-cf752ba89f96",
+                    "scryfallOracleId": "b34bb2dc-c1af-4d77-b0b3-a0fb342a5fc6",
+                    "tcgplayerProductId": "623898"
+                },
+                "isFullArt": true,
+                "isReprint": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "explorer": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "penny": "Legal",
+                    "pioneer": "Legal",
+                    "predh": "Legal",
+                    "premodern": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Forest",
+                "number": "291",
+                "printings": [
+                    "10E",
+                    "2ED",
+                    "2XM",
+                    "30A",
+                    "3ED",
+                    "40K",
+                    "4BB",
+                    "4ED",
+                    "5ED",
+                    "6ED",
+                    "7ED",
+                    "8ED",
+                    "9ED",
+                    "ACR",
+                    "AFR",
+                    "AKH",
+                    "AKR",
+                    "ALA",
+                    "ANA",
+                    "ANB",
+                    "ARC",
+                    "ATH",
+                    "AVR",
+                    "BBD",
+                    "BFZ",
+                    "BLB",
+                    "BRB",
+                    "BRO",
+                    "BTD",
+                    "C13",
+                    "C14",
+                    "C15",
+                    "C16",
+                    "C17",
+                    "C18",
+                    "C19",
+                    "CED",
+                    "CEI",
+                    "CHK",
+                    "CLB",
+                    "CLU",
+                    "CM2",
+                    "CMA",
+                    "CMD",
+                    "CMM",
+                    "CMR",
+                    "CST",
+                    "DD1",
+                    "DDD",
+                    "DDE",
+                    "DDG",
+                    "DDH",
+                    "DDJ",
+                    "DDL",
+                    "DDM",
+                    "DDO",
+                    "DDP",
+                    "DDR",
+                    "DDS",
+                    "DDU",
+                    "DFT",
+                    "DKM",
+                    "DMR",
+                    "DMU",
+                    "DOM",
+                    "DPA",
+                    "DSK",
+                    "DTK",
+                    "E01",
+                    "ELD",
+                    "EVG",
+                    "FBB",
+                    "FDN",
+                    "FRF",
+                    "G17",
+                    "GK1",
+                    "GK2",
+                    "GN2",
+                    "GN3",
+                    "GNT",
+                    "GRN",
+                    "GS1",
+                    "GVL",
+                    "H09",
+                    "HBG",
+                    "HOP",
+                    "HOU",
+                    "ICE",
+                    "IKO",
+                    "INR",
+                    "INV",
+                    "ISD",
+                    "ITP",
+                    "J14",
+                    "J22",
+                    "J25",
+                    "JMP",
+                    "KHM",
+                    "KLD",
+                    "KLR",
+                    "KTK",
+                    "LCI",
+                    "LEA",
+                    "LEB",
+                    "LRW",
+                    "LTR",
+                    "M10",
+                    "M11",
+                    "M12",
+                    "M13",
+                    "M14",
+                    "M15",
+                    "M19",
+                    "M20",
+                    "M21",
+                    "MBS",
+                    "ME1",
+                    "ME3",
+                    "MH2",
+                    "MH3",
+                    "MID",
+                    "MIR",
+                    "MKM",
+                    "MMQ",
+                    "MOM",
+                    "MRD",
+                    "NEO",
+                    "NPH",
+                    "ODY",
+                    "OLEP",
+                    "ONE",
+                    "ONS",
+                    "ORI",
+                    "OTJ",
+                    "P02",
+                    "P23",
+                    "PAL00",
+                    "PAL01",
+                    "PAL03",
+                    "PAL04",
+                    "PAL05",
+                    "PAL06",
+                    "PAL99",
+                    "PALP",
+                    "PANA",
+                    "PARL",
+                    "PC2",
+                    "PCA",
+                    "PELP",
+                    "PF19",
+                    "PF20",
+                    "PGPX",
+                    "PGRU",
+                    "PIP",
+                    "PL25",
+                    "PLST",
+                    "PMPS",
+                    "PMPS06",
+                    "PMPS07",
+                    "PMPS08",
+                    "PMPS09",
+                    "PMPS10",
+                    "PMPS11",
+                    "POR",
+                    "PPP1",
+                    "PRM",
+                    "PRW2",
+                    "PRWK",
+                    "PS11",
+                    "PSAL",
+                    "PSS2",
+                    "PSS3",
+                    "PSS4",
+                    "PTC",
+                    "PTK",
+                    "PZ2",
+                    "RAV",
+                    "REX",
+                    "RIX",
+                    "RNA",
+                    "ROE",
+                    "RQS",
+                    "RTR",
+                    "S99",
+                    "SCD",
+                    "SHM",
+                    "SIR",
+                    "SLD",
+                    "SNC",
+                    "SOI",
+                    "SOM",
+                    "STX",
+                    "SUM",
+                    "TD0",
+                    "TD2",
+                    "TDM",
+                    "THB",
+                    "THS",
+                    "TMP",
+                    "TPR",
+                    "TSP",
+                    "UGL",
+                    "UND",
+                    "UNF",
+                    "UNH",
+                    "USG",
+                    "UST",
+                    "VOW",
+                    "WAR",
+                    "WC00",
+                    "WC01",
+                    "WC02",
+                    "WC03",
+                    "WC04",
+                    "WC97",
+                    "WC98",
+                    "WC99",
+                    "WHO",
+                    "WOE",
+                    "XANA",
+                    "XLN",
+                    "ZEN",
+                    "ZNR"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/379b0e44d7e3badf",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f9e4eb7a85cfbdb0",
+                    "tcgplayer": "https://mtgjson.com/links/ca79359607a61854"
+                },
+                "rarity": "common",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Forest"
+                ],
+                "supertypes": [
+                    "Basic"
+                ],
+                "text": "({T}: Add {G}.)",
+                "type": "Basic Land — Forest",
+                "types": [
+                    "Land"
+                ],
+                "uuid": "a29f61fa-fdc5-5ac1-bf1c-a5541f843d5c",
+                "variations": [
+                    "620a04ad-e485-51e1-a5a8-2a1a277e1dbf",
+                    "4699678e-00c2-57fd-9315-f4e95d0002fa",
+                    "96e0cf4b-a8b0-5f04-9c30-affa24189153"
+                ]
+            },
+            {
+                "artist": "Cabrol",
+                "artistIds": [
+                    "31eddcd4-22e7-4b8b-8a46-6f841124f378"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B"
+                ],
+                "colors": [
+                    "B"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 25116,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase",
+                    "enchantment"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312309",
+                    "cardKingdomId": "311195",
+                    "mcmId": "817958",
+                    "mcmMetaId": "447331",
+                    "mtgjsonV4Id": "bf7abad3-7b93-502a-85ad-a863420d89b9",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "a8f19964-b37b-4877-bdd5-c5c3022439ef",
+                    "scryfallIllustrationId": "976b74ce-bd62-4326-9ede-bba742654bc5",
+                    "scryfallOracleId": "4c55ca3b-1254-4d44-96ac-1e1cadaf49f5",
+                    "tcgplayerProductId": "623946"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Surveil"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{1}{B}",
+                "manaValue": 2.0,
+                "name": "Corroding Dragonstorm",
+                "number": "297",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/e473ef51ab273802",
+                    "cardKingdomFoil": "https://mtgjson.com/links/de8760b713890a88",
+                    "cardmarket": "https://mtgjson.com/links/94520a415f2f0252",
+                    "tcgplayer": "https://mtgjson.com/links/7c37a7226bb3bb1f"
+                },
+                "rarity": "uncommon",
+                "setCode": "TDM",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "When this enchantment enters, each opponent loses 2 life and you gain 2 life. Surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)\nWhen a Dragon you control enters, return this enchantment to its owner's hand.",
+                "type": "Enchantment",
+                "types": [
+                    "Enchantment"
+                ],
+                "uuid": "f79a344c-2f52-54a2-9799-c1822e5cc3e3",
+                "variations": [
+                    "00d93aa3-4e25-5022-82f8-65a542efd0f3"
+                ]
+            },
+            {
+                "artist": "DZO",
+                "artistIds": [
+                    "b967e930-39f5-4fbb-a054-800e5d330ee0"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B"
+                ],
+                "colors": [
+                    "B"
+                ],
+                "convertedManaCost": 6.0,
+                "edhrecRank": 27046,
+                "faceConvertedManaCost": 6.0,
+                "faceManaValue": 6.0,
+                "faceName": "Feral Deathgorger",
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312344",
+                    "cardKingdomId": "311541",
+                    "mcmId": "819509",
+                    "mcmMetaId": "447428",
+                    "mtgjsonV4Id": "052ffb93-8e34-5703-b8ac-6a8a29d9b293",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "58c446e6-8ffb-45ed-aca2-95161ac88d5c",
+                    "scryfallIllustrationId": "703b3cce-4793-4f02-b777-20d1246020f1",
+                    "scryfallOracleId": "1722f814-2d4e-4d59-9b74-10ef8e89def9",
+                    "tcgplayerProductId": "624562"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Deathtouch",
+                    "Flying"
+                ],
+                "language": "English",
+                "layout": "adventure",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{5}{B}",
+                "manaValue": 6.0,
+                "name": "Feral Deathgorger // Dusk Sight",
+                "number": "298",
+                "otherFaceIds": [
+                    "c5208366-64c8-5a77-9c78-45b659120eeb"
+                ],
+                "power": "3",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/201930e6624efe33",
+                    "cardKingdomFoil": "https://mtgjson.com/links/dbe7283de0a0f447",
+                    "cardmarket": "https://mtgjson.com/links/a3a753c137860dfd",
+                    "tcgplayer": "https://mtgjson.com/links/085f238b487046b2"
+                },
+                "rarity": "common",
+                "setCode": "TDM",
+                "side": "a",
+                "subtypes": [
+                    "Dragon"
+                ],
+                "supertypes": [],
+                "text": "Flying, deathtouch\nWhen this creature enters, exile up to two target cards from a single graveyard.",
+                "toughness": "5",
+                "type": "Creature — Dragon",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "6f1b3818-22a3-5675-bc28-5e7fa98a9076",
+                "variations": [
+                    "b2bbcbbd-6695-5c01-9b4f-408c0d5d880c"
+                ]
+            },
+            {
+                "artist": "DZO",
+                "artistIds": [
+                    "b967e930-39f5-4fbb-a054-800e5d330ee0"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B"
+                ],
+                "colors": [
+                    "B"
+                ],
+                "convertedManaCost": 6.0,
+                "edhrecRank": 27046,
+                "faceConvertedManaCost": 2.0,
+                "faceManaValue": 2.0,
+                "faceName": "Dusk Sight",
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "mcmId": "819509",
+                    "mcmMetaId": "447428",
+                    "mtgjsonV4Id": "85889ac2-640c-584d-9812-80ca95b51df7",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "58c446e6-8ffb-45ed-aca2-95161ac88d5c",
+                    "scryfallIllustrationId": "703b3cce-4793-4f02-b777-20d1246020f1",
+                    "scryfallOracleId": "1722f814-2d4e-4d59-9b74-10ef8e89def9",
+                    "tcgplayerProductId": "624562"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "adventure",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{1}{B}",
+                "manaValue": 6.0,
+                "name": "Feral Deathgorger // Dusk Sight",
+                "number": "298",
+                "otherFaceIds": [
+                    "6f1b3818-22a3-5675-bc28-5e7fa98a9076"
+                ],
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardmarket": "https://mtgjson.com/links/ac05e5b881c1fa5b",
+                    "tcgplayer": "https://mtgjson.com/links/f51cc3ffd8870300"
+                },
+                "rarity": "common",
+                "setCode": "TDM",
+                "side": "b",
+                "subtypes": [
+                    "Omen"
+                ],
+                "supertypes": [],
+                "text": "Put a +1/+1 counter on up to one target creature. Draw a card. (Then shuffle this card into its owner's library.)",
+                "type": "Sorcery — Omen",
+                "types": [
+                    "Sorcery"
+                ],
+                "uuid": "c5208366-64c8-5a77-9c78-45b659120eeb",
+                "variations": [
+                    "0120acd4-e5ae-57eb-87fd-c1d8599a2e22"
+                ]
+            },
+            {
+                "artist": "DZO",
+                "artistIds": [
+                    "b967e930-39f5-4fbb-a054-800e5d330ee0"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "R"
+                ],
+                "colors": [
+                    "R"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 19792,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase",
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "310868",
+                    "cardKingdomId": "310867",
+                    "mtgjsonV4Id": "3fed9726-a6a2-53c3-94c1-e1d21c8b293d",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "57c03255-e3dc-44c2-982b-7efa188280df",
+                    "scryfallIllustrationId": "6b190674-b05a-4c50-998e-ee237bd3dc16",
+                    "scryfallOracleId": "71cb48e2-2328-471c-a04a-7b6461f378f4",
+                    "tcgplayerProductId": "619701"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Treasure"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{1}{R}",
+                "manaValue": 2.0,
+                "name": "Sarkhan, Dragon Ascendant",
+                "number": "302",
+                "power": "2",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/ebe23f17cb750f73",
+                    "cardKingdomFoil": "https://mtgjson.com/links/2443a74984364a38",
+                    "tcgplayer": "https://mtgjson.com/links/666728f34a51ddec"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Human",
+                    "Druid"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "When Sarkhan enters, you may behold a Dragon. If you do, create a Treasure token. (To behold a Dragon, choose a Dragon you control or reveal a Dragon card from your hand.)\nWhenever a Dragon you control enters, put a +1/+1 counter on Sarkhan. Until end of turn, Sarkhan becomes a Dragon in addition to its other types and gains flying.",
+                "toughness": "2",
+                "type": "Legendary Creature — Human Druid",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "18d9cd0c-3903-528b-99ad-ebf4fecda30a",
+                "variations": [
+                    "a496e8ba-a448-58c1-9332-973fd04d7027",
+                    "7b0d3123-e1b3-5278-ae77-29bf44bb74d2",
+                    "afe8f05c-11ed-5b2a-9157-4270d3f6eae5"
+                ]
+            },
+            {
+                "artist": "Massiveface",
+                "artistIds": [
+                    "61e01370-6b15-4771-8ef2-e64bb0447fe7"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "R"
+                ],
+                "colors": [
+                    "R"
+                ],
+                "convertedManaCost": 6.0,
+                "edhrecRank": 16308,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "Some dragonstorms pass without a trace. Others can conquer worlds.",
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312284",
+                    "cardKingdomId": "310871",
+                    "mcmId": "817963",
+                    "mcmMetaId": "447342",
+                    "mtgjsonV4Id": "c9109b06-9a94-53e0-9509-8102dbfc2949",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "c250cbd2-2b78-4721-9977-02de20c3d7d1",
+                    "scryfallIllustrationId": "d88c4767-1a73-4a21-b976-8c9bc3b8aae3",
+                    "scryfallOracleId": "cf37426d-b0ad-42c3-81be-79701aa4e0cf",
+                    "tcgplayerProductId": "619703"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Flying",
+                    "Storm"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{4}{R}{R}",
+                "manaValue": 6.0,
+                "name": "Stormscale Scion",
+                "number": "303",
+                "power": "4",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/9da0628ed120236b",
+                    "cardKingdomFoil": "https://mtgjson.com/links/8d1e9be89af9995a",
+                    "cardmarket": "https://mtgjson.com/links/e0afd8d6a1a6b29e",
+                    "tcgplayer": "https://mtgjson.com/links/cadd91702bee1893"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Dragon"
+                ],
+                "supertypes": [],
+                "text": "Flying\nOther Dragons you control get +1/+1.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. Copies become tokens.)",
+                "toughness": "4",
+                "type": "Creature — Dragon",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "4c762144-26fc-526f-8681-9ead4a95c12c",
+                "variations": [
+                    "9709ca48-4092-5e8b-8e3e-c663bccec9af"
+                ]
+            },
+            {
+                "artist": "Aaron J. Riley",
+                "artistIds": [
+                    "f21b412c-aef5-4d15-88be-4f40615acde3"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 4.0,
+                "edhrecRank": 27619,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312292",
+                    "cardKingdomId": "311081",
+                    "mcmId": "817973",
+                    "mcmMetaId": "447318",
+                    "mtgjsonV4Id": "15632b9e-4ec3-5f3c-be63-2c1895e22d2e",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "3c6d8e5c-4b3d-4c5c-89c5-a2746cd4b578",
+                    "scryfallIllustrationId": "7bda7003-bc32-4cf9-9098-51862585b584",
+                    "scryfallOracleId": "892a83a0-a3cb-4cfb-9106-4008e4e75c0f",
+                    "tcgplayerProductId": "623958"
+                },
+                "isFullArt": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{3}{W}",
+                "manaValue": 4.0,
+                "name": "United Battlefront",
+                "number": "330",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/78c67c0993fae220",
+                    "cardKingdomFoil": "https://mtgjson.com/links/665edf65c0a7a7ea",
+                    "cardmarket": "https://mtgjson.com/links/d64af2111b9d7ab5",
+                    "tcgplayer": "https://mtgjson.com/links/471bf34c8ec76682"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Look at the top seven cards of your library. Put up to two noncreature, nonland permanent cards with mana value 3 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
+                "type": "Sorcery",
+                "types": [
+                    "Sorcery"
+                ],
+                "uuid": "61720e0c-3f75-500e-91fb-37e1e70defd3",
+                "variations": [
+                    "cb884575-e62b-5a08-a3b1-a41dabc1856b"
+                ]
+            },
+            {
+                "artist": "Crystal Sully",
+                "artistIds": [
+                    "5c14673f-f538-490a-a7a8-457c1f4b67cf"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 22716,
+                "faceName": "Clarion Conqueror",
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "311556",
+                    "cardKingdomId": "311552",
+                    "mtgjsonV4Id": "cd0d3d81-d857-5854-a317-8a90595bc536",
+                    "scryfallId": "b3aecdfc-9d37-4f1f-9123-fc07b669d747",
+                    "scryfallIllustrationId": "5f641efa-3b32-420d-8a01-41edb223d574",
+                    "scryfallOracleId": "f1266a1b-bae6-4ded-b4d5-7586a5b6c5d0",
+                    "tcgplayerProductId": "624546"
+                },
+                "isFullArt": true,
+                "isStarter": true,
+                "keywords": [
+                    "Flying"
+                ],
+                "language": "English",
+                "layout": "reversible_card",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{2}{W}",
+                "manaValue": 3.0,
+                "name": "Clarion Conqueror // Clarion Conqueror",
+                "number": "377",
+                "otherFaceIds": [
+                    "8c72b366-acf7-52ab-b68d-a58c66387d4b"
+                ],
+                "power": "3",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/16385887d0b3c897",
+                    "cardKingdomFoil": "https://mtgjson.com/links/f0c8a5ce8c2bd296",
+                    "tcgplayer": "https://mtgjson.com/links/6cd461e4b2352c0e"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "side": "a",
+                "subtypes": [
+                    "Dragon"
+                ],
+                "supertypes": [],
+                "text": "Flying\nActivated abilities of artifacts, creatures, and planeswalkers can't be activated.",
+                "toughness": "3",
+                "type": "Creature — Dragon",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "1aaaaffe-949e-528f-8738-c9fcfb770942"
+            },
+            {
+                "artist": "Raymond Bonilla",
+                "artistIds": [
+                    "39fcaaac-bf5d-4c43-ae20-4cf4921a44fa"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "B",
+                    "G"
+                ],
+                "colors": [
+                    "B",
+                    "G"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 21349,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "enchantment",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312355",
+                    "cardKingdomId": "311554",
+                    "mcmId": "819516",
+                    "mcmMetaId": "447472",
+                    "mtgjsonV4Id": "5ac3245e-81c3-57bd-a0f1-d98a673729c1",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "bd9a6427-09cc-4ddf-88a6-fc23498a7c08",
+                    "scryfallIllustrationId": "be7d790e-e262-42cf-b146-d40b8bbfd83a",
+                    "scryfallOracleId": "31061e34-042e-40c3-99ab-752795ab4324",
+                    "tcgplayerProductId": "624586"
+                },
+                "isFullArt": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{B}{G}",
+                "manaValue": 2.0,
+                "name": "Hollowmurk Siege",
+                "number": "387",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/0e65a52f14cdd0bf",
+                    "cardKingdomFoil": "https://mtgjson.com/links/1456b5f3f981d7bb",
+                    "cardmarket": "https://mtgjson.com/links/b44e3be17f8af1c3",
+                    "tcgplayer": "https://mtgjson.com/links/64e4d9435bc6cdd8"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "As this enchantment enters, choose Sultai or Abzan.\n• Sultai — Whenever a counter is put on a creature you control, draw a card. This ability triggers only once each turn.\n• Abzan — Whenever you attack, put a +1/+1 counter on target attacking creature. It gains menace until end of turn.",
+                "type": "Enchantment",
+                "types": [
+                    "Enchantment"
+                ],
+                "uuid": "e686dfe3-c104-5e7c-8e62-da44fd9f3e5c",
+                "variations": [
+                    "4682ecf2-2723-57d4-b2b8-6751f7ee3486"
+                ]
+            },
+            {
+                "artist": "Justyna Dura",
+                "artistIds": [
+                    "d2340aef-8ca9-4e0d-864c-6a4e8d5e350a"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "R",
+                    "U",
+                    "W"
+                ],
+                "colors": [
+                    "R",
+                    "U",
+                    "W"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 24931,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "enchantment",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312305",
+                    "cardKingdomId": "311100",
+                    "mcmId": "817995",
+                    "mcmMetaId": "447363",
+                    "mtgjsonV4Id": "c922148f-ae3a-5ef4-b41a-1f3be06233aa",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "9f0797b4-7e06-4f64-95f3-3a7d694d601a",
+                    "scryfallIllustrationId": "be6230b1-3a88-4d26-b44f-7147519abcfc",
+                    "scryfallOracleId": "680a8e14-053f-4cde-a060-e1b36873cf14",
+                    "tcgplayerProductId": "623867"
+                },
+                "isFullArt": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "saga",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{U}{R}{W}",
+                "manaValue": 3.0,
+                "name": "Rediscover the Way",
+                "number": "388",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/e0525f1aa8576317",
+                    "cardKingdomFoil": "https://mtgjson.com/links/91d10748f3dde70c",
+                    "cardmarket": "https://mtgjson.com/links/b27006df6feb593e",
+                    "tcgplayer": "https://mtgjson.com/links/7e9b0560aa90ba0d"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Saga"
+                ],
+                "supertypes": [],
+                "text": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Look at the top three cards of your library. Put one of them into your hand and the rest on the bottom of your library in any order.\nIII — Whenever you cast a noncreature spell this turn, target creature you control gains double strike until end of turn.",
+                "type": "Enchantment — Saga",
+                "types": [
+                    "Enchantment"
+                ],
+                "uuid": "3f7de260-8a02-5493-bf72-4e09f9e6725d",
+                "variations": [
+                    "6ecbb40f-83c3-5b74-be2b-fd3d1043e862"
+                ]
+            },
+            {
+                "artist": "Jeremy Wilson",
+                "artistIds": [
+                    "eb66ec0c-e03d-4a7d-a732-193bfa421f67"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 13750,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "312306",
+                    "cardKingdomId": "311101",
+                    "mtgjsonV4Id": "0626a856-e383-5ee6-b771-c96d4a29b194",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "1fdf9438-fd5f-4638-8f41-dae35ae8f257",
+                    "scryfallIllustrationId": "97639946-a2da-4bb0-a294-59ce7939ab30",
+                    "scryfallOracleId": "f78af825-023a-42e9-8374-5c52303a1417",
+                    "tcgplayerProductId": "623865"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "loyalty": "5",
+                "manaCost": "{3}{W}{W}",
+                "manaValue": 5.0,
+                "name": "Elspeth, Storm Slayer",
+                "number": "398",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/f9811e4e5b3207d0",
+                    "cardKingdomFoil": "https://mtgjson.com/links/7492531b9d102683",
+                    "tcgplayer": "https://mtgjson.com/links/75c640576557a18b"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Elspeth"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "If one or more tokens would be created under your control, twice that many of those tokens are created instead.\n[+1]: Create a 1/1 white Soldier creature token.\n[0]: Put a +1/+1 counter on each creature you control. Those creatures gain flying until your next turn.\n[−3]: Destroy target creature an opponent controls with mana value 3 or greater.",
+                "type": "Legendary Planeswalker — Elspeth",
+                "types": [
+                    "Planeswalker"
+                ],
+                "uuid": "ef7955f4-0aca-53a4-9b00-ffb5ddbae260",
+                "variations": [
+                    "49fc65ab-f09a-5a9a-b550-f8fde7ac1b5e",
+                    "f305af5b-7c2a-52f4-8a6f-b296a1664f5a",
+                    "15693f55-81b8-500b-9fd2-90d7893015ef"
+                ]
+            },
+            {
+                "artist": "Nathaniel Himawan",
+                "artistIds": [
+                    "ae1e4729-d4ec-4d0f-8c71-883fc7358005"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 22716,
+                "finishes": [
+                    "foil"
+                ],
+                "flavorText": "The dragon's roar silenced all challengers, yet it was only an echo of Ugin's power.",
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "311557",
+                    "mtgjsonV4Id": "68e58a61-5aed-5cca-9d08-49f8ac04e259",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "5aa73d25-c887-487a-ba77-0d4ca992f106",
+                    "scryfallIllustrationId": "95f39758-c03b-4707-8caa-e3b00c8656b4",
+                    "scryfallOracleId": "f1266a1b-bae6-4ded-b4d5-7586a5b6c5d0",
+                    "tcgplayerProductId": "624547"
+                },
+                "isFullArt": true,
+                "isStarter": true,
+                "keywords": [
+                    "Flying"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{2}{W}",
+                "manaValue": 3.0,
+                "name": "Clarion Conqueror",
+                "number": "400",
+                "power": "3",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/9a4e03956a0d1c0c",
+                    "tcgplayer": "https://mtgjson.com/links/1016a6afb2a3acff"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Dragon"
+                ],
+                "supertypes": [],
+                "text": "Flying\nActivated abilities of artifacts, creatures, and planeswalkers can't be activated.",
+                "toughness": "3",
+                "type": "Creature — Dragon",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "a571b4ec-fc18-5297-95c3-6b0f990cc6f4",
+                "variations": [
+                    "9de42322-cb51-5a85-a711-766c4039ccdf",
+                    "cbf169a5-761c-5873-9249-37c13eeaab21"
+                ]
+            },
+            {
+                "artist": "Joshua Raphael",
+                "artistIds": [
+                    "553b2a73-780f-414b-b2d7-3b7888821082"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 7.0,
+                "edhrecRank": 16567,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "showcase",
+                    "inverted"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "311207",
+                    "mtgjsonV4Id": "de5b6877-042b-50c2-b542-b0602a859cad",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "2e7cb37b-3ab5-42d0-860a-0c0760924850",
+                    "scryfallIllustrationId": "b49ffc89-8391-48ef-b41a-6dbdbb0bb571",
+                    "scryfallOracleId": "5c58353a-fd60-4528-bf0d-669626cda0b2",
+                    "tcgplayerProductId": "624038"
+                },
+                "isAlternative": true,
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": false,
+                    "oathbreaker": true
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "loyalty": "7",
+                "manaCost": "{7}",
+                "manaValue": 7.0,
+                "name": "Ugin, Eye of the Storms",
+                "number": "409",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "halofoil",
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/ca8cd0f8a56e1212",
+                    "tcgplayer": "https://mtgjson.com/links/1c88a96ad59b29f7"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Ugin"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "When you cast this spell, exile up to one target permanent that's one or more colors.\nWhenever you cast a colorless spell, exile up to one target permanent that's one or more colors.\n[+2]: You gain 3 life and draw a card.\n[0]: Add {C}{C}{C}.\n[−11]: Search your library for any number of colorless nonland cards, exile them, then shuffle. Until end of turn, you may cast those cards without paying their mana costs.",
+                "type": "Legendary Planeswalker — Ugin",
+                "types": [
+                    "Planeswalker"
+                ],
+                "uuid": "186c47bd-4d0c-57a2-a3b4-ebada06aa583",
+                "variations": [
+                    "22e8c995-d185-5f9f-84cf-a7e799daeeda",
+                    "8cc28706-1594-582f-b0d1-ae4bbfa6e5bb"
+                ]
+            },
+            {
+                "artist": "Dan Frazier",
+                "artistIds": [
+                    "059bba56-5feb-42e4-8c2e-e2f1e6ba11f9"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 14207,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "1997",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "mcmId": "817881",
+                    "mcmMetaId": "447376",
+                    "mtgjsonV4Id": "ec460c19-6eb9-537a-a03f-976dc34ef362",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "ec33ea23-c8e8-4066-91b9-5e0ad191bcdb",
+                    "scryfallIllustrationId": "fd58ddb6-6803-4fd4-8656-3fa95c595088",
+                    "scryfallOracleId": "d5fca77c-377f-41b4-a9e9-e91a89d351cc"
+                },
+                "isStarter": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{0}",
+                "manaValue": 0.0,
+                "name": "Mox Jasper",
+                "number": "419",
+                "printings": [
+                    "TDM"
+                ],
+                "promoTypes": [
+                    "serialized",
+                    "doublerainbow"
+                ],
+                "purchaseUrls": {
+                    "cardmarket": "https://mtgjson.com/links/185c5526e29eaaed"
+                },
+                "rarity": "mythic",
+                "setCode": "TDM",
+                "subtypes": [],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "{T}: Add one mana of any color. Activate only if you control a Dragon.",
+                "type": "Legendary Artifact",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "b48f16cd-53a6-57f7-a5d1-3385075cc0c0",
+                "variations": [
+                    "0bb61288-bcc4-56fe-8eb5-a6cc401aeb26",
+                    "2266f524-232c-53ad-9fd2-bbca85627469"
+                ]
+            }
+        ]
+    }
+}

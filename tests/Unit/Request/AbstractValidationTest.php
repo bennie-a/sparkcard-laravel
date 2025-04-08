@@ -17,7 +17,10 @@ abstract class AbstractValidationTest extends TestCase
     {
             $validator = $this->validate($data);
             $isPassed = $validator->passes();
-            $this->assertTrue($isPassed);        
+            if ($validator->fails()) {
+                logger()->error($validator->errors());
+            }
+            $this->assertTrue($isPassed, 'バリデーション失敗');        
     }
 
     /**
