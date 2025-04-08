@@ -35,9 +35,13 @@ class CardJsonFileService {
             }
 
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
-            'multiverseId' => $cardtype->multiverseId(), 'scryfallId' => $cardtype->scryfallId(),
+            'scryfallId' => $cardtype->scryfallId(),
             'color' => $cardtype->color(), Column::NUMBER => $cardtype->number(),
              Column::PROMOTYPE => $promoType, Column::FOIL_TYPE => $foiltype];
+
+             if ($cardtype->multiverseId() != 0) {
+                $newCard[Column::MULTIVERSEID] = $cardtype->multiverseId();
+             }
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
             
             array_push($cardInfo, $newCard);

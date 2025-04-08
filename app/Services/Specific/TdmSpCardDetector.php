@@ -67,7 +67,7 @@ class TdmSpCardDetector extends DefaultSpCardDetector {
         }
 
         // ハロー・Foil
-        $promotypes = $json[CardConstant::PROMOTYPES];
+        $promotypes = MtgJsonUtil::getIfExists(CardConstant::PROMOTYPES, $json);
         return in_array('halofoil', $promotypes);
     }
 }

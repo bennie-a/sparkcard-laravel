@@ -48,6 +48,7 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
+                                {{ card.scryfallId }}
                             </td>
                             <td>
                                 <promo v-model:name="card.promotype" v-model:setcode="setCode"></promo>
@@ -193,7 +194,7 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
-            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color;
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color+"&setcode=" + this.setCode;
 
             await axios
                 .post("/api/upload/card" + query, file, config)

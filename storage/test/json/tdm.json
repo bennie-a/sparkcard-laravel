@@ -4,6 +4,102 @@
         "code": "TDM",
         "cards": [
             {
+                "artist": "Matt Stewart",
+                "artistIds": [
+                    "20871267-2d8a-41d5-b03a-be3d557c5734"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 3.0,
+                "edhrecRank": 23392,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "\"Kin and clan call to me—and I will always answer.\"",
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "311987",
+                    "cardKingdomId": "311041",
+                    "mcmId": "817810",
+                    "mcmMetaId": "447308",
+                    "mtgjsonV4Id": "21b73272-ec1b-5902-97e3-d25e84eaa772",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "29957f49-9a6b-42f6-b2fb-b48f653ab725",
+                    "scryfallIllustrationId": "0a5e1f80-862e-40a9-ada2-8e0726cc5eda",
+                    "scryfallOracleId": "659bc01c-fa60-4d00-bdad-5bca1d2a978f",
+                    "tcgplayerProductId": "623879"
+                },
+                "keywords": [
+                    "First strike",
+                    "Flash"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "future": "Legal"
+                },
+                "manaCost": "{2}{W}",
+                "manaValue": 3.0,
+                "name": "Anafenza, Unyielding Lineage",
+                "number": "2",
+                "power": "2",
+                "printings": [
+                    "TDM"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/9749e3a44f4992f0",
+                    "cardKingdomFoil": "https://mtgjson.com/links/9876a3ca84408f1d",
+                    "cardmarket": "https://mtgjson.com/links/19281d4de21d3c76",
+                    "tcgplayer": "https://mtgjson.com/links/2938e6f994408ff5"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "TDM",
+                "subtypes": [
+                    "Spirit",
+                    "Soldier"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Flash\nFirst strike\nWhenever another nontoken creature you control dies, Anafenza endures 2. (Put two +1/+1 counters on it or create a 2/2 white Spirit creature token.)",
+                "toughness": "2",
+                "type": "Legendary Creature — Spirit Soldier",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "760e6b1a-c1c9-5f1a-be46-a1fb6b85245b",
+                "variations": [
+                    "82df3262-c519-5a46-a8e4-fb3ad5cc03ed"
+                ],
+                "watermark": "abzan"
+            },
+            {
                 "artist": "Ron Spencer",
                 "artistIds": [
                     "dab52c11-0564-4207-a4a1-c1735c946a65"

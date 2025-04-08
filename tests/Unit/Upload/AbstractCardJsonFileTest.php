@@ -50,6 +50,7 @@ abstract class AbstractCardJsonFileTest extends TestCase{
         $dbPromo = Promotype::findCardByAttr($expectedPromo);
         logger()->debug("期待プロモタイプ:{$dbPromo->name}");
         $this->assertEquals($dbPromo->name, $actualcard[Column::PROMOTYPE], 'プロモタイプ');
+        $this->assertNotEmpty($actualcard[Column::SCRYFALLID], '{Column::SCRYFALLID}');
     }
     
     /**
