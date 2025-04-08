@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Services\Constant\StockpileHeader;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
@@ -25,11 +26,13 @@ class CardFileRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = ['data' => 'required', 
+        $rules = [
+                            'data' => 'required', 
                             'data.cards' => 'required',
-                             'data.code' => 'required',
-                             'isDraft' => 'nullable|boolean',
-                            'color' => 'nullable|string'
+                            'data.code' => 'required',
+                            'isDraft' => 'nullable|boolean',
+                            'color' => 'nullable|string',
+                            StockpileHeader::SETCODE => 'required'                            
                         ];
 
         return $rules;

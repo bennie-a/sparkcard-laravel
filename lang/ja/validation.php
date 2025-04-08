@@ -1,6 +1,8 @@
 <?php
 use App\Services\Constant\SearchConstant as Scon;
 use App\Services\Constant\ArrivalConstant as Acon;
+use App\Services\Constant\StockpileHeader;
+
 return [
 
     /*
@@ -117,7 +119,7 @@ return [
     'prohibited_if' => 'The :attribute field is prohibited when :other is :value.',
     'prohibited_unless' => 'The :attribute field is prohibited unless :other is in :values.',
     'prohibits' => 'The :attribute field prohibits :other from being present.',
-    'regex' => 'The :attribute format is invalid.',
+    'regex' => ':attributeの形式が異なります。',
     'required' => ':attributeは必ず入力してください。',
     'required_array_keys' => 'The :attribute field must contain entries for: :values.',
     'required_if' => ':attributeは:otherが:valueの時は必ず入力してください。',
@@ -125,7 +127,7 @@ return [
     'required_with' => 'The :attribute field is required when :values is present.',
     'required_with_all' => 'The :attribute field is required when :values are present.',
     'required_without' => 'The :attribute field is required when :values is not present.',
-    'required_without_all' => ':attribute field is required when none of :values are present.',
+    'required_without_all' => ':attribute / :valuesのどれかを入力してください。',
     'same' => 'The :attribute and :other must match.',
     'size' => [
         'array' => 'The :attribute must contain :size items.',
@@ -157,7 +159,7 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-        ],
+        ]
     ],
 
     /*
@@ -174,7 +176,8 @@ return [
     'attributes' => [
         Scon::VENDOR_TYPE_ID => '取引先カテゴリID',
         Acon::ARRIVAL_DATE => '入荷日',
-        Scon::CARD_NAME => 'カード名'
+        Scon::CARD_NAME => 'カード名',
+        StockpileHeader::SETCODE => 'エキスパンション略称'
     ],
 
     'values' => [

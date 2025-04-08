@@ -50,6 +50,8 @@ class PromotypeSeeder extends Seeder
         $dsk = Expansion::findBySetCode('DSK');
         // DFT
         $dft = Expansion::findBySetCode('DFT');
+        // TDM
+        $tdm = Expansion::findBySetCode('TDM');
         $items = [
             ['attr' => 'draft', 'name' => '', $exp_id => $com->notion_id],
             ['attr' => 'showcase', 'name' => 'ショーケース', $exp_id => $com->notion_id],
@@ -88,7 +90,10 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'maxspeed', 'name' => '「最大出力」ボーダーレス', $exp_id => $dft->notion_id],
             ['attr' => 'badassrider', 'name' => '「ワルなライダー」ボーダーレス', $exp_id => $dft->notion_id],
             ['attr' => 'graffgiant', 'name' => '「グラフィティ・ジャイアント」ボーダーレス', $exp_id => $dft->notion_id],
-            ['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil', $exp_id => $dft->notion_id]
+            ['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil', $exp_id => $dft->notion_id],
+            ['attr' => 'reversible_card', 'name' => 'リバーシブル・ボーダーレス', $exp_id => $tdm->notion_id],
+            ['attr' => 'dragonic', 'name' => '「ドラコニック」ショーケース', $exp_id => $tdm->notion_id],
+            ['attr' => 'clan', 'name' => '「氏族」ショーケース', $exp_id => $tdm->notion_id],
         ]; 
 
         foreach($items as $i ){

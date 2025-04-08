@@ -18,7 +18,7 @@ class Halfsize implements ValidationRule
      // $attribute 属性名、$value 値、$fail 失敗時のメッセージ
      public function validate(string $attribute, mixed $value, Closure $fail): void
      {
-        if (!empty($value) && \preg_match('/^[a-zA-Z0-9!-\/:-@ \[-`{-~]+$/', $value)) {
+        if (!empty($value) && \preg_match('/^[a-zA-Z0-9!-\/:-@ \[-`{-~]+$/', $value) == false) {
             $fail('validation.halfsize')->translate();
         }
      }

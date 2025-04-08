@@ -193,7 +193,7 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
-            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color;
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color+"&setcode=" + this.setCode;
 
             await axios
                 .post("/api/upload/card" + query, file, config)
