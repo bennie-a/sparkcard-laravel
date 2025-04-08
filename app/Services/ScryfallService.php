@@ -8,6 +8,7 @@ use App\Enum\CardColor;
 use App\Exceptions\ConflictException;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
+use App\Services\Constant\CardConstant;
 use App\Services\json\ScryfallCard;
 use Illuminate\Http\Response;
 
@@ -51,7 +52,7 @@ class ScryfallService {
         if (MtgJsonUtil::hasKey('imageurl', $details)) {
             return $details['imageurl'];
         }
-        $multiverseId = $details['multiverseId'];
+        $multiverseId = MtgJsonUtil::getIfExists(CardConstant::MULTIVERSEID, $details);
         $json = [];
         if (!empty($multiverseId)) {
             $json = $this->repo->getCardByMultiverseId($multiverseId);

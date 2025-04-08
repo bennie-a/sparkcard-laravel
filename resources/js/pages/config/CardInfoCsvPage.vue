@@ -48,7 +48,6 @@
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
-                                {{ card.scryfallId }}
                             </td>
                             <td>
                                 <promo v-model:name="card.promotype" v-model:setcode="setCode"></promo>
