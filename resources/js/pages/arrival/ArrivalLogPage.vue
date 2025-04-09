@@ -10,6 +10,7 @@ import { useStore } from 'vuex';
 import pglist from "../component/PgList.vue";
 import MessageArea from "../component/MessageArea.vue";
 import foiltag from "../component/tag/FoilTag.vue";
+import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 
 // 検索条件
 const itemname = ref("");
@@ -18,6 +19,8 @@ const startD  = new Date();
 startD.setDate(startD.getDate() - 7);
 const startDate = ref(startD);
 const endDate = ref(new Date());
+
+const gcStore = groupConditionStore();
 
 // 検索結果
 let result = reactive([]);
@@ -69,6 +72,8 @@ const current = (data) => {
 
 // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendor_id) => {
+    gcStore.startDate = toString(startDate.value);
+    gcStore.endDate = toString(endDate.value);
     router.push({
         name: "ArrivalLogDss",
         params: { arrival_date: arrivalDate, vendor_id:vendor_id},

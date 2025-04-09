@@ -3,13 +3,15 @@ import { useRoute, useRouter } from "vue-router";
 import cardlayout from "../component/CardLayout.vue";
 import pagination from "../component/ListPagination.vue";
 import vendortag from "../component/tag/VendorTag.vue"
-
+import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 
 const route = useRoute();
 const router = useRouter();
 
 const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
+const gcStore = groupConditionStore();
+
 const card = {
     id:5555,
     cardname:'霜の暴君、アイシングデス[JP]',
@@ -44,6 +46,8 @@ const toList = () => {
         <h3 class="ui medium dividing header">
             件数：5件
         </h3>
+        開始日：{{gcStore.startDate}}
+        終了日: {{ gcStore.endDate }}
         <table class="ui striped table">
             <thead>
                 <tr>
