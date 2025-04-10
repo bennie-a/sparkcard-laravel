@@ -62,6 +62,11 @@ const fetch =  async () => {
 }
 
 onMounted(async() => {
+    const referrer_path = router.referrer.path;
+    if (referrer_path.indexOf('/arrival/') !== 0 ) {
+        console.log('pinia reset');
+        gcStore.reset();
+    }
     await fetch();
 });
 
@@ -82,6 +87,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
 </script>
 <template>
     <message-area />
+    開始日：{{ gcStore.startDate }} 終了日:{{ gcStore.endDate }}
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">
