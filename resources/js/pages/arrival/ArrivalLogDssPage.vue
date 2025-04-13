@@ -46,8 +46,8 @@ const toList = () => {
         <h3 class="ui medium dividing header">
             件数：5件
         </h3>
-        開始日：{{gcStore.startDate}}
-        終了日: {{ gcStore.endDate }}
+        開始日：{{ gcStore.startDate }} 型：{{ typeof(gcStore.startDate) }} 
+        終了日:{{ gcStore.endDate }} 型：{{ typeof(gcStore.endDate) }}
         <table class="ui striped table">
             <thead>
                 <tr>

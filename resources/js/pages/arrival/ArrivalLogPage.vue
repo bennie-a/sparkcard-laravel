@@ -5,22 +5,19 @@ import scdatepicker from "../component/SCDatePicker.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import Loading from "vue-loading-overlay";
 import axios from 'axios';
-import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import { useStore } from 'vuex';
+import UseDateFormatter from '../../functions/UseDateFormatter.js';
+
 import pglist from "../component/PgList.vue";
 import MessageArea from "../component/MessageArea.vue";
 import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
-
-// 検索条件
-const itemname = ref("");
-const date = ref("");
-const startD  = new Date();
-startD.setDate(startD.getDate() - 7);
-const startDate = ref(startD);
-const endDate = ref(new Date());
+import { storeToRefs } from 'pinia';
 
 const gcStore = groupConditionStore();
+
+// 検索条件
+const {startDate, endDate, itemname} = storeToRefs(gcStore);
 
 // 検索結果
 let result = reactive([]);
@@ -31,7 +28,6 @@ const isLoading = ref(false);
 
 const router = useRouter();
 const {toString} = UseDateFormatter();
-
 const store = useStore();
 
 // 入荷情報検索
@@ -77,8 +73,6 @@ const current = (data) => {
 
 // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendor_id) => {
-    gcStore.startDate = toString(startDate.value);
-    gcStore.endDate = toString(endDate.value);
     router.push({
         name: "ArrivalLogDss",
         params: { arrival_date: arrivalDate, vendor_id:vendor_id},
@@ -87,7 +81,8 @@ const toDssPage = (arrivalDate, vendor_id) => {
 </script>
 <template>
     <message-area />
-    開始日：{{ gcStore.startDate }} 終了日:{{ gcStore.endDate }}
+    開始日：{{ gcStore.startDate }} 型：{{ typeof(gcStore.startDate) }} 
+    終了日:{{ gcStore.endDate }} 型：{{ typeof(gcStore.endDate) }}
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">
