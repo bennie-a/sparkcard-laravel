@@ -4,6 +4,10 @@ import cardlayout from "../component/CardLayout.vue";
 import pagination from "../component/ListPagination.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import { onMounted } from "vue";
+import {apiService} from "@/component/ApiGetService";
+import {ref} from 'vue';
+import Loading from "vue-loading-overlay";
 
 const route = useRoute();
 const router = useRouter();
@@ -11,6 +15,7 @@ const router = useRouter();
 const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
+const isLoading = ref(false);
 
 const card = {
     id:5555,
@@ -20,6 +25,25 @@ const card = {
     image_url:'https://cards.scryfall.io/png/front/b/0/b009f231-6dd2-468d-8005-04715cb9df1d.png?1645529044',
     vendor:{id:vendor_id, name:'オリジナルパック'},
 };
+
+const result = ref([]);
+onMounted(async() =>{
+    isLoading.value = true;
+    await apiService.get(
+        {
+            url:"/arrival/",
+            query:{params:{
+                arrival_date:arrival_date,
+                vendor_type_id:vendor_id
+            }},
+            onSuccess:(data) => {
+                result.value = data;
+            },
+            onFinally:() => {
+                isLoading.value = false;
+            }
+        });
+    });
 
 // 入荷情報一覧ページに戻る
 const toList = () => {
@@ -36,18 +60,12 @@ const toList = () => {
 
 </script>
 <template>
-    <article>
-        <h2 class="ui medium header">入荷先</h2>
+    <article v-show="!isLoading">
         <vendortag v-model="card.vendor"></vendortag>
         <span class="ml-half">晴れる屋トーナメントセンター大阪</span>
     </article>
-    <article class="mt-2">
-        <h2 class="ui medium header">入荷商品</h2>
-        <h3 class="ui medium dividing header">
-            件数：5件
-        </h3>
-        開始日：{{ gcStore.startDate }} 型：{{ typeof(gcStore.startDate) }} 
-        終了日:{{ gcStore.endDate }} 型：{{ typeof(gcStore.endDate) }}
+    <article class="mt-2" v-show="!isLoading">
+        {{ result }}
         <table class="ui striped table">
             <thead>
                 <tr>
@@ -89,4 +107,7 @@ const toList = () => {
             <button class="ui gray basic button" @click="toList">一覧に戻る</button>
         </div>
     </article>
+    <loading
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
 </template>

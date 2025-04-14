@@ -81,8 +81,6 @@ const toDssPage = (arrivalDate, vendor_id) => {
 </script>
 <template>
     <message-area />
-    開始日：{{ gcStore.startDate }} 型：{{ typeof(gcStore.startDate) }} 
-    終了日:{{ gcStore.endDate }} 型：{{ typeof(gcStore.endDate) }}
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">
