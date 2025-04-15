@@ -56,10 +56,12 @@ const toList = () => {
 <template>
     <article v-show="!isLoading">
         <h3 class="ui header">入荷情報</h3>
-        <table class="ui collapsing definition table">
+        <table class="ui collapsing definition table" v-if="result.length != 0">
             <tr>
                 <td>入荷先カテゴリ</td>
-                <td><vendortag v-model="result[0].vendor"></vendortag></td>
+                <td>
+                    <vendortag v-model="result[0].vendor"></vendortag>
+                </td>
             </tr>
             <tr>
                 <td>取引先名</td>
