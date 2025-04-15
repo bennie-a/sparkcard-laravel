@@ -16,6 +16,7 @@ use FiveamCode\LaravelNotionApi\Entities\Properties\Select;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Response as HttpResponse;
+use App\Services\Constant\CardConstant as Con;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -99,13 +100,14 @@ class ShippingLogService extends AbstractSmsService{
     public function show(string $orderId) {
         $list = ShippingLog::fetchByOrderId($orderId);
         $items = $list->map(function($slog) {
-                return ["id" => $slog["stock_id"], "cardname" => $slog["cardname"], Header::SETNAME => $slog[Header::SETNAME],
-                             Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,
-                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"], 'foil' => ['isFoil' => $slog['isFoil'], 'foilname' => $slog['foilname']],
+                return ["id" => $slog["stock_id"],  Con::NAME => $slog["cardname"], Con::EXP => [Con::NAME => $slog[Header::SETNAME], Con::ATTR => $slog['exp_attr']],
+                             Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
+                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"], 
+                            Header::FOIL => ['is_foil' => $slog['isFoil'], Con::NAME => $slog['foilname']],
                             'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price];
         });
         // $items = array_map(function($log) {
-        // }, $list);
+        // }, $list);   
         $slog = $list[0];
         $info = [Header::ORDER_ID => $slog->order_id, Header::BUYER => $slog[Header::BUYER],
                         Header::SHIPPING_DATE => $slog->shipping_date,  'zipcode' => '〒'.$slog->zip, 

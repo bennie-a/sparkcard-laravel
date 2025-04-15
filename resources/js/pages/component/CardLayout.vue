@@ -21,8 +21,8 @@ const showImage = (id) => {
         <h4 class="ui image header">
             <img :src="card.image_url" class="ui mini rounded image" @click="showImage(card.id)">
             <div class="content">
-                {{ card.cardname }}<span v-if="card.foil"><foiltag :isFoil="card.foil.isFoil" :name="card.foil.name"/></span>
-                <div class="sub header">{{ card.setname }}</div>
+                <span v-if="card.foil"><foiltag :isFoil="card.foil.is_foil" :name="card.foil.name"/></span>{{ card.name }}
+                <div class="sub header">{{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}</div>
             </div>
             <div class="ui tiny modal" v-bind:id="card.id">
                 <i class="close icon"></i>
