@@ -2,14 +2,11 @@
 import { defineProps } from 'vue';
 import foiltag from './tag/FoilTag.vue';
 
-
-const props = defineProps({
-    card:{
-        type:Object,
-        required:true,
-    }
-});
-const card = props.card;
+const card = defineModel({
+                type:Object,
+                required:true,
+            }
+);
 
 const showImage = (id) => {
     const selecterId = `#${id}`;
@@ -21,7 +18,8 @@ const showImage = (id) => {
         <h4 class="ui image header">
             <img :src="card.image_url" class="ui mini rounded image" @click="showImage(card.id)">
             <div class="content">
-                <span v-if="card.foil"><foiltag :isFoil="card.foil.is_foil" :name="card.foil.name"/></span>{{ card.name }}
+                <span v-if="card.foil"><foiltag :isFoil="card.foil.is_foil" :name="card.foil.name"/></span>
+                {{ card.name }}&#91;{{ card.lang }}&#93;
                 <div class="sub header">{{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}</div>
             </div>
             <div class="ui tiny modal" v-bind:id="card.id">

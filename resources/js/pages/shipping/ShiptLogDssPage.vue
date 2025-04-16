@@ -79,9 +79,8 @@ onMounted(async() => {
         <table class="ui table stripe">
             <thead>
                 <tr>
-                    <th class="one wide">在庫ID</th>
+                    <th class="two wide">在庫ID</th>
                     <th>カード</th>
-                    <th class="center aligned">言語</th>
                     <th class="center aligned">状態</th>
                     <th class="center aligned">枚数</th>
                     <th class="center aligned">単価</th>
@@ -92,9 +91,8 @@ onMounted(async() => {
                 <tr v-for="(i, index) in detail.items" :key="index">
                 <td>{{ i.id }}</td>
                 <td>
-                    <cardlayout :card="i"></cardlayout>
+                    <cardlayout v-model="detail.items[index]"></cardlayout>
                 </td>
-                <td class="center aligned">{{ i.lang }}</td>
                 <td class="center aligned"><condition :name="i.condition"/></td>
                 <td class="center aligned">{{i.quantity}}枚</td>
                 <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ i.single_price }}</td>

@@ -61,7 +61,8 @@ class Stockpile extends Model
      * @return array
      */
     public static function fetch(array $details) {
-        $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity', 'c.image_url', 'c.isFoil as isFoil', 's.updated_at as updated_at'];
+        $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity',
+         'c.image_url', 'c.number', 'c.isFoil as isFoil', 's.updated_at as updated_at'];
         $query = self::from('stockpile as s')->select($columns);
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
         $cardname = MtgJsonUtil::hasKey(SearchConstant::CARD_NAME, $details) ? $details[SearchConstant::CARD_NAME] : '';
@@ -76,7 +77,7 @@ class Stockpile extends Model
         if (!empty($limit) && $limit > 0) {
             $query = $query->limit($limit);
         }
-        return $query->orderBy('s.id', 'asc')->get();
+        return $query->orderBy('s.id', 'asc')->orderBy('c.number', 'asc')->get();
     }
 
     public function getUpdatedAtAttribute($value)

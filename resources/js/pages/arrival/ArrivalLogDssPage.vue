@@ -5,11 +5,13 @@ import pagination from "../component/ListPagination.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
-import { onMounted } from "vue";
+import { onMounted, reactive } from "vue";
 import {apiService} from "@/component/ApiGetService";
 
 import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
+import pglist from "@/pages/component/PgList.vue";
+
 
 const route = useRoute();
 const router = useRouter();
@@ -17,9 +19,10 @@ const router = useRouter();
 const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
+const currentList = reactive([]);
 const isLoading = ref(false);
 
-const result = ref([]);
+const result = reactive([]);
 onMounted(async() =>{
     isLoading.value = true;
     await apiService.get(
@@ -51,6 +54,10 @@ const toList = () => {
             params: { arrival_date:arrival_date, arrival_id: arrival_id},
         });
     }
+
+ const current = (data) => {
+    currentList.value = data.response;
+}
 
 </script>
 <template>
@@ -89,9 +96,11 @@ const toList = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(log, index) in result" :key="index">
+                <tr v-for="(log, index) in currentList.value" :key="index">
                     <td class="center aligned">{{log.id}}</td>
-                    <td><cardlayout :card="log.card"></cardlayout></td>
+                    <td>
+                            <cardlayout v-model="log.card"></cardlayout>
+                    </td>
                     <td class="center aligned"><ConditionTag :name="log.card.condition"/></td>
                     <td class="center aligned">{{log.quantity}}枚</td>
                     <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ log.cost }}</td>
@@ -107,7 +116,7 @@ const toList = () => {
                 <tr>
                     <th colspan="10">
                         <div class="right aligned">
-                            <pagination></pagination>
+                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
                         </div>
                     </th>
                 </tr>
