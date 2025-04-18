@@ -5,19 +5,19 @@ import scdatepicker from "../component/SCDatePicker.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import Loading from "vue-loading-overlay";
 import axios from 'axios';
-import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import { useStore } from 'vuex';
+import UseDateFormatter from '../../functions/UseDateFormatter.js';
+
 import pglist from "../component/PgList.vue";
 import MessageArea from "../component/MessageArea.vue";
 import foiltag from "../component/tag/FoilTag.vue";
+import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import { storeToRefs } from 'pinia';
+
+const gcStore = groupConditionStore();
 
 // 検索条件
-const itemname = ref("");
-const date = ref("");
-const startD  = new Date();
-startD.setDate(startD.getDate() - 7);
-const startDate = ref(startD);
-const endDate = ref(new Date());
+const {startDate, endDate, itemname} = storeToRefs(gcStore);
 
 // 検索結果
 let result = reactive([]);
@@ -28,8 +28,6 @@ const isLoading = ref(false);
 
 const router = useRouter();
 const {toString} = UseDateFormatter();
-
-const vendorId =3;
 const store = useStore();
 
 // 入荷情報検索
@@ -60,6 +58,11 @@ const fetch =  async () => {
 }
 
 onMounted(async() => {
+    const referrer_path = router.referrer.path;
+    if (referrer_path.indexOf('/arrival/') !== 0 ) {
+        console.log('pinia reset');
+        gcStore.reset();
+    }
     await fetch();
 });
 
@@ -69,10 +72,10 @@ const current = (data) => {
 
 
 // 詳細画面を表示する。
-const toDssPage = (arrivalDate, vendorId) => {
+const toDssPage = (arrivalDate, vendor_id) => {
     router.push({
         name: "ArrivalLogDss",
-        params: { arrival_date: arrivalDate, vendor_id:vendorId},
+        params: { arrival_date: arrivalDate, vendor_id:vendor_id},
     });
 }
 </script>
@@ -108,27 +111,32 @@ const toDssPage = (arrivalDate, vendorId) => {
         </div>
     </article>
     <article class="mt-2" v-show="resultCount != 0">
-        <h2 class="ui medium dividing header">
-            件数：{{resultCount}}件
-        </h2>
+        <h3 class="ui devide">{{ resultCount }}件</h3>
         <table class="ui striped table">
             <thead>
                 <tr>
                     <th class="two wide center aligned">入荷日</th>
                     <th class="" colspan="2">取引先</th>
                     <th class="">商品名</th>
-                    <th class="one side center aligned">原価合計</th>
+                    <th class="two wide center aligned">入荷数</th>
+                    <th class="two wide center aligned">原価合計</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(r, index) in currentList.value" :key="index">
                     <td class="center aligned">{{ r.arrival_date }}</td>
-                    <td colspan="2"><vendortag v-model="r.vendor.name"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
-                    <td><foiltag :isFoil="r.foil.is_foil" :foiltype="r.foil.name"></foiltag>【{{r.attr}}】{{r.name}}[{{ r.lang }}]<span v-if="r.item_count !== 1">ほか</span><label class="ui label ml-half">{{r.item_count}}点</label></td>
+                    <td colspan="2"><vendortag v-model="r.vendor"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
+                    <td>
+                        <foiltag :isFoil="r.card.foil.is_foil" :foiltype="r.card.foil.name"></foiltag>
+                        【{{r.card.exp.attr}}】{{r.card.name}}[{{ r.card.lang }}]<span v-if="r.item_count !== 1">ほか</span>
+                    </td>
+                    <td class="center aligned">
+                        {{r.item_count}}点
+                    </td>
                     <td class=" center aligned"><i class="bi bi-currency-yen"></i>{{ r.sum_cost }}</td>
                     <td class="center aligned selectable">
-                        <a @click="toDssPage('2024/10/31', 1)">
+                        <a @click="toDssPage(r.arrival_date, r.vendor.id)">
                             <i class="angle double right icon"></i>
                         </a>
                     </td>

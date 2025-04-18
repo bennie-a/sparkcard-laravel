@@ -173,6 +173,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    router['referrer'] = from;
     store.dispatch("loading/start");
     next();
 });

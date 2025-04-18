@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\CardConstant as Con;
 use Illuminate\Http\Request;
+use App\Services\Constant\GlobalConstant as GCon;
 
 class CardInfoResource extends JsonResource
 {
@@ -21,12 +22,12 @@ class CardInfoResource extends JsonResource
     public function toArray(Request $request)
     {
         $array =  [
-            Con::ID => $this->id,
+            GCon::ID => $this->id,
             Con::NAME => $this->name,
             Con::EXP => [Con::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
             Con::NUMBER => $this->number,
             Con::COLOR => CardColor::tryFrom($this->color_id)->text(),
-            'image' => $this->image_url,
+            'image_url' => $this->image_url,
             Header::CONDITION => $this->condition,
         ];
         $resources = json_decode(json_encode($this->resource), true);

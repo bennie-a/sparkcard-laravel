@@ -1,6 +1,6 @@
 <template>
     <message-area></message-area>
-    <search-form limitprice="300" status="ショップ登録予定"></search-form>
+    <search-form limitprice="70" status="ショップ登録予定"></search-form>
     <div class="mt-2" v-if="this.$store.getters.cardsLength != 0">
         <div class="ui toggle checkbox mr-2">
             <input type="checkbox" name="public" v-model="isPublic" />

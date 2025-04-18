@@ -122,7 +122,7 @@ export default {
                             <div class="content">
                                 {{ s.cardname
                             }}<foiltag :isFoil="s.isFoil"/>
-                            <div class="sub header">{{ s.setname }}</div>
+                            <div class="sub header">{{ s.setname }}&#35;{{ s.number }}</div>
                         </div>
                         <image-modal
                         :url="s.image_url"

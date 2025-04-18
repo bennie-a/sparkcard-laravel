@@ -12,6 +12,8 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
+import {createPinia} from 'pinia';
+
 
 // ルータをインストール
 app.use(router);
@@ -21,5 +23,8 @@ app.use(VuePapaParse);
 app.use(Encoding);
 app.use(Datepicker);
 app.use(Loading);
+
+const pinia = createPinia();
+app.use(pinia);
 
 app.mount("#app");

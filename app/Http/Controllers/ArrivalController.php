@@ -19,6 +19,7 @@ use App\Services\Stock\ArrivalParams;
 use App\Services\Stock\ArrivalLogService;
 use App\Services\Constant\SearchConstant as Con;
 use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\GlobalConstant as GCon;
 use App\Facades\APIHand;
 
 /**
@@ -41,7 +42,9 @@ class ArrivalController extends Controller {
     {
         $details = $request->only([Con::CARD_NAME, ACon::ARRIVAL_DATE, Con::VENDOR_TYPE_ID]);
         $search = fn($details) => $this->service->filtering($details);  // 検索処理
-        $transformer = fn($results) => ArrivalLogResource::collection($results); // 変換処理
+
+        $transformer = fn($results) => [GCon::DATA => $results[GCon::DATA],
+                                                                   GCon::LOGS => ArrivalLogResource::collection($results[GCon::LOGS])]; // 変換処理
         return APIHand::handleSearch($details, $search, $transformer);
     }
 

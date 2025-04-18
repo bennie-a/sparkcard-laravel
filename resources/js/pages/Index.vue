@@ -270,17 +270,17 @@ const formatPrice = (price) => {
                 <div class="image">
                     <img
                         class=""
-                        :src="card.image"
+                        :src="card.image_url"
                         @click="$refs.modal[index].showImage(card.id)"
                     />
-                    <image-modal :id="card.id" ref="modal" :url="card.image" />
+                    <image-modal :id="card.id" ref="modal" :url="card.image_url" />
                 </div>
                 <div class="content">
                     <div class="header">
                         {{ card.name }}
                     </div>
                     <div class="meta">
-                        {{ card.exp.name }}#{{ card.number }}
+                        {{ card.exp.name }}&#35;{{ card.number }}
                     </div>
                     <div class="description ui right floated">
                         平均価格:<span class="price"

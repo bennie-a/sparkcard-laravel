@@ -15,7 +15,6 @@ class StockpileHeader {
 
     const CARD_ID = 'card_id';
     const LANGUAGE = 'language';
-    const SUPPLIER = 'supplier';
     const FOIL = 'foil';
 
     // 出荷CSV(メルカリ)
