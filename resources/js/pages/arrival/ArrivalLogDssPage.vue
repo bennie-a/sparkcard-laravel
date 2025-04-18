@@ -10,7 +10,7 @@ import {apiService} from "@/component/ApiGetService";
 
 import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
-import pglist from "@/pages/component/PgList.vue";
+import pglist from "../component/PgList.vue";
 
 
 const route = useRoute();
@@ -20,6 +20,10 @@ const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
 const currentList = reactive([]);
+const resultCount = ref(0);
+
+const logs = reactive([]);
+
 const isLoading = ref(false);
 
 const result = reactive([]);
@@ -35,6 +39,8 @@ onMounted(async() =>{
             }},
             onSuccess:(data) => {
                 result.value = data;
+                resultCount.value = result.value.logs.length;
+                logs.value = result.value.logs;
             },
             onFinally:() => {
                 isLoading.value = false;
@@ -56,33 +62,35 @@ const toList = () => {
     }
 
  const current = (data) => {
+    console.log(data.response);
     currentList.value = data.response;
 }
 
 </script>
 <template>
     <article v-show="!isLoading">
-        <h3 class="ui header">入荷情報</h3>
-        <table class="ui collapsing definition table" v-if="result.length != 0">
+        <h2 class="ui header">入荷情報</h2>
+        <table class="ui collapsing definition table" v-if="result.value">
             <tr>
                 <td>入荷先カテゴリ</td>
                 <td>
-                    <vendortag v-model="result[0].vendor"></vendortag>
+                    <vendortag v-model="result.value.data.vendor"></vendortag>
                 </td>
             </tr>
             <tr>
                 <td>取引先名</td>
                 <td class="center aligned">
-                    <span v-if="result[0].vendor.supplier == ''">&mdash;</span>
-                    <span v-if="result[0].vendor.supplier != ''">
-                        {{ result[0].vendor.supplier }}
+                    <span v-if="result.value.data.vendor.supplier == ''">&mdash;</span>
+                    <span v-if="result.value.data.vendor.supplier != ''">
+                        {{ result.data.vendor.supplier }}
                     </span>
                 </td>
             </tr>
         </table>
     </article>
     <article class="mt-3" v-show="!isLoading">
-        <h3 class="ui header">商品一覧</h3>
+        <h2 class="ui header">商品一覧</h2>
+        <h3 class="ui devide">{{ resultCount }}件</h3>
         <table class="ui striped table">
             <thead>
                 <tr>
@@ -114,9 +122,9 @@ const toList = () => {
             </tbody>
             <tfoot class="full-width">
                 <tr>
-                    <th colspan="10">
+                    <th colspan="7">
                         <div class="right aligned">
-                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+                            <pglist ref="pglistRef" v-model:list="logs.value" @loadPage="current"></pglist>
                         </div>
                     </th>
                 </tr>

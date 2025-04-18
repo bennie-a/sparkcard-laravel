@@ -11,6 +11,7 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
+use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Http\Response;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
@@ -42,32 +43,24 @@ class ArrivalLogSearchTest extends TestCase
      * @param array $condition
      * @return void
      */
-    public function test_condition(array $condition) {
-        $method = function($condition, $j, $log){
-            $id = $j[Con::ID];
-            $this->assertNotEmpty($id, '入荷ID');
-            logger()->debug('入荷ID:'.$id);
-            if (MtgJsonUtil::isNotEmpty(ACon::ARRIVAL_DATE, $condition)) {
-                $this->assertEquals(CarbonFormatUtil::toDateString($condition[ACon::ARRIVAL_DATE]), $j[ACon::ARRIVAL_DATE], '入荷日');
-            } else {
-                $exp_arrival = $log->arrival_date;
-                $this->assertEquals(CarbonFormatUtil::toDateString($exp_arrival), $j[ACon::ARRIVAL_DATE], '入荷日');
-            }
-            $this->assertEquals($log->cost, $j[Header::COST], '原価');
-            logger()->debug("原価：expected:{$log->cost}, actual:{$j[Header::COST]}");
-
-            $this->assertEquals($log->quantity, $j[Header::QUANTITY], '枚数');
-        };
+    public function test_condition(array $condition, $method) {        
+        $response = $this->assert_OK($condition);
+        $json = $response->json();
         
-        $this->assertResult($condition, $method);
+        $this->assertArrayHasKey(GCon::LOGS, $json, 'logs要素が含まれない');
+        $method($condition, $json[GCon::DATA]);
     }
     
     public function conditionProvider() {
+        $equal_date = fn($condition, $j) => 
+                        $this->assertEquals($condition[ACon::ARRIVAL_DATE], $j[ACon::ARRIVAL_DATE]);
+        $no_date = fn($condition, $j) => 
+                        $this->assertArrayNotHasKey(ACon::ARRIVAL_DATE, $j);
         return [
             '検索条件が入荷日と取引先カテゴリ' =>
-            [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1]],
+            [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1], $equal_date],
             '検索条件がカード名と取引先カテゴリ' =>
-            [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3]],
+            [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3], $no_date],
         ];
     }
     
@@ -81,7 +74,15 @@ class ArrivalLogSearchTest extends TestCase
     public function test_vendor(int $vendor_type_id, callable $method) {
         $condition = [SCon::VENDOR_TYPE_ID => $vendor_type_id,
                          ACon::ARRIVAL_DATE => TestDateUtil::formatToday()];
-        $this->assertResult($condition, $method);
+        $response = $this->assert_OK($condition);
+        $json = $response->json();
+        $this->assertArrayHasKey(GCon::DATA, $json, 'data要素が含まれない');
+
+        $data = $json[GCon::DATA];
+        $this->assertArrayHasKey(ACon::VENDOR, $data, 'vendor要素が含まれない');
+
+        $logs = $json[GCon::LOGS];
+        $method($data[ACon::VENDOR]);
     }
     
     /**
@@ -120,8 +121,19 @@ class ArrivalLogSearchTest extends TestCase
         $response = $this->assert_OK($condition);
         $json = $response->json();
         
-        foreach($json as $j) {
-            $log = ArrivalLog::find($j[Con::ID]);
+        $this->assertArrayHasKey(GCon::LOGS, $json, 'logs要素が含まれない');
+
+        $this->assertNotEmpty($json[GCon::LOGS], 'log要素の有無');
+        foreach($json[GCon::LOGS] as $j) {
+            $id = $j[GCon::ID];
+            logger()->debug('入荷ID:'.$id);
+            $this->assertNotEmpty($id, '入荷ID');
+
+            $log = ArrivalLog::find($j[GCon::ID]);
+            $this->assertEquals($log->cost, $j[Header::COST], '原価');
+            logger()->debug("原価：expected:{$log->cost}, actual:{$j[Header::COST]}");
+
+            $this->assertEquals($log->quantity, $j[Header::QUANTITY], '枚数');
             $this->verifyCard($log->stock_id, $j[Con::CARD]);
             $method($condition, $j, $log);
         }
@@ -165,7 +177,7 @@ class ArrivalLogSearchTest extends TestCase
 
     protected function verifyCard($stock_id, array $json) {
         $this->verifyCardFromParent($stock_id, $json);
-        $exp_stock = Stockpile::where(Con::ID, $stock_id)->first();
+        $exp_stock = Stockpile::where(GCon::ID, $stock_id)->first();
         $this->assertEquals($exp_stock->language, $json[Header::LANG], '言語');
         $this->assertEquals($exp_stock->condition, $json[Header::CONDITION], '状態');
     }

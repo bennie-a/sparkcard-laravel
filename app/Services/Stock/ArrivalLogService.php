@@ -1,13 +1,17 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Libs\CarbonFormatUtil;
+use App\Libs\MtgJsonUtil;
 use App\Models\Stockpile;
 use app\Services\Stock\ArrivalParams;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\ArrivalConstant as Con;
+use App\Services\Constant\CardConstant;
 use App\Services\Constant\SearchConstant;
+use App\Services\Constant\GlobalConstant as GCon;
 
 /**
  * 入荷手続きに関するServiceクラス
@@ -24,7 +28,22 @@ class ArrivalLogService {
     }
 
     public function filtering($details) {
-        $results = ArrivalLog::filtering($details);
+        $logs = ArrivalLog::filtering($details);
+        if ($logs->isEmpty()) {
+            return $logs;
+        }
+        $first = $logs->first();
+        
+        $data = [
+            Con::VENDOR => [GCon::ID => $first->vendor_type_id,
+            CardConstant::NAME => $first->vcat,
+            Con::SUPPLIER => $first->vendor
+            ]
+        ];
+        if (MtgJsonUtil::hasKey(Con::ARRIVAL_DATE, $details)) {
+            $data[Con::ARRIVAL_DATE] =  CarbonFormatUtil::toDateString($details[Con::ARRIVAL_DATE]);
+        }
+        $results = collect([GCon::DATA => $data, GCon::LOGS => $logs]);
         return $results;
     }
 

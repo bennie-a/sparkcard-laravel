@@ -4,8 +4,6 @@ namespace App\Services\Constant;
 class CardConstant {
     const CARD = 'card';
 
-    const ID = 'id';
-
     const SET = 'set';  
 
     const NAME = 'name';

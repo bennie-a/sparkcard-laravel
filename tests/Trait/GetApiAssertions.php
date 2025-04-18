@@ -11,6 +11,7 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\GlobalConstant as GCon;
 
 /**
  * 'GET'メソッドのAPIに関する検証クラス
@@ -51,11 +52,11 @@ trait GetApiAssertions
      * @return void
      */
     protected function verifyCard(string $stock_id, array $json) {
-        $expected = CardInfo::find($json[Con::ID]);
+        $expected = CardInfo::find($json[GCon::ID]);
         logger()->debug('カード名:'.$json[Con::NAME]);
         $this->assertEquals($expected->name, $json[Con::NAME], 'カード名');
         $this->assertEquals($expected->number, $json[Con::NUMBER], 'カード番号');
-        $this->assertEquals($expected->image_url, $json['image'], '画像URL');
+        $this->assertEquals($expected->image_url, $json['image_url'], '画像URL');
         $this->assertEquals(CardColor::tryFrom($expected->color_id)->text(), $json[Con::COLOR], '色');
 
         $exp_expansion = Expansion::findByNotionId($expected->exp_id);
@@ -70,13 +71,11 @@ trait GetApiAssertions
      * @return void
      */
     protected function verifyBuyVendor() {
-        return function($condition, $json, $log) {
-            $vendor = $json[ACon::VENDOR];
-            $this->assertNotNull($vendor);
-            $this->assertEquals(3, $vendor[Con::ID], '取引先カテゴリID');
+        return function($vendor) {
+            $this->assertEquals(3, $vendor[GCon::ID], '取引先カテゴリID');
             $type = VendorType::find(3);
             $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
-            $this->assertNotNull($vendor['supplier']);
+            $this->assertNotNull($vendor[ACon::SUPPLIER]);
         };
     }
 
@@ -86,14 +85,12 @@ trait GetApiAssertions
      * @return void
      */
     protected function verifyOtherVendor() {
-        return function($condition, $json, $log) {
-            $vendor = $json[ACon::VENDOR];
-            $this->assertNotNull($vendor);
-            $vendor_type_id = $vendor[Con::ID];
+        return function($vendor) {
+            $vendor_type_id = $vendor[GCon::ID];
             $this->assertNotNull($vendor_type_id, '取引先カテゴリID');
             $type = VendorType::find($vendor_type_id);
             $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
-            $this->assertNull($vendor['supplier']);
+            $this->assertNull($vendor[ACon::SUPPLIER]);
         };
     }
 
@@ -124,7 +121,7 @@ trait GetApiAssertions
             $foils = $card[Header::FOIL];
             $this->assertTrue($foils['is_foil']);
 
-            $cardinfo = CardInfo::find($card[Con::ID]);
+            $cardinfo = CardInfo::find($card[GCon::ID]);
             $foiltype = Foiltype::find($cardinfo->foiltype_id);
             $this->assertEquals($foiltype->name, $foils[Con::NAME]);
         };

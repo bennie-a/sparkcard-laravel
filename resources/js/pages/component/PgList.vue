@@ -14,7 +14,6 @@
     const perPage = ref(10);
 
     const currentList = reactive([]);
-
     // ページ番号をクリックしたときのイベント
     const clickCallback = (pageNum) => {
         currentPage.value = pageNum;
@@ -34,8 +33,6 @@
     watch(() => list.value, () => {
         pageCount();
         clickCallback(currentPage.value);
-        // if (lastPage.value === 0) {
-        // }
     });
 
 </script>
