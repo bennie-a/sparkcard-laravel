@@ -111,11 +111,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
         </div>
     </article>
     <article class="mt-2" v-show="resultCount != 0">
-        {{ result.value }}
-
-        <h2 class="ui medium dividing header">
-            件数：{{resultCount}}件
-        </h2>
+        <h3 class="ui devide">{{ resultCount }}件</h3>
         <table class="ui striped table">
             <thead>
                 <tr>

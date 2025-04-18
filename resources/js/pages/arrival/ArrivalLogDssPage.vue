@@ -82,7 +82,7 @@ const toList = () => {
                 <td class="center aligned">
                     <span v-if="result.value.data.vendor.supplier == ''">&mdash;</span>
                     <span v-if="result.value.data.vendor.supplier != ''">
-                        {{ result.data.vendor.supplier }}
+                        {{ result.value.data.vendor.supplier }}
                     </span>
                 </td>
             </tr>
