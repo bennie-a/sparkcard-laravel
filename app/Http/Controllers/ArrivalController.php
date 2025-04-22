@@ -113,13 +113,17 @@ class ArrivalController extends Controller {
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 入荷情報を削除する。
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id 入荷ID
+     * @return \Illuminate\Http\Response 
      */
     public function destroy($id)
     {
-        //
+        logger()->info("Start to Delete Arrival log. id:{$id}");
+        $log = $this->service->findByStockInfo($id);
+        logger()->debug($log->stock_id);
+        logger()->info("End to Delete Arrival log. id:{$id}");
+        return response()->noContent();
     }
 }

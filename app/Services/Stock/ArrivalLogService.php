@@ -70,4 +70,16 @@ class ArrivalLogService {
                                         Header::QUANTITY => $params->quantity(), Header::COST => $params->cost()]);
         return $arrivalLog;
     }
+
+    /**
+     * 入荷IDと合致する入荷情報を在庫情報及び出荷情報と
+     * 一緒に取得する。
+     *
+     * @param integer $id
+     * @return Model
+     */
+    public function findByStockInfo(int $id) {
+        $log = ArrivalLog::findWithStockInfo($id);
+        return $log;
+    }
 }
