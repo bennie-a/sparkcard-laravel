@@ -2,8 +2,7 @@
     import { ref, reactive, computed, onMounted } from "vue";
     import axios from "axios";
     import loading from "vue-loading-overlay";
-    import MessageArea from "./component/MessageArea.vue";
-    import pagination from "./component/ListPagination.vue";
+    import MessageArea from "./component/MessageArea.vue";;
     import ModalButton from "./component/ModalButton.vue";
     import foiltag from "./component/tag/FoilTag.vue";
     import ImageModal from "./component/ImageModal.vue";
