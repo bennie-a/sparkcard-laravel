@@ -6,12 +6,12 @@
     const execEmit = () => {
         emit('loadPage', { 'response': currentList.value });
     }
+    const perPage = defineModel('perPage', {type:Number, required:false, default:10});
 
     // 現在表示されているページ数
     const currentPage = ref(1);
     // 最後のページ数
     const lastPage = ref(0);
-    const perPage = ref(10);
 
     const currentList = reactive([]);
     // ページ番号をクリックしたときのイベント

@@ -8,7 +8,7 @@
     import foiltag from "./component/tag/FoilTag.vue";
     import ImageModal from "./component/ImageModal.vue";
     import scdatepicker from "./component/SCDatePicker.vue";
-    import PgList from "./component/PgList.vue";
+    import pglist from "./component/PgList.vue";
     import { AxiosTask } from "../component/AxiosTask";
     import vendorType from './component/VendorType.vue';
     import lang from './component/Language.vue';
@@ -18,7 +18,7 @@ const components = {
         MessageArea,
         ModalButton,
         ImageModal,
-        PgList,
+        pglist,
         };
 
 // リアクティブデータの定義
@@ -31,6 +31,10 @@ const cost = ref(28);
 const isLoading = ref(false);
 const vendorNum = ref(1);
 const vendor = ref("");
+const currentList = reactive([]);
+let result = reactive([]);
+let count = ref(12);
+const resultCount = ref(0);
 
 // Vuex Storeへのアクセス（例: 仮想的なuseStore）
 import { useStore } from "vuex";
@@ -79,6 +83,9 @@ const search = async () => {
     isLoading.value = true;
     store.dispatch("message/clear");
     store.dispatch("clearCards");
+    store.dispatch("clearMessage");
+    result.value = [];
+    resultCount.value = 0;
 
     const query = {
         params: {
@@ -91,12 +98,11 @@ const search = async () => {
 
   try {
     const response = await axios.get("/api/database/card", query);
-    const filterd = response.data.map((f) => {
+    result.value = response.data.map((f) => {
             f.language = "JP";
             return f;
             });
-
-            store.dispatch("setCard", filterd);
+    resultCount.value = result.value.length;
         } catch (e) {
             let data = e.response.data;
             console.log(data);
@@ -106,7 +112,7 @@ const search = async () => {
         }
     };
 
-    const regist = async () => {
+const regist = async () => {
     store.dispatch("setLoad", true);
     store.dispatch("message/clear");
     store.dispatch("clearMessage");
@@ -132,7 +138,7 @@ const search = async () => {
 
             const response = await axios.post("api/arrival", query);
             if (response.status === 201) {
-            console.log(c.name + ": 登録完了");
+                    console.log(c.name + ": 登録完了");
             }
         })
         );
@@ -148,11 +154,20 @@ const search = async () => {
     };
 
 const formatPrice = (price) => {
-  const formattedPrice = String(price);
-  return formattedPrice.includes(",")
-    ? formattedPrice.replace(",", "")
-    : formattedPrice;
-};
+    const formattedPrice = String(price);
+    return formattedPrice.includes(",")
+        ? formattedPrice.replace(",", "")
+        : formattedPrice;
+    };
+
+const current = (data) => {
+        currentList.value = data.response;
+    }
+
+const hasResult = () => {
+    return resultCount.value > 0;
+}
+
 </script>
 
 <template>
@@ -219,12 +234,12 @@ const formatPrice = (price) => {
     </article>
     <article class="mt-2">
         <h2
-            v-if="$store.getters.cardsLength != 0"
+            v-if="hasResult()"
             class="ui medium dividing header"
         >
-            件数：{{ $store.getters.cardsLength }}件
+            {{ resultCount }}件
         </h2>
-        <div v-if="$store.getters.cardsLength != 0" class="mt-2 ui form">
+        <div v-if="hasResult()" class="mt-2 ui form">
             <div class="four fields">
                 <div class="three wide column field">
                     <label for="">入荷カテゴリ</label>
@@ -259,7 +274,7 @@ const formatPrice = (price) => {
         </div>
         <div class="mt-1 ui four cards">
             <div
-                v-for="(card, index) in $store.getters.sliceCard"
+                v-for="(card, index) in currentList.value"
                 :key="index"
                 class="card gallery"
             >
@@ -324,10 +339,8 @@ const formatPrice = (price) => {
                 </div>
             </div>
         </div>
-        <div class="ui grid">
-            <div class="four wide column row right floated">
-                <pagination :count="Number(12)" />
-            </div>
+        <div  v-show="hasResult()" class="ui centered grid mt-2 mb-1">
+            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current" v-model:perPage="count"></pglist>
         </div>
         <loading
          :active="isLoading"

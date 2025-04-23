@@ -48,7 +48,7 @@ body {
 }
 
 .mt-2 {
-    margin-top: 2rem;
+    margin-top: 2rem !important;
 }
 
 .mt-3 {
@@ -72,6 +72,10 @@ body {
 
 .ml-half {
     margin-left: 0.5rem !important;
+}
+
+.mb-1 {
+    margin-bottom: 1rem !important;
 }
 
 
