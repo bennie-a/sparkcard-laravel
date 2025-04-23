@@ -28,7 +28,7 @@ class ArrivalLogDeleteTest extends TestCase
      */
     public function test_example(): void
     {
-        $response = $this->delete('/api/arrival/1');
+        $response = $this->delete('/api/arrival/2');
 
         $response->assertStatus(204);
     }

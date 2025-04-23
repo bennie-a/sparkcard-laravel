@@ -21,6 +21,8 @@ use App\Services\Constant\SearchConstant as Con;
 use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\GlobalConstant as GCon;
 use App\Facades\APIHand;
+use App\Facades\CardBoard;
+use App\Services\CardBoardService;
 
 /**
  * 入荷手続きAPI
@@ -122,7 +124,9 @@ class ArrivalController extends Controller {
     {
         logger()->info("Start to Delete Arrival log. id:{$id}");
         $log = $this->service->findByStockInfo($id);
-        logger()->debug($log->stock_id);
+
+        CardBoard::decreaseQuantity($log->card_id, $log->quantity);
+
         logger()->info("End to Delete Arrival log. id:{$id}");
         return response()->noContent();
     }

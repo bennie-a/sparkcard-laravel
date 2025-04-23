@@ -15,6 +15,7 @@ use FiveamCode\LaravelNotionApi\Exceptions\NotionException;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Collection;
 use App\Services\Constant\NotionConstant as JA;
+use App\Services\Constant\NotionStatus;
 
 /**
  * Notionの販売管理ボードに関するServiceクラス
@@ -161,7 +162,7 @@ class CardBoardService {
             logger()->debug($info->name);
             $duplicated = $this->repo->findBySparkcardId($info->id);
             $priceVal = intval($details[Header::MARKET_PRICE]);
-            if (!empty($duplicated) && $duplicated->getProperty(JA::STATUS)->getName() !== '取引完了') {
+            if (!empty($duplicated) && $duplicated->getProperty(JA::STATUS)->getName() !== NotionStatus::Complete->value) {
                 $stock = $duplicated->getProperty(JA::QTY)->getNumber() + intval($details[Header::QUANTITY]);
                 $page->set(JA::QTY, Number::value($stock));
                 $page->setId($duplicated->getId());
@@ -169,7 +170,7 @@ class CardBoardService {
             } else {
                 $page->setTitle(JA::NAME, $info->name);
                 $page->setText(JA::EN_NAME, $info->en_name);
-                $page->setSelect(JA::STATUS, "要写真撮影");
+                $this->setStatus($page, NotionStatus::PhotoPending);
                 $page->setNumber(JA::QTY, $details[Header::QUANTITY]);
                 $page->setNumber(JA::NUMBER, $info->number);
                 $language = CardLanguage::find($details[Header::LANGUAGE]);
@@ -209,6 +210,33 @@ class CardBoardService {
         $factory = new NotionPageFactory();
         $page = $factory->create($id, $details);
         $this->updatePage($page);
+    }
+
+    /**
+     * 在庫数を減らす。
+     * 在庫数が0ならStatusを「削除対象」に変更する。
+     *
+     * @param integer $id
+     * @param integer $quantity
+     * @return void
+     */
+    public function decreaseQuantity(int $id, int $quantity) {
+        $targetPage = $this->repo->findBySparkcardId($id);
+        $page = new Page();
+        $page->setId($targetPage->getId());
+        $beforeQty = $targetPage->getProperty(JA::QTY);
+        $afterQty = $beforeQty->getNumber() - $quantity;
+        if ($afterQty <= 0) {
+            $afterQty = 0;
+            $this->setStatus($page, NotionStatus::ToBeDeleted);
+        }
+
+        $page->setNumber(JA::QTY, $afterQty);
+        $this->updatePage($page);
+    }
+
+    private function setStatus(Page $page, NotionStatus $status) {
+        $page->setSelect(JA::STATUS, $status->value);
     }
 
     public function updatePage(Page $page) {

@@ -96,7 +96,7 @@ class CardBoardRepository extends NotionRepository{
      *
      * @param FilterBag $filterbag
      * @param Sorting $sorting
-     * @return $pages
+     * @return Collection
      */
     private function findByFilter(FilterBag $filterbag, Sorting $sorting) {
         $database = $this->getDatabase();
@@ -112,7 +112,7 @@ class CardBoardRepository extends NotionRepository{
      * @param Database $database
      * @param PageCollection $pageCollection
      * @param Collection $pages
-     * @return $pages
+     * @return Collection $pages
      */
     private function getCardCollection(Database $database, PageCollection $pageCollection, Collection $pages) {
         if ($pageCollection->hasMoreEntries()) {
