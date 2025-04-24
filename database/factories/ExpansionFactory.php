@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Expansion;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Expansion>
@@ -19,12 +20,9 @@ class ExpansionFactory extends Factory
     public function definition()
     {
         return [
-            'notion_id' => $this->random(),
-            'base_id' => mt_rand(0, 999999)
+            'notion_id' => Str::uuid(),
+            'base_id' => mt_rand(0, 999999),
+            'release_date' => fake()->date()
         ];
-    }
-
-    private function random() {
-        return substr(str_shuffle("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789"), 0, 36);
     }
 }

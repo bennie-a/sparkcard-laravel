@@ -1,13 +1,15 @@
 <?php
 
-namespace Database\Seeders;
+namespace Tests\Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
-use App\Enum\PromoType;
-use App\Models\BaseCategory;
-use App\Models\CsvHeader;
-use App\Models\Shipping;
+use Database\Seeders\CsvHeaderSeeder;
+use Database\Seeders\ExcludePromoSeeder;
+use Database\Seeders\ExpansionSeeder;
+use Database\Seeders\FoiltypeSeeder;
+use Database\Seeders\MainColorSeeder;
+use Database\Seeders\PromotypeSeeder;
+use Database\Seeders\ShippingSeeder;
+use Database\Seeders\VendorTypeSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +23,7 @@ class DatabaseSeeder extends Seeder
     {
         logger()->info('マスタデータ登録開始');
         $this->call(ExpansionSeeder::class);
+        $this->call(TestExpansionSeeder::class);
         $this->call(MainColorSeeder::class);
         $this->call(ShippingSeeder::class);
         $this->call(PromotypeSeeder::class);

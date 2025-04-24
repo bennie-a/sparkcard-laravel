@@ -8,9 +8,13 @@ use App\Models\Expansion;
 use App\Models\Foiltype;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Services\Constant\CardConstant as CCon;
 
 class TestCardInfoSeeder extends Seeder
 {
+    const EXP_ID = 'exp_id';
+
+    
     /**
      * Run the database seeds.
      *
@@ -26,63 +30,75 @@ class TestCardInfoSeeder extends Seeder
         // 兄弟戦争
         $bro = $this->findNotionId('BRO');
         
-        CardInfo::factory()->createOne(['exp_id' => $bro, 'name' => 'ドラゴンの運命',
-        'en_name' => 'Draconic Destiny', 'color_id' => 'R', 'number' => '130',
-        'isFoil' => false, 'image_url' => '', 'barcode' => 'xxxxxxxx', 'foiltype_id' => $nonfoil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
-        'en_name' => 'Phyrexian Dragon Engine', 'color_id' => 'A', 'number' => '163',
-        'isFoil' => false, 'image_url' => '', 'barcode' => 'xxxxxxxy', 'foiltype_id' => $nonfoil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
-        'en_name' => 'Phyrexian Dragon Engine', 'color_id' => 'A', 'number' => '163',
-        'isFoil' => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $bro, 'name' => 'ドラゴンの運命',
+        CCon::EN_NAME => 'Draconic Destiny', 'color_id' => 'R', CCon::NUMBER => '130',
+        CCon::IS_FOIL => false, 'image_url' => '', 'barcode' => 'xxxxxxxx', 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
+        CCon::EN_NAME => 'Phyrexian Dragon Engine', 'color_id' => 'A', CCon::NUMBER => '163',
+        CCon::IS_FOIL => false, 'image_url' => '', 'barcode' => 'xxxxxxxy', 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
+        CCon::EN_NAME => 'Phyrexian Dragon Engine', 'color_id' => 'A', CCon::NUMBER => '163',
+        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
 
         // 灯争大戦
         $war = $this->findNotionId('WAR');
-        CardInfo::factory()->createOne(['exp_id' => $war, 'name' => '群れの声、アーリン≪絵違い≫',
-        'en_name' => 'Arlinn, Voice of the Pack', 'color_id' => 'G', 'number' => '150',
-         'isFoil' => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $war, 'name' => '群れの声、アーリン≪絵違い≫',
+        CCon::EN_NAME => 'Arlinn, Voice of the Pack', 'color_id' => 'G', CCon::NUMBER => '150',
+         CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
 
          // 神河：輝ける世界
          $neo = $this->findNotionId('NEO');
-        CardInfo::factory()->createOne(['exp_id' => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
-        'en_name' => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', 'number' => '59',
-        'isFoil' => false, 'image_url' => '', 'foiltype_id' => $nonfoil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
-        'en_name' => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', 'number' => '59',
-        'isFoil' => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $neo, 'name' => '告別≪ショーケース≫',
-    'en_name' => 'Farewell', 'color_id' => 'W', 'number' => '365',
-        'isFoil' => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
+        CCon::EN_NAME => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', CCon::NUMBER => '59',
+        CCon::IS_FOIL => false, 'image_url' => '', 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
+        CCon::EN_NAME => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', CCon::NUMBER => '59',
+        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $neo, 'name' => '告別≪ショーケース≫',
+    CCon::EN_NAME => 'Farewell', 'color_id' => 'W', CCon::NUMBER => '365',
+        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
 
         // ファイレクシア：完全なる統一
         $one = $this->findNotionId('ONE');
-        CardInfo::factory()->createOne(['exp_id' => $one, 'name' => '機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫',
-        'en_name' => 'Elesh Norn, Mother of Machines', 'color_id' => 'W', 'number' => '298',
-        'isFoil' => true, 'foiltype_id' => $scfoil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $one, 'name' => '完成化した精神、ジェイス',
-        'en_name' => 'Jace, the Perfected Mind', 'color_id' => 'U', 'number' => '57',
-        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $one, 'name' => 'ドロスの魔神',
-        'en_name' => 'Archfiend of the Dross', 'color_id' => 'B', 'number' => '82',
-        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $one, 'name' => '機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫',
+        CCon::EN_NAME => 'Elesh Norn, Mother of Machines', 'color_id' => 'W', CCon::NUMBER => '298',
+        CCon::IS_FOIL => true, 'foiltype_id' => $scfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $one, 'name' => '完成化した精神、ジェイス',
+        CCon::EN_NAME => 'Jace, the Perfected Mind', 'color_id' => 'U', CCon::NUMBER => '57',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $one, 'name' => 'ドロスの魔神',
+        CCon::EN_NAME => 'Archfiend of the Dross', 'color_id' => 'B', CCon::NUMBER => '82',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
 
         // イクサラン
         $xln = $this->findNotionId('XLN');
-        CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '軍団の上陸',
-        'en_name' => 'Legion\'s Landing  Adanto', 'color_id' => 'W', 'number' => '22',
-        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
-        CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '軍団の上陸≪プレリリース≫',
-        'en_name' => 'Legion\'s Landing  Adanto', 'color_id' => 'W', 'number' => '22s',
-        'isFoil' => true, 'foiltype_id' => $foil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $xln, 'name' => '軍団の上陸',
+        CCon::EN_NAME => 'Legion\'s Landing  Adanto', 'color_id' => 'W', CCon::NUMBER => '22',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $xln, 'name' => '軍団の上陸≪プレリリース≫',
+        CCon::EN_NAME => 'Legion\'s Landing  Adanto', 'color_id' => 'W', CCon::NUMBER => '22s',
+        CCon::IS_FOIL => true, 'foiltype_id' => $foil->id]);
 
-        CardInfo::factory()->createOne(['exp_id' => $xln, 'name' => '在庫情報なし',
-        'en_name' => 'No Info', 'color_id' => 'W', 'number' => '1',
-        'isFoil' => false, 'foiltype_id' => $nonfoil->id]);
+        CardInfo::factory()->createOne([self::EXP_ID => $xln, 'name' => '在庫情報なし',
+        CCon::EN_NAME => 'No Info', 'color_id' => 'W', CCon::NUMBER => '1',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
 
+        // 入荷履歴削除テスト
+        CardInfo::factory()->createOne([self::EXP_ID => $xln, 'name' => '削除テストカード_出荷情報あり',
+        CCon::EN_NAME => 'Pre-Delete Card', 'color_id' => 'W', CCon::NUMBER => '2',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
+
+        CardInfo::factory()->createOne([self::EXP_ID => $xln, 'name' => '削除テストカード_出荷情報なし',
+        CCon::EN_NAME => 'Pre-Delete Card_No_Shipt_Info', 'color_id' => 'W', CCon::NUMBER => '3',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
+
+        CardInfo::factory()->createOne([self::EXP_ID => $xln, 'name' => '削除カード_Notionカードなし',
+        CCon::EN_NAME => 'Pre-Delete Card', 'color_id' => 'W', CCon::NUMBER => '4',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
     }
         
-        private function findNotionId(string $attr) : string {
-            $set = Expansion::where('attr', $attr)->first();
-            return $set->notion_id;
-      }
+    private function findNotionId(string $attr) : string {
+        $set = Expansion::findBySetCode($attr);
+        return $set->notion_id;
+    }
 }
