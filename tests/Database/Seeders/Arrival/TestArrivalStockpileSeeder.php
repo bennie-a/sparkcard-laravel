@@ -1,0 +1,29 @@
+<?php
+namespace Tests\Database\Seeders\Arrival;
+
+use App\Models\CardInfo;
+use App\Models\Stockpile;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\StockpileHeader as Header;
+
+class TestArrivalStockpileSeeder extends TestStockpileSeeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $pre_delete = CardInfo::findSingleCard('XLN', '入荷情報編集カード_出荷情報あり', false);
+        Stockpile::create([Header::CARD_ID => $pre_delete->id, Header::CONDITION => 'NM', 
+                                                                                                Con::QUANTITY => 3, Header::LANGUAGE => 'JP']);
+
+        $no_shipt_log = CardInfo::findSingleCard('XLN', '入荷情報編集カード_出荷情報なし', false);
+        Stockpile::create([Header::CARD_ID => $no_shipt_log->id, Header::CONDITION => 'NM', 
+                                                                                                Con::QUANTITY => 5, Header::LANGUAGE => 'JP']);
+                                                                                        
+
+    }
+}

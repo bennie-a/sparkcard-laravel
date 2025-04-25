@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Unit\DB;
+namespace Tests\Unit\DB\Card;
 
-use App\Facades\ExService;
 use App\Facades\ScryfallServ;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
@@ -10,18 +9,17 @@ use App\Models\Expansion;
 use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Response;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertIsInt;
-use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
-use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertSame;
-use function PHPUnit\Framework\assertTrue;
+use Illuminate\Support\Str;
 
 class CardInfoDBTest extends TestCase
 {
@@ -29,9 +27,9 @@ class CardInfoDBTest extends TestCase
     public function setup():void
     {
         parent::setup();
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('TestCardInfoSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
     }
 
 /**
@@ -59,11 +57,11 @@ public function test_getImage(string $setcode, string $name, string $color, int 
 
     public function imageprovider() {
         return[
-            'multiverseIdあり' => ['WAR', '出現領域', 'Land', 245, 462492, ''],
+            'multiverseIdあり' => ['WAR', '出現領域', 'Land', 245, 462492, (string)Str::uuid()],
             'scryfallIdあり' => ['WAR', '出現領域', 'Land', 245, 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
-            'multiverseIdとscryfallIdなし' => ['WAR', '出現領域', 'Land', 245, 0, ''],
-            '両面カード' => ['NEO', '永岩城の修繕', 'W', 442, 551715, ''],
-            '画像URL更新' => ['NEO', '告別≪ショーケース≫', 'W', 365,552454, ''],
+            'multiverseIdとscryfallIdなし' => ['WAR', '出現領域', 'Land', 245, 0, (string)Str::uuid()],
+            '両面カード' => ['NEO', '永岩城の修繕', 'W', 442, 551715, (string)Str::uuid()],
+            '画像URL更新' => ['NEO', '告別≪ショーケース≫', 'W', 365,552454, (string)Str::uuid()],
         ];
     }
 

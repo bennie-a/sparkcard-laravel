@@ -6,11 +6,11 @@ use Illuminate\Http\Response;
 /**
  * 検索結果が存在しない場合に発生する例外クラス
  */
-class NoContentException extends ApiException {
+class NotFoundException extends ApiException {
 
     public function getTitle(): string
     {
-        return '情報なし';
+        return '結果なし';
     }
 
     public function getStatusCode(): int
@@ -20,7 +20,7 @@ class NoContentException extends ApiException {
 
     public function getDetail(): string
     {
-        return '指定した情報がありません。';
+        return '検索結果がありません。';
     }
 
 }

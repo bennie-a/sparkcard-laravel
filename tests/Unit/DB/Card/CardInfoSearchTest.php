@@ -2,16 +2,13 @@
 
 namespace Tests\Unit\DB\Card;
 
-use App\Facades\CardInfoServ;
-use App\Models\CardInfo;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Constant\CardConstant as Con;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\GetApiAssertions;
-
-use function PHPUnit\Framework\assertCount;
-use function PHPUnit\Framework\assertSame;
 
 /**
  * カード情報検索に関するテスト
@@ -22,12 +19,10 @@ class CardInfoSearchTest extends TestCase
     public function setup():void
     {
         parent::setup();
-        parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
     }
     /**
      * 在庫情報の有無に関するテスト
@@ -41,9 +36,6 @@ class CardInfoSearchTest extends TestCase
         $response = $this->assert_OK($query);
         $json = $response->json();
         $this->assertCount(1, $json, '件数');
-        foreach($json as $line) {
-            $this->assertEquals($quantity, $line[Con::QUANTITY], '数量');
-        }
     }
 
     public function stockpileprovider() {

@@ -46,5 +46,7 @@ class CardConstant {
 
     const EXP = 'exp';
 
+    const EXP_ID = 'exp_id';
+
     const ATTR = 'attr';
 }

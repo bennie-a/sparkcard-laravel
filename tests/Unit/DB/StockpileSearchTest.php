@@ -11,6 +11,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
@@ -31,11 +35,10 @@ class StockpileSearchTest extends TestCase
      */
     public function setup():void {
         parent::setup();
-        $this->seed('TruncateAllTables');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
     }
     /**
      * 在庫情報検索OKパターン
@@ -58,8 +61,8 @@ class StockpileSearchTest extends TestCase
             
             $info = CardInfo::find($stock->card_id);
             assertEquals($info->name, $actual[$index]['cardname']);
-            assertEquals($stock->quantity, $actual[$index][StockpileHeader::QUANTITY]);
-            assertEquals($stock->condition, $actual[$index][StockpileHeader::CONDITION]);
+            assertEquals($stock->quantity, $actual[$index]['quantity']);
+            assertEquals($stock->condition, $actual[$index]['condition']);
         }
     }
 
@@ -88,11 +91,5 @@ class StockpileSearchTest extends TestCase
         return [
             '検索結果なし' =>['xxxx', '', 0, Response::HTTP_NO_CONTENT],
         ];
-    }
-
-    public function tearDown():void
-    {
-        Artisan::call('migrate:refresh');
-        parent::tearDown();
     }
 }

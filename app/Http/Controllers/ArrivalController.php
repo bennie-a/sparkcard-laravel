@@ -77,17 +77,17 @@ class ArrivalController extends Controller {
         $details[Header::IS_FOIL] = $request->boolean(Header::IS_FOIL);
         $details[ACon::ARRIVAL_DATE] = $request->date(ACon::ARRIVAL_DATE);
         $params = new ArrivalParams($details);
-        logger()->info('Start Arrival log', [$params->cardId()]);
+        logger()->info('Start to Post Arrival log', [$params->cardId()]);
         $info = CardInfo::find($params->cardId());
         if (empty($info)) {
-            throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_CARD, 'カード情報がありません');
+            throw new NoContentException();
         }
 
         $arrivalLog = $this->service->store($params);
         if (!empty($arrivalLog)) {
             \App\Facades\CardBoard::store($info, $details);
         }
-        logger()->info('End Arrival log', [$params->cardId()]);
+        logger()->info('Start to Post Arrival log', [$params->cardId()]);
         return response()->json([Header::CARD_ID => $params->cardId(), 'arrival_id' => $arrivalLog->id], Response::HTTP_CREATED);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Tests\Database\Seeders\Arrival;
 
 use App\Models\ArrivalLog;
 use App\Models\Stockpile;

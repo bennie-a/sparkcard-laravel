@@ -16,6 +16,11 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant as GCon;
 use Carbon\Carbon;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\Arrival\TestArrivalLogSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
@@ -31,12 +36,11 @@ class ArrivalLogGroupingTest extends TestCase {
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
-        $this->seed('TestArrivalLogSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
+        $this->seed(TestArrivalLogSeeder::class);
     }
 
     /**

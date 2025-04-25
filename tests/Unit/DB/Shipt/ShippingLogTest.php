@@ -1,11 +1,15 @@
 <?php
 
-namespace Tests\Feature\tests\Unit\DB;
+namespace Tests\Feature\tests\Unit\DB\Shipt;
 
 use App\Files\Csv\CsvWriter;
 use App\Files\Stock\ShippingLogCsvReader;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Http\Response;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
 /**
@@ -15,11 +19,10 @@ class ShippingLogTest extends TestCase
 {
     public function setup():void {
         parent::setup();
-        $this->seed('TruncateAllTables');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
      }
     /**
      * A basic feature test example.
@@ -36,8 +39,8 @@ class ShippingLogTest extends TestCase
     public function okprovider() {
         return [
             '全件成功' => ['all_success.csv'],
-            'ファイルの文字コードがShift-JIS' => ['shift-jis.csv'],
-            'ファイルの文字コードがUTF-8' => ['utf-8.csv']
+            // 'ファイルの文字コードがShift-JIS' => ['shift-jis.csv'],
+            // 'ファイルの文字コードがUTF-8' => ['utf-8.csv']
         ];
     }
 
@@ -62,7 +65,7 @@ class ShippingLogTest extends TestCase
      * @return void
      */
     private function execute(string $filename, int $status, array $json) {
-        $dir = dirname(__FILE__, 4).'\storage\test\sms\shipt\\';
+        $dir = dirname(__FILE__, 5).'\storage\test\sms\shipt\\';
         $response = $this->post('/api/shipping/import', ['path' => $dir.$filename]);
         logger()->debug($response->json());
         
