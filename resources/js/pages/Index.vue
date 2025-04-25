@@ -115,7 +115,7 @@ const regist = async () => {
     store.dispatch("setLoad", true);
     store.dispatch("message/clear");
     store.dispatch("clearMessage");
-    const card = store.getters.card;
+    const card = result.value;
     const filtered = card.filter((c) => c.stock != null && c.stock > 0);
 
     try {
