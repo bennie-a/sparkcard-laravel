@@ -228,7 +228,7 @@ class CardBoardService {
         $afterQty = $beforeQty->getNumber() - $quantity;
         if ($afterQty <= 0) {
             $afterQty = 0;
-            // $page->setCheckbox('archived', true);
+            $page->setCheckbox('archived', true);
         }
 
         $page->setNumber(JA::QTY, $afterQty);

@@ -1,14 +1,13 @@
 <?php
-
+namespace Tests\Database\Seeders\Arrival;
 use App\Models\CardInfo;
-use Illuminate\Database\Seeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use App\Services\Constant\CardConstant as CCon;
 
 /**
  * 入荷情報の編集・削除用のカード情報を作成するSeederクラス
  */
-class TestArrrivalCardInfoSeeder extends TestCardInfoSeeder
+class TestArrLogCardInfoSeeder extends TestCardInfoSeeder
 {
     /**
      * Run the database seeds.

@@ -28,7 +28,7 @@ class ArrivalLog extends Model
      * @return Model
      */
     public static function findWithStockInfo(int $id) {
-        $columns = ['alog.id as arrival_id', 'alog.quantity', 's.id as stock_id', 's.card_id'];
+        $columns = ['alog.id', 'alog.quantity', 's.id as stock_id', 's.card_id'];
         $query = self::getTableQuery()->select($columns)->where('alog.id', $id);
         $query = self::joinStockpile($query);
         return $query->first();

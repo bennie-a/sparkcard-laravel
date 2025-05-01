@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Api\Notion;
 
-use App\Exceptions\NotFoundException;
+use App\Exceptions\api\NotFoundException;
 use App\Http\Response\CustomResponse;
 use App\Models\Expansion;
 use App\Repositories\Api\Notion\NotionRepository;
@@ -47,7 +47,7 @@ class CardBoardRepository extends NotionRepository{
             }
             $exp = Expansion::where('name', $setname)->first();
             if (!$exp) {
-                throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_EXPANSION, '該当するエキスパンションがありません');
+                throw new NotFoundException('該当するエキスパンションがありません');
             }
             $filtered = $pages->filter(function($value, $key) use ($exp) {
                 $relation = $value->getProperty('エキスパンション');

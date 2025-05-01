@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Facades\StockpileServ;
 use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
 use App\Models\Stockpile;
@@ -12,6 +13,7 @@ use App\Services\Constant\ArrivalConstant as Con;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\SearchConstant;
 use App\Services\Constant\GlobalConstant as GCon;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * 入荷手続きに関するServiceクラス
@@ -76,10 +78,22 @@ class ArrivalLogService {
      * 一緒に取得する。
      *
      * @param integer $id
-     * @return Model
+     * @return ArrivalLog
      */
     public function findByStockInfo(int $id) {
         $log = ArrivalLog::findWithStockInfo($id);
         return $log;
+    }
+
+    /**
+     * 在庫情報の枚数を入荷情報の枚数分減らし、入荷情報を削除する。
+     *
+     * @param Model $log
+     * @return void
+     */
+    public function destroy($log) {
+        $stockserv = new StockpileService();
+        $stockserv->decreaseQuantity($log->stock_id, $log->quantity);
+        ArrivalLog::destroy($log->id);
     }
 }
