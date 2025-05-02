@@ -23,7 +23,10 @@ class TestArrivalStockpileSeeder extends TestStockpileSeeder
         $no_shipt_log = CardInfo::findSingleCard('XLN', '入荷情報編集カード_出荷情報なし', false);
         Stockpile::create([Header::CARD_ID => $no_shipt_log->id, Header::CONDITION => 'NM', 
                                                                                                 Con::QUANTITY => 5, Header::LANGUAGE => 'JP']);
-                                                                                        
+       
+        $no_notion = CardInfo::findSingleCard('XLN', '入荷情報編集カード_Notionカードなし', false);
+        Stockpile::create([Header::CARD_ID => $no_notion->id, Header::CONDITION => 'NM', 
+                                                                                                Con::QUANTITY => 7, Header::LANGUAGE => 'JP']);
 
     }
 }

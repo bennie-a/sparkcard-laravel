@@ -19,16 +19,29 @@ class TestArrLogEditSeeder extends Seeder
      */
     public function run()
     {
-        $stock_id = 'stock_id';
-        $noshipt = Stockpile::find("入荷情報編集カード_出荷情報なし", "XLN", "NM", "JP", false);
-        TestDateUtil::formatYesterday();
-        $logs = [];
-        $logs[] = [
-            $stock_id => $noshipt->id,
+        $logs = collect([
+            '入荷情報編集カード_出荷情報なし',
+            '入荷情報編集カード_Notionカードなし',
+        ])->map(function ($name) {
+            return $this->makeLogEntry($name);
+        })->all();
+    
+        ArrivalLog::factory()->createMany($logs);
+    }
+
+    private function makeLogEntry(string $productName): array
+    {
+        $stock = Stockpile::find($productName, "XLN", "NM", "JP", false);
+
+        if (!$stock) {
+            throw new \RuntimeException("Stockpile not found for: {$productName}");
+        }
+
+        return [
+            'stock_id' => $stock->id,
             Acon::ARRIVAL_DATE => TestDateUtil::formatToday(),
             StockpileHeader::QUANTITY => 2,
-            SCon::VENDOR_TYPE_ID => 1,            
+            SCon::VENDOR_TYPE_ID => 1,
         ];
-        ArrivalLog::factory()->createMany($logs);
     }
 }

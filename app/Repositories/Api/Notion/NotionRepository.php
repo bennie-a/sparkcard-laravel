@@ -39,7 +39,7 @@ class NotionRepository {
         try {
             $notion = self::createNotion();
             $notion->pages()->update($page);
-            logger()->info('更新完了'.$page->getId());
+            logger()->info('更新完了:'.$page->getId());
         } catch(NotionException $e) {
             logger()->error($e->getMessage());
             throw $e;

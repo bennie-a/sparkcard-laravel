@@ -30,9 +30,9 @@ class ArrivalLogCollector
      * カード名を元に入荷情報を取得する。
      *
      * @param string $cardname
-     * @return void
+     * @return ArrivalLog
      */
-    public function fetchByCardname(string $cardname) {
+    public function fetchByCardname(string $cardname):ArrivalLog {
         return $this->getQuery()->where('c.name', $cardname)->first();
     }
 

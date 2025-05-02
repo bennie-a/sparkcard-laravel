@@ -138,3 +138,9 @@ const toList = () => {
          :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
 </template>
+<style scoped>
+i.icon {
+    cursor: pointer;
+    font-size: 1.3rem;
+}
+</style>

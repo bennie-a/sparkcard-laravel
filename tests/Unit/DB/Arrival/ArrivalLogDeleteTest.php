@@ -36,7 +36,7 @@ class ArrivalLogDeleteTest extends TestCase
         $this->seed(TestArrivalStockpileSeeder::class);
         $this->seed(TestArrLogEditSeeder::class);
 
-        $repo = new CardBoardRepository();
+        $repo = $this->createCardRepo();
         $noShiptLog = $this->getNoShiptArrivalLog();
         $noShiptPage = $repo->findBySparkcardId($noShiptLog->card_id);
 
@@ -48,32 +48,66 @@ class ArrivalLogDeleteTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
+     * @dataProvider notionProvider
      */
-    public function test_example(): void
+    public function test_入荷情報削除後のNotionカード(string $cardName, bool $expectPageExists)
     {
-        $details = [Scon::CARD_NAME => '入荷情報編集カード_出荷情報なし'];
-        $logs = ArrivalLog::filtering($details);
-        $this->assertNotEmpty($logs, '入荷情報が取得できません。');
+        $targetLog = $this->getArrivalLogByCardname($cardName);
+        $expectedQty = $this->execute($targetLog);
 
-        $targetLog = $logs->first();
-        $response = $this->delete('/api/arrival/'.$targetLog->arrival_id);
+        $page = $this->findNotionCard($targetLog);
+
+        if ($expectPageExists) {
+            $this->assertNotNull($page, 'Notionカードが見つからない');
+            $actualQty = $page->getProperty(NotionConstant::QTY)->getNumber();
+            $this->assertEquals($expectedQty, $actualQty, 'Notionカードの枚数が一致しない');
+        } else {
+            $this->assertNull($page, 'Notionカードが見つかる');
+        }
+    }
+
+    protected function notionProvider(): array
+    {
+        return [
+            'Notionカードあり' => [
+                'cardName' => '入荷情報編集カード_出荷情報なし',
+                'expectPageExists' => true,
+            ],
+            'Notionカードなし' => [
+                'cardName' => '入荷情報編集カード_Notionカードなし',
+                'expectPageExists' => false,
+            ],
+        ];
+    }
+
+    public function execute(ArrivalLog $targetLog) {
+        $expectedQty = $targetLog->qty - $targetLog->rog;
+
+        $response = $this->delete('/api/arrival/'.$targetLog->id);
         $response->assertStatus(204);
+        return $expectedQty;
     }
 
     /**
      * Undocumented function
      *
-     * @return CardInfo
+     * @return ArrivalLog
      */
-    private function getNoShiptArrivalLog() {
+    private function getNoShiptArrivalLog():ArrivalLog {
         $collector = new ArrivalLogCollector();
         return $collector->fetchByCardname('入荷情報編集カード_出荷情報なし');
     }
+    
+    private function getArrivalLogByCardname(string $cardName): ArrivalLog
+    {
+        $collector = new ArrivalLogCollector();
+        return $collector->fetchByCardname($cardName);
+    }
 
-    private function getCardInfo(string $attr, string $cardname) {
-         $info = CardInfo::findCardByAttr($attr, $cardname);
-         return $info;
+    private function findNotionCard(ArrivalLog $log) {
+        $repo = $this->createCardRepo();
+        $page = $repo->findBySparkcardId($log->card_id);
+        return $page;
     }
 
     // Notionカードがない
@@ -83,5 +117,7 @@ class ArrivalLogDeleteTest extends TestCase
     //     1.出荷情報あり
     //    2.出荷情報なし
     // 入荷情報の数量 > 在庫情報の数量
-
+    private function createCardRepo() {
+        return new CardBoardRepository();
+    }
 }

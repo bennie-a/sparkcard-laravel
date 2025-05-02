@@ -222,6 +222,10 @@ class CardBoardService {
      */
     public function decreaseQuantity(int $id, int $quantity) {
         $targetPage = $this->repo->findBySparkcardId($id);
+        if (is_null($targetPage)) {
+            logger()->info('Notion card is not found. ID:'.$id);
+            return;
+        }
         $page = new Page();
         $page->setId($targetPage->getId());
         $beforeQty = $targetPage->getProperty(JA::QTY);
