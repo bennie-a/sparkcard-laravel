@@ -28,5 +28,9 @@ class TestArrivalStockpileSeeder extends TestStockpileSeeder
         Stockpile::create([Header::CARD_ID => $no_notion->id, Header::CONDITION => 'NM', 
                                                                                                 Con::QUANTITY => 7, Header::LANGUAGE => 'JP']);
 
+        $nostock = CardInfo::findSingleCard('XLN', '入荷情報編集カード_削除後在庫数0', false);
+        Stockpile::create([Header::CARD_ID => $nostock->id, Header::CONDITION => 'NM', 
+                                                                                                Con::QUANTITY => 2, Header::LANGUAGE => 'JP']);
+                                                                                        
     }
 }

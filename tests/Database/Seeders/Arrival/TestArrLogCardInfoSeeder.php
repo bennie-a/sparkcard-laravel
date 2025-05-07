@@ -32,6 +32,11 @@ class TestArrLogCardInfoSeeder extends TestCardInfoSeeder
         CCon::EN_NAME => 'Pre-Delete Card', 'color_id' => 'W', CCon::NUMBER => '4',
         CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id];
 
+        $items[] = [CCon::EXP_ID => $xln, 'name' => '入荷情報編集カード_削除後在庫数0',
+        CCon::EN_NAME => 'No Stock Card', 'color_id' => 'W', CCon::NUMBER => '5',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id];
+
+
         CardInfo::factory()->createMany($items);
     }
 }

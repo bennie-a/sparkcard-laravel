@@ -16,6 +16,7 @@ use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Support\Collection;
 use App\Services\Constant\NotionConstant as JA;
 use App\Services\Constant\NotionStatus;
+use FiveamCode\LaravelNotionApi\NotionFacade;
 
 /**
  * Notionの販売管理ボードに関するServiceクラス
@@ -232,7 +233,7 @@ class CardBoardService {
         $afterQty = $beforeQty->getNumber() - $quantity;
         if ($afterQty <= 0) {
             $afterQty = 0;
-            $page->setCheckbox('archived', true);
+            $this->setStatus($page, NotionStatus::Archive);
         }
 
         $page->setNumber(JA::QTY, $afterQty);

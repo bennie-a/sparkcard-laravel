@@ -22,6 +22,7 @@ class TestArrLogEditSeeder extends Seeder
         $logs = collect([
             '入荷情報編集カード_出荷情報なし',
             '入荷情報編集カード_Notionカードなし',
+            '入荷情報編集カード_削除後在庫数0',
         ])->map(function ($name) {
             return $this->makeLogEntry($name);
         })->all();
