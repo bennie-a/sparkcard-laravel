@@ -20,14 +20,23 @@ use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\SearchConstant as SCon;
 use FiveamCode\LaravelNotionApi\Entities\Page;
+use FiveamCode\LaravelNotionApi\Notion;
+use FiveamCode\LaravelNotionApi\NotionFacade;
+use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
+use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Tests\Database\Collector\ArrivalLogCollector;
+use FiveamCode\LaravelNotionApi\Entities\Properties\NumberProperty;
 
 /**
  * 入荷情報削除APIのテストクラス
  */
 class ArrivalLogDeleteTest extends TestCase
 {
-
+    
+    private $noShiptId =  '1df79508-4f9b-80c6-afb8-f06458647242';
+    
+    private $noStockId = '1ec79508-4f9b-80bf-be55-e2a95e60ad58';
+    
     public function setUp(): void
     {
         parent::setUp();
@@ -38,61 +47,87 @@ class ArrivalLogDeleteTest extends TestCase
         $this->seed(TestArrLogEditSeeder::class);
 
         $repo = $this->createCardRepo();
+
         $noShiptLog = $this->getNoShiptArrivalLog();
+    
         $nostockLog = $this->getNoStockArrivalLog();
 
-        foreach ([$noShiptLog, $nostockLog] as $log) {
-            $page = $repo->findBySparkcardId($log->card_id);
-    
-            logger()->debug("入荷情報なしのNotionカード更新:{$page->getId()}");
-            $newpage = new Page();
-            $newpage->setId($page->getId());
-            $newpage->setNumber(NotionConstant::QTY, $log->qty);
-            $newpage->setSelect('Status', NotionStatus::OnSale->value);
-            $repo->update($newpage);
-        }
+        $this->updateNotionCard($this->noShiptId, $noShiptLog);
+        $this->updateNotionCard($this->noStockId, $nostockLog);
+    }
+
+    private function updateNotionCard(string $id, ArrivalLog $log) {
+        $repo = $this->createCardRepo();
+        $page = new Page();
+        $page->setId($id);
+        $page->setNumber(NotionConstant::QTY, $log->qty);
+        $page->setSelect('Status', NotionStatus::OnSale->value);
+        $page->setNumber(NotionConstant::SPARK_ID, $log->card_id);
+        return $repo->update($page);
     }
 
     /**
      * @dataProvider notionProvider
      */
-    public function test_入荷情報削除後のNotionカード(string $cardName, bool $expectPageExists, NotionStatus $status = NotionStatus::OnSale)
+    public function test_Notionカードあり(string $cardName, string $notionId, NotionStatus $status = NotionStatus::OnSale)
     {
         $targetLog = $this->getArrivalLogByCardname($cardName);
         $expectedQty = $this->execute($targetLog);
 
-        $page = $this->findNotionCard($targetLog);
+        $page = $this->findNotionCard($notionId);
+        $this->assertNotNull($page, 'Notionカードが見つからない');
 
-        if ($expectPageExists) {
-            $this->assertNotNull($page, 'Notionカードが見つからない');
-            $actualQty = $page->getProperty(NotionConstant::QTY)->getNumber();
-            $this->assertEquals($expectedQty, $actualQty, 'Notionカードの枚数が一致しない');
+        /** @var  NumberProperty $actualQty */
+        $actualQty = $page->getProperty(NotionConstant::QTY);
+        $this->assertEquals($expectedQty, $actualQty->getNumber(), 'Notionカードの枚数が一致しない');
 
-            // Statusの確認
-            $actualStatus = $page->getProperty('Status')->getName();
-            $this->assertEquals($status->value, $actualStatus, 'NotionカードのStatusが一致しない');
+        /** @var SelectProperty $actualStatus */
+        $actualStatus = $page->getProperty('Status');
+        $this->assertEquals($status->value, $actualStatus->getName(), 'NotionカードのStatusが一致しない');
+        /** @var Tests\Unit\DB\Arrival\NumberProperty $spark_id */
+        $spark_id = $page->getProperty(NotionConstant::SPARK_ID);
+
+        if ($expectedQty == 0) {
+            $this->assertEquals(0, $spark_id->getNumber(), "sparkcard_idが0でない");
         } else {
-            $this->assertNull($page, 'Notionカードが見つかる');
+            $this->assertNotEquals(0, $spark_id->getNumber(), "sparkcard_idが0である");
         }
     }
 
     protected function notionProvider(): array
     {
         return [
-            'Notionカードあり' => [
+            '削除後の在庫数が1以上' => [
                 'cardName' => '入荷情報編集カード_出荷情報なし',
-                'expectPageExists' => true,
-            ],
-            'Notionカードなし' => [
-                'cardName' => '入荷情報編集カード_Notionカードなし',
-                'expectPageExists' => false,
+                'notionId' => $this->noShiptId,
             ],
             '削除後の在庫数が0' => [
-                '入荷情報編集カード_削除後在庫数0',
-                'expectPageExists' => true,
+                 'cardName' => '入荷情報編集カード_削除後在庫数0',
+                'notionId' => $this->noStockId,
                 'status' => NotionStatus::Archive,
-            ]
+            ],
+            // 'Notionカードなし' => [
+            //     'cardName' => '入荷情報編集カード_Notionカードなし',
+            //     'expectPageExists' => false,
+            // ],
         ];
+    }
+
+    public function test_Notionカードなし() {
+        $targetLog = $this->getArrivalLogByCardname('入荷情報編集カード_Notionカードなし');
+        $this->execute($targetLog);
+
+        $repo = $this->createCardRepo();
+        $page = $repo->findBySparkcardId($targetLog->card_id);
+        $this->assertNull($page, 'Notionカードが見つかる');
+
+        $details = [
+            SCon::STATUS => NotionStatus::Archive->value,
+            SCon::PRICE => 0,
+        ];
+        $pages = $repo->findByStatus($details);
+        $this->assertCount(0, $pages, 'Notionカードが見つかる');
+
     }
 
     public function execute(ArrivalLog $targetLog) {
@@ -125,9 +160,8 @@ class ArrivalLogDeleteTest extends TestCase
         return $collector->fetchByCardname($cardName);
     }
 
-    private function findNotionCard(ArrivalLog $log) {
-        $repo = $this->createCardRepo();
-        $page = $repo->findBySparkcardId($log->card_id);
+    private function findNotionCard(string $id): ?Page{
+        $page = NotionFacade::pages()->find($id);
         return $page;
     }
 

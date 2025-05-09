@@ -234,6 +234,7 @@ class CardBoardService {
         if ($afterQty <= 0) {
             $afterQty = 0;
             $this->setStatus($page, NotionStatus::Archive);
+            $page->setNumber(JA::SPARK_ID, 0);
         }
 
         $page->setNumber(JA::QTY, $afterQty);
