@@ -5,7 +5,9 @@ namespace Tests\Unit\DB\Arrival;
 use App\Facades\CardBoard;
 use App\Models\ArrivalLog;
 use App\Models\CardInfo;
+use App\Models\Stockpile;
 use App\Repositories\Api\Notion\CardBoardRepository;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\NotionConstant;
 use App\Services\Constant\NotionStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -105,32 +107,73 @@ class ArrivalLogDeleteTest extends TestCase
                  'cardName' => '入荷情報編集カード_削除後在庫数0',
                 'notionId' => $this->noStockId,
                 'status' => NotionStatus::Archive,
-            ],
-            // 'Notionカードなし' => [
-            //     'cardName' => '入荷情報編集カード_Notionカードなし',
-            //     'expectPageExists' => false,
-            // ],
+            ]
         ];
     }
 
     public function test_Notionカードなし() {
         $targetLog = $this->getArrivalLogByCardname('入荷情報編集カード_Notionカードなし');
         $this->execute($targetLog);
-
+        
         $repo = $this->createCardRepo();
         $page = $repo->findBySparkcardId($targetLog->card_id);
         $this->assertNull($page, 'Notionカードが見つかる');
-
+        
         $details = [
             SCon::STATUS => NotionStatus::Archive->value,
             SCon::PRICE => 0,
         ];
         $pages = $repo->findByStatus($details);
         $this->assertCount(0, $pages, 'Notionカードが見つかる');
+    }
+    // 入荷情報の数量 < 在庫情報の数量
+    // 入荷情報の数量 = 在庫情報の数量
+    //     1.出荷情報あり
+    //    2.出荷情報なし
+    // 入荷情報の数量 > 在庫情報の数量
+    /**
+     * @dataProvider arrivalLogProvider
+     */
+    public function test_入荷情報の有無(string $cardName, callable $method) {
+        $beforeLog = $this->getArrivalLogByCardname($cardName);
+        $expectedQty = $this->execute($beforeLog);
 
+        $afterLog = ArrivalLog::find($beforeLog->id);
+        $this->assertNull($afterLog, '入荷情報が削除されていない');
+
+        $stock = Stockpile::where(GlobalConstant::ID, $beforeLog->stock_id)->first();
+        $method($stock, $expectedQty);
     }
 
-    public function execute(ArrivalLog $targetLog) {
+    public function arrivalLogProvider(): array
+    {
+        return [
+            '出荷情報なし_入荷情報の数量 < 在庫情報の数量' => [
+                '入荷情報編集カード_削除後在庫数-1',  $this->assertNoStockpile(),
+            ],
+            '出荷情報なし_入荷情報の数量 = 在庫情報の数量' => [
+                '入荷情報編集カード_削除後在庫数0', $this->assertNoStockpile(),
+            ],
+            '出荷情報なし_入荷情報の数量 > 在庫情報の数量' => [
+                '入荷情報編集カード_出荷情報なし', $this->assertStockpile(),
+            ]
+        ];
+    }
+
+    private function assertStockpile() {
+        return function(?Stockpile $stock, int $expectedQty) {
+            $this->assertNotNull($stock, '在庫情報が見つからない');
+            $this->assertEquals($expectedQty, $stock->quantity, '在庫情報の数量が一致しない');
+        };
+    }
+
+    private function assertNoStockpile() {
+        return function(?Stockpile $stock, int $expectedQty) {
+            $this->assertNull($stock, '在庫情報が見つかる');
+        };
+    }
+
+    private function execute(ArrivalLog $targetLog) {
         $expectedQty = $targetLog->qty - $targetLog->rog;
 
         $response = $this->delete('/api/arrival/'.$targetLog->id);
@@ -165,13 +208,6 @@ class ArrivalLogDeleteTest extends TestCase
         return $page;
     }
 
-    // Notionカードがない
-    // Notionカードがある
-    // 入荷情報の数量 < 在庫情報の数量
-    // 入荷情報の数量 = 在庫情報の数量
-    //     1.出荷情報あり
-    //    2.出荷情報なし
-    // 入荷情報の数量 > 在庫情報の数量
     private function createCardRepo() {
         return new CardBoardRepository();
     }

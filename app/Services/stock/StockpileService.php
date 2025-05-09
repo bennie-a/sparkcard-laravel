@@ -5,6 +5,7 @@ use App\Exceptions\api\NotFoundException;
 use App\Exceptions\ConflictException;
 use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
+use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
@@ -123,9 +124,14 @@ class StockpileService extends AbstractSmsService{
             throw new NotFoundException('在庫情報が見つかりません。');
         }
         $afterQty = $target->quantity - $beforeQtty;
-        if ($afterQty < 0) {
+        if ($afterQty <= 0) {
             $afterQty = 0;
-            // $stock->delete();
+            
+            $isExists = ShippingLog::isExists('', '', $target->id);
+            if (!$isExists) {
+                $target->delete();
+            }
+            return;
         }
         Stockpile::updateData($id, [StockpileHeader::QUANTITY => $afterQty]);
     }

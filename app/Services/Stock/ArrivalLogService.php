@@ -93,7 +93,7 @@ class ArrivalLogService {
      */
     public function destroy($log) {
         $stockserv = new StockpileService();
-        $stockserv->decreaseQuantity($log->stock_id, $log->quantity);
         ArrivalLog::destroy($log->id);
+        $stockserv->decreaseQuantity($log->stock_id, $log->quantity);
     }
 }
