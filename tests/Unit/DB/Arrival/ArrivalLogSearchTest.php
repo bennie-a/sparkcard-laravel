@@ -2,8 +2,6 @@
 
 namespace Tests\Unit\DB\Arrival;
 
-use App\Libs\CarbonFormatUtil;
-use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
 use App\Models\Stockpile;
 use Tests\TestCase;
@@ -13,6 +11,11 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Http\Response;
+use Tests\Database\Seeders\Arrival\TestArrivalLogSeeder;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
@@ -28,12 +31,11 @@ class ArrivalLogSearchTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
-        $this->seed('TestArrivalLogSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
+        $this->seed(TestArrivalLogSeeder::class);
     }
 
     /**

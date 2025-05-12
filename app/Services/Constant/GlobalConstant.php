@@ -13,4 +13,6 @@ class GlobalConstant {
     const ID = 'id';
 
     const CARD = 'card';
+
+    const NAME = 'name';
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Handler;
 
-use App\Exceptions\api\NoContentException;
+use App\Exceptions\api\NotFoundException;
 use Illuminate\Http\Response;
 
 class APIHandler {
@@ -12,7 +12,7 @@ class APIHandler {
         $results = $fetchMethod($details);
         if ($results->isEmpty()) {
             logger()->info('No Result');
-            throw new NoContentException();
+            throw new NotFoundException();
         }
         $count = $results->count();
         logger()->info("End to search Result Count:$count");

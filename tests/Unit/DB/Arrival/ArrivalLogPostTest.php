@@ -26,6 +26,10 @@ use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\SearchConstant as Scon;
 use Mockery;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestExpansionSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 
 /**
  * 入荷情報登録に関するテスト
@@ -38,10 +42,9 @@ class ArrivalLogPostTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('TestCardInfoSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
         $this->repo = new CardBoardRepository();
         $page = $this->repo->findBySparkcardId(3);
         $updatePage = new Page();
@@ -177,14 +180,14 @@ class ArrivalLogPostTest extends TestCase
     public function test_ng(int $cardId) {
         $response = $this->post('/api/arrival', ['card_id' => $cardId, 'language' => 'JP', 'condition' => 'NM-',
                                                                                  'arrival_date' => '2023/7/25', 'cost' => 10, 'market_price' => 400,
-                                                                                  'quantity' => 3, 'supplier' => '私物']);
+                                                                                  'quantity' => 3, 'vendor' => '', 'vendor_type_id' => 2]);
 
-        $response->assertStatus(CustomResponse::HTTP_NOT_FOUND_CARD);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     public function ngprovider() {
         return [
-            'カード情報IDが存在しない' => [99],
+            'カード情報IDが存在しない' => [9999],
         ];
     }
 

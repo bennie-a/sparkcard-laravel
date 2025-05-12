@@ -1,12 +1,15 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Exceptions\api\NotFoundException;
 use App\Exceptions\ConflictException;
-use App\Exceptions\NotFoundException;
 use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
+use App\Models\ShippingLog;
 use App\Models\Stockpile;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\StockpileHeader;
 use App\Services\Stock\StockpileRow;
 
 /**
@@ -106,5 +109,30 @@ class StockpileService extends AbstractSmsService{
     public function fetch(array $details) {
         $result = Stockpile::fetch($details);
         return $result;
+    }
+
+    /**
+     * 在庫情報の枚数から入荷情報の枚数分を減らす。
+     *
+     * @param integer $id
+     * @param integer $beforeQtty
+     * @return void
+     */
+    public function decreaseQuantity(int $id, int $beforeQtty) {
+        $target = Stockpile::where(GlobalConstant::ID, '=', $id)->first();
+        if (empty($target)) {
+            throw new NotFoundException('在庫情報が見つかりません。');
+        }
+        $afterQty = $target->quantity - $beforeQtty;
+        if ($afterQty <= 0) {
+            $afterQty = 0;
+            
+            $isExists = ShippingLog::isExistsByStockId($target->id);
+            if (!$isExists) {
+                $target->delete();
+                return;
+            }
+        }
+        Stockpile::updateData($id, [StockpileHeader::QUANTITY => $afterQty]);
     }
 }

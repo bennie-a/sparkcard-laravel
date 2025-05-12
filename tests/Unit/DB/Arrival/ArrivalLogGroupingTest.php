@@ -2,10 +2,8 @@
 
 namespace Tests\Unit\DB\Arrival;
 
-use App\Libs\MtgJsonUtil;
 use App\Models\ArrivalLog;
 use App\Models\Stockpile;
-use App\Models\VendorType;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Response;
@@ -16,7 +14,13 @@ use Illuminate\Support\Facades\DB;
 use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\GlobalConstant as GCon;
 use Carbon\Carbon;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\Arrival\TestArrivalLogSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\GetApiAssertions;
 use Tests\Util\TestDateUtil;
 
@@ -32,12 +36,11 @@ class ArrivalLogGroupingTest extends TestCase {
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('DatabaseSeeder');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('TestCardInfoSeeder');
-        $this->seed('TestStockpileSeeder');
-        $this->seed('TestArrivalLogSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
+        $this->seed(TestArrivalLogSeeder::class);
     }
 
     /**
@@ -58,7 +61,7 @@ class ArrivalLogGroupingTest extends TestCase {
 
         foreach($json as $j) {
             $this->verifyJson($j);
-            $log = ArrivalLog::find($j[Con::ID]);
+            $log = ArrivalLog::find($j[GCon::ID]);
             $method($condition, $j, $log);
         }
     }
@@ -168,12 +171,11 @@ class ArrivalLogGroupingTest extends TestCase {
         $json = $response->json();
 
         $filtered = array_filter($json, function($j) use ($vendor_type_id) {
-                                return $j[ACon::VENDOR][Con::ID] == $vendor_type_id;
+                                return $j[ACon::VENDOR][GCon::ID] == $vendor_type_id;
                             });
         $this->assertNotEmpty($filtered, '検索結果');
         foreach($filtered as $f) {
-            $log = ArrivalLog::find($f[Con::ID]);
-            $method($condition, $f, $log);
+            $method($f[ACon::VENDOR]);
         }
     }
 
@@ -195,7 +197,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $response = $this->assert_OK($condition);
         $json = $response->json();
         foreach($json as $j) {
-            $log = $this->getCardInfoFromArrivalId($j[Con::ID]);
+            $log = $this->getCardInfoFromArrivalId($j[GCon::ID]);
             $this->verifyCard($log->stock_id, $j[Con::CARD]);           
             $method($condition, $j, $log);
         }
@@ -255,13 +257,13 @@ class ArrivalLogGroupingTest extends TestCase {
      */
     private function verifyJson(array $json) {
         $day_string =$json[ACon::ARRIVAL_DATE];
-        $log = $this->getCardInfoFromArrivalId($json[Con::ID]);
+        $log = $this->getCardInfoFromArrivalId($json[GCon::ID]);
 
         $this->verifyCard($log->stock_id, $json[Con::CARD]);
         logger()->debug("入荷ログ検証：$day_string");
 
         $vendor = $json[ACon::VENDOR];
-        $vendor_type_id = $vendor[Con::ID];
+        $vendor_type_id = $vendor[GCon::ID];
 
         $cost = $this->getCostSum($json[ACon::ARRIVAL_DATE], $vendor_type_id);
         $this->assertEquals($cost->item_count, $json['item_count'], "入荷件数:$day_string");
@@ -305,7 +307,7 @@ class ArrivalLogGroupingTest extends TestCase {
     protected function verifyCard($stock_id, array $json) {
         $this->verifyCardFromParent($stock_id, $json);
         $this->assertArrayHasKey(Header::LANG, $json, 'lang要素なし');
-        $exp_stock = Stockpile::where(Con::ID, $stock_id)->first();
+        $exp_stock = Stockpile::where(GCon::ID, $stock_id)->first();
         $this->assertEquals($exp_stock->language, $json[Header::LANG], '言語');
     }
 }

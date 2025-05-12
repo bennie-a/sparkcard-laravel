@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -78,6 +79,21 @@ class Stockpile extends Model
             $query = $query->limit($limit);
         }
         return $query->orderBy('s.id', 'asc')->orderBy('c.number', 'asc')->get();
+    }
+
+
+    /**
+     * 在庫情報を更新する。
+     *
+     * @param array $details
+     * @return void
+     */
+    public static function updateData(int $stock_id, array $data) {
+        $target = self::where(GlobalConstant::ID, $stock_id)->first();
+        if (empty($target)) {
+            return;
+        }
+        $target->update($data);
     }
 
     public function getUpdatedAtAttribute($value)

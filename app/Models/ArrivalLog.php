@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
+use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
@@ -16,9 +17,22 @@ class ArrivalLog extends Model
 {
     protected $table = 'arrival_log';
 
-    protected $fillable = ['id', 'stock_id',  ACon::ARRIVAL_DATE, Header::QUANTITY,
+    protected $fillable = [GCon::ID, 'stock_id',  ACon::ARRIVAL_DATE, Header::QUANTITY,
                                             Header::COST, SCon::VENDOR_TYPE_ID, ACon::VENDOR];
     use HasFactory;
+
+    /**
+     * 在庫情報と紐づいた入荷情報を取得する。
+     *
+     * @param integer $id
+     * @return Model
+     */
+    public static function findWithStockInfo(int $id) {
+        $columns = ['alog.id', 'alog.quantity', 's.id as stock_id', 's.card_id'];
+        $query = self::getTableQuery()->select($columns)->where('alog.id', $id);
+        $query = self::joinStockpile($query);
+        return $query->first();
+    }
 
         /**
      * カード情報を含む入荷情報を取得する。
@@ -112,12 +126,16 @@ public static function filtering(array $details) {
  * @return Builder
  */
 private static function join($query):Builder {
-    $query->join('stockpile as s', 's.id', '=', 'alog.stock_id')
+    self::joinStockpile($query)
     ->join('card_info as c', 'c.id', '=', 's.card_id')
     ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
     ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id')
     ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id');
     return $query;
+}
+
+private static function joinStockpile($query):Builder {
+    return $query->join('stockpile as s', 's.id', '=', 'alog.stock_id');
 }
 
 private static function getTableQuery() {

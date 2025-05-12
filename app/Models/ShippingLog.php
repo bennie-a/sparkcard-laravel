@@ -78,4 +78,8 @@ class ShippingLog extends Model
         ];
         return ShippingLog::where($condition)->exists();
     }
+
+    public static function isExistsByStockId(int $stockId):bool {
+        return ShippingLog::where("stock_id", "=", $stockId)->exists();
+    }
 }

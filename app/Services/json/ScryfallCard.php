@@ -53,7 +53,7 @@ class ScryfallCard extends AbstractCard {
         return $this->getJson()['type_line'];
     }
 
-    protected function isFullArt() {
+    public function isFullArt() {
         return \boolval($this->getJson()[('full_art')]);
     }
 

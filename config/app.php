@@ -185,6 +185,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        FiveamCode\LaravelNotionApi\LaravelNotionApiServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -233,7 +234,8 @@ return [
         'ScryfallServ' => App\Facades\ScryfallServ::class,
         'CardBoard' => App\Facades\CardBoard::class,
         'StockpileServ' => App\Facades\StockpileServ::class,
-        'WisdomGuild' => App\Facades\WisdomGuild::class
+        'WisdomGuild' => App\Facades\WisdomGuild::class,
+        'Notion' => FiveamCode\LaravelNotionApi\Notion::class
          // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
