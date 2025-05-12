@@ -20,7 +20,7 @@ class TestArrLogEditSeeder extends Seeder
     public function run()
     {
         $logs = collect([
-            '入荷情報編集カード_出荷情報なし',
+            '入荷情報編集カード_削除後在庫数1以上',
             '入荷情報編集カード_Notionカードなし',
             '入荷情報編集カード_削除後在庫数0',
             '入荷情報編集カード_削除後在庫数-1'

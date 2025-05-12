@@ -2,30 +2,22 @@
 
 namespace Tests\Unit\DB\Arrival;
 
-use App\Facades\CardBoard;
 use App\Models\ArrivalLog;
-use App\Models\CardInfo;
+use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Repositories\Api\Notion\CardBoardRepository;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\NotionConstant;
 use App\Services\Constant\NotionStatus;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Database\Seeders\Arrival\TestArrivalLogSeeder;
 use Tests\Database\Seeders\Arrival\TestArrivalStockpileSeeder;
 use Tests\Database\Seeders\Arrival\TestArrLogCardInfoSeeder;
 use Tests\Database\Seeders\Arrival\TestArrLogEditSeeder;
 use Tests\Database\Seeders\DatabaseSeeder;
-use Tests\Database\Seeders\TestExpansionSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\SearchConstant as SCon;
 use FiveamCode\LaravelNotionApi\Entities\Page;
-use FiveamCode\LaravelNotionApi\Notion;
 use FiveamCode\LaravelNotionApi\NotionFacade;
-use FiveamCode\LaravelNotionApi\Query\Filters\Filter;
-use FiveamCode\LaravelNotionApi\Query\Filters\Operators;
 use Tests\Database\Collector\ArrivalLogCollector;
 use FiveamCode\LaravelNotionApi\Entities\Properties\NumberProperty;
 
@@ -39,6 +31,12 @@ class ArrivalLogDeleteTest extends TestCase
     
     private $noStockId = '1ec79508-4f9b-80bf-be55-e2a95e60ad58';
     
+    private $inStockName = '入荷情報編集カード_削除後在庫数1以上';
+
+    private $noStockName = '入荷情報編集カード_削除後在庫数0';
+
+    private $minusStockName = '入荷情報編集カード_削除後在庫数-1';
+
     public function setUp(): void
     {
         parent::setUp();
@@ -100,11 +98,11 @@ class ArrivalLogDeleteTest extends TestCase
     {
         return [
             '削除後の在庫数が1以上' => [
-                'cardName' => '入荷情報編集カード_出荷情報なし',
+                'cardName' => $this->inStockName,
                 'notionId' => $this->noShiptId,
             ],
             '削除後の在庫数が0' => [
-                 'cardName' => '入荷情報編集カード_削除後在庫数0',
+                 'cardName' => $this->noStockName,
                 'notionId' => $this->noStockId,
                 'status' => NotionStatus::Archive,
             ]
@@ -126,37 +124,56 @@ class ArrivalLogDeleteTest extends TestCase
         $pages = $repo->findByStatus($details);
         $this->assertCount(0, $pages, 'Notionカードが見つかる');
     }
-    // 入荷情報の数量 < 在庫情報の数量
-    // 入荷情報の数量 = 在庫情報の数量
-    //     1.出荷情報あり
-    //    2.出荷情報なし
-    // 入荷情報の数量 > 在庫情報の数量
     /**
      * @dataProvider arrivalLogProvider
      */
-    public function test_入荷情報の有無(string $cardName, callable $method) {
+    public function test_在庫情報に出荷情報の紐づけなし(string $cardName, callable $method) {
         $beforeLog = $this->getArrivalLogByCardname($cardName);
         $expectedQty = $this->execute($beforeLog);
 
-        $afterLog = ArrivalLog::find($beforeLog->id);
-        $this->assertNull($afterLog, '入荷情報が削除されていない');
+        $this->assertArrivalLog($beforeLog);
 
-        $stock = Stockpile::where(GlobalConstant::ID, $beforeLog->stock_id)->first();
+        $stock = $this->getStockInfo($beforeLog);
         $method($stock, $expectedQty);
     }
 
-    public function arrivalLogProvider(): array
+    protected function arrivalLogProvider(): array
     {
         return [
-            '出荷情報なし_入荷情報の数量 < 在庫情報の数量' => [
-                '入荷情報編集カード_削除後在庫数-1',  $this->assertNoStockpile(),
+            '入荷情報の数量 > 在庫情報の数量' => [
+                $this->minusStockName,  $this->assertNoStockpile(),
             ],
-            '出荷情報なし_入荷情報の数量 = 在庫情報の数量' => [
-                '入荷情報編集カード_削除後在庫数0', $this->assertNoStockpile(),
+            '入荷情報の数量 = 在庫情報の数量' => [
+                $this->noStockName, $this->assertNoStockpile(),
             ],
-            '出荷情報なし_入荷情報の数量 > 在庫情報の数量' => [
-                '入荷情報編集カード_出荷情報なし', $this->assertStockpile(),
+            '入荷情報の数量 < 在庫情報の数量' => [
+                $this->inStockName, $this->assertStockpile(),
             ]
+        ];
+    }
+
+    /**
+     * 出荷情報がある場合、削除できるか検証する。
+     * @dataProvider linkingShiptLogProvider
+     */
+    public function test_在庫情報に出荷情報の紐づけあり(string $cardName) {
+        $targetLog = $this->getArrivalLogByCardname($cardName);
+        $stockid = $targetLog->stock_id;
+        ShippingLog::factory()->create(['stock_id' => $stockid]);
+        $expectedQty = $this->execute($targetLog);
+
+        $this->assertArrivalLog($targetLog);
+        $stock = $this->getStockInfo($targetLog);
+        $method = $this->assertStockpile();
+        $method($stock, $expectedQty);
+    }
+
+    protected function linkingShiptLogProvider(): array
+    {
+        return [
+            '入荷情報の数量 > 在庫情報の数量' => [$this->minusStockName],
+            '入荷情報の数量 = 在庫情報の数量' => [$this->noStockName],
+            '入荷情報の数量 < 在庫情報の数量' => [$this->inStockName]
         ];
     }
 
@@ -175,10 +192,24 @@ class ArrivalLogDeleteTest extends TestCase
 
     private function execute(ArrivalLog $targetLog) {
         $expectedQty = $targetLog->qty - $targetLog->rog;
+        if ($expectedQty < 0) {
+            $expectedQty = 0;
+        }
 
         $response = $this->delete('/api/arrival/'.$targetLog->id);
         $response->assertStatus(204);
         return $expectedQty;
+    }
+
+    /**
+     * 入荷情報が削除されているか検証する。
+     *
+     * @param ArrivalLog $targetLog
+     * @return void
+     */
+    private function assertArrivalLog(ArrivalLog $targetLog) {
+        $afterLog = ArrivalLog::find($targetLog->id);
+        $this->assertNull($afterLog, '入荷情報が削除されていない');
     }
 
     /**
@@ -188,19 +219,24 @@ class ArrivalLogDeleteTest extends TestCase
      */
     private function getNoShiptArrivalLog():ArrivalLog {
         $collector = new ArrivalLogCollector();
-        return $collector->fetchByCardname('入荷情報編集カード_出荷情報なし');
+        return $collector->fetchByCardname($this->inStockName);
     }
     
     private function getNoStockArrivalLog(): ArrivalLog
     {
         $collector = new ArrivalLogCollector();
-        return $collector->fetchByCardname('入荷情報編集カード_削除後在庫数0');
+        return $collector->fetchByCardname($this->noStockName);
     }
 
     private function getArrivalLogByCardname(string $cardName): ArrivalLog
     {
         $collector = new ArrivalLogCollector();
         return $collector->fetchByCardname($cardName);
+    }
+
+    private function getStockInfo(ArrivalLog $log): ?Stockpile{
+        $stock = Stockpile::where(GlobalConstant::ID, $log->stock_id)->first();
+        return $stock;
     }
 
     private function findNotionCard(string $id): ?Page{

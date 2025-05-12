@@ -127,11 +127,11 @@ class StockpileService extends AbstractSmsService{
         if ($afterQty <= 0) {
             $afterQty = 0;
             
-            $isExists = ShippingLog::isExists('', '', $target->id);
+            $isExists = ShippingLog::isExistsByStockId($target->id);
             if (!$isExists) {
                 $target->delete();
+                return;
             }
-            return;
         }
         Stockpile::updateData($id, [StockpileHeader::QUANTITY => $afterQty]);
     }
