@@ -20,6 +20,7 @@ use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\NotionFacade;
 use Tests\Database\Collector\ArrivalLogCollector;
 use FiveamCode\LaravelNotionApi\Entities\Properties\NumberProperty;
+use Illuminate\Testing\TestResponse;
 
 /**
  * 入荷情報削除APIのテストクラス
@@ -177,6 +178,13 @@ class ArrivalLogDeleteTest extends TestCase
         ];
     }
 
+    public function test_削除対象のログが存在しない() {
+        $this->deleteByAPI(999)
+            ->assertStatus(404)->assertJson([
+                'detail' => '指定した情報がありません。',
+            ]);
+    }
+
     private function assertStockpile() {
         return function(?Stockpile $stock, int $expectedQty) {
             $this->assertNotNull($stock, '在庫情報が見つからない');
@@ -196,9 +204,19 @@ class ArrivalLogDeleteTest extends TestCase
             $expectedQty = 0;
         }
 
-        $response = $this->delete('/api/arrival/'.$targetLog->id);
+        $response = $this->deleteByAPI($targetLog->id);
         $response->assertStatus(204);
         return $expectedQty;
+    }
+
+    /**
+     * APIを使用して入荷情報を削除する。
+     *
+     * @param integer $id
+     * @return TestResponse
+     */
+    private function deleteByAPI(int $id): TestResponse{
+        return $this->delete('/api/arrival/'.$id);
     }
 
     /**
