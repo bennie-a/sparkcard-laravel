@@ -7,11 +7,13 @@ import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 import { onMounted, reactive } from "vue";
 import {apiService} from "@/component/ApiGetService";
+import { apiDeleteService } from "@/component/ApiDeleteService";
 
 import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
-
+import ModalButton from "../component/ModalButton.vue";
+import { useStore } from 'vuex';
 
 const route = useRoute();
 const router = useRouter();
@@ -59,6 +61,21 @@ const toList = () => {
             name: "ArrivalLogEdit",
             params: { arrival_date:arrival_date, arrival_id: arrival_id},
         });
+    }
+
+    // 入荷情報を1件削除する。
+const deleteLog = async(arrival_id) => {
+    isLoading.value = true;
+    await apiDeleteService.delete({
+        url: "/arrival/", arrival_id,
+        onSuccess: () => {
+            alert("削除しました");
+            toList();
+        },
+        onFinally: () => {
+            isLoading.value = false;
+        }
+    });
     }
 
  const current = (data) => {
@@ -115,8 +132,10 @@ const toList = () => {
                     <td class="center aligned selectable">
                         <a @click="toEditPage(log.id)"><i class="edit icon"></i></a>
                     </td>
-                    <td class="center aligned selectable">
-                        <a class="icon"><i class="trash alternate outline icon"></i></a>
+                    <td class="center aligned">
+                        <ModalButton  :msg="`入荷ID[${log.id}]を削除しますか？`" @action="deleteLog(log.id)">
+                            <i class="trash alternate outline icon"></i>
+                        </ModalButton>
                     </td>
                 </tr>
             </tbody>

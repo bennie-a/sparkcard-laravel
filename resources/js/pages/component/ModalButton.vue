@@ -10,7 +10,7 @@
         </div>
         <h2 class="ui header">Notice</h2>
         <div class="modal__content">
-            <p>登録してもよろしいですか?</p>
+            <p>{{msg}}</p>
         </div>
         <div class="ui divider"></div>
         <div class="modal__action">
@@ -20,7 +20,7 @@
             <button class="ui teal button" @click="execute">OK</button>
         </div>
     </vue-final-modal>
-    <button class="ui fluid teal button" @click="show">
+    <button class="ui fluid teal icon button" @click="show">
         <slot></slot>
     </button>
 </template>
@@ -31,7 +31,7 @@ export default {
     components: {
         "vue-final-modal": VueFinalModal,
     },
-    props: { },
+    props: { msg: { type: String, default: "登録してもよろしいですか?" } },
     emits: ["action"],
     data() {
         return {
