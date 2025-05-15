@@ -9,9 +9,10 @@ import { useStore } from 'vuex';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
 
 import pglist from "../component/PgList.vue";
-import MessageArea from "../component/MessageArea.vue";
+import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 import { storeToRefs } from 'pinia';
 
 const gcStore = groupConditionStore();
@@ -62,6 +63,7 @@ onMounted(async() => {
     if (referrer_path.indexOf('/arrival/') !== 0 ) {
         console.log('pinia reset');
         gcStore.reset();
+        piniaMsgStore().reset();
     }
     await fetch();
 });
@@ -80,7 +82,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
 }
 </script>
 <template>
-    <message-area />
+    <PiniaMsgForm></PiniaMsgForm>
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">

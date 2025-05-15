@@ -5,13 +5,16 @@ import pagination from "../component/ListPagination.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import { onMounted, reactive } from "vue";
 import {apiService} from "@/component/ApiGetService";
+import { apiDeleteService } from "@/component/ApiDeleteService";
 
 import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
-
+import ModalButton from "../component/ModalButton.vue";
+import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -19,16 +22,21 @@ const router = useRouter();
 const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
+const piniaMsg = piniaMsgStore();
 const currentList = reactive([]);
 const resultCount = ref(0);
 
 const logs = reactive([]);
-
 const isLoading = ref(false);
 
 const result = reactive([]);
 onMounted(async() =>{
     isLoading.value = true;
+    piniaMsg.reset();
+    await fetch();
+    });
+
+const fetch = async() => {
     await apiService.get(
         {
             url:"/arrival/",
@@ -46,7 +54,7 @@ onMounted(async() =>{
                 isLoading.value = false;
             }
         });
-    });
+}
 
 // 入荷情報一覧ページに戻る
 const toList = () => {
@@ -59,6 +67,22 @@ const toList = () => {
             name: "ArrivalLogEdit",
             params: { arrival_date:arrival_date, arrival_id: arrival_id},
         });
+    }
+
+    // 入荷情報を1件削除する。
+const deleteLog = async(arrival_id) => {
+    isLoading.value = true;
+    await apiDeleteService.delete({
+        url: "/arrival/",
+         id:arrival_id,
+        onSuccess: (response) => {
+            piniaMsg.setSuccess("削除しました。");
+            toList();
+        },
+        onFinally: () => {
+            isLoading.value = false;
+        }
+    });
     }
 
  const current = (data) => {
@@ -104,7 +128,7 @@ const toList = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(log, index) in currentList.value" :key="index">
+                <tr v-for="(log, index) in currentList.value" :key="index" v-memo="currentList.value">
                     <td class="center aligned">{{log.id}}</td>
                     <td>
                             <cardlayout v-model="log.card"></cardlayout>
@@ -115,8 +139,10 @@ const toList = () => {
                     <td class="center aligned selectable">
                         <a @click="toEditPage(log.id)"><i class="edit icon"></i></a>
                     </td>
-                    <td class="center aligned selectable">
-                        <a class="icon"><i class="trash alternate outline icon"></i></a>
+                    <td class="center aligned">
+                        <ModalButton  :msg="`入荷ID[${log.id}]を削除しますか？`" @action="deleteLog(log.id)">
+                            <i class="trash alternate outline icon"></i>
+                        </ModalButton>
                     </td>
                 </tr>
             </tbody>
