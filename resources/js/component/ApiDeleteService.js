@@ -4,11 +4,10 @@ import {useStore} from 'vuex';
 export const apiDeleteService = {
     // API経由で削除する。
     delete({url, id, onSuccess, onFinally}) {
-        const store = useStore();
         axios
-            .get( "/api" + url + id)
-            .then((response) => {
-                onSuccess(response.data);
+        .delete( "/api" + url + id)
+        .then((response) => {
+                onSuccess(response);
             })
             .catch((e) => {
                 let data = e.response.data;

@@ -5,6 +5,7 @@ import pagination from "../component/ListPagination.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import { onMounted, reactive } from "vue";
 import {apiService} from "@/component/ApiGetService";
 import { apiDeleteService } from "@/component/ApiDeleteService";
@@ -13,7 +14,7 @@ import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
 import ModalButton from "../component/ModalButton.vue";
-import { useStore } from 'vuex';
+import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -21,16 +22,21 @@ const router = useRouter();
 const arrival_date = route.params.arrival_date;
 const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
+const piniaMsg = piniaMsgStore();
 const currentList = reactive([]);
 const resultCount = ref(0);
 
 const logs = reactive([]);
-
 const isLoading = ref(false);
 
 const result = reactive([]);
 onMounted(async() =>{
     isLoading.value = true;
+    piniaMsg.reset();
+    await fetch();
+    });
+
+const fetch = async() => {
     await apiService.get(
         {
             url:"/arrival/",
@@ -48,7 +54,7 @@ onMounted(async() =>{
                 isLoading.value = false;
             }
         });
-    });
+}
 
 // 入荷情報一覧ページに戻る
 const toList = () => {
@@ -67,9 +73,10 @@ const toList = () => {
 const deleteLog = async(arrival_id) => {
     isLoading.value = true;
     await apiDeleteService.delete({
-        url: "/arrival/", arrival_id,
-        onSuccess: () => {
-            alert("削除しました");
+        url: "/arrival/",
+         id:arrival_id,
+        onSuccess: (response) => {
+            piniaMsg.setSuccess("削除しました。");
             toList();
         },
         onFinally: () => {
@@ -121,7 +128,7 @@ const deleteLog = async(arrival_id) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(log, index) in currentList.value" :key="index">
+                <tr v-for="(log, index) in currentList.value" :key="index" v-memo="currentList.value">
                     <td class="center aligned">{{log.id}}</td>
                     <td>
                             <cardlayout v-model="log.card"></cardlayout>
