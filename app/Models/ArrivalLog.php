@@ -108,16 +108,36 @@ public static function filtering(array $details) {
         return $key !== SCon::CARD_NAME;
     }, ARRAY_FILTER_USE_KEY);
     $cardname = MtgJsonUtil::getValueOrEmpty(SCon::CARD_NAME, $details);
-    $columns = ['alog.id as arrival_id', 'alog.arrival_date', 'alog.quantity as alog_quan', 'alog.cost', 'e.name as exp_name', 'alog.vendor',
-                            'e.attr as exp_attr', 'c.id', 'c.name', 'c.number', 'c.image_url', 'c.color_id', 'c.isFoil','s.language',
-                            's.condition', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
+    $columns = self::getFetchColumns();
     $query = self::getTableQuery()->select($columns)->where($log_conditions);
     $query = self::join($query)->when($cardname, function($query, $cardname) {
                                                             $pat = '%' . addcslashes($cardname, '%_\\') . '%';
                                                             return $query->where('c.name', 'LIKE', $pat);
-                                                        });
+                    });
     return $query->get();
 }
+
+private static function getFetchColumns() {
+    $columns = ['alog.id as arrival_id', 'alog.arrival_date', 'alog.quantity as alog_quan', 'alog.cost', 'e.name as exp_name', 'alog.vendor',
+                            'e.attr as exp_attr', 'c.id', 'c.name', 'c.number', 'c.image_url', 'c.color_id', 'c.isFoil','s.language',
+                            's.condition', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
+    return $columns;
+}
+
+/**
+ * 入荷情報を1件取得する。
+ *
+ * @param integer $id
+ * @return Model
+ * 
+ */
+public static function find(int $id) {
+    $columns = self::getFetchColumns();
+    $query = self::getTableQuery()->select($columns)->where('alog.id', $id);
+    $query = self::join($query);
+    return $query->first();
+}
+
 
 /**
  * 内部結合のクエリを取得する。

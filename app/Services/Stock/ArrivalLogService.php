@@ -85,6 +85,11 @@ class ArrivalLogService {
         return $log;
     }
 
+    public function findById(int $id) {
+        $log = ArrivalLog::find($id);
+        return $log;
+    }
+
     /**
      * 在庫情報の枚数を入荷情報の枚数分減らし、入荷情報を削除する。
      *

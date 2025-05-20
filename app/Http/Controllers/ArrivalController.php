@@ -22,6 +22,7 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\GlobalConstant as GCon;
 use App\Facades\APIHand;
 use App\Facades\CardBoard;
+use App\Http\Resources\ArrivalLogFindResource;
 use App\Models\ArrivalLog;
 use App\Services\CardBoardService;
 
@@ -100,7 +101,9 @@ class ArrivalController extends Controller {
      */
     public function show($id)
     {
-        //
+        $show = fn($id) => $this->service->findById($id);
+        $transformer = fn($model) => new ArrivalLogFindResource($model);
+        return APIHand::handleShow($id, $show, $transformer);
     }
 
     /**
