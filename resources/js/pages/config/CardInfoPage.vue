@@ -75,6 +75,7 @@
                             <option value="M">多色</option>
                             <option value="A">アーティファクト</option>
                             <option value="Land">土地</option>
+                            <option value="T">トークン</option>
                         </select>
                     </div>
                     <div class="eight wide field">
