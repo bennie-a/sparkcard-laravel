@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\api\NoContentException;
-use App\Exceptions\NotFoundException;
+use App\Exceptions\api\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockpileIndexRequest;
 use App\Services\Constant\SearchConstant;
 use App\Services\Stock\StockpileService;
 use App\Traits\ImportCsv;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -37,7 +35,7 @@ class StockpileController extends Controller
         logger()->debug('入力パラメータ', $details);
         $result = $this->service->fetch($details);
         if (count($result) == 0) {
-            throw new NoContentException();
+            throw new NotFoundException();
         }
         
         logger()->info('End Search Stockpile');
