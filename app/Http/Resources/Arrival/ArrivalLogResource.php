@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Arrival;
 
+use App\Http\Resources\CardInfoResource;
 use Illuminate\Http\Request;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\CardConstant as Con;

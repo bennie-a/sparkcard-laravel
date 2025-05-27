@@ -44,6 +44,7 @@ class TestArrLogEditSeeder extends Seeder
             Acon::ARRIVAL_DATE => TestDateUtil::formatToday(),
             StockpileHeader::QUANTITY => 2,
             SCon::VENDOR_TYPE_ID => 1,
+            ACon::VENDOR => '',
         ];
     }
 }

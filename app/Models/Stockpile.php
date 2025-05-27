@@ -89,7 +89,7 @@ class Stockpile extends Model
      * @return void
      */
     public static function updateData(int $stock_id, array $data) {
-        $target = self::where(GlobalConstant::ID, $stock_id)->first();
+        $target = self::findById($stock_id);
         if (empty($target)) {
             return;
         }
@@ -101,4 +101,8 @@ class Stockpile extends Model
         return CarbonFormatUtil::toDateString($value);
     }
 
+    public static function findById(int $id): ?Stockpile
+    {
+        return self::where(GlobalConstant::ID, $id)->first();
+    }
 }

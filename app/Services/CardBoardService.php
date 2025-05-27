@@ -213,6 +213,17 @@ class CardBoardService {
         $this->updatePage($page);
     }
 
+    public function updateQty($cardId, $quantity) {
+        $targetPage = $this->repo->findBySparkcardId($cardId);
+        if (is_null($targetPage)) {
+            return;
+        }
+        $page = new Page();
+        $page->setId($targetPage->getId());
+        $page->setNumber(JA::QTY, $quantity);
+        $this->updatePage($page);
+    }
+
     /**
      * 在庫数を減らす。
      * 在庫数が0ならStatusを「削除対象」に変更する。

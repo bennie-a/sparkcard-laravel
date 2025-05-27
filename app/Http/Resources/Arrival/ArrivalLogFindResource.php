@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Arrival;
 
 use App\Libs\CarbonFormatUtil;
 use Illuminate\Http\Request;

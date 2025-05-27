@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Validator;
 
-use App\Http\Requests\ArrivalRequest;
+use App\Http\Requests\Arrival\ArrivalRequest;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 

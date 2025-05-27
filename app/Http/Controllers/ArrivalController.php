@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\api\NoContentException;
-use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ArrivalGroupRequest;
-use App\Http\Requests\ArrivalRequest;
-use App\Http\Requests\ArrivalSearchRequest;
+use App\Http\Requests\Arrival\ArrivalGroupRequest;
+use App\Http\Requests\Arrival\ArrivalRequest;
+use App\Http\Requests\Arrival\ArrivalSearchRequest;
 use App\Http\Resources\ArrivalGroupingLogResource;
-use App\Http\Resources\ArrivalLogResource;
-use App\Http\Response\CustomResponse;
+use App\Http\Resources\Arrival\ArrivalLogResource;
 use App\Models\CardInfo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,9 +20,12 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\GlobalConstant as GCon;
 use App\Facades\APIHand;
 use App\Facades\CardBoard;
-use App\Http\Resources\ArrivalLogFindResource;
+use App\Http\Requests\Arrival\ArrivalUpdateRequest;
+use App\Http\Resources\Arrival\ArrivalLogFindResource;
+use App\Http\Resources\Arrival\ArrivalLogUpdateResource;
 use App\Models\ArrivalLog;
-use App\Services\CardBoardService;
+use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\SearchConstant;
 
 /**
  * 入荷手続きAPI
@@ -113,9 +114,20 @@ class ArrivalController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ArrivalUpdateRequest $request, $id)
     {
-        //
+        logger()->info("Start to Update id:{$id}");
+        $details = $request->only([Header::QUANTITY, ACon::ARRIVAL_DATE, 
+                                            SearchConstant::VENDOR_TYPE_ID, ACon::VENDOR, Header::COST]);
+
+        $isExists = ArrivalLog::where(GlobalConstant::ID, $id)->exists();
+        if (!$isExists) {
+            logger()->info("No Result  id:{$id}");
+            throw new NoContentException();
+        }
+        $result = $this->service->update($id, $details);
+        logger()->info("End to update id:{$id}");
+        return response(new ArrivalLogFindResource($result), Response::HTTP_OK);
     }
 
     /**
