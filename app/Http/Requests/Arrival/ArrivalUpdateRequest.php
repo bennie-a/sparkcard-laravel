@@ -34,7 +34,7 @@ class ArrivalUpdateRequest extends FormRequest
         return [
             Header::QUANTITY => self::qtyRules(),
             Acon::ARRIVAL_DATE => 'date',
-            SearchConstant::VENDOR_TYPE_ID => self::vendorTypeIdRules(),
+            SearchConstant::VENDOR_TYPE_ID => ['integer', 'between:1,5'],
             Acon::VENDOR => self::supplierRules(),
             Header::COST => 'numeric|min:1',
         ];
