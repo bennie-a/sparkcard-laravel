@@ -21,7 +21,7 @@ class ArrivalLogFindResource extends ArrivalLogResource
         $json[Acon::VENDOR] = VendorJsonUtil::setVendorInfo(
             $this->vendor_type_id,
             $this->vcat,
-            $this->vendor
+            $this->vendor ?? ''
         );
         return $json;
     }

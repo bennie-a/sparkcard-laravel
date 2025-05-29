@@ -2,6 +2,7 @@
 namespace Tests\Trait;
 
 use App\Enum\CardColor;
+use App\Enum\VendorTypeCat;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
@@ -72,9 +73,9 @@ trait GetApiAssertions
      */
     protected function verifyBuyVendor() {
         return function($vendor) {
-            $this->assertEquals(3, $vendor[GCon::ID], '取引先カテゴリID');
-            $type = VendorType::find(3);
-            $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
+            $purchase = VendorTypeCat::PURCHASE;
+            $this->assertEquals($purchase->value, $vendor[GCon::ID], '取引先カテゴリID');
+            $this->assertEquals($purchase->text(), $vendor[Header::NAME], '取引先カテゴリ名');
             $this->assertNotNull($vendor[ACon::SUPPLIER]);
         };
     }
@@ -90,7 +91,7 @@ trait GetApiAssertions
             $this->assertNotNull($vendor_type_id, '取引先カテゴリID');
             $type = VendorType::find($vendor_type_id);
             $this->assertEquals($type->name, $vendor[Header::NAME], '取引先カテゴリ名');
-            $this->assertNull($vendor[ACon::SUPPLIER]);
+            $this->assertEmpty($vendor[ACon::SUPPLIER]);
         };
     }
 
