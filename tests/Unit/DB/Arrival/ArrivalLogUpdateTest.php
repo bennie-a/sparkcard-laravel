@@ -4,6 +4,7 @@ namespace Tests\Unit\DB\Arrival;
 
 use App\Enum\VendorTypeCat;
 use App\Models\ArrivalLog;
+use App\Models\Stockpile;
 use App\Models\VendorType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,8 +14,10 @@ use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
-use Illuminate\Http\Response;
-use Tests\Database\Seeders\Arrival\TestArrivalLogSeeder;
+use App\Services\Constant\StockpileHeader;
+use Tests\Database\Seeders\Arrival\TestArrivalStockpileSeeder;
+use Tests\Database\Seeders\Arrival\TestArrLogCardInfoSeeder;
+use Tests\Database\Seeders\Arrival\TestArrLogEditSeeder;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
@@ -29,9 +32,9 @@ class ArrivalLogUpdateTest extends TestCase
         parent::setUp();
         $this->seed(TruncateAllTables::class);
         $this->seed(DatabaseSeeder::class);
-        $this->seed(TestCardInfoSeeder::class);
-        $this->seed(TestStockpileSeeder::class);
-        $this->seed(TestArrivalLogSeeder::class);
+        $this->seed(TestArrLogCardInfoSeeder::class);
+        $this->seed(TestArrivalStockpileSeeder::class);
+        $this->seed(TestArrLogEditSeeder::class);
     }
 
     use GetApiAssertions;
@@ -80,16 +83,56 @@ class ArrivalLogUpdateTest extends TestCase
     protected function vendorTypeProvider(): array
     {
         return [
-            'オリジナルパック' => [1, VendorTypeCat::ORIGINAL_PACK, null, $this->verifyOtherVendor()],
-            '私物' => [2, VendorTypeCat::PERSONAL, null, $this->verifyOtherVendor()],
-            '買取' => [13, VendorTypeCat::PURCHASE, fake()->name, $this->verifyBuyVendor()],
-            '棚卸し' => [4, VendorTypeCat::INVENTORY, null, $this->verifyOtherVendor()],
-            '返品' => [5, VendorTypeCat::RETURNED, null, $this->verifyOtherVendor()],
+            'オリジナルパック' => [5, VendorTypeCat::ORIGINAL_PACK, null, $this->verifyOtherVendor()],
+            '私物' => [1, VendorTypeCat::PERSONAL, null, $this->verifyOtherVendor()],
+            '買取' => [1, VendorTypeCat::PURCHASE, fake()->name, $this->verifyBuyVendor()],
+            '棚卸し' => [1, VendorTypeCat::INVENTORY, null, $this->verifyOtherVendor()],
+            '返品' => [1, VendorTypeCat::RETURNED, null, $this->verifyOtherVendor()],
         ];
     }
 
-    public function test_全項目未入力() {
+    /**
+     * 入荷枚数の更新テスト
+     * @dataProvider qtyProvider
+     */
+    public function test_入荷枚数(int $arrival_id, int $expected_qty): void
+    {
+        $data[Header::QUANTITY] = 4;
+        $response = $this->update_ok($arrival_id, $data);
 
+        // JSONの検証
+        $json = $response->json();
+        $this->assertArrayHasKey(Header::QUANTITY, $json, '入荷枚数が含まれない');
+        $this->assertEquals($data[Header::QUANTITY] , $json[Header::QUANTITY], '入荷枚数が更新されていない');
+
+        // 入荷ログテーブルの検証
+        $data[GlobalConstant::ID] = $arrival_id;
+        $this->assertDatabaseHas(ArrivalLog::class, $data);
+
+        // 在庫数の検証
+        $log = ArrivalLog::findWithStockInfo($arrival_id);
+        $stock = Stockpile::findById($log->stock_id);
+        $this->assertEquals($expected_qty, $stock->quantity, '在庫数が更新されていない');
+    }
+
+    // NG_変更対象が存在しない
+    // NG costが負の値
+    // NG costが0
+    // NG 入荷枚数が負の値
+    // NG 入荷枚数が0
+    // NG 入荷日が未来の日付
+    // NG 入荷日が日付ではない
+    // NG 入荷カテゴリが存在しない
+    // NG 入荷カテゴリが買取以外で、取引先が存在する
+    // NG 入荷カテゴリが買取で、取引先が存在しない
+
+    protected function qtyProvider()
+    {
+        return [
+            '変更前の入荷枚数 = 在庫数' => [3, 4],
+            '変更前の入荷枚数 < 在庫数' => [2, 9],
+            '変更前の入荷枚数 > 在庫数' => [4, 4],
+        ];
     }
 
     private function update_ok(int $id, array $data) {

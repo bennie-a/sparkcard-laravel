@@ -2,6 +2,7 @@
 
 namespace Tests\Database\Seeders\Arrival;
 
+use App\Enum\VendorTypeCat;
 use App\Models\ArrivalLog;
 use App\Models\Stockpile;
 use Illuminate\Database\Seeder;
@@ -23,12 +24,17 @@ class TestArrLogEditSeeder extends Seeder
             '入荷情報編集カード_削除後在庫数1以上',
             '入荷情報編集カード_Notionカードなし',
             '入荷情報編集カード_削除後在庫数0',
-            '入荷情報編集カード_削除後在庫数-1'
+            '入荷情報編集カード_削除後在庫数-1',
         ])->map(function ($name) {
             return $this->makeLogEntry($name);
         })->all();
     
         ArrivalLog::factory()->createMany($logs);
+
+        $purchase = $this->makeLogEntry('入荷情報編集カード_削除後在庫数1以上');
+        $purchase[SCon::VENDOR_TYPE_ID] = VendorTypeCat::PURCHASE->value; // 買取カテゴリ
+        $purchase[ACon::VENDOR] = fake()->unique()->word();
+        ArrivalLog::factory()->create($purchase);
     }
 
     private function makeLogEntry(string $productName): array

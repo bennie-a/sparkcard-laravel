@@ -99,7 +99,7 @@ return [
     'min' => [
         'array' => 'The :attribute must have at least :min items.',
         'file' => 'The :attribute must be at least :min kilobytes.',
-        'numeric' => 'The :attribute must be at least :min.',
+        'numeric' => ':attributeは:min以上の数字を入力してください。',
         'string' => 'The :attribute must be at least :min characters.',
     ],
     'min_digits' => 'The :attribute must have at least :min digits.',
@@ -177,7 +177,8 @@ return [
         Scon::VENDOR_TYPE_ID => '取引先カテゴリID',
         Acon::ARRIVAL_DATE => '入荷日',
         Scon::CARD_NAME => 'カード名',
-        StockpileHeader::SETCODE => 'エキスパンション略称'
+        StockpileHeader::SETCODE => 'エキスパンション略称',
+        StockpileHeader::QUANTITY => '枚数',
     ],
 
     'values' => [

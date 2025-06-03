@@ -39,4 +39,13 @@ class ArrivalUpdateRequest extends FormRequest
             Header::COST => 'numeric|min:1',
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (empty($this->all())) {
+                $validator->errors()->add('request', '更新項目が必要です。');
+            }
+        });
+    }
 }

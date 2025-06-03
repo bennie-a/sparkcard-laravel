@@ -100,7 +100,6 @@ class ArrivalLogService {
         }
 
         $log = ArrivalLog::where(GlobalConstant::ID, $id)->first();
-        // $log->cost = $details[Header::COST] ?? $log->cost;
         $log->fill($details)->update();
         $result = $this->findById($id);
         return $result;
