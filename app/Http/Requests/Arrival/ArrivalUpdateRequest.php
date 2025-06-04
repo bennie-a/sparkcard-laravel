@@ -53,11 +53,11 @@ class ArrivalUpdateRequest extends FormRequest
             $vendor = $this->input(Acon::VENDOR);
 
             if ($vendorTypeId == 3 && (is_null($vendor) || $vendor === '')) {
-                $validator->errors()->add(Acon::VENDOR, '取引先カテゴリIDが「買取」の時は取引先は必ず入力してください。');
+                $validator->errors()->add(Acon::VENDOR, __('validation.custom.vendor.required_if_vendor_type_id_3'));
             }
 
             if ($vendorTypeId != 3 && !is_null($vendor) && $vendor !== '') {
-                $validator->errors()->add(Acon::VENDOR, '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。');
+                $validator->errors()->add(Acon::VENDOR, __('validation.custom.vendor.prohibited_unless_vendor_type_id_3'));
             }
         });
     }

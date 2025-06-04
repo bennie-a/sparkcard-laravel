@@ -160,6 +160,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+         'vendor' => [
+            'required_if_vendor_type_id_3' => '取引先カテゴリIDが「買取」の時は取引先は必ず入力してください。',
+            'prohibited_unless_vendor_type_id_3' => '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。',
+        ],
     ],
 
     /*
