@@ -15,6 +15,9 @@ use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\StockpileHeader;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Testing\TestResponse;
 use Tests\Database\Seeders\Arrival\TestArrivalStockpileSeeder;
 use Tests\Database\Seeders\Arrival\TestArrLogCardInfoSeeder;
 use Tests\Database\Seeders\Arrival\TestArrLogEditSeeder;
@@ -23,6 +26,7 @@ use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\GetApiAssertions;
+use Tests\Util\TestDateUtil;
 
 class ArrivalLogUpdateTest extends TestCase
 {
@@ -57,7 +61,8 @@ class ArrivalLogUpdateTest extends TestCase
     {
         return [
             '原価' => [[Header::COST => fake()->randomNumber(3)]],
-            '入荷日' => [[ACon::ARRIVAL_DATE => fake()->dateTimeBetween('-7 days', '-4 days')->format('Y/m/d')]],
+            '入荷日_今日以前の日付' => [[ACon::ARRIVAL_DATE => fake()->dateTimeBetween('-7 days', '-4 days')->format('Y/m/d')]],
+            '入荷日_今日' => [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday()]],
         ];
     }
 
@@ -115,17 +120,6 @@ class ArrivalLogUpdateTest extends TestCase
         $this->assertEquals($expected_qty, $stock->quantity, '在庫数が更新されていない');
     }
 
-    // NG_変更対象が存在しない
-    // NG costが負の値
-    // NG costが0
-    // NG 入荷枚数が負の値
-    // NG 入荷枚数が0
-    // NG 入荷日が未来の日付
-    // NG 入荷日が日付ではない
-    // NG 入荷カテゴリが存在しない
-    // NG 入荷カテゴリが買取以外で、取引先が存在する
-    // NG 入荷カテゴリが買取で、取引先が存在しない
-
     protected function qtyProvider()
     {
         return [
@@ -135,8 +129,15 @@ class ArrivalLogUpdateTest extends TestCase
         ];
     }
 
+    /**
+     * 変更処理に成功した場合を検証する。
+     *
+     * @param integer $id 入荷情報ID
+     * @param array $data 更新データ
+     * @return \Illuminate\Testing\TestResponse
+     */
     private function update_ok(int $id, array $data) {
-        $response = $this->put("/api/arrival/{$id}", $data);
+        $response = $this->execute($id, $data);
         $response->assertOk();
         $response->assertJsonStructure(
             [
@@ -165,6 +166,63 @@ class ArrivalLogUpdateTest extends TestCase
                 ]
             ]);
         return $response;
+    }
+    public function test_ng_変更対象が存在しない() {
+        $response = $this->execute(99999, [Header::QUANTITY => 1]);
+        $response->assertStatus(HttpResponse::HTTP_NOT_FOUND);
+        $response->assertJson([
+            'title' => '情報なし',
+            'detail' => '指定した情報がありません。',
+            'status' => HttpResponse::HTTP_NOT_FOUND,
+            'request' => 'api/arrival/99999',
+        ]);
+    }
+
+    /**
+     * バリデーションエラーを検証する。
+     * @dataProvider validationNgProvider
+     * @return void
+     */
+    public function test_validation_ng(array $data, string $msg): void{
+        $id = 1; // 更新する入荷情報のID
+        $response = $this->execute($id, $data);
+        $response->assertStatus(HttpResponse::HTTP_BAD_REQUEST);
+        $response->assertJson([
+            'title' => 'Validation Error',
+            'detail' => $msg,
+            'status' => HttpResponse::HTTP_BAD_REQUEST,
+            'request' => 'api/arrival/1',
+        ]);
+    }
+
+    protected function validationNgProvider(): array
+    {
+        return [
+            'NG 原価が負の値' => [[Header::COST => -1], '原価は1以上の数字を入力してください。'],            
+            'NG 原価が0' => [[Header::COST => 0], '原価は1以上の数字を入力してください。'], 
+            'NG 入荷枚数が負の値' => [[Header::QUANTITY => -1], '入荷枚数は1以上の数字を入力してください。'],
+            'NG 入荷枚数が0' => [[Header::QUANTITY => 0], '入荷枚数は1以上の数字を入力してください。'],
+            'NG 入荷日が未来の日付' => [[ACon::ARRIVAL_DATE => now()->addDays(1)->format('Y/m/d')], '入荷日は今日以前の日付を入力してください。'],
+            'NG 入荷日が日付ではない' => [[ACon::ARRIVAL_DATE => 'invalid-date'], '入荷日が日付形式ではありません。'],
+            'NG 入荷カテゴリが存在しない' => [[SCon::VENDOR_TYPE_ID => 999], '取引先カテゴリIDは1～5の間の数字を設定してください。'],
+            'NG 入荷カテゴリが「買取」以外で、取引先が存在する' => [
+                        [SCon::VENDOR_TYPE_ID => VendorTypeCat::ORIGINAL_PACK->value, ACon::VENDOR => fake()->name],
+                         '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。'],
+            'NG 入荷カテゴリが買取で、取引先が存在しない' => [
+                [SCon::VENDOR_TYPE_ID => VendorTypeCat::PURCHASE->value], 
+                '取引先カテゴリIDが「買取」の時は取引先は必ず入力してください。'],
+        ];
+    }
+    
+    /**
+     * 変更処理を実行する。
+     *
+     * @param integer $id
+     * @param array $data
+     * @return TestResponse
+     */
+    private function execute(int $id, array $data) {
+        return $this->put("/api/arrival/{$id}", $data);
     }
 
 }

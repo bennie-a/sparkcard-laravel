@@ -12,7 +12,6 @@ use App\Traits\VendorTypeIdRules;
 
 class ArrivalUpdateRequest extends FormRequest
 {
-    use VendorTypeIdRules;
     use QtyRules;
     use SupplierRules;
     
@@ -33,18 +32,32 @@ class ArrivalUpdateRequest extends FormRequest
     {
         return [
             Header::QUANTITY => self::qtyRules(),
-            Acon::ARRIVAL_DATE => 'date',
+            Acon::ARRIVAL_DATE => 'date|before_or_equal:today',
             SearchConstant::VENDOR_TYPE_ID => ['integer', 'between:1,5'],
-            Acon::VENDOR => self::supplierRules(),
+            Acon::VENDOR => 'nullable|string',
             Header::COST => 'numeric|min:1',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            Header::QUANTITY => '入荷枚数'
         ];
     }
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            if (empty($this->all())) {
-                $validator->errors()->add('request', '更新項目が必要です。');
+    $validator->after(function ($validator) {
+            $vendorTypeId = $this->input(SearchConstant::VENDOR_TYPE_ID);
+            $vendor = $this->input(Acon::VENDOR);
+
+            if ($vendorTypeId == 3 && (is_null($vendor) || $vendor === '')) {
+                $validator->errors()->add(Acon::VENDOR, '取引先カテゴリIDが「買取」の時は取引先は必ず入力してください。');
+            }
+
+            if ($vendorTypeId != 3 && !is_null($vendor) && $vendor !== '') {
+                $validator->errors()->add(Acon::VENDOR, '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。');
             }
         });
     }

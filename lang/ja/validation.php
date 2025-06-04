@@ -30,7 +30,7 @@ return [
     'between' => [
         'array' => 'The :attribute must have between :min and :max items.',
         'file' => 'The :attribute must be between :min and :max kilobytes.',
-        'numeric' => ':attributeは:min ～:maxの間の数字を設定してください。',
+        'numeric' => ':attributeは:min～:maxの間の数字を設定してください。',
         'string' => 'The :attribute must be between :min and :max characters.',
     ],
     'boolean' => ':attributeはtrueかfalseを入力してください。',
@@ -159,7 +159,7 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-        ]
+        ],
     ],
 
     /*
@@ -179,12 +179,16 @@ return [
         Scon::CARD_NAME => 'カード名',
         StockpileHeader::SETCODE => 'エキスパンション略称',
         StockpileHeader::QUANTITY => '枚数',
+        StockpileHeader::COST => '原価',
+        Acon::VENDOR => '取引先名',
     ],
 
     'values' => [
         'shipping_date' => [
             'today' => '今日'
         ],
+        Acon::ARRIVAL_DATE => [
+            'today' => '今日',
+        ],
     ],
-
 ];
