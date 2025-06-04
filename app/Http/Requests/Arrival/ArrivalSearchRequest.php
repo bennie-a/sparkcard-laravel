@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Arrival;
 
 use App\Services\Constant\SearchConstant;
 use Illuminate\Foundation\Http\FormRequest;

@@ -30,4 +30,16 @@ class APIHandler {
         logger()->info("End to Find id:{$id}");
         return response($transformer($model), Response::HTTP_OK);
     }
+
+    /**
+     * 情報を1件更新する。
+     *
+     * @param integer $id
+     * @param array $details
+     * @param callable $fetchMethod
+     * @param callable|null $transformer
+     * @return void
+     */
+    public function handleUpdate(int $id, array $details, callable $fetchMethod, callable $updateMethod, callable $transformer) {
+    }
 }

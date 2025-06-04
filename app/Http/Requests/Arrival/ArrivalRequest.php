@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Arrival;
 
+use App\Traits\Rules\SupplierRules;
 use App\Traits\VendorTypeIdRules;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\Rules\VendorRules;
 
 /**
  * 入荷手続きのリクエストクラス
@@ -11,6 +13,8 @@ use Illuminate\Foundation\Http\FormRequest;
 class ArrivalRequest extends FormRequest
 {
     use VendorTypeIdRules;
+
+    use SupplierRules;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -33,7 +37,7 @@ class ArrivalRequest extends FormRequest
             'language' =>'required|in:JP,EN,IT,CS,CT',
             'cost' =>'required|numeric|min:1',
             'vendor_type_id' => self::vendorTypeIdRules(),
-            'vendor' =>['nullable', 'string', 'required_if:vendor_type_id,3'],
+            'vendor' => self::supplierRules(),
             'market_price' =>'required|numeric|min:1',
             'quantity' =>'required|numeric|min:1',
             'condition' =>'required|in:NM,NM-,EX+,EX,PLD',

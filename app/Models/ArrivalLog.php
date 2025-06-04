@@ -28,7 +28,7 @@ class ArrivalLog extends Model
      * @return Model
      */
     public static function findWithStockInfo(int $id) {
-        $columns = ['alog.id', 'alog.quantity', 's.id as stock_id', 's.card_id'];
+        $columns = ['alog.id', 'alog.quantity', 'alog.cost', 'alog.arrival_date', 's.id as stock_id', 's.card_id'];
         $query = self::getTableQuery()->select($columns)->where('alog.id', $id);
         $query = self::joinStockpile($query);
         return $query->first();
@@ -120,7 +120,7 @@ public static function filtering(array $details) {
 private static function getFetchColumns() {
     $columns = ['alog.id as arrival_id', 'alog.arrival_date', 'alog.quantity as alog_quan', 'alog.cost', 'e.name as exp_name', 'alog.vendor',
                             'e.attr as exp_attr', 'c.id', 'c.name', 'c.number', 'c.image_url', 'c.color_id', 'c.isFoil','s.language',
-                            's.condition', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
+                            's.condition', 's.id as stock_id', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
     return $columns;
 }
 

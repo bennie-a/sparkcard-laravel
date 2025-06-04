@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\VendorTypeCat;
 use App\Models\VendorType;
 use App\Services\Constant\CardConstant as Con;
 use Illuminate\Database\Seeder;
@@ -16,7 +17,7 @@ class VendorTypeSeeder extends Seeder
     {
         DB::table('vendor_type')->delete();
         DB::statement('ALTER SEQUENCE vendor_type_id_seq RESTART WITH 1');
-        $categories = ['オリジナルパック', '私物', '買取', '棚卸し', '返品'];
+        $categories = VendorTypeCat::toTextArray();
         foreach ($categories as $category) {
             VendorType::create([Con::NAME => $category]);
         }

@@ -5,6 +5,7 @@ namespace Tests\Unit\DB;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Stockpile;
+use App\Services\Constant\SearchConstant;
 use App\Services\Constant\StockpileHeader;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,13 +69,19 @@ class StockpileSearchTest extends TestCase
 
     /**
      * 在庫情報検索NGパターン
-     *@dataProvider searchNgProvider
+     * 
      * @return void
      */
-    public function test_index_ng(string $cardname, string $setname, int $statusCode) {
-        $query = ['card_name' => $cardname, 'set_name' => $setname, 'limit' => 0];
+    public function test_ng_not_found() {
+        $query = [SearchConstant::CARD_NAME => 'xxxx', SearchConstant::SET_NAME => '', 'limit' => 0];
         $response = $this->call('GET', '/api/stockpile', $query);
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $response->assertJson([
+            'title' => '結果なし',
+            'status' => Response::HTTP_NOT_FOUND,
+            'detail' => '検索結果がありません。',
+            "request" => "api/stockpile"
+        ]);
     }
 
 

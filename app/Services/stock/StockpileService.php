@@ -3,6 +3,7 @@ namespace App\Services\Stock;
 
 use App\Exceptions\api\NotFoundException;
 use App\Exceptions\ConflictException;
+use App\Facades\CardBoard;
 use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
 use App\Models\ShippingLog;
@@ -109,6 +110,28 @@ class StockpileService extends AbstractSmsService{
     public function fetch(array $details) {
         $result = Stockpile::fetch($details);
         return $result;
+    }
+
+    /**
+     * 在庫情報の枚数を更新する。
+     *
+     * @param integer $id 在庫ID
+     * @param integer $prevQty 変更前の入荷枚数
+     * @param int $currQty 変更後の入荷枚数
+     * @return void
+     */
+    public function updateQty(int $id, int $prevQty, int $currQty) {
+        $stock = Stockpile::findById($id);
+        $stockQty = $stock->quantity;
+
+        $decreaseQty = $stockQty - $prevQty;
+        if ($decreaseQty < 0) {
+            $decreaseQty = 0;
+        }
+        $newQty = $decreaseQty + $currQty;
+        Stockpile::updateData($id, [Header::QUANTITY => $newQty]);
+
+        CardBoard::updateQty($stock->card_id, $newQty);
     }
 
     /**

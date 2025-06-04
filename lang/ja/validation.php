@@ -30,7 +30,7 @@ return [
     'between' => [
         'array' => 'The :attribute must have between :min and :max items.',
         'file' => 'The :attribute must be between :min and :max kilobytes.',
-        'numeric' => ':attributeは:min ～:maxの間の数字を設定してください。',
+        'numeric' => ':attributeは:min～:maxの間の数字を設定してください。',
         'string' => 'The :attribute must be between :min and :max characters.',
     ],
     'boolean' => ':attributeはtrueかfalseを入力してください。',
@@ -99,7 +99,7 @@ return [
     'min' => [
         'array' => 'The :attribute must have at least :min items.',
         'file' => 'The :attribute must be at least :min kilobytes.',
-        'numeric' => 'The :attribute must be at least :min.',
+        'numeric' => ':attributeは:min以上の数字を入力してください。',
         'string' => 'The :attribute must be at least :min characters.',
     ],
     'min_digits' => 'The :attribute must have at least :min digits.',
@@ -159,7 +159,11 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-        ]
+        ],
+         'vendor' => [
+            'required_if_vendor_type_id_3' => '取引先カテゴリIDが「買取」の時は取引先は必ず入力してください。',
+            'prohibited_unless_vendor_type_id_3' => '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。',
+        ],
     ],
 
     /*
@@ -177,13 +181,18 @@ return [
         Scon::VENDOR_TYPE_ID => '取引先カテゴリID',
         Acon::ARRIVAL_DATE => '入荷日',
         Scon::CARD_NAME => 'カード名',
-        StockpileHeader::SETCODE => 'エキスパンション略称'
+        StockpileHeader::SETCODE => 'エキスパンション略称',
+        StockpileHeader::QUANTITY => '枚数',
+        StockpileHeader::COST => '原価',
+        Acon::VENDOR => '取引先名',
     ],
 
     'values' => [
         'shipping_date' => [
             'today' => '今日'
         ],
+        Acon::ARRIVAL_DATE => [
+            'today' => '今日',
+        ],
     ],
-
 ];

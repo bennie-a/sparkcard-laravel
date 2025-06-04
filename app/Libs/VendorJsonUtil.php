@@ -14,6 +14,6 @@ class VendorJsonUtil
      */
     public static function setVendorInfo(int $id, string $name, string $supplier): array
     {
-        return [GCon::ID => $id, Header::NAME => $name, ACon::SUPPLIER => $supplier];
+        return [GCon::ID => $id, Header::NAME => $name, ACon::SUPPLIER => $supplier ?? ''];
     }
 }

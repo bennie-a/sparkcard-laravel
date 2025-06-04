@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Stock;
 
+use App\Facades\CardBoard;
 use App\Facades\StockpileServ;
 use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
@@ -13,6 +14,7 @@ use App\Services\Constant\ArrivalConstant as Con;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\SearchConstant;
 use App\Services\Constant\GlobalConstant as GCon;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -88,6 +90,19 @@ class ArrivalLogService {
     public function findById(int $id) {
         $log = ArrivalLog::find($id);
         return $log;
+    }
+
+    public function update(int $id, array $details) {
+        if (MtgJsonUtil::hasKey(Header::QUANTITY, $details)) {
+            $log = ArrivalLog::findWithStockInfo($id);
+            $stockServ = new StockpileService();
+            $stockServ->updateQty($log->stock_id, $log->quantity, $details[Header::QUANTITY]);
+        }
+
+        $log = ArrivalLog::where(GlobalConstant::ID, $id)->first();
+        $log->fill($details)->update();
+        $result = $this->findById($id);
+        return $result;
     }
 
     /**

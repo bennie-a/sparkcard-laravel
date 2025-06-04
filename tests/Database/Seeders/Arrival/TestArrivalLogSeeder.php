@@ -38,7 +38,7 @@ class TestArrivalLogSeeder extends Seeder
             }
             $items = array_map(function($s) use($i) {
                 return ['stock_id' => $s['id'],
-                             SCon::VENDOR_TYPE_ID => $i];
+                             SCon::VENDOR_TYPE_ID => $i, 'vendor' => ''];
             }, $all_stock);
             $buy_items = array_merge($buy_items, $items);
         }
