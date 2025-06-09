@@ -1,7 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import cardlayout from "../component/CardLayout.vue";
-import pagination from "../component/ListPagination.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
@@ -65,7 +64,7 @@ const toList = () => {
  const toEditPage = (arrival_id) => {
         router.push({
             name: "ArrivalLogEdit",
-            params: { arrival_date:arrival_date, arrival_id: arrival_id},
+            params: {arrival_id: arrival_id},
         });
     }
 
@@ -86,7 +85,6 @@ const deleteLog = async(arrival_id) => {
     }
 
  const current = (data) => {
-    console.log(data.response);
     currentList.value = data.response;
 }
 

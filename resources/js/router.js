@@ -47,7 +47,7 @@ const routes = [
         },
     },
     {
-        path:"/arival/edit/:arrival_date/:arrival_id",
+        path:"/arival/edit/detail/:arrival_id",
         name:'ArrivalLogEdit',
         component:ArrivalLogEditPage,
         beforeEnter:(to, from, next) => {
