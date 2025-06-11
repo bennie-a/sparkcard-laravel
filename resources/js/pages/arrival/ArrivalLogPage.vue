@@ -12,10 +12,13 @@ import pglist from "../component/PgList.vue";
 import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
+
 import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 import { storeToRefs } from 'pinia';
 
 const gcStore = groupConditionStore();
+const arrDateStore = arrDateConditionStore();
 
 // 検索条件
 const {startDate, endDate, itemname} = storeToRefs(gcStore);
@@ -63,6 +66,7 @@ onMounted(async() => {
     if (referrer_path.indexOf('/arrival/') !== 0 ) {
         console.log('pinia reset');
         gcStore.reset();
+        arrDateStore.reset();
         piniaMsgStore().reset();
     }
     await fetch();
@@ -75,9 +79,10 @@ const current = (data) => {
 
 // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendor_id) => {
+    arrDateStore.arrivalDate = arrivalDate;
+    arrDateStore.vendorId = vendor_id;
     router.push({
-        name: "ArrivalLogDss",
-        params: { arrival_date: arrivalDate, vendor_id:vendor_id},
+        name: "ArrivalLogDss"
     });
 }
 </script>

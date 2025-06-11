@@ -4,6 +4,7 @@ import cardlayout from "../component/CardLayout.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
+import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import { onMounted, reactive } from "vue";
 import {apiService} from "@/component/ApiGetService";
@@ -14,13 +15,18 @@ import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
 import ModalButton from "../component/ModalButton.vue";
 import PiniaMsgForm from "../component/PiniaMsgForm.vue";
+import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const router = useRouter();
 
-const arrival_date = route.params.arrival_date;
-const vendor_id = route.params.vendor_id;
+// const arrival_date = route.params.arrival_date;
+// const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
+const arrDateStore = arrDateConditionStore();
+
+const {arrivalDate, vendorId} = storeToRefs(arrDateStore);
+
 const piniaMsg = piniaMsgStore();
 const currentList = reactive([]);
 const resultCount = ref(0);
@@ -40,8 +46,8 @@ const fetch = async() => {
         {
             url:"/arrival/",
             query:{params:{
-                arrival_date:arrival_date,
-                vendor_type_id:vendor_id,
+                arrival_date:arrivalDate.value,
+                vendor_type_id:vendorId.value,
                 card_name:gcStore.itemname
             }},
             onSuccess:(data) => {

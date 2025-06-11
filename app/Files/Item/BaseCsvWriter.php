@@ -40,7 +40,7 @@ class BaseCsvWriter extends ItemCsvWriter {
             return $price;
         }
         if ($price >= 300 && $price < 1500) {
-            return $price - 60;
+            return $price - 80;
         }
         return $price -180;
     }

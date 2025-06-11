@@ -14,9 +14,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import{ store} from './store';
 import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
+import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {url:"/arrival/detail/:arrival_date/:vendor_id", title:""};
+const arrivalDssLinks = {url:"/arrival/date/", title:""};
 const routes = [
     {
         path: "/",
@@ -39,7 +40,8 @@ const routes = [
         name:'ArrivalLogDss',
         component:ArrivalLogDssPage,
         beforeEnter:(to, from, next) => {
-            to.meta.title = to.params.arrival_date;
+            const arrDateStore = arrDateConditionStore();
+            to.meta.title = arrDateStore.arrivalDate;
             next();
         },
         meta:{
@@ -47,12 +49,14 @@ const routes = [
         },
     },
     {
-        path:"/arival/edit/detail/:arrival_id",
+        path:"/arrival/edit/:arrival_id",
         name:'ArrivalLogEdit',
         component:ArrivalLogEditPage,
         beforeEnter:(to, from, next) => {
+            const arrDateStore = arrDateConditionStore();
+            console.log("arrival_date:", arrDateStore.arrivalDate);
+            arrivalDssLinks.title = arrDateStore.arrivalDate;
             to.meta.title = 'No.' + to.params.arrival_id;
-            arrivalDssLinks.title = to.params.arrival_date;
             next();
         },
         meta:{

@@ -6,6 +6,7 @@
     import { useRoute, useRouter } from 'vue-router';
     import Loading from "vue-loading-overlay";
     import { apiService } from "@/component/ApiGetService";
+    import condition from "../component/tag/ConditionTag.vue";
 
     const router = useRouter();
     const route = useRoute();
@@ -28,6 +29,7 @@
             url: `/arrival/${arrival_id}`,
             onSuccess: (data) => {
                 detail.value = data;
+                console.log(detail.value);
             },
             onError: (error) => {
                 console.error("Error fetching arrival details:", error);
@@ -43,13 +45,20 @@
     <article v-if="!isLoading">
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
-            {{ detail }}
-            <div class="field">
-                <label>カード名</label>
-                <div class="emphasis">
-                    {{ detail.card.name }}
+            <div class="two fields ui vertical segment">
+                <div class="seven wide field">
+                    <label>カード名</label>
+                    <div class="emphasis">
+                        {{ detail.card.name }}
+                    </div>
+                    <span class="setname" v-if="detail.card.exp">
+                        {{detail.card.exp.name}}&#91;{{ detail.card.exp.attr }}&#93;&#35;{{ detail.card.number }}
+                    </span>
                 </div>
-                <span class="setname">{{detail.card.exp.name}}&#91;{{ detail.card.exp.attr }}&#93;&#35;{{ detail.card.number }}</span>
+                <div class="field">
+                    <label>状態</label>
+                    <condition :name="detail.card.condition" v-if="detail.card.condition"></condition>
+                </div>
             </div>
             <div class="two fields">
                 <div class="seven wide field">
@@ -64,11 +73,15 @@
             <div class="two fields">
                 <div class="six wide field">
                     <label>入荷カテゴリ</label>
-                    <vendorType v-model="detail.vendor.id"></vendorType>
+                    <div v-if="detail.vendor">
+                        <vendorType v-model="detail.vendor.id"></vendorType>
+                    </div>
                 </div>
                 <div class="ten wide field">
                     <label>取引先</label>
-                    <input type="text" v-model="detail.vendor.supplier">
+                    <div v-if="detail.vendor">
+                        <input type="text" v-model="detail.vendor.supplier">
+                    </div>
                 </div>
             </div>
             <div class="two fields">
@@ -106,7 +119,8 @@
 
 /* 強調 */
 .emphasis {
-    font-weight: 500;
+    font-weight: 700;
+    font-size: 1.2em;
 }
 
 .setname {
