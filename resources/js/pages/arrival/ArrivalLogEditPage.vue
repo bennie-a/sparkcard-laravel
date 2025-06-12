@@ -2,29 +2,33 @@
     import { onMounted, reactive, ref } from 'vue';
     import vendorType from '../component/VendorType.vue';
     import scdatepicker from "../component/SCDatePicker.vue";
-    import lang from "../component/Language.vue";
     import { useRoute, useRouter } from 'vue-router';
     import Loading from "vue-loading-overlay";
     import { apiService } from "@/component/ApiGetService";
     import condition from "../component/tag/ConditionTag.vue";
     import foiltag from "../component/tag/FoilTag.vue";
+    import ModalButton from "../component/ModalButton.vue";
+    import PiniaMsgForm from "../component/PiniaMsgForm.vue";
+    import { piniaMsgStore } from "@/stores/global/PiniaMsg";
+    import { storeToRefs } from "pinia";
 
     const router = useRouter();
     const route = useRoute();
-    const vendorNum = ref(2);
     const isLoading = ref(false);
     const arrival_id = route.params.arrival_id;
+
+    const piniaMsg = piniaMsgStore();
+
     const toDssPage = () => {
-        console.log(detail.value.vendorId);
         router.push({
             name: "ArrivalLogDss",
-            params: { arrival_date: detail.value.arrivalDate, vendor_id:detail.value.vendorId},
         });
     };
 
     const detail  = ref({card:{name:""}});
    // 初期表示
     onMounted(async() => {
+        piniaMsg.reset();
         isLoading.value = true;
         await apiService.get({
             url: `/arrival/${arrival_id}`,
@@ -39,10 +43,31 @@
                 isLoading.value = false;
             }
         });
-        // detail.value = {lang:"EN", arrivalDate: ref(new Date(route.params.arrival_date)), vendorId:3};
     });
+
+    const update = async() => {
+        piniaMsg.setSuccess("変更しました。");
+
+        // isLoading.value = true;
+        // await apiService.put({
+        //     url: `/arrival/${arrival_id}`,
+        //     data: detail.value,
+        //     onSuccess: (data) => {
+        //         piniaMsg.success("入荷情報を更新しました");
+        //         toDssPage();
+        //     },
+        //     onError: (error) => {
+        //         console.error("Error updating arrival details:", error);
+        //         piniaMsg.error("入荷情報の更新に失敗しました");
+        //     },
+        //     onFinally: () => {
+        //         isLoading.value = false;
+        //     }
+        // });
+    };
 </script>
 <template>
+    <PiniaMsgForm></PiniaMsgForm>
     <article v-if="!isLoading">
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
@@ -68,7 +93,7 @@
                     <label>入荷日</label>
                     <scdatepicker v-model="detail.arrival_date"></scdatepicker>
                 </div>
-                                <div class="four wide field">
+                <div class="four wide field">
                     <label>原価</label>
                     <div class="ui left icon input">
                         <input type="number" step="1" min="1" v-model="detail.cost">
@@ -94,15 +119,17 @@
                 <div class="ten wide field">
                     <label>取引先</label>
                     <div v-if="detail.vendor">
-                        <input type="text" v-model="detail.vendor.supplier">
+                        <input type="text" v-model="detail.vendor.supplier" :disabled="detail.vendor.id !== 3">
                     </div>
                 </div>
             </div>
             <div class="two fields">
-            </div>
-            <div class="field">
-                <button class="ui basic teal button" @click="toDssPage"><i class="angle double left icon"></i>入荷詳細に戻る</button>
-                <button class="ui teal button ml-1"><i class="pencil alternate icon"></i>変更する</button>                    
+                <div class="six wide field">
+                    <button class="ui basic teal button" @click="toDssPage"><i class="angle double left icon"></i>入荷詳細に戻る</button>
+                </div>
+                <div class="five wide field">
+                    <ModalButton :msg="`変更してもよろしいですか？`" @action="update()"><i class="pencil alternate icon"></i>変更する</ModalButton>
+                </div>
             </div>
         </div>
         <div class="six wide column">
