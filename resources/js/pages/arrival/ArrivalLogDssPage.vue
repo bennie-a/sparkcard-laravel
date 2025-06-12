@@ -17,11 +17,8 @@ import ModalButton from "../component/ModalButton.vue";
 import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import { storeToRefs } from "pinia";
 
-const route = useRoute();
 const router = useRouter();
 
-// const arrival_date = route.params.arrival_date;
-// const vendor_id = route.params.vendor_id;
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
 

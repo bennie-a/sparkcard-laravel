@@ -7,6 +7,7 @@
     import Loading from "vue-loading-overlay";
     import { apiService } from "@/component/ApiGetService";
     import condition from "../component/tag/ConditionTag.vue";
+    import foiltag from "../component/tag/FoilTag.vue";
 
     const router = useRouter();
     const route = useRoute();
@@ -45,30 +46,43 @@
     <article v-if="!isLoading">
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
-            <div class="two fields ui vertical segment">
-                <div class="seven wide field">
-                    <label>カード名</label>
-                    <div class="emphasis">
-                        {{ detail.card.name }}
-                    </div>
-                    <span class="setname" v-if="detail.card.exp">
+            <h2 class="ui medium header" v-if="detail.card.foil">
+                {{ detail.card.name }}<foiltag :isFoil="detail.card.foil.is_foil" :name="detail.card.foil.name"/>
+                <div class="sub header"  v-if="detail.card.exp">
                         {{detail.card.exp.name}}&#91;{{ detail.card.exp.attr }}&#93;&#35;{{ detail.card.number }}
-                    </span>
+                </div>
+            </h2>
+            <div class="two fields">
+                <div class="two wide field">
+                    <label>言語</label>
+                    <span> {{ detail.card.lang }}</span>
                 </div>
                 <div class="field">
                     <label>状態</label>
-                    <condition :name="detail.card.condition" v-if="detail.card.condition"></condition>
+                        <condition :name="detail.card.condition" v-if="detail.card.condition"></condition>
                 </div>
             </div>
-            <div class="two fields">
+            <div class="ui divider"></div>
+            <div class="three fields">
                 <div class="seven wide field">
                     <label>入荷日</label>
                     <scdatepicker v-model="detail.arrival_date"></scdatepicker>
                 </div>
-                <div class="field">
-                    <label>言語</label>
-                    <lang v-model="detail.card.lang"></lang>
+                                <div class="four wide field">
+                    <label>原価</label>
+                    <div class="ui left icon input">
+                        <input type="number" step="1" min="1" v-model="detail.cost">
+                        <i class="yen sign icon"></i>                       
+                    </div>
                 </div>
+                <div class="four wide field">
+                    <label>枚数</label>
+                    <div class="ui right labeled input">
+                        <input type="number" min="1" step="1" v-model="detail.quantity">
+                        <label class="ui basic label">枚</label>
+                    </div>
+                </div>
+
             </div>
             <div class="two fields">
                 <div class="six wide field">
@@ -85,20 +99,6 @@
                 </div>
             </div>
             <div class="two fields">
-                <div class="four wide field">
-                    <label>原価</label>
-                    <div class="ui left icon input">
-                        <input type="number" step="1" min="1" v-model="detail.cost">
-                        <i class="yen sign icon"></i>                       
-                    </div>
-                </div>
-                <div class="four wide field">
-                    <label>枚数</label>
-                    <div class="ui right labeled input">
-                        <input type="number" min="1" step="1" v-model="detail.quantity">
-                        <label class="ui basic label">枚</label>
-                    </div>
-                </div>
             </div>
             <div class="field">
                 <button class="ui basic teal button" @click="toDssPage"><i class="angle double left icon"></i>入荷詳細に戻る</button>
