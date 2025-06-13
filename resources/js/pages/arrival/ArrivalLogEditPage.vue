@@ -10,7 +10,7 @@
     import ModalButton from "../component/ModalButton.vue";
     import PiniaMsgForm from "../component/PiniaMsgForm.vue";
     import { piniaMsgStore } from "@/stores/global/PiniaMsg";
-    import { storeToRefs } from "pinia";
+    import {apiPutService} from "@/component/ApiPutService";
 
     const router = useRouter();
     const route = useRoute();
@@ -28,7 +28,6 @@
     const detail  = ref({card:{name:""}});
    // 初期表示
     onMounted(async() => {
-        piniaMsg.reset();
         isLoading.value = true;
         await apiService.get({
             url: `/arrival/${arrival_id}`,
@@ -46,24 +45,23 @@
     });
 
     const update = async() => {
-        piniaMsg.setSuccess("変更しました。");
+        const updateDetail = detail.value;
+        const query  = {
+            arrival_date: updateDetail.arrival_date,
+            cost: updateDetail.cost};
+            console.log("Updating arrival details:", query);
+        isLoading.value = true;
+        await apiPutService.put({
+            url: `/arrival/${arrival_id}`,
+            query: query,
+            onSuccess: (data) => {
 
-        // isLoading.value = true;
-        // await apiService.put({
-        //     url: `/arrival/${arrival_id}`,
-        //     data: detail.value,
-        //     onSuccess: (data) => {
-        //         piniaMsg.success("入荷情報を更新しました");
-        //         toDssPage();
-        //     },
-        //     onError: (error) => {
-        //         console.error("Error updating arrival details:", error);
-        //         piniaMsg.error("入荷情報の更新に失敗しました");
-        //     },
-        //     onFinally: () => {
-        //         isLoading.value = false;
-        //     }
-        // });
+                piniaMsg.setSuccess("変更しました。");
+            },
+            onFinally: () => {
+                isLoading.value = false;
+            }
+        });
     };
 </script>
 <template>

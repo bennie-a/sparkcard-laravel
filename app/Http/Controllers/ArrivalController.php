@@ -114,12 +114,12 @@ class ArrivalController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ArrivalUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
         logger()->info("Start to Update id:{$id}");
-        $details = $request->only([Header::QUANTITY, ACon::ARRIVAL_DATE, 
-                                            SearchConstant::VENDOR_TYPE_ID, ACon::VENDOR, Header::COST]);
-
+        // $details = $request->only([Header::QUANTITY, ACon::ARRIVAL_DATE, 
+        //                                     SearchConstant::VENDOR_TYPE_ID, ACon::VENDOR, Header::COST]);
+        $details = $request->all();
         $isExists = ArrivalLog::where(GlobalConstant::ID, $id)->exists();
         if (!$isExists) {
             logger()->info("No Result  id:{$id}");
