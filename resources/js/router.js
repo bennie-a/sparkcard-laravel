@@ -18,7 +18,7 @@ import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {url:"/arrival/date/", title:""};
+const arrivalDssLinks = {url:"/arrival/date/", title:"入荷履歴"};
 const routes = [
     {
         path: "/",
@@ -54,8 +54,6 @@ const routes = [
         name:'ArrivalLogEdit',
         component:ArrivalLogEditPage,
         beforeEnter:(to, from, next) => {
-            const arrDateStore = arrDateConditionStore();
-            arrivalDssLinks.title = arrDateStore.arrivalDate;
             to.meta.title = 'No.' + to.params.arrival_id;
             next();
         },

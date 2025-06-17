@@ -1,3 +1,4 @@
+import { has } from "lodash";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -13,7 +14,7 @@ export const piniaMsgStore = defineStore('piniaMsgStore', () =>{
 
     // エラーメッセージをセットする。
     function setError(msg) {
-        error.value = msg;
+        error.value.push(msg);
     }
 
     function reset() {
@@ -23,7 +24,11 @@ export const piniaMsgStore = defineStore('piniaMsgStore', () =>{
 
     function hasSuccess() {
         return success.value !== "";
+    }    
+    
+    function hasError() {
+        return error.value.length > 0;
     }
 
-    return {success, error, setSuccess, setError, reset, hasSuccess};
+    return {success, error, setSuccess, setError, reset, hasSuccess, hasError};
 });

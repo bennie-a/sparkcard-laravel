@@ -1,5 +1,5 @@
 <script setup>
-    import { onMounted, reactive, ref } from 'vue';
+    import { onMounted, reactive, ref, watch } from 'vue';
     import vendorType from '../component/VendorType.vue';
     import scdatepicker from "../component/SCDatePicker.vue";
     import { useRoute, useRouter } from 'vue-router';
@@ -11,6 +11,8 @@
     import PiniaMsgForm from "../component/PiniaMsgForm.vue";
     import { piniaMsgStore } from "@/stores/global/PiniaMsg";
     import {apiPutService} from "@/component/ApiPutService";
+    import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
+    import UseDateFormatter from '../../functions/UseDateFormatter.js';
 
     const router = useRouter();
     const route = useRoute();
@@ -44,18 +46,22 @@
         });
     });
 
+    const {toString} = UseDateFormatter();
     const update = async() => {
+        piniaMsg.reset();
         const updateDetail = detail.value;
         const query  = {
-            arrival_date: updateDetail.arrival_date,
-            cost: updateDetail.cost};
-            console.log("Updating arrival details:", query);
+            arrival_date: toString(updateDetail.arrival_date),
+            cost: updateDetail.cost,
+            quantity: updateDetail.quantity,
+            vendor_type_id: updateDetail.vendor.id,
+            vendor: updateDetail.vendor.supplier};
         isLoading.value = true;
         await apiPutService.put({
             url: `/arrival/${arrival_id}`,
             query: query,
             onSuccess: (data) => {
-
+                arrDateConditionStore().arrivalDate = data.arrival_date;
                 piniaMsg.setSuccess("変更しました。");
             },
             onFinally: () => {
