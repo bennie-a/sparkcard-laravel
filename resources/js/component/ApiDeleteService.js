@@ -1,5 +1,4 @@
 import axios from "axios";
-import {useStore} from 'vuex';
 
 export const apiDeleteService = {
     // API経由で削除する。

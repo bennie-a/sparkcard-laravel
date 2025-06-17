@@ -116,11 +116,10 @@ class ArrivalController extends Controller {
      */
     public function update(ArrivalUpdateRequest $request, $id)
     {
-        logger()->info("Start to Update id:{$id}");
         $details = $request->only([Header::QUANTITY, ACon::ARRIVAL_DATE, 
-                                            SearchConstant::VENDOR_TYPE_ID, ACon::VENDOR, Header::COST]);
-
+        SearchConstant::VENDOR_TYPE_ID, ACon::VENDOR, Header::COST]);
         $isExists = ArrivalLog::where(GlobalConstant::ID, $id)->exists();
+        logger()->info("Start to Update id:{$id}, details:", $details);
         if (!$isExists) {
             logger()->info("No Result  id:{$id}");
             throw new NoContentException();
