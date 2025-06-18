@@ -51,7 +51,7 @@ class ShippingLogService extends AbstractSmsService{
         }
 
         if ($stock->quantity == 0) {
-            $this->addError($row->number(), '在庫が0枚です');
+            $this->addError($row->number(), '在庫が0枚です。');
             return;
         }
         $notionCard = CardBoard::findByOrderId($row->order_id());
@@ -67,6 +67,11 @@ class ShippingLogService extends AbstractSmsService{
         ShippingLog::create($log);
 
         $stock->quantity = $stock->quantity - $row->quantity();
+        if ($stock->quantity < 0) {
+            $this->addError($row->number(), '在庫が足りません。');
+            return;
+        }
+
         $stock->update();
         $this->updateNotion($notionCard[0], $row);
         $this->addSuccess($row->number());

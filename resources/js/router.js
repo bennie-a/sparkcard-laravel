@@ -18,7 +18,7 @@ import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {url:"/arrival/date/", title:"入荷履歴"};
+const arrivalDssLinks = {url:"/arrival/date/", title:""};
 const routes = [
     {
         path: "/",
@@ -42,6 +42,7 @@ const routes = [
         component:ArrivalLogDssPage,
         beforeEnter:(to, from, next) => {
             const arrDateStore = arrDateConditionStore();
+            arrivalDssLinks.title = arrDateStore.arrivalDate;
             to.meta.title = arrDateStore.arrivalDate;
             next();
         },
@@ -177,7 +178,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     router['referrer'] = from;
     store.dispatch("loading/start");
-    piniaMsgStore().reset();
     next();
 });
 

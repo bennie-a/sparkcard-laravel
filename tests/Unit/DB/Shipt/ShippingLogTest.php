@@ -4,6 +4,7 @@ namespace Tests\Feature\tests\Unit\DB\Shipt;
 
 use App\Files\Csv\CsvWriter;
 use App\Files\Stock\ShippingLogCsvReader;
+use App\Models\Stockpile;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Http\Response;
 use Tests\Database\Seeders\DatabaseSeeder;
@@ -125,7 +126,7 @@ class ShippingLogTest extends TestCase
      * @param array $json
      * @dataProvider ngprovider
      */
-    public function test_ng(string $item_name, int $status, array $json) {
+    public function test_ng(string $item_name, string $msg) {
         $reader = new ShippingLogCsvReader();
         $dir = config('csv.export');
         $row = $reader->read("{$dir}shipping_log.csv");
@@ -136,25 +137,29 @@ class ShippingLogTest extends TestCase
                 $newRow[0][$h] = $item_name;
                 continue;
             }
+            if ($item_name === '【XLN】軍団の上陸[JP][白]' && $h === Header::QUANTITY) {
+                $stock = Stockpile::find('軍団の上陸', 'XLN', 'NM', 'JP', false);
+                $this->assertNotNull($stock, '在庫情報が存在しません');
+                $newRow[0][$h] = $stock->quantity + 1; // 在庫が0枚以下
+                continue;
+            }
             $newRow[0][$h] = $r[$h];
         }
 
         $writer = new CsvWriter();
         $newfile = 'tmp.csv';
         $writer->write($newfile, Header::shippinglog_constants(), $newRow);
-        $this->execute($newfile, $status, $json);
+        $json =  ['total_rows' => 1, 'successful_rows' => 0,
+            'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => $msg]],
+            'skip_rows' => 0, "skip_details" => []];
+        $this->execute($newfile, 445, $json);
     }
 
     public function ngprovider() {
         return [
-            '在庫が0枚' => ['【BRO】ドラゴンの運命[JP][赤]', 445,  
-            ['total_rows' => 1, 'successful_rows' => 0,
-            'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => "在庫が0枚です"]],
-            'skip_rows' => 0, "skip_details" => []]],
-            '在庫情報が存在しない' => ['【NEO】【Foil】告別≪ショーケース≫[JP][白]', 445,  
-            ['total_rows' => 1, 'successful_rows' => 0,
-            'failed_rows' => 1, 'failed_details' => [["number" => "2", "reason" => "在庫データがありません"]],
-            'skip_rows' => 0, "skip_details" => []]],
+            '在庫が0枚' => ['【BRO】ドラゴンの運命[JP][赤]',  "在庫が0枚です。"],
+            '在庫情報が存在しない' => ['【XLN】在庫情報なし[JP][白]', "在庫データがありません"],
+            '出荷後の在庫が0枚未満' => ['【XLN】軍団の上陸[JP][白]', "在庫が足りません。"],
         ];
     }
 

@@ -8,11 +8,12 @@
     import condition from "../component/tag/ConditionTag.vue";
     import foiltag from "../component/tag/FoilTag.vue";
     import ModalButton from "../component/ModalButton.vue";
-    import PiniaMsgForm from "../component/PiniaMsgForm.vue";
     import { piniaMsgStore } from "@/stores/global/PiniaMsg";
     import {apiPutService} from "@/component/ApiPutService";
     import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
     import UseDateFormatter from '../../functions/UseDateFormatter.js';
+    import PiniaMsgForm from "../component/PiniaMsgForm.vue";
+
 
     const router = useRouter();
     const route = useRoute();
@@ -30,6 +31,7 @@
     const detail  = ref({card:{name:""}});
    // 初期表示
     onMounted(async() => {
+        piniaMsg.reset();
         isLoading.value = true;
         await apiService.get({
             url: `/arrival/${arrival_id}`,
@@ -63,6 +65,7 @@
             onSuccess: (data) => {
                 arrDateConditionStore().arrivalDate = data.arrival_date;
                 piniaMsg.setSuccess("変更しました。");
+                toDssPage();
             },
             onFinally: () => {
                 isLoading.value = false;
