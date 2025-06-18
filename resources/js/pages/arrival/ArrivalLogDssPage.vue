@@ -34,7 +34,6 @@ const isLoading = ref(false);
 const result = reactive([]);
 onMounted(async() =>{
     isLoading.value = true;
-    piniaMsg.reset();
     await fetch();
     });
 
@@ -74,6 +73,7 @@ const toList = () => {
     // 入荷情報を1件削除する。
 const deleteLog = async(arrival_id) => {
     isLoading.value = true;
+    piniaMsg.reset();
     await apiDeleteService.delete({
         url: "/arrival/",
          id:arrival_id,
@@ -94,6 +94,7 @@ const deleteLog = async(arrival_id) => {
 </script>
 <template>
     <article v-show="!isLoading">
+        <PiniaMsgForm></PiniaMsgForm>
         <h2 class="ui header">入荷情報</h2>
         <table class="ui collapsing definition table" v-if="result.value">
             <tr>

@@ -65,9 +65,9 @@ onMounted(async() => {
     const referrer_path = router.referrer.path;
     if (referrer_path.indexOf('/arrival/') !== 0 ) {
         console.log('pinia reset');
+        piniaMsgStore().reset();
         gcStore.reset();
         arrDateStore.reset();
-        piniaMsgStore().reset();
     }
     await fetch();
 });
