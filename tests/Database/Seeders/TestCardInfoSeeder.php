@@ -81,7 +81,7 @@ class TestCardInfoSeeder extends Seeder
         CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
     }
         
-    private function findNotionId(string $attr) : string {
+    protected function findNotionId(string $attr) : string {
         $set = Expansion::findBySetCode($attr);
         return $set->notion_id;
     }

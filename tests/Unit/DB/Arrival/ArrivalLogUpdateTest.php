@@ -18,6 +18,7 @@ use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\Arrival\TestArrivalStockpileSeeder;
 use Tests\Database\Seeders\Arrival\TestArrLogCardInfoSeeder;
 use Tests\Database\Seeders\Arrival\TestArrLogEditSeeder;
@@ -45,8 +46,8 @@ class ArrivalLogUpdateTest extends TestCase
 
     /**
      *入荷情報の枚数と入荷カテゴリ以外の各値が更新されているか確認するテスト
-     * @dataProvider updateValueProvider
      */
+    #[DataProvider('updateValueProvider')]
     public function test_update_ok(array $data): void
     {
         $id = 1; // 更新する入荷情報のID
@@ -57,7 +58,7 @@ class ArrivalLogUpdateTest extends TestCase
         $this->assertDatabaseHas('arrival_log', $data);        
     }
 
-    public function updateValueProvider(): array
+    public static function updateValueProvider(): array
     {
         return [
             '原価' => [[Header::COST => fake()->randomNumber(3)]],
@@ -180,9 +181,9 @@ class ArrivalLogUpdateTest extends TestCase
 
     /**
      * バリデーションエラーを検証する。
-     * @dataProvider validationNgProvider
      * @return void
      */
+    #[DataProvider('validationNgProvider')]
     public function test_validation_ng(array $data, string $msg): void{
         $id = 1; // 更新する入荷情報のID
         $response = $this->execute($id, $data);
@@ -195,7 +196,7 @@ class ArrivalLogUpdateTest extends TestCase
         ]);
     }
 
-    protected function validationNgProvider(): array
+    protected static function validationNgProvider(): array
     {
         return [
             'NG 原価が負の値' => [[Header::COST => -1], '原価は1以上の数字を入力してください。'],            

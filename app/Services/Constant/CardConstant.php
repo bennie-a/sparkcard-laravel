@@ -49,4 +49,6 @@ class CardConstant {
     const EXP_ID = 'exp_id';
 
     const ATTR = 'attr';
+
+    const PROMO_ID = 'promotype_id';
 }

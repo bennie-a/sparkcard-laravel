@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\CardInfo;
+use App\Services\Constant\CardConstant;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,10 +23,11 @@ class CardInfoFactory extends Factory
     {
         return [
             'barcode' => $this->random(16),
-            'name' => $this->faker->realText(10),
-            // 'en_name' => $this->random(10),
-            'number' => $this->random(3),
+            GlobalConstant::NAME => $this->faker->realText(10),
+            CardConstant::EN_NAME => fake()->unique()->sentence(3),
+            CardConstant::NUMBER => fake()->unique()->randomNumber(3),
             'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16),
+            'color_id' => fake()->randomElement(['W', 'U', 'B', 'R', 'G', 'M', 'A']),
         ];
     }
 
