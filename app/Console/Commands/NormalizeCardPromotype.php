@@ -92,7 +92,7 @@ class NormalizeCardPromotype extends Command
         if ($skippedCount > 0) {
             $this->warn("スキップされたカード名一覧:");
             foreach ($skippedList as $skipped) {
-                $this->line(" - {$skipped}");
+                $this->line(" - ID:{$skipped[GCon::ID]}, カード名: {$skipped[GCon::NAME]}");
             }
         }
 
