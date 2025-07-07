@@ -1,14 +1,13 @@
 <?php
 
-namespace Tests\Database\Seeders\CLI;
+namespace Tests\Database\Seeders\CLI\Normalize;
 
 use App\Models\Expansion;
 use App\Models\Promotype;
 use App\Services\Constant\CardConstant as CCon;
-use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Database\Seeder;
 
-class NormalizePromoSeeder extends Seeder
+class NormPromoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
