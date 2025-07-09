@@ -30,7 +30,7 @@ class TestExpansionSeeder extends Seeder
         $items[] = ['attr' => 'WOE', 'name' => 'エルドレインの森'];
         $items[] = ['attr' => 'WOT', 'name' => 'エルドレインの森おとぎ話カード'];
         $items[] = ['attr' => 'SCH', 'name' => 'Store Championships'];
-        $items[] = ['attr' => 'XLN', 'name' => 'イクサラン'];
+        $items[] = ['attr' => 'XLN', 'name' => 'イクサラン', 'notion_id' => '5ede77f3a80542d3a4259e28b6f069dd'];
         $items[] = ['attr' => 'LCI', 'name' => 'イクサラン:失われし洞窟'];
         $items[] = ['attr' => 'MKM', 'name' => 'カルロフ邸殺人事件'];
         $items[] = ['attr' => 'SPG', 'name' => 'スペシャルゲスト'];

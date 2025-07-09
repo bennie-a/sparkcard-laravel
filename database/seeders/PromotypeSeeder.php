@@ -75,7 +75,7 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'anime', 'name' => 'アニメ・ボーダーレス', $exp_id => $woe->notion_id],
             ['attr' => 'phoilslick', 'name' => 'ファイレクシア語「胆液」', $exp_id => $one->notion_id],
             ['attr' => 'oilslickshowcase', 'name' => 'ショーケース「胆液」', $exp_id => $one->notion_id],
-            ['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース', $exp_id => $one->notion_id],
+            ['attr' => 'oilslick', 'name' => 'ボーダーレス「胆液」ショーケース', $exp_id => $one->notion_id],
             ['attr' => 'stepandcompleat', 'name' => 'S&C', $exp_id => $one->notion_id],
             ['attr' => 'concept', 'name' => 'コンセプトアート', $exp_id => $one->notion_id],
             ['attr' => 'magnified', 'name' => '「拡大鏡」ショーケース', $exp_id => $mkm->notion_id],

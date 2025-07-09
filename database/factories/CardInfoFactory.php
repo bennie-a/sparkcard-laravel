@@ -28,6 +28,7 @@ class CardInfoFactory extends Factory
             CardConstant::NUMBER => fake()->unique()->randomNumber(3),
             'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16),
             'color_id' => fake()->randomElement(['W', 'U', 'B', 'R', 'G', 'M', 'A']),
+            CardConstant::PROMO_ID => 1
         ];
     }
 
