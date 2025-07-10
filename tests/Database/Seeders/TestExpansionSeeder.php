@@ -22,7 +22,7 @@ class TestExpansionSeeder extends Seeder
         $items[] = ['attr' => 'BRO', 'name' => '兄弟戦争'];
         $items[] = ['attr' => 'WAR', 'name' => '灯争大戦'];
         $items[] = ['attr' => 'NEO', 'name' => '神河：輝ける世界'];
-        $items[] = ['attr' => 'ONE', 'name' => 'ファイレクシア：完全なる統一'];
+        $items[] = ['attr' => 'ONE', 'name' => 'ファイレクシア：完全なる統一', 'notion_id' => '1a36d935-ee60-466b-ac43-ecc797c0ee87'];
         $items[] = ['attr' => 'DMU', 'name' => '団結のドミナリア'];
         $items[] = ['attr' => 'MIR', 'name' => 'ミラージュ'];
         $items[] = ['attr' => 'MUL', 'name' => '機械兵団の進軍_多元宇宙の伝説'];

@@ -24,8 +24,10 @@ use function PHPUnit\Framework\assertNotNull;
 use App\Services\Constant\NotionConstant as JA;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\NotionStatus;
 use App\Services\Constant\SearchConstant as Scon;
+use FiveamCode\LaravelNotionApi\Notion;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\Arrival\PostStockpileSeeder;
@@ -48,22 +50,36 @@ class ArrivalLogPostTest extends TestCase
         $this->seed(TruncateAllTables::class);
         $this->seed(DatabaseSeeder::class);
         $this->seed(TestCardInfoSeeder::class);
-        // $this->seed(PostStockpileSeeder::class);
+        $this->seed(PostStockpileSeeder::class);
         $this->repo = new CardBoardRepository();
+        
+        $deletePage = $this->repo->findBySparkcardId(13);
+        if (!empty($deletePage)) {
+            $this->toCompleteCard($deletePage);
+        }
+        $page = $this->repo->findBySparkcardId(5);
+        $updatePage = new Page();
+        $updatePage->setId($page->getId());
+        $updatePage->set(JA::QTY, Number::value(1));
+        CardBoard::updatePage($updatePage);
 
-        // $page = $this->repo->findBySparkcardId(3);
-        // $updatePage = new Page();
-        // $updatePage->setId($page->getId());
-        // $updatePage->set(JA::QTY, Number::value(3));
-        // CardBoard::updatePage($updatePage);
+        $storePage = $this->repo->findBySparkcardId(8);
+        if (!empty($storePage)) {
+            $this->toCompleteCard($storePage);
+        }
+    }
 
-        // $storePage = $this->repo->findBySparkcardId(2);
-        // if (!empty($storePage)) {
-        //     $newPage = new Page();
-        //     $newPage->setId($storePage->getId());
-        //     $newPage->setSelect(JA::STATUS, NotionStatus::Complete->value);
-        //     CardBoard::updatePage($newPage);
-        // }
+    /**
+     * Notionカードのステータスを「取引完了」にする。
+     *
+     * @param Page $page
+     * @return void
+     */
+    private function toCompleteCard(Page $page) {
+        $newPage = new Page();
+        $newPage->setId($page->getId());
+        $newPage->setSelect(JA::STATUS, NotionStatus::Complete->value);
+        CardBoard::updatePage($newPage);
     }
     /**
      * A basic feature test example.
@@ -142,19 +158,25 @@ class ArrivalLogPostTest extends TestCase
      * @return void
      */
     #[DataProvider('stockpileProvider')]
-    public function test_ok_stockpile(int $cardId) {
+    public function test_ok_stockpile(int $cardId, int $beforeQty = 0) {
         $params = $this->createParams($cardId, TestDateUtil::formatToday());
         $log = $this->execute($params);
 
+        $stock_id  = $log->stock_id;
+        $this->assertDatabaseHas('stockpile', [
+            GlobalConstant::ID => $stock_id,
+            Header::CARD_ID => $params[Header::CARD_ID],
+            Header::LANGUAGE => $params[Header::LANGUAGE],
+            Header::CONDITION => $params[Header::CONDITION],
+            Header::QUANTITY => $params[Header::QUANTITY] + $beforeQty,
+        ]);
     }
 
     public static function stockpileProvider() {
         return [
             '在庫なし_stockpileテーブルにレコードなし' =>[13],
-            // '在庫なし_stockpileテーブルにレコードあり' =>[],
-            // '在庫あり' =>[
-            //     'BRO', 'ドラゴンの運命', false, 'NM', '2023-07-24', 23, 400
-            // ],
+            '在庫なし_stockpileテーブルにレコードあり' =>[8],
+            '在庫あり' =>[5, 1],
         ];
     }
 
@@ -202,10 +224,18 @@ class ArrivalLogPostTest extends TestCase
 
     private function execute(array $params) {
         $response = $this->post('/api/arrival', $params);
-        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertCreated();
         $json = $response->json();
-        $log = ArrivalLog::find($json['arrival_id']);
-        assertNotNull($log, '入荷ログ');
+
+        $id = $json['arrival_id'];
+        $this->assertDatabaseHas('arrival_log', [
+            GlobalConstant::ID => $id,
+            ACon::ARRIVAL_DATE => $params[ACon::ARRIVAL_DATE],
+            Header::COST => $params[Header::COST],
+            Header::QUANTITY => $params[Header::QUANTITY],
+        ]);
+        $log = ArrivalLog::find($id);
+        // assertNotNull($log, '入荷ログ');
         return $log;
     }
 
@@ -230,11 +260,11 @@ class ArrivalLogPostTest extends TestCase
     }
 
     private function createParams(int $cardId, string $arrivalDate): array{
-        $lang = fake()->randomElement(['JP', 'EN', 'IT', 'CT', 'CS']);
+        $lang = 'JP';
         $quantity = fake()->numberBetween(1, 5);
         $cost  = fake()->numberBetween(10, 200);
         $market_price = fake()->numberBetween(100, 5000);
-        $condition = fake()->randomElement(['NM', 'EX', 'NM-', 'EX+', 'PLD']);
+        $condition = 'NM';
 
         $params = [Header::CARD_ID => $cardId, Header::LANGUAGE => $lang, Header::CONDITION => $condition,
                               ACon::ARRIVAL_DATE => $arrivalDate, Header::COST => $cost, Header::MARKET_PRICE => $market_price,
@@ -245,8 +275,6 @@ class ArrivalLogPostTest extends TestCase
 
     public function tearDown(): void
     {
-        // Artisan::call('migrate:refresh');
-        // $page = $this->repo->findBySparkcardId(3);
         parent::tearDown();
     }
 }
