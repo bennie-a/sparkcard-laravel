@@ -125,4 +125,15 @@ class CardInfo extends Model
         }
         return $value;
     }
+
+    public static function getDetailsById(int $id) {
+        $columns = ['card_info.id', 'card_info.name', 'card_info.en_name', 'card_info.number', 'card_info.image_url',
+                    'card_info.isFoil', 'card_info.color_id', 'card_info.promotype_id', 'p.name as promo_name', 'e.name as exp_name', 
+                    'e.attr as exp_attr', 'e.notion_id as exp_id'];
+        $info = self::select($columns)
+                            ->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id')
+                            ->join('promotype as p', 'p.id', '=', 'card_info.promotype_id')
+                            ->where('card_info.id', $id)->first();
+        return $info;
+    }
 }

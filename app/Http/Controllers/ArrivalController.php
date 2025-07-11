@@ -81,14 +81,14 @@ class ArrivalController extends Controller {
         $details[ACon::ARRIVAL_DATE] = $request->date(ACon::ARRIVAL_DATE);
         $params = new ArrivalParams($details);
         logger()->info('Start to Post Arrival log', [$params->cardId()]);
-        $info = CardInfo::find($params->cardId());
-        if (empty($info)) {
+        $isExists = CardInfo::where(GlobalConstant::ID, $params->cardId())->exists();
+        if (!$isExists) {
             throw new NoContentException();
         }
 
         $arrivalLog = $this->service->store($params);
         if (!empty($arrivalLog)) {
-            \App\Facades\CardBoard::store($info, $details);
+            \App\Facades\CardBoard::store($details);
         }
         logger()->info('Start to Post Arrival log', [$params->cardId()]);
         return response()->json([Header::CARD_ID => $params->cardId(), 'arrival_id' => $arrivalLog->id], Response::HTTP_CREATED);

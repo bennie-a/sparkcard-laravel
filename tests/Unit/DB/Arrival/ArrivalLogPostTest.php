@@ -180,6 +180,28 @@ class ArrivalLogPostTest extends TestCase
         ];
     }
 
+    /**
+     * Notionカードのタイトルに関するテスト
+     *
+     * @return void
+     */
+    #[DataProvider('notionTitleProvider')]
+    public function test_ok_notion_title(int $cardId, String $expectedTitle) {
+        $params = $this->createParams($cardId, TestDateUtil::formatToday());
+        $this->execute($params);
+
+        $repo = new CardBoardRepository();
+        $notionCard = $repo->findBySparkcardId($cardId);
+        $this->assertNotNull($notionCard, 'Notionカードの取得');
+        $this->assertEquals($expectedTitle, $notionCard->getTitle(), 'Notionカードのタイトル');
+    }
+
+    public static function notionTitleProvider() {
+        return [
+            '通常版' => [10, 'ドロスの魔神'],
+            '特別版' => [8, '機械の母、エリシュ・ノーン≪ボーダーレス「胆液」ショーケース≫'],
+        ];
+    }
     //DB
         // 通常版
         // 特別版
