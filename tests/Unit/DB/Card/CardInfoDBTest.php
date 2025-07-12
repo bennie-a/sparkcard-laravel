@@ -8,6 +8,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
@@ -20,10 +21,13 @@ use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertSame;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * カード情報を登録するテストクラス
+ */
 class CardInfoDBTest extends TestCase
 {
-    use RefreshDatabase;
     public function setup():void
     {
         parent::setup();
@@ -41,11 +45,11 @@ class CardInfoDBTest extends TestCase
  * @param integer $multiId
  * @param string $scryId
  * @return void
- * @dataProvider imageprovider
  */
-public function test_getImage(string $setcode, string $name, string $color, int $number, int $multiId, string $scryId) {
-    $enname = $this->getEnName($setcode, $number);
-    $data = ['setCode' => $setcode,
+    #[DataProvider('imageprovider')]
+    public function test_getImage(string $setcode, string $name, string $color, int $number, int $multiId, string $scryId) {
+        $enname = $this->getEnName($setcode, $number);
+        $data = ['setCode' => $setcode,
                         Con::NAME => $name,
                         Con::EN_NAME => $enname,
                         Con::COLOR => $color,
@@ -55,7 +59,7 @@ public function test_getImage(string $setcode, string $name, string $color, int 
         $this->post_ok($data);
     }
 
-    public function imageprovider() {
+    public static function imageprovider() {
         return[
             'multiverseIdあり' => ['WAR', '出現領域', 'Land', 245, 462492, (string)Str::uuid()],
             'scryfallIdあり' => ['WAR', '出現領域', 'Land', 245, 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
@@ -66,27 +70,51 @@ public function test_getImage(string $setcode, string $name, string $color, int 
     }
 
     /**
-     * 特別版の登録テスト
-     *@dataProvider specialcardprovider
+     * 通常版/特別版カードの登録テスト
+     *
+     * @param string $setcode セット略称
+     * @param string $name カード名
+     * @param int $promotypeId プロモタイプID
+     * @param array $foiltype Foilタイプ
      * @return void
      */
-    public function test_specialcard(string $setcode, string $name, int $number, int $multiId, string $promotype, string $scryId, array $foiltype) {
-        $enname = $this->getEnName($setcode, $number);
+    #[DataProvider('specialcardprovider')]
+    public function test_specialcard(string $setcode, string $name,  int $promotypeId, array $foiltype) {
+        $params = $this->createParams($setcode, $name, $promotypeId, $foiltype);
+        $this->post_execute($params, 201);
+        foreach($foiltype as $type) {
+            $type = Foiltype::findByName($type);
+            assertNotNull($type, 'Foilタイプの存在確認');
+            $exp = Expansion::findBySetCode($setcode);
+            $this->assertDatabaseHas('card_info', [
+                Con::EXP_ID => $exp->notion_id,
+                GlobalConstant::NAME => $params[GlobalConstant::NAME],
+                Con::EN_NAME => $params[Con::EN_NAME],
+                'color_id' => $params[Con::COLOR],
+                Con::NUMBER => $params[Con::NUMBER],
+                Con::FOIL_ID => $type->id,
+                Con::PROMO_ID => $promotypeId
+            ]);
+        }
+    }
+
+    public static function specialcardprovider() {
+        return [
+            '通常版' => ['BRO', '出現領域', 1, ['通常版']],
+            '特別版_共通' => ['NEO', '発展の暴君、ジン＝ギタクシアス', 2, ['通常版', 'Foil']],
+            '特別版_セット特有' => ['MOM', '族樹の精霊、アナフェンザ', 13, ['ハロー・Foil']]
+        ];
+    }
+
+    private function createParams(string $setcode, string $name, int $promotypeId, array $foiltype): array{
         $data = ['setCode' => $setcode,
                             Con::NAME => $name,
-                            Con::EN_NAME => $enname,
-                            Con::COLOR => 'U',
-                            Con::NUMBER => $number,
-                            'multiverseId' => $multiId,
-                           Con::PROMOTYPE => $promotype, 'scryfallId' => $scryId, Con::FOIL_TYPE => $foiltype, 'isSkip' => false];
-            $this->post_ok($data);
-    
-    }
-    public function specialcardprovider() {
-        return [
-            '特別版' => ['NEO', '発展の暴君、ジン＝ギタクシアス', 371, 552460, 'ショーケース', '', ['通常版', 'Foil']],
-            'ハロー・Foil' => ['MUL', '族樹の精霊、アナフェンザ', 131, 0, '',  "262ebc87-fcf5-4893-8357-dcb985a9ba60", ['ハロー・Foil']]
-        ];
+                            Con::EN_NAME => $this->getEnName(),
+                            Con::COLOR => fake()->randomElement(['U', 'B', 'R', 'G', 'W', 'Land']),
+                            Con::NUMBER => fake()->numberBetween(1, 400),
+                            Con::IMAGE_URL => fake()->url(),
+                           Con::PROMO_ID => $promotypeId, Con::FOIL_TYPE => $foiltype, 'isSkip' => false];
+        return $data;
     }
 
     private function post_ok($data)
@@ -129,16 +157,15 @@ public function test_getImage(string $setcode, string $name, string $color, int 
         $this->post('api/database/card', $data)->assertStatus($statuscode);
     }
 
-    private function getEnName(string $setcode, int $number) {
-        $api = ScryfallServ::getCardInfoByNumber(["setcode" => $setcode, Con::NUMBER => $number, 'language' => "en"]);
-        return $api[Con::EN_NAME];
+    private function getEnName() {
+        return fake()->sentence(5);
     }
 
     /**
      * エラーケース
-     *@dataProvider errorcase
      * @return void
      */
+    #[DataProvider('errorcase')]
     public function test_error(string $setcode, string $name, string $enname, 
                                             int $number, int $multiId, int $statuscode, array $foiltype) {
         $data = ['setCode' => $setcode,
@@ -151,7 +178,7 @@ public function test_getImage(string $setcode, string $name, string $color, int 
         $this->post_execute($data, $statuscode);
     }
 
-    public function errorcase() {
+    public static function errorcase() {
         return [
             'setCodeがDBになし' => ['XXX', '出現領域', 'Emergence Zone', 245, 462492, 441, ['通常版']],
             '不明なFoilタイプ' => ['WAR', '出現領域', 'Emergence Zone',

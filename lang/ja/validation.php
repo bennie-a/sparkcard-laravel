@@ -1,6 +1,7 @@
 <?php
 use App\Services\Constant\SearchConstant as Scon;
 use App\Services\Constant\ArrivalConstant as Acon;
+use App\Services\Constant\CardConstant as CCon;
 use App\Services\Constant\StockpileHeader;
 
 return [
@@ -185,6 +186,8 @@ return [
         StockpileHeader::QUANTITY => '枚数',
         StockpileHeader::COST => '原価',
         Acon::VENDOR => '取引先名',
+        CCon::NUMBER => 'カード番号',
+        Ccon::PROMO_ID => 'プロモタイプID'
     ],
 
     'values' => [

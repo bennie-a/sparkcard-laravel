@@ -26,7 +26,8 @@ class CardInfo extends Model
         return $this->hasOne('App\Model\Foiltype');
     }
 
-    protected $fillable = ['id', 'expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id'];
+    protected $fillable = ['id', 'expansion.name', 'expansion.attr',  'exp_id', 'barcode','name',
+                 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id', Con::PROMO_ID];
 
     /**
      * 検索条件に該当するデータを取得する。
@@ -100,13 +101,28 @@ class CardInfo extends Model
      * @param [type] $exp_id
      * @param [type] $name
      * @param [type] $isFoil
+     * @deprecated version 4.11.0
      * @return カード情報
-     */
+     */  
     public static function findSpecificCard($exp_id, $name, $foiltype_id)
     {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
         $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'foiltype_id' => $foiltype_id])->first();
         return $info;
+    }
+
+    /**
+     * 特定のカード情報が存在するかどうかを確認する。
+     *
+     * @param [type] $exp_id
+     * @param [type] $number
+     * @param [type] $foiltype_id
+     * @param [type] $promotype_id
+     * @return CardInfo
+     */
+    public static function getCardinfo($exp_id, $number, $foiltype_id, $promotype_id) {
+        return Cardinfo::where([Con::EXP_ID => $exp_id, Con::NUMBER => $number,
+                                         Con::FOIL_ID => $foiltype_id, Con::PROMO_ID => $promotype_id])->first();
     }
 
     public static function findEnCard($name) {
