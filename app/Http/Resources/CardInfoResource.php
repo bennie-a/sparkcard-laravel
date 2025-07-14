@@ -39,6 +39,7 @@ class CardInfoResource extends JsonResource
         }
 
         $array = CardInfoJsonUtil::setFoilInfo($array, $this->isFoil, $this->foiltype);
+        $array = CardInfoJsonUtil::setPromoInfo($array, $this->promotype_id, $this->promo_name);
         return $array;
     }
 }

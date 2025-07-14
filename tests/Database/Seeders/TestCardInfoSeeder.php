@@ -49,10 +49,10 @@ class TestCardInfoSeeder extends Seeder
          $neo = $this->findNotionId('NEO');
         CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
         CCon::EN_NAME => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', CCon::NUMBER => '59',
-        CCon::IS_FOIL => false, 'image_url' => '', 'foiltype_id' => $nonfoil->id]);
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
         CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '発展の暴君、ジン＝ギタクシアス',
         CCon::EN_NAME => 'Jin-Gitaxias, Progress Tyrant', 'color_id' => 'U', CCon::NUMBER => '59',
-        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
+        CCon::IS_FOIL => true, 'foiltype_id' => $foil->id]);
 
         $showcase = $this->getPromoId('showcase');
         CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '告別',

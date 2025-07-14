@@ -40,7 +40,7 @@ class CardInfo extends Model
         // DB::enableQueryLog();
         $columns = ['card_info.exp_id', 'e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
                  'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
-                 'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
+                 'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity', 'card_info.promotype_id', 'p.name as promo_name'];
         $name = $condition['card_info.name'];
         $query = self::select($columns);
         if (!empty($name)) {
@@ -55,8 +55,10 @@ class CardInfo extends Model
             }
         }
         $cardList = $query->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id'
-                                )->leftJoin('stockpile as s', 'card_info.id', '=', 's.card_id')->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')->
-                        orderBy('e.release_date', 'desc')->orderByRaw('CAST(replace(card_info.number, \'s\',\'\') as integer ) asc')->get();
+                                )->leftJoin('stockpile as s', 'card_info.id', '=', 's.card_id')
+                                ->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')
+                                ->join('promotype as p', 'p.id', '=', 'card_info.promotype_id')
+                                ->orderBy('e.release_date', 'desc')->orderByRaw('CAST(replace(card_info.number, \'s\',\'\') as integer ) asc')->get();
         // logger()->debug(DB::getQueryLog());
         return $cardList;
     }
