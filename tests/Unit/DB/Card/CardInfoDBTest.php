@@ -10,6 +10,7 @@ use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
@@ -47,25 +48,33 @@ class CardInfoDBTest extends TestCase
  * @return void
  */
     #[DataProvider('imageprovider')]
-    public function test_getImage(string $setcode, string $name, string $color, int $number, int $multiId, string $scryId) {
-        $enname = $this->getEnName($setcode, $number);
-        $data = ['setCode' => $setcode,
-                        Con::NAME => $name,
-                        Con::EN_NAME => $enname,
-                        Con::COLOR => $color,
-                        Con::NUMBER => $number,
-                        'multiverseId' => $multiId,
-                       Con::PROMOTYPE => '', 'scryfallId' => $scryId, Con::FOIL_TYPE => ['通常版', 'Foil'], 'isSkip' => false];
-        $this->post_ok($data);
+    public function test_getImage(string $setcode, int $multiId, string $scryId) {
+        $name = fake()->realText(10);
+        $params = $this->createParams($setcode, $name, 1, ['通常版']);
+        $params['multiverseId'] = $multiId;
+        if ($multiId > 0 && $scryId !== '') {
+            unset($params[Con::IMAGE_URL]);
+        }
+        if(!empty($scryId)) {
+            $params['scryfallId'] = $scryId;
+        }
+        $this->post_execute($params, 201);
+
+        $info = CardInfo::getCardinfo(
+            Expansion::findBySetCode($setcode)->notion_id,
+            $params[Con::NUMBER],
+            Foiltype::findByName('通常版')->id
+        );
+        $this->assertNotNull($info, 'カード情報の取得');
+        $this->assertNotNull($info->image_url, '画像URLの取得');
     }
 
     public static function imageprovider() {
         return[
-            'multiverseIdあり' => ['WAR', '出現領域', 'Land', 245, 462492, (string)Str::uuid()],
-            'scryfallIdあり' => ['WAR', '出現領域', 'Land', 245, 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
-            'multiverseIdとscryfallIdなし' => ['WAR', '出現領域', 'Land', 245, 0, (string)Str::uuid()],
-            '両面カード' => ['NEO', '永岩城の修繕', 'W', 442, 551715, (string)Str::uuid()],
-            '画像URL更新' => ['NEO', '告別≪ショーケース≫', 'W', 365,552454, (string)Str::uuid()],
+            'multiverseIdあり' => ['WAR', 462492, ''],
+            'scryfallIdあり' => ['WAR', 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
+            'image_urlあり_multiverseIdとscryfallIdなし' => ['WAR', 0, ''],
+            '両面カード' => ['NEO', 551715, (string)Str::uuid()],
         ];
     }
 
@@ -154,7 +163,7 @@ class CardInfoDBTest extends TestCase
     }
 
     private function post_execute($data, int $statuscode) {
-        $this->post('api/database/card', $data)->assertStatus($statuscode);
+        return $this->post('api/database/card', $data)->assertStatus($statuscode);
     }
 
     private function getEnName() {
@@ -166,51 +175,19 @@ class CardInfoDBTest extends TestCase
      * @return void
      */
     #[DataProvider('errorcase')]
-    public function test_error(string $setcode, string $name, string $enname, 
-                                            int $number, int $multiId, int $statuscode, array $foiltype) {
-        $data = ['setCode' => $setcode,
-                            Con::NAME => $name,
-                            Con::EN_NAME => $enname,
-                            Con::COLOR => 'Land',
-                            Con::NUMBER => $number,
-                            'multiverseId' => $multiId,
-                           Con::PROMOTYPE => '', 'scryfallId' => '', Con::FOIL_TYPE => $foiltype, 'isSkip' => false];
-        $this->post_execute($data, $statuscode);
+    public function test_error(string $setcode, array $foiltype, string $title) {
+        $name = fake()->realText(10);
+        $params = $this->createParams($setcode, $name, 1, $foiltype);
+        $response = $this->post_execute($params, Response::HTTP_NOT_FOUND);
+        $response->assertJsonStructure(['title', 'detail', 'status','request']);
+        $this->assertEquals($title, $response->json('title'), 'タイトルの確認');
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->json('status'), 'ステータスコード');
     }
 
     public static function errorcase() {
         return [
-            'setCodeがDBになし' => ['XXX', '出現領域', 'Emergence Zone', 245, 462492, 441, ['通常版']],
-            '不明なFoilタイプ' => ['WAR', '出現領域', 'Emergence Zone',
-                                                     245, 462492, CustomResponse::HTTP_NOT_FOUND_FOIL, ['不明']]
+            'setCodeがDBになし' => ['XXX', ['通常版'], 'エキスパンションなし'],
+            '不明なFoilタイプ' => ['WAR', ['不明'], 'Foilタイプなし'],
         ];
     }
-
-    public function test_search(string $name, string $set, string $color, bool $isFoil) {
-
-    }
-    // public function test_検索() {
-    //     $condition = ['name' => '', 'set' => 'BRO', 'color' => 'W', 'isFoil' => false];
-    //     $response = $this->json('GET', 'api/database/card', $condition)->assertOk();
-    //     $response->assertJsonCount(5);
-    //     $json = $response->baseResponse->getContent();
-    //     $contents = json_decode($json, true);
-    //     foreach($contents as $line) {
-    //         assertTrue(array_key_exists('index', $line), 'index');
-    //         assertTrue(array_key_exists('name', $line), 'name');
-    //         assertTrue(array_key_exists('enname', $line), 'enname');
-    //         assertTrue(array_key_exists('image', $line), 'image');
-    //         assertTrue(array_key_exists('color', $line), 'color');
-    //         assertEquals('白', $line['color'], '色の返り値');
-    //     }
-    // }
-
-    // public function test_検索_検索結果なし() {
-    //     CardInfo::factory()->count(5)->create(['exp_id' => $this->bro->notion_id,
-    //      'color_id' => 'W', 'isFoil' => false,  'en_name' =>'aaaaa']);
-    //     $condition = ['name' => '', 'set' => $this->bro->attr, 'color' => 'U', 'isFoil' => false];
-    //     $response = $this->json('GET', 'api/database/card', $condition)
-    //                                 ->assertStatus(Response::HTTP_NO_CONTENT);
-    // }
- 
 }

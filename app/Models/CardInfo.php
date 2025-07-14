@@ -120,9 +120,9 @@ class CardInfo extends Model
      * @param [type] $promotype_id
      * @return CardInfo
      */
-    public static function getCardinfo($exp_id, $number, $foiltype_id, $promotype_id) {
+    public static function getCardinfo($exp_id, $number, $foiltype_id) {
         return Cardinfo::where([Con::EXP_ID => $exp_id, Con::NUMBER => $number,
-                                         Con::FOIL_ID => $foiltype_id, Con::PROMO_ID => $promotype_id])->first();
+                                         Con::FOIL_ID => $foiltype_id])->first();
     }
 
     public static function findEnCard($name) {

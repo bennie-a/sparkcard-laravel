@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Exceptions\api\NoContentException;
+use App\Exceptions\api\NoExpException;
 use App\Exceptions\api\NoFoilTypeException;
 use App\Exceptions\api\NoPromoTypeException;
 use App\Exceptions\NotFoundException;
@@ -59,8 +60,7 @@ class CardInfoDBService {
         $foiltype = $details[Con::FOIL_TYPE];
         $exp = Expansion::where('attr', $setCode)->first();
         if (\is_null($exp)) {
-            logger()->error('not exist:'.$setCode);
-            throw new HttpResponseException(response($setCode.'がDBに登録されていません', CustomResponse::HTTP_NOT_FOUND_EXPANSION));
+            throw new NoExpException($setCode);
         }
         $hasPromo = Promotype::isExist($exp->notion_id, $details[Con::PROMO_ID]);
         if ($hasPromo === false) {
@@ -76,7 +76,7 @@ class CardInfoDBService {
                 throw new NoFoilTypeException($name, $number);
             }
 
-            $info = CardInfo::getCardinfo($exp->notion_id, $number, $foiltype->id, $details[Con::PROMO_ID]);
+            $info = CardInfo::getCardinfo($exp->notion_id, $number, $foiltype->id);
             // 画像URL取得
             $url = ScryfallServ::getImageUrl($details);
             $log = ['カード名' => $name, 'number' => $details['number'], 'カード仕様' => $foil];
