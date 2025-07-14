@@ -69,7 +69,7 @@ trait GetApiAssertions
     /**
      * 取引先カテゴリIDが買取の場合を検証する。
      *
-     * @return void
+     * @return callable
      */
     protected function verifyBuyVendor() {
         return function($vendor) {
@@ -83,7 +83,8 @@ trait GetApiAssertions
     /**
      * 取引先カテゴリが「買取」以外の場合を検証する。
      *
-     * @return void
+     * @return callable
+     * 
      */
     protected function verifyOtherVendor() {
         return function($vendor) {

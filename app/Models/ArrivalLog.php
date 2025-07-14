@@ -120,7 +120,8 @@ public static function filtering(array $details) {
 private static function getFetchColumns() {
     $columns = ['alog.id as arrival_id', 'alog.arrival_date', 'alog.quantity as alog_quan', 'alog.cost', 'e.name as exp_name', 'alog.vendor',
                             'e.attr as exp_attr', 'c.id', 'c.name', 'c.number', 'c.image_url', 'c.color_id', 'c.isFoil','s.language',
-                            's.condition', 's.id as stock_id', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat'];
+                            's.condition', 's.id as stock_id', 'f.name as foiltype', 'alog.vendor_type_id', 'v.name as vcat', 
+                            'c.promotype_id', 'p.name as promo_name'];
     return $columns;
 }
 
@@ -150,7 +151,8 @@ private static function join($query):Builder {
     ->join('card_info as c', 'c.id', '=', 's.card_id')
     ->join('expansion as e', 'e.notion_id', '=', 'c.exp_id')
     ->join('vendor_type as v', 'v.id', '=', 'alog.vendor_type_id')
-    ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id');
+    ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id')
+    ->join('promotype as p', 'p.id', '=', 'c.promotype_id');
     return $query;
 }
 
