@@ -3,6 +3,7 @@
 namespace Tests\Unit\DB\Arrival;
 
 use App\Models\ArrivalLog;
+use App\Models\Promotype;
 use App\Models\Stockpile;
 use Tests\TestCase;
 use App\Services\Constant\ArrivalConstant as ACon;
@@ -39,34 +40,6 @@ class ArrivalLogSearchTest extends TestCase
         $this->seed(TestArrivalLogSeeder::class);
     }
 
-    // /**
-    //  * 検索条件について検証する。
-    //  *
-    //  * @param array $condition
-    //  * @return void
-    //  */
-    // #[DataProvider('conditionProvider')]
-    // public function test_condition(array $condition, $method) {        
-    //     $response = $this->assert_OK($condition);
-    //     $json = $response->json();
-        
-    //     $this->assertArrayHasKey(GCon::LOGS, $json, 'logs要素が含まれない');
-    //     $method($condition, $json[GCon::DATA]);
-    // }
-    
-    // public static function conditionProvider() {
-    //     $equal_date = fn($condition, $j) => 
-    //                     $this->assertEquals($condition[ACon::ARRIVAL_DATE], $j[ACon::ARRIVAL_DATE]);
-    //     $no_date = fn($condition, $j) => 
-    //                     $this->assertArrayNotHasKey(ACon::ARRIVAL_DATE, $j);
-    //     return [
-    //         '検索条件が入荷日と取引先カテゴリ' =>
-    //         [[ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1], $equal_date],
-    //         '検索条件がカード名と取引先カテゴリ' =>
-    //         [[SCon::CARD_NAME => 'ドラゴン', SCon::VENDOR_TYPE_ID => 3], $no_date],
-    //     ];
-    // }
-
     public function test_条件が入荷日と取引先カテゴリ() {
         $condition = [ACon::ARRIVAL_DATE => TestDateUtil::formatToday(), SCon::VENDOR_TYPE_ID => 1];
         $response = $this->assert_OK($condition);
@@ -101,7 +74,6 @@ class ArrivalLogSearchTest extends TestCase
         $data = $json[GCon::DATA];
         $this->assertArrayHasKey(ACon::VENDOR, $data, 'vendor要素が含まれない');
 
-        $logs = $json[GCon::LOGS];
         $method($data[ACon::VENDOR]);
     }
     
@@ -151,6 +123,31 @@ class ArrivalLogSearchTest extends TestCase
         $this->assertResult($condition, $method);
     }
 
+    /**
+     * card要素のpromotypeについて検証する。
+     *
+     * @return void
+     */
+    #[DataProvider('promoProvider')]
+    public function test_promotype(string $name, int $promo_id) {
+        $condition = [SCon::CARD_NAME => $name, SCon::VENDOR_TYPE_ID => 1];
+        $response = $this->assert_OK($condition);
+        $json = $response->json();
+        $card = current($json[GCon::LOGS])[Con::CARD];
+        $this->assertArrayHasKey(Con::PROMOTYPE, $card, 'promotype要素が含まれない');
+
+        $actual = $card[Con::PROMOTYPE];
+        $this->assertEquals($promo_id, $actual[GCon::ID], 'promotypeの値が一致しない');
+        $db = Promotype::find($promo_id);
+        $this->assertEquals($db->name, $actual[GCon::NAME], 'promotypeの名前が一致しない');
+    }
+
+    public static function promoProvider() {
+        return [
+            '通常版' => ['ドラゴンの運命', 1],
+            '特別版' => ['告別', 2]
+        ];
+    }
     
     protected function assertResult(array $condition, callable $method) {
         $response = $this->assert_OK($condition);
