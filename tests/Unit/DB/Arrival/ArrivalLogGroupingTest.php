@@ -16,6 +16,7 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant as GCon;
 use Carbon\Carbon;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\Arrival\TestArrivalLogSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
@@ -42,20 +43,54 @@ class ArrivalLogGroupingTest extends TestCase {
         $this->seed(TestStockpileSeeder::class);
         $this->seed(TestArrivalLogSeeder::class);
     }
-
+    
     /**
      * エンドポイントを取得する。
-     *
-     * @return string
-     */
+    *
+    * @return string
+    */
     protected function getEndPoint():string {
         return  'api/arrival/grouping';
     }
+    
+    public function test_入荷日_開始日のみ入力() {
+        
+        $condition = [SCon::START_DATE => TestDateUtil::formatYesterday()];
+        $this->verifyArrivalDate($condition, $this->equalBefore());
+    }
+    
+    public function test_入荷日_終了日のみ入力() {
+        $condition = [SCon::END_DATE => TestDateUtil::formatTwoDateBefore()];
+        $this->verifyArrivalDate($condition, $this->equalAfter());
+    }
+
+    public function 入荷日_開始日と終了日の両方入力() {
+        $condition = [SCon::START_DATE => TestDateUtil::formatTwoDateBefore(),
+                      SCon::END_DATE => TestDateUtil::formatToday()];
+        $this->verifyArrivalDate($condition, $this->between());
+    }
+
+    public function 入荷日_開始日と終了日が同じ日() {
+       $condition = [SCon::START_DATE => TestDateUtil::formatToday(),
+            SCon::END_DATE => TestDateUtil::formatToday()];
+        $this->verifyArrivalDate($condition, $this->equals());
+    }
+
+    public function カード名のみ入力() {
+        $condition = [SCon::CARD_NAME => 'ジン＝ギタクシアス'];
+        $this->verifyArrivalDate($condition, $this->cardname());
+    }
+
+    public function 全検索項目入力() {
+         $condition = [SCon::CARD_NAME => '神', SCon::START_DATE => TestDateUtil::formatYesterday(),
+            SCon::END_DATE => TestDateUtil::formatYesterday()];
+        $this->verifyArrivalDate($condition, $this->condition_all());
+    }
+
     /**
      * 入荷日検索に関するテストケース
-     * @dataProvider arrivalDateProvider
      */
-    public function test_ok_arrival_date(array $condition, callable $method) {
+    public function verifyArrivalDate(array $condition, callable $method) {
         $response = $this->assert_OK($condition);
         $json = $response->json();
 
@@ -64,20 +99,6 @@ class ArrivalLogGroupingTest extends TestCase {
             $log = ArrivalLog::find($j[GCon::ID]);
             $method($condition, $j, $log);
         }
-    }
-
-    public function arrivalDateProvider() {
-        return [
-            '入荷日_開始日のみ入力' => [[SCon::START_DATE => TestDateUtil::formatYesterday()], $this->equalBefore()],
-            '入荷日_終了日のみ入力' => [[SCon::END_DATE => TestDateUtil::formatTwoDateBefore()], $this->equalAfter()],
-            '入荷日_開始日と終了日の両方入力' => [[SCon::START_DATE => TestDateUtil::formatTwoDateBefore(),
-            SCon::END_DATE => TestDateUtil::formatToday()], $this->between()],
-            '入荷日_開始日と終了日が同じ日' =>  [[SCon::START_DATE => TestDateUtil::formatToday(),
-            SCon::END_DATE => TestDateUtil::formatToday()], $this->equals()],
-            'カード名のみ入力' => [[SCon::CARD_NAME => 'ジン＝ギタクシアス'], $this->cardname()],
-            '全検索項目入力' => [[SCon::CARD_NAME => '神', SCon::START_DATE => TestDateUtil::formatYesterday(),
-            SCon::END_DATE => TestDateUtil::formatYesterday()], $this->condition_all()]
-        ];
     }
 
     private function equals() {
@@ -135,37 +156,42 @@ class ArrivalLogGroupingTest extends TestCase {
             $this->assertTrue($actual->between($start, $end), '入荷日が検索条件に合わない');
         };
     }
+    
+    public function test_通常版のみ検索() {
+        $this->verifyIsFoil('ドロスの魔神', $this->verifyNonFoil());
+    } 
+    
+    public function test_Foil版のみ検索() {
+        $this->verifyIsFoil('告別', $this->verifyFoil(), 2);
+    } 
+    
+    public function test_特殊Foil版のみ検索() {
+        $this->verifyIsFoil('機械の母、エリシュ・ノーン', $this->verifyFoil(), 23);
+    } 
 
     /**
      * カード名のみ検索に関するテストケース
      *
      * @param string $cardname カード名
      * @param callable $method 検証メソッド
-     * @dataProvider isFoilProvider
+     * @param int  $promo_id プロモタイプID(期待値)
      * @return void
      */
-    public function test_ok_isFoil(string $cardname, callable $method) {
+    public function verifyIsFoil(string $cardname, callable $method, int $promo_id = 1) {
         $condition = [SCon::CARD_NAME => $cardname];
-        $this->ok($condition, $method);
+        $json = $this->ok($condition, $method);
+        $card = current($json)[Con::CARD];
+        $this->verifyPromotype($promo_id, $card);
     }
     
-    public function isFoilProvider() {
-        return [
-            '通常版のみ検索' => ['ドロスの魔神', $this->verifyNonFoil()],
-            'Foil版のみ検索' => ['告別≪ショーケース≫', $this->verifyFoil()],
-            '特殊Foil版のみ検索' => ['機械の母、エリシュ・ノーン≪ボーダレス「胆液」≫', $this->verifyFoil()],
-        ];
-    }
-
     /**
      * vendor要素について検証する。
      *
      * @param integer $vendor_type_id
      * @param callable $method
-     * @dataProvider vendorProvider
      * @return void
      */
-    public function test_vendor(int $vendor_type_id, callable $method) {
+    public function verifyVendor(int $vendor_type_id, callable $method) {
         $condition = [SCon::CARD_NAME => "告別", SCon::START_DATE => TestDateUtil::formatToday()];
         $response = $this->assert_OK($condition);
         $json = $response->json();
@@ -179,18 +205,25 @@ class ArrivalLogGroupingTest extends TestCase {
         }
     }
 
-        /**
+    #[DataProvider('vendorProvider')]
+    public function test_otherVendor(int $vendor_type_id) {
+        $this->verifyVendor($vendor_type_id, $this->verifyOtherVendor());
+    }
+
+    /**
      * 取引先に関するテストケース
-     * @dataProvider vendorProvider
      */
-    public function vendorProvider() {
+    public static function vendorProvider() {
         return [
-                '入荷先カテゴリがオリジナルパック' => [1, $this->verifyOtherVendor()],
-                '入荷先カテゴリが私物' => [2, $this->verifyOtherVendor()],
-                '入荷先カテゴリが買取' => [3, $this->verifyBuyVendor()],
-                '入荷先カテゴリが棚卸し' => [4, $this->verifyOtherVendor()],
-                '入荷先カテゴリが返品' => [5, $this->verifyOtherVendor()]
+                '入荷先カテゴリがオリジナルパック' => [1],
+                '入荷先カテゴリが私物' => [2],
+                '入荷先カテゴリが棚卸し' => [4],
+                '入荷先カテゴリが返品' => [5],
         ];
+    }
+    
+    public function test_入荷先カテゴリが買取() {
+        $this->verifyVendor(3, $this->verifyBuyVendor());
     }
 
     private function ok($condition, callable $method) {
@@ -201,13 +234,14 @@ class ArrivalLogGroupingTest extends TestCase {
             $this->verifyCard($log->stock_id, $j[Con::CARD]);           
             $method($condition, $j, $log);
         }
+        return $json;
     }
     /**
      * 検索結果がない場合のテストケース
-     * @dataProvider noResultProvider
      * @param array $condition
      * @return void
      */
+    #[DataProvider('noResultProvider')]
     public function test_NoResult(array $condition) {
         $response = $this->execute($condition);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
@@ -215,7 +249,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $this->assertEquals('検索結果がありません。', $data['detail']);
     }
 
-    public function noResultProvider() {
+    public static function noResultProvider() {
         $four_days_before = CarbonImmutable::today()->subDays(4);
         return [
             '検索結果なし_入荷日に該当する結果がない'
@@ -228,11 +262,11 @@ class ArrivalLogGroupingTest extends TestCase {
     /**
      * NGケース
      *
-     * @dataProvider ngProvider
      * @param array $condition
      * @param [type] $msg
      * @return void
      */
+    #[DataProvider('ngProvider')]
     public function test_ng(array $condition, $msg) {
         $response = $this->execute($condition);
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
@@ -240,7 +274,7 @@ class ArrivalLogGroupingTest extends TestCase {
         $this->assertEquals($msg, $actual['detail']);
     }
 
-    public function ngProvider() {
+    public static function ngProvider() {
         return [
             '入荷日(開始日)が入荷日(終了日)以降' =>
                             [[SCon::START_DATE => '2025/03/10', 'end_date' => '2025/03/01'], 

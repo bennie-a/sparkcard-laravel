@@ -133,13 +133,9 @@ class ArrivalLogSearchTest extends TestCase
         $condition = [SCon::CARD_NAME => $name, SCon::VENDOR_TYPE_ID => 1];
         $response = $this->assert_OK($condition);
         $json = $response->json();
-        $card = current($json[GCon::LOGS])[Con::CARD];
-        $this->assertArrayHasKey(Con::PROMOTYPE, $card, 'promotype要素が含まれない');
-
-        $actual = $card[Con::PROMOTYPE];
-        $this->assertEquals($promo_id, $actual[GCon::ID], 'promotypeの値が一致しない');
-        $db = Promotype::find($promo_id);
-        $this->assertEquals($db->name, $actual[GCon::NAME], 'promotypeの名前が一致しない');
+        foreach($json[GCon::LOGS] as $log) {
+            $this->verifyPromotype($promo_id, $log[Con::CARD]);
+        }
     }
 
     public static function promoProvider() {

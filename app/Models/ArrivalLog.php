@@ -64,6 +64,8 @@ class ArrivalLog extends Model
                             'v.name as vcat',
                             'alog.vendor',
                             'f.name as foiltype',
+                            'c.promotype_id',
+                            'p.name as promo_name',
                             DB::raw("ROW_NUMBER() OVER (PARTITION BY alog.arrival_date, alog.vendor_type_id ORDER BY alog.id) as rank_number")
                         ]);
         $subQuery = self::join($subQuery);
