@@ -33,6 +33,7 @@ class NormCardInfoSeeder extends Seeder
                 CardConstant::EXP_ID => $mkm->notion_id,
                 CardConstant::IS_FOIL => false,
                 'foiltype_id' => 1, // Non-foil
+                CardConstant::PROMO_ID => null
             ]);
         }
     }

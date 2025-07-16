@@ -55,18 +55,19 @@ class NormalizeCardPromotype extends Command
                 $name = $card->name;
                 $cardName = $name;
                 $promotypeName = null;
-
-                // プロモタイプの抽出
-                if (preg_match('/(.+?)≪(.+?)≫$/u', $name, $matches)) {
+                
+                if ($card->color_id === 'T') {
+                    $promotype = $defaultPromotype;
+                } else if (preg_match('/(.+?)≪(.+?)≫$/u', $name, $matches)) {
+                    // プロモタイプの抽出
                     $cardName = trim($matches[1]);
                     $promotypeName = trim($matches[2]);
 
                     $promotype = Promotype::findCardByName($promotypeName);
                     if (!$promotype) {
-                        $skippedCount++;
-                        $bar->advance();
-                        array_push($skippedList, [GCon::ID => $card->id, GCon::NAME=> $name]);
-                        continue;
+                        $attr = base_convert(mt_rand(pow(36, 8 - 1), pow(36,8) - 1), 10, 36);
+                        $item = [CardConstant::ATTR => $attr, GCon::NAME=> $promotypeName,  CardConstant::EXP_ID => $card->exp_id];
+                        $promotype = Promotype::create($item);
                     }
                 } else {
                     // プロモタイプが見つからない場合は、デフォルトのプロモタイプを使用
