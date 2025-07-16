@@ -56,6 +56,7 @@ class StockpileSearchTest extends TestCase
         $response = $this->call('GET', '/api/stockpile', $query);
         $response->assertOk();
         $response->assertJsonCount(count($exStockNo));
+        logger()->debug($response->json());
         // $expected = Stockpile::findMany($exStockNo);
         // $actual = $response->json();
         // foreach($expected as $index =>  $stock) {
