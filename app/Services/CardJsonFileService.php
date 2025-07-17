@@ -37,7 +37,7 @@ class CardJsonFileService {
             $newCard = ['setCode'=> $setcode, 'name' => $cardtype->jpname($enname), "en_name" => $enname,
             'scryfallId' => $cardtype->scryfallId(),
             'color' => $cardtype->color(), Column::NUMBER => $cardtype->number(),
-             Column::PROMOTYPE => $promoType, Column::FOIL_TYPE => $foiltype];
+             Column::PROMO_ID => $promoType, Column::FOIL_TYPE => $foiltype];
 
              if ($cardtype->multiverseId() != 0) {
                 $newCard[Column::MULTIVERSEID] = $cardtype->multiverseId();
@@ -45,7 +45,7 @@ class CardJsonFileService {
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
             
             array_push($cardInfo, $newCard);
-            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::PROMOTYPE => $newCard[Column::PROMOTYPE]]);
+            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::PROMO_ID => $newCard[Column::PROMO_ID]]);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;

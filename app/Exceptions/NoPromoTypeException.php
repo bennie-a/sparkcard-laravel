@@ -3,10 +3,12 @@
 namespace App\Exceptions;
 
 use App\Http\Response\CustomResponse;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * カードマスタ登録：プロモタイプが該当しない時に発生する例外クラス
+ * @deprecated 4.11.0
  */
 class NoPromoTypeException extends ApiException
 {
@@ -23,7 +25,7 @@ class NoPromoTypeException extends ApiException
    */
   public function getStatusCode(): int
   {
-      return CustomResponse::HTTP_NO_PROMOTYPE;
+      return Response::HTTP_NOT_FOUND;
   }
 
   

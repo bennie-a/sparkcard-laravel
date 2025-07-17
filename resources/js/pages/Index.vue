@@ -292,9 +292,10 @@ const hasResult = () => {
                 <div class="content">
                     <div class="header">
                         {{ card.name }}
+                        <div v-if="card.promotype.id != '1'">&#8810;{{card.promotype.name}}&#8811;</div>
                     </div>
                     <div class="meta">
-                        {{ card.exp.name }}&#35;{{ card.number }}
+                        {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}
                     </div>
                     <div class="description ui right floated">
                         平均価格:<span class="price"

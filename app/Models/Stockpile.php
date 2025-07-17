@@ -26,11 +26,11 @@ class Stockpile extends Model
         return $this->belongsTo('App\Models\CardInfo');
     }
 
-    public static function find(string $cardname, string $setcode, string $condition, string $language, bool $isFoil)  {
+    public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
-        $stock = $query->where(['c.name' => $cardname, 'c.isFoil' => $isFoil,
+        $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
                                              's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
         return $stock;
     }

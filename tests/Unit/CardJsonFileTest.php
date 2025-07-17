@@ -98,8 +98,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         return $actualcard;
     }
 
-    public function promoProvider() {
-        $this->markTestSkipped('各Exceptionクラスにて実施する');
+    public static function promoProvider() {
         return [];
     }
 
@@ -256,8 +255,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             return $json;
         }
         
-        public function excludeprovider() {
-            $this->markTestSkipped('各Exceptionクラスにて実施する');
+        public static function excludeprovider() {
             return [
                 // 'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat'],
             ];

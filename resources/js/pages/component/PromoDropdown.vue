@@ -18,6 +18,6 @@ onMounted(async() => {
 </script>
 <template>
 <select v-model="name" class="mr-1 ui dropdown">
-    <option v-for="t in list.value" :key="t.id" :value="t.name">{{t.name }}</option>
+    <option v-for="t in list.value" :key="t.id" :value="t.id">{{t.name }}</option>
 </select>
 </template>

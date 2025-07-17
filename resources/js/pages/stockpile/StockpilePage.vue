@@ -114,26 +114,27 @@ export default {
                     <td>{{ s.id }}</td>
                     <td>
                             <h4 class="ui image header">
-                                <img
-                                :src="s.image_url"
+                                <img    
+                                :src="s.card.image_url"
                                 class="ui mini rounded image"
                                 @click="$refs.modal[index].showImage(s.id)"
                             >
                             <div class="content">
-                                {{ s.cardname
-                            }}<foiltag :isFoil="s.isFoil"/>
-                            <div class="sub header">{{ s.setname }}&#35;{{ s.number }}</div>
+                                {{ s.card.name}}
+                            <div v-if="s.card.promotype.id != '1'">&#8810;{{s.card.promotype.name}}&#8811;</div>
+                            <foiltag :isFoil="s.card.foil.is_foil" :foiltype="s.card.foil.name"/>
+                            <div class="sub header">{{ s.card.exp.name }}&#91;{{s.card.exp.attr}}&#93;&#35;{{ s.card.number }}</div>
                         </div>
                         <image-modal
-                        :url="s.image_url"
+                        :url="s.card.image_url"
                         :id="s.id"
                         ref="modal"
                         />
                     </h4>
                     </td>
-                    <td class="center aligned">{{ s.language }}</td>
+                    <td class="center aligned">{{ s.lang }}</td>
                     <td class="center aligned">
-                        <condition :name="s.condition"/>
+                        <condition :name="s.card.condition"/>
                     </td>
                     <td class="center aligned">{{ s.quantity }}</td>
                     <td class="right aligned">{{ s.updated_at }}</td>

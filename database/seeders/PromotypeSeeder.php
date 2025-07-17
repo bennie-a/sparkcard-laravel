@@ -54,6 +54,8 @@ class PromotypeSeeder extends Seeder
         $tdm = Expansion::findBySetCode('TDM');
 
         $blb = Expansion::findBySetCode('BLB');
+
+        $eoe = Expansion::findBySetCode('EOE');
         $items = [
             ['attr' => 'draft', 'name' => '', $exp_id => $com->notion_id],
             ['attr' => 'showcase', 'name' => 'ショーケース', $exp_id => $com->notion_id],
@@ -104,7 +106,8 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'phyrexia_art', 'name'=> 'ファイレクシア化フルアート',  $exp_id => $one->notion_id],
             ['attr' => 'borderless_oil', 'name'=> 'ボーダレス「胆液」',  $exp_id => $one->notion_id],
             ['attr' => 'concept_judge', 'name'=> 'ボーダレス・コンセプトアート法務官',  $exp_id => $one->notion_id],
-
+            ['attr' => 'surreal_space', 'name'=> '「超常宇宙」ボーダーレス',  $exp_id => $eoe->notion_id],
+            ['attr' => 'observation', 'name'=> '「観測窓」ボーダーレス',  $exp_id => $eoe->notion_id],
         ]; 
 
         foreach($items as $i ){

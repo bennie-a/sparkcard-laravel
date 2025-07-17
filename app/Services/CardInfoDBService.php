@@ -63,10 +63,10 @@ class CardInfoDBService {
             throw new NoExpException($setCode);
         }
         $hasPromo = Promotype::isExist($exp->notion_id, $details[Con::PROMO_ID]);
-        if ($hasPromo === false) {
-            throw new NoPromoTypeException($details[Con::PROMO_ID]);
-        }
         $number = $details[Con::NUMBER];
+        if ($hasPromo === false) {
+            throw new NoPromoTypeException($details[Con::PROMO_ID], $number);
+        }
         foreach($foiltype as $foil) {
             $isFoil = $foil != '通常版';
             logger()->info("import start.");

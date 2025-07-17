@@ -1,0 +1,240 @@
+{
+    "data": {
+        "baseSetSize": 276,
+        "booster": {},
+        "cards": [
+                        {
+                "artist": "Piotr Dura",
+                "artistIds": [
+                    "aff176e8-1d15-432e-ad1d-207a474decba"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 25408,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "extendedart"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316653",
+                    "cardKingdomId": "316651",
+                    "mtgjsonV4Id": "bf6da883-2a2a-50e0-919b-60f73e7fdc05",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "4d6901e7-d519-4dfc-a74d-63fff5e4ffae",
+                    "scryfallIllustrationId": "10779d12-13ed-4925-a740-4616598fa2a4",
+                    "scryfallOracleId": "70d35dbd-1d91-4a2a-a643-6870d168f4f5",
+                    "tcgplayerProductId": "642448"
+                },
+                "isStarter": true,
+                "keywords": [
+                    "Station"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {},
+                "manaValue": 0.0,
+                "name": "Adagia, Windswept Bastion",
+                "number": "277",
+                "printings": [
+                    "EOE"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/739f00b3554b21cb",
+                    "cardKingdomFoil": "https://mtgjson.com/links/87ceb08639afc8f5",
+                    "tcgplayer": "https://mtgjson.com/links/68c6c444743f68fd"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "EOE",
+                "subtypes": [
+                    "Planet"
+                ],
+                "supertypes": [],
+                "text": "This land enters tapped.\n{T}: Add {W}.\nStation (Tap another creature you control: Put charge counters equal to its power on this Planet. Station only as a sorcery.)\nSTATION 12+\n{3}{W}, {T}: Create a token that's a copy of target artifact or enchantment you control, except it's legendary. Activate only as a sorcery.",
+                "type": "Land — Planet",
+                "types": [
+                    "Land"
+                ],
+                "uuid": "223bc127-dce1-5eef-ad8a-b302bdd71374",
+                "variations": [
+                    "3297cea3-e801-5f49-9ba1-fe7cee0c00e9",
+                    "15b70fdb-dabf-5020-90f3-fc211697a208"
+                ]
+            },
+            {
+                "artist": "Micha Huigen",
+                "artistIds": [
+                    "e89041e3-0b4b-4df1-9900-fdeb015e0a71"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "R"
+                ],
+                "colors": [
+                    "R"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 21820,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "A welcoming farewell to new neighbors.",
+                "foreignData": [],
+                "frameEffects": [
+                    "inverted",
+                    "enchantment"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316435",
+                    "cardKingdomId": "316391",
+                    "mcmId": "834160",
+                    "mcmMetaId": "451411",
+                    "mtgjsonV4Id": "aee0b2ec-6292-5f20-a2c5-2cf75a3054a1",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "b2c86408-5e19-46ca-a3ce-949eb148acde",
+                    "scryfallIllustrationId": "708ed1f7-d8d4-473d-ac43-9678638afd21",
+                    "scryfallOracleId": "e48a8160-cffe-4e00-a3e9-a59d7fc7b3a2",
+                    "tcgplayerProductId": "641784"
+                },
+                "isFullArt": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {},
+                "manaCost": "{1}{R}",
+                "manaValue": 2.0,
+                "name": "Weapons Manufacturing",
+                "number": "311",
+                "printings": [
+                    "EOE"
+                ],
+                "promoTypes": [
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/064249b39fcb0322",
+                    "cardKingdomFoil": "https://mtgjson.com/links/7484f84458d722f8",
+                    "cardmarket": "https://mtgjson.com/links/926545856dd5490b",
+                    "tcgplayer": "https://mtgjson.com/links/452767493bcaf272"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "EOE",
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Whenever a nontoken artifact you control enters, create a colorless artifact token named Munitions with \"When this token leaves the battlefield, it deals 2 damage to any target.\"",
+                "type": "Enchantment",
+                "types": [
+                    "Enchantment"
+                ],
+                "uuid": "981079a4-1f37-5e52-b386-f0c5693b7ef2",
+                "variations": [
+                    "97009d9d-3652-53ce-9180-75da5ad1f9e8"
+                ]
+            },
+                        {
+                "artist": "Piotr Dura",
+                "artistIds": [
+                    "aff176e8-1d15-432e-ad1d-207a474decba"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "borderless",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 25408,
+                "finishes": [
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "extendedart"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": false,
+                "identifiers": {
+                    "cardKingdomFoilId": "316654",
+                    "mtgjsonV4Id": "b9c7d004-1c35-5498-99fc-fc402954738e",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "bf314021-ba15-46c2-99e0-94141f118bc9",
+                    "scryfallIllustrationId": "10779d12-13ed-4925-a740-4616598fa2a4",
+                    "scryfallOracleId": "70d35dbd-1d91-4a2a-a643-6870d168f4f5",
+                    "tcgplayerProductId": "642773"
+                },
+                "isAlternative": true,
+                "keywords": [
+                    "Station"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {},
+                "manaValue": 0.0,
+                "name": "Adagia, Windswept Bastion",
+                "number": "372",
+                "printings": [
+                    "EOE"
+                ],
+                "promoTypes": [
+                    "galaxyfoil",
+                    "boosterfun"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/7874ee84264aab06",
+                    "tcgplayer": "https://mtgjson.com/links/0656db26993d6173"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "EOE",
+                "subtypes": [
+                    "Planet"
+                ],
+                "supertypes": [],
+                "text": "This land enters tapped.\n{T}: Add {W}.\nStation (Tap another creature you control: Put charge counters equal to its power on this Planet. Station only as a sorcery.)\nSTATION 12+\n{3}{W}, {T}: Create a token that's a copy of target artifact or enchantment you control, except it's legendary. Activate only as a sorcery.",
+                "type": "Land — Planet",
+                "types": [
+                    "Land"
+                ],
+                "uuid": "15b70fdb-dabf-5020-90f3-fc211697a208",
+                "variations": [
+                    "3297cea3-e801-5f49-9ba1-fe7cee0c00e9",
+                    "223bc127-dce1-5eef-ad8a-b302bdd71374"
+                ]
+            }
+        ],
+        "code": "EOE"
+    }
+}

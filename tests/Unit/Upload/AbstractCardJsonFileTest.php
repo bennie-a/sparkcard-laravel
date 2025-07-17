@@ -6,6 +6,10 @@ use App\Services\Constant\StockpileHeader;
 use Tests\TestCase;
 use App\Services\Constant\CardConstant as Column;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestExpansionSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\PostApiAssertions;
 
 /**
@@ -17,9 +21,8 @@ abstract class AbstractCardJsonFileTest extends TestCase{
 
     public function setUp():void {
         parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('DatabaseSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
      }
 
     protected function ok(string $setcode, bool $isDraft = false, ?string $color = '') {
@@ -42,22 +45,22 @@ abstract class AbstractCardJsonFileTest extends TestCase{
 
     /**
      * 特別版が含まれているか検証する。
-     * @dataProvider promoProvider
      */
-    public function test_ok_promotype(string $number, string $expectedPromo) {
+    #[DataProvider('promoProvider')]
+    public function test_ok_promotype(string $number, string $promo_attr) {
         $result = $this->ok($this->getSetCode(), false);
         $actualcard = $this->filteringCard($number, $result);
-        $dbPromo = Promotype::findCardByAttr($expectedPromo);
-        logger()->debug("期待プロモタイプ:{$dbPromo->name}");
-        $this->assertEquals($dbPromo->name, $actualcard[Column::PROMOTYPE], 'プロモタイプ');
+
+        $expected = Promotype::findCardByAttr($promo_attr);
+        $this->assertEquals($expected->id, $actualcard[Column::PROMO_ID], 'プロモタイプ');
         $this->assertNotEmpty($actualcard[Column::SCRYFALLID], '{Column::SCRYFALLID}');
     }
     
     /**
      * 特定の特別版が含まれていないか検証する。
-     * @dataProvider excludeProvider
      * @return void
      */
+    #[DataProvider('excludeProvider')]
     public function test_ok_excluded(string $number) {
         $result = $this->ok($this->getSetCode(), false);
         $actualcard = $this->filteringCard($number, $result);
@@ -131,12 +134,12 @@ abstract class AbstractCardJsonFileTest extends TestCase{
      *
      * @return void
      */
-    abstract public function promoProvider();
+    abstract public static function promoProvider();
 
     /**
      * 特定の特別版が含まれないか検証するテストデータ
      *
      * @return void
      */
-    abstract public function excludeProvider();
+    abstract public static function excludeProvider();
 }

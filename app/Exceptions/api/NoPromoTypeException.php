@@ -9,9 +9,12 @@ class NoPromoTypeException extends NotFoundException
 {
     private $number;
 
-    public function __construct($number)
+    private $promoValue;
+
+    public function __construct($number, $promoValue)
     {
         $this->number = $number;
+        $this->promoValue = $promoValue;
         parent::__construct();      
     }
 
@@ -22,7 +25,7 @@ class NoPromoTypeException extends NotFoundException
 
     public function getDetail(): string
     {
-        return "指定したプロモタイプが見つかりません: {$this->number}";
+        return "指定したプロモタイプが見つかりません。number:{$this->number}, promotype:{$this->promoValue}";
     }
 
 }

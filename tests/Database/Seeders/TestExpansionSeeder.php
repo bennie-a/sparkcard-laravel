@@ -44,6 +44,7 @@ class TestExpansionSeeder extends Seeder
         $items[] = ['attr' => 'STX', 'name' => 'ストリクスヘイヴン：魔法学院'];
         $items[] = ['attr' => 'SCH', 'name' => 'Store Championship'];
         $items[] = ['attr' => 'BLB', 'name' => 'ブルームバロウ'];
+        $items[] = ['attr' => 'EOE', 'name' => '久遠の終端'];
 
         Expansion::factory()->createMany($items);
     }
