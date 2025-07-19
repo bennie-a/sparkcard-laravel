@@ -54,5 +54,5 @@ class CardConstant {
 
     const PROMO_ID = 'promotype_id';
 
-    const IMAGE_URL = 'imageurl';
+    const IMAGE_URL = 'image_url';
 }

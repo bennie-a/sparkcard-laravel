@@ -2,16 +2,21 @@
 
 namespace Tests\Unit\DB;
 
+use App\Enum\CardColor;
 use App\Models\CardInfo;
 use App\Models\Expansion;
+use App\Models\MainColor;
 use App\Models\Stockpile;
+use App\Services\Constant\CardConstant;
+use App\Services\Constant\GlobalConstant as GCon;
 use App\Services\Constant\SearchConstant;
-use App\Services\Constant\StockpileHeader;
+use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
@@ -57,23 +62,49 @@ class StockpileSearchTest extends TestCase
         $response->assertOk();
         $response->assertJsonCount(count($exStockNo));
         logger()->debug($response->json());
-        // $expected = Stockpile::findMany($exStockNo);
-        // $actual = $response->json();
-        // foreach($expected as $index =>  $stock) {
-            
-        //     $info = CardInfo::find($stock->card_id);
-        //     assertEquals($info->name, $actual[$index]['cardname']);
-        //     assertEquals($stock->quantity, $actual[$index]['quantity']);
-        //     assertEquals($stock->condition, $actual[$index]['condition']);
-        // }
+
+        // 検索結果検証
+        $expected = Stockpile::findMany($exStockNo)->map(function ($stock) {
+            $card = CardInfo::getDetailsById($stock->card_id);
+            return [
+                GCon::ID => $stock->id,
+                Header::LANG => $stock->language,
+                Header::QUANTITY => $stock->quantity,
+                GCon::UPDATED_AT => $stock->updated_at,
+                GCon::CARD => [
+                    GCon::ID => $card->id,
+                    GCon::NAME => $card->name,
+                    CardConstant::EXP => [
+                        GCon::NAME => $card->exp_name,
+                        CardConstant::ATTR => $card->exp_attr,
+                    ],
+                    CardConstant::NUMBER => $card->number,
+                    CardConstant::COLOR => CardColor::tryFrom($card->color_id)->text(),
+                    CardConstant::IMAGE_URL => $card->image_url,
+                    Header::CONDITION => $stock->condition,
+                    'foil' => [
+                        'is_foil' => $card->isFoil,
+                        GCon::NAME => $card->foiltype == '通常版' ? '' : $card->foiltype
+                    ],
+                    CardConstant::PROMOTYPE => [
+                        GCon::ID => $card->promotype_id,
+                        GCon::NAME => $card->promo_name,
+                    ],
+                ],
+            ];
+        })->values()->toArray();
+
+        $response->assertJson($expected);
     }
     
     public static function searchprovider() {
         return [
             '検索結果あり_検索条件なし' => ['', '', 0, range(1, 12)],
-            // '検索結果あり_カード名入力' => ['ファイレクシアの', '', 0, [1,2]],
-            // '検索結果あり_セット名入力' => ['', '統一', 0, [4,5]],
-            // '検索結果あり_取得件数あり' => ['', '', 2, [1,2]],
+            '検索結果あり_カード名入力' => ['ファイレクシアの', '', 0, [1,2]],
+            '検索結果あり_セット名入力' => ['', '統一', 0, [4,5, 10]],
+            '検索結果あり_取得件数あり' => ['', '', 2, [1,2]],
+            '検索結果あり_通常版' => ['ドロスの魔神', '', 0, [4]],
+            '検索結果あり_特別版' => ['機械の母、エリシュ・ノーン', '', 0, [10]],
         ];
     }
     /**
@@ -91,12 +122,5 @@ class StockpileSearchTest extends TestCase
             'detail' => '検索結果がありません。',
             "request" => "api/stockpile"
         ]);
-    }
-
-
-    public function searchNgProvider() {
-        return [
-            '検索結果なし' =>['xxxx', '', 0, Response::HTTP_NO_CONTENT],
-        ];
     }
 }

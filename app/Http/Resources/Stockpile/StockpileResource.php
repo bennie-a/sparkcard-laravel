@@ -18,7 +18,7 @@ class StockpileResource extends CardInfoResource
      */
     public function toArray(Request $request): array
     {
-        $array[GCon::ID] = $this->id;
+        $array[GCon::ID] = $this->stock_id;
         $array[Header::LANG] = $this->language;
         $array[Header::QUANTITY] = $this->quantity;
         $array[GCon::UPDATED_AT] = CarbonFormatUtil::toDateString($this->updated_at);

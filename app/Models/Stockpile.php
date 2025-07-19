@@ -62,7 +62,7 @@ class Stockpile extends Model
      * @return array
      */
     public static function fetch(array $details) {
-        $columns = ['s.id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.name as name', 
+        $columns = ['s.id as stock_id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.name as name', 
                                 'c.color_id', 's.language', 's.condition', 's.quantity',
                                 'c.image_url', 'c.number', 'c.isFoil as isFoil', 'f.name as foiltype',
                                 'c.promotype_id', 'p.name as promo_name', 's.updated_at as updated_at'];

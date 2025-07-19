@@ -108,6 +108,7 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'concept_judge', 'name'=> 'ボーダレス・コンセプトアート法務官',  $exp_id => $one->notion_id],
             ['attr' => 'surreal_space', 'name'=> '「超常宇宙」ボーダーレス',  $exp_id => $eoe->notion_id],
             ['attr' => 'observation', 'name'=> '「観測窓」ボーダーレス',  $exp_id => $eoe->notion_id],
+            ['attr' => 'stellar_sight', 'name'=> '「星景」土地',  $exp_id => $eoe->notion_id],
         ]; 
 
         foreach($items as $i ){
