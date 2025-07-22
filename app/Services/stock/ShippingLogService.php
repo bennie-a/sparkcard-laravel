@@ -109,7 +109,7 @@ class ShippingLogService extends AbstractSmsService{
         $items = $list->map(function($slog) {
                 return ["id" => $slog["stock_id"],  Con::NAME => $slog["cardname"], Con::EXP => [Con::NAME => $slog[Header::SETNAME], Con::ATTR => $slog['exp_attr']],
                              Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
-                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"], 
+                            Header::LANG => $slog[Header::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL], 
                             Header::FOIL => ['is_foil' => $slog['isFoil'], Con::NAME => $slog['foilname']],
                             'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
                             Con::PROMOTYPE => [GlobalConstant::ID => $slog->promotype_id, GlobalConstant::NAME => $slog->promo_name
@@ -120,7 +120,7 @@ class ShippingLogService extends AbstractSmsService{
         $slog = $list[0];
         $info = [Header::ORDER_ID => $slog->order_id, Header::BUYER => $slog[Header::BUYER],
                         Header::SHIPPING_DATE => $slog->shipping_date,  'zipcode' => '〒'.$slog->zip, 
-                        'address' => $slog->address, 'items' => $items->toArray()];
+                        'address' => $slog->address, GlobalConstant::CARD => $items->toArray()];
         return $info;
         // $log = ShippingLog::find($id);
     }

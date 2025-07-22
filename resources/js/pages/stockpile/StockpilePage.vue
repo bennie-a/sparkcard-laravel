@@ -134,7 +134,7 @@ export default {
                     </td>
                     <td class="center aligned">{{ s.lang }}</td>
                     <td class="center aligned">
-                        <condition :name="s.card.condition"/>
+                        <condition :name="s.condition"/>
                     </td>
                     <td class="center aligned">{{ s.quantity }}</td>
                     <td class="right aligned">{{ s.updated_at }}</td>

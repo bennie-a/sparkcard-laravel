@@ -4,37 +4,26 @@ namespace Tests\Unit\DB;
 
 use App\Enum\CardColor;
 use App\Models\CardInfo;
-use App\Models\Expansion;
-use App\Models\MainColor;
 use App\Models\Stockpile;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GCon;
-use App\Services\Constant\SearchConstant;
+use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\StockpileHeader as Header;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertJson;
-use function PHPUnit\Framework\assertNotNull;
-use function PHPUnit\Framework\assertTrue;
+use Tests\Trait\CardJsonHelper;
 
 /**
  * 在庫管理情報検索のテスト
  */
 class StockpileSearchTest extends TestCase
 {
-    // use DatabaseTransactions;
+    use CardJsonHelper;
     /**
      * テスト開始時のみテストデータを導入する。
      *
@@ -57,11 +46,10 @@ class StockpileSearchTest extends TestCase
      */
     #[DataProvider('searchprovider')]
     public function test_index_ok(string $cardname, string $setname, int $limit, array $exStockNo) {
-        $query = ['card_name' => $cardname, 'set_name' => $setname, 'limit' => $limit];
+        $query = [SCon::CARD_NAME => $cardname, SCon::SET_NAME => $setname, SCon::LIMIT => $limit];
         $response = $this->call('GET', '/api/stockpile', $query);
         $response->assertOk();
         $response->assertJsonCount(count($exStockNo));
-        logger()->debug($response->json());
 
         // 検索結果検証
         $expected = Stockpile::findMany($exStockNo)->map(function ($stock) {
@@ -70,27 +58,9 @@ class StockpileSearchTest extends TestCase
                 GCon::ID => $stock->id,
                 Header::LANG => $stock->language,
                 Header::QUANTITY => $stock->quantity,
+                Header::CONDITION => $stock->condition,
                 GCon::UPDATED_AT => $stock->updated_at,
-                GCon::CARD => [
-                    GCon::ID => $card->id,
-                    GCon::NAME => $card->name,
-                    CardConstant::EXP => [
-                        GCon::NAME => $card->exp_name,
-                        CardConstant::ATTR => $card->exp_attr,
-                    ],
-                    CardConstant::NUMBER => $card->number,
-                    CardConstant::COLOR => CardColor::tryFrom($card->color_id)->text(),
-                    CardConstant::IMAGE_URL => $card->image_url,
-                    Header::CONDITION => $stock->condition,
-                    'foil' => [
-                        'is_foil' => $card->isFoil,
-                        GCon::NAME => $card->foiltype == '通常版' ? '' : $card->foiltype
-                    ],
-                    CardConstant::PROMOTYPE => [
-                        GCon::ID => $card->promotype_id,
-                        GCon::NAME => $card->promo_name,
-                    ],
-                ],
+                GCon::CARD => $this->buildCardJson($card)
             ];
         })->values()->toArray();
 
@@ -113,7 +83,7 @@ class StockpileSearchTest extends TestCase
      * @return void
      */
     public function test_ng_not_found() {
-        $query = [SearchConstant::CARD_NAME => 'xxxx', SearchConstant::SET_NAME => '', 'limit' => 0];
+        $query = [SCon::CARD_NAME => 'xxxx', SCon::SET_NAME => '', 'limit' => 0];
         $response = $this->call('GET', '/api/stockpile', $query);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
         $response->assertJson([

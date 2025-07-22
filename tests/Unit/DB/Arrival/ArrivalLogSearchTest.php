@@ -26,9 +26,7 @@ use Tests\Util\TestDateUtil;
  */
 class ArrivalLogSearchTest extends TestCase
 {
-    use GetApiAssertions {
-        GetApiAssertions::verifyCard as verifyCardFromParent;
-    }
+    use GetApiAssertions;
 
     public function setUp(): void
     {
@@ -162,6 +160,11 @@ class ArrivalLogSearchTest extends TestCase
             logger()->debug("原価：expected:{$log->cost}, actual:{$j[Header::COST]}");
 
             $this->assertEquals($log->alog_quan, $j[Header::QUANTITY], '枚数');
+
+            $exp_stock = Stockpile::where(GCon::ID, $log->stock_id)->first();
+
+            $this->assertEquals($exp_stock->language, $j[Header::LANG], '言語');
+            $this->assertEquals($exp_stock->condition, $j[Header::CONDITION], '状態');
             $this->verifyCard($log->stock_id, $j[Con::CARD]);
             $method($condition, $j, $log);
         }
@@ -201,12 +204,5 @@ class ArrivalLogSearchTest extends TestCase
      */
     protected function getEndPoint():string {
         return  'api/arrival';
-    }
-
-    protected function verifyCard($stock_id, array $json) {
-        $this->verifyCardFromParent($stock_id, $json);
-        $exp_stock = Stockpile::where(GCon::ID, $stock_id)->first();
-        $this->assertEquals($exp_stock->language, $json[Header::LANG], '言語');
-        $this->assertEquals($exp_stock->condition, $json[Header::CONDITION], '状態');
     }
 }

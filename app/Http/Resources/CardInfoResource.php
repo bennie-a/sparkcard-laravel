@@ -27,8 +27,7 @@ class CardInfoResource extends JsonResource
             Con::EXP => [Con::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
             Con::NUMBER => $this->number,
             Con::COLOR => CardColor::tryFrom($this->color_id)->text(),
-            'image_url' => $this->image_url,
-            Header::CONDITION => $this->condition,
+            Con::IMAGE_URL => $this->image_url,
         ];
         $resources = json_decode(json_encode($this->resource), true);
         if (MtgJsonUtil::isNotEmpty(Con::PRICE, $resources)) {

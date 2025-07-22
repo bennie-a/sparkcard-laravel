@@ -88,10 +88,10 @@ onMounted(async() => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(i, index) in detail.items" :key="index">
+                <tr v-for="(i, index) in detail.card" :key="index">
                 <td>{{ i.id }}</td>
                 <td>
-                    <cardlayout v-model="detail.items[index]"></cardlayout>
+                    <cardlayout v-model:card="detail.card[index]" v-model:lang="detail.card[index].lang"></cardlayout>
                 </td>
                 <td class="center aligned"><condition :name="i.condition"/></td>
                 <td class="center aligned">{{i.quantity}}枚</td>
