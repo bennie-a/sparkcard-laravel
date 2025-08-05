@@ -52,6 +52,10 @@ class PromotypeSeeder extends Seeder
         $dft = Expansion::findBySetCode('DFT');
         // TDM
         $tdm = Expansion::findBySetCode('TDM');
+
+        $blb = Expansion::findBySetCode('BLB');
+
+        $eoe = Expansion::findBySetCode('EOE');
         $items = [
             ['attr' => 'draft', 'name' => '', $exp_id => $com->notion_id],
             ['attr' => 'showcase', 'name' => 'ショーケース', $exp_id => $com->notion_id],
@@ -75,7 +79,7 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'anime', 'name' => 'アニメ・ボーダーレス', $exp_id => $woe->notion_id],
             ['attr' => 'phoilslick', 'name' => 'ファイレクシア語「胆液」', $exp_id => $one->notion_id],
             ['attr' => 'oilslickshowcase', 'name' => 'ショーケース「胆液」', $exp_id => $one->notion_id],
-            ['attr' => 'oilslick', 'name' => 'ボーダレス「胆液」ショーケース', $exp_id => $one->notion_id],
+            ['attr' => 'oilslick', 'name' => 'ボーダーレス「胆液」ショーケース', $exp_id => $one->notion_id],
             ['attr' => 'stepandcompleat', 'name' => 'S&C', $exp_id => $one->notion_id],
             ['attr' => 'concept', 'name' => 'コンセプトアート', $exp_id => $one->notion_id],
             ['attr' => 'magnified', 'name' => '「拡大鏡」ショーケース', $exp_id => $mkm->notion_id],
@@ -94,6 +98,17 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'reversible_card', 'name' => 'リバーシブル・ボーダーレス', $exp_id => $tdm->notion_id],
             ['attr' => 'dragonic', 'name' => '「ドラコニック」ショーケース', $exp_id => $tdm->notion_id],
             ['attr' => 'clan', 'name' => '「氏族」ショーケース', $exp_id => $tdm->notion_id],
+            ['attr' => 'forest', 'name'=> '「森林」ショーケース',  $exp_id => $blb->notion_id],
+            ['attr' => 'field', 'name'=> '実地調査ボーダーレス',  $exp_id => $blb->notion_id],
+            ['attr' => 'extandart', 'name'=> '拡張アート',  $exp_id => $com->notion_id],
+            ['attr' => 'promo', 'name'=> 'プロモカード',  $exp_id => $com->notion_id],
+            ['attr' => 'firstplace', 'name'=> 'ボーダーレス・ファーストプレイスFoil',  $exp_id => $dft->notion_id],
+            ['attr' => 'phyrexia_art', 'name'=> 'ファイレクシア化フルアート',  $exp_id => $one->notion_id],
+            ['attr' => 'borderless_oil', 'name'=> 'ボーダレス「胆液」',  $exp_id => $one->notion_id],
+            ['attr' => 'concept_judge', 'name'=> 'ボーダレス・コンセプトアート法務官',  $exp_id => $one->notion_id],
+            ['attr' => 'surreal_space', 'name'=> '「超常宇宙」ボーダーレス',  $exp_id => $eoe->notion_id],
+            ['attr' => 'observation', 'name'=> '「観測窓」ボーダーレス',  $exp_id => $eoe->notion_id],
+            ['attr' => 'stellar_sight', 'name'=> '「星景」土地',  $exp_id => $eoe->notion_id],
         ]; 
 
         foreach($items as $i ){

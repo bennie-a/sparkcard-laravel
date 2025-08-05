@@ -50,7 +50,7 @@
                                 <input type="text" v-model="card.name" />
                             </td>
                             <td>
-                                <promo v-model:name="card.promotype" v-model:setcode="setCode"></promo>
+                                <promo v-model:name="card.promotype_id" v-model:setcode="setCode"></promo>
                             </td>
                             <td>
                                 {{ card.en_name }}

@@ -22,9 +22,9 @@ class ArrivalLogResource extends CardInfoResource
         $array[GCon::ID] = $this->arrival_id;
         $array[Header::COST] = $this->cost;
         $array[Header::QUANTITY] = $this->alog_quan;
+        $array[Header::LANG] = $this->language;
+        $array[Header::CONDITION] = $this->condition;
         $array[GCon::CARD] = parent::toArray($request);
-        $array[Con::CARD][Header::LANG] = $this->language;
-        $array[GCon::CARD][Header::CONDITION] = $this->condition;
         return $array;
     }
 }

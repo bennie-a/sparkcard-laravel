@@ -26,7 +26,8 @@ class CardInfo extends Model
         return $this->hasOne('App\Model\Foiltype');
     }
 
-    protected $fillable = ['id', 'expansion.name', 'expansion.attr',  'exp_id', 'barcode','name', 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id'];
+    protected $fillable = ['id', 'expansion.name', 'expansion.attr',  'exp_id', 'barcode','name',
+                 'en_name', 'number', 'color_id', 'image_url', 'isFoil', 'foiltype_id', Con::PROMO_ID];
 
     /**
      * 検索条件に該当するデータを取得する。
@@ -39,7 +40,7 @@ class CardInfo extends Model
         // DB::enableQueryLog();
         $columns = ['card_info.exp_id', 'e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
                  'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
-                 'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity'];
+                 'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity', 'card_info.promotype_id', 'p.name as promo_name'];
         $name = $condition['card_info.name'];
         $query = self::select($columns);
         if (!empty($name)) {
@@ -54,8 +55,10 @@ class CardInfo extends Model
             }
         }
         $cardList = $query->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id'
-                                )->leftJoin('stockpile as s', 'card_info.id', '=', 's.card_id')->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')->
-                        orderBy('e.release_date', 'desc')->orderByRaw('CAST(replace(card_info.number, \'s\',\'\') as integer ) asc')->get();
+                                )->leftJoin('stockpile as s', 'card_info.id', '=', 's.card_id')
+                                ->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')
+                                ->join('promotype as p', 'p.id', '=', 'card_info.promotype_id')
+                                ->orderBy('e.release_date', 'desc')->orderByRaw('CAST(replace(card_info.number, \'s\',\'\') as integer ) asc')->get();
         // logger()->debug(DB::getQueryLog());
         return $cardList;
     }
@@ -100,13 +103,28 @@ class CardInfo extends Model
      * @param [type] $exp_id
      * @param [type] $name
      * @param [type] $isFoil
+     * @deprecated version 4.11.0
      * @return カード情報
-     */
+     */  
     public static function findSpecificCard($exp_id, $name, $foiltype_id)
     {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];
         $info = self::select($columns)->where(['exp_id' => $exp_id, 'name' => $name, 'foiltype_id' => $foiltype_id])->first();
         return $info;
+    }
+
+    /**
+     * 特定のカード情報が存在するかどうかを確認する。
+     *
+     * @param [type] $exp_id
+     * @param [type] $number
+     * @param [type] $foiltype_id
+     * @param [type] $promotype_id
+     * @return CardInfo
+     */
+    public static function getCardinfo($exp_id, $number, $foiltype_id) {
+        return Cardinfo::where([Con::EXP_ID => $exp_id, Con::NUMBER => $number,
+                                         Con::FOIL_ID => $foiltype_id])->first();
     }
 
     public static function findEnCard($name) {
@@ -124,5 +142,17 @@ class CardInfo extends Model
             return 0;
         }
         return $value;
+    }
+
+    public static function getDetailsById(int $id) {
+        $columns = ['card_info.id', 'card_info.name', 'card_info.en_name', 'card_info.number', 'card_info.image_url',
+                    'card_info.isFoil', 'f.name as foiltype', 'card_info.color_id', 'card_info.promotype_id', 'p.name as promo_name',
+                     'e.name as exp_name', 'e.attr as exp_attr', 'e.notion_id as exp_id'];
+        $info = self::select($columns)
+                            ->join('expansion as e', 'e.notion_id', '=', 'card_info.exp_id')
+                            ->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')
+                            ->join('promotype as p', 'p.id', '=', 'card_info.promotype_id')
+                            ->where('card_info.id', $id)->first();
+        return $info;
     }
 }

@@ -138,7 +138,7 @@ class CardInfoFactory {
      */
     private static function isExclude($json):bool {
         $detector = SpCardDetectorFactory::create(self::setCode($json));
-        $isExclude = self::isOnlineOnly($json) || self::isExtendedArt($json) || $detector->isExclude($json);
+        $isExclude = self::isOnlineOnly($json) || $detector->isExclude($json);
         if ($isExclude) {
             return $isExclude;
         }

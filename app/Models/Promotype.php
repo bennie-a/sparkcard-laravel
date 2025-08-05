@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Services\Constant\CardConstant;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\GlobalConstant;
 
 class Promotype extends Model
 {
@@ -50,5 +53,12 @@ class Promotype extends Model
                                 })->whereIn('e.attr', $condition)
                                 ->orderBy('e.release_date')->orderBy('p.id')->get();
         return $result;
+    }
+
+    public static function isExist(string $exp_id, int $id) {
+        $com = Expansion::findBySetCode('COM');
+        return Promotype::whereIn(Con::EXP_ID, [$exp_id, $com->notion_id])
+                    ->where(GlobalConstant::ID, $id)->exists();
+
     }
 }

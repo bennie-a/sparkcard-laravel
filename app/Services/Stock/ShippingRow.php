@@ -1,5 +1,8 @@
 <?php
 namespace App\Services\Stock;
+
+use App\Services\Constant\CardConstant;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Stock\Strategy\NoSetCodeStrategy;
 use App\Services\Stock\Strategy\DefaultRowStrategy;
@@ -15,10 +18,16 @@ class ShippingRow extends StockpileRow {
     private $cardname;
 
     private $language;
+
+    private $promotype;
+
+    private $isFoil;
+
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;
         $this->row = $row;
+        $this->extract();
     }
 
     public function shipping_date() {
@@ -53,10 +62,6 @@ class ShippingRow extends StockpileRow {
 
     public function setcode()
     {
-        if (empty($this->setcode)) {
-            \preg_match("/(?<=【)[A-Z0-9]+(?=】)/", $this->product_name(), $match);
-            $this->setcode = current($match);
-        }
         return $this->setcode;
     }
 
@@ -66,23 +71,14 @@ class ShippingRow extends StockpileRow {
      * @return string
      */
     public function card_name():string {
-        if (empty($this->cardname)) {
-            $start = mb_strrpos($this->product_name(), "】") + 1;
-            $length = mb_strpos($this->product_name(), "[") - $start;
-            $this->cardname = mb_substr($this->product_name(), $start, $length, 'UTF-8');
-        }
         return $this->cardname;
     }
 
     public function isFoil():bool {
-        return strpos($this->product_name(), "【Foil】");
+        return $this->isFoil;
     }
 
     public function language() {
-        if (empty($this->language)) {
-            \preg_match("/(?<=\[)[A-Z]+(?=\])/", $this->product_name(), $match);
-            $this->language = current($match);
-        }
         return $this->language;
     }
     
@@ -93,6 +89,10 @@ class ShippingRow extends StockpileRow {
             $address.= " ". $this->row[Header::BILLING_ADDRESS_2];
         }
         return $address;
+    }
+    
+    public function promotype() {
+        return $this->promotype;
     }
 
     public function product_price() {
@@ -105,5 +105,20 @@ class ShippingRow extends StockpileRow {
 
     public function order_id() {
         return $this->row[Header::ORDER_ID];
+    }
+
+    private function extract() {
+        $productName = $this->product_name();
+        if (preg_match('/^【(?<setcode>.+?)】(?:【(?<foil>Foil)】)?(?<name>.+?)(?:≪(?<promotype>.+?)≫)?\[(?<lang>[A-Z]{2})]/u', $productName, $matches)) {            $this->setcode = $matches[Header::SETCODE];
+            $this->setcode = $matches[Header::SETCODE];
+            $this->cardname =  $matches[GlobalConstant::NAME];
+            $this->promotype = $matches[CardConstant::PROMOTYPE] ?? ''; 
+            $this->language = $matches[Header::LANG];
+            $this->isFoil  = $matches['foil'] === 'Foil';
+        } else {
+            // パースに失敗した場合
+            $this->setcode = $this->cardname = $this->promotype = $this->language = '';
+            $this->isFoil = false;
+        }
     }
 }

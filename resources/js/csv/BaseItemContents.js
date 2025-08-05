@@ -39,7 +39,7 @@ export default () => {
                 return price;
             }
             let num = price / 10;
-            num = Math.round(num - 6.3);
+            num = Math.round(num - 8.0);
             return num * 10;
         },
         description: function (c) {

@@ -14,6 +14,8 @@ class CardConstant {
 
     const FOIL_TYPE = 'foiltype';
 
+    const FOIL_ID = 'foiltype_id';
+
     const NUMBER = 'number';
 
     const COLOR = 'color';
@@ -49,4 +51,8 @@ class CardConstant {
     const EXP_ID = 'exp_id';
 
     const ATTR = 'attr';
+
+    const PROMO_ID = 'promotype_id';
+
+    const IMAGE_URL = 'image_url';
 }

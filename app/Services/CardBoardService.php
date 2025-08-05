@@ -157,10 +157,12 @@ class CardBoardService {
     }
     
     // 入力値をNotionに登録する。
-    public function store(CardInfo $info, array $details) {
+    public function store(array $details) {
         try {
             $page = new Page();
-            logger()->debug($info->name);
+            $info = CardInfo::getDetailsById($details[Header::CARD_ID]);
+            logger()->debug("カード名：{$info->name}, プロモタイプ:{$info->promo_name}");
+
             $duplicated = $this->repo->findBySparkcardId($info->id);
             $priceVal = intval($details[Header::MARKET_PRICE]);
             if (!empty($duplicated) && $duplicated->getProperty(JA::STATUS)->getName() !== NotionStatus::Complete->value) {
@@ -169,7 +171,9 @@ class CardBoardService {
                 $page->setId($duplicated->getId());
                 $this->updatePage($page);
             } else {
-                $page->setTitle(JA::NAME, $info->name);
+                $promotype = !empty($info->promo_name) ? "≪{$info->promo_name}≫" : $info->promo_name;
+                $cardname = $info->name.$promotype;
+                $page->setTitle(JA::NAME, $cardname);
                 $page->setText(JA::EN_NAME, $info->en_name);
                 $this->setStatus($page, NotionStatus::PhotoPending);
                 $page->setNumber(JA::QTY, $details[Header::QUANTITY]);

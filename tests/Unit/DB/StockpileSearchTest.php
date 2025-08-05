@@ -2,33 +2,28 @@
 
 namespace Tests\Unit\DB;
 
+use App\Enum\CardColor;
 use App\Models\CardInfo;
-use App\Models\Expansion;
 use App\Models\Stockpile;
-use App\Services\Constant\SearchConstant;
-use App\Services\Constant\StockpileHeader;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Services\Constant\CardConstant;
+use App\Services\Constant\GlobalConstant as GCon;
+use App\Services\Constant\SearchConstant as SCon;
+use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertJson;
-use function PHPUnit\Framework\assertNotNull;
-use function PHPUnit\Framework\assertTrue;
+use Tests\Trait\CardJsonHelper;
 
 /**
  * 在庫管理情報検索のテスト
  */
 class StockpileSearchTest extends TestCase
 {
-    // use DatabaseTransactions;
+    use CardJsonHelper;
     /**
      * テスト開始時のみテストデータを導入する。
      *
@@ -47,33 +42,48 @@ class StockpileSearchTest extends TestCase
      * @param string $cardname
      * @param string $setname
      * @param integer $limit
-     * @dataProvider searchprovider
      * @return void
      */
+    #[DataProvider('searchprovider')]
     public function test_index_ok(string $cardname, string $setname, int $limit, array $exStockNo) {
-        $query = ['card_name' => $cardname, 'set_name' => $setname, 'limit' => $limit];
+        $query = [SCon::CARD_NAME => $cardname, SCon::SET_NAME => $setname, SCon::LIMIT => $limit];
         $response = $this->call('GET', '/api/stockpile', $query);
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertOk();
+        $response->assertJsonCount(count($exStockNo));
 
-        $expected = Stockpile::findMany($exStockNo);
-        $actual = $response->json();
-        assertEquals(count($expected), count($actual), '件数');
-        foreach($expected as $index =>  $stock) {
-            
-            $info = CardInfo::find($stock->card_id);
-            assertEquals($info->name, $actual[$index]['cardname']);
-            assertEquals($stock->quantity, $actual[$index]['quantity']);
-            assertEquals($stock->condition, $actual[$index]['condition']);
-        }
+        // 検索結果検証
+        $expected = Stockpile::findMany($exStockNo)->map(function ($stock) {
+            $card = CardInfo::getDetailsById($stock->card_id);
+            return [
+                GCon::ID => $stock->id,
+                Header::LANG => $stock->language,
+                Header::QUANTITY => $stock->quantity,
+                Header::CONDITION => $stock->condition,
+                GCon::UPDATED_AT => $stock->updated_at,
+                GCon::CARD => $this->buildCardJson($card)
+            ];
+        })->values()->toArray();
+
+        $response->assertJson($expected);
     }
-
+    
+    public static function searchprovider() {
+        return [
+            '検索結果あり_検索条件なし' => ['', '', 0, range(1, 12)],
+            '検索結果あり_カード名入力' => ['ファイレクシアの', '', 0, [1,2]],
+            '検索結果あり_セット名入力' => ['', '統一', 0, [4,5, 10]],
+            '検索結果あり_取得件数あり' => ['', '', 2, [1,2]],
+            '検索結果あり_通常版' => ['ドロスの魔神', '', 0, [4]],
+            '検索結果あり_特別版' => ['機械の母、エリシュ・ノーン', '', 0, [10]],
+        ];
+    }
     /**
      * 在庫情報検索NGパターン
      * 
      * @return void
      */
     public function test_ng_not_found() {
-        $query = [SearchConstant::CARD_NAME => 'xxxx', SearchConstant::SET_NAME => '', 'limit' => 0];
+        $query = [SCon::CARD_NAME => 'xxxx', SCon::SET_NAME => '', 'limit' => 0];
         $response = $this->call('GET', '/api/stockpile', $query);
         $response->assertStatus(Response::HTTP_NOT_FOUND);
         $response->assertJson([
@@ -82,21 +92,5 @@ class StockpileSearchTest extends TestCase
             'detail' => '検索結果がありません。',
             "request" => "api/stockpile"
         ]);
-    }
-
-
-    public function searchprovider() {
-        return [
-            // '検索結果あり_検索条件なし' => ['', '', 0, [1,2,3,4,5]],
-            '検索結果あり_カード名入力' => ['ファイレクシアの', '', 0, [1,2]],
-            // '検索結果あり_セット名入力' => ['', '統一', 0, [4,5]],
-            // '検索結果あり_取得件数あり' => ['', '', 2, [1,2]],
-        ];
-    }
-
-    public function searchNgProvider() {
-        return [
-            '検索結果なし' =>['xxxx', '', 0, Response::HTTP_NO_CONTENT],
-        ];
     }
 }

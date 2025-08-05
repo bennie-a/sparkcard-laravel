@@ -10,6 +10,8 @@ use App\Files\Item\MercariCsvWriter;
 use App\Models\CardInfo;
 use Illuminate\Console\Command;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\StockpileHeader;
+use GuzzleHttp\Psr7\Header;
 
 /**
  * セット略称を条件に各カードのNotionカードを一括作成するコマンドクラス
@@ -20,7 +22,7 @@ class CreateNotionCard extends Command
      *
      * @var string
      */
-    protected $signature = 'createcard {set : セット略称}{color : W,R,B,U,G,A,M,Land,Lのいずれか}';
+    protected $signature = 'createcard {set : セット略称}{color? : W,R,B,U,G,A,M,Land,Lのいずれか(任意)}';
 
     /**
      * The console command description.
@@ -44,24 +46,49 @@ class CreateNotionCard extends Command
 
         $condition = [
             'card_info.name' => '',
-            'card_info.color_id' => $color,
             'e.attr' => $set,
             'card_info.isFoil' => 'false'];
+        if (!is_null($color)) {
+            $condition['card_info.color_id'] = $color;
+        }
         $result = CardInfo::fetchByCondition($condition);
-        $this->info(sprintf("カード情報を%s件を取得しました。", count($result)));
+        $total = count($result);
+        $this->info(sprintf("カード情報を%s件を取得しました。", $total));
         $this->info("******************************************");
+        $bar = $this->output->createProgressBar($total);
+        $bar->start();
         $details = [Con::QUANTITY => '0', Con::MARKET_PRICE => '0', 'condition' => 'NM', 'language' => 'JP'];
+
+        $createCount = 0;
+        $createList = [];
+        $skippedCount = 0;
+
         foreach($result as $r) {
             if (CardBoard::exists($r->id)) {
-                $this->info(sprintf("「%s」をスキップしました", $r->name));
+                $skippedCount++;
+                $bar->advance();
                 continue;
             }
-            $this->info(sprintf("「%s」作成", $r->name));
-            CardBoard::store($r, $details);
+            $details[StockpileHeader::CARD_ID] = $r->id;
+            CardBoard::store($details);
+            $promotype = !empty($r->promo_name) ? "≪{$r->promo_name}≫" : $r->promo_name;
+            $createList[] = $r->name.$promotype;
+            $createCount++;
+            $bar->advance();
         }
+        $bar->finish();
         $this->info("******************************************");
         $this->info("Notionカードの作成が完了しました。");
-        logger()->info('end createcard');
+        $this->info("✅ 作成件数: {$createCount}");
+        $this->info("⚠️ スキップ件数: {$skippedCount}");
+
+        if ($createCount > 0) {
+            $this->info("作成カード名一覧:");
+            foreach ($createList as $c) {
+                $this->line(" -  {$c}");
+            }
+        }
+
         return Command::SUCCESS;
     }
 }

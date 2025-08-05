@@ -6,6 +6,7 @@ use App\Enum\VendorTypeCat;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
+use App\Models\Promotype;
 use App\Models\Stockpile;
 use App\Models\VendorType;
 use App\Services\Constant\ArrivalConstant as ACon;
@@ -69,7 +70,7 @@ trait GetApiAssertions
     /**
      * 取引先カテゴリIDが買取の場合を検証する。
      *
-     * @return void
+     * @return callable
      */
     protected function verifyBuyVendor() {
         return function($vendor) {
@@ -83,7 +84,8 @@ trait GetApiAssertions
     /**
      * 取引先カテゴリが「買取」以外の場合を検証する。
      *
-     * @return void
+     * @return callable
+     * 
      */
     protected function verifyOtherVendor() {
         return function($vendor) {
@@ -128,5 +130,19 @@ trait GetApiAssertions
         };
     }
     
+    /**
+     * card要素のpromotypeについて検証する。。
+     *
+     * @param integer $promo_id プロモタイプID(期待値)
+     * @param [type] $json_card jsonのcard要素
+     * @return void
+     */
+    public function verifyPromotype(int $promo_id, $json_card) {
+        $this->assertArrayHasKey(Con::PROMOTYPE, $json_card, 'promotype要素が含まれない');
+        $actual = $json_card[Con::PROMOTYPE];
+        $this->assertEquals($promo_id, $actual[GCon::ID], 'promotypeの値が一致しない');
+        $db = Promotype::find($promo_id);
+        $this->assertEquals($db->name, $actual[GCon::NAME], 'promotypeの名前が一致しない');
+    }
 
 }

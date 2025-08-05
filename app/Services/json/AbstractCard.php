@@ -10,6 +10,7 @@ use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\interfaces\CardInfoInterface;
 use Closure;
+use GuzzleHttp\Exception\ServerException;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -61,7 +62,14 @@ abstract class AbstractCard implements CardInfoInterface {
      * @return string カード名(日本語名)
      */
     protected function getJpnameByAPI($enname) {
-        $jpname = WisdomGuild::getJpName($enname);
+        $jpname = '';
+        try {
+            $jpname = WisdomGuild::getJpName($enname);
+
+        } catch(ServerException $e) {
+            logger()->error("日本語名の取得に失敗しました。英語名:{$enname},
+                        番号:{$this->number()}, ステータスコード:{$e->getCode()}");
+        }
         return $jpname;
     }
 

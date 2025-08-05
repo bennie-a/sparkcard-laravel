@@ -15,4 +15,6 @@ class GlobalConstant {
     const CARD = 'card';
 
     const NAME = 'name';
+
+    const UPDATED_AT = 'updated_at';
 }

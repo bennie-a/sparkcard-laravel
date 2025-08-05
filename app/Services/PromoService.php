@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Exceptions\NoPromoTypeException;
+use App\Exceptions\api\NoPromoTypeException;
 use App\Models\Promotype;
 use App\Services\Constant\StockpileHeader;
 use app\Services\json\AbstractCard;
@@ -17,9 +17,9 @@ class PromoService {
 
         $promo = Promotype::findCardByAttr($promoValue);
         if (empty($promo)) {
-                throw new NoPromoTypeException($cardtype->getJson()['name'], $cardtype->number(), $promoValue);
+                throw new NoPromoTypeException($cardtype->number(), $promoValue);
         }
-        return $promo->name;
+        return $promo->id;
     }
 
     /**

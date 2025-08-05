@@ -9,6 +9,7 @@ use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Stock\ShippingRow;
 use Carbon\Carbon;
 
 /**
@@ -26,13 +27,42 @@ class Stockpile extends Model
         return $this->belongsTo('App\Models\CardInfo');
     }
 
-    public static function find(string $cardname, string $setcode, string $condition, string $language, bool $isFoil)  {
+    /**
+     * Undocumented function
+     *
+     * @param integer $card_id
+     * @param string $setcode
+     * @param string $condition
+     * @param string $language
+     * @param boolean $isFoil
+     * @return Stockpile|null
+     * @deprecated version 4.11.0
+     */
+    public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
-        $stock = $query->where(['c.name' => $cardname, 'c.isFoil' => $isFoil,
+        $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
                                              's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
         return $stock;
+    }
+
+    /**
+     * 出荷用CSVファイルから特定の在庫情報を取得する。
+     *
+     * @param ShippingRow $row
+     * @return Stockpile|null
+     */
+    public static function findByShiptCsv(ShippingRow $row): Stockpile|null {
+        $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
+        $query = self::select($columns)->from('stockpile as s');
+        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')
+                                        ->join('expansion as e', 'c.exp_id', '=', 'e.notion_id')
+                                        ->join('promotype as p', 'p.id', '=', 'c.promotype_id');
+        return $query->where(['c.name' => $row->card_name(), 'c.isFoil' => $row->isFoil(),
+                                             's.condition' => $row->condition(), 's.language' => $row->language(), 'e.attr' => $row->setcode(),
+                                             'p.name' => $row->promotype()])->first();
+
     }
 
     /**
@@ -62,10 +92,15 @@ class Stockpile extends Model
      * @return array
      */
     public static function fetch(array $details) {
-        $columns = ['s.id', 'e.name as setname', 'c.name as cardname', 's.language', 's.condition', 's.quantity',
-         'c.image_url', 'c.number', 'c.isFoil as isFoil', 's.updated_at as updated_at'];
+        $columns = ['s.id as stock_id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.name as name', 
+                                'c.color_id', 's.language', 's.condition', 's.quantity',
+                                'c.image_url', 'c.number', 'c.isFoil as isFoil', 'f.name as foiltype',
+                                'c.promotype_id', 'p.name as promo_name', 's.updated_at as updated_at'];
         $query = self::from('stockpile as s')->select($columns);
-        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
+        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')
+                                    ->join('expansion as e', 'c.exp_id', '=', 'e.notion_id')
+                                    ->join('foiltype as f', 'f.id', '=', 'c.foiltype_id')
+                                    ->join('promotype as p', 'p.id', '=', 'c.promotype_id');
         $cardname = MtgJsonUtil::hasKey(SearchConstant::CARD_NAME, $details) ? $details[SearchConstant::CARD_NAME] : '';
         if (!empty($cardname)) {
             $query = $query->where('c.name', 'like', '%'.$cardname.'%');

@@ -17,6 +17,7 @@ use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Response as HttpResponse;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\GlobalConstant;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -30,14 +31,14 @@ class ShippingLogService extends AbstractSmsService{
     protected function csvReader() {
         return new ShippingLogCsvReader();
     }
-
-        /**
+    
+    /**
      * @see AbstractSmsService::store
      * @param ShippingRow $row
      * @return void
-     */
+    */
     protected function store($row) {
-        $stock = Stockpile::find($row->card_name(), $row->setcode(), $row->condition(), $row->language(), $row->isFoil());
+        $stock = Stockpile::findByShiptCsv($row);
         if (empty($stock)) {
             $this->addError($row->number(), '在庫データがありません');
             return;
@@ -54,12 +55,6 @@ class ShippingLogService extends AbstractSmsService{
             $this->addError($row->number(), '在庫が0枚です。');
             return;
         }
-        $notionCard = CardBoard::findByOrderId($row->order_id());
-        if ($notionCard->isEmpty()) {
-            $this->addError($row->number(), '該当するNotionカードがありません');
-            return;
-        }
-
     
         $log = ['order_id' => $row->order_id(), Header::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
                         'stock_id' => $stock['id'], Header::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
@@ -73,6 +68,13 @@ class ShippingLogService extends AbstractSmsService{
         }
 
         $stock->update();
+
+        $notionCard = CardBoard::findByOrderId($row->order_id());
+        if ($notionCard->isEmpty()) {
+            $this->addError($row->number(), '該当するNotionカードがありません');
+            return;
+        }
+
         $this->updateNotion($notionCard[0], $row);
         $this->addSuccess($row->number());
     }
@@ -107,16 +109,18 @@ class ShippingLogService extends AbstractSmsService{
         $items = $list->map(function($slog) {
                 return ["id" => $slog["stock_id"],  Con::NAME => $slog["cardname"], Con::EXP => [Con::NAME => $slog[Header::SETNAME], Con::ATTR => $slog['exp_attr']],
                              Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
-                            Header::LANG => $slog[Header::LANG], 'image_url' => $slog["image_url"], 
+                            Header::LANG => $slog[Header::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL], 
                             Header::FOIL => ['is_foil' => $slog['isFoil'], Con::NAME => $slog['foilname']],
-                            'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price];
+                            'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
+                            Con::PROMOTYPE => [GlobalConstant::ID => $slog->promotype_id, GlobalConstant::NAME => $slog->promo_name
+                ]];
         });
         // $items = array_map(function($log) {
         // }, $list);   
         $slog = $list[0];
         $info = [Header::ORDER_ID => $slog->order_id, Header::BUYER => $slog[Header::BUYER],
                         Header::SHIPPING_DATE => $slog->shipping_date,  'zipcode' => '〒'.$slog->zip, 
-                        'address' => $slog->address, 'items' => $items->toArray()];
+                        'address' => $slog->address, GlobalConstant::CARD => $items->toArray()];
         return $info;
         // $log = ShippingLog::find($id);
     }

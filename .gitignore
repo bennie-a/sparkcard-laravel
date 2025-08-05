@@ -20,3 +20,4 @@ composer.lock
 *.testing
 storage/test/sms/shipt/tmp.csv
 tmp.csv
+.phpunit.cache/test-results

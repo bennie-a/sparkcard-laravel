@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\Halfsize;
+use App\Services\Constant\CardConstant;
 use App\Traits\UuidRules;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -34,9 +35,10 @@ class PostCardDBRequest extends FormRequest
             'multiverseId' => 'required_without_all:scryfallId,imageurl|integer',
             'scryfallId' => ['required_without_all:multiverseId,imageurl', self::uuidrules()],
             'number' => 'required',
-            'imageurl' => 'required_without_all:multiverseId,scryfallId',
+            CardConstant::IMAGE_URL => 'required_without_all:multiverseId,scryfallId',
             'isSkip' => 'nullable|boolean',
-            'foiltype' => 'required'
+            'foiltype' => 'required',
+            CardConstant::PROMO_ID => 'required|integer',
         ];
     }
 
@@ -44,12 +46,10 @@ class PostCardDBRequest extends FormRequest
     {
         return [
             'setCode'=>'セット略称',
-            'name'=>'カード名',
             'en_name'=>'カード名(英語)',
             'color'=>'色',
             'multiverseId' => 'Multiverse ID',
             'scryfallId' => 'Scryfall ID',
-            'number' => 'カード番号',
             'imageurl' => '画像URL',
             'foiltype' => 'カード仕様'
         ];

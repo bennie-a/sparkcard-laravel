@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\api\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockpileIndexRequest;
+use App\Http\Resources\Stockpile\StockpileResource;
 use App\Services\Constant\SearchConstant;
 use App\Services\Stock\StockpileService;
 use App\Traits\ImportCsv;
@@ -39,6 +40,6 @@ class StockpileController extends Controller
         }
         
         logger()->info('End Search Stockpile');
-        return response()->json($result, Response::HTTP_OK);
+        return response(StockpileResource::collection($result), Response::HTTP_OK);
     }
 }

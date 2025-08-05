@@ -2,6 +2,9 @@
 namespace App\Services;
 
 use App\Exceptions\api\NoContentException;
+use App\Exceptions\api\NoExpException;
+use App\Exceptions\api\NoFoilTypeException;
+use App\Exceptions\api\NoPromoTypeException;
 use App\Exceptions\NotFoundException;
 use App\Http\Response\CustomResponse;
 use App\Models\CardInfo;
@@ -10,7 +13,10 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Facades\ScryfallServ;
 use App\Facades\WisdomGuild;
 use App\Models\Foiltype;
+use App\Models\Promotype;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\CardConstant;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -50,26 +56,27 @@ class CardInfoDBService {
      */
     public function post($setCode, $details)
     {
-        $promotype = $details['promotype'] != '' ? "≪".$details['promotype']."≫": '';
-        $name = $details['name'].$promotype;
+        $name = $details[GlobalConstant::NAME];
         $foiltype = $details[Con::FOIL_TYPE];
         $exp = Expansion::where('attr', $setCode)->first();
         if (\is_null($exp)) {
-            logger()->error('not exist:'.$setCode);
-            throw new HttpResponseException(response($setCode.'がDBに登録されていません', CustomResponse::HTTP_NOT_FOUND_EXPANSION));
+            throw new NoExpException($setCode);
         }
+        $hasPromo = Promotype::isExist($exp->notion_id, $details[Con::PROMO_ID]);
         $number = $details[Con::NUMBER];
+        if ($hasPromo === false) {
+            throw new NoPromoTypeException($details[Con::PROMO_ID], $number);
+        }
         foreach($foiltype as $foil) {
             $isFoil = $foil != '通常版';
             logger()->info("import start.");
             // カード名、エキスパンション略称、カード番号で一意性チェック
             $foiltype = Foiltype::findByName($foil);
             if (empty($foiltype)) {
-                $msg = $name.'('.$number.')のFoilタイプが見つかりません';
-                throw new NotFoundException(CustomResponse::HTTP_NOT_FOUND_FOIL, $msg);
+                throw new NoFoilTypeException($name, $number);
             }
 
-            $info = CardInfo::findSpecificCard($exp->notion_id, $name, $foiltype->id);
+            $info = CardInfo::getCardinfo($exp->notion_id, $number, $foiltype->id);
             // 画像URL取得
             $url = ScryfallServ::getImageUrl($details);
             $log = ['カード名' => $name, 'number' => $details['number'], 'カード仕様' => $foil];
@@ -77,19 +84,22 @@ class CardInfoDBService {
                 logger()->info("insert card.",$log);
                 $record = [
                     'exp_id'=> $exp->notion_id,
-                    'name' => $name,
+                     GlobalConstant::NAME => $name,
                     'barcode' => $this->barcode(),
                     'en_name' => $details['en_name'],
                     'color_id' => $details['color'],
-                    'number' => $details['number'],
+                    Con::NUMBER => $details[Con::NUMBER],
                     'image_url' => $url,
                     'isFoil' => $isFoil,
-                    'foiltype_id' => $foiltype->id
+                    Con::FOIL_ID => $foiltype->id,
+                    Con::PROMO_ID => $details[Con::PROMO_ID]
                 ];
                 $record = CardInfo::create($record);
             } else if (!is_null($url) && boolval($details['isSkip']) !== true) {
                 logger()->info('update card:', $log);
                 $info->image_url = $url;
+                $info->name = $name;
+                $info->promotype_id = $details[Con::PROMO_ID];
                 $info->update();
             } else {
                 logger()->info('skip card:', ['カード名' => $name, '通常/Foil' => $isFoil]);

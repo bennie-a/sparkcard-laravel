@@ -80,7 +80,9 @@
                     </div>
                     <div class="eight wide field">
                         <label for="promotype">プロモタイプ</label>
-                        <select class="ui dropdown" v-model="promotype">
+                        <promo v-model:name="promotype_id" v-model:setcode="attr"></promo>
+
+                        <!-- <select class="ui dropdown" v-model="promotype">
                             <option value="">通常</option>
                             <option value="ボーダーレス">ボーダーレス</option>
                             <option value="ファーストプレイス・Foil">ファーストプレイス・Foil</option>
@@ -91,7 +93,7 @@
                             <option value="プレリリース">プレリリース</option>
                             <option value="プロモカード">プロモカード</option>
                             <option value="フルアート">フルアート</option>
-                        </select>
+                        </select> -->
                     </div>
                 </div>
                 <div class="two fields">
@@ -128,12 +130,14 @@ import MessageArea from "../component/MessageArea.vue";
 import ModalButton from "../component/ModalButton.vue";
 import axios from "axios";
 import Loading from "vue-loading-overlay";
+import PromoDropdown from "../component/PromoDropdown.vue";
 
 export default {
     components: {
         "message-area": MessageArea,
         ModalButton: ModalButton,
         loading: Loading,
+        promo:PromoDropdown
     },
     data() {
         return {
@@ -142,7 +146,7 @@ export default {
             name: "",
             en_name: "",
             isFoil: false,
-            promotype: "",
+            promotype_id: 1,
             number: "",
             multiverse_id: "",
             color: "",
@@ -173,7 +177,6 @@ export default {
                     this.en_name = data["en_name"];
                     this.multiverse_id = data["multiverse_id"];
                     this.color = data["color"];
-                    this.promotype = data["promotype"];
                     this.imageurl = data["imageurl"];
                     this.foiltype = data["foiltype"];
                 })
@@ -203,6 +206,7 @@ export default {
                 isSkip: false,
                 imageurl: this.imageurl,
                 foiltype: ["通常版", "Foil"],
+                promotype_id:this.promotype_id
             };
             const success = function (response, store) {
                 // this.back();

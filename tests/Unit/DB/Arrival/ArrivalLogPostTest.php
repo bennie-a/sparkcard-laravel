@@ -24,12 +24,17 @@ use function PHPUnit\Framework\assertNotNull;
 use App\Services\Constant\NotionConstant as JA;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\ArrivalConstant as ACon;
+use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\NotionStatus;
 use App\Services\Constant\SearchConstant as Scon;
+use FiveamCode\LaravelNotionApi\Notion;
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Database\Seeders\Arrival\PostStockpileSeeder;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
-use Tests\Database\Seeders\TestExpansionSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
+use Tests\Util\TestDateUtil;
 
 /**
  * 入荷情報登録に関するテスト
@@ -45,25 +50,43 @@ class ArrivalLogPostTest extends TestCase
         $this->seed(TruncateAllTables::class);
         $this->seed(DatabaseSeeder::class);
         $this->seed(TestCardInfoSeeder::class);
+        $this->seed(PostStockpileSeeder::class);
         $this->repo = new CardBoardRepository();
-        $page = $this->repo->findBySparkcardId(3);
+        
+        $deletePage = $this->repo->findBySparkcardId(13);
+        if (!empty($deletePage)) {
+            $this->toCompleteCard($deletePage);
+        }
+        $page = $this->repo->findBySparkcardId(5);
         $updatePage = new Page();
         $updatePage->setId($page->getId());
-        $updatePage->set(JA::QTY, Number::value(3));
+        $updatePage->set(JA::QTY, Number::value(1));
         CardBoard::updatePage($updatePage);
 
-        $storePage = $this->repo->findBySparkcardId(2);
+        $storePage = $this->repo->findBySparkcardId(8);
         if (!empty($storePage)) {
-            $storePage->setSelect(JA::STATUS, '取引完了');
-            CardBoard::updatePage($storePage);
+            $this->toCompleteCard($storePage);
         }
+    }
+
+    /**
+     * Notionカードのステータスを「取引完了」にする。
+     *
+     * @param Page $page
+     * @return void
+     */
+    private function toCompleteCard(Page $page) {
+        $newPage = new Page();
+        $newPage->setId($page->getId());
+        $newPage->setSelect(JA::STATUS, NotionStatus::Complete->value);
+        CardBoard::updatePage($newPage);
     }
     /**
      * A basic feature test example.
      *
-     * @dataProvider okprovider
      * @return void
      */
+    #[DataProvider('okprovider')]
     public function test_ok(string $attr, string $name, bool $isFoil,  string $condition, string $arrivalDate, int $cost, int $market_price)
     {
         $language = 'JP';
@@ -121,22 +144,76 @@ class ArrivalLogPostTest extends TestCase
      *
      * @return void
      */
-    public function okprovider() {
+    public static function okprovider() {
         return [
-            // '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'NM', '2023-07-24', 23, 400],
-            '在庫情報なし_ミニレター' => ['BRO', 'ドラゴンの運命', false, 'NM', '2023-06-10', 23, 100],
-            '在庫情報なし_クリックポスト' => ['NEO', '告別≪ショーケース≫', true, 'NM', '2023-06-10', 23, 1500]
+            '在庫情報あり' => ['BRO', 'ファイレクシアのドラゴン・エンジン', true, 'NM', '2023-07-24', 23, 400],
+            // '在庫情報なし_ミニレター' => ['BRO', 'ドラゴンの運命', false, 'NM', '2023-06-10', 23, 100],
+            // '在庫情報なし_クリックポスト' => ['NEO', '告別≪ショーケース≫', true, 'NM', '2023-06-10', 23, 1500]
         ];
     }
 
     /**
+     * 既に在庫あり/なしでの登録テスト
+     *
+     * @return void
+     */
+    #[DataProvider('stockpileProvider')]
+    public function test_ok_stockpile(int $cardId, int $beforeQty = 0) {
+        $params = $this->createParams($cardId, TestDateUtil::formatToday());
+        $log = $this->execute($params);
+
+        $stock_id  = $log->stock_id;
+        $this->assertDatabaseHas('stockpile', [
+            GlobalConstant::ID => $stock_id,
+            Header::CARD_ID => $params[Header::CARD_ID],
+            Header::LANGUAGE => $params[Header::LANGUAGE],
+            Header::CONDITION => $params[Header::CONDITION],
+            Header::QUANTITY => $params[Header::QUANTITY] + $beforeQty,
+        ]);
+    }
+
+    public static function stockpileProvider() {
+        return [
+            '在庫なし_stockpileテーブルにレコードなし' =>[13],
+            '在庫なし_stockpileテーブルにレコードあり' =>[8],
+            '在庫あり' =>[5, 1],
+        ];
+    }
+
+    /**
+     * Notionカードのタイトルに関するテスト
+     *
+     * @return void
+     */
+    #[DataProvider('notionTitleProvider')]
+    public function test_ok_notion_title(int $cardId, String $expectedTitle) {
+        $params = $this->createParams($cardId, TestDateUtil::formatToday());
+        $this->execute($params);
+
+        $repo = new CardBoardRepository();
+        $notionCard = $repo->findBySparkcardId($cardId);
+        $this->assertNotNull($notionCard, 'Notionカードの取得');
+        $this->assertEquals($expectedTitle, $notionCard->getTitle(), 'Notionカードのタイトル');
+    }
+
+    public static function notionTitleProvider() {
+        return [
+            '通常版' => [10, 'ドロスの魔神'],
+            '特別版' => [8, '機械の母、エリシュ・ノーン≪ボーダーレス「胆液」ショーケース≫'],
+        ];
+    }
+    //Notion
+        // 価格が1500未満
+        // 価格が1500以上
+
+    /**
      * 入荷先に関するテスト
      *
-     * @dataProvider vendorprovider
      * @param integer $vender_type_id
      * @param string $vendor
      * @return void
      */
+    #[DataProvider('vendorprovider')]
     public function test_vendor(int $vendor_type_id, string $vendor) {
         $info = CardInfo::findSingleCard('BRO', 'ドラゴンの運命', false);
 
@@ -152,7 +229,7 @@ class ArrivalLogPostTest extends TestCase
         Mockery::close();
     }
 
-    public function vendorprovider() {
+    public static function vendorprovider() {
         return [
             'オリジナルパック' =>[1, ''],
             '私物' =>[2, ''],
@@ -164,19 +241,27 @@ class ArrivalLogPostTest extends TestCase
 
     private function execute(array $params) {
         $response = $this->post('/api/arrival', $params);
-        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertCreated();
         $json = $response->json();
-        $log = ArrivalLog::find($json['arrival_id']);
-        assertNotNull($log, '入荷ログ');
+
+        $id = $json['arrival_id'];
+        $this->assertDatabaseHas('arrival_log', [
+            GlobalConstant::ID => $id,
+            ACon::ARRIVAL_DATE => $params[ACon::ARRIVAL_DATE],
+            Header::COST => $params[Header::COST],
+            Header::QUANTITY => $params[Header::QUANTITY],
+        ]);
+        $log = ArrivalLog::find($id);
+        // assertNotNull($log, '入荷ログ');
         return $log;
     }
 
     /**
      * NGケース(HTTPステータスコードとメッセージを確認する)
-     * @dataProvider ngprovider
      * @param integer $cardId
      * @return void
      */
+    #[DataProvider('ngprovider')]
     public function test_ng(int $cardId) {
         $response = $this->post('/api/arrival', ['card_id' => $cardId, 'language' => 'JP', 'condition' => 'NM-',
                                                                                  'arrival_date' => '2023/7/25', 'cost' => 10, 'market_price' => 400,
@@ -185,16 +270,28 @@ class ArrivalLogPostTest extends TestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function ngprovider() {
+    public static function ngprovider() {
         return [
             'カード情報IDが存在しない' => [9999],
         ];
     }
 
+    private function createParams(int $cardId, string $arrivalDate): array{
+        $lang = 'JP';
+        $quantity = fake()->numberBetween(1, 5);
+        $cost  = fake()->numberBetween(10, 200);
+        $market_price = fake()->numberBetween(100, 5000);
+        $condition = 'NM';
+
+        $params = [Header::CARD_ID => $cardId, Header::LANGUAGE => $lang, Header::CONDITION => $condition,
+                              ACon::ARRIVAL_DATE => $arrivalDate, Header::COST => $cost, Header::MARKET_PRICE => $market_price,
+                            Header::QUANTITY => $quantity, SCon::VENDOR_TYPE_ID => 1];
+        return $params;
+
+    }
+
     public function tearDown(): void
     {
-        // Artisan::call('migrate:refresh');
-        // $page = $this->repo->findBySparkcardId(3);
         parent::tearDown();
     }
 }
