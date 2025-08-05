@@ -9,6 +9,7 @@ use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Stock\ShippingRow;
 use Carbon\Carbon;
 
 /**
@@ -26,6 +27,17 @@ class Stockpile extends Model
         return $this->belongsTo('App\Models\CardInfo');
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param integer $card_id
+     * @param string $setcode
+     * @param string $condition
+     * @param string $language
+     * @param boolean $isFoil
+     * @return Stockpile|null
+     * @deprecated version 4.11.0
+     */
     public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
@@ -33,6 +45,24 @@ class Stockpile extends Model
         $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
                                              's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
         return $stock;
+    }
+
+    /**
+     * 出荷用CSVファイルから特定の在庫情報を取得する。
+     *
+     * @param ShippingRow $row
+     * @return Stockpile|null
+     */
+    public static function findByShiptCsv(ShippingRow $row): Stockpile|null {
+        $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
+        $query = self::select($columns)->from('stockpile as s');
+        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')
+                                        ->join('expansion as e', 'c.exp_id', '=', 'e.notion_id')
+                                        ->join('promotype as p', 'p.id', '=', 'c.promotype_id');
+        return $query->where(['c.name' => $row->card_name(), 'c.isFoil' => $row->isFoil(),
+                                             's.condition' => $row->condition(), 's.language' => $row->language(), 'e.attr' => $row->setcode(),
+                                             'p.name' => $row->promotype()])->first();
+
     }
 
     /**

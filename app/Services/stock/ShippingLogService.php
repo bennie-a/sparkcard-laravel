@@ -38,13 +38,7 @@ class ShippingLogService extends AbstractSmsService{
      * @return void
     */
     protected function store($row) {
-        $notionCard = CardBoard::findByOrderId($row->order_id());
-        if ($notionCard->isEmpty()) {
-            $this->addError($row->number(), '該当するNotionカードがありません');
-            return;
-        }
-        $card_id= $notionCard[0]->getProperty('sparkcard_id')->getContent();
-        $stock = Stockpile::find($card_id, $row->setcode(), $row->condition(), $row->language(), $row->isFoil());
+        $stock = Stockpile::findByShiptCsv($row);
         if (empty($stock)) {
             $this->addError($row->number(), '在庫データがありません');
             return;
@@ -61,7 +55,6 @@ class ShippingLogService extends AbstractSmsService{
             $this->addError($row->number(), '在庫が0枚です。');
             return;
         }
-
     
         $log = ['order_id' => $row->order_id(), Header::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
                         'stock_id' => $stock['id'], Header::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
@@ -75,6 +68,13 @@ class ShippingLogService extends AbstractSmsService{
         }
 
         $stock->update();
+
+        $notionCard = CardBoard::findByOrderId($row->order_id());
+        if ($notionCard->isEmpty()) {
+            $this->addError($row->number(), '該当するNotionカードがありません');
+            return;
+        }
+
         $this->updateNotion($notionCard[0], $row);
         $this->addSuccess($row->number());
     }

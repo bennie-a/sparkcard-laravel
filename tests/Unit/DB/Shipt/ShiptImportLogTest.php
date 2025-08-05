@@ -7,6 +7,8 @@ use App\Files\Stock\ShippingLogCsvReader;
 use App\Models\Stockpile;
 use App\Services\Constant\StockpileHeader as Header;
 use Illuminate\Http\Response;
+use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
@@ -14,9 +16,9 @@ use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
 /**
- * 出荷ログに関するテスト
+ * 出荷ログ登録に関するテスト
  */
-class ShippingLogTest extends TestCase
+class ShiptImportLogTest extends TestCase
 {
     public function setup():void {
         parent::setup();
@@ -30,18 +32,20 @@ class ShippingLogTest extends TestCase
      *@dataProvider okprovider
      * @return void
      */
+    #[DataProvider('okprovider')]
     public function test_ok(String $filename)
-    {        $json = ['total_rows' => 2, 'successful_rows' => 2,
-                                'failed_rows' => 0, 'failed_details' => [],
-                                'skip_rows' => 0, "skip_details" => []];
+    {      
+        $json = ['total_rows' => 2, 'successful_rows' => 2,
+                        'failed_rows' => 0, 'failed_details' => [],
+                        'skip_rows' => 0, "skip_details" => []];
         $this->execute($filename, Response::HTTP_CREATED, $json);
     }
     
-    public function okprovider() {
+    public static function okprovider() {
         return [
             '全件成功' => ['all_success.csv'],
-            // 'ファイルの文字コードがShift-JIS' => ['shift-jis.csv'],
-            // 'ファイルの文字コードがUTF-8' => ['utf-8.csv']
+            'ファイルの文字コードがShift-JIS' => ['shift-jis.csv'],
+            'ファイルの文字コードがUTF-8' => ['utf-8.csv']
         ];
     }
 
@@ -79,12 +83,13 @@ class ShippingLogTest extends TestCase
      *@dataProvider skipprovider
      * @return void
      */
+    #[DataProvider('skipprovider')]
     public function test_skipcase(string $filename, array $json) 
     {
         $this->execute($filename, 201, $json);
     }
 
-    public function skipprovider() {
+    public static function skipprovider() {
         return [
             '重複した出荷登録(在庫あり)' => ["duplicate.csv",
             ['total_rows' => 2, 'successful_rows' => 1,
@@ -103,12 +108,13 @@ class ShippingLogTest extends TestCase
      *@dataProvider fileprovider
      * @return void
      */
+    #[DataProvider('fileprovider')]
     public function test_fileerror($filename, int $statusCode, string $status, string $error) {
         $json = ["status" => $status, "error" => $error];
         $this->execute($filename, $statusCode, $json);
     }
 
-    public function fileprovider() {
+    public static function fileprovider() {
         return [
             'CSVヘッダー不足' => ['ng-noheader.csv', Response::HTTP_BAD_REQUEST,
                                                         'CSV Validation Error', 'CSVファイルのヘッダーが足りません'],
@@ -126,6 +132,7 @@ class ShippingLogTest extends TestCase
      * @param array $json
      * @dataProvider ngprovider
      */
+    #[DataProvider('ngprovider')]
     public function test_ng(string $item_name, string $msg) {
         $reader = new ShippingLogCsvReader();
         $dir = config('csv.export');
@@ -155,15 +162,16 @@ class ShippingLogTest extends TestCase
         $this->execute($newfile, 445, $json);
     }
 
-    public function ngprovider() {
+    public static function ngprovider() {
         return [
             '在庫が0枚' => ['【BRO】ドラゴンの運命[JP][赤]',  "在庫が0枚です。"],
             '在庫情報が存在しない' => ['【XLN】在庫情報なし[JP][白]', "在庫データがありません"],
             '出荷後の在庫が0枚未満' => ['【XLN】軍団の上陸[JP][白]', "在庫が足りません。"],
         ];
     }
-
+    
     protected function tearDown():void {
+        parent::tearDown();
         $tmpcsv  ="{config('csv.export')}tmp.csv";
         $result = false;
         if (!file_exists($tmpcsv)) {
@@ -177,5 +185,6 @@ class ShippingLogTest extends TestCase
                 logger()->info('tmp.csvを削除できませんでした');
             }
         }
+        Mockery::close();
     }
 }
