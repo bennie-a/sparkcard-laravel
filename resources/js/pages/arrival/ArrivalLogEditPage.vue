@@ -79,19 +79,15 @@
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
             <h2 class="ui medium header" v-if="detail.card.foil">
-                {{ detail.card.name }}<foiltag :isFoil="detail.card.foil.is_foil" :name="detail.card.foil.name"/>
+                {{ detail.card.name }}&#91;{{ detail.lang }}&#93;<foiltag :isFoil="detail.card.foil.is_foil" :name="detail.card.foil.name"/>
                 <div class="sub header"  v-if="detail.card.exp">
                         {{detail.card.exp.name}}&#91;{{ detail.card.exp.attr }}&#93;&#35;{{ detail.card.number }}
                 </div>
             </h2>
-            <div class="two fields">
-                <div class="two wide field">
-                    <label>言語</label>
-                    <span> {{ detail.card.lang }}</span>
-                </div>
+            <div class="inline fields">
+                <label>状態&#0058;</label>
                 <div class="field">
-                    <label>状態</label>
-                        <condition :name="detail.card.condition" v-if="detail.card.condition"></condition>
+                        <condition :name="detail.condition" v-if="detail.condition"></condition>
                 </div>
             </div>
             <div class="ui divider"></div>
