@@ -30,7 +30,6 @@
         </div>
     </article>
     <article class="mt-1" v-if="getCards.length != 0">
-        {{ checkedCard }}
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
             <div class="field">
                 <table class="ui table striped six column">
@@ -47,7 +46,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(card, index) in getCards" :key="index">
-                            <td class="one wide"><input type="checkbox" :value="index" v-model="checkedCard" checked></td>
+                            <td class="one wide"><input type="checkbox" :value="card.number" v-model="checkedCard" checked></td>
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
@@ -130,7 +129,7 @@ export default {
             color: "",
             promoItems:[],
             name:ref("通常版"),
-            checkedCard:ref([])
+            checkedCard:[]
         };
     },
     computed: {
@@ -206,7 +205,7 @@ export default {
                         let item = response.data;
                         this.setCode = item.setCode;
                         this.$store.dispatch("setCard", item.cards);
-                        this.checkedCard.push(...Array.from(Array(item.cards.length).keys()));
+                        this.checkedCard = item.cards.map(c => c.number);
                     }
                 })
                 .catch((e) => {
@@ -235,10 +234,22 @@ export default {
         },
         store: async function () {
             this.isLoading = true;
+            this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearMessage");
+
+            if (this.checkedCard.length == 0) {
+                this.isLoading = false;
+                this.$store.dispatch("message/error", "登録するカードを選択してください。");
+                return;
+            }
+
             const task = new AxiosTask(this.$store);
-            const list = this.checkedCard.map(index => this.$store.getters.card[index]).filter(Boolean);
+            const list = this.$store.getters.card;
             await Promise.all(
                 list.map(async (card) => {
+                    if (this.checkedCard.includes(card.number) == false) {
+                        return;
+                    }
                     if (card.name != "") {
                         const success = function (response, store) {};
                         card["isSkip"] = this.isSkip;
@@ -251,7 +262,7 @@ export default {
             this.isLoading = false;
             this.$store.dispatch(
                 "setSuccessMessage",
-                `${list.length}件登録が完了しました。`
+                `${this.checkedCard.length}件登録が完了しました。`
             );
 
             console.log("store finished.");
