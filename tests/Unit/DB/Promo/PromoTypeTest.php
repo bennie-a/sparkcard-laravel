@@ -7,6 +7,9 @@ use App\Services\Constant\StockpileHeader;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestExpansionSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use Tests\Trait\GetApiAssertions;
 
@@ -20,22 +23,29 @@ class PromoTypeTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed('TruncateAllTables');
-        $this->seed('TestExpansionSeeder');
-        $this->seed('DatabaseSeeder');
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
     }
 
     /**
      * A basic feature test example.
      */
-    public function test_ok(): void
+    public function test_プロモタイプあり(): void
     {
         $response = $this->assert_OK([StockpileHeader::SETCODE => 'MH3']);
+        $response->assertJsonCount(14);
     }
 
-    public function test_NoResult() {
+    public function test_プロモタイプなし(): void
+    {
+        $response = $this->assert_OK([StockpileHeader::SETCODE => 'MH1']);
+        $response->assertJsonCount(12);
+    }
+
+
+    public function test_エキスパンション未登録() {
         $this->assert_NG([StockpileHeader::SETCODE => 'XXX'],
-                     Response::HTTP_NOT_FOUND, '検索結果がありません。');
+                     Response::HTTP_NOT_FOUND, '指定したエキスパンションが見つかりません: XXX');
     }
 
     /**

@@ -3,7 +3,6 @@ import Index from "./pages/Index.vue";
 import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/config/ExpansionPage.vue";
-import CardInfoCsvPage from "./pages/config/CardInfoCsvPage.vue";
 import CardinfoPage from "./pages/config/CardInfoPage.vue";
 import PostExPage from "./pages/config/PostExPage.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
@@ -16,6 +15,7 @@ import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { piniaMsgStore } from "@/stores/global/PiniaMsg";
+import CardInfoBulkPage from "./pages/config/CardInfoBulkPage.vue";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
 const arrivalDssLinks = {url:"/arrival/date/", title:""};
@@ -114,7 +114,7 @@ const routes = [
     {
         path: "/config/cardinfo/csv/:attr",
         name:"CardInfoCsvPage",
-        component: CardInfoCsvPage,
+        component: CardInfoBulkPage,
         meta: {
             title: "カード情報一括登録",
             description:

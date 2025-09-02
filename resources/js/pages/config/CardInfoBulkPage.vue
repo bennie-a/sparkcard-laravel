@@ -35,6 +35,7 @@
                 <table class="ui table striped six column">
                     <thead>
                         <tr>
+                            <th class="one wide"></th>
                             <th class="one wide">No.</th>
                             <th class="four wide left aligned">カード名</th>
                             <th class="three wide">特別版</th>
@@ -44,7 +45,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="card in getCards" :key="card.id">
+                        <tr v-for="(card, index) in getCards" :key="index">
+                            <td class="one wide"><input type="checkbox" :value="card.number" v-model="checkedCard" checked></td>
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
@@ -60,7 +62,7 @@
                                 <label
                                     class="ui large label"
                                     :class="colorlabel(card.color)"
-                                    >{{ colortext(card.color) }}</label
+                                    >{{ card.color }}</label
                                 >
                             </td>
                         </tr>
@@ -126,7 +128,8 @@ export default {
             isDraftOnly: false,
             color: "",
             promoItems:[],
-            name:ref("通常版")
+            name:ref("通常版"),
+            checkedCard:[]
         };
     },
     computed: {
@@ -163,7 +166,7 @@ export default {
                     R: "red",
                     G: "green",
                     M: "orange",
-                    L: "grey",
+                    L: "purple",
                     A: "grey",
                     Land: "brown",
                 };
@@ -202,6 +205,7 @@ export default {
                         let item = response.data;
                         this.setCode = item.setCode;
                         this.$store.dispatch("setCard", item.cards);
+                        this.checkedCard = item.cards.map(c => c.number);
                     }
                 })
                 .catch((e) => {
@@ -230,10 +234,22 @@ export default {
         },
         store: async function () {
             this.isLoading = true;
+            this.$store.dispatch("message/clear");
+            this.$store.dispatch("clearMessage");
+
+            if (this.checkedCard.length == 0) {
+                this.isLoading = false;
+                this.$store.dispatch("message/error", "登録するカードを選択してください。");
+                return;
+            }
+
             const task = new AxiosTask(this.$store);
             const list = this.$store.getters.card;
             await Promise.all(
                 list.map(async (card) => {
+                    if (this.checkedCard.includes(card.number) == false) {
+                        return;
+                    }
                     if (card.name != "") {
                         const success = function (response, store) {};
                         card["isSkip"] = this.isSkip;
@@ -246,7 +262,7 @@ export default {
             this.isLoading = false;
             this.$store.dispatch(
                 "setSuccessMessage",
-                `${list.length}件登録が完了しました。`
+                `${this.checkedCard.length}件登録が完了しました。`
             );
 
             console.log("store finished.");
