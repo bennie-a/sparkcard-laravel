@@ -45,12 +45,12 @@ class Promotype extends Model
      * @return Collection
      */
     public static function findBySetCode(string $setcode) {
-        $condition = ['COM', $setcode];
         $columns = ['p.id', 'p.attr', 'p.name', 'e.attr as setcode'];
         $query = DB::table('promotype as p')->select($columns);
         $result = $query->join('expansion as e', function($join) {
                                     $join->on('p.exp_id', 'e.notion_id');
-                                })->whereIn('e.attr', $condition)
+                                })->where('e.attr', 'COM')
+                                  ->orWhere('e.attr', $setcode)
                                 ->orderBy('e.release_date')->orderBy('p.id')->get();
         return $result;
     }

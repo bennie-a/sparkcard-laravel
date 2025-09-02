@@ -1,7 +1,9 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\api\NoExpException;
 use App\Exceptions\api\NoPromoTypeException;
+use App\Models\Expansion;
 use App\Models\Promotype;
 use App\Services\Constant\StockpileHeader;
 use app\Services\json\AbstractCard;
@@ -30,13 +32,11 @@ class PromoService {
      */
     public function fetch(array $condition) {
         $setcode = $condition[StockpileHeader::SETCODE];
-        $result = Promotype::findBySetCode($setcode);
-        $filtered = $result->filter(function($r) use ($setcode) {
-            return $r->setcode == $setcode;
-        });
-        if ($filtered->isEmpty()) {
-            return $filtered;
+        $isExist = Expansion::isExistByAttr($setcode);
+        if (!$isExist) {
+            throw new NoExpException($setcode);
         }
+        $result = Promotype::findBySetCode($setcode);
         return $result;
     }
 }

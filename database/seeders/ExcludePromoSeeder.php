@@ -25,5 +25,8 @@ class ExcludePromoSeeder extends Seeder
         ExcludePromo::create(['attr' => 'fracturefoil', 'name' => 'フラクチャー・Foil']);
         ExcludePromo::create(['attr' => 'textured', 'name' => 'テクスチャー・Foil']);
         ExcludePromo::create(['attr' => 'galaxyfoil', 'name' => '星景ポスター']);
+        ExcludePromo::create(['attr' => 'startercollection', 'name' => 'スターターコレクション']);
+        ExcludePromo::create(['attr' => 'beginnerbox', 'name' => 'ビギナーボックス']);
+        ExcludePromo::create(['attr' => 'manafoil'  , 'name' => 'マナ・フォイル']);
     }
 }
