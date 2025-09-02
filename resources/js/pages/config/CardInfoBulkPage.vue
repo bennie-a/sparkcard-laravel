@@ -35,6 +35,7 @@
                 <table class="ui table striped six column">
                     <thead>
                         <tr>
+                            <th></th>
                             <th class="one wide">No.</th>
                             <th class="four wide left aligned">カード名</th>
                             <th class="three wide">特別版</th>
@@ -45,6 +46,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="card in getCards" :key="card.id">
+                            <td><input type="checkbox"></td>
                             <td class="one wide">{{ card.number }}</td>
                             <td>
                                 <input type="text" v-model="card.name" />
