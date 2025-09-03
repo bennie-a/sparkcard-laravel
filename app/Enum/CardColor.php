@@ -157,7 +157,7 @@ enum CardColor:string {
 
     public static function findColor(array $color, string $cardtype) {
         // アーティファクト
-        if (strpos($cardtype, 'Artifact') !== false) {
+        if (strpos($cardtype, 'Artifact') !== false && empty($color)) {
             return CardColor::ARTIFACT;
         }
         // 土地
