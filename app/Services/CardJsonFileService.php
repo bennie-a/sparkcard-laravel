@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Exceptions\api\BadRequestException;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
+use App\Models\Promotype;
 use App\Services\Constant\CardConstant as Column;
 use app\Services\json\AbstractCard;
 use BadExpException;
@@ -64,6 +65,10 @@ class CardJsonFileService {
      */
     private function isExclude(AbstractCard $cardtype, string $promo, bool $isDraft, string $colorFilter) {
         $isExcludeColor = !empty($colorFilter) && $cardtype->color() != $colorFilter;
-        return $isExcludeColor || $isDraft && !empty($promo);
+        if (!$isDraft) {
+            return $isExcludeColor;
+        }
+        $isSpecial = $promo != Promotype::findCardByAttr('draft')->id;
+        return $isExcludeColor || $isSpecial;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Upload;
 
 use App\Enum\CardColor;
 use Illuminate\Http\Response;
@@ -13,6 +13,7 @@ use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNotSame;
 use App\Services\Constant\CardConstant as Con;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * カード情報ファイルアップロードのテスト
@@ -29,8 +30,8 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
     /**
      * 土地以外のカードについて検証する。
      *
-     * @dataProvider dataprovider
      */
+    #[DataProvider('dataprovider')]
     public function test_通常版(string $setcode, array $expected)
     {
         $result = $this->ok($setcode);
@@ -53,7 +54,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      *
      * @return array 各テストの入力値
      */
-    public function dataprovider() {
+    public static function dataprovider() {
         return [
             '日本語表記あり' =>['WAR', [Con::NUMBER => '272', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027']],
             '日本語表記あり_multiverseIdなし' => ['MIR', [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84']],
@@ -64,8 +65,9 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
 
     /**
      * 土地カードのテスト
-     * @dataProvider landProvider
+     * 
      */
+    #[DataProvider('landProvider')]
     public function test_土地カード(array $expected) {
         $setCode = 'MH1';
         $result = $this->ok($setCode);
@@ -80,7 +82,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      *
      * @return void
      */
-    public function landProvider() {
+    public static function landProvider() {
         return [
             '基本土地' => [['name' => '島(263)', Con::MULTIVERSEID => 604650]],
             '特殊土地' => [ ['name' => 'やせた原野', Con::MULTIVERSEID => 465455]],
@@ -98,15 +100,19 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         return $actualcard;
     }
 
+    public function test_ok_promotype(string $number, string $promo_attr) {
+        $this->markTestSkipped("テスト対象外のためスキップ");        
+    }
+    
     public static function promoProvider() {
         return [];
     }
 
     /**
      * Foilタイプの特定テスト
-     * @dataProvider foiltypeprovider
      * @return void
      */
+    #[DataProvider('foiltypeprovider')]
     public function test_finishes(string $setcode, string $number, array $foiltype) {
 
         $result = $this->ok($setcode);
@@ -116,7 +122,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         $this->assertSame($foiltype, $actualFoil, '仕様の特定');
     }
 
-    public function foiltypeprovider() {
+    public static function foiltypeprovider() {
         return [
             '通常版&Foil' => ['MUL', "1", ["通常版", "Foil"]],
             'ハロー・Foil' => ['MUL', "131", ["ハロー・Foil"]],
@@ -128,57 +134,29 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
 
     /**
      * 検索条件に関するテストケース
-     * @dataProvider isDraftProvider
      * @return void
      */
-    public function test_isDraft(string $setcode, bool $isDraft, callable $method) {
-        $result = $this->ok($setcode, $isDraft);
+    public function test_通常版フィルタがtrue() {
+        $result = $this->ok('WAR', true);
         assertNotSame(0, count($result), '結果件数');
         foreach($result as $r) {
-            $method($r);
+            $this->assertEquals(1, $r[Con::PROMO_ID], 'プロモタイプが通常版以外');
+        }
+    }
+
+    public function test_通常版フィルタがfalse() {
+        $result = $this->ok('WAR', false);
+        assertNotSame(0, count($result), '結果件数');
+        foreach($result as $r) {
+            $this->assertContains($r[Con::PROMO_ID], [1, 11]);
         }
     }
 
     /**
-     * 絞り込みのテストケース
-     *
-     * @return void
-     */
-    public function isDraftProvider() {
-        return [
-            '通常版フィルタがtrue' => ['WAR', true, $this->isOnlyDraft()],
-            '通常版フィルタがfalse' => ['WAR', false, $this->hasPromotype()],
-        ];
-    }
-
-    /**
-     * カード情報が通常版かどうか検証する。
-     *
-     * @return boolean
-     */
-    private function isOnlyDraft() {
-        return function($r) {
-            $this->assertEmpty($r[Con::PROMOTYPE]);
-        };
-    }
-
-    /**
-     * カード情報に特別版が含まれるか検証する。
-     *
-     * @return boolean
-     */
-    private function hasPromotype() {
-        return function($r) {
-            $this->assertContains($r[Con::PROMOTYPE], ['', '絵違い']);
-        };
-    }
-
-
-    /**
      * 色の判別を検証する
-     * @dataProvider colorprovider
      * @return void
      */
+    #[DataProvider('colorprovider')]
     public function test_color(CardColor $color) {
         $result = $this->ok('WAR', false, $color->value);
         foreach($result as $r) {
@@ -192,7 +170,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      *
      * @return void
      */
-    public function colorprovider() {
+    public static function colorprovider() {
         return [
             '色フィルター_白' => [CardColor::WHITE],
             '色フィルター_黒' => [CardColor::BLACK],
@@ -211,8 +189,9 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      * @param string $filename
      * @param integer $exStatusCode
      * @param string $msgCode
-     * @dataProvider errorprovider
+     * 
      */
+    #[DataProvider('errorprovider')]
     public function test_error(string $setCode, int $exStatusCode, string $msgCode) {
         $response = $this->ng($setCode, 'not_found_ex.json', $exStatusCode);
 
@@ -220,7 +199,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         $this->assertEquals($expectedMsg, $response['detail'], 'メッセージ');
     }
     
-    public function errorprovider() {
+    public static function errorprovider() {
         return [
             'エキスパンションが存在しない' => ['NFD', Response::HTTP_BAD_REQUEST,  'messages.setcode-notFound'],
             'JSONファイルとエキスパンションと入力したエキスパンションが異なる' =>
@@ -255,6 +234,10 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             return $json;
         }
         
+        public function test_ok_excluded(string $number) {
+            $this->markTestSkipped("テスト対象外のためスキップ");
+        }
+
         public static function excludeprovider() {
             return [
                 // 'イベント用プロモカード' => ['lci.json', 'Deep-Cavern Bat'],

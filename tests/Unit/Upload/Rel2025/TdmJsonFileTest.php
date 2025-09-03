@@ -7,7 +7,7 @@ use Tests\Unit\Upload\AbstractCardJsonFileTest;
  */
 class TdmJsonFileTest extends AbstractCardJsonFileTest {
     
-    public function promoProvider() {
+    public static function promoProvider() {
         return [
             'リバーシブル・ボーダーレス' => ['377', 'reversible_card'],
             '「氏族」ボーダーレス' =>['330', 'clan'],
@@ -20,7 +20,7 @@ class TdmJsonFileTest extends AbstractCardJsonFileTest {
         ];
     }
 
-    public function excludeprovider() {
+    public static function excludeprovider() {
         return [
             '「ドラゴンの眼」フルアート版土地(緑)' => ['291'],
             '「ドラゴンの眼」フルアート版土地(緑)' => ['291'],
@@ -29,6 +29,7 @@ class TdmJsonFileTest extends AbstractCardJsonFileTest {
             'シリアル番号付き旧枠版' => ['419']
         ];
     }
+    
     protected function getSetCode():string
     {
         return 'TDM';
