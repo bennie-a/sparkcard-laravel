@@ -6,6 +6,7 @@ use App\Services\Constant\StockpileHeader;
 use Tests\TestCase;
 use App\Services\Constant\CardConstant as Column;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestExpansionSeeder;
@@ -26,6 +27,12 @@ abstract class AbstractCardJsonFileTest extends TestCase{
      }
 
     protected function ok(string $setcode, bool $isDraft = false, ?string $color = '') {
+        $response = $this->ok_response($setcode, $isDraft, $color);
+        $result = $response->json('cards');
+        return $result;
+    }
+
+    protected function ok_response(string $setcode, bool $isDraft = false, ?string $color = '') {
         $filename = strtolower($setcode).'.json';
         $json = $this->json_decode($filename);
         $cards = $json['data']['cards'];
@@ -37,10 +44,11 @@ abstract class AbstractCardJsonFileTest extends TestCase{
         ];
         $query = sprintf('?setcode=%s&isDraft=%s&color=%s', $setcode, $isDraft, $color);
         $response = $this->upload_OK($query, $data);
-        $actualCode = $response->json('setCode');
-        $this->assertEquals($setcode, $actualCode, 'Ex略称');
-        $result = $response->json('cards');
-        return $result;
+
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->where('setCode', $setcode)->etc()
+        );
+        return $response;
     }
 
     /**

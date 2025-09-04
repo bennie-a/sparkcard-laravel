@@ -13,6 +13,7 @@ use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNotSame;
 use App\Services\Constant\CardConstant as Con;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -157,7 +158,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      * @return void
      */
     #[DataProvider('colorprovider')]
-    public function test_color(CardColor $color) {
+    public function test_色フィルター(CardColor $color) {
         $result = $this->ok('WAR', false, $color->value);
         foreach($result as $r) {
             $this->assertEquals($color->value, $r[Con::COLOR], '違う色が抽出された');
@@ -180,6 +181,57 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             '色フィルター_多色' => [CardColor::MULTI],
             '色フィルター_茶' => [CardColor::ARTIFACT],
             '色フィルター_無色' => [CardColor::LESS],
+        ];
+    }
+
+    /**
+     * 色の判別に関するテスト
+     */
+    #[DataProvider('cardColorProvider')]
+    public function test_色判別(string $number, CardColor $color) {
+        $this->function_verify_color('WAR', $number, $color);
+    }
+
+    private function function_verify_color(string $setCode, string $number, CardColor $color) {
+        $result = $this->ok($setCode);
+        $actualcard = $this->filteringCard($number, $result);
+        assertNotNull($actualcard, '該当カードの有無');
+        assertEquals($color->value, $actualcard[Con::COLOR], '色の判別');
+    }
+
+    public static function cardColorProvider():array
+    {
+        return [
+            '単色_白' => ['6', CardColor::WHITE],
+            '単色_青' => ['272', CardColor::BLUE],
+            '単色_黒' => ['78', CardColor::BLACK],
+            '単色_赤' => ['119', CardColor::RED],
+            '単色_緑' => ['150', CardColor::GREEN],
+            '多色' => ['207', CardColor::MULTI],
+            '無色' => ['1', CardColor::LESS],
+            '色なしアーティファクト' => ['241', CardColor::ARTIFACT],
+            '土地' => ['245', CardColor::LAND],
+        ];
+    }
+
+    /**
+     * 
+     */
+    #[DataProvider('artifactColorProvider')]
+    public function test_色付きアーティファクト(string $number, CardColor $color) {
+        $this->function_verify_color('EOE', $number, $color);
+    }
+
+    public static function artifactColorProvider():array
+    {
+        return [
+            '白' => ['32', CardColor::WHITE],
+            '青' => ['52', CardColor::BLUE],
+            '黒' => ['106', CardColor::BLACK],
+            '赤' => ['131', CardColor::RED],
+            '緑' => ['179', CardColor::GREEN],
+            '多色' => ['219', CardColor::MULTI],
+            '土地' => ['267', CardColor::LAND],
         ];
     }
 

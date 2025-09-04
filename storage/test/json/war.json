@@ -1359,7 +1359,237 @@
                 "types": ["Planeswalker"],
                 "uuid": "ad06d0fe-1d5c-5d62-9134-e97294333d90",
                 "variations": ["4e13c7ce-6811-5d13-9675-3baafa9d3910"]
-            }
+            },
+            			{
+				"artist": "Raoul Vitale",
+				"artistIds": [
+					"c7c15d49-f84b-4d98-9a34-e80e8347b756"
+				],
+				"availability": [
+					"arena",
+					"mtgo",
+					"paper"
+				],
+				"boosterTypes": [
+					"default"
+				],
+				"borderColor": "black",
+				"colorIdentity": [],
+				"colors": [],
+				"convertedManaCost": 3,
+				"edhrecRank": 6023,
+				"finishes": [
+					"nonfoil",
+					"foil"
+				],
+				"flavorText": "\"I don't care if it's an all-powerful relic or a street vendor's lucky charm. If it brings you courage, wear it.\"\n—Saheeli Rai",
+				"foreignData": [
+					{
+						"flavorText": "„Es ist mir egal, ob es ein allmächtiges Relikt ist oder der Glücksbringer irgendeines Straßenhändlers. Wenn es dir Mut macht, trag es.\"\n—Saheeli Rai",
+						"identifiers": {
+							"multiverseId": "461432",
+							"scryfallId": "35aaf5bd-bbfe-4664-b395-2b0ecadf7fe2"
+						},
+						"language": "German",
+						"multiverseId": 461432,
+						"name": "Manageode",
+						"text": "Wenn die Manageode ins Spiel kommt, wende Hellsicht 1 an.\n{T}: Erzeuge ein Mana einer beliebigen Farbe.",
+						"type": "Artefakt"
+					},
+					{
+						"flavorText": "\"No me importa si es una reliquia todopoderosa o el amuleto de un vendedor callejero. Si a ti te aporta coraje, llévala\".\n—Saheeli Rai",
+						"identifiers": {
+							"multiverseId": "461696",
+							"scryfallId": "e97caa6b-29f6-40e6-a162-139574dbe44d"
+						},
+						"language": "Spanish",
+						"multiverseId": 461696,
+						"name": "Geoda de maná",
+						"text": "Cuando la Geoda de maná entre al campo de batalla, adivina 1.\n{T}: Agrega un maná de cualquier color.",
+						"type": "Artefacto"
+					},
+					{
+						"flavorText": "« Peu importe que ce soit une relique toute puissante ou un grigri vendu par un marchand ambulant. Si elle vous donne du courage, portez-la. »\n—Saheeli Rai",
+						"identifiers": {
+							"multiverseId": "461960",
+							"scryfallId": "fe4c84e1-d214-49c1-9327-957d95befecf"
+						},
+						"language": "French",
+						"multiverseId": 461960,
+						"name": "Géode de mana",
+						"text": "Quand la Géode de mana arrive sur le champ de bataille, regard 1.\n{T} : Ajoutez un mana de la couleur de votre choix.",
+						"type": "Artefact"
+					},
+					{
+						"flavorText": "\"Non mi interessa se è una reliquia onnipotente o un portafortuna comprato da un venditore ambulante. Se ti infonde coraggio, indossalo.\"\n—Saheeli Raji",
+						"identifiers": {
+							"multiverseId": "462224",
+							"scryfallId": "bf011774-0627-4061-9d8e-4dcdfe2149e5"
+						},
+						"language": "Italian",
+						"multiverseId": 462224,
+						"name": "Geode di Mana",
+						"text": "Quando il Geode di Mana entra nel campo di battaglia, profetizza 1.\n{T}: Aggiungi un mana di un qualsiasi colore.",
+						"type": "Artefatto"
+					},
+					{
+						"flavorText": "「最高の遺物だろうと露店の魔除けだろうと関係ない。それで勇気が湧くのなら、身に着けるべきね。」\n――サヒーリ・ライ",
+						"identifiers": {
+							"multiverseId": "462488",
+							"scryfallId": "29bcc756-d2d7-4dca-af75-d10591c6af2d"
+						},
+						"language": "Japanese",
+						"multiverseId": 462488,
+						"name": "マナ晶洞石",
+						"text": "マナ晶洞石が戦場に出たとき、占術１を行う。\n{T}：好きな色１色のマナ１点を加える。",
+						"type": "アーティファクト"
+					},
+					{
+						"flavorText": "\"난 그게 아주 강력한 유물이든 길거리 노점에서 파는 행운의 부적이든 상관 안 해. 그게 네게 용기를 불러일으켜 준다면, 몸에 지녀.\"\n—사힐리 라이",
+						"identifiers": {
+							"multiverseId": "462752",
+							"scryfallId": "43f65045-d360-43d9-8e85-0c1d91655ce9"
+						},
+						"language": "Korean",
+						"multiverseId": 462752,
+						"name": "마나 정동",
+						"text": "마나 정동이 전장에 들어올 때, 점술 1을 한다.\n{T}: 원하는 색의 마나 한 개를 추가한다.",
+						"type": "마법물체"
+					},
+					{
+						"flavorText": "\"Não me importa se é uma relíquia onipotente ou um amuleto de camelô. Se lhe dá coragem, use.\"\n— Saheeli Rai",
+						"identifiers": {
+							"multiverseId": "463016",
+							"scryfallId": "8b7d3dfb-c130-450d-b7e1-93b0410e852a"
+						},
+						"language": "Portuguese (Brazil)",
+						"multiverseId": 463016,
+						"name": "Geodo de Mana",
+						"text": "Quando Geodo de Mana entrar no campo de batalha, use vidência 1\n{T}: Adicione um mana de qualquer cor.",
+						"type": "Artefato"
+					},
+					{
+						"flavorText": "«Всемогущая реликвия, безделушка с лотка уличного торговца — мне все равно. Если она придает тебе смелости, носи ее».\n— Сахили Рей",
+						"identifiers": {
+							"multiverseId": "463280",
+							"scryfallId": "6a7afefe-3a70-41d4-9d14-aa4f1636ea92"
+						},
+						"language": "Russian",
+						"multiverseId": 463280,
+						"name": "Мановая Жеода",
+						"text": "Когда Мановая Жеода выходит на поле битвы, предскажите 1.\n{T}: добавьте одну ману любого цвета.",
+						"type": "Артефакт"
+					},
+					{
+						"flavorText": "「我不在乎这是蕴藏强大力量的遗宝，还是街头小贩手中的护符。只要它能让你获得勇气，那就戴上。」\n～莎希莉莱伊",
+						"identifiers": {
+							"multiverseId": "463544",
+							"scryfallId": "e998c2b3-cc16-48dc-819c-db4ec06def14"
+						},
+						"language": "Chinese Simplified",
+						"multiverseId": 463544,
+						"name": "法术力晶球",
+						"text": "当法术力晶球进战场时，占卜1。\n{T}：加一点任意颜色的法术力。",
+						"type": "神器"
+					},
+					{
+						"flavorText": "「我不在乎這是蘊藏強大力量的遺寶，還是街頭小販手中的護符。只要它能讓你獲得勇氣，那就戴上。」\n～莎希莉萊伊",
+						"identifiers": {
+							"multiverseId": "463808",
+							"scryfallId": "73e8fa06-0719-44fa-9ee7-8c1b09ec9778"
+						},
+						"language": "Chinese Traditional",
+						"multiverseId": 463808,
+						"name": "魔法力晶球",
+						"text": "當魔法力晶球進戰場時，占卜1。\n{T}：加一點任意顏色的魔法力。",
+						"type": "神器"
+					}
+				],
+				"frameVersion": "2015",
+				"hasFoil": true,
+				"hasNonFoil": true,
+				"identifiers": {
+					"cardKingdomFoilId": "224597",
+					"cardKingdomId": "224327",
+					"cardsphereFoilId": "59346",
+					"cardsphereId": "59347",
+					"deckboxId": "44139",
+					"mcmId": "372580",
+					"mcmMetaId": "269818",
+					"mtgArenaId": "69692",
+					"mtgjsonV4Id": "4af9b080-b5a7-5eb2-883c-b176be12963b",
+					"mtgoId": "72088",
+					"multiverseId": "461168",
+					"scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+					"scryfallId": "17315a12-a7f8-45ba-ac3b-a62c789e75d0",
+					"scryfallIllustrationId": "7f17152d-43c2-4661-a75c-86430a15d72c",
+					"scryfallOracleId": "0844f4e6-2b98-4d09-a5c5-92f0a3b6a517",
+					"tcgplayerProductId": "188889"
+				},
+				"keywords": [
+					"Scry"
+				],
+				"language": "English",
+				"layout": "normal",
+				"legalities": {
+					"brawl": "Legal",
+					"commander": "Legal",
+					"duel": "Legal",
+					"gladiator": "Legal",
+					"historic": "Legal",
+					"legacy": "Legal",
+					"modern": "Legal",
+					"oathbreaker": "Legal",
+					"pauper": "Legal",
+					"paupercommander": "Legal",
+					"pioneer": "Legal",
+					"timeless": "Legal",
+					"vintage": "Legal"
+				},
+				"manaCost": "{3}",
+				"manaValue": 3,
+				"name": "Mana Geode",
+				"number": "241",
+				"originalText": "When Mana Geode enters the battlefield, scry 1.\n{T}: Add one mana of any color.\n",
+				"printings": [
+					"JMP",
+					"WAR"
+				],
+				"purchaseUrls": {
+					"cardKingdom": "https://mtgjson.com/links/d4598ba747a7c031",
+					"cardKingdomFoil": "https://mtgjson.com/links/08f0216178ee4ed3",
+					"cardmarket": "https://mtgjson.com/links/b37ca1b8d3b72178",
+					"tcgplayer": "https://mtgjson.com/links/c660d49c9e848651"
+				},
+				"rarity": "common",
+				"setCode": "WAR",
+				"sourceProducts": {
+					"foil": [
+						"3020fb4c-6968-514c-81da-09f7f6a907ec",
+						"40463e51-2394-59e1-8a2b-4bcefc7a802b",
+						"822c97c7-59f1-572d-8650-3d5b1a81380e"
+					],
+					"nonfoil": [
+						"3020fb4c-6968-514c-81da-09f7f6a907ec",
+						"30dc68c6-fd54-57cc-a1c4-209e659e647c",
+						"585e2a3d-6a84-5f8f-8cb8-a81316dd072f",
+						"5987a43b-1497-5004-ba30-b6b3d4b3afee",
+						"766071ad-6578-526a-8b34-1777b588be07",
+						"822c97c7-59f1-572d-8650-3d5b1a81380e",
+						"a0e43ef1-0b23-58f5-9457-1df62fb7e5c4",
+						"d18e655c-ce0a-50d3-9883-efd20803114a",
+						"dda73ce5-6049-5a22-8d8e-3555a578450b"
+					]
+				},
+				"subtypes": [],
+				"supertypes": [],
+				"text": "When this artifact enters, scry 1.\n{T}: Add one mana of any color.",
+				"type": "Artifact",
+				"types": [
+					"Artifact"
+				],
+				"uuid": "0cd9f299-f255-5114-9297-da3fa19f29f1"
+			}
         ],
         "code": "WAR"
     }

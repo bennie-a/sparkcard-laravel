@@ -233,6 +233,832 @@
                     "3297cea3-e801-5f49-9ba1-fe7cee0c00e9",
                     "223bc127-dce1-5eef-ad8a-b302bdd71374"
                 ]
+            },
+            {
+                "artist": "Viko Menezes",
+                "artistIds": [
+                    "92dfef2a-d0fa-42fd-bdd6-bc4c9286cb56"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 6.0,
+                "edhrecRank": 16430,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316907",
+                    "cardKingdomId": "316875",
+                    "cardsphereFoilId": "140115",
+                    "cardsphereId": "140033",
+                    "mcmId": "835023",
+                    "mcmMetaId": "451466",
+                    "mtgjsonV4Id": "23623b40-ff29-5aa6-8073-e6d25dc26d95",
+                    "mtgoId": "142677",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "6fe86bfb-c67d-4df9-88c9-f083091f4cda",
+                    "scryfallIllustrationId": "d95286f5-3036-4624-b24f-79747ce5205e",
+                    "scryfallOracleId": "112aaaf0-3301-4f79-9640-d36c75a0fb30",
+                    "tcgplayerProductId": "643470"
+                },
+                "keywords": [
+                    "Flying",
+                    "Station"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{5}{W}",
+                "manaValue": 6.0,
+                "name": "Rescue Skiff",
+                "number": "32",
+                "power": "5",
+                "printings": [
+                    "EOE"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/08b6ec4684cfa087",
+                    "cardKingdomFoil": "https://mtgjson.com/links/0b12e67a2a89d96a",
+                    "cardmarket": "https://mtgjson.com/links/6fef32a47eceac39",
+                    "tcgplayer": "https://mtgjson.com/links/4e21dfb91a896766"
+                },
+                "rarity": "uncommon",
+                "setCode": "EOE",
+                "sourceProducts": {
+                    "foil": [
+                        "4f2cc48f-3bd4-503d-9698-642345cebc62",
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ],
+                    "nonfoil": [
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ]
+                },
+                "subtypes": [
+                    "Spacecraft"
+                ],
+                "supertypes": [],
+                "text": "When this Spacecraft enters, return target creature or enchantment card from your graveyard to the battlefield.\nStation (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 10+.)\nSTATION 10+\nFlying",
+                "toughness": "6",
+                "type": "Artifact — Spacecraft",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "883b79bb-c05f-5d45-bf9d-47bbd2dadcd0"
+            },
+                        {
+                "artist": "Eelis Kyttanen",
+                "artistIds": [
+                    "699b24be-cde0-4da8-bc0f-7a3ecd60ab01"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "U"
+                ],
+                "colors": [
+                    "U"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 11718,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "Older than the Eumidian seedships that populated Evendo.",
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316982",
+                    "cardKingdomId": "316945",
+                    "cardsphereFoilId": "140077",
+                    "cardsphereId": "140039",
+                    "mcmId": "835354",
+                    "mcmMetaId": "451611",
+                    "mtgjsonV4Id": "10bafaf2-b0f8-54cb-8793-e4c2d92b45d8",
+                    "mtgoId": "142717",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "7bfb33b6-e2bf-498f-8c58-ae21a840cf75",
+                    "scryfallIllustrationId": "6d4cfab0-8dfd-462c-962a-68cbd8b4c842",
+                    "scryfallOracleId": "106e9c0d-67a2-4db7-97d9-03e1ea1b40b5",
+                    "tcgplayerProductId": "643478"
+                },
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pauper": "Legal",
+                    "paupercommander": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{1}{U}",
+                "manaValue": 2.0,
+                "name": "Cryogen Relic",
+                "number": "52",
+                "printings": [
+                    "EOE"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/4b1176725cb167e8",
+                    "cardKingdomFoil": "https://mtgjson.com/links/755742b912affbb2",
+                    "cardmarket": "https://mtgjson.com/links/edb55b5b33ae117b",
+                    "tcgplayer": "https://mtgjson.com/links/0a292506c7c655a0"
+                },
+                "rarity": "common",
+                "setCode": "EOE",
+                "sourceProducts": {
+                    "foil": [
+                        "4f2cc48f-3bd4-503d-9698-642345cebc62",
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ],
+                    "nonfoil": [
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ]
+                },
+                "subtypes": [],
+                "supertypes": [],
+                "text": "When this artifact enters or leaves the battlefield, draw a card.\n{1}{U}, Sacrifice this artifact: Put a stun counter on up to one target tapped creature. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+                "type": "Artifact",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "24b797a0-8764-57e9-8e21-2b60c8cc9fbf"
+            },
+                        {
+                "artist": "Viko Menezes",
+                "artistIds": [
+                    "92dfef2a-d0fa-42fd-bdd6-bc4c9286cb56"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B"
+                ],
+                "colors": [
+                    "B"
+                ],
+                "convertedManaCost": 1.0,
+                "edhrecRank": 20148,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316983",
+                    "cardKingdomId": "316946",
+                    "cardsphereFoilId": "140094",
+                    "cardsphereId": "140040",
+                    "mcmId": "835356",
+                    "mcmMetaId": "451613",
+                    "mtgjsonV4Id": "1afff6c7-1b98-5808-aee9-f481c14294d4",
+                    "mtgoId": "142825",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "ac80cf18-0707-4358-bdd4-0c2b90d0a1d9",
+                    "scryfallIllustrationId": "7e2ead05-f272-4237-a9d0-eae4140d235e",
+                    "scryfallOracleId": "64ca59b8-6e90-46c8-8047-6172b9c84226",
+                    "tcgplayerProductId": "643489"
+                },
+                "keywords": [
+                    "Equip",
+                    "Void"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{B}",
+                "manaValue": 1.0,
+                "name": "Hylderblade",
+                "number": "106",
+                "printings": [
+                    "EOE"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/1012480f07195db2",
+                    "cardKingdomFoil": "https://mtgjson.com/links/5920f507d7e9cfcd",
+                    "cardmarket": "https://mtgjson.com/links/f12ec55a2e932327",
+                    "tcgplayer": "https://mtgjson.com/links/f2ad5eb946eebbbf"
+                },
+                "rarity": "uncommon",
+                "setCode": "EOE",
+                "sourceProducts": {
+                    "foil": [
+                        "4f2cc48f-3bd4-503d-9698-642345cebc62",
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ],
+                    "nonfoil": [
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ]
+                },
+                "subtypes": [
+                    "Equipment"
+                ],
+                "supertypes": [],
+                "text": "Equipped creature gets +3/+1.\nVoid — At the beginning of your end step, if a nonland permanent left the battlefield this turn or a spell was warped this turn, attach this Equipment to target creature you control.\nEquip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+                "type": "Artifact — Equipment",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "23575bcb-8f23-535a-a5cd-a09f495a612a"
+            },
+                        {
+                "artist": "David Álvarez",
+                "artistIds": [
+                    "c3004e2c-d372-4faa-90db-f1274e75ef41"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "R"
+                ],
+                "colors": [
+                    "R"
+                ],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 20041,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316522",
+                    "cardKingdomId": "316519",
+                    "cardsphereFoilId": "139924",
+                    "cardsphereId": "139907",
+                    "mcmId": "834853",
+                    "mcmMetaId": "451442",
+                    "mtgjsonV4Id": "ae3ced81-5134-5bc7-8d58-b88ab1f3c9aa",
+                    "mtgoId": "142875",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "ea713f35-6442-4388-8839-2714374fb4b6",
+                    "scryfallIllustrationId": "6792c3aa-07c0-4847-a0da-9ac5ddfddb3e",
+                    "scryfallOracleId": "db0894e1-2644-48d4-8de4-8cc43e940bc1",
+                    "tcgplayerProductId": "644605"
+                },
+                "keywords": [
+                    "Flying",
+                    "Station"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{4}{R}",
+                "manaValue": 5.0,
+                "name": "Debris Field Crusher",
+                "number": "131",
+                "power": "1",
+                "printings": [
+                    "EOE"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/de931647e9023952",
+                    "cardKingdomFoil": "https://mtgjson.com/links/7c35abe9b03df639",
+                    "cardmarket": "https://mtgjson.com/links/70766495355a0ba8",
+                    "tcgplayer": "https://mtgjson.com/links/ddd65878a475eddf"
+                },
+                "rarity": "uncommon",
+                "setCode": "EOE",
+                "sourceProducts": {
+                    "foil": [
+                        "4f2cc48f-3bd4-503d-9698-642345cebc62",
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ],
+                    "nonfoil": [
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ]
+                },
+                "subtypes": [
+                    "Spacecraft"
+                ],
+                "supertypes": [],
+                "text": "When this Spacecraft enters, it deals 3 damage to any target.\nStation (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 8+.)\nSTATION 8+\nFlying\n{1}{R}: This Spacecraft gets +2/+0 until end of turn.",
+                "toughness": "5",
+                "type": "Artifact — Spacecraft",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "247232d0-c4d5-5a41-853f-f2680dc6cb99"
+            },
+                        {
+                "artist": "Francisco Badilla",
+                "artistIds": [
+                    "d876f06d-e6a6-4b0d-abe3-e7c9900ebf0c"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "G"
+                ],
+                "colors": [
+                    "G"
+                ],
+                "convertedManaCost": 1.0,
+                "edhrecRank": 20468,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "flavorText": "Charting the Edge, one scan at a time.",
+                "foreignData": [],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "317301",
+                    "cardKingdomId": "317281",
+                    "cardsphereFoilId": "140150",
+                    "cardsphereId": "140134",
+                    "mcmId": "836330",
+                    "mcmMetaId": "451659",
+                    "mtgjsonV4Id": "5c559b58-1154-5e4a-afb9-ce75793073bb",
+                    "mtgoId": "142971",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "90741ec9-6893-42d4-b510-8664666094e3",
+                    "scryfallIllustrationId": "a9da5ffa-361b-4ae6-b70a-4bba8bafb982",
+                    "scryfallOracleId": "b907d375-b715-446b-8966-79959feb9f58",
+                    "tcgplayerProductId": "643896"
+                },
+                "keywords": [
+                    "Reach"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{G}",
+                "manaValue": 1.0,
+                "name": "Edge Rover",
+                "number": "179",
+                "power": "2",
+                "printings": [
+                    "EOE"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/7589178b1cdad4b9",
+                    "cardKingdomFoil": "https://mtgjson.com/links/bfee2b91f83bb6db",
+                    "cardmarket": "https://mtgjson.com/links/8b3b54e885674c91",
+                    "tcgplayer": "https://mtgjson.com/links/fd781082f64025a5"
+                },
+                "rarity": "uncommon",
+                "setCode": "EOE",
+                "sourceProducts": {
+                    "foil": [
+                        "4f2cc48f-3bd4-503d-9698-642345cebc62",
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ],
+                    "nonfoil": [
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ]
+                },
+                "subtypes": [
+                    "Robot",
+                    "Scout"
+                ],
+                "supertypes": [],
+                "text": "Reach\nWhen this creature dies, each player creates a Lander token. (It's an artifact with \"{2}, {T}, Sacrifice this token: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.\")",
+                "toughness": "2",
+                "type": "Artifact Creature — Robot Scout",
+                "types": [
+                    "Artifact",
+                    "Creature"
+                ],
+                "uuid": "a8f025f6-6841-5945-ae72-71230914734b"
+            },
+                        {
+                "artist": "Piotr Dura",
+                "artistIds": [
+                    "aff176e8-1d15-432e-ad1d-207a474decba"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B",
+                    "G",
+                    "R",
+                    "U",
+                    "W"
+                ],
+                "colors": [
+                    "B",
+                    "G",
+                    "R",
+                    "U",
+                    "W"
+                ],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 13428,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "316334",
+                    "cardKingdomId": "316270",
+                    "cardsphereFoilId": "139939",
+                    "cardsphereId": "139875",
+                    "mcmId": "834019",
+                    "mcmMetaId": "451384",
+                    "mtgjsonV4Id": "549393f0-4484-5cff-a770-f92fd660a0ed",
+                    "mtgoId": "143051",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "5688894a-bbec-476b-ae2e-94000be258d0",
+                    "scryfallIllustrationId": "6a1ff3ba-98db-46bb-8ada-f1695879b192",
+                    "scryfallOracleId": "cda39514-86c9-483e-8d95-fd08138ce33a",
+                    "tcgplayerProductId": "641800"
+                },
+                "keywords": [
+                    "Flying",
+                    "Station"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": true,
+                    "commander": true,
+                    "oathbreaker": false
+                },
+                "legalities": {
+                    "alchemy": "Legal",
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaCost": "{W}{U}{B}{R}{G}",
+                "manaValue": 5.0,
+                "name": "Infinite Guideline Station",
+                "number": "219",
+                "power": "7",
+                "printings": [
+                    "EOE",
+                    "PEOE"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/1ee9c5098b30e20d",
+                    "cardKingdomFoil": "https://mtgjson.com/links/d9ab57a7557879b3",
+                    "cardmarket": "https://mtgjson.com/links/f6c2136e4af45347",
+                    "tcgplayer": "https://mtgjson.com/links/42e1de17805060fe"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "EOE",
+                "sourceProducts": {
+                    "foil": [
+                        "4f2cc48f-3bd4-503d-9698-642345cebc62",
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ],
+                    "nonfoil": [
+                        "b0b4ced3-518f-5ee6-b986-9af2eb441db4"
+                    ]
+                },
+                "subtypes": [
+                    "Spacecraft"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "When Infinite Guideline Station enters, create a tapped 2/2 colorless Robot artifact creature token for each multicolored permanent you control.\nStation (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 12+.)\nSTATION 12+\nFlying\nWhenever Infinite Guideline Station attacks, draw a card for each multicolored permanent you control.",
+                "toughness": "15",
+                "type": "Legendary Artifact — Spacecraft",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "322f0dfe-4322-5437-b8ec-e900bc9444f5",
+                "variations": [
+                    "f402775a-0fe1-5fff-af3e-5159b37be589"
+                ]
+            },
+            {
+                "artist": "Jokubas Uogintas",
+                "artistIds": [
+                    "2c14303e-97a3-45fa-9bd8-59e5332a65f9"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "boosterTypes": [
+                    "default"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 0.0,
+                "edhrecRank": 2794,
+                "edhrecSaltiness": 0.01,
+                "finishes": [
+                    "nonfoil",
+                    "foil"
+                ],
+                "foreignData": [
+                    {
+                        "identifiers": {
+                            "multiverseId": "647092",
+                            "scryfallId": "90824d7a-defb-4154-ba82-115f0477f7d2"
+                        },
+                        "language": "German",
+                        "multiverseId": 647092,
+                        "name": "Tatort",
+                        "text": "Der Tatort kommt getappt ins Spiel.\n{T}: Erzeuge {C}.\n{T}, tappe eine ungetappte Kreatur, die du kontrollierst: Erzeuge ein Mana einer beliebigen Farbe.\n{2}, opfere den Tatort: Ziehe eine Karte.",
+                        "type": "Artefakt, Land — Hinweis"
+                    },
+                    {
+                        "identifiers": {
+                            "multiverseId": "647363",
+                            "scryfallId": "1a8ab58c-7f03-4e4c-a221-fb15b9d60601"
+                        },
+                        "language": "Spanish",
+                        "multiverseId": 647363,
+                        "name": "Escena del crimen",
+                        "text": "La Escena del crimen entra al campo de batalla girada.\n{T}: Agrega {C}.\n{T}, girar una criatura enderezada que controlas: Agrega un maná de cualquier color.\n{2}, sacrificar la Escena del crimen: Roba una carta.",
+                        "type": "Tierra artefacto — Pista"
+                    },
+                    {
+                        "identifiers": {
+                            "multiverseId": "647634",
+                            "scryfallId": "6b812bef-a349-4cd1-8c28-9572b612a45b"
+                        },
+                        "language": "French",
+                        "multiverseId": 647634,
+                        "name": "Lieu du crime",
+                        "text": "Le Lieu du crime arrive sur le champ de bataille engagé.\n{T} : Ajoutez {C}.\n{T}, engagez une créature dégagée que vous contrôlez : Ajoutez un mana de la couleur de votre choix.\n{2}, sacrifiez le Lieu du crime : Piochez une carte.",
+                        "type": "Terrain-artefact — indice"
+                    },
+                    {
+                        "identifiers": {
+                            "multiverseId": "647905",
+                            "scryfallId": "7d8bee4a-c926-46ed-ab89-7a87d57e8533"
+                        },
+                        "language": "Italian",
+                        "multiverseId": 647905,
+                        "name": "Scena del Crimine",
+                        "text": "La Scena del Crimine entra nel campo di battaglia TAPpata.\n{T}: Aggiungi {C}.\n{T}, TAPpa una creatura STAPpata che controlli: Aggiungi un mana di un qualsiasi colore.\n{2}, Sacrifica la Scena del Crimine: Pesca una carta.",
+                        "type": "Terra Artefatto — Indizio"
+                    },
+                    {
+                        "identifiers": {
+                            "multiverseId": "648176",
+                            "scryfallId": "94931d9f-029a-4bcc-867f-26549a07d41f"
+                        },
+                        "language": "Japanese",
+                        "multiverseId": 648176,
+                        "name": "犯行現場",
+                        "text": "犯行現場はタップ状態で戦場に出る。\n{T}：{C}を加える。\n{T}, あなたがコントロールしていてアンタップ状態であるクリーチャー１体をタップする：好きな色１色のマナ１点を加える。\n{2}, 犯行現場を生け贄に捧げる：カード１枚を引く。",
+                        "type": "アーティファクト・土地 — 手掛かり"
+                    },
+                    {
+                        "identifiers": {
+                            "multiverseId": "648447",
+                            "scryfallId": "aa2ee325-8f60-431e-9617-a2561d50807b"
+                        },
+                        "language": "Portuguese (Brazil)",
+                        "multiverseId": 648447,
+                        "name": "Cena do Crime",
+                        "text": "Cena do Crime entra no campo de batalha virada\n{T}: Adicione {C}.\n{T}, vire uma criatura desvirada que você controla: Adicione um mana de qualquer cor.\n{2}, sacrifique Cena do Crime: Compre um card.",
+                        "type": "Terreno Artefato — Pista"
+                    },
+                    {
+                        "identifiers": {
+                            "multiverseId": "648718",
+                            "scryfallId": "b300438f-055a-467d-bad5-22b704e86a40"
+                        },
+                        "language": "Chinese Simplified",
+                        "multiverseId": 648718,
+                        "name": "罪案现场",
+                        "text": "罪案现场须横置进战场。\n{T}：加{C}。\n{T}，横置一个由你操控且未横置的生物：加一点任意颜色的法术力。\n{2}，牺牲罪案现场：抓一张牌。",
+                        "type": "神器地 — 线索"
+                    }
+                ],
+                "frameVersion": "2015",
+                "hasFoil": true,
+                "hasNonFoil": true,
+                "identifiers": {
+                    "cardKingdomFoilId": "290958",
+                    "cardKingdomId": "289781",
+                    "cardsphereId": "115117",
+                    "deckboxId": "87444",
+                    "mcmId": "750883",
+                    "mcmMetaId": "429438",
+                    "mtgArenaId": "89189",
+                    "mtgjsonV4Id": "a97c2814-f2a7-5b8f-822b-b20ee67fd564",
+                    "mtgoId": "122026",
+                    "multiverseId": "646821",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "de039992-631b-4feb-a522-acdb0a6d1f26",
+                    "scryfallIllustrationId": "d9d992bc-7230-4828-90a3-9130dce94729",
+                    "scryfallOracleId": "ba11a517-1dbd-4797-9f5e-46ce0f6c77c0",
+                    "tcgplayerProductId": "532873"
+                },
+                "language": "English",
+                "layout": "normal",
+                "legalities": {
+                    "brawl": "Legal",
+                    "commander": "Legal",
+                    "duel": "Legal",
+                    "future": "Legal",
+                    "gladiator": "Legal",
+                    "historic": "Legal",
+                    "legacy": "Legal",
+                    "modern": "Legal",
+                    "oathbreaker": "Legal",
+                    "pioneer": "Legal",
+                    "standard": "Legal",
+                    "standardbrawl": "Legal",
+                    "timeless": "Legal",
+                    "vintage": "Legal"
+                },
+                "manaValue": 0.0,
+                "name": "Scene of the Crime",
+                "number": "267",
+                "originalText": "Scene of the Crime enters the battlefield tapped.\n{T}: Add {C}.\n{T}, Tap an untapped creature you control: Add one mana of any color.\n{2}, Sacrifice Scene of the Crime: Draw a card.",
+                "printings": [
+                    "MKM"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/74d9cec2574606e5",
+                    "cardKingdomFoil": "https://mtgjson.com/links/bd73c645ff4ca8d1",
+                    "cardmarket": "https://mtgjson.com/links/97ce11b72f1874b1",
+                    "tcgplayer": "https://mtgjson.com/links/6e575e933648c062"
+                },
+                "rarity": "uncommon",
+                "setCode": "MKM",
+                "sourceProducts": {
+                    "foil": [
+                        "bbbdf7c5-7f6c-535e-ad8a-ed292e4cbfe2",
+                        "c9b74555-134e-5865-b8f7-0d0cd26c8f58",
+                        "fe605e28-69ab-546c-b0d9-ec65d756bb5e"
+                    ],
+                    "nonfoil": [
+                        "5810b245-457a-578b-8162-372915d9c339",
+                        "c9b74555-134e-5865-b8f7-0d0cd26c8f58"
+                    ]
+                },
+                "subtypes": [
+                    "Clue"
+                ],
+                "supertypes": [],
+                "text": "This land enters tapped.\n{T}: Add {C}.\n{T}, Tap an untapped creature you control: Add one mana of any color.\n{2}, Sacrifice this land: Draw a card.",
+                "type": "Artifact Land — Clue",
+                "types": [
+                    "Artifact",
+                    "Land"
+                ],
+                "uuid": "8061e12c-cd7b-507d-b8c2-fadf27b7a2e2"
             }
         ],
         "code": "EOE"
