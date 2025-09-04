@@ -11,7 +11,7 @@ class WarJsonFileTest extends AbstractCardJsonFileTest {
      *
      * @return void
      */
-    public function promoProvider() {
+    public static function promoProvider() {
         return [
             '日本限定カード' => ['150','jpwalker'],
         ];
@@ -22,8 +22,7 @@ class WarJsonFileTest extends AbstractCardJsonFileTest {
      *
      * @return void
      */
-    public function excludeProvider() {
-        $this->markTestSkipped("除外する特別版なし");
+    public static function excludeProvider() {
         return [
         ];
     }

@@ -152,16 +152,16 @@ enum CardColor:string {
             return CardColor::LESS;
         } 
         $colorArray = $card[$colorKey];
-        return self::findColor($colorArray, $cardtype);
+        return self::findColor($colorArray, $types);
     }
 
-    public static function findColor(array $color, string $cardtype) {
+    public static function findColor(array $color, array $cardtype) {
         // アーティファクト
-        if (strpos($cardtype, 'Artifact') !== false) {
+        if ($cardtype === ['Artifact'] && empty($color)) {
             return CardColor::ARTIFACT;
         }
         // 土地
-        if (strcmp($cardtype, "Land") == 0) {
+        if (in_array('Land', $cardtype)) {
             return CardColor::LAND;
         }
 
