@@ -37,7 +37,7 @@ class TransformCard extends JsonCard {
             $colors = $this->getJson()['colorIdentity'];
             $types =$this->getJson()["types"];
             $cardtype = current($types);
-            $colortype = CardColor::findColor($colors, $cardtype);
+            $colortype = CardColor::findColor($colors, $types);
             $this->color = $colortype->value;
         }
         return $this->color;
