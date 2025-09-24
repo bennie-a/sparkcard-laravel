@@ -3,7 +3,7 @@
         <div class="ui list">
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-box-seam"></i>入荷
+                    在庫
                 </div>
                 <ul>
                     <li>
@@ -12,40 +12,39 @@
                             :class="{ active: $route.path === '/' }"
                             aria-current="page"
                             to="/"
-                            ><i class="bi bi-inboxes-fill"></i
-                            >入荷登録</router-link
+                            ><i class="bi bi-plus-circle-fill"></i>登録</router-link
                         >
                     </li>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/arrival' }"
-                            aria-current="page"
-                            to="/arrival"
-                            ><i class="bi bi-search"></i>入荷情報一覧</router-link
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div class="item">
-                <div class="ui small header">
-                    <i class="bi bi-bank2"></i>在庫情報
-                </div>
-                <ul>
                     <li>
                         <router-link
                             class="nav-link"
                             :class="{ active: $route.path === '/stockpile/' }"
                             aria-current="page"
                             to="/stockpile/"
-                            ><i class="bi bi-search"></i>在庫情報検索</router-link
+                            ><i class="bi bi-search"></i>検索</router-link
                         >
                     </li>
                 </ul>
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-cart2"></i>ショップ登録
+                   入荷
+                </div>
+                <ul>
+                    <li>
+                        <router-link
+                            class="nav-link"
+                            :class="{ active: $route.path === '/arrival' }"
+                            aria-current="page"
+                            to="/arrival"
+                            ><i class="bi bi-search"></i>検索</router-link
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="item">
+                <div class="ui small header">
+                   エクスポート
                 </div>
                 <ul>
                     <li>
@@ -72,16 +71,24 @@
             </div>
             <div class="item">
                 <div class="ui small header">
-                    <i class="bi bi-truck"></i>出荷
+                   出荷
                 </div>
                 <ul>
+                    <li>
+                        <router-link
+                            class="nav-link"
+                            :class="{ active: $route.path === '/shipping/import' }"
+                            aria-current="page"
+                            to="/shipping/import"
+                            ><i class="bi bi-upload"></i>一括登録</router-link>
+                    </li>
                     <li>
                         <router-link
                             class="nav-link"
                             :class="{ active: $route.path === '/shipping/' }"
                             aria-current="page"
                             to="/shipping/"
-                            ><i class="bi bi-search"></i>出荷情報一覧</router-link
+                            ><i class="bi bi-search"></i>検索</router-link
                         >
                     </li>
                 </ul>
@@ -104,10 +111,12 @@ import { version } from "../../../../package";
     padding-top: 2rem;
 }
 .ui.list > .item .header {
-    color: white;
+    color: #d1ddf3;
     font-weight: 700;
-    margin-left: 0.5em;
+    margin-left: 0.7em;
+    font-size: 1.2rem;
 }
+
 div.item > ul {
     padding-left: 0;
     margin-top: 0.5em;
@@ -122,10 +131,12 @@ span {
 }
 
 div.item > ul > li > a {
-    padding: 1em 1em;
+    padding: 0.8em 1em;
     display: block;
     color: white;
     line-height: 1.4;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 div.item > ul > li > a:hover {
     background: #2766cc;
