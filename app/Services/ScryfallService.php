@@ -3,11 +3,8 @@ namespace App\Services;
 
 use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
-use app\Services\json\AbstractCard;
 use App\Enum\CardColor;
-use App\Exceptions\ConflictException;
-use App\Exceptions\NotFoundException;
-use App\Factory\CardInfoFactory;
+use App\Exceptions\api\NotFoundException;
 use App\Services\Constant\CardConstant;
 use App\Services\json\ScryfallCard;
 use Illuminate\Http\Response;
@@ -98,7 +95,7 @@ class ScryfallService {
 
     protected function toArray(array $contents) {
         $card = new ScryfallCard($contents);
-        $color = CardColor::findColor($card->colors(), $card->cardtype());
+        $color = CardColor::findColor($card->colors(), $card->types());
         $promotype = \App\Facades\Promo::find($card);
         logger()->info('プロモタイプ', [$promotype]);
         return ['name' => $card->name(), 
