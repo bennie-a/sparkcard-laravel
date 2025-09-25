@@ -7,7 +7,7 @@
     />
     <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
         <i class="file icon"></i>
-        ファイルを選択する
+        選択する
     </label>
 </template>
 <style scoped>
