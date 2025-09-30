@@ -13,8 +13,13 @@
 </script>
 
 <template>
-    <FileUpload type="csv" @action="uploadFile"/>
+    <article id="upload_form" class="ui mt-1 form grid segment">
+        <FileUpload type="csv" @action="uploadFile"/>
+    </article>
 </template>    
 
 <style>
+#upload_form {
+    padding: 1rem;
+}
 </style>

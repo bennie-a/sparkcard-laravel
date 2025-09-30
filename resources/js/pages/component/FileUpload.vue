@@ -1,6 +1,6 @@
 <template>
-  <article  id="upload" class="mt-1 ui grid segment">
-    <div class="five wide column">
+  <div class="wrapper">
+    <div>
       <input
       id="embedpollfileinput"
       type="file"
@@ -11,19 +11,26 @@
         <i class="file icon"></i>
         選択
       </label>
-      <label class="ml-1">{{filename}}</label>
+      <label class="ml-half">{{filename}}</label>
     </div>
-    <div class="three wide column">
-      <button class="ui teal button" @click="upload"><i class="upload icon"></i>アップロード</button>
+    <div>
+        <button class="ui teal button" @click="upload"><i class="upload icon"></i>アップロード</button>
     </div>
-    <div id="invalid" class="ui mini modal">
+  </div>
+  <div id="invalid" class="ui mini modal">
         <div class="header">{{ props.type }}ファイルではありません。</div>
         <button id="ok" class="ui teal fluid button" @click="ok">OK</button>
     </div>
-  </article>
 </template>
 
 <style scoped>
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  column-gap: 3rem;
+}
 .inputfile {
   width: 0.1px;
   height: 0.1px;
