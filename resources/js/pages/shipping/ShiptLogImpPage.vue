@@ -5,22 +5,21 @@
     import FileUpload from "../component/FileUpload.vue";
 
     const router = useRouter();
-    const filename = ref("ファイルを選択してください");
+
+    const uploadFile = (file) => {
+        alert(file.value.name);
+    };
+
 </script>
 
 <template>
-    <article id="upload" class="mt-1 ui grid segment">
-        <div class="six wide column">
-            <FileUpload type="csv" @action="(file) => console.log(file)"/><label>{{ filename }}</label>
-        </div>
-        <div class="three wide column">
-            <button class="ui teal button"><i class="upload icon"></i>アップロード</button>
-        </div>
+    <article id="upload_form" class="ui mt-1 form grid segment">
+        <FileUpload type="csv" @action="uploadFile"/>
     </article>
 </template>    
 
 <style>
-    #upload {
-        padding: 1rem;
-    }
+#upload_form {
+    padding: 1rem;
+}
 </style>
