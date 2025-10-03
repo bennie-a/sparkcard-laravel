@@ -1,36 +1,18 @@
 <template>
-  <div class="wrapper">
-    <div>
-      <input
-      id="embedpollfileinput"
-      type="file"
-      class="inputfile"
-      @change="onFileChange"
-      />
-      <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
-        <i class="file icon"></i>
-        選択
-      </label>
-      <label class="ml-half">{{filename}}</label>
-    </div>
-    <div>
-        <button class="ui teal button" @click="upload"><i class="upload icon"></i>アップロード</button>
-    </div>
-  </div>
-  <div id="invalid" class="ui mini modal">
-        <div class="header">{{ props.type }}ファイルではありません。</div>
-        <button id="ok" class="ui teal fluid button" @click="ok">OK</button>
-    </div>
+  <input
+    id="embedpollfileinput"
+    type="file"
+    class="inputfile"
+    @change="onFileChange"
+  />
+  <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
+    <i class="file icon"></i>
+    選択する
+  </label>
+  <label class="ml-2">{{filename}}</label>
 </template>
 
 <style scoped>
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  column-gap: 3rem;
-}
 .inputfile {
   width: 0.1px;
   height: 0.1px;
@@ -38,14 +20,6 @@
   overflow: hidden;
   position: absolute;
   z-index: -1;
-}
-
-#upload {
-        padding: 1rem;
-    }
-
-#invalid {
-    padding: 5px;
 }
 </style>
 
@@ -59,34 +33,23 @@ const props = defineProps({
   type: { type: String, default: "csv" },
 })
 
-const emit = defineEmits(["action"]);
-const file = ref(null);
+const emit = defineEmits(["action"])
 const filename = ref("ファイルを選択してください");
 
 // ファイルアップロードイベント
 const onFileChange = (e) => {
-    store.dispatch("message/clear")
+  store.dispatch("message/clear")
 
-    file.value = e.target.files[0];
-    if (!file) return;
-    filename.value = file.value.name;
-    const fileType = file.value.name.split(".").pop()
-    if (fileType !== props.type) {
-        $("#invalid").modal("show");
-        filename.value = "ファイルを選択してください";
-        file.value = null;
-        e.target.value = null;
-        return
-    }
-}
+  const file = e.target.files[0]
+  if (!file) return
+  filename.value = file.name;
+  const fileType = file.name.split(".").pop()
+  if (fileType !== props.type) {
+    store.dispatch("message/error", `ファイルは${props.type}ファイルを選択してください。`)
+    return
+  }
 
-const ok = () => {
-    $("#invalid").modal("hide");
-}
-
-const upload = () => {
-    store.dispatch("message/clear");
-    emit("action", file)
-    store.dispatch("setLoad", false)
+  emit("action", file)
+  store.dispatch("setLoad", false)
 }
 </script>
