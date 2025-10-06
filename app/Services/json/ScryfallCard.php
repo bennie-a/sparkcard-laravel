@@ -70,8 +70,8 @@ class ScryfallCard extends AbstractCard {
 
     public function imageurl() {
         $imageuris = [];
-        if ($this->getJson()['layout'] == 'transform') {
-            $imageuris = $this->getJson()['card_faces'][0]['image_uris'];
+        if ($this->getJson()['layout'] == 'modal_dfc') {
+            $imageuris = current($this->getJson()['card_faces'])['image_uris'];
         } else {
             $imageuris =  $this->getJson()['image_uris'];
         }
