@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Constant\GlobalConstant as GCon;
 use App\Services\Constant\StockpileHeader as Header;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * ScryfallControllerのテスト
@@ -17,12 +18,19 @@ class ScryfallTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_単色(): void
+    #[DataProvider('imageProvider')]
+    public function test_画像(string $setcode, int $number, string $url): void
     {
-        $query = [Header::SETCODE => 'IKO', Con::NUMBER => 1, Header::LANGUAGE => 'ja'];
+        $query = [Header::SETCODE => $setcode, Con::NUMBER => $number, Header::LANGUAGE => 'ja'];
         $response = $this->call('GET', '/api/scryfall', $query);
         $response->assertOk();
-        $json = json_decode($response->content());
-        $this->assertEquals(480816, $json->multiverse_id);
+        $response->assertJsonFragment(['imageurl' => $url]);
+    }
+
+    public static function imageProvider(): array
+    {
+        return [
+            '表面のみ' => ['IKO', 1, 'https://cards.scryfall.io/png/front/e/1/e1059d5b-1de6-4988-a3a8-fe540a541342.png?1645734158'],
+        ];
     }
 }
