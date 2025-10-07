@@ -46,6 +46,7 @@ const onFileChange = (e) => {
   const fileType = file.name.split(".").pop()
   if (fileType !== props.type) {
     store.dispatch("message/error", `ファイルは${props.type}ファイルを選択してください。`)
+    filename.value = "ファイルを選択してください";
     return
   }
 

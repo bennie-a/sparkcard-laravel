@@ -6,15 +6,17 @@
 
     const router = useRouter();
 
-    const uploadFile = (file) => {
-        alert(file.value.name);
+    const uploadFile = async(file) => {
+        alert(file.name);
     };
 
 </script>
 
 <template>
     <article id="upload_form" class="ui mt-1 form grid segment">
-        <FileUpload type="csv" @action="uploadFile"/>
+        <div class="five wide columns">
+            <FileUpload type="csv" @action="uploadFile"/>
+        </div>
     </article>
 </template>    
 
