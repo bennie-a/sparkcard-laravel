@@ -66,7 +66,9 @@ class ShippingLogController extends Controller
         return response()->json($info, Response::HTTP_OK);
     }
 
-    public function parse() {
+    public function parse(Request $request) {
+        $file = $request->file('file');
+        logger()->info($file->getClientOriginalName());
         $data = [
             "order_id" => "order_Nt7GwWt9TQj3zb5AGhrNTJ",
             "buyer_name" => "金井 三郎",
@@ -127,7 +129,7 @@ class ShippingLogController extends Controller
             ]
         ];
 
-        return response()->json($data);
+        return response($data, Response::HTTP_CREATED);
     }
 
 }
