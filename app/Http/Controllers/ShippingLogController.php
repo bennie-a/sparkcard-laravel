@@ -66,4 +66,68 @@ class ShippingLogController extends Controller
         return response()->json($info, Response::HTTP_OK);
     }
 
+    public function parse() {
+        $data = [
+            "order_id" => "order_Nt7GwWt9TQj3zb5AGhrNTJ",
+            "buyer_name" => "金井 三郎",
+            "shipping_date" => "2025/10/10",
+            "zipcode" => "899-4754",
+            "address" => "福井県吉田郡永平寺町諏訪間502-6",
+            "items" => [
+                [
+                    "id" => 2473,
+                    "card" => [
+                        "name" => "次元の創世",
+                        "exp" => [
+                            "name" => "モダンホライゾン3",
+                            "attr" => "MH3"
+                        ],
+                        "number" => "198",
+                        "image_url" => "https://cards.scryfall.io/png/front/7/f/7fc9a10b-c9f9-4129-a671-ced0917ce78b.png?1717012797",
+                        "foil" => [
+                            "is_foil" => false,
+                            "name" => "通常版"
+                        ],
+                        "promotype" => [
+                            "id" => 1,
+                            "name" => ""
+                        ]
+                    ],
+                    "condition" => "NM",
+                    "quantity" => 2,
+                    "lang" => "JP",
+                    "single_price" => 120,
+                    "subtotal_price" => 240,
+                ],
+                [
+                    "id" => 2957,
+                    "card" => [
+                        "name" => "次元の創世",
+                        "exp" => [
+                            "name" => "モダンホライゾン3",
+                            "attr" => "MH3"
+                        ],
+                        "number" => "198",
+                        "image_url" => "https://cards.scryfall.io/png/front/7/f/7fc9a10b-c9f9-4129-a671-ced0917ce78b.png?1717012797",
+                        "foil" => [
+                            "is_foil" => false,
+                            "name" => "通常版"
+                        ],
+                        "promotype" => [
+                            "id" => 1,
+                            "name" => ""
+                        ]
+                    ],
+                    "lang" => "JP",
+                    "condition" => "NM-",
+                    "quantity" => 1,
+                    "single_price" => 120,
+                    "subtotal_price" => 120,
+                ],
+            ]
+        ];
+
+        return response()->json($data);
+    }
+
 }
