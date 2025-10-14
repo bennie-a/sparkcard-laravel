@@ -129,7 +129,7 @@ class ShippingLogController extends Controller
             ]
         ];
 
-        return response($data, Response::HTTP_CREATED);
+        return response([$data], Response::HTTP_CREATED);
     }
 
 }
