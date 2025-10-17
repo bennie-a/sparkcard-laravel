@@ -4,15 +4,19 @@
     import { useRouter } from 'vue-router';
     import FileUpload from "../component/FileUpload.vue";
     import pagination from "../component/ListPagination.vue";
+    import Loading from "vue-loading-overlay";
     import axios from 'axios';
+    import condition from "../component/tag/ConditionTag.vue";
 
     const router = useRouter();
     const result = reactive([]);
     const resultCount = ref(0);
+    const isLoading = ref(false);
     const upload = function() {
         
     };
     const uploadFile = async(file) => {
+        isLoading.value = true;
         const formData = new FormData();
         formData.append('file', file);
 
@@ -26,6 +30,8 @@
                 console.log(result.value);
             }).catch((error) => {
                 console.error('Error:', error);
+            }).finally(() => {
+                isLoading.value = false;
             });
     };
 
@@ -48,34 +54,60 @@
         </div>
     </div>
     <div class="mt-2">
-        {{ result.value }}
-        <div class="ui segment" v-for="(r, index) in result.value" :key="index">
+        <div class="ui padded segment" v-for="(r, index) in result.value" :key="index">
             <div>
-               【{{index}}】{{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
+               {{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
             </div>
-            <div class="ui secondary segment">
-             <p>〒{{ r.zipcode }}</p>
-             <p>{{ r.address }}</p>
-             <p class="buyer_name">{{ r.buyer_name }}様</p>
-            </div>
-            </div>
+            <address id="buyer" class="ui secondary segment">
+                <p>〒{{ r.zipcode }}</p>
+                <p>{{ r.address }}</p>
+                <p class="name">{{ r.buyer_name }}様</p>
+            </address>
+            <table class="ui striped table">
+                <thead>
+                    <tr>
+                        <th class="one wide center aligned">在庫ID</th>
+                        <th>カード情報</th>
+                        <th class="one wide center aligned">状態</th>
+                        <th class="one wide center aligned">枚数</th>
+                        <th class="two wide center aligned">単価</th>
+                        <th class="two wide center aligned">小計</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, idx) in r.items" :key="idx">
+                        <td class="one wide center aligned">{{ item.id }}</td>
+                        <td>{{ item.card.name }}</td>
+                        <td class="one wide center aligned"><condition :name="item.condition"/></td>
+                        <td class="center aligned">{{ item.quantity }}枚</td>
+                        <td class="two wide center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
+                        <td class="two wide center aligned"><i class="bi bi-currency-yen"></i>{{ item.subtotal_price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <pagination :page="1" :pageCount="2" @pageChange="(p) => alert(p)"/>
     </div>
+        <loading
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
+
 </template>    
 
-<style>
+<style scoped>
 #upload_form {
     padding: 1rem;
 }
 
-.segment > p {
-    line-height: 0.2rem;
+#buyer > p {
+    line-height: 0.6rem;
     color: #444;
 }
 
-.segment > .buyer_name {
+#buyer > .name {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    margin-top: 1rem;
 }
 
 </style>

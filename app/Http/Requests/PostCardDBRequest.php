@@ -36,7 +36,7 @@ class PostCardDBRequest extends FormRequest
             'scryfallId' => ['required_without_all:multiverseId,imageurl', self::uuidrules()],
             'number' => 'required',
             CardConstant::IMAGE_URL => 'required_without_all:multiverseId,scryfallId',
-            'isSkip' => 'nullable|boolean',
+            'is skip' => 'nullable|boolean',
             'foiltype' => 'required',
             CardConstant::PROMO_ID => 'required|integer',
         ];

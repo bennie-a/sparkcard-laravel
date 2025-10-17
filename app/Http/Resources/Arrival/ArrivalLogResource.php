@@ -20,6 +20,7 @@ class ArrivalLogResource extends CardInfoResource
     public function toArray(Request $request): array
     {
         $array[GCon::ID] = $this->arrival_id;
+        $array['stock_id'] = $this->stock_id;
         $array[Header::COST] = $this->cost;
         $array[Header::QUANTITY] = $this->alog_quan;
         $array[Header::LANG] = $this->language;

@@ -251,7 +251,7 @@ export default {
                     }
                     if (card.name != "") {
                         const success = function (response, store) {};
-                        card["isSkip"] = this.isSkip;
+                        card["is_skip"] = this.isSkip;
                         await task.post("/database/card", card, success);
                     }
                 })

@@ -120,8 +120,9 @@ const deleteLog = async(arrival_id) => {
         <table class="ui striped table">
             <thead>
                 <tr>
-                    <th class="two wide center aligned">入荷ID</th>
-                    <th class="six wide">商品名</th>
+                    <th class="one wide center aligned">入荷ID</th>
+                    <th class="one wide center aligned">在庫ID</th>
+                    <th class="">商品名</th>
                     <th class="center aligned">状態</th>
                     <th class="center aligned">枚数</th>
                     <th class="center aligned">原価</th>
@@ -132,6 +133,7 @@ const deleteLog = async(arrival_id) => {
             <tbody>
                 <tr v-for="(log, index) in currentList.value" :key="index" v-memo="currentList.value">
                     <td class="center aligned">{{log.id}}</td>
+                    <td>{{ log.stock_id }}</td>
                     <td>
                             <cardlayout v-model:card="log.card" v-model:lang="log.lang"></cardlayout>
                     </td>

@@ -84,8 +84,7 @@ class ShippingLogController extends Controller
                             "name" => "モダンホライゾン3",
                             "attr" => "MH3"
                         ],
-                        "number" => "198",
-                        "image_url" => "https://cards.scryfall.io/png/front/7/f/7fc9a10b-c9f9-4129-a671-ced0917ce78b.png?1717012797",
+                        "color" => "多色",
                         "foil" => [
                             "is_foil" => false,
                             "name" => "通常版"
@@ -98,8 +97,8 @@ class ShippingLogController extends Controller
                     "condition" => "NM",
                     "quantity" => 2,
                     "lang" => "JP",
-                    "single_price" => 120,
-                    "subtotal_price" => 240,
+                    "single_price" => 6000,
+                    "subtotal_price" => 12000,
                 ],
                 [
                     "id" => 2957,
@@ -109,8 +108,7 @@ class ShippingLogController extends Controller
                             "name" => "モダンホライゾン3",
                             "attr" => "MH3"
                         ],
-                        "number" => "198",
-                        "image_url" => "https://cards.scryfall.io/png/front/7/f/7fc9a10b-c9f9-4129-a671-ced0917ce78b.png?1717012797",
+                        "color" => "多色",
                         "foil" => [
                             "is_foil" => false,
                             "name" => "通常版"

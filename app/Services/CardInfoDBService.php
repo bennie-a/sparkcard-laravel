@@ -95,7 +95,7 @@ class CardInfoDBService {
                     Con::PROMO_ID => $details[Con::PROMO_ID]
                 ];
                 $record = CardInfo::create($record);
-            } else if (!is_null($url) && boolval($details['isSkip']) !== true) {
+            } else if (!is_null($url) && boolval($details['is_skip']) !== true) {
                 logger()->info('update card:', $log);
                 $info->image_url = $url;
                 $info->name = $name;
