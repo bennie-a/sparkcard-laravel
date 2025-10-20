@@ -7,14 +7,23 @@
     import Loading from "vue-loading-overlay";
     import axios from 'axios';
     import condition from "../component/tag/ConditionTag.vue";
+    import pglist from "../component/PgList.vue";
 
     const router = useRouter();
     const result = reactive([]);
     const resultCount = ref(0);
     const isLoading = ref(false);
+    const pglistRef = ref();
+    const currentList = reactive([]);
+
     const upload = function() {
         
     };
+
+    const current = (data) => {
+        currentList.value = data.response;
+    }
+
     const uploadFile = async(file) => {
         isLoading.value = true;
         const formData = new FormData();
@@ -48,12 +57,12 @@
             <div class="four wide left floated column">
                 <button class="ui teal button" @click="router.back()">インポート</button>
             </div>
-            <div class="seven wide right floated column">
-                <label>1-5件&#47;{{ resultCount }}件</label>
+            <div class="seven wide right floated column ui right aligned">
+                <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
             </div>
         </div>
     </div>
-    <div class="mt-2">
+    <div class="mt-1">
         <div class="ui padded segment" v-for="(r, index) in result.value" :key="index">
             <div>
                {{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
@@ -86,7 +95,6 @@
                 </tbody>
             </table>
         </div>
-        <pagination :page="1" :pageCount="2" @pageChange="(p) => alert(p)"/>
     </div>
         <loading
          :active="isLoading"
