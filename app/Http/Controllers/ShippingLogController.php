@@ -66,9 +66,15 @@ class ShippingLogController extends Controller
         return response()->json($info, Response::HTTP_OK);
     }
 
+    /**
+     * 注文CSVファイルを解析する。
+     *
+     * @param Request $request
+     * @return void
+     */
     public function parse(Request $request) {
         $file = $request->file('file');
-        logger()->info($file->getClientOriginalName());
+        logger()->info($file->getRealPath());
         $data = [
             "order_id" => "order_Nt7GwWt9TQj3zb5AGhrNTJ",
             "buyer_name" => "金井 三郎",
