@@ -7,6 +7,7 @@ use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use League\Csv\Reader;
+use League\Csv\Statement;
 
 /**
  * CSVファイル読み込みクラス
@@ -21,7 +22,7 @@ abstract class CsvReader {
      */
     public function read(string $path)
     {
-        // ファイルが存在するかチェック
+        // ファイル存在チェック
         if (!file_exists($path)) {
             $response = response()->json([
                 'status' => 'File Not Found',
@@ -30,38 +31,48 @@ abstract class CsvReader {
             throw new HttpResponseException($response);
         }
 
-        // 文字コードを取得する。
+        // 文字コード検出
         $character_codes = ['ASCII', 'ISO-2022-JP', 'UTF-8', 'EUC-JP', 'SJIS'];
         $file_encoding = mb_detect_encoding(file_get_contents($path), $character_codes, true);
         logger()->debug("文字コード：$file_encoding");
 
-        // CSVファイルを読み込む
-        $csv = Reader::createFromPath($path);
-        // 指定したヘッダーがファイルに存在するかチェック
-        $fileHeaders = $csv->fetchOne();
-        $exHeaders = $this->csvHeaders();
+        // league/csv 9.9対応: SplFileObject を使用
+        $csv = Reader::createFromPath($path, 'r');
 
-        $count = 0;
-        foreach($fileHeaders as $h) {
-            if(in_array($h, $exHeaders)) {
-                $count++;
-            }
-        }
-        if (count($exHeaders) !== $count) {
+        // BOM除去 (もしUTF-8 BOM付きなら)
+        $csv->setOutputBOM(Reader::BOM_UTF8);
+
+        // 1行目をヘッダーとして取得
+        $csv->setHeaderOffset(0);
+        $fileHeaders = $csv->getHeader();
+
+        // ヘッダー検証
+        $exHeaders = $this->csvHeaders();
+        $missingHeaders = array_diff($exHeaders, $fileHeaders);
+        if (!empty($missingHeaders)) {
             $response = response()->json([
                 'status' => 'CSV Validation Error',
-                'error' => 'CSVファイルのヘッダーが足りません'
+                'error' => 'CSVファイルのヘッダーが足りません: ' . implode(', ', $missingHeaders)
             ], Response::HTTP_BAD_REQUEST);
             throw new HttpResponseException($response);
         }
-        
-        // ヘッダーを除いて1行ずつ配列にする
-        $csv->setHeaderOffset(0);
-        $records = [];
-        foreach ($csv as $row) {
-            $records[] = mb_convert_encoding($row, 'UTF-8', $file_encoding);
+
+        // 全レコードを取得
+        $records = $csv->getRecords();
+        $rows = [];
+        // 文字コード変換 (UTF-8以外の場合)
+        if ($file_encoding !== 'UTF-8') {
+            foreach ($records as &$row) {
+                foreach ($row as $key => $value) {
+                    $rows[$key] = mb_convert_encoding($value, 'UTF-8', $file_encoding);
+                }
+            }
+            unset($rows);
         }
-        $this->validate($records);
+
+        // バリデーション処理
+        $this->validate($rows);
+
         return $records;
     }
 

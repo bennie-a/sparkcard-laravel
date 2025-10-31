@@ -9,6 +9,7 @@ use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Shipt\ShiptRow;
 use App\Services\Stock\ShippingRow;
 use Carbon\Carbon;
 
@@ -53,7 +54,7 @@ class Stockpile extends Model
      * @param ShippingRow $row
      * @return Stockpile|null
      */
-    public static function findByShiptCsv(ShippingRow $row): Stockpile|null {
+    public static function findByShiptCsv(ShiptRow $row): Stockpile|null {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')

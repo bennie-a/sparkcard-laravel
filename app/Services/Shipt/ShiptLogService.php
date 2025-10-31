@@ -1,13 +1,14 @@
 <?php
-namespace App\Services\Stock;
+namespace App\Services\Shipt;
 
 use App\Exceptions\NotFoundException;
 use App\Facades\CardBoard;
 use App\Files\CsvReader;
-use App\Files\Stock\ShippingLogCsvReader;
+use App\Files\Reader\ShiptLogCsvReader;
 use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
+use App\Services\AbstractCsvService;
 use App\Services\Constant\StockpileHeader as Header;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
@@ -18,23 +19,24 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\Response as HttpResponse;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant;
+use League\Csv\AbstractCsv;
 
 /**
  * 出荷ログ機能のサービスクラス
  */
-class ShippingLogService extends AbstractSmsService{
+class ShiptLogService extends AbstractCsvService {
     /**
      * 出荷ログ用のCSV読み込みクラスを取得する。
      * @see CsvReader::csvReader
-     * @return ShippingLogCsvReader
+     * @return ShiptLogCsvReader
      */
     protected function csvReader() {
-        return new ShippingLogCsvReader();
+        return new ShiptLogCsvReader;
     }
     
     /**
      * @see AbstractSmsService::store
-     * @param ShippingRow $row
+     * @param ShiptRow $row
      * @return void
     */
     protected function store($row) {
@@ -79,7 +81,20 @@ class ShippingLogService extends AbstractSmsService{
         $this->addSuccess($row->number());
     }
 
-    private function updateNotion(Page $notionCard, ShippingRow $row) {
+    /**
+     * 注文CSVの内容を解析する。
+     *
+     * @param string $path
+     * @return void
+     */
+    public function parse(string $path) {
+        $records = $this->read($path);
+        // DB登録
+        return $records;
+
+    }
+
+    private function updateNotion(Page $notionCard, ShiptRow $row) {
         $page = new Page();
         $page->setId($notionCard->getId());
         $page->set('購入者名', Text::value($row->buyer()));
@@ -91,7 +106,7 @@ class ShippingLogService extends AbstractSmsService{
     }
 
     protected function createRow(int $index, array $row) {
-        return new ShippingRow($index, $row);
+        return new ShiptRow($index, $row);
     }
 
     public function fetch(array $details) {

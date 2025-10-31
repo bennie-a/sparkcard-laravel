@@ -4,19 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiptLogRequest;
-use App\Services\Stock\ShippingLogService;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Constant\StockpileHeader as Header;
-
+use App\Services\Shipt\ShiptLogService;
 
 /**
  * 出荷ログAPI
  */
-class ShippingLogController extends Controller
+class ShiptLogController extends Controller
 {
-    public function __construct(ShippingLogService $service) {
+    public function __construct(ShiptLogService $service) {
         ini_set("max_execution_time",300); // タイムアウトを240秒にセット
         ini_set("max_input_time",300); // パース時間を240秒にセット
 
@@ -75,6 +74,8 @@ class ShippingLogController extends Controller
     public function parse(Request $request) {
         $file = $request->file('file');
         logger()->info($file->getRealPath());
+
+        $this->service->parse($file->getRealPath());
         $data = [
             "order_id" => "order_Nt7GwWt9TQj3zb5AGhrNTJ",
             "buyer_name" => "金井 三郎",

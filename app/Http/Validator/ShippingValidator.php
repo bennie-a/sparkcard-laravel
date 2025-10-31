@@ -23,7 +23,7 @@ class ShippingValidator extends AbstractCsvValidator {
    protected function attributes():array {
     return [
         Header::BUYER => '購入者名',
-        Header::CONDITION => '保存状態',
+        Header::CONDITION => '状態',
         Header::QUANTITY => '数量',
     ];
    }

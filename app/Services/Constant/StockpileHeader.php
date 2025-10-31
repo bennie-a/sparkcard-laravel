@@ -23,6 +23,7 @@ class StockpileHeader {
     public const PRODUCT_NAME = "product_name";
     public const PRODUCT_PRICE = "product_price";
     public const SHIPPING_DATE = "shipping_date";
+    public const PRODUCT_ID = "original_product_id";
     public const BILLING_POSTAL_CODE = "billing_postal_code";
     public const BILLING_STATE = "billing_state";
     public const BILLING_CITY = "billing_city";
@@ -42,7 +43,7 @@ class StockpileHeader {
     }
 
     public static function shippinglog_constants() {
-        return [self::ORDER_ID, self::SHIPPING_DATE, self::BUYER, self::PRODUCT_NAME, self::QUANTITY, self::CONDITION,
+        return [self::ORDER_ID, self::SHIPPING_DATE, self::PRODUCT_ID, self::BUYER, self::PRODUCT_NAME, self::QUANTITY,
                      self::PRODUCT_PRICE, self::BILLING_POSTAL_CODE, self::BILLING_STATE, self::BILLING_CITY,
                     self::BILLING_ADDRESS_1,self::BILLING_ADDRESS_2];
     }

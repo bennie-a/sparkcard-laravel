@@ -8,6 +8,7 @@ use App\Files\Stock\StockpileCsvReader;
 use App\Models\CardInfo;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
+use App\Services\AbstractCsvService;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\StockpileHeader;
@@ -16,7 +17,7 @@ use App\Services\Stock\StockpileRow;
 /**
  * 在庫管理機能のサービスクラス
  */
-class StockpileService extends AbstractSmsService{
+class StockpileService extends AbstractCsvService {
 
 /**
      * 出荷ログ用のCSV読み込みクラスを取得する。

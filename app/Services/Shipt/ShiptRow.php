@@ -1,9 +1,9 @@
 <?php
-namespace App\Services\Stock;
-
+namespace App\Services\Shipt;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Stock\StockpileRow;
 use App\Services\Stock\Strategy\NoSetCodeStrategy;
 use App\Services\Stock\Strategy\DefaultRowStrategy;
 use Carbon\Carbon;
@@ -11,7 +11,7 @@ use Carbon\Carbon;
 /**
  * 出荷CSV1件分のクラス
  */
-class ShippingRow extends StockpileRow {
+class ShiptRow extends StockpileRow {
     
     private $setcode;
 

@@ -1,10 +1,13 @@
 <?php
-namespace App\Files\Stock;
+namespace App\Files\Reader;
 
 use App\Files\Csv\CsvReader;
 use App\Http\Validator\ShippingValidator;
 use App\Services\Constant\StockpileHeader as Header;
-class ShippingLogCsvReader extends CsvReader {
+/**
+ * メルカリ用注文CSVの読み込みクラス
+ */
+class ShiptLogCsvReader extends CsvReader {
     /**
      * 出荷ログファイルのヘッダーを取得する。
      * @see CsvReader::csvHeaders

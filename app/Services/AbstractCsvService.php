@@ -1,17 +1,12 @@
 <?php
-namespace App\Services\Stock;
+namespace App\Services;
 
 use App\Files\CsvReader;
-use App\Http\Response\CustomResponse;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use App\Services\Stock\StockpileRow;
-
-use function Symfony\Component\Mailer\Command\execute;
 
 /**
- * 在庫管理機能(Stock Management Service:SMS)の抽象クラス
+ * CSVファイル読み込みに関する抽象クラス
  */
-abstract class AbstractSmsService {
+abstract class AbstractCsvService {
 
     private $success = [];
 
