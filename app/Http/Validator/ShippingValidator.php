@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Validator;
 use App\Http\Validator\AbstractCsvValidator;
+use App\Services\Constant\ShiptConstant as ShiptCon;
 use App\Services\Constant\StockpileHeader as Header;
 
 class ShippingValidator extends AbstractCsvValidator {
@@ -9,9 +10,10 @@ class ShippingValidator extends AbstractCsvValidator {
      */
    protected function validationRules():array {
     return [
-        Header::BUYER => 'required',
+        ShiptCon::BUYER => 'required',
         Header::CONDITION => 'nullable|in:NM,NM-,EX+,EX,PLD',
-        Header::QUANTITY => 'required|numeric'
+        Header::QUANTITY => 'required|numeric',
+        ShiptCon::SHIPPING_DATE => 'required|date_format:YYYY/m/d'
     ];
    }
 
@@ -22,9 +24,6 @@ class ShippingValidator extends AbstractCsvValidator {
      */
    protected function attributes():array {
     return [
-        Header::BUYER => '購入者名',
-        Header::CONDITION => '状態',
-        Header::QUANTITY => '数量',
     ];
    }
 }

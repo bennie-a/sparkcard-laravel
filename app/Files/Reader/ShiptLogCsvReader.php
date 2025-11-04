@@ -3,7 +3,7 @@ namespace App\Files\Reader;
 
 use App\Files\Csv\CsvReader;
 use App\Http\Validator\ShippingValidator;
-use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\ShiptConstant;
 /**
  * メルカリ用注文CSVの読み込みクラス
  */
@@ -14,7 +14,7 @@ class ShiptLogCsvReader extends CsvReader {
      * @return array
      */
     protected function csvHeaders() {
-        return Header::shippinglog_constants();
+        return ShiptConstant::shippinglog_constants();
     }
 
     protected function validator()

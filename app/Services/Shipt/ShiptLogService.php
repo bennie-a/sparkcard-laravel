@@ -20,6 +20,7 @@ use Illuminate\Http\Response as HttpResponse;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant;
 use League\Csv\AbstractCsv;
+use App\Services\Constant\ShiptConstant as ShiptCon;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -133,9 +134,9 @@ class ShiptLogService extends AbstractCsvService {
         // $items = array_map(function($log) {
         // }, $list);   
         $slog = $list[0];
-        $info = [Header::ORDER_ID => $slog->order_id, Header::BUYER => $slog[Header::BUYER],
-                        Header::SHIPPING_DATE => $slog->shipping_date,  'zipcode' => '〒'.$slog->zip, 
-                        'address' => $slog->address, GlobalConstant::CARD => $items->toArray()];
+        $info = [ShiptCon::ORDER_ID => $slog->order_id, ShiptCon::BUYER => $slog[ShiptCon::BUYER],
+                        ShiptCon::SHIPPING_DATE => $slog->shipping_date,  ShiptCon::ZIPCODE => '〒'.$slog->zip, 
+                        ShiptCon::ADDRESS => $slog->address, GlobalConstant::CARD => $items->toArray()];
         return $info;
         // $log = ShippingLog::find($id);
     }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
 use App\Files\Csv\CsvWriter;
+use App\Files\Reader\ShiptLogCsvReader;
 use App\Files\Stock\ShippingLogCsvReader;
 use App\Models\Stockpile;
 use App\Services\Constant\StockpileHeader as Header;
@@ -134,7 +135,7 @@ class ShiptImportLogTest extends TestCase
      */
     #[DataProvider('ngprovider')]
     public function test_ng(string $item_name, string $msg) {
-        $reader = new ShippingLogCsvReader();
+        $reader = new ShiptLogCsvReader();
         $dir = config('csv.export');
         $row = $reader->read("{$dir}shipping_log.csv");
         $newRow = [];

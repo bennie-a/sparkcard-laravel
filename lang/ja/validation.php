@@ -2,6 +2,7 @@
 use App\Services\Constant\SearchConstant as Scon;
 use App\Services\Constant\ArrivalConstant as Acon;
 use App\Services\Constant\CardConstant as CCon;
+use App\Services\Constant\ShiptConstant;
 use App\Services\Constant\StockpileHeader;
 
 return [
@@ -187,11 +188,14 @@ return [
         StockpileHeader::COST => '原価',
         Acon::VENDOR => '取引先名',
         CCon::NUMBER => 'カード番号',
-        Ccon::PROMO_ID => 'プロモタイプID'
+        Ccon::PROMO_ID => 'プロモタイプID',
+        ShiptConstant::BUYER => '購入者名',
+        StockpileHeader::CONDITION => '状態',
+        StockpileHeader::QUANTITY => '枚数',
     ],
 
     'values' => [
-        'shipping_date' => [
+        ShiptConstant::SHIPPING_DATE => [
             'today' => '今日'
         ],
         Acon::ARRIVAL_DATE => [
