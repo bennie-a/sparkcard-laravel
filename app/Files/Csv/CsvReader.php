@@ -37,14 +37,14 @@ abstract class CsvReader {
         logger()->debug("文字コード：$file_encoding");
 
         // league/csv 9.9対応: SplFileObject を使用
-        $csv = Reader::createFromPath($path, 'r');
+        $reader = Reader::createFromPath($path, 'r');
 
         // BOM除去 (もしUTF-8 BOM付きなら)
-        $csv->setOutputBOM(Reader::BOM_UTF8);
+        $reader->setOutputBOM(Reader::BOM_UTF8);
 
         // 1行目をヘッダーとして取得
-        $csv->setHeaderOffset(0);
-        $fileHeaders = $csv->getHeader();
+        $reader->setHeaderOffset(0);
+        $fileHeaders = $reader->getHeader();
 
         // ヘッダー検証
         $exHeaders = $this->csvHeaders();
@@ -58,22 +58,23 @@ abstract class CsvReader {
         }
 
         // 全レコードを取得
-        $records = $csv->getRecords();
+        $reader->setHeaderOffset(0);
+        $records = $reader->getRecords();
+        logger()->debug($reader->count() . "件のレコードを取得");
         $rows = [];
-        // 文字コード変換 (UTF-8以外の場合)
-        if ($file_encoding !== 'UTF-8') {
-            foreach ($records as &$row) {
-                foreach ($row as $key => $value) {
-                    $rows[$key] = mb_convert_encoding($value, 'UTF-8', $file_encoding);
-                }
+        foreach ($records as $record) {
+            $convertedRow = [];
+            foreach ($record as $key => $value) {
+                $convertedRow[$key] = mb_convert_encoding($value, 'UTF-8', $file_encoding);
             }
-            unset($rows);
+            $rows[] = $convertedRow;
+            logger()->debug($convertedRow);
         }
 
         // バリデーション処理
         $this->validate($rows);
 
-        return $records;
+        return $rows;
     }
 
     /** 

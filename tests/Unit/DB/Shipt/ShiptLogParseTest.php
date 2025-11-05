@@ -12,6 +12,8 @@ use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
+use Tests\Util\TestDateUtil;
+
 /**
  * 出荷情報解析機能のテストケース
  */
@@ -30,12 +32,14 @@ class ShiptLogParseTest extends TestCase
      */
     public function test_読み込みテスト(): void
     {
+        $today = TestDateUtil::formatToday();
         $content = <<<CSV
         order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,billing_postal_code,billing_state,billing_city,billing_address_1,billing_address_2,coupon_discount_amount
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,,,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,,,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,00
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
         CSV;
-        $this->upload($content);
+        $response = $this->upload($content);
+        logger()->info($response->getContent());
     }
 
     public function test_ng_ヘッダ不足(): void {

@@ -192,6 +192,7 @@ return [
         ShiptConstant::BUYER => '購入者名',
         StockpileHeader::CONDITION => '状態',
         StockpileHeader::QUANTITY => '枚数',
+        ShiptConstant::SHIPPING_DATE => '発送日',
     ],
 
     'values' => [

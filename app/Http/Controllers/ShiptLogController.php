@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Shipt\ShiptLogService;
+use App\Services\Constant\ShiptConstant as ShiptCon;
 
 /**
  * 出荷ログAPI
@@ -47,7 +48,7 @@ class ShiptLogController extends Controller
      * @return Response
      */
     public function index(ShiptLogRequest $request) {
-        $detail = $request->only([Header::BUYER, Header::SHIPPING_DATE]);
+        $detail = $request->only([ShiptCon::BUYER, ShiptCon::SHIPPING_DATE]);
         $result = $this->service->fetch($detail);
         logger()->debug($request);
         logger()->info($result);
@@ -73,9 +74,9 @@ class ShiptLogController extends Controller
      */
     public function parse(Request $request) {
         $file = $request->file('file');
-        logger()->info($file->getRealPath());
+        logger()->info("ファイル読み込み開始：{$file->getClientOriginalName()}");
 
-        $this->service->parse($file->getRealPath());
+        $records = $this->service->parse($file->getRealPath());
         $data = [
             "order_id" => "order_Nt7GwWt9TQj3zb5AGhrNTJ",
             "buyer_name" => "金井 三郎",
@@ -134,7 +135,7 @@ class ShiptLogController extends Controller
             ]
         ];
 
-        return response([$data], Response::HTTP_CREATED);
+        return response($records, Response::HTTP_CREATED);
     }
 
 }
