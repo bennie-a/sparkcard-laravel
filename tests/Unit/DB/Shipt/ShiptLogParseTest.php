@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
+use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;

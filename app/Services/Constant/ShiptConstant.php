@@ -14,18 +14,16 @@ class ShiptConstant extends StockpileHeader {
     public const PRODUCT_PRICE = "product_price";
     public const SHIPPING_DATE = "shipping_date";
     public const PRODUCT_ID = "original_product_id";
-    public const BILLING_POSTAL_CODE = "billing_postal_code";
-    public const BILLING_STATE = "billing_state";
-    public const BILLING_CITY = "billing_city";
-    public const BILLING_ADDRESS_1 = "billing_address_1";
-    public const BILLING_ADDRESS_2  = "billing_address_2";
+    public const POSTAL_CODE = "billing_postal_code";
+    public const STATE = "billing_state";
+    public const CITY = "billing_city";
+    public const ADDRESS_1 = "billing_address_1";
+    public const ADDRESS_2  = "billing_address_2";
     public const ZIPCODE = "zipcode";
     public const ADDRESS = "address";
 
     public static function shippinglog_constants() {
         return [self::ORDER_ID, self::SHIPPING_DATE, self::PRODUCT_ID, self::BUYER, self::PRODUCT_NAME, self::QUANTITY,
-                     self::PRODUCT_PRICE, self::BILLING_POSTAL_CODE, self::BILLING_STATE, self::BILLING_CITY,
-                    self::BILLING_ADDRESS_1,self::BILLING_ADDRESS_2];
+                     self::PRODUCT_PRICE, self::POSTAL_CODE, self::STATE, self::CITY, self::ADDRESS_1,self::ADDRESS_2];
     }
-
 }

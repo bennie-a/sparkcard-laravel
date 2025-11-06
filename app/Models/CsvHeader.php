@@ -11,9 +11,9 @@ class CsvHeader extends Model
 
     protected $table = 'csv_header';
 
-    protected $fillable = ['id', 'shop',  'column'];
+    protected $fillable = ['id', 'shop',  'column', 'csv_type', 'order_id'];
 
-    protected $visible = ['id', 'column'];
+    protected $visible = ['id', 'shop', 'column', 'csv_type', 'order_id'];
 
     /**
      * 'shop'カラムと合致するレコードを取得する。
