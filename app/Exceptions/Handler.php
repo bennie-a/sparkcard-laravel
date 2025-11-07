@@ -53,7 +53,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): JsonResponse {
         $statusCode = match (true) {
-            $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
             $e instanceof ValidationException => Response::HTTP_BAD_REQUEST,
             $e instanceof HttpException => $e->getStatusCode(),
             $e instanceof ApiExceptionInterface => $e->getStatusCode(),
@@ -62,10 +61,7 @@ class Handler extends ExceptionHandler
 
         $title = "";
         $detail = "";
-        if ($e instanceof CsvFormatException) {
-            $title = 'CSV Validation Error';
-            $detail = $e->getMessage();
-        } else if ($e instanceof ApiExceptionInterface) {
+        if ($e instanceof ApiExceptionInterface) {
             $title = $e->getTitle();
             $detail = $e->getDetail();
         } else if ($statusCode === Response::HTTP_BAD_REQUEST) {
@@ -111,9 +107,6 @@ class Handler extends ExceptionHandler
                         $title = 'Not Found';
                     case Response::HTTP_CONFLICT:
                         $title = 'Conflict';
-                    break;
-                    case CustomResponse::HTTP_NO_PROMOTYPE:
-                        $title = 'No Promotype';
                     break;
                     case CustomResponse::HTTP_NOT_FOUND_EXPANSION:
                         $title = 'Not Found Expansion';

@@ -1,9 +1,8 @@
 <?php
 namespace App\Files\Csv;
 
-use App\Exceptions\CsvFormatException;
+use App\Exceptions\api\CsvFormatException;
 use App\Http\Response\CustomResponse;
-use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use League\Csv\Reader;
@@ -50,11 +49,8 @@ abstract class CsvReader {
         $exHeaders = $this->csvHeaders();
         $missingHeaders = array_diff($exHeaders, $fileHeaders);
         if (!empty($missingHeaders)) {
-            $response = response()->json([
-                'status' => 'CSV Validation Error',
-                'error' => 'CSVファイルのヘッダーが足りません: ' . implode(', ', $missingHeaders)
-            ], Response::HTTP_BAD_REQUEST);
-            throw new HttpResponseException($response);
+            $details = 'ヘッダーが足りません: ' . implode(', ', $missingHeaders);
+            throw new CsvFormatException('ヘッダー不足', $details);
         }
 
         // 全レコードを取得
