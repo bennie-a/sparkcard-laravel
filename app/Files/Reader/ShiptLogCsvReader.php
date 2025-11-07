@@ -1,8 +1,11 @@
 <?php
 namespace App\Files\Reader;
 
+use App\Enum\CsvFlowType;
+use App\Enum\ShopPlatform;
 use App\Files\Csv\CsvReader;
 use App\Http\Validator\ShippingValidator;
+use App\Models\CsvHeader;
 use App\Services\Constant\ShiptConstant;
 /**
  * メルカリ用注文CSVの読み込みクラス
@@ -14,7 +17,12 @@ class ShiptLogCsvReader extends CsvReader {
      * @return array
      */
     protected function csvHeaders() {
-        return ShiptConstant::shippinglog_constants();
+        $headers = CsvHeader::findColumns(
+            ShopPlatform::MERCARI,
+            CsvFlowType::SHIPT
+        );
+
+        return $headers;
     }
 
     protected function validator()

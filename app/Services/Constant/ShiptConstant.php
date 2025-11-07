@@ -14,11 +14,11 @@ class ShiptConstant extends StockpileHeader {
     public const PRODUCT_PRICE = "product_price";
     public const SHIPPING_DATE = "shipping_date";
     public const PRODUCT_ID = "original_product_id";
-    public const POSTAL_CODE = "billing_postal_code";
-    public const STATE = "billing_state";
-    public const CITY = "billing_city";
-    public const ADDRESS_1 = "billing_address_1";
-    public const ADDRESS_2  = "billing_address_2";
+    public const POSTAL_CODE = "shipping_postal_code";
+    public const STATE = "shipping_state";
+    public const CITY = "shipping_city";
+    public const ADDRESS_1 = "shipping_address_1";
+    public const ADDRESS_2  = "shipping_address_2";
     public const ZIPCODE = "zipcode";
     public const ADDRESS = "address";
 

@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
+use App\Enum\CsvFlowType;
+use App\Enum\ShopPlatform;
+use App\Models\CsvHeader;
 use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,6 +17,7 @@ use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use Tests\Util\TestDateUtil;
+
 
 /**
  * 出荷情報解析機能のテストケース
@@ -35,7 +39,7 @@ class ShiptLogParseTest extends TestCase
     {
         $today = TestDateUtil::formatToday();
         $content = <<<CSV
-        order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,billing_postal_code,billing_state,billing_city,billing_address_1,billing_address_2,coupon_discount_amount
+        order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
         CSV;
@@ -44,15 +48,16 @@ class ShiptLogParseTest extends TestCase
     }
 
     public function test_ng_ヘッダ不足(): void {
-                $content = <<<CSV
-        order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,billing_postal_code,billing_state,billing_city,billing_address_1,shipping_address_2,coupon_discount_amount
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,,,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,,,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,00
+        $today = TestDateUtil::formatToday();
+        $content = <<<CSV
+        order_id,buyer_name,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,00
         CSV;
         $response = $this->upload($content, Response::HTTP_BAD_REQUEST);
         $response->assertJsonFragment([
             'status' => 'CSV Validation Error',
-            'error' => 'CSVファイルのヘッダーが足りません: billing_address_2'
+            'error' => 'CSVファイルのヘッダーが足りません: shipping_date'
         ]);
     }
 
