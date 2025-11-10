@@ -49,7 +49,7 @@ abstract class CsvReader {
         $exHeaders = $this->csvHeaders();
         $missingHeaders = array_diff($exHeaders, $fileHeaders);
         if (!empty($missingHeaders)) {
-            $details = 'ヘッダーが足りません: ' . implode(', ', $missingHeaders);
+            $details = __('messages.lack-of-csv-header'). implode(', ', $missingHeaders);
             throw new CsvFormatException('ヘッダー不足', $details);
         }
 
