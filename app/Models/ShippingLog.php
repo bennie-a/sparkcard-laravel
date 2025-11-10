@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Libs\MtgJsonUtil;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\ShiptConstant as SC;
 use Carbon\Carbon;
 
 /**
@@ -42,10 +42,10 @@ class ShippingLog extends Model
     }
 
     public static function fetch($details) {
-        $buyer = $details[Header::BUYER];
+        $buyer = $details[SC::BUYER];
         $shiptDate = null;
-        if (MtgJsonUtil::hasKey(Header::SHIPPING_DATE, $details)) {
-            $shiptDate = $details[Header::SHIPPING_DATE];
+        if (MtgJsonUtil::hasKey(SC::SHIPPING_DATE, $details)) {
+            $shiptDate = $details[SC::SHIPPING_DATE];
         }
         $query = ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
         selectRaw('count(order_id) as item_count, sum(total_price) as total_price');
@@ -54,7 +54,7 @@ class ShippingLog extends Model
             $query = $query->where('name', 'LIKE', $pat);
         }
         if ($shiptDate != null) {
-            $query = $query->whereDate(Header::SHIPPING_DATE, $shiptDate);
+            $query = $query->whereDate(SC::SHIPPING_DATE, $shiptDate);
         }
         return $query->orderBy('shipping_date', 'desc')
             ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->get();

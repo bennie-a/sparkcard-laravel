@@ -34,23 +34,51 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-    /**
-     * A basic feature test example.
-     */
-    public function test_読み込みテスト(): void
+     public function test_注文数が1件(): void
+    {
+        $order_id1 = uniqid('order_');
+        logger()->debug("order_id1: {$order_id1}");
+        $order_id2 = uniqid('order_');
+        logger()->debug("order_id1: {$order_id2}");
+    }
+
+    public function test_同じ注文番号が複数あり(): void
     {
         $today = TestDateUtil::formatToday();
         $content = <<<CSV
         order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
         CSV;
         $response = $this->upload($content);
         logger()->info($response->getContent());
     }
 
-    public function test_ng_ヘッダー不足(): void {
+    public function test_購入者が2名_1人あたりの注文数が3件ずつ(): void {
         $today = TestDateUtil::formatToday();
+        $content = <<<CSV
+        order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1113,【MHR】天空の刃、セラ[JP][赤],1,600,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+        order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1114,【KHM】無情な行動[JP][黒],2,720,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
+        order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1115,【ZNR】時の一掃者、テフェリー[JP][青],1,500,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
+        order_3KGEXf3shdRmUSLVLKiR
+        CSV;
+    }
+
+    public function test_発送日が今日() {
+
+    }
+
+    public function test_発送日が昨日() {
+
+    }
+
+    public function test_発送日が明日() {
+
+    }
+
+    public function test_ng_ヘッダー不足(): void {
         $content = <<<CSV
         order_id,buyer_name,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
