@@ -34,23 +34,32 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-     public function test_注文数が1件(): void
+     public function test_同じ注文番号が複数件(): void
     {
-        $order_id1 = uniqid('order_');
+        $order_id1 = $this->createOrderId();
         logger()->debug("order_id1: {$order_id1}");
-        $order_id2 = uniqid('order_');
+        $order_id2 = $this->createOrderId();
         logger()->debug("order_id1: {$order_id2}");
     }
 
-    public function test_同じ注文番号が複数あり(): void
+    public function test_注文数が1件(): void
     {
         $today = TestDateUtil::formatToday();
+        $orderId = $this->createOrderId();
+        $buyer = fake()->name();
+        $postalCode = fake()->postcode1()."-".fake()->postcode2();
+        $pref = fake()->prefecture();
+        $city = fake()->city();
+        $address1 = fake()->streetAddress();
+        $address2 = fake()->secondaryAddress();
         $content = <<<CSV
-        order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+        {$this->getHeader()}
+        {$orderId},{$buyer},{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,{$postalCode},{$pref},{$city},{$address1},{$address2},0
+        {$orderId},{$buyer},{$today},1112,【BRO】ガイアの眼、グウェナ[JP][緑],2,480,{$postalCode},{$pref},{$city},{$address1},{$address2},0
         CSV;
         $response = $this->upload($content);
-        logger()->info($response->getContent());
+        $json = $response->json();
+        logger()->debug($json);
     }
 
     public function test_購入者が2名_1人あたりの注文数が3件ずつ(): void {
@@ -119,6 +128,33 @@ class ShiptLogParseTest extends TestCase
                 unlink($tmpFilePath);
             }
         }
+    }
 
+    /**
+     * 注文番号をランダムで作成する。
+     *
+     * @return string
+     */
+    private function createOrderId(): string {
+        return uniqid('order_');
+    }
+
+    private function getHeader() {
+        $header = implode(',', [
+                                'order_id',
+                                'buyer_name',
+                                'shipping_date',
+                                'original_product_id',
+                                'product_name',
+                                'quantity',
+                                'product_price',
+                                'shipping_postal_code',
+                                'shipping_state',
+                                'shipping_city',
+                                'shipping_address_1',
+                                'shipping_address_2',
+                                'coupon_discount_amount',
+                            ]);
+        return $header;
     }
 }

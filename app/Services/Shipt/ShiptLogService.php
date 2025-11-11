@@ -9,7 +9,6 @@ use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\AbstractCsvService;
-use App\Services\Constant\StockpileHeader as Header;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
@@ -20,7 +19,7 @@ use Illuminate\Http\Response as HttpResponse;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant;
 use League\Csv\AbstractCsv;
-use App\Services\Constant\ShiptConstant as ShiptCon;
+use App\Services\Constant\ShiptConstant as SC;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -59,8 +58,8 @@ class ShiptLogService extends AbstractCsvService {
             return;
         }
     
-        $log = ['order_id' => $row->order_id(), Header::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
-                        'stock_id' => $stock['id'], Header::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
+        $log = ['order_id' => $row->order_id(), SC::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
+                        'stock_id' => $stock['id'], SC::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
                     'single_price' => $row->product_price(), 'total_price' => $row->total_price() ];
         ShippingLog::create($log);
 
@@ -90,11 +89,48 @@ class ShiptLogService extends AbstractCsvService {
      */
     public function parse(string $path) {
         $records = $this->read($path);
+        $orders = [];
+        foreach ($records as $index => $r) {
+            $row = $this->createRow($index + 2, $r);
+            $orderId = $row->order_id();
 
-
-        return $records;
-
+            if(!isset($orders[$orderId])){
+                // 新規生成
+                $orders[$orderId] = [
+                    SC::ORDER_ID => $orderId,
+                    SC::BUYER => $row->buyer(),
+                    SC::SHIPPING_DATE => $row->shipping_date(),
+                    SC::ZIPCODE => $row->postal_code(),
+                    SC::ADDRESS => $row->address(),
+                    SC::ITEMS => [],
+                ];
+            }
+        }
+        return $orders;
     }
+
+//     // subtotal_price
+//     $subtotal = (int)$row['product_price'] * (int)$row['quantity'];
+
+//     // single_price = subtotal / shipment（小数点切り捨て）
+//     $single = (int) floor($subtotal / (int)$row['quantity']);
+
+//     // item push
+//     $orders[$orderId]['items'][] = [
+//         'stock' => [
+//             'id' => (int)$row['original_product_id'],
+//         ],
+//         'shipment' => (int)$row['quantity'],
+//         'single_price' => $single,
+//         'subtotal_price' => $subtotal,
+//     ];
+// }
+
+// $json = json_encode(array_values($orders), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+// echo $json;
+//         }
+
+//         return $records;
 
     private function updateNotion(Page $notionCard, ShiptRow $row) {
         $page = new Page();
@@ -124,10 +160,10 @@ class ShiptLogService extends AbstractCsvService {
     public function show(string $orderId) {
         $list = ShippingLog::fetchByOrderId($orderId);
         $items = $list->map(function($slog) {
-                return ["id" => $slog["stock_id"],  Con::NAME => $slog["cardname"], Con::EXP => [Con::NAME => $slog[Header::SETNAME], Con::ATTR => $slog['exp_attr']],
-                             Header::CONDITION => $slog[Header::CONDITION], Header::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
-                            Header::LANG => $slog[Header::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL], 
-                            Header::FOIL => ['is_foil' => $slog['isFoil'], Con::NAME => $slog['foilname']],
+                return ["id" => $slog["stock_id"],  Con::NAME => $slog["cardname"], Con::EXP => [Con::NAME => $slog[SC::SETNAME], Con::ATTR => $slog['exp_attr']],
+                             SC::CONDITION => $slog[SC::CONDITION], SC::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
+                            SC::LANG => $slog[SC::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL], 
+                            SC::FOIL => ['is_foil' => $slog['isFoil'], Con::NAME => $slog['foilname']],
                             'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
                             Con::PROMOTYPE => [GlobalConstant::ID => $slog->promotype_id, GlobalConstant::NAME => $slog->promo_name
                 ]];
@@ -135,9 +171,9 @@ class ShiptLogService extends AbstractCsvService {
         // $items = array_map(function($log) {
         // }, $list);   
         $slog = $list[0];
-        $info = [ShiptCon::ORDER_ID => $slog->order_id, ShiptCon::BUYER => $slog[ShiptCon::BUYER],
-                        ShiptCon::SHIPPING_DATE => $slog->shipping_date,  ShiptCon::ZIPCODE => '〒'.$slog->zip, 
-                        ShiptCon::ADDRESS => $slog->address, GlobalConstant::CARD => $items->toArray()];
+        $info = [SC::ORDER_ID => $slog->order_id, SC::BUYER => $slog[SC::BUYER],
+                        SC::SHIPPING_DATE => $slog->shipping_date,  SC::ZIPCODE => '〒'.$slog->zip, 
+                        SC::ADDRESS => $slog->address, GlobalConstant::CARD => $items->toArray()];
         return $info;
         // $log = ShippingLog::find($id);
     }

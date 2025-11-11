@@ -64,7 +64,6 @@ abstract class CsvReader {
                 $convertedRow[$key] = mb_convert_encoding($value, 'UTF-8', $file_encoding);
             }
             $rows[] = $convertedRow;
-            logger()->debug($convertedRow);
         }
 
         // バリデーション処理
