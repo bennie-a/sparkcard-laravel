@@ -85,7 +85,7 @@ class ShiptLogService extends AbstractCsvService {
      * 注文CSVの内容を解析する。
      * @since 5.1.0
      * @param string $path
-     * @return void
+     * @return array
      */
     public function parse(string $path) {
         $records = $this->read($path);
@@ -106,7 +106,7 @@ class ShiptLogService extends AbstractCsvService {
                 ];
             }
         }
-        return $orders;
+        return array_values($orders);
     }
 
 //     // subtotal_price

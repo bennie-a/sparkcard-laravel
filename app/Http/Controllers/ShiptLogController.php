@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiptLogRequest;
+use App\Http\Resources\Shipt\OrderCollection;
+use App\Http\Resources\Shipt\OrderResource;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -77,65 +79,8 @@ class ShiptLogController extends Controller
         logger()->info("ファイル読み込み開始：{$file->getClientOriginalName()}");
 
         $records = $this->service->parse($file->getRealPath());
-        $data = [
-            "order_id" => "order_Nt7GwWt9TQj3zb5AGhrNTJ",
-            "buyer_name" => "金井 三郎",
-            "shipping_date" => "2025/10/10",
-            "zipcode" => "899-4754",
-            "address" => "福井県吉田郡永平寺町諏訪間502-6",
-            "items" => [
-                [
-                    "id" => 2473,
-                    "card" => [
-                        "name" => "次元の創世",
-                        "exp" => [
-                            "name" => "モダンホライゾン3",
-                            "attr" => "MH3"
-                        ],
-                        "color" => "多色",
-                        "foil" => [
-                            "is_foil" => false,
-                            "name" => "通常版"
-                        ],
-                        "promotype" => [
-                            "id" => 1,
-                            "name" => ""
-                        ]
-                    ],
-                    "condition" => "NM",
-                    "quantity" => 2,
-                    "lang" => "JP",
-                    "single_price" => 6000,
-                    "subtotal_price" => 12000,
-                ],
-                [
-                    "id" => 2957,
-                    "card" => [
-                        "name" => "次元の創世",
-                        "exp" => [
-                            "name" => "モダンホライゾン3",
-                            "attr" => "MH3"
-                        ],
-                        "color" => "多色",
-                        "foil" => [
-                            "is_foil" => false,
-                            "name" => "通常版"
-                        ],
-                        "promotype" => [
-                            "id" => 1,
-                            "name" => ""
-                        ]
-                    ],
-                    "lang" => "JP",
-                    "condition" => "NM-",
-                    "quantity" => 1,
-                    "single_price" => 120,
-                    "subtotal_price" => 120,
-                ],
-            ]
-        ];
 
-        return response($records, Response::HTTP_CREATED);
+        return response(OrderResource::collection($records), Response::HTTP_CREATED);
     }
 
 }
