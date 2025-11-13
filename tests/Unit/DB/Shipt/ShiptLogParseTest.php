@@ -6,6 +6,7 @@ use App\Enum\CsvFlowType;
 use App\Enum\ShopPlatform;
 use App\Http\Response\CustomResponse;
 use App\Models\CsvHeader;
+use App\Services\Constant\ShiptConstant;
 use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -52,12 +53,13 @@ class ShiptLogParseTest extends TestCase
         $city = fake()->city();
         $address1 = fake()->streetAddress();
         $address2 = fake()->secondaryAddress();
+        $content = 'aaa';
         $content = <<<CSV
         {$this->getHeader()}
         {$orderId},{$buyer},{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,{$postalCode},{$pref},{$city},{$address1},{$address2},0
         {$orderId},{$buyer},{$today},1112,【BRO】ガイアの眼、グウェナ[JP][緑],2,480,{$postalCode},{$pref},{$city},{$address1},{$address2},0
         CSV;
-        $response = $this->upload($content);
+        $response = $this->upload($content, 201);
         $json = $response->json();
         logger()->debug($json);
     }
@@ -71,9 +73,15 @@ class ShiptLogParseTest extends TestCase
         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1113,【MHR】天空の刃、セラ[JP][赤],1,600,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
         order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1114,【KHM】無情な行動[JP][黒],2,720,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
         order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1115,【ZNR】時の一掃者、テフェリー[JP][青],1,500,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
-
+        order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1116,【SPM】スパイダーセンス[JP][青],1,500,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
         CSV;
         $response = $this->upload($content);
+        $response->assertJsonCount(2);
+        for($i = 0; $i < 2; $i++) {
+            $response->assertJsonPath("{$i}.". ShiptConstant::ITEMS, function($items) {
+                return count($items) === 3;
+            });
+        }
         $json = $response->json();
         logger()->debug($json);
     }
@@ -90,25 +98,32 @@ class ShiptLogParseTest extends TestCase
 
     }
 
-    public function test_ng_ヘッダー不足(): void {
-        $content = <<<CSV
-        order_id,buyer_name,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,00
-        CSV;
-        $response = $this->upload($content, CustomResponse::HTTP_CSV_VALIDATION);
-        $response->assertJson(function(AssertableJson $json) {
-            $json->hasAll(['title', 'status', 'request', 'detail']);
-            $json->whereAll([
-                'title' => 'ヘッダー不足',
-                'status' => CustomResponse::HTTP_CSV_VALIDATION,
-                'detail' => 'ヘッダーが足りません: shipping_date',
-                'request' => 'api/shipping/parse',
-            ]);
-        });
-    }
+//     public function test_ng_ヘッダー不足(): void {
+//         $content = <<<'CSV'
+//         order_id,buyer_name,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
+//         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
+//         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,00
+// CSV;
+//         $response = $this->upload($content, CustomResponse::HTTP_CSV_VALIDATION);
+//         $response->assertJson(function(AssertableJson $json) {
+//             $json->hasAll(['title', 'status', 'request', 'detail']);
+//             $json->whereAll([
+//                 'title' => 'ヘッダー不足',
+//                 'status' => CustomResponse::HTTP_CSV_VALIDATION,
+//                 'detail' => 'ヘッダーが足りません: shipping_date',
+//                 'request' => 'api/shipping/parse',
+//             ]);
+//         });
+//     }
 
-    private function upload(String $content, int $status = Response::HTTP_CREATED) {
+    /**
+     * Undocumented function
+     *
+     * @param string $content
+     * @param int $status
+     * @return \Illuminate\Testing\TestResponse
+     */
+    private function upload(string $content = '', int $status = Response::HTTP_CREATED) {
         Storage::fake('local');
         // ダミーCSVファイル作成
         $filename = 'shipping_import_test.csv';

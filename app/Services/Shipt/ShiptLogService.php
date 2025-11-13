@@ -98,13 +98,23 @@ class ShiptLogService extends AbstractCsvService {
                 // 新規生成
                 $orders[$orderId] = [
                     SC::ORDER_ID => $orderId,
-                    SC::BUYER => $row->buyer(),
-                    SC::SHIPPING_DATE => $row->shipping_date(),
-                    SC::ZIPCODE => $row->postal_code(),
-                    SC::ADDRESS => $row->address(),
-                    SC::ITEMS => [],
+                    // SC::BUYER => $row->buyer(),
+                    // SC::SHIPPING_DATE => $row->shipping_date(),
+                    // SC::ZIPCODE => $row->postal_code(),
+                    // SC::ADDRESS => $row->address(),
+                    // SC::ITEMS => [],
+                    GlobalConstant::DATA => $row,
                 ];
             }
+            // 出荷商品情報
+            $orders[$orderId][SC::ITEMS][] = [
+                SC::STOCK => [
+                    GlobalConstant::ID => (int)$r[SC::PRODUCT_ID],
+                ],
+                // 'shipment' => (int)$row['quantity'],
+                // 'single_price' => $single,
+                // 'subtotal_price' => $subtotal,
+            ];
         }
         return array_values($orders);
     }
@@ -115,15 +125,6 @@ class ShiptLogService extends AbstractCsvService {
 //     // single_price = subtotal / shipment（小数点切り捨て）
 //     $single = (int) floor($subtotal / (int)$row['quantity']);
 
-//     // item push
-//     $orders[$orderId]['items'][] = [
-//         'stock' => [
-//             'id' => (int)$row['original_product_id'],
-//         ],
-//         'shipment' => (int)$row['quantity'],
-//         'single_price' => $single,
-//         'subtotal_price' => $subtotal,
-//     ];
 // }
 
 // $json = json_encode(array_values($orders), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);

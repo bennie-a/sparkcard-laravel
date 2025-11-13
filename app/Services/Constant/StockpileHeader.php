@@ -16,6 +16,7 @@ class StockpileHeader {
     const CARD_ID = 'card_id';
     const LANGUAGE = 'language';
     const FOIL = 'foil';
+    const STOCK = 'stock';
 
     /**
      * 定数一覧を取得する。

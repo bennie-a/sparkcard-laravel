@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Resources\Shipt;
+
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\ShiptConstant as SC;
@@ -18,8 +20,11 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $row = $this[GlobalConstant::DATA];
         return [
             SC::ORDER_ID => $this[SC::ORDER_ID],
+            SC::BUYER => $row->buyer(),
+            SC::ITEMS => $this[SC::ITEMS]
         ];
     }
 }
