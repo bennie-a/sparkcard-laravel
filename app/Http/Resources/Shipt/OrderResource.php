@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Shipt;
 
+use App\Libs\CarbonFormatUtil;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,6 +25,9 @@ class OrderResource extends JsonResource
         return [
             SC::ORDER_ID => $this[SC::ORDER_ID],
             SC::BUYER => $row->buyer(),
+            SC::SHIPPING_DATE => CarbonFormatUtil::toDateString($row->shipping_date()),
+            SC::ZIPCODE => $row->postal_code(),
+            SC::ADDRESS => $row->address(),
             SC::ITEMS => $this[SC::ITEMS]
         ];
     }
