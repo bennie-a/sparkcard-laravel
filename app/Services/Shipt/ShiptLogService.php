@@ -98,11 +98,6 @@ class ShiptLogService extends AbstractCsvService {
                 // 新規生成
                 $orders[$orderId] = [
                     SC::ORDER_ID => $orderId,
-                    // SC::BUYER => $row->buyer(),
-                    // SC::SHIPPING_DATE => $row->shipping_date(),
-                    // SC::ZIPCODE => $row->postal_code(),
-                    // SC::ADDRESS => $row->address(),
-                    // SC::ITEMS => [],
                     GlobalConstant::DATA => $row,
                 ];
             }

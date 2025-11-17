@@ -2,10 +2,7 @@
 
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
-use App\Enum\CsvFlowType;
-use App\Enum\ShopPlatform;
-use App\Http\Response\CustomResponse;
-use App\Models\CsvHeader;
+use App\Models\Stockpile;
 use App\Services\Constant\ShiptConstant;
 use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,12 +32,22 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-     public function test_同じ注文番号が複数件(): void
+     public function test_belongTo(): void
     {
-        $order_id1 = $this->createOrderId();
-        logger()->debug("order_id1: {$order_id1}");
-        $order_id2 = $this->createOrderId();
-        logger()->debug("order_id1: {$order_id2}");
+        $stock = Stockpile::find(10);
+        $this->assertNotNull($stock->cardinfo);
+        logger()->info("Card Name: ".$stock->cardinfo->name);
+
+        $exp = $stock->cardinfo->expansion;
+        $this->assertNotNull($exp);
+        logger()->info("Expansion Name: ".$exp->attr);
+
+        $this->assertNotNull($stock->cardinfo->foiltype);
+        logger()->info("Foil Type: ".$stock->cardinfo->foiltype->name);
+
+        $this->assertNotNull($stock->cardinfo->promotype);
+        logger()->info("Promo Type: ".$stock->cardinfo->promotype->name);
+
     }
 
     public function test_注文数が1件(): void

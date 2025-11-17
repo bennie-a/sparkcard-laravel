@@ -5,7 +5,7 @@ use App\Services\Stock\Strategy\NoSetCodeStrategy;
 use App\Services\Stock\Strategy\DefaultRowStrategy;
 
 /**
- * 在庫情報CSV1件分のクラス
+ * 在庫情報1件分のクラス
  */
 class StockpileRow {
     
@@ -52,6 +52,11 @@ class StockpileRow {
         return $this->number;
     }
 
+    /**
+     * 
+     * @deprecated 5.1.0
+     * @return void
+     */
     public function strategy() {
         if (empty($this->setcode())) {
             return new NoSetCodeStrategy();

@@ -9,6 +9,7 @@ use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\StockpileHeader;
 use App\Services\Shipt\ShiptRow;
 use App\Services\Stock\ShippingRow;
 use Carbon\Carbon;
@@ -25,28 +26,29 @@ class Stockpile extends Model
     protected $fillable = ['id', 'card_id', 'language',  'condition', 'quantity', 'updated_at'];
 
     public function cardinfo() {
-        return $this->belongsTo('App\Models\CardInfo');
+        return $this->belongsTo(CardInfo::class, StockpileHeader::CARD_ID, GlobalConstant::ID);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param integer $card_id
-     * @param string $setcode
-     * @param string $condition
-     * @param string $language
-     * @param boolean $isFoil
-     * @return Stockpile|null
-     * @deprecated version 4.11.0
-     */
-    public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
-        $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
-        $query = self::select($columns)->from('stockpile as s');
-        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
-        $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
-                                             's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
-        return $stock;
-    }
+    // /**
+    //  * Undocumented function
+    //  *
+    //  * @param integer $card_id
+    //  * @param string $setcode
+    //  * @param string $condition
+    //  * @param string $language
+    //  * @param boolean $isFoil
+    //  * @return Stockpile|null
+    //  * @deprecated version 4.11.0
+    //  */
+    // public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
+    //     $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
+    //     $query = self::select($columns)->from('stockpile as s');
+    //     $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
+    //     $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
+    //                                          's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
+    //     return $stock;
+    // }
+
 
     /**
      * 出荷用CSVファイルから特定の在庫情報を取得する。

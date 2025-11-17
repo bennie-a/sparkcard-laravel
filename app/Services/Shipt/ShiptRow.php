@@ -11,23 +11,13 @@ use Carbon\Carbon;
 /**
  * 出荷CSV1件分のクラス
  */
-class ShiptRow extends StockpileRow {
+class ShiptRow {
     
-    private $setcode;
-
-    private $cardname;
-
-    private $language;
-
-    private $promotype;
-
-    private $isFoil;
-
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;
         $this->row = $row;
-        $this->extract();
+        // $this->extract();
     }
 
     public function shipping_date() {
@@ -60,28 +50,6 @@ class ShiptRow extends StockpileRow {
         return $this->row[SC::POSTAL_CODE];
     }
 
-    public function setcode()
-    {
-        return $this->setcode;
-    }
-
-    /**
-     * カード名を取得する。
-     *
-     * @return string
-     */
-    public function card_name():string {
-        return $this->cardname;
-    }
-
-    public function isFoil():bool {
-        return $this->isFoil;
-    }
-
-    public function language() {
-        return $this->language;
-    }
-    
     public function address() {
         $address = $this->row[SC::STATE].$this->row[SC::CITY]. 
                         $this->row[SC::ADDRESS_1];
@@ -91,10 +59,6 @@ class ShiptRow extends StockpileRow {
         return $address;
     }
     
-    public function promotype() {
-        return $this->promotype;
-    }
-
     public function product_price() {
         return $this->row[SC::PRODUCT_PRICE];
     }
@@ -107,6 +71,11 @@ class ShiptRow extends StockpileRow {
         return $this->row[SC::ORDER_ID];
     }
 
+    /**
+     * 商品名から各種情報を抽出する。
+     * @deprecated 5.1.0
+     * @return void
+     */
     private function extract() {
         $productName = $this->product_name();
         if (preg_match('/^【(?<setcode>.+?)】(?:【(?<foil>Foil)】)?(?<name>.+?)(?:≪(?<promotype>.+?)≫)?\[(?<lang>[A-Z]{2})]/u', $productName, $matches)) {            $this->setcode = $matches[SC::SETCODE];

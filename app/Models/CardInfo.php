@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Database\Eloquent\Collection;
 
 class CardInfo extends Model
@@ -15,7 +16,7 @@ class CardInfo extends Model
 
     public function expansion()
     {
-        return $this->belongsTo('App\Models\Expansion');
+        return $this->belongsTo(Expansion::class, 'exp_id', 'notion_id');
     }
 
     public function stockpiles() {
@@ -23,7 +24,11 @@ class CardInfo extends Model
     }
 
     public function foiltype() {
-        return $this->hasOne('App\Model\Foiltype');
+        return $this->belongsTo(Foiltype::class, 'foiltype_id', GlobalConstant::ID);
+    }
+
+    public function promotype() {
+        return $this->belongsTo(Promotype::class, 'promotype_id', GlobalConstant::ID);
     }
 
     protected $fillable = ['id', 'expansion.name', 'expansion.attr',  'exp_id', 'barcode','name',
