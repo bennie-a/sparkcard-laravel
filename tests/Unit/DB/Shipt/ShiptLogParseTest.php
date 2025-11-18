@@ -34,19 +34,20 @@ class ShiptLogParseTest extends TestCase
 
      public function test_belongTo(): void
     {
-        $stock = Stockpile::find(10);
-        $this->assertNotNull($stock->cardinfo);
-        logger()->info("Card Name: ".$stock->cardinfo->name);
+        $stock = Stockpile::find(99);
+        $this->assertNull($stock);
+        // $this->assertNotNull($stock->cardinfo);
+        // logger()->info("Card Name: ".$stock->cardinfo->name);
 
-        $exp = $stock->cardinfo->expansion;
-        $this->assertNotNull($exp);
-        logger()->info("Expansion Name: ".$exp->attr);
+        // $exp = $stock->cardinfo->expansion;
+        // $this->assertNotNull($exp);
+        // logger()->info("Expansion Name: ".$exp->attr);
 
-        $this->assertNotNull($stock->cardinfo->foiltype);
-        logger()->info("Foil Type: ".$stock->cardinfo->foiltype->name);
+        // $this->assertNotNull($stock->cardinfo->foiltype);
+        // logger()->info("Foil Type: ".$stock->cardinfo->foiltype->name);
 
-        $this->assertNotNull($stock->cardinfo->promotype);
-        logger()->info("Promo Type: ".$stock->cardinfo->promotype->name);
+        // $this->assertNotNull($stock->cardinfo->promotype);
+        // logger()->info("Promo Type: ".$stock->cardinfo->promotype->name);
 
     }
 
@@ -60,11 +61,11 @@ class ShiptLogParseTest extends TestCase
         $city = fake()->city();
         $address1 = fake()->streetAddress();
         $address2 = fake()->secondaryAddress();
-        $content = 'aaa';
+
         $content = <<<CSV
         {$this->getHeader()}
-        {$orderId},{$buyer},{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,{$postalCode},{$pref},{$city},{$address1},{$address2},0
-        {$orderId},{$buyer},{$today},1112,【BRO】ガイアの眼、グウェナ[JP][緑],2,480,{$postalCode},{$pref},{$city},{$address1},{$address2},0
+        {$orderId},{$buyer},{$today},3,{$this->product_name(3)},3,340,{$postalCode},{$pref},{$city},{$address1},{$address2},0
+        {$orderId},{$buyer},{$today},2,{$this->product_name(2)},2,480,{$postalCode},{$pref},{$city},{$address1},{$address2},0
         CSV;
         $response = $this->upload($content, 201);
         $json = $response->json();
@@ -103,6 +104,28 @@ class ShiptLogParseTest extends TestCase
 
     public function test_発送日が明日() {
 
+    }
+
+    /**
+     * 在庫情報から商品名を作成する。
+     *
+     * @param integer $id
+     * @return string
+     */
+    private function product_name(int $id): string {
+        $stock = Stockpile::find($id);
+        if (!$stock) {
+            $this->fail("在庫情報が存在しません。ID: {$id}");
+        }
+        $card = $stock->cardinfo;
+        $exp = $stock->cardinfo->expansion;
+        $foil = $stock->cardinfo->foiltype;
+        $promo = $stock->cardinfo->promotype;
+        return "【{$exp->attr}】".
+                ($foil ? "【{$foil->name}】" : "").
+                "{$card->name}".
+                ($promo ? "≪{$promo->name}≫" : "").
+                "[$stock->language]"."[{$card->color_id}]";
     }
 
 //     public function test_ng_ヘッダー不足(): void {

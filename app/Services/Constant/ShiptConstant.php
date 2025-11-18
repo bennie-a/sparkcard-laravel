@@ -24,6 +24,9 @@ class ShiptConstant extends StockpileHeader {
     public const ADDRESS = "address";
     public const DISCOUNT_AMOUNT = "coupon_discount_amount";
     public const ITEMS = "items";
+    public const SHIPMENT = 'shipment';
+    public const SINGLE_PRICE = 'single_price';
+    public const SUBTOTAL_PRICE = 'subtotal_price';
 
     #[Deprecated(since: "5.1.0", reason: "DBで管理するため不要")]
     public static function shippinglog_constants() {

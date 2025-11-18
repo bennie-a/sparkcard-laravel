@@ -58,13 +58,28 @@ class ShiptRow {
         }
         return $address;
     }
+
+    /**
+     * 注文枚数を取得する。
+     *
+     * @return int
+     */
+    public function shipment():int {
+        return (int)$this->row[SC::QUANTITY];
+    }
     
-    public function product_price() {
-        return $this->row[SC::PRODUCT_PRICE];
+    /**
+     * 小計額を取得する。
+     *
+     * @return int
+     */
+    public function subtotal_price():int {
+        return (int)$this->row[SC::PRODUCT_PRICE];
     }
 
-    public function total_price() {
-        return $this->product_price() * $this->quantity();
+    public function single_price():int {        
+        $price = $this->subtotal_price() / $this->shipment();
+        return round($price);
     }
 
     public function order_id() {

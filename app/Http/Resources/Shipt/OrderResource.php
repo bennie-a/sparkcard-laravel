@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Shipt;
 
+use App\Http\Resources\CardInfoResource;
+use App\Http\Resources\Stockpile\StockpileResource;
 use App\Libs\CarbonFormatUtil;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
@@ -22,13 +24,25 @@ class OrderResource extends JsonResource
     public function toArray(Request $request): array
     {
         $row = $this[GlobalConstant::DATA];
+        $shiptData = $this[SC::ITEMS];
+        $items = [];
+        foreach ($shiptData as &$s) {
+            $stock = $s[SC::STOCK];
+            $items[] = [
+                SC::STOCK => [GlobalConstant::ID => $stock->id],
+                GlobalConstant::CARD => [GlobalConstant::NAME => $stock->cardinfo->name],
+                SC::SHIPMENT => $s[SC::SHIPMENT],
+                SC::SINGLE_PRICE => $s[SC::SINGLE_PRICE],
+                SC::SUBTOTAL_PRICE => $s[SC::SUBTOTAL_PRICE],
+            ];
+        }
         return [
             SC::ORDER_ID => $this[SC::ORDER_ID],
             SC::BUYER => $row->buyer(),
             SC::SHIPPING_DATE => CarbonFormatUtil::toDateString($row->shipping_date()),
             SC::ZIPCODE => $row->postal_code(),
             SC::ADDRESS => $row->address(),
-            SC::ITEMS => $this[SC::ITEMS]
+            SC::ITEMS => $items,
         ];
     }
 }

@@ -20,6 +20,8 @@ use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant;
 use League\Csv\AbstractCsv;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Constant\ShiptConstant;
+use App\Services\Constant\StockpileHeader;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -102,13 +104,12 @@ class ShiptLogService extends AbstractCsvService {
                 ];
             }
             // 出荷商品情報
+            $stock = Stockpile::find((int)$r[SC::PRODUCT_ID]);
             $orders[$orderId][SC::ITEMS][] = [
-                SC::STOCK => [
-                    GlobalConstant::ID => (int)$r[SC::PRODUCT_ID],
-                ],
-                // 'shipment' => (int)$row['quantity'],
-                // 'single_price' => $single,
-                // 'subtotal_price' => $subtotal,
+                StockpileHeader::STOCK => $stock,
+                ShiptConstant::SHIPMENT => $row->shipment(),
+                ShiptConstant::SINGLE_PRICE => $row->single_price(),
+                ShiptConstant::SUBTOTAL_PRICE => $row->subtotal_price(),
             ];
         }
         return array_values($orders);
