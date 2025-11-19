@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Shipt;
 
 use App\Http\Resources\CardInfoResource;
+use App\Http\Resources\Items\ItemResource;
 use App\Http\Resources\Stockpile\StockpileResource;
 use App\Libs\CarbonFormatUtil;
 use App\Services\Constant\GlobalConstant;
@@ -29,8 +30,7 @@ class OrderResource extends JsonResource
         foreach ($shiptData as &$s) {
             $stock = $s[SC::STOCK];
             $items[] = [
-                SC::STOCK => [GlobalConstant::ID => $stock->id],
-                GlobalConstant::CARD => [GlobalConstant::NAME => $stock->cardinfo->name],
+                SC::STOCK => new ItemResource($stock),
                 SC::SHIPMENT => $s[SC::SHIPMENT],
                 SC::SINGLE_PRICE => $s[SC::SINGLE_PRICE],
                 SC::SUBTOTAL_PRICE => $s[SC::SUBTOTAL_PRICE],

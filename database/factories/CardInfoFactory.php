@@ -26,7 +26,7 @@ class CardInfoFactory extends Factory
             GlobalConstant::NAME => $this->faker->realText(10),
             CardConstant::EN_NAME => fake()->unique()->sentence(3),
             CardConstant::NUMBER => fake()->unique()->randomNumber(3),
-            'image_url' => 'https://cards.scryfall.io/normal/front/d/3/'.$this->random(16),
+            CardConstant::IMAGE_URL => fake()->url(),
             'color_id' => fake()->randomElement(['W', 'U', 'B', 'R', 'G', 'M', 'A']),
             CardConstant::PROMO_ID => 1
         ];

@@ -16,6 +16,8 @@ class CardConstant {
 
     const FOIL_ID = 'foiltype_id';
 
+    const FOIL = 'foil';
+
     const NUMBER = 'number';
 
     const COLOR = 'color';

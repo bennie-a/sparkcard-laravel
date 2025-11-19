@@ -16,7 +16,7 @@ class FoiltypeSeeder extends Seeder
      */
     public function run()
     {
-        Foiltype::create(['attr' => 'nonfoil', 'name' => '通常版']);
+        Foiltype::create(['attr' => 'nonfoil', 'name' => '']);
         Foiltype::create(['attr' => 'foil', 'name' => 'Foil']);
         Foiltype::create(['attr' => 'etched', 'name' => 'エッチングFoil']);
         Foiltype::create(['attr' => 'stepandcompleat', 'name' => 'S&C・Foil']);
