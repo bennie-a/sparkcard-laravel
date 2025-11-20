@@ -22,7 +22,7 @@ class ItemResource extends JsonResource
         return [
             GCon::ID => $this->id,
             GCon::CARD => new CardResource($this->cardInfo),
-            SH::LANG => $this->lang,
+            SH::LANG => $this->language,
             SH::CONDITION => $this->condition,
             SH::QUANTITY => $this->quantity,
         ];

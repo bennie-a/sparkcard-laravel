@@ -3,8 +3,10 @@
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
 use App\Models\Stockpile;
+use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant;
+use App\Services\Constant\StockpileHeader;
 use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -32,31 +34,13 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-     public function test_belongTo(): void
-    {
-        $stock = Stockpile::find(99);
-        $this->assertNull($stock);
-        // $this->assertNotNull($stock->cardinfo);
-        // logger()->info("Card Name: ".$stock->cardinfo->name);
-
-        // $exp = $stock->cardinfo->expansion;
-        // $this->assertNotNull($exp);
-        // logger()->info("Expansion Name: ".$exp->attr);
-
-        // $this->assertNotNull($stock->cardinfo->foiltype);
-        // logger()->info("Foil Type: ".$stock->cardinfo->foiltype->name);
-
-        // $this->assertNotNull($stock->cardinfo->promotype);
-        // logger()->info("Promo Type: ".$stock->cardinfo->promotype->name);
-
-    }
-
     public function test_注文数が1件(): void
     {
         $buyerInfo = $this->createBuyerInfo();
         $today = TestDateUtil::formatToday();
         $csvline1 = array_values($buyerInfo);
-        array_push($csvline1, $today, 3, $this->product_name(3), 1, 340, 0);
+        $stock = $this->createItemInfo();
+        array_push($csvline1, $today, $stock->id, $this->product_name($stock->id), 1, 340, 0);
         $implode = implode(',', $csvline1);
         $content = <<<CSV
         {$this->getHeader()}
@@ -66,22 +50,7 @@ class ShiptLogParseTest extends TestCase
         $json = $response->json();
         logger()->debug($json);
     }
-
-    /**
-     * テスト用購入者情報を作成する。
-     */
-    private function createBuyerInfo():array {
-        return [
-            ShiptConstant::ORDER_ID => $this->createOrderId(),
-            ShiptConstant::BUYER => fake()->name(),
-            ShiptConstant::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
-            ShiptConstant::STATE => fake()->prefecture(),
-            ShiptConstant::CITY => fake()->city(),
-            ShiptConstant::ADDRESS_1 => fake()->streetAddress(),
-            ShiptConstant::ADDRESS_2 => fake()->secondaryAddress(),
-        ];
-    }
-
+    
     public function test_購入者が2名_1人あたりの注文数が3件ずつ(): void {
         $today = TestDateUtil::formatToday();
         $content = <<<CSV
@@ -103,17 +72,45 @@ class ShiptLogParseTest extends TestCase
         $json = $response->json();
         logger()->debug($json);
     }
-
+    
     public function test_発送日が今日() {
-
+        
     }
-
+    
     public function test_発送日が昨日() {
-
+        
+    }
+    
+    public function test_発送日が明日() {
+        
+    }
+    
+    /**
+     * 購入者情報をランダムで作成する。
+     *
+     * @return array
+     */
+    private function createBuyerInfo():array {
+        return [
+            ShiptConstant::ORDER_ID => $this->createOrderId(),
+            ShiptConstant::BUYER => fake()->name(),
+            ShiptConstant::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
+            ShiptConstant::STATE => fake()->prefecture(),
+            ShiptConstant::CITY => fake()->city(),
+            ShiptConstant::ADDRESS_1 => fake()->streetAddress(),
+            ShiptConstant::ADDRESS_2 => fake()->secondaryAddress(),
+        ];
     }
 
-    public function test_発送日が明日() {
-
+    private function createItemInfo(int $foiltypeId = 1, int $promotypeId = 1):Stockpile {
+        $condition = [
+            CardConstant::FOIL_ID => $foiltypeId,
+            CardConstant::PROMO_ID => $promotypeId,
+        ];
+        $stock = Stockpile::inRandomOrder()->
+                            where(StockpileHeader::QUANTITY, '>', 0)->first();
+        $stock->cardinfo()->where($condition)->first();
+        return $stock;
     }
 
     /**
