@@ -3,6 +3,7 @@
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
 use App\Models\Stockpile;
+use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant;
 use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,7 +11,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
@@ -53,23 +53,33 @@ class ShiptLogParseTest extends TestCase
 
     public function test_注文数が1件(): void
     {
+        $buyerInfo = $this->createBuyerInfo();
         $today = TestDateUtil::formatToday();
-        $orderId = $this->createOrderId();
-        $buyer = fake()->name();
-        $postalCode = fake()->postcode1()."-".fake()->postcode2();
-        $pref = fake()->prefecture();
-        $city = fake()->city();
-        $address1 = fake()->streetAddress();
-        $address2 = fake()->secondaryAddress();
-
+        $csvline1 = array_values($buyerInfo);
+        array_push($csvline1, $today, 3, $this->product_name(3), 1, 340, 0);
+        $implode = implode(',', $csvline1);
         $content = <<<CSV
         {$this->getHeader()}
-        {$orderId},{$buyer},{$today},3,{$this->product_name(3)},3,340,{$postalCode},{$pref},{$city},{$address1},{$address2},0
-        {$orderId},{$buyer},{$today},2,{$this->product_name(2)},2,480,{$postalCode},{$pref},{$city},{$address1},{$address2},0
+        {$implode}
         CSV;
         $response = $this->upload($content, 201);
         $json = $response->json();
         logger()->debug($json);
+    }
+
+    /**
+     * テスト用購入者情報を作成する。
+     */
+    private function createBuyerInfo():array {
+        return [
+            ShiptConstant::ORDER_ID => $this->createOrderId(),
+            ShiptConstant::BUYER => fake()->name(),
+            ShiptConstant::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
+            ShiptConstant::STATE => fake()->prefecture(),
+            ShiptConstant::CITY => fake()->city(),
+            ShiptConstant::ADDRESS_1 => fake()->streetAddress(),
+            ShiptConstant::ADDRESS_2 => fake()->secondaryAddress(),
+        ];
     }
 
     public function test_購入者が2名_1人あたりの注文数が3件ずつ(): void {
@@ -191,16 +201,16 @@ class ShiptLogParseTest extends TestCase
         $header = implode(',', [
                                 'order_id',
                                 'buyer_name',
-                                'shipping_date',
-                                'original_product_id',
-                                'product_name',
-                                'quantity',
-                                'product_price',
                                 'shipping_postal_code',
                                 'shipping_state',
                                 'shipping_city',
                                 'shipping_address_1',
                                 'shipping_address_2',
+                                'shipping_date',
+                                'original_product_id',
+                                'product_name',
+                                'quantity',
+                                'product_price',
                                 'coupon_discount_amount',
                             ]);
         return $header;
