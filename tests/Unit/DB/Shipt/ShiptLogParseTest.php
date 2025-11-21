@@ -41,7 +41,7 @@ class ShiptLogParseTest extends TestCase
         $csvline1 = array_values($buyerInfo);
         $stock = $this->createItemInfo();
         array_push($csvline1, $today, $stock->id, $this->product_name($stock->id), 1, 340, 0);
-        $implode = implode(',', $csvline1);
+        $implode = $this->arrayToCsvString($csvline1);
         $content = <<<CSV
         {$this->getHeader()}
         {$implode}
@@ -194,22 +194,38 @@ class ShiptLogParseTest extends TestCase
         return uniqid('order_');
     }
 
+    /**
+     * 配列を','区切りの文字列に変換する。
+     *
+     * @param [type] $array
+     * @return string
+     */
+    private function arrayToCsvString($array):string
+    {
+        return implode(',', $array);
+    }
+
+    /**
+     * 注文CSV用ヘッダー行を取得する。
+     *
+     * @return array
+     */
     private function getHeader() {
-        $header = implode(',', [
-                                'order_id',
-                                'buyer_name',
-                                'shipping_postal_code',
-                                'shipping_state',
-                                'shipping_city',
-                                'shipping_address_1',
-                                'shipping_address_2',
-                                'shipping_date',
-                                'original_product_id',
-                                'product_name',
-                                'quantity',
-                                'product_price',
-                                'coupon_discount_amount',
-                            ]);
-        return $header;
+        $header = [
+                                ShiptConstant::ORDER_ID,
+                                ShiptConstant::BUYER,
+                                ShiptConstant::POSTAL_CODE,
+                                ShiptConstant::STATE,
+                                ShiptConstant::CITY,
+                                ShiptConstant::ADDRESS_1,
+                                ShiptConstant::ADDRESS_2,
+                                ShiptConstant::SHIPPING_DATE,
+                                ShiptConstant::PRODUCT_ID,
+                                ShiptConstant::PRODUCT_NAME,
+                                StockpileHeader::QUANTITY,
+                                ShiptConstant::PRODUCT_PRICE,
+                                ShiptConstant::DISCOUNT_AMOUNT
+                            ];
+        return $this->arrayToCsvString($header);
     }
 }
