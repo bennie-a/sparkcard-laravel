@@ -5,7 +5,7 @@ namespace Tests\Feature\tests\Unit\DB\Shipt;
 use App\Models\Stockpile;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GC;
-use App\Services\Constant\ShiptConstant;
+use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
 use Database\Seeders\CsvHeaderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,15 +38,24 @@ class ShiptLogParseTest extends TestCase
     {
         $buyerInfo = $this->createBuyerInfo();
         $today = TestDateUtil::formatToday();
-        $csvline1 = array_values($buyerInfo);
-        $stock = $this->createItemInfo();
-        array_push($csvline1, $today, $stock->id, $this->product_name($stock->id), 1, 340, 0);
-        $implode = $this->arrayToCsvString($csvline1);
+        
+        $implode = '';
+        $csvline = array_values($buyerInfo);            
+        for($i = 0; $i < 2; $i++) {
+            $oneline = $csvline;
+            array_push($oneline, $today);
+            $stock = $this->createItemInfo();
+            $buyerInfo[SC::ITEMS][] = $stock;
+            $oneline += $stock;
+            $implode .= $this->arrayToCsvString($oneline)."\n";
+            $oneline = [];
+        }
+
         $content = <<<CSV
         {$this->getHeader()}
         {$implode}
         CSV;
-        $response = $this->upload($content, 201);
+        $response = $this->upload($content);
         $json = $response->json();
         logger()->debug($json);
     }
@@ -92,25 +101,26 @@ class ShiptLogParseTest extends TestCase
      */
     private function createBuyerInfo():array {
         return [
-            ShiptConstant::ORDER_ID => $this->createOrderId(),
-            ShiptConstant::BUYER => fake()->name(),
-            ShiptConstant::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
-            ShiptConstant::STATE => fake()->prefecture(),
-            ShiptConstant::CITY => fake()->city(),
-            ShiptConstant::ADDRESS_1 => fake()->streetAddress(),
-            ShiptConstant::ADDRESS_2 => fake()->secondaryAddress(),
+            SC::ORDER_ID => $this->createOrderId(),
+            SC::BUYER => fake()->name(),
+            SC::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
+            SC::STATE => fake()->prefecture(),
+            SC::CITY => fake()->city(),
+            SC::ADDRESS_1 => fake()->streetAddress(),
+            SC::ADDRESS_2 => fake()->secondaryAddress(),
         ];
     }
 
-    private function createItemInfo(int $foiltypeId = 1, int $promotypeId = 1):Stockpile {
-        $condition = [
-            CardConstant::FOIL_ID => $foiltypeId,
-            CardConstant::PROMO_ID => $promotypeId,
-        ];
+    private function createItemInfo(int $foiltypeId = 1, int $promotypeId = 1):array {
         $stock = Stockpile::inRandomOrder()->
-                            where(StockpileHeader::QUANTITY, '>', 0)->first();
-        $stock->cardinfo()->where($condition)->first();
-        return $stock;
+                            where(StockpileHeader::QUANTITY, '>', 0)
+                            ->whereHas('cardinfo', function($query) use($foiltypeId, $promotypeId){
+                                $query->where(CardConstant::FOIL_ID, $foiltypeId)
+                                ->where(CardConstant::PROMO_ID, $promotypeId);
+                            })->first();
+        return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock->id),
+                    StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
+                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), 0];
     }
 
     /**
@@ -212,19 +222,10 @@ class ShiptLogParseTest extends TestCase
      */
     private function getHeader() {
         $header = [
-                                ShiptConstant::ORDER_ID,
-                                ShiptConstant::BUYER,
-                                ShiptConstant::POSTAL_CODE,
-                                ShiptConstant::STATE,
-                                ShiptConstant::CITY,
-                                ShiptConstant::ADDRESS_1,
-                                ShiptConstant::ADDRESS_2,
-                                ShiptConstant::SHIPPING_DATE,
-                                ShiptConstant::PRODUCT_ID,
-                                ShiptConstant::PRODUCT_NAME,
-                                StockpileHeader::QUANTITY,
-                                ShiptConstant::PRODUCT_PRICE,
-                                ShiptConstant::DISCOUNT_AMOUNT
+                                SC::ORDER_ID, SC::BUYER, SC::POSTAL_CODE, SC::STATE,
+                                SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2, SC::SHIPPING_DATE,
+                                SC::PRODUCT_ID, SC::PRODUCT_NAME, StockpileHeader::QUANTITY,
+                                SC::PRODUCT_PRICE, SC::DISCOUNT_AMOUNT
                             ];
         return $this->arrayToCsvString($header);
     }
