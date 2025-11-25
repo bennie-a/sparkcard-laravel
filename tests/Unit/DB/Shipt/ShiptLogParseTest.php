@@ -36,21 +36,10 @@ class ShiptLogParseTest extends TestCase
 
     public function test_注文数が1件(): void
     {
-        $buyerInfo = $this->createBuyerInfo();
         $today = TestDateUtil::formatToday();
+        $buyerInfo = $this->createBuyerInfo(1, $today);
         
-        $implode = '';
-        $csvline = array_values($buyerInfo);            
-        for($i = 0; $i < 2; $i++) {
-            $oneline = $csvline;
-            array_push($oneline, $today);
-            $stock = $this->createItemInfo();
-            $buyerInfo[SC::ITEMS][] = $stock;
-            $oneline += $stock;
-            $implode .= $this->arrayToCsvString($oneline)."\n";
-            $oneline = [];
-        }
-
+        $implode = $this->createCsvLine([$buyerInfo], $today);
         $content = <<<CSV
         {$this->getHeader()}
         {$implode}
@@ -94,12 +83,33 @@ class ShiptLogParseTest extends TestCase
         
     }
     
+    private function createCsvLine(array $buyers):string {
+        $implode = '';
+        foreach($buyers as $buyer) {
+            $items = $buyer[SC::ITEMS];
+            unset($buyer[SC::ITEMS]);
+            $buyerLine = array_values($buyer); 
+            foreach($items as $item) {
+                $oneline = $buyerLine;
+                $oneline = array_merge($buyerLine, array_values($item));
+                $implode .= $this->arrayToCsvString($oneline)."\n";
+                $oneline = [];
+            }
+        }
+        return $implode;
+    }
+
     /**
      * 購入者情報をランダムで作成する。
      *
      * @return array
      */
-    private function createBuyerInfo():array {
+    private function createBuyerInfo(int $itemCount, string $shiptDate, 
+                                                            bool $isFoil = false, bool $isPromo = false):array {
+        $items = [];
+        for ($i=0; $i < $itemCount; $i++) { 
+            $items[] = $this->createItemInfo($isFoil, $isPromo);
+        }
         return [
             SC::ORDER_ID => $this->createOrderId(),
             SC::BUYER => fake()->name(),
@@ -108,19 +118,30 @@ class ShiptLogParseTest extends TestCase
             SC::CITY => fake()->city(),
             SC::ADDRESS_1 => fake()->streetAddress(),
             SC::ADDRESS_2 => fake()->secondaryAddress(),
+            SC::SHIPPING_DATE => $shiptDate,
+            SC::ITEMS => $items
         ];
     }
 
-    private function createItemInfo(int $foiltypeId = 1, int $promotypeId = 1):array {
+    /**
+     * 商品情報を1件作成する。
+     *
+     * @param integer $foiltypeId
+     * @param integer $promotypeId
+     * @return array
+     */
+    private function createItemInfo(bool $isFoil, bool $isPromo):array {
+        $isFoilOpe = !$isFoil ? '=' : '<>';
+        $isPromoOpe = !$isPromo ? '=' : '<>';
         $stock = Stockpile::inRandomOrder()->
                             where(StockpileHeader::QUANTITY, '>', 0)
-                            ->whereHas('cardinfo', function($query) use($foiltypeId, $promotypeId){
-                                $query->where(CardConstant::FOIL_ID, $foiltypeId)
-                                ->where(CardConstant::PROMO_ID, $promotypeId);
+                            ->whereHas('cardinfo', function($query) use($isFoilOpe, $isPromoOpe){
+                                $query->where(CardConstant::FOIL_ID, $isFoilOpe, 1)
+                                ->where(CardConstant::PROMO_ID, $isPromoOpe, 1);
                             })->first();
-        return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock->id),
+        return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock),
                     StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
-                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), 0];
+                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
     }
 
     /**
@@ -129,19 +150,15 @@ class ShiptLogParseTest extends TestCase
      * @param integer $id
      * @return string
      */
-    private function product_name(int $id): string {
-        $stock = Stockpile::find($id);
-        if (!$stock) {
-            $this->fail("在庫情報が存在しません。ID: {$id}");
-        }
+    private function product_name(Stockpile $stock): string {
         $card = $stock->cardinfo;
         $exp = $stock->cardinfo->expansion;
         $foil = $stock->cardinfo->foiltype;
         $promo = $stock->cardinfo->promotype;
         return "【{$exp->attr}】".
-                ($foil ? "【{$foil->name}】" : "").
+                ($foil->id != 1 ? "【{$foil->name}】" : "").
                 "{$card->name}".
-                ($promo ? "≪{$promo->name}≫" : "").
+                ($promo->id != 1 ? "≪{$promo->name}≫" : "").
                 "[$stock->language]"."[{$card->color_id}]";
     }
 
