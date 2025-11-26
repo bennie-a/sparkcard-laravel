@@ -7,9 +7,6 @@ use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
-use Database\Seeders\CsvHeaderSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -34,9 +31,11 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-    public function test_注文数が1件(): void
+    public function test_購入者が1人_注文数が1件(): void
     {
         $today = TestDateUtil::formatToday();
+        $buyerCount = 1;
+        $itemCount = 1;
         $buyerInfo = $this->createBuyerInfo(1, $today);
         
         $implode = $this->createCsvLine([$buyerInfo], $today);
@@ -45,6 +44,58 @@ class ShiptLogParseTest extends TestCase
         {$implode}
         CSV;
         $response = $this->upload($content);
+
+        $response->assertJsonStructure([
+            '*' => [ 
+                SC::ORDER_ID,
+                SC::BUYER,
+                SC::SHIPPING_DATE,
+                SC::ZIPCODE,
+                SC::ADDRESS,
+                SC::ITEMS => [
+                    '*' => [
+                        SC::STOCK => [
+                            GC::ID,
+                            CardConstant::CARD => [
+                                GC::NAME,
+                                CardConstant::EXP => [
+                                    GC::NAME,
+                                    CardConstant::ATTR
+                                ],
+                                CardConstant::NUMBER,
+                                CardConstant::IMAGE_URL,
+                                CardConstant::COLOR,
+                                CardConstant::FOIL => [
+                                    GC::ID,
+                                    GC::NAME
+                                ],
+                                CardConstant::PROMOTYPE => [
+                                    GC::ID,
+                                    GC::NAME
+                                ]
+                            ],
+                            StockpileHeader::CONDITION,
+                            StockpileHeader::LANG,
+                            StockpileHeader::QUANTITY
+                        ],
+                        SC::SHIPMENT,
+                        SC::SINGLE_PRICE,
+                        SC::SUBTOTAL_PRICE
+                        ]
+                    ]
+                ]
+            ]);
+            
+        // 購入者数確認
+        $response->assertJsonCount($buyerCount);
+
+        //注文商品の件数確認
+        for($i = 0; $i < $buyerCount; $i++) {
+            $response->assertJsonPath("{$i}.". SC::ITEMS, function($items) use($itemCount){
+                return count($items) === $itemCount;
+            });
+        }
+
         $json = $response->json();
         logger()->debug($json);
     }
