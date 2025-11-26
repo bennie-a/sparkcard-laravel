@@ -31,6 +31,11 @@ class TestDateUtil {
         return self::formatDate($yesterday);
     }
 
+    public static function formatTomorrow() {
+        $tomorrow = CarbonImmutable::tomorrow();
+        return self::formatDate($tomorrow);
+    }
+
     /**
      * 昨日の日付を取得する。
      *

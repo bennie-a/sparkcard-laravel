@@ -10,6 +10,8 @@ use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
@@ -31,21 +33,62 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-    public function test_購入者が1人_注文数が1件(): void
+    #[TestDox('購入者と注文商品が正しく集計されているか確認する')]
+    #[TestWith([1, 1], '購入者1人_出荷商品1件')]
+    #[TestWith([1, 2], '購入者1人_出荷商品2件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品1件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品2件')]
+    public function testBuyerAndItemCount(int $buyerCount, int $itemCount): void
     {
         $today = TestDateUtil::formatToday();
-        $buyerCount = 1;
-        $itemCount = 1;
-        $buyerInfo = $this->createBuyerInfo(1, $today);
+        $response = $this->uploadOk($buyerCount, $itemCount, $today);            
+        // 購入者数確認
+        $response->assertJsonCount($buyerCount);
+
+        //注文商品の件数確認
+        for($i = 0; $i < $buyerCount; $i++) {
+            $response->assertJsonPath("{$i}.". SC::ITEMS, function($items) use($itemCount){
+                return count($items) === $itemCount;
+            });
+        }
+    }
+    
+    #[TestDox('発送日が正しく設定されているか確認する')]
+    #[TestWith(['today'], '今日')]
+    #[TestWith(['tomorrow'], '明日')]
+    #[TestWith(['yesterday'], '昨日')]
+    public function testShippingDate(string $date) {
+        $date = match($date) {
+            'today' => TestDateUtil::formatToday(),
+            'tomorrow' => TestDateUtil::formatTomorrow(),
+            'yesterday' => TestDateUtil::formatYesterday(),
+        };
+        logger()->info("Testing shipping date: {$date}");
+        $response = $this->uploadOk(1, 1, $date);
+        $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $date);
+    }
+
+    /**
+     * アップロードOKパターン
+     *
+     * @param integer $buyerCount
+     * @param integer $itemCount
+     * @param string $shiptDate
+     * @return \Illuminate\Testing\TestResponse
+     */
+    private function uploadOk(int $buyerCount, int $itemCount, string $shiptDate) {
+        $buyerInfos = [];
+        for ($i=0; $i < $buyerCount; $i++) { 
+            $buyerInfos[] = $this->createBuyerInfo($itemCount, $shiptDate);
+        }
         
-        $implode = $this->createCsvLine([$buyerInfo], $today);
+        $implode = $this->createCsvLine($buyerInfos);
         $content = <<<CSV
         {$this->getHeader()}
         {$implode}
         CSV;
         $response = $this->upload($content);
-
-        $response->assertJsonStructure([
+                $response->assertJsonStructure([
             '*' => [ 
                 SC::ORDER_ID,
                 SC::BUYER,
@@ -85,54 +128,9 @@ class ShiptLogParseTest extends TestCase
                     ]
                 ]
             ]);
-            
-        // 購入者数確認
-        $response->assertJsonCount($buyerCount);
 
-        //注文商品の件数確認
-        for($i = 0; $i < $buyerCount; $i++) {
-            $response->assertJsonPath("{$i}.". SC::ITEMS, function($items) use($itemCount){
-                return count($items) === $itemCount;
-            });
-        }
-
-        $json = $response->json();
-        logger()->debug($json);
-    }
-    
-    public function test_購入者が2名_1人あたりの注文数が3件ずつ(): void {
-        $today = TestDateUtil::formatToday();
-        $content = <<<CSV
-        order_id,buyer_name,shipping_date,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,{$today},1113,【MHR】天空の刃、セラ[JP][赤],1,600,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-        order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1114,【KHM】無情な行動[JP][黒],2,720,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
-        order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1115,【ZNR】時の一掃者、テフェリー[JP][青],1,500,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
-        order_3KGEXf3shdRmUSLVLKiR4V,田中 一郎,{$today},1116,【SPM】スパイダーセンス[JP][青],1,500,160-0023,東京都新宿区西新宿2-8-1,新宿モノリスビル1204,0
-        CSV;
-        $response = $this->upload($content);
-        $response->assertJsonCount(2);
-        for($i = 0; $i < 2; $i++) {
-            $response->assertJsonPath("{$i}.". ShiptConstant::ITEMS, function($items) {
-                return count($items) === 3;
-            });
-        }
-        $json = $response->json();
-        logger()->debug($json);
-    }
-    
-    public function test_発送日が今日() {
-        
-    }
-    
-    public function test_発送日が昨日() {
-        
-    }
-    
-    public function test_発送日が明日() {
-        
-    }
+        return $response;
+    }    
     
     private function createCsvLine(array $buyers):string {
         $implode = '';
@@ -198,7 +196,7 @@ class ShiptLogParseTest extends TestCase
     /**
      * 在庫情報から商品名を作成する。
      *
-     * @param integer $id
+     * @param Stockpile $stock
      * @return string
      */
     private function product_name(Stockpile $stock): string {
