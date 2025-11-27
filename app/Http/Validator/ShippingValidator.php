@@ -13,7 +13,7 @@ class ShippingValidator extends AbstractCsvValidator {
         ShiptCon::BUYER => 'required',
         Header::CONDITION => 'nullable|in:NM,NM-,EX+,EX,PLD',
         Header::QUANTITY => 'required|numeric',
-        ShiptCon::SHIPPING_DATE => 'required|date_format:Y/m/d'
+        ShiptCon::SHIPPING_DATE => 'date_format:Y/m/d'
     ];
    }
 

@@ -57,14 +57,19 @@ class ShiptLogParseTest extends TestCase
     #[TestWith(['today'], '今日')]
     #[TestWith(['tomorrow'], '明日')]
     #[TestWith(['yesterday'], '昨日')]
+    #[TestWith([''], '未入力')]
     public function testShippingDate(string $date) {
         $date = match($date) {
             'today' => TestDateUtil::formatToday(),
             'tomorrow' => TestDateUtil::formatTomorrow(),
             'yesterday' => TestDateUtil::formatYesterday(),
+            '' => ''
         };
         logger()->info("Testing shipping date: {$date}");
         $response = $this->uploadOk(1, 1, $date);
+        if (empty($date)) {
+            $date = TestDateUtil::formatToday();
+        }
         $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $date);
     }
 
