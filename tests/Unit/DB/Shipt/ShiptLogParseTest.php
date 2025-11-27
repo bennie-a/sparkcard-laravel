@@ -10,6 +10,7 @@ use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Database\Seeders\DatabaseSeeder;
@@ -33,7 +34,11 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
-    #[TestDox('購入者と注文商品が正しく集計されているか確認する')]
+     const RES = 'response';
+
+     const EX_INFO = 'expected_info';
+
+    #[TestDox('購入者情報と注文商品が正しく集計されているか確認する')]
     #[TestWith([1, 1], '購入者1人_出荷商品1件')]
     #[TestWith([1, 2], '購入者1人_出荷商品2件')]
     #[TestWith([2, 1], '購入者2人_出荷商品1件')]
@@ -41,14 +46,26 @@ class ShiptLogParseTest extends TestCase
     public function testBuyerAndItemCount(int $buyerCount, int $itemCount): void
     {
         $today = TestDateUtil::formatToday();
-        $response = $this->uploadOk($buyerCount, $itemCount, $today);            
+        $result = $this->uploadOk($buyerCount, $itemCount, $today);            
+
+        $response = $result[self::RES];
+        $buyerInfo = $result[self::EX_INFO];
         // 購入者数確認
         $response->assertJsonCount($buyerCount);
 
-        //注文商品の件数確認
         for($i = 0; $i < $buyerCount; $i++) {
-            $response->assertJsonPath("{$i}.". SC::ITEMS, function($items) use($itemCount){
-                return count($items) === $itemCount;
+            $buyer = $buyerInfo[$i];
+            // 購入者情報の確認
+            $response->assertJson(function(AssertableJson $json) use($i, $buyer) {
+                $json->whereAll([
+                    "{$i}.". SC::ORDER_ID => $buyer[SC::ORDER_ID],
+                    "{$i}.". SC::BUYER => $buyer[SC::BUYER],
+                    "{$i}.". SC::ZIPCODE => $buyer[SC::POSTAL_CODE],
+                    "{$i}.". SC::ADDRESS => 
+                        $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
+                    "{$i}.". SC::SHIPPING_DATE => $buyer[SC::SHIPPING_DATE],
+                    "{$i}.". SC::ITEMS => fn($items) => count($items) == count($buyer[SC::ITEMS]),
+                ]);
             });
         }
     }
@@ -66,7 +83,9 @@ class ShiptLogParseTest extends TestCase
             '' => ''
         };
         logger()->info("Testing shipping date: {$date}");
-        $response = $this->uploadOk(1, 1, $date);
+        $result = $this->uploadOk(1, 1, $date);
+        $response = $result[self::RES];
+        
         if (empty($date)) {
             $date = TestDateUtil::formatToday();
         }
@@ -134,7 +153,7 @@ class ShiptLogParseTest extends TestCase
                 ]
             ]);
 
-        return $response;
+        return [self::RES => $response, self::EX_INFO => $buyerInfos];
     }    
     
     private function createCsvLine(array $buyers):string {
