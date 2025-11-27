@@ -34,6 +34,7 @@ class OrderResource extends JsonResource
                 SC::SHIPMENT => $s[SC::SHIPMENT],
                 SC::SINGLE_PRICE => $s[SC::SINGLE_PRICE],
                 SC::SUBTOTAL_PRICE => $s[SC::SUBTOTAL_PRICE],
+                SC::DISCOUNT_AMOUNT => $s[SC::DISCOUNT_AMOUNT]
             ];
         }
         return [

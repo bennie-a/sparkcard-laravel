@@ -85,7 +85,7 @@ class ShiptLogParseTest extends TestCase
         logger()->info("Testing shipping date: {$date}");
         $result = $this->uploadOk(1, 1, $date);
         $response = $result[self::RES];
-        
+
         if (empty($date)) {
             $date = TestDateUtil::formatToday();
         }
@@ -147,7 +147,8 @@ class ShiptLogParseTest extends TestCase
                         ],
                         SC::SHIPMENT,
                         SC::SINGLE_PRICE,
-                        SC::SUBTOTAL_PRICE
+                        SC::SUBTOTAL_PRICE,
+                        SC::DISCOUNT_AMOUNT
                         ]
                     ]
                 ]

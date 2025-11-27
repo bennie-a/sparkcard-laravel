@@ -110,6 +110,7 @@ class ShiptLogService extends AbstractCsvService {
                 ShiptConstant::SHIPMENT => $row->shipment(),
                 ShiptConstant::SINGLE_PRICE => $row->single_price(),
                 ShiptConstant::SUBTOTAL_PRICE => $row->subtotal_price(),
+                ShiptConstant::DISCOUNT_AMOUNT => $row->discount()
             ];
         }
         return array_values($orders);

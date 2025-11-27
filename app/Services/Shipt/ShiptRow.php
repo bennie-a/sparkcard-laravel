@@ -82,6 +82,19 @@ class ShiptRow {
         return round($price);
     }
 
+    /**
+     * クーポン割引額を取得する。
+     *
+     * @return int
+     */
+    public function discount():int {
+        $discount = (int)$this->row[SC::DISCOUNT_AMOUNT];
+        if ($discount < 0) {
+            return -$discount;
+        }
+        return 0;
+    }
+
     public function order_id() {
         return $this->row[SC::ORDER_ID];
     }
