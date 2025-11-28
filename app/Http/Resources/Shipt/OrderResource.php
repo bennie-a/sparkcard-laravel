@@ -32,9 +32,10 @@ class OrderResource extends JsonResource
             $items[] = [
                 SC::STOCK => new ItemResource($stock),
                 SC::SHIPMENT => $s[SC::SHIPMENT],
+                SC::PRODUCT_PRICE => $s[SC::PRODUCT_PRICE],
+                SC::DISCOUNT_AMOUNT => $s[SC::DISCOUNT_AMOUNT],
+                SC::TOTAL_PRICE => $s[SC::TOTAL_PRICE],
                 SC::SINGLE_PRICE => $s[SC::SINGLE_PRICE],
-                SC::SUBTOTAL_PRICE => $s[SC::SUBTOTAL_PRICE],
-                SC::DISCOUNT_AMOUNT => $s[SC::DISCOUNT_AMOUNT]
             ];
         }
         return [

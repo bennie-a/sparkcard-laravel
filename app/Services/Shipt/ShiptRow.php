@@ -69,17 +69,31 @@ class ShiptRow {
     }
     
     /**
-     * 小計額を取得する。
+     * 商品価格を取得する。
      *
      * @return int
      */
-    public function subtotal_price():int {
+    public function product_price():int {
         return (int)$this->row[SC::PRODUCT_PRICE];
     }
 
+    /**
+     * 1枚あたりの単価を計算する。
+     *
+     * @return int
+     */
     public function single_price():int {        
-        $price = $this->subtotal_price() / $this->shipment();
+        $price = $this->total_price() / $this->shipment();
         return round($price);
+    }
+
+    /**
+     * 支払い価格を計算する。
+     *
+     * @return integer
+     */
+    public function total_price():int {
+        return $this->product_price() - $this->discount();
     }
 
     /**
@@ -88,11 +102,7 @@ class ShiptRow {
      * @return int
      */
     public function discount():int {
-        $discount = (int)$this->row[SC::DISCOUNT_AMOUNT];
-        if ($discount < 0) {
-            return -$discount;
-        }
-        return 0;
+        return (int)$this->row[SC::DISCOUNT_AMOUNT];
     }
 
     public function order_id() {

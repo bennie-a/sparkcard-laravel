@@ -107,10 +107,11 @@ class ShiptLogService extends AbstractCsvService {
             $stock = Stockpile::find((int)$r[SC::PRODUCT_ID]);
             $orders[$orderId][SC::ITEMS][] = [
                 StockpileHeader::STOCK => $stock,
-                ShiptConstant::SHIPMENT => $row->shipment(),
-                ShiptConstant::SINGLE_PRICE => $row->single_price(),
-                ShiptConstant::SUBTOTAL_PRICE => $row->subtotal_price(),
-                ShiptConstant::DISCOUNT_AMOUNT => $row->discount()
+                SC::SHIPMENT => $row->shipment(),
+                SC::PRODUCT_PRICE => $row->product_price(),
+                SC::DISCOUNT_AMOUNT => $row->discount(),
+                SC::SINGLE_PRICE => $row->single_price(),
+                SC::TOTAL_PRICE => $row->total_price()
             ];
         }
         return array_values($orders);

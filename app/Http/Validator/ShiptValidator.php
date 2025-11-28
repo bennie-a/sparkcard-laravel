@@ -4,7 +4,10 @@ use App\Http\Validator\AbstractCsvValidator;
 use App\Services\Constant\ShiptConstant as ShiptCon;
 use App\Services\Constant\StockpileHeader as Header;
 
-class ShippingValidator extends AbstractCsvValidator {
+/**
+ * 注文CSV1行分のバリデーションクラス
+ */
+class ShiptValidator extends AbstractCsvValidator {
     /**
      * @see AbstractCsvValidator::validationRules
      */

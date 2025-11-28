@@ -46,7 +46,12 @@ class ShiptLogParseTest extends TestCase
     public function testBuyerAndItemCount(int $buyerCount, int $itemCount): void
     {
         $today = TestDateUtil::formatToday();
-        $result = $this->uploadOk($buyerCount, $itemCount, $today);            
+        $buyerInfos = [];
+        for ($i=0; $i < $buyerCount; $i++) { 
+            $buyerInfos[] = $this->createBuyerInfo($itemCount, $today);
+        }
+
+        $result = $this->uploadOk($buyerInfos);            
 
         $response = $result[self::RES];
         $buyerInfo = $result[self::EX_INFO];
@@ -83,7 +88,9 @@ class ShiptLogParseTest extends TestCase
             '' => ''
         };
         logger()->info("Testing shipping date: {$date}");
-        $result = $this->uploadOk(1, 1, $date);
+        $buyerInfos = [$this->createBuyerInfo(1, $date)];
+
+        $result = $this->uploadOk($buyerInfos);
         $response = $result[self::RES];
 
         if (empty($date)) {
@@ -95,17 +102,10 @@ class ShiptLogParseTest extends TestCase
     /**
      * アップロードOKパターン
      *
-     * @param integer $buyerCount
-     * @param integer $itemCount
-     * @param string $shiptDate
-     * @return \Illuminate\Testing\TestResponse
+     * @param array $buyerInfos
+     * @return array
      */
-    private function uploadOk(int $buyerCount, int $itemCount, string $shiptDate) {
-        $buyerInfos = [];
-        for ($i=0; $i < $buyerCount; $i++) { 
-            $buyerInfos[] = $this->createBuyerInfo($itemCount, $shiptDate);
-        }
-        
+    private function uploadOk(array $buyerInfos) {      
         $implode = $this->createCsvLine($buyerInfos);
         $content = <<<CSV
         {$this->getHeader()}
@@ -146,9 +146,10 @@ class ShiptLogParseTest extends TestCase
                             StockpileHeader::QUANTITY
                         ],
                         SC::SHIPMENT,
+                        SC::PRODUCT_PRICE,
+                        SC::DISCOUNT_AMOUNT,
+                        SC::TOTAL_PRICE,
                         SC::SINGLE_PRICE,
-                        SC::SUBTOTAL_PRICE,
-                        SC::DISCOUNT_AMOUNT
                         ]
                     ]
                 ]
