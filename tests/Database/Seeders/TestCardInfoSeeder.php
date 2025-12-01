@@ -86,6 +86,11 @@ class TestCardInfoSeeder extends Seeder
         CardInfo::factory()->createOne([CCon::EXP_ID => $xln, 'name' => '在庫情報なし',
         CCon::EN_NAME => 'No Info', 'color_id' => 'W', CCon::NUMBER => '1',
         CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
+
+        CardInfo::factory()->createOne([CCon::EXP_ID => $one, 'name' => '機械の母、エリシュ・ノーン',
+        CCon::EN_NAME => 'Elesh Norn, Mother of Machines', 'color_id' => 'W', CCon::NUMBER => '298',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id, Ccon::PROMO_ID => $oilslick]);
+
     }
         
     protected function findNotionId(string $attr) : string {

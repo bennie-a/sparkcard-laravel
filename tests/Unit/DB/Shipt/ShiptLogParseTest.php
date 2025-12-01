@@ -3,7 +3,7 @@
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
 use App\Models\Stockpile;
-use App\Services\Constant\CardConstant;
+use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
@@ -153,6 +153,46 @@ class ShiptLogParseTest extends TestCase
         }
     }
 
+    #[TestDox('在庫情報が正しく表示されているか確認する')]
+    #[TestWith([false, false], '通常版')]
+    #[TestWith([true, false], '通常版のFoilカード')]
+    #[TestWith([false, true], '特別版')]
+    #[TestWith([true, true], '特別版のFoilカード')]
+    public function testStock(bool $isFoil = false, bool $isPromo = false): void {
+        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo)];
+        $response = $this->uploadOk($buyerInfos);
+
+        $items = $buyerInfos[0][SC::ITEMS];
+        for ($i=0; $i < count($items); $i++) { 
+            $item = $items[$i];
+            $stock = Stockpile::find((int)$item[GC::ID]);
+            $card = $stock->cardinfo;
+            $exp = $card->expansion;
+            $foil = $card->foiltype;
+            $promo = $card->promotype;
+
+            $response->assertJson(function(AssertableJson $json) use($i, $stock, $card, $exp, $foil, $promo) {
+                $json->whereAll([
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".GC::ID => $stock->id,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".GC::NAME => $card->name,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::NUMBER => $card->number,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::COLOR => $card->color_id,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::IMAGE_URL => $card->image_url,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::EXP.".".GC::NAME => $exp->name,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::EXP.".".CC::ATTR => $exp->attr,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::FOIL.".".GC::ID => $foil->id,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::FOIL.".".GC::NAME => $foil->name,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::PROMOTYPE.".".GC::ID => $promo->id,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::PROMOTYPE.".".GC::NAME => $promo->name,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".StockpileHeader::LANG => $stock->language,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".StockpileHeader::CONDITION => $stock->condition,
+                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".StockpileHeader::QUANTITY => $stock->quantity,
+                ]);
+            });
+        }
+
+    }
+
     /**
      * アップロードOKパターン
      *
@@ -177,20 +217,20 @@ class ShiptLogParseTest extends TestCase
                     '*' => [
                         SC::STOCK => [
                             GC::ID,
-                            CardConstant::CARD => [
+                            CC::CARD => [
                                 GC::NAME,
-                                CardConstant::EXP => [
+                                CC::EXP => [
                                     GC::NAME,
-                                    CardConstant::ATTR
+                                    CC::ATTR
                                 ],
-                                CardConstant::NUMBER,
-                                CardConstant::IMAGE_URL,
-                                CardConstant::COLOR,
-                                CardConstant::FOIL => [
+                                CC::NUMBER,
+                                CC::IMAGE_URL,
+                                CC::COLOR,
+                                CC::FOIL => [
                                     GC::ID,
                                     GC::NAME
                                 ],
-                                CardConstant::PROMOTYPE => [
+                                CC::PROMOTYPE => [
                                     GC::ID,
                                     GC::NAME
                                 ]
@@ -265,9 +305,12 @@ class ShiptLogParseTest extends TestCase
         $stock = Stockpile::inRandomOrder()->
                             where(StockpileHeader::QUANTITY, '>', 0)
                             ->whereHas('cardinfo', function($query) use($isFoilOpe, $isPromoOpe){
-                                $query->where(CardConstant::FOIL_ID, $isFoilOpe, 1)
-                                ->where(CardConstant::PROMO_ID, $isPromoOpe, 1);
+                                $query->where(CC::FOIL_ID, $isFoilOpe, 1)
+                                ->where(CC::PROMO_ID, $isPromoOpe, 1);
                             })->first();
+        if(!$stock) {
+            $this->fail('在庫情報がありません。Foil:'.($isFoil ? 'あり' : 'なし').' Promo:'.($isPromo ? 'あり' : 'なし'));
+        }
         return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock),
                     StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
                     SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
