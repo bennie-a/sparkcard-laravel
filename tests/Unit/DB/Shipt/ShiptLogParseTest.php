@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Database\Seeders\DatabaseSeeder;
@@ -51,15 +52,13 @@ class ShiptLogParseTest extends TestCase
             $buyerInfos[] = $this->createBuyerInfo($itemCount, $today);
         }
 
-        $result = $this->uploadOk($buyerInfos);            
+        $response = $this->uploadOk($buyerInfos);            
 
-        $response = $result[self::RES];
-        $buyerInfo = $result[self::EX_INFO];
-        // 購入者数確認
+       // 購入者数確認
         $response->assertJsonCount($buyerCount);
 
         for($i = 0; $i < $buyerCount; $i++) {
-            $buyer = $buyerInfo[$i];
+            $buyer = $buyerInfos[$i];
             // 購入者情報の確認
             $response->assertJson(function(AssertableJson $json) use($i, $buyer) {
                 $json->whereAll([
@@ -90,8 +89,7 @@ class ShiptLogParseTest extends TestCase
         logger()->info("Testing shipping date: {$date}");
         $buyerInfos = [$this->createBuyerInfo(1, $date)];
 
-        $result = $this->uploadOk($buyerInfos);
-        $response = $result[self::RES];
+        $response = $this->uploadOk($buyerInfos);
 
         if (empty($date)) {
             $date = TestDateUtil::formatToday();
@@ -99,11 +97,67 @@ class ShiptLogParseTest extends TestCase
         $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $date);
     }
 
+    #[TestDox('出荷枚数と商品価格が正しく設定されているか確認する')]
+    public function testShipmentAndProductPrice() {
+        $buyerInfos = [$this->createBuyerInfo(2, TestDateUtil::formatToday())];
+        $response = $this->uploadOk($buyerInfos);
+        $items = $buyerInfos[0][SC::ITEMS];
+        for ($i=0; $i < count($items); $i++) { 
+                $item = $items[$i];
+                $response->assertJson(function(AssertableJson $json) use($i, $item) {
+                $json->whereAll([
+                    "0.".SC::ITEMS.".{$i}.".SC::SHIPMENT => $item[StockpileHeader::QUANTITY],
+                    "0.".SC::ITEMS.".{$i}.".SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                ]);
+            });
+        }
+    }
+
+    #[TestDox('支払い金額が正しく計算されているか確認する')]
+    #[TestWith([0], '割引なし')]
+    #[TestWith([100], '割引あり')]
+    public function testTotalPriceCalc(int $discount) {
+        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday())];
+        // 商品価格と割引金額を設定
+        $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
+
+        $response = $this->uploadOk($buyerInfos);
+
+        $exitem = current($buyerInfos[0][SC::ITEMS]);
+        $exTotalPrice = $exitem[SC::PRODUCT_PRICE] - $exitem[SC::DISCOUNT_AMOUNT];
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::TOTAL_PRICE, $exTotalPrice);
+    }
+
+    #[TestDox('単価が正しく計算されているか確認する')]
+    #[TestWith([1], '出荷枚数1枚')]
+    #[TestWith([3], '出荷枚数が複数枚_割引なし')]
+    #[TestWith([3, 50], '出荷枚数が複数枚_割引あり')]
+    public function testSinglePriceCalc(int $shipment, int $discount = 0): void {
+        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday())];
+        // 商品価格と出荷枚数を設定
+        $buyerInfos[0][SC::ITEMS][0][SC::PRODUCT_PRICE] = 1000;
+        $buyerInfos[0][SC::ITEMS][0][StockpileHeader::QUANTITY] = $shipment;
+        $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
+        $response = $this->uploadOk($buyerInfos);
+
+        $items = $buyerInfos[0][SC::ITEMS];
+        for ($i=0; $i < count($items); $i++) { 
+            $item = $items[$i];
+            $exTotalPrice = $item[SC::PRODUCT_PRICE] - $item[SC::DISCOUNT_AMOUNT];
+            $exSinglePrice = (int)round($exTotalPrice / $item[StockpileHeader::QUANTITY]);
+            $response->assertJson(function(AssertableJson $json) use($i, $exSinglePrice) {
+            $json->whereAll([
+                "0.".SC::ITEMS.".{$i}.".SC::SINGLE_PRICE => $exSinglePrice,
+                ]);
+            });
+        }
+    }
+
     /**
      * アップロードOKパターン
      *
      * @param array $buyerInfos
-     * @return array
+     * @return TestResponse $response
      */
     private function uploadOk(array $buyerInfos) {      
         $implode = $this->createCsvLine($buyerInfos);
@@ -155,7 +209,7 @@ class ShiptLogParseTest extends TestCase
                 ]
             ]);
 
-        return [self::RES => $response, self::EX_INFO => $buyerInfos];
+        return $response;
     }    
     
     private function createCsvLine(array $buyers):string {
