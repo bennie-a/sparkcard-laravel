@@ -163,8 +163,7 @@ class ShiptLogParseTest extends TestCase
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
-        for ($i=0; $i < count($items); $i++) { 
-            $item = $items[$i];
+        foreach ($items as $i => $item) { 
             $stock = Stockpile::find((int)$item[GC::ID]);
             $card = $stock->cardinfo;
             $exp = $card->expansion;
@@ -172,22 +171,26 @@ class ShiptLogParseTest extends TestCase
             $promo = $card->promotype;
 
             $response->assertJson(function(AssertableJson $json) use($i, $stock, $card, $exp, $foil, $promo) {
-                $json->whereAll([
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".GC::ID => $stock->id,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".GC::NAME => $card->name,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::NUMBER => $card->number,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::COLOR => $card->color_id,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::IMAGE_URL => $card->image_url,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::EXP.".".GC::NAME => $exp->name,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::EXP.".".CC::ATTR => $exp->attr,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::FOIL.".".GC::ID => $foil->id,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::FOIL.".".GC::NAME => $foil->name,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::PROMOTYPE.".".GC::ID => $promo->id,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".CC::CARD.".".CC::PROMOTYPE.".".GC::NAME => $promo->name,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".StockpileHeader::LANG => $stock->language,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".StockpileHeader::CONDITION => $stock->condition,
-                    "0.".SC::ITEMS.".{$i}.".SC::STOCK.".".StockpileHeader::QUANTITY => $stock->quantity,
-                ]);
+                // 共通ベースパス
+                $base = "0." . SC::ITEMS . ".{$i}." . SC::STOCK;
+                $expected = [
+                    $base.".".GC::ID => $stock->id,
+                    $base.".".CC::CARD.".".GC::NAME => $card->name,
+                    $base.".".CC::CARD.".".CC::NUMBER => $card->number,
+                    $base.".".CC::CARD.".".CC::COLOR => $card->color_id,
+                    $base.".".CC::CARD.".".CC::IMAGE_URL => $card->image_url,
+                    $base.".".CC::CARD.".".CC::EXP.".".GC::NAME => $exp->name,
+                    $base.".".CC::CARD.".".CC::EXP.".".CC::ATTR => $exp->attr,
+                    $base.".".CC::CARD.".".CC::FOIL.".".GC::ID => $foil->id,
+                    $base.".".CC::CARD.".".CC::FOIL.".".GC::NAME => $foil->name,
+                    $base.".".CC::CARD.".".CC::PROMOTYPE.".".GC::ID => $promo->id,
+                    $base.".".CC::CARD.".".CC::PROMOTYPE.".".GC::NAME => $promo->name,
+                    $base.".".StockpileHeader::LANG => $stock->language,
+                    $base.".".StockpileHeader::CONDITION => $stock->condition,
+                    $base.".".StockpileHeader::QUANTITY => $stock->quantity,
+                ];
+
+                $json->whereAll($expected);
             });
         }
 
