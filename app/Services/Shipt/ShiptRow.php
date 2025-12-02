@@ -59,13 +59,23 @@ class ShiptRow {
         return $address;
     }
 
+    private int $shipment = 0;
+
     /**
      * 注文枚数を取得する。
      *
      * @return int
      */
     public function shipment():int {
-        return (int)$this->row[SC::QUANTITY];
+        if ($this->shipment == 0) {
+            // 例: "6枚セット", "3枚 セット" など両方に対応
+            if (preg_match('/(\d+)枚\s*セット/u', $this->product_name(), $matches)) {
+                $this->shipment = (int) $matches[1];
+            } else {
+                $this->shipment = (int)$this->row[SC::QUANTITY];
+            }
+        }
+        return $this->shipment;
     }
     
     /**

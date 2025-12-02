@@ -97,20 +97,51 @@ class ShiptLogParseTest extends TestCase
         $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $date);
     }
 
-    #[TestDox('出荷枚数と商品価格が正しく設定されているか確認する')]
-    public function testShipmentAndProductPrice() {
-        $buyerInfos = [$this->createBuyerInfo(2, TestDateUtil::formatToday())];
+    #[TestDox('出荷枚数が正しく設定されているか確認する')]
+    #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
+    #[TestWith([true, false, false], '単品_通常版[Foil]')]
+    #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
+    #[TestWith([true, true, false], '単品_特別版[Foil]')]
+    #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
+    #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
+    #[TestWith([false, true, true], 'セット販売_特別版[Non-Foil]]')]
+    #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
+    public function testShipment(bool $isFoil, bool $isPromo, bool $isSet): void {
+        $shipment = $isSet ? 2 : 1;
+        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
+        $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
+            $stock = Stockpile::find((int)$item[GC::ID]);
+            // セット販売の商品名に変更
+            $item[SC::PRODUCT_NAME] = $this->product_name($stock, $isSet);
+            logger()->info($item[SC::PRODUCT_NAME]);
+            $item[StockpileHeader::QUANTITY] = $isSet ? 1:$shipment;
+            return $item;
+        }, $buyerInfos[0][SC::ITEMS]);
+
         $response = $this->uploadOk($buyerInfos);
         $items = $buyerInfos[0][SC::ITEMS];
-        for ($i=0; $i < count($items); $i++) { 
-                $item = $items[$i];
+        foreach ($items as $i => $item) { 
                 $response->assertJson(function(AssertableJson $json) use($i, $item) {
-                $json->whereAll([
-                    "0.".SC::ITEMS.".{$i}.".SC::SHIPMENT => $item[StockpileHeader::QUANTITY],
-                    "0.".SC::ITEMS.".{$i}.".SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
-                ]);
+                    $base = "0.".SC::ITEMS.".{$i}.";
+                    $json->whereAll([
+                        $base.SC::SHIPMENT => $this->shipment($item),
+                        $base.SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                    ]);
             });
         }
+    }
+
+    /**
+     * 出荷枚数を取得する。
+     *
+     * @return int
+     */
+    public function shipment(array $item):int {
+        $product_name = $item[SC::PRODUCT_NAME];
+        if (preg_match('/(\d+)枚\s*セット/u', $product_name, $matches)) {
+            return  (int) $matches[1];
+        }
+        return (int)$item[SC::QUANTITY];
     }
 
     #[TestDox('支払い金額が正しく計算されているか確認する')]
@@ -124,7 +155,9 @@ class ShiptLogParseTest extends TestCase
         $response = $this->uploadOk($buyerInfos);
 
         $exitem = current($buyerInfos[0][SC::ITEMS]);
-        $exTotalPrice = $exitem[SC::PRODUCT_PRICE] - $exitem[SC::DISCOUNT_AMOUNT];
+        $exProductPrice = $exitem[SC::PRODUCT_PRICE];
+        $exTotalPrice = $exProductPrice - $exitem[SC::DISCOUNT_AMOUNT];
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::PRODUCT_PRICE, $exProductPrice);
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::TOTAL_PRICE, $exTotalPrice);
     }
 
@@ -193,7 +226,6 @@ class ShiptLogParseTest extends TestCase
                 $json->whereAll($expected);
             });
         }
-
     }
 
     /**
@@ -277,10 +309,10 @@ class ShiptLogParseTest extends TestCase
      * @return array
      */
     private function createBuyerInfo(int $itemCount, string $shiptDate, 
-                                                            bool $isFoil = false, bool $isPromo = false):array {
+                                                            bool $isFoil = false, bool $isPromo = false, int $quantity = 1):array {
         $items = [];
         for ($i=0; $i < $itemCount; $i++) { 
-            $items[] = $this->createItemInfo($isFoil, $isPromo);
+            $items[] = $this->createItemInfo($isFoil, $isPromo, $quantity);
         }
         return [
             SC::ORDER_ID => $this->createOrderId(),
@@ -302,11 +334,26 @@ class ShiptLogParseTest extends TestCase
      * @param integer $promotypeId
      * @return array
      */
-    private function createItemInfo(bool $isFoil, bool $isPromo):array {
+    private function createItemInfo(bool $isFoil, bool $isPromo, int $quantity = 1):array {
+        $stock = $this->getRandomStock($isFoil, $isPromo, $quantity);
+        return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock),
+                    StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
+                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
+    }
+
+    /**
+     * 条件に合った在庫情報を取得する。
+     *
+     * @param boolean $isFoil true:Foil、false:Non-Foil
+     * @param boolean $isPromo true:特別版、false:通常版
+     * @param integer $quantity 枚数
+     * @return Stockpile
+     */
+    private function getRandomStock(bool $isFoil, bool $isPromo, int $quantity = 1): Stockpile {
         $isFoilOpe = !$isFoil ? '=' : '<>';
         $isPromoOpe = !$isPromo ? '=' : '<>';
         $stock = Stockpile::inRandomOrder()->
-                            where(StockpileHeader::QUANTITY, '>', 0)
+                            where(StockpileHeader::QUANTITY, '>=', $quantity)
                             ->whereHas('cardinfo', function($query) use($isFoilOpe, $isPromoOpe){
                                 $query->where(CC::FOIL_ID, $isFoilOpe, 1)
                                 ->where(CC::PROMO_ID, $isPromoOpe, 1);
@@ -314,18 +361,17 @@ class ShiptLogParseTest extends TestCase
         if(!$stock) {
             $this->fail('在庫情報がありません。Foil:'.($isFoil ? 'あり' : 'なし').' Promo:'.($isPromo ? 'あり' : 'なし'));
         }
-        return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock),
-                    StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
-                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
+        return $stock;
     }
 
     /**
      * 在庫情報から商品名を作成する。
      *
      * @param Stockpile $stock
+     * @param $isSet true:セット販売、false:単品
      * @return string
      */
-    private function product_name(Stockpile $stock): string {
+    private function product_name(Stockpile $stock, bool $isSet = false): string {
         $card = $stock->cardinfo;
         $exp = $stock->cardinfo->expansion;
         $foil = $stock->cardinfo->foiltype;
@@ -334,6 +380,7 @@ class ShiptLogParseTest extends TestCase
                 ($foil->id != 1 ? "【{$foil->name}】" : "").
                 "{$card->name}".
                 ($promo->id != 1 ? "≪{$promo->name}≫" : "").
+                ($isSet && $stock->quantity > 1 ? "{$stock->quantity}枚セット" : "").
                 "[$stock->language]"."[{$card->color_id}]";
     }
 
