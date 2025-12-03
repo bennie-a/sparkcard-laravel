@@ -75,6 +75,9 @@ class Handler extends ExceptionHandler
                 'detail' => $detail,
                 'request' => $request->path()
             ];
+        if(!empty($e->getSpecifics())) {
+            $json['specifics'] = $e->getSpecifics();
+        } 
         logger()->info('エラー：', $json);
         return response()->json($json, $statusCode,  [
             'Content-Type' => 'application/problem+json',

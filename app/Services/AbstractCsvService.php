@@ -75,12 +75,25 @@ abstract class AbstractCsvService {
 
     protected function addSkip(int $number, string $judge) {
         logger()->info('skip', [$number, $judge]);
-        $this->ignore[] = ["number" => $number, "reason" => $judge];
+        $this->ignore[] = ["number" => $number, "msg" => $judge];
     }
 
     protected function addError(int $number, string $judge) {
         logger()->info('error', [$number , $judge]);
-        $this->error[] = ["number" => $number, "reason" => $judge];
+        $this->error[] = ["number" => $number, "msg" => $judge];
+    }
+
+    public function getError() {
+        return $this->error;
+    }
+
+    /**
+     * ファイル内容にエラーが発生するか検証する。
+     *
+     * @return bool true:エラーあり、false:エラーなし
+     */
+    public function hasError():bool {
+        return !empty($this->error);
     }
 
     protected abstract function store($row);

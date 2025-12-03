@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
+use App\Http\Response\CustomResponse;
 use App\Models\Stockpile;
+use App\Services\CardBoardService;
 use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
@@ -129,6 +131,26 @@ class ShiptLogParseTest extends TestCase
                     ]);
             });
         }
+    }
+
+    public function testNotionCard() {
+        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday())];
+        $mock = \Mockery::mock(CardBoardService::class);
+
+            // 2. findByOrderId をスタブ化
+        $mock->shouldReceive('findByOrderId')
+                ->once()
+                ->with($buyerInfos[0][SC::ORDER_ID])
+                ->andReturn(collect([
+                    (object)[
+                        'id' => 123,
+                        'title' => 'テストカード'
+                    ]
+         ]));
+
+        // 3. DI コンテナへ登録（本物と差し替え）
+        $this->app->instance(\App\Services\CardBoardService::class, $mock);
+        $response = $this->uploadOk($buyerInfos);
     }
 
     /**
@@ -287,6 +309,30 @@ class ShiptLogParseTest extends TestCase
         return $response;
     }    
     
+    public function test_ng_ヘッダー不足(): void {
+        $buyerInfo = $this->createBuyerInfo(1, TestDateUtil::formatToday());
+        $header = $this->getHeader();
+        // shipping_dateヘッダーを削除
+        $header = str_replace('shipping_date,', '', $header);
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+        $response = $this->upload($content, CustomResponse::HTTP_CSV_VALIDATION);
+        logger()->debug($response->json());
+        // $response->assertJson(function(AssertableJson $json) {
+        //     $json->hasAll(['title', 'status', 'request', 'detail']);
+        //     $json->whereAll([
+        //         'title' => 'ヘッダー不足',
+        //         'status' => CustomResponse::HTTP_CSV_VALIDATION,
+        //         'detail' => 'ヘッダーが足りません: shipping_date',
+        //         'request' => 'api/shipping/parse',
+        //     ]);
+        // });
+    }
+
+
     private function createCsvLine(array $buyers):string {
         $implode = '';
         foreach($buyers as $buyer) {
@@ -383,24 +429,6 @@ class ShiptLogParseTest extends TestCase
                 ($isSet && $stock->quantity > 1 ? "{$stock->quantity}枚セット" : "").
                 "[$stock->language]"."[{$card->color_id}]";
     }
-
-//     public function test_ng_ヘッダー不足(): void {
-//         $content = <<<'CSV'
-//         order_id,buyer_name,original_product_id,product_name,quantity,product_price,shipping_postal_code,shipping_state,shipping_city,shipping_address_1,shipping_address_2,coupon_discount_amount
-//         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1111,【BRO】ガイアの眼、グウェナ[JP][緑],1,340,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,0
-//         order_2JGEXf3shdRmUSLVLKiR3U,梶島 充雄,1112,【SPM】インポスター症候群[JP][青],1,480,270-1164,千葉県,我孫子市,つくし野3-20,我孫子ビレジ504,00
-// CSV;
-//         $response = $this->upload($content, CustomResponse::HTTP_CSV_VALIDATION);
-//         $response->assertJson(function(AssertableJson $json) {
-//             $json->hasAll(['title', 'status', 'request', 'detail']);
-//             $json->whereAll([
-//                 'title' => 'ヘッダー不足',
-//                 'status' => CustomResponse::HTTP_CSV_VALIDATION,
-//                 'detail' => 'ヘッダーが足りません: shipping_date',
-//                 'request' => 'api/shipping/parse',
-//             ]);
-//         });
-//     }
 
     /**
      * Undocumented function

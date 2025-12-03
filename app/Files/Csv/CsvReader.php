@@ -1,7 +1,7 @@
 <?php
 namespace App\Files\Csv;
 
-use App\Exceptions\api\CsvFormatException;
+use App\Exceptions\api\Csv\CsvFormatException;
 use App\Http\Response\CustomResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
@@ -49,8 +49,8 @@ abstract class CsvReader {
         $exHeaders = $this->csvHeaders();
         $missingHeaders = array_diff($exHeaders, $fileHeaders);
         if (!empty($missingHeaders)) {
-            $details = __('messages.lack-of-csv-header'). implode(', ', $missingHeaders);
-            throw new CsvFormatException('ヘッダー不足', $details);
+            $detail =  __('messages.lack-of-csv-header'). implode(', ', $missingHeaders);
+            throw new CsvFormatException('ヘッダー不足', $detail);
         }
 
         // 全レコードを取得

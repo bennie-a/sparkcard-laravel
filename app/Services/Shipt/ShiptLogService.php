@@ -95,6 +95,12 @@ class ShiptLogService extends AbstractCsvService {
         foreach ($records as $index => $r) {
             $row = $this->createRow($index + 2, $r);
             $orderId = $row->order_id();
+            $notionCard = CardBoard::findByOrderId($row->order_id());
+            if ($notionCard->isEmpty()) {
+                logger()->error('該当するNotionカードがありません', ['order_id' => $orderId]);
+                $this->addError($row->number(), '該当するNotionカードがありません');
+                continue;
+         }
 
             if(!isset($orders[$orderId])){
                 // 新規生成
@@ -116,20 +122,6 @@ class ShiptLogService extends AbstractCsvService {
         }
         return array_values($orders);
     }
-
-//     // subtotal_price
-//     $subtotal = (int)$row['product_price'] * (int)$row['quantity'];
-
-//     // single_price = subtotal / shipment（小数点切り捨て）
-//     $single = (int) floor($subtotal / (int)$row['quantity']);
-
-// }
-
-// $json = json_encode(array_values($orders), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
-// echo $json;
-//         }
-
-//         return $records;
 
     private function updateNotion(Page $notionCard, ShiptRow $row) {
         $page = new Page();

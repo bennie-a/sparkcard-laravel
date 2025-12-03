@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\api\Csv\CsvFormatException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShiptLogRequest;
 use App\Http\Resources\Shipt\OrderCollection;
@@ -79,6 +80,9 @@ class ShiptLogController extends Controller
         logger()->info("ファイル読み込み開始：{$file->getClientOriginalName()}");
 
         $records = $this->service->parse($file->getRealPath());
+        if ($this->service->hasError()) {
+            throw new CsvFormatException('不正な記載', 'CSVファイルに不正な記載があります。', $this->service->getError());
+        }
 
         return response(OrderResource::collection($records), Response::HTTP_CREATED);
     }

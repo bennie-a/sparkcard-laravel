@@ -1,5 +1,5 @@
 <?php
-namespace App\Exceptions\api;
+namespace App\Exceptions\api\Csv;
 
 use App\Exceptions\ApiException;
 use App\Http\Response\CustomResponse;
@@ -11,10 +11,13 @@ use App\Http\Response\CustomResponse;
 class CsvFormatException extends ApiException {
 
     private string $title;
-    public function __construct(string $title, string $details)
+    private string $detail;
+    private array $specifics = [];
+    public function __construct(string $title, string $detail, array $specifics = [])
     {
       $this->title = $title;
-      $this->message = $details;
+      $this->detail = $detail;
+      $this->specifics = $specifics;
     }
 
     /**
@@ -25,7 +28,6 @@ class CsvFormatException extends ApiException {
     {
         return $this->title;
     }
-
 
     /**
      * @override ApiException
@@ -38,6 +40,12 @@ class CsvFormatException extends ApiException {
 
     public function getDetail(): string
     {
-        return $this->message;
+        return $this->detail;
     }
+
+    public function getSpecifics(): array
+    {
+        return $this->specifics;
+    }
+
 }
