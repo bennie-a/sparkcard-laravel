@@ -24,7 +24,7 @@ class ApiException extends Exception implements ApiExceptionInterface
         return 'Unexpected error occurred.';
     }
 
-    public function getSpecifics(): array
+    public function getRows(): array
     {
         return [];
     }

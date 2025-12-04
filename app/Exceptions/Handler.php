@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use App\Http\Response\CustomResponse;
-use Exception;
+use App\Services\Constant\ErrorConstant as EC;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -70,13 +71,13 @@ class Handler extends ExceptionHandler
         }
 
         $json =[
-                'title' => $title,
-                'status' => $statusCode,
-                'detail' => $detail,
-                'request' => $request->path()
+                EC::TITLE => $title,
+                GlobalConstant::STATUS => $statusCode,
+                EC::DETAIL => $detail,
+                EC::REQUEST => $request->path()
             ];
-        if(!empty($e->getSpecifics())) {
-            $json['specifics'] = $e->getSpecifics();
+        if(!empty($e->getRows)) {
+            $json[EC::ROWS] = $e->getRows();
         } 
         logger()->info('エラー：', $json);
         return response()->json($json, $statusCode,  [

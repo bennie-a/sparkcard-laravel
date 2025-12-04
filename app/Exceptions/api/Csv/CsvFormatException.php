@@ -12,12 +12,13 @@ class CsvFormatException extends ApiException {
 
     private string $title;
     private string $detail;
-    private array $specifics = [];
-    public function __construct(string $title, string $detail, array $specifics = [])
+    private array $rows = [];
+    
+    public function __construct(string $title, string $detail, array $rows = [])
     {
       $this->title = $title;
       $this->detail = $detail;
-      $this->specifics = $specifics;
+      $this->rows = $rows;
     }
 
     /**
@@ -43,9 +44,9 @@ class CsvFormatException extends ApiException {
         return $this->detail;
     }
 
-    public function getSpecifics(): array
+    public function getRows(): array
     {
-        return $this->specifics;
+        return $this->rows;
     }
 
 }

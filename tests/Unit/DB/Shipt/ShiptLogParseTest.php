@@ -8,6 +8,7 @@ use App\Services\CardBoardService;
 use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -36,10 +37,6 @@ class ShiptLogParseTest extends TestCase
         $this->seed(TestCardInfoSeeder::class);
         $this->seed(TestStockpileSeeder::class);
      }
-
-     const RES = 'response';
-
-     const EX_INFO = 'expected_info';
 
     #[TestDox('購入者情報と注文商品が正しく集計されているか確認する')]
     #[TestWith([1, 1], '購入者1人_出荷商品1件')]
@@ -188,7 +185,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([3], '出荷枚数が複数枚_割引なし')]
     #[TestWith([3, 50], '出荷枚数が複数枚_割引あり')]
     public function testSinglePriceCalc(int $shipment, int $discount = 0): void {
-        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday())];
+        $buyerInfos = [$this->createTodayOrderInfos(1)];
         // 商品価格と出荷枚数を設定
         $buyerInfos[0][SC::ITEMS][0][SC::PRODUCT_PRICE] = 1000;
         $buyerInfos[0][SC::ITEMS][0][StockpileHeader::QUANTITY] = $shipment;
@@ -307,32 +304,69 @@ class ShiptLogParseTest extends TestCase
             ]);
 
         return $response;
-    }    
+    }
+
+    private function uploadNg(string $content, int $status, array $expJson = []): TestResponse {      
+        $response = $this->upload($content, $status);
+        $this->assertJsonError($response, $status, $expJson);
+        return $response;
+    }
     
     public function test_ng_ヘッダー不足(): void {
-        $buyerInfo = $this->createBuyerInfo(1, TestDateUtil::formatToday());
+        $buyerInfo = $this->createTodayOrderInfos();
         $header = $this->getHeader();
         // shipping_dateヘッダーを削除
-        $header = str_replace('shipping_date,', '', $header);
+        $header = str_replace(SC::SHIPPING_DATE, '', $header);
         $implode = $this->createCsvLine([$buyerInfo]);
         $content = <<<CSV
         {$header}
         {$implode}
         CSV;
-        $response = $this->upload($content, CustomResponse::HTTP_CSV_VALIDATION);
-        logger()->debug($response->json());
-        // $response->assertJson(function(AssertableJson $json) {
-        //     $json->hasAll(['title', 'status', 'request', 'detail']);
-        //     $json->whereAll([
-        //         'title' => 'ヘッダー不足',
-        //         'status' => CustomResponse::HTTP_CSV_VALIDATION,
-        //         'detail' => 'ヘッダーが足りません: shipping_date',
-        //         'request' => 'api/shipping/parse',
-        //     ]);
-        // });
+        $expJson = [
+            EC::TITLE => 'ヘッダー不足',
+            EC::DETAIL => __('messages.lack-of-csv-header').SC::SHIPPING_DATE
+        ];
+        $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
     }
 
+    public function test_ng_空ファイル(): void {
+        $content = <<<CSV
+        {$this->getHeader()}
+        CSV;
+        $expJson = [
+            EC::TITLE => '空ファイル',
+            EC::DETAIL => __('empty-file')
+        ];
+        $this->uploadNg($content, Response::HTTP_BAD_REQUEST, $expJson);
+    }
 
+    /**
+     * エラーに関するJSON情報を検証する。
+     *
+     * @param TestResponse $response
+     * @param integer $status
+     * @param array $expJson
+     * @return void
+     */
+    private function assertJsonError(TestResponse $response, int $status, array $expJson = []): void {
+        $response->assertJson(function(AssertableJson $json) use($status, $expJson) {
+            $json->hasAll([EC::TITLE, GC::STATUS, EC::REQUEST, EC::DETAIL]);
+            $json->whereAll([
+                EC::TITLE => $expJson[EC::TITLE],
+                GC::STATUS => $status,
+                EC::DETAIL => $expJson[EC::DETAIL],
+                EC::REQUEST => 'api/shipping/parse',
+            ]);
+        });
+
+    }
+
+    /**
+     * CSV1行分の文字列を作成する。
+     *
+     * @param array $buyers
+     * @return string
+     */
     private function createCsvLine(array $buyers):string {
         $implode = '';
         foreach($buyers as $buyer) {
@@ -347,6 +381,16 @@ class ShiptLogParseTest extends TestCase
             }
         }
         return $implode;
+    }
+
+    /**
+     * 発送日が今日の注文情報を取得する。
+     *
+     * @param integer $itemCount
+     * @return array
+     */
+    private function createTodayOrderInfos(): array {
+        return $this->createBuyerInfo(1, TestDateUtil::formatToday());
     }
 
     /**

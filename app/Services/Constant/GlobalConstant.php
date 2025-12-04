@@ -17,4 +17,7 @@ class GlobalConstant {
     const NAME = 'name';
 
     const UPDATED_AT = 'updated_at';
+
+    const STATUS = 'status';
+
 }
