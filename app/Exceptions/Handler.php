@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler
                 EC::DETAIL => $detail,
                 EC::REQUEST => $request->path()
             ];
-        if(!empty($e->getRows)) {
+        if($e instanceof ApiException && $e->hasRows()) {
             $json[EC::ROWS] = $e->getRows();
         } 
         logger()->info('エラー：', $json);

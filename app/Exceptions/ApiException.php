@@ -28,4 +28,9 @@ class ApiException extends Exception implements ApiExceptionInterface
     {
         return [];
     }
+
+    public function hasRows(): bool
+    {
+        return !empty($this->getRows());
+    }
 }

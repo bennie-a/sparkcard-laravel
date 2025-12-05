@@ -93,7 +93,7 @@ class ShiptLogService extends AbstractCsvService {
         $records = $this->read($path);
         $orders = [];
         foreach ($records as $index => $r) {
-            $row = $this->createRow($index + 2, $r);
+            $row = $this->createRow($index, $r);
             $orderId = $row->order_id();
             $notionCard = CardBoard::findByOrderId($row->order_id());
             if ($notionCard->isEmpty()) {

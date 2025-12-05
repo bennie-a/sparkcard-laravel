@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\api\Csv\CsvFormatException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
-use App\Http\Resources\Shipt\OrderCollection;
 use App\Http\Resources\Shipt\OrderResource;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
@@ -72,10 +72,10 @@ class ShiptLogController extends Controller
     /**
      * 注文CSVファイルを解析する。
      *
-     * @param Request $request
+     * @param ShiptUploadRequest $request
      * @return void
      */
-    public function parse(Request $request) {
+    public function parse(ShiptUploadRequest $request) {
         $file = $request->file('file');
         logger()->info("ファイル読み込み開始：{$file->getClientOriginalName()}");
 

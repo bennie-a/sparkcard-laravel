@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Files\CsvReader;
+use App\Services\Constant\ErrorConstant as EC;
 
 /**
  * CSVファイル読み込みに関する抽象クラス
@@ -79,8 +80,8 @@ abstract class AbstractCsvService {
     }
 
     protected function addError(int $number, string $judge) {
-        logger()->info('error', [$number , $judge]);
-        $this->error[] = ["number" => $number, "msg" => $judge];
+        logger()->error('error', [$number , $judge]);
+        $this->error[] = [EC::ROW => $number, EC::MSG => $judge];
     }
 
     public function getError() {
