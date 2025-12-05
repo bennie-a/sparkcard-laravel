@@ -28,4 +28,9 @@ class ShiptUploadRequest extends FormRequest
             'file' => 'required|file|mimes:csv,txt',
         ];
     }
+
+    public function prepareForValidation()
+    {
+        return parent::prepareForValidation();
+    }
 }
