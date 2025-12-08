@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\tests\Unit\DB\Shipt;
 
+use App\Enum\CsvFlowType;
+use App\Enum\ShopPlatform;
 use App\Http\Response\CustomResponse;
+use App\Models\CsvHeader;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
 use App\Services\Constant\CardConstant as CC;
@@ -40,9 +43,9 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('購入者情報と注文商品が正しく集計されているか確認する')]
     #[TestWith([1, 1], '購入者1人_出荷商品1件')]
-    // #[TestWith([1, 2], '購入者1人_出荷商品2件')]
-    // #[TestWith([2, 1], '購入者2人_出荷商品1件')]
-    // #[TestWith([2, 1], '購入者2人_出荷商品2件')]
+    #[TestWith([1, 2], '購入者1人_出荷商品2件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品1件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品2件')]
     public function testBuyerAndItemCount(int $buyerCount, int $itemCount): void
     {
         $today = TestDateUtil::formatToday();
@@ -333,15 +336,29 @@ class ShiptLogParseTest extends TestCase
         $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
     }
 
+    public function test_ng_ヘッダーなし() : void {
+        $buyerInfo = $this->createTodayOrderInfos();
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $content = <<<CSV
+        {$implode}
+        CSV;
+        $dbHeeader = CsvHeader::findColumns(ShopPlatform::MERCARI, CsvFlowType::SHIPT);
+        $expJson = [
+            EC::TITLE => 'ヘッダー不足',
+            EC::DETAIL => __('messages.lack-of-csv-header').implode(', ', $dbHeeader)
+        ];
+        $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
+    }
+
     public function test_ng_空ファイル(): void {
         $content = <<<CSV
         {$this->getHeader()}
         CSV;
         $expJson = [
             EC::TITLE => '空ファイル',
-            EC::DETAIL => __('empty-file')
+            EC::DETAIL => __('messages.empty-content')
         ];
-        $this->uploadNg($content, Response::HTTP_BAD_REQUEST, $expJson);
+        $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
     }
 
     /**

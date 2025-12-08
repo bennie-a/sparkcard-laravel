@@ -57,6 +57,9 @@ abstract class CsvReader {
         $reader->setHeaderOffset(0);
         $records = $reader->getRecords();
         logger()->debug($reader->count() . "件のレコードを取得");
+        if ($reader->count() == 0) {
+            throw new CsvFormatException('空ファイル', __('messages.empty-content'));
+        }
         $rows = [];
         foreach ($records as $record) {
             $convertedRow = [];

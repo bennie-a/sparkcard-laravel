@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use App\Files\CsvReader;
 use App\Services\Constant\ErrorConstant as EC;
 
 /**
@@ -33,13 +32,6 @@ abstract class AbstractCsvService {
                             'failed_rows' => count($this->error), 'failed_details' => $this->error,
                             'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
         return $result;
-    }
-
-    protected function read(string $path) {
-        logger()->info('読み込み開始', [$path]);
-        $reader = $this->csvReader();
-        $records = $reader->read($path);
-        return $records;
     }
 
     /**
@@ -98,12 +90,6 @@ abstract class AbstractCsvService {
     }
 
     protected abstract function store($row);
-
-    /**
-     * 機能に応じたCsvReaderクラスを呼び出す。
-     * @return CsvReader
-     */
-    protected abstract function csvReader();
 
     /**
      * CSVファイル1行分のオブジェクトを作成する。 
