@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Shipt;
 
+use App\Files\Reader\ShiptLogCsvReader;
+use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -9,6 +11,8 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class ShiptUploadRequest extends FormRequest
 {
+    const FILE = 'file';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -25,12 +29,23 @@ class ShiptUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:csv,txt',
+            self::FILE => 'required|file|mimes:csv,txt',
         ];
     }
 
+    /**
+     * アップロードされたファイルを読み込む。
+     *
+     * @return void
+     */
     public function prepareForValidation()
     {
-        return parent::prepareForValidation();
+        $path = $this->file(self::FILE)->path();
+        logger()->info('ファイル読み込み開始：', [$path]);
+        $reader = new ShiptLogCsvReader();
+        $records = $reader->read($path);
+        return $this->merge([
+            GC::DATA => $records,
+        ]);
     }
 }

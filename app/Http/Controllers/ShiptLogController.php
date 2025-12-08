@@ -7,12 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
 use App\Http\Resources\Shipt\OrderResource;
+use App\Services\Constant\GlobalConstant as GC;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Shipt\ShiptLogService;
 use App\Services\Constant\ShiptConstant as ShiptCon;
+use GMP;
 
 /**
  * 出荷ログAPI
@@ -76,10 +78,8 @@ class ShiptLogController extends Controller
      * @return void
      */
     public function parse(ShiptUploadRequest $request) {
-        $file = $request->file('file');
-        logger()->info("ファイル読み込み開始：{$file->getClientOriginalName()}");
-
-        $records = $this->service->parse($file->getRealPath());
+        $data = $request->input(GC::DATA);
+        $records = $this->service->parse($data);
         if ($this->service->hasError()) {
             throw new CsvFormatException('不正な記載', 'CSVファイルに不正な記載があります。', $this->service->getError());
         }

@@ -86,11 +86,10 @@ class ShiptLogService extends AbstractCsvService {
     /**
      * 注文CSVの内容を解析する。
      * @since 5.1.0
-     * @param string $path
+     * @param array $records CSV読み込み結果
      * @return array
      */
-    public function parse(string $path) {
-        $records = $this->read($path);
+    public function parse(array $records) {
         $orders = [];
         foreach ($records as $index => $r) {
             $row = $this->createRow($index, $r);
