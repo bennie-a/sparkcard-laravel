@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Shipt;
 
+use App\Exceptions\api\Csv\CsvFormatException;
 use App\Files\Reader\ShiptLogCsvReader;
 use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,15 +30,7 @@ class ShiptUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::FILE => ['required', 'file', 'mimes:csv,txt',
-            function ($attribute, $value, $fail) {
-                if (!$this->hasFile(self::FILE)) {
-                    $fail('validation.file.required');
-                }
-                if ($this->file(self::FILE)->getSize() === 0) {
-                    $fail(__('validation.file.empty-content'));
-                }
-            }],
+            self::FILE => ['required', 'file', 'mimes:csv,txt'],
         ];
     }
 
@@ -48,6 +41,9 @@ class ShiptUploadRequest extends FormRequest
      */
     public function prepareForValidation()
     {
+        if ($this->file(self::FILE)->getSize() === 0) {
+            throw new CsvFormatException('empty-file');
+        }
         $path = $this->file(self::FILE)->path();
         logger()->info('ファイル読み込み開始：', [$path]);
         $reader = new ShiptLogCsvReader();

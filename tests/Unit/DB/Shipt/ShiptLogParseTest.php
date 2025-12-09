@@ -1,11 +1,9 @@
 <?php
 
-namespace Tests\Feature\tests\Unit\DB\Shipt;
-
+namespace Tests\Unit\DB\Shipt;
 use App\Enum\CsvFlowType;
 use App\Enum\ShopPlatform;
 use App\Http\Response\CustomResponse;
-use App\Models\CsvHeader;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
 use App\Services\Constant\CardConstant as CC;
@@ -19,8 +17,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
+use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
@@ -51,7 +51,7 @@ class ShiptLogParseTest extends TestCase
         $today = TestDateUtil::formatToday();
         $buyerInfos = [];
         for ($i=0; $i < $buyerCount; $i++) {
-            $buyerInfos[] = $this->createBuyerInfo($itemCount, $today);
+            $buyerInfos[] = ShiptLogTestHelper::createBuyerInfo($itemCount, $today);
         }
 
         $response = $this->uploadOk($buyerInfos);
@@ -89,7 +89,7 @@ class ShiptLogParseTest extends TestCase
             '' => ''
         };
         logger()->info("Testing shipping date: {$date}");
-        $buyerInfos = [$this->createBuyerInfo(1, $date)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $date)];
 
         $response = $this->uploadOk($buyerInfos);
 
@@ -110,11 +110,11 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
     public function testShipment(bool $isFoil, bool $isPromo, bool $isSet): void {
         $shipment = $isSet ? 2 : 1;
-        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
         $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
             $stock = Stockpile::find((int)$item[GC::ID]);
             // セット販売の商品名に変更
-            $item[SC::PRODUCT_NAME] = $this->product_name($stock, $isSet);
+            $item[SC::PRODUCT_NAME] = ShiptLogTestHelper::product_name($stock, $isSet);
             logger()->info($item[SC::PRODUCT_NAME]);
             $item[StockpileHeader::QUANTITY] = $isSet ? 1:$shipment;
             return $item;
@@ -134,7 +134,7 @@ class ShiptLogParseTest extends TestCase
     }
 
     public function testNotionCard() {
-        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday())];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday())];
         $response = $this->uploadOk($buyerInfos);
     }
 
@@ -155,7 +155,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([0], '割引なし')]
     #[TestWith([100], '割引あり')]
     public function testTotalPriceCalc(int $discount) {
-        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday())];
+        $buyerInfos = [$this->createTodayOrderInfos(1)];
         // 商品価格と割引金額を設定
         $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
 
@@ -199,7 +199,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([false, true], '特別版')]
     #[TestWith([true, true], '特別版のFoilカード')]
     public function testStock(bool $isFoil = false, bool $isPromo = false): void {
-        $buyerInfos = [$this->createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo)];
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
@@ -244,11 +244,6 @@ class ShiptLogParseTest extends TestCase
     private function uploadOk(array $buyerInfos) {
 
         $mock = \Mockery::mock(CardBoardService::class);
-            // 2. findByOrderId をスタブ化
-
-        $orderIds = array_map(function($b) {
-            return $b[SC::ORDER_ID];
-        }, $buyerInfos);
         $mock->shouldReceive('findByOrderId')
                 ->with(Mockery::any())
                 ->andReturn(collect([
@@ -262,8 +257,9 @@ class ShiptLogParseTest extends TestCase
         $this->app->instance(\App\Services\CardBoardService::class, $mock);
 
         $implode = $this->createCsvLine($buyerInfos);
+        $header = ShiptLogTestHelper::getHeader();
         $content = <<<CSV
-        {$this->getHeader()}
+        {$header}
         {$implode}
         CSV;
         $response = $this->upload($content);
@@ -315,7 +311,7 @@ class ShiptLogParseTest extends TestCase
 
     public function test_ng_ヘッダー不足(): void {
         $buyerInfo = $this->createTodayOrderInfos();
-        $header = $this->getHeader();
+        $header  = ShiptLogTestHelper::getHeader();
         // shipping_dateヘッダーを削除
         $header = str_replace(SC::SHIPPING_DATE, '', $header);
         $implode = $this->createCsvLine([$buyerInfo]);
@@ -335,14 +331,19 @@ class ShiptLogParseTest extends TestCase
         $this->testfileError($content, 'no-header');
     }
 
-    public function test_ng_空ファイル(): void {
+    public function test_ng_データが空(): void {
+        $header  = ShiptLogTestHelper::getHeader();
         $content = <<<CSV
-        {$this->getHeader()}
+        {$header}
         CSV;
         $this->testFileError($content, 'empty-content');
     }
 
-    private function testFileError(string $content, string $keyword, string $value = ''): void {
+    public function test_ng_空ファイル(): void {
+        $this->testfileError('', 'empty-file');
+    }
+
+    private function testfileError(string $content, string $keyword, string $value = ''): void {
         $base = 'validation.file';
         $expJson = [
             EC::TITLE => __("$base.title.$keyword"),
@@ -394,7 +395,7 @@ class ShiptLogParseTest extends TestCase
             foreach($items as $item) {
                 $oneline = $buyerLine;
                 $oneline = array_merge($buyerLine, array_values($item));
-                $implode .= $this->arrayToCsvString($oneline)."\n";
+                $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
                 $oneline = [];
             }
         }
@@ -408,88 +409,7 @@ class ShiptLogParseTest extends TestCase
      * @return array
      */
     private function createTodayOrderInfos(): array {
-        return $this->createBuyerInfo(1, TestDateUtil::formatToday());
-    }
-
-    /**
-     * 購入者情報をランダムで作成する。
-     *
-     * @return array
-     */
-    private function createBuyerInfo(int $itemCount, string $shiptDate,
-                                                            bool $isFoil = false, bool $isPromo = false, int $quantity = 1):array {
-        $items = [];
-        for ($i=0; $i < $itemCount; $i++) {
-            $items[] = $this->createItemInfo($isFoil, $isPromo, $quantity);
-        }
-        return [
-            SC::ORDER_ID => $this->createOrderId(),
-            SC::BUYER => fake()->name(),
-            SC::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
-            SC::STATE => fake()->prefecture(),
-            SC::CITY => fake()->city(),
-            SC::ADDRESS_1 => fake()->streetAddress(),
-            SC::ADDRESS_2 => fake()->secondaryAddress(),
-            SC::SHIPPING_DATE => $shiptDate,
-            SC::ITEMS => $items
-        ];
-    }
-
-    /**
-     * 商品情報を1件作成する。
-     *
-     * @param integer $foiltypeId
-     * @param integer $promotypeId
-     * @return array
-     */
-    private function createItemInfo(bool $isFoil, bool $isPromo, int $quantity = 1):array {
-        $stock = $this->getRandomStock($isFoil, $isPromo, $quantity);
-        return [GC::ID => $stock->id, SC::PRODUCT_NAME => $this->product_name($stock),
-                    StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
-                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
-    }
-
-    /**
-     * 条件に合った在庫情報を取得する。
-     *
-     * @param boolean $isFoil true:Foil、false:Non-Foil
-     * @param boolean $isPromo true:特別版、false:通常版
-     * @param integer $quantity 枚数
-     * @return Stockpile
-     */
-    private function getRandomStock(bool $isFoil, bool $isPromo, int $quantity = 1): Stockpile {
-        $isFoilOpe = !$isFoil ? '=' : '<>';
-        $isPromoOpe = !$isPromo ? '=' : '<>';
-        $stock = Stockpile::inRandomOrder()->
-                            where(StockpileHeader::QUANTITY, '>=', $quantity)
-                            ->whereHas('cardinfo', function($query) use($isFoilOpe, $isPromoOpe){
-                                $query->where(CC::FOIL_ID, $isFoilOpe, 1)
-                                ->where(CC::PROMO_ID, $isPromoOpe, 1);
-                            })->first();
-        if(!$stock) {
-            $this->fail('在庫情報がありません。Foil:'.($isFoil ? 'あり' : 'なし').' Promo:'.($isPromo ? 'あり' : 'なし'));
-        }
-        return $stock;
-    }
-
-    /**
-     * 在庫情報から商品名を作成する。
-     *
-     * @param Stockpile $stock
-     * @param $isSet true:セット販売、false:単品
-     * @return string
-     */
-    private function product_name(Stockpile $stock, bool $isSet = false): string {
-        $card = $stock->cardinfo;
-        $exp = $stock->cardinfo->expansion;
-        $foil = $stock->cardinfo->foiltype;
-        $promo = $stock->cardinfo->promotype;
-        return "【{$exp->attr}】".
-                ($foil->id != 1 ? "【{$foil->name}】" : "").
-                "{$card->name}".
-                ($promo->id != 1 ? "≪{$promo->name}≫" : "").
-                ($isSet && $stock->quantity > 1 ? "{$stock->quantity}枚セット" : "").
-                "[$stock->language]"."[{$card->color_id}]";
+        return ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday());
     }
 
     /**
@@ -525,40 +445,5 @@ class ShiptLogParseTest extends TestCase
                 unlink($file->getRealPath());
             }
         }
-    }
-
-    /**
-     * 注文番号をランダムで作成する。
-     *
-     * @return string
-     */
-    private function createOrderId(): string {
-        return uniqid('order_');
-    }
-
-    /**
-     * 配列を','区切りの文字列に変換する。
-     *
-     * @param [type] $array
-     * @return string
-     */
-    private function arrayToCsvString($array):string
-    {
-        return implode(',', $array);
-    }
-
-    /**
-     * 注文CSV用ヘッダー行を取得する。
-     *
-     * @return array
-     */
-    private function getHeader() {
-        $header = [
-                                SC::ORDER_ID, SC::BUYER, SC::POSTAL_CODE, SC::STATE,
-                                SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2, SC::SHIPPING_DATE,
-                                SC::PRODUCT_ID, SC::PRODUCT_NAME, StockpileHeader::QUANTITY,
-                                SC::PRODUCT_PRICE, SC::DISCOUNT_AMOUNT
-                            ];
-        return $this->arrayToCsvString($header);
     }
 }
