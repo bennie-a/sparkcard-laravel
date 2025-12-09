@@ -29,7 +29,15 @@ class ShiptUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::FILE => 'required|file|mimes:csv,txt',
+            self::FILE => ['required', 'file', 'mimes:csv,txt',
+            function ($attribute, $value, $fail) {
+                if (!$this->hasFile(self::FILE)) {
+                    $fail('validation.file.required');
+                }
+                if ($this->file(self::FILE)->getSize() === 0) {
+                    $fail(__('validation.file.empty-content'));
+                }
+            }],
         ];
     }
 

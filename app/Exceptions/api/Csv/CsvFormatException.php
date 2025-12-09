@@ -13,12 +13,13 @@ class CsvFormatException extends ApiException {
     private string $title;
     private string $detail;
     private array $rows = [];
-    
-    public function __construct(string $title, string $detail, array $rows = [])
+
+    public function __construct(string $keyword, string $value = '', array $rows = [])
     {
-      $this->title = $title;
-      $this->detail = $detail;
-      $this->rows = $rows;
+        $validation = 'validation.file';
+        $this->title = __("$validation.title.$keyword");
+        $this->detail = __("$validation.detail.$keyword", ['values' => $value]);
+        $this->rows = $rows;
     }
 
     /**

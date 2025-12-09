@@ -50,11 +50,11 @@ class ShiptLogParseTest extends TestCase
     {
         $today = TestDateUtil::formatToday();
         $buyerInfos = [];
-        for ($i=0; $i < $buyerCount; $i++) { 
+        for ($i=0; $i < $buyerCount; $i++) {
             $buyerInfos[] = $this->createBuyerInfo($itemCount, $today);
         }
 
-        $response = $this->uploadOk($buyerInfos);            
+        $response = $this->uploadOk($buyerInfos);
 
        // 購入者数確認
         $response->assertJsonCount($buyerCount);
@@ -67,7 +67,7 @@ class ShiptLogParseTest extends TestCase
                     "{$i}.". SC::ORDER_ID => $buyer[SC::ORDER_ID],
                     "{$i}.". SC::BUYER => $buyer[SC::BUYER],
                     "{$i}.". SC::ZIPCODE => $buyer[SC::POSTAL_CODE],
-                    "{$i}.". SC::ADDRESS => 
+                    "{$i}.". SC::ADDRESS =>
                         $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
                     "{$i}.". SC::SHIPPING_DATE => $buyer[SC::SHIPPING_DATE],
                     "{$i}.". SC::ITEMS => fn($items) => count($items) == count($buyer[SC::ITEMS]),
@@ -75,7 +75,7 @@ class ShiptLogParseTest extends TestCase
             });
         }
     }
-    
+
     #[TestDox('発送日が正しく設定されているか確認する')]
     #[TestWith(['today'], '今日')]
     #[TestWith(['tomorrow'], '明日')]
@@ -122,7 +122,7 @@ class ShiptLogParseTest extends TestCase
 
         $response = $this->uploadOk($buyerInfos);
         $items = $buyerInfos[0][SC::ITEMS];
-        foreach ($items as $i => $item) { 
+        foreach ($items as $i => $item) {
                 $response->assertJson(function(AssertableJson $json) use($i, $item) {
                     $base = "0.".SC::ITEMS.".{$i}.";
                     $json->whereAll([
@@ -181,7 +181,7 @@ class ShiptLogParseTest extends TestCase
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
-        for ($i=0; $i < count($items); $i++) { 
+        for ($i=0; $i < count($items); $i++) {
             $item = $items[$i];
             $exTotalPrice = $item[SC::PRODUCT_PRICE] - $item[SC::DISCOUNT_AMOUNT];
             $exSinglePrice = (int)round($exTotalPrice / $item[StockpileHeader::QUANTITY]);
@@ -203,7 +203,7 @@ class ShiptLogParseTest extends TestCase
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
-        foreach ($items as $i => $item) { 
+        foreach ($items as $i => $item) {
             $stock = Stockpile::find((int)$item[GC::ID]);
             $card = $stock->cardinfo;
             $exp = $card->expansion;
@@ -242,7 +242,7 @@ class ShiptLogParseTest extends TestCase
      * @return TestResponse $response
      */
     private function uploadOk(array $buyerInfos) {
-        
+
         $mock = \Mockery::mock(CardBoardService::class);
             // 2. findByOrderId をスタブ化
 
@@ -268,7 +268,7 @@ class ShiptLogParseTest extends TestCase
         CSV;
         $response = $this->upload($content);
                 $response->assertJsonStructure([
-            '*' => [ 
+            '*' => [
                 SC::ORDER_ID,
                 SC::BUYER,
                 SC::SHIPPING_DATE,
@@ -313,12 +313,6 @@ class ShiptLogParseTest extends TestCase
         return $response;
     }
 
-    private function uploadNg(string $content, int $status, array $expJson = []): TestResponse {      
-        $response = $this->upload($content, $status);
-        $this->assertJsonError($response, $status, $expJson);
-        return $response;
-    }
-    
     public function test_ng_ヘッダー不足(): void {
         $buyerInfo = $this->createTodayOrderInfos();
         $header = $this->getHeader();
@@ -329,11 +323,7 @@ class ShiptLogParseTest extends TestCase
         {$header}
         {$implode}
         CSV;
-        $expJson = [
-            EC::TITLE => 'ヘッダー不足',
-            EC::DETAIL => __('messages.lack-of-csv-header').SC::SHIPPING_DATE
-        ];
-        $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
+        $this->testFileError($content, 'lack-of-header', SC::SHIPPING_DATE);
     }
 
     public function test_ng_ヘッダーなし() : void {
@@ -342,23 +332,30 @@ class ShiptLogParseTest extends TestCase
         $content = <<<CSV
         {$implode}
         CSV;
-        $dbHeeader = CsvHeader::findColumns(ShopPlatform::MERCARI, CsvFlowType::SHIPT);
-        $expJson = [
-            EC::TITLE => 'ヘッダー不足',
-            EC::DETAIL => __('messages.lack-of-csv-header').implode(', ', $dbHeeader)
-        ];
-        $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
+        $this->testfileError($content, 'no-header');
     }
 
     public function test_ng_空ファイル(): void {
         $content = <<<CSV
         {$this->getHeader()}
         CSV;
+        $this->testFileError($content, 'empty-content');
+    }
+
+    private function testFileError(string $content, string $keyword, string $value = ''): void {
+        $base = 'validation.file';
         $expJson = [
-            EC::TITLE => '空ファイル',
-            EC::DETAIL => __('messages.empty-content')
+            EC::TITLE => __("$base.title.$keyword"),
+            EC::DETAIL => __("$base.detail.$keyword", ['values' => $value])
         ];
         $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
+
+    }
+
+    private function uploadNg(string $content, int $status, array $expJson = []): TestResponse {
+        $response = $this->upload($content, $status);
+        $this->assertJsonError($response, $status, $expJson);
+        return $response;
     }
 
     /**
@@ -393,7 +390,7 @@ class ShiptLogParseTest extends TestCase
         foreach($buyers as $buyer) {
             $items = $buyer[SC::ITEMS];
             unset($buyer[SC::ITEMS]);
-            $buyerLine = array_values($buyer); 
+            $buyerLine = array_values($buyer);
             foreach($items as $item) {
                 $oneline = $buyerLine;
                 $oneline = array_merge($buyerLine, array_values($item));
@@ -419,10 +416,10 @@ class ShiptLogParseTest extends TestCase
      *
      * @return array
      */
-    private function createBuyerInfo(int $itemCount, string $shiptDate, 
+    private function createBuyerInfo(int $itemCount, string $shiptDate,
                                                             bool $isFoil = false, bool $isPromo = false, int $quantity = 1):array {
         $items = [];
-        for ($i=0; $i < $itemCount; $i++) { 
+        for ($i=0; $i < $itemCount; $i++) {
             $items[] = $this->createItemInfo($isFoil, $isPromo, $quantity);
         }
         return [
@@ -509,20 +506,23 @@ class ShiptLogParseTest extends TestCase
         $tmpFilePath = sys_get_temp_dir() . "/{$filename}";
         file_put_contents($tmpFilePath, $content);
 
+        // 一時ファイルから UploadedFile インスタンス作成
+        $file = new UploadedFile(
+            $tmpFilePath, $filename, 'text/csv', null, true);
+        return $this->execute($file, $status);
+    }
+
+    private function execute(UploadedFile $file, int $status = Response::HTTP_CREATED) {
         try {
-            // 一時ファイルから UploadedFile インスタンス作成
-            $file = new UploadedFile(
-                $tmpFilePath, $filename, 'text/csv', null, true);
-    
             $response = $this->postJson('/api/shipping/parse', ['file' => $file], [
                 'Content-Type' => 'multipart/form-data',
             ]);
-            
+
             $response->assertStatus($status);
             return $response;
         } finally {
-            if (file_exists($tmpFilePath)) {
-                unlink($tmpFilePath);
+            if (file_exists($file->getRealPath())) {
+                unlink($file->getRealPath());
             }
         }
     }

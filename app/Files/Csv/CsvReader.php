@@ -48,9 +48,11 @@ abstract class CsvReader {
         // ヘッダー検証
         $exHeaders = $this->csvHeaders();
         $missingHeaders = array_diff($exHeaders, $fileHeaders);
+        if (count($fileHeaders) == count($missingHeaders)) {
+            throw new CsvFormatException('no-header');
+        }
         if (!empty($missingHeaders)) {
-            $detail =  __('messages.lack-of-csv-header'). implode(', ', $missingHeaders);
-            throw new CsvFormatException('ヘッダー不足', $detail);
+            throw new CsvFormatException('lack-of-header', implode(', ', $missingHeaders));
         }
 
         // 全レコードを取得
@@ -58,7 +60,7 @@ abstract class CsvReader {
         $records = $reader->getRecords();
         logger()->debug($reader->count() . "件のレコードを取得");
         if ($reader->count() == 0) {
-            throw new CsvFormatException('空ファイル', __('messages.empty-content'));
+            throw new CsvFormatException('empty-content');
         }
         $rows = [];
         foreach ($records as $record) {
@@ -75,7 +77,7 @@ abstract class CsvReader {
         return $rows;
     }
 
-    /** 
+    /**
      * CSVファイルのヘッダーを指定する。
      * @return  array
      */
@@ -85,7 +87,7 @@ abstract class CsvReader {
 
     /**
      * CSVファイルの入力チェックを行う。
-     * 
+     *
      */
     private function validate(array $records) {
         // CSVデータの入力値チェック
@@ -97,6 +99,6 @@ abstract class CsvReader {
             ], CustomResponse::HTTP_CSV_VALIDATION);
             throw new HttpResponseException($response);
         }
-    
+
     }
 }

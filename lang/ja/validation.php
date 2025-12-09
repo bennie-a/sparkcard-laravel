@@ -2,6 +2,7 @@
 use App\Services\Constant\SearchConstant as Scon;
 use App\Services\Constant\ArrivalConstant as Acon;
 use App\Services\Constant\CardConstant as CCon;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
 
@@ -167,6 +168,18 @@ return [
             'prohibited_unless_vendor_type_id_3' => '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。',
         ],
     ],
+    GlobalConstant::FILE => [
+            'title' => [
+                'empty-content' => '空ファイル',
+                'lack-of-header' => 'ヘッダー不足',
+                'no-header' => 'ヘッダーなし',
+            ],
+            'detail' => [
+                'empty-content' => 'ファイルに内容がありません。',
+                'lack-of-header' => 'ヘッダーが足りません: :values',
+                'no-header' => 'CSVファイルにヘッダーがありません。',
+            ],
+        ],
 
     /*
     |--------------------------------------------------------------------------

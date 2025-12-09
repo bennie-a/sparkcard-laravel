@@ -20,4 +20,5 @@ class GlobalConstant {
 
     const STATUS = 'status';
 
+    const FILE = 'file';
 }
