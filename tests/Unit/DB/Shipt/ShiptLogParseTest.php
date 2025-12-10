@@ -43,9 +43,9 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('購入者情報と注文商品が正しく集計されているか確認する')]
     #[TestWith([1, 1], '購入者1人_出荷商品1件')]
-    // #[TestWith([1, 2], '購入者1人_出荷商品2件')]
-    // #[TestWith([2, 1], '購入者2人_出荷商品1件')]
-    // #[TestWith([2, 1], '購入者2人_出荷商品2件')]
+    #[TestWith([1, 2], '購入者1人_出荷商品2件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品1件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品2件')]
     public function testBuyerAndItemCount(int $buyerCount, int $itemCount): void
     {
         $today = TestDateUtil::formatToday();
@@ -131,11 +131,6 @@ class ShiptLogParseTest extends TestCase
                     ]);
             });
         }
-    }
-
-    public function testNotionCard() {
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday())];
-        $response = $this->uploadOk($buyerInfos);
     }
 
     /**
@@ -242,7 +237,6 @@ class ShiptLogParseTest extends TestCase
      * @return TestResponse $response
      */
     private function uploadOk(array $buyerInfos) {
-
         $mock = \Mockery::mock(CardBoardService::class);
         $mock->shouldReceive('findByOrderId')
                 ->with(Mockery::any())
@@ -253,7 +247,6 @@ class ShiptLogParseTest extends TestCase
                     ]
          ]));
 
-        // 3. DI コンテナへ登録（本物と差し替え）
         $this->app->instance(\App\Services\CardBoardService::class, $mock);
 
         $implode = $this->createCsvLine($buyerInfos);
@@ -344,7 +337,20 @@ class ShiptLogParseTest extends TestCase
 
     #[Group('file-error')]
     public function test_ng_空ファイル(): void {
-        $this->verifyFileError('', 'empty-file');
+        $expJson = [
+            EC::TITLE => 'Validation Error',
+            EC::DETAIL => 'ファイルが空です',
+        ];
+        $this->uploadNg('', Response::HTTP_BAD_REQUEST, $expJson);
+    }
+
+    #[Group('file-error')]
+    public function test_ng_CSV形式以外のファイル(): void {
+        $image = UploadedFile::fake()->create('test_image.png', 100, 'image/png');
+        $response = $this->uploadFile($image, Response::HTTP_BAD_REQUEST);
+        $this->assertJsonError($response, Response::HTTP_BAD_REQUEST, [
+            EC::TITLE => 'Validation Error',
+            EC::DETAIL => 'ファイルはCSV形式でアップロードしてください']);
     }
 
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
@@ -434,11 +440,7 @@ class ShiptLogParseTest extends TestCase
             // 一時ファイルから UploadedFile インスタンス作成
             $file = new UploadedFile(
                 $tmpFilePath, $filename, 'text/csv', null, true);
-            $response = $this->postJson('/api/shipping/parse', ['file' => $file], [
-                'Content-Type' => 'multipart/form-data',
-            ]);
-
-            $response->assertStatus($status);
+            $response = $this->uploadFile($file, $status);
             return $response;
         } finally {
             if (file_exists($tmpFilePath)) {
@@ -447,6 +449,18 @@ class ShiptLogParseTest extends TestCase
         }
     }
 
-    private function execute(UploadedFile $file, int $status = Response::HTTP_CREATED) {
+    /**
+     * UploadedFileオブジェクトを指定してアップロードテストを実行する。
+     *
+     * @param UploadedFile $file
+     * @param int $status
+     * @return \Illuminate\Testing\TestResponse
+     */
+    private function uploadFile(UploadedFile $file, int $status = Response::HTTP_CREATED) {
+        $response = $this->postJson('/api/shipping/parse', ['file' => $file], [
+            'Content-Type' => 'multipart/form-data',
+        ]);
+        $response->assertStatus($status);
+        return $response;
     }
 }

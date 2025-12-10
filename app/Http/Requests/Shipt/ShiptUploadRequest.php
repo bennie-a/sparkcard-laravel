@@ -12,8 +12,6 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class ShiptUploadRequest extends FormRequest
 {
-    const FILE = 'file';
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -30,26 +28,46 @@ class ShiptUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::FILE => ['required', 'file', 'mimes:csv,txt'],
+            GC::FILE => ['required', 'file',
+                                        function ($attribute, $value, $fail) {
+                                            $ja = $this->attributes()[GC::FILE];
+                                            if ($value->getClientOriginalExtension() !== 'csv') {
+                                                $fail('ファイルはCSV形式でアップロードしてください');
+                                            }
+                                            if ($this->file(GC::FILE)->getSize() === 0) {
+                                                $fail('ファイルが空です');
+                                            }
+                                        }],
         ];
     }
+
+    // public function prepareForValidation()
+    // {
+    //     if ($this->file(self::FILE)->getSize() === 0) {
+    //         throw new CsvFormatException('empty-file');
+    //     }
+    // }
 
     /**
      * アップロードされたファイルを読み込む。
      *
      * @return void
      */
-    public function prepareForValidation()
+    public function passedValidation()
     {
-        if ($this->file(self::FILE)->getSize() === 0) {
-            throw new CsvFormatException('empty-file');
-        }
-        $path = $this->file(self::FILE)->path();
+        $path = $this->file(GC::FILE)->path();
         logger()->info('ファイル読み込み開始：', [$path]);
         $reader = new ShiptLogCsvReader();
         $records = $reader->read($path);
         return $this->merge([
             GC::DATA => $records,
         ]);
+    }
+
+    public function attributes()
+    {
+        return [
+            GC::FILE => 'ファイル'
+        ];
     }
 }

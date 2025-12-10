@@ -173,13 +173,11 @@ return [
                 'empty-content' => '空データ',
                 'lack-of-header' => 'ヘッダー不足',
                 'no-header' => 'ヘッダーなし',
-                'empty-file' => '空ファイル',
             ],
             'detail' => [
                 'empty-content' => 'ファイルにデータがありません。',
                 'lack-of-header' => 'ヘッダーが足りません: :values',
                 'no-header' => 'CSVファイルにヘッダーがありません。',
-                'empty-file' => 'ファイルが空です。',
             ],
         ],
 
@@ -212,6 +210,7 @@ return [
         SC::DISCOUNT_AMOUNT => '割引額',
         SC::SINGLE_PRICE => '単価',
         SC::TOTAL_PRICE => '支払い価格',
+        GlobalConstant::FILE => 'ファイル',
     ],
 
     'values' => [
