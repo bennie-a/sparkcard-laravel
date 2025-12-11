@@ -14,12 +14,11 @@ class CsvFormatException extends ApiException {
     private string $detail;
     private array $rows = [];
 
-    public function __construct(string $keyword, string $value = '', array $rows = [])
+    public function __construct(string $keyword, string $value = '')
     {
         $validation = 'validation.file';
         $this->title = __("$validation.title.$keyword");
         $this->detail = __("$validation.detail.$keyword", ['values' => $value]);
-        $this->rows = $rows;
     }
 
     /**
@@ -44,10 +43,4 @@ class CsvFormatException extends ApiException {
     {
         return $this->detail;
     }
-
-    public function getRows(): array
-    {
-        return $this->rows;
-    }
-
 }

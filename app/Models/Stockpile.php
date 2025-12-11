@@ -29,27 +29,6 @@ class Stockpile extends Model
         return $this->belongsTo(CardInfo::class, StockpileHeader::CARD_ID, GlobalConstant::ID);
     }
 
-    // /**
-    //  * Undocumented function
-    //  *
-    //  * @param integer $card_id
-    //  * @param string $setcode
-    //  * @param string $condition
-    //  * @param string $language
-    //  * @param boolean $isFoil
-    //  * @return Stockpile|null
-    //  * @deprecated version 4.11.0
-    //  */
-    // public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
-    //     $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
-    //     $query = self::select($columns)->from('stockpile as s');
-    //     $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
-    //     $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
-    //                                          's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
-    //     return $stock;
-    // }
-
-
     /**
      * 出荷用CSVファイルから特定の在庫情報を取得する。
      *
@@ -95,7 +74,7 @@ class Stockpile extends Model
      * @return array
      */
     public static function fetch(array $details) {
-        $columns = ['s.id as stock_id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.name as name', 
+        $columns = ['s.id as stock_id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.name as name',
                                 'c.color_id', 's.language', 's.condition', 's.quantity',
                                 'c.image_url', 'c.number', 'c.isFoil as isFoil', 'f.name as foiltype',
                                 'c.promotype_id', 'p.name as promo_name', 's.updated_at as updated_at'];

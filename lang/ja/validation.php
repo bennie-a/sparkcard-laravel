@@ -169,17 +169,22 @@ return [
         ],
     ],
     GlobalConstant::FILE => [
-            'title' => [
-                'empty-content' => '空データ',
-                'lack-of-header' => 'ヘッダー不足',
-                'no-header' => 'ヘッダーなし',
-            ],
-            'detail' => [
-                'empty-content' => 'ファイルにデータがありません。',
-                'lack-of-header' => 'ヘッダーが足りません: :values',
-                'no-header' => 'CSVファイルにヘッダーがありません。',
-            ],
+        'title' => [
+            'empty-content' => '空データ',
+            'lack-of-header' => 'ヘッダー不足',
+            'no-header' => 'ヘッダーなし',
         ],
+        'detail' => [
+            'empty-content' => 'ファイルにデータがありません。',
+            'lack-of-header' => 'ヘッダーが足りません: :values',
+            'no-header' => 'CSVファイルにヘッダーがありません。',
+        ],
+    ],
+    'csv' => [
+        'msg' => [
+            'no-info' => '在庫情報がありません',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

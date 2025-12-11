@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
 use Mockery;
+use Mockery\Mock;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -237,17 +238,7 @@ class ShiptLogParseTest extends TestCase
      * @return TestResponse $response
      */
     private function uploadOk(array $buyerInfos) {
-        $mock = \Mockery::mock(CardBoardService::class);
-        $mock->shouldReceive('findByOrderId')
-                ->with(Mockery::any())
-                ->andReturn(collect([
-                    (object)[
-                        'id' => 123,
-                        'title' => 'テストカード'
-                    ]
-         ]));
-
-        $this->app->instance(\App\Services\CardBoardService::class, $mock);
+        $this->setMockCardBoard();
 
         $implode = $this->createCsvLine($buyerInfos);
         $header = ShiptLogTestHelper::getHeader();
@@ -302,6 +293,27 @@ class ShiptLogParseTest extends TestCase
         return $response;
     }
 
+    /**
+     * CardBoardServiceのMockを設定する。
+     *
+     * @param array $orderIds
+     * @return void
+     */
+    private function setMockCardBoard() {
+        $mock = \Mockery::mock(CardBoardService::class);
+        $mock->shouldReceive('findByOrderId')
+                ->with(Mockery::any())
+                ->andReturn(collect([
+                    (object)[
+                        'id' => 123,
+                        'title' => 'テストカード'
+                    ]
+         ]));
+
+        $this->app->instance(\App\Services\CardBoardService::class, $mock);
+    }
+
+    #[TestDox('ファイルエラー: ヘッダー不足')]
     #[Group('file-error')]
     public function test_ng_ヘッダー不足(): void {
         $buyerInfo = $this->createTodayOrderInfos();
@@ -316,6 +328,7 @@ class ShiptLogParseTest extends TestCase
         $this->verifyFileError($content, 'lack-of-header', SC::SHIPPING_DATE);
     }
 
+    #[TestDox('ファイルエラー: ヘッダーがない')]
     #[Group('file-error')]
     public function test_ng_ヘッダーなし() : void {
         $buyerInfo = $this->createTodayOrderInfos();
@@ -326,6 +339,7 @@ class ShiptLogParseTest extends TestCase
         $this->verifyFileError($content, 'no-header');
     }
 
+    #[TestDox('ファイルエラー: データ行がない')]
     #[Group('file-error')]
     public function test_ng_データが空(): void {
         $header  = ShiptLogTestHelper::getHeader();
@@ -335,6 +349,7 @@ class ShiptLogParseTest extends TestCase
         $this->verifyFileError($content, 'empty-content');
     }
 
+    #[TestDox('ファイルエラー: 空ファイル')]
     #[Group('file-error')]
     public function test_ng_空ファイル(): void {
         $expJson = [
@@ -344,6 +359,7 @@ class ShiptLogParseTest extends TestCase
         $this->uploadNg('', Response::HTTP_BAD_REQUEST, $expJson);
     }
 
+    #[TestDox('ファイルエラー: CSV形式以外のファイルをアップロード')]
     #[Group('file-error')]
     public function test_ng_CSV形式以外のファイル(): void {
         $image = UploadedFile::fake()->create('test_image.png', 100, 'image/png');
@@ -353,6 +369,28 @@ class ShiptLogParseTest extends TestCase
             EC::DETAIL => 'ファイルはCSV形式でアップロードしてください']);
     }
 
+    #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
+    #[TestWith([GC::ID, '9999', 'no-info'], '存在しない在庫ID')]
+    public function testNg_ItemError(string $key, string $value, string $msg) {
+        $buyerInfo = $this->createTodayOrderInfos();
+        // 在庫IDを不正値に変更
+        $buyerInfo[SC::ITEMS][0][$key] = $value;
+
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+
+        $base = 'validation.csv.msg';
+        $this->setMockCardBoard();
+        $status = CustomResponse::HTTP_CSV_VALIDATION;
+
+        $response = $this->upload($content, $status);
+        $this->assertRowError($response, $status, __("$base.$msg"));
+    }
+
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
         $base = 'validation.file';
         $expJson = [
@@ -360,7 +398,6 @@ class ShiptLogParseTest extends TestCase
             EC::DETAIL => __("$base.detail.$keyword", ['values' => $value])
         ];
         $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
-
     }
 
     private function uploadNg(string $content, int $status, array $expJson = []): TestResponse {
@@ -387,7 +424,20 @@ class ShiptLogParseTest extends TestCase
                 EC::REQUEST => 'api/shipping/parse',
             ]);
         });
+    }
 
+    private function assertRowError(TestResponse $response, int $status, string $msg) {
+        $response->assertJson(function(AssertableJson $json) use($status, $msg) {
+            $json->hasAll([EC::TITLE, GC::STATUS, EC::REQUEST, EC::DETAIL, EC::ROWS]);
+            $json->whereAll([
+                EC::TITLE => '不正な記載',
+                EC::DETAIL => 'CSVファイルに不正な記載があります。',
+                GC::STATUS => $status,
+                EC::REQUEST => 'api/shipping/parse',
+                EC::ROWS.".0.row" => 2,
+                EC::ROWS.".0.msg" => $msg,
+            ]);
+        });
     }
 
     /**

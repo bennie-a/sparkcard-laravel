@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\api\Csv\CsvFormatException;
+use App\Exceptions\Api\Csv\CsvInvalidRowException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
@@ -11,7 +11,6 @@ use App\Services\Constant\GlobalConstant as GC;
 use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Shipt\ShiptLogService;
 use App\Services\Constant\ShiptConstant as ShiptCon;
 use GMP;
@@ -81,7 +80,7 @@ class ShiptLogController extends Controller
         $data = $request->input(GC::DATA);
         $records = $this->service->parse($data);
         if ($this->service->hasError()) {
-            throw new CsvFormatException('不正な記載', 'CSVファイルに不正な記載があります。', $this->service->getError());
+            throw new CsvInvalidRowException($this->service->getError());
         }
 
         return response(OrderResource::collection($records), Response::HTTP_CREATED);
