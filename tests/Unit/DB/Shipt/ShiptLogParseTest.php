@@ -3,6 +3,7 @@
 namespace Tests\Unit\DB\Shipt;
 use App\Enum\CsvFlowType;
 use App\Enum\ShopPlatform;
+use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
@@ -17,8 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
 use Mockery;
-use Mockery\Mock;
-use PhpParser\Node\Stmt\TraitUse;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -32,7 +32,9 @@ use Tests\Util\TestDateUtil;
 
 /**
  * 出荷情報解析機能のテストケース
+ * @covers ShiptLogController
  */
+#[CoversClass(ShiptLogController::class)]
 class ShiptLogParseTest extends TestCase
 {
     public function setup():void {
@@ -102,14 +104,14 @@ class ShiptLogParseTest extends TestCase
     }
 
     #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
-    // #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
-    // #[TestWith([true, false, false], '単品_通常版[Foil]')]
-    // #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
-    // #[TestWith([true, true, false], '単品_特別版[Foil]')]
-    // #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
-    // #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
+    #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
+    #[TestWith([true, false, false], '単品_通常版[Foil]')]
+    #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
+    #[TestWith([true, true, false], '単品_特別版[Foil]')]
+    #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
+    #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
     #[TestWith([false, true, true], 'セット販売_特別版[Non-Foil]]')]
-    // #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
+    #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
     public function testOkSingleAndSetcorrect(bool $isFoil, bool $isPromo, bool $isSet): void {
         $shipment = $isSet ? 2 : 1;
         $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
@@ -345,7 +347,7 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('ファイルエラー: ヘッダー不足')]
     #[Group('file-error')]
-    public function test_ng_ヘッダー不足(): void {
+    public function testNgLackOfHeader(): void {
         $buyerInfo = $this->createTodayOrderInfos();
         $header  = ShiptLogTestHelper::getHeader();
         // shipping_dateヘッダーを削除
@@ -360,7 +362,7 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('ファイルエラー: ヘッダーがない')]
     #[Group('file-error')]
-    public function test_ng_ヘッダーなし() : void {
+    public function testNgNoHeader() : void {
         $buyerInfo = $this->createTodayOrderInfos();
         $implode = $this->createCsvLine([$buyerInfo]);
         $content = <<<CSV
@@ -371,7 +373,7 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('ファイルエラー: データ行がない')]
     #[Group('file-error')]
-    public function test_ng_データが空(): void {
+    public function testNgEmptyData(): void {
         $header  = ShiptLogTestHelper::getHeader();
         $content = <<<CSV
         {$header}
@@ -381,7 +383,7 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('ファイルエラー: 空ファイル')]
     #[Group('file-error')]
-    public function test_ng_空ファイル(): void {
+    public function testNgEmptyFile(): void {
         $expJson = [
             EC::TITLE => 'Validation Error',
             EC::DETAIL => 'ファイルが空です',
@@ -391,7 +393,7 @@ class ShiptLogParseTest extends TestCase
 
     #[TestDox('ファイルエラー: CSV形式以外のファイルをアップロード')]
     #[Group('file-error')]
-    public function test_ng_CSV形式以外のファイル(): void {
+    public function testNgPngFile(): void {
         $image = UploadedFile::fake()->create('test_image.png', 100, 'image/png');
         $response = $this->uploadFile($image, Response::HTTP_BAD_REQUEST);
         $this->assertJsonError($response, Response::HTTP_BAD_REQUEST, [
