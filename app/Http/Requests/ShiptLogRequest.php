@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader as Header;
 
 /**
@@ -26,17 +27,8 @@ class ShiptLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            Header::BUYER => 'nullable',
-            Header::SHIPPING_DATE => 'date',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            Header::BUYER => '購入者名',
-            Header::SHIPPING_DATE => '発送日',
-            'today' => '今日'
+            SC::BUYER => 'nullable',
+            SC::SHIPPING_DATE => 'date',
         ];
     }
 }
