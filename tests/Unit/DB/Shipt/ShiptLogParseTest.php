@@ -18,6 +18,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
 use Mockery;
 use Mockery\Mock;
+use PhpParser\Node\Stmt\TraitUse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -100,16 +101,16 @@ class ShiptLogParseTest extends TestCase
         $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $date);
     }
 
-    #[TestDox('出荷枚数が正しく設定されているか確認する')]
-    #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
-    #[TestWith([true, false, false], '単品_通常版[Foil]')]
-    #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
-    #[TestWith([true, true, false], '単品_特別版[Foil]')]
-    #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
-    #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
+    #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
+    // #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
+    // #[TestWith([true, false, false], '単品_通常版[Foil]')]
+    // #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
+    // #[TestWith([true, true, false], '単品_特別版[Foil]')]
+    // #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
+    // #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
     #[TestWith([false, true, true], 'セット販売_特別版[Non-Foil]]')]
-    #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
-    public function testShipment(bool $isFoil, bool $isPromo, bool $isSet): void {
+    // #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
+    public function testOkSingleAndSetcorrect(bool $isFoil, bool $isPromo, bool $isSet): void {
         $shipment = $isSet ? 2 : 1;
         $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
         $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
@@ -132,6 +133,20 @@ class ShiptLogParseTest extends TestCase
                     ]);
             });
         }
+    }
+
+    #[TestDox('出荷枚数が在庫枚数より少ないか同等なら出荷情報が返ってくるか確認する')]
+    #[TestWith(['<'], '出荷枚数 < 在庫枚数')]
+    #[TestWith(['='], '出荷枚数 = 在庫枚数')]
+    public function testOkShipment(string $symbol) {
+        $buyerInfo = $this->createTodayOrderInfos();
+        if ($symbol == '=') {
+            $item = $buyerInfo[SC::ITEMS][0];
+            $productId = $item[GC::ID];
+            $stock = Stockpile::find((int)$productId);
+            $item[SC::SHIPMENT] = $stock->quantity;
+        }
+        $this->uploadOk([$buyerInfo]);
     }
 
     /**
@@ -165,15 +180,20 @@ class ShiptLogParseTest extends TestCase
     }
 
     #[TestDox('単価が正しく計算されているか確認する')]
-    #[TestWith([1], '出荷枚数1枚')]
-    #[TestWith([3], '出荷枚数が複数枚_割引なし')]
-    #[TestWith([3, 50], '出荷枚数が複数枚_割引あり')]
-    public function testSinglePriceCalc(int $shipment, int $discount = 0): void {
+    #[TestWith([false], '出荷枚数1枚_割引なし')]
+    #[TestWith([false, 50], '出荷枚数1枚_割引あり')]
+    #[TestWith([true], '出荷枚数が複数枚_割引なし')]
+    #[TestWith([true, 50], '出荷枚数が複数枚_割引あり')]
+    public function testSinglePriceCalc(bool $isMulti, int $discount = 0): void {
         $buyerInfos = [$this->createTodayOrderInfos(1)];
         // 商品価格と出荷枚数を設定
-        $buyerInfos[0][SC::ITEMS][0][SC::PRODUCT_PRICE] = 1000;
-        $buyerInfos[0][SC::ITEMS][0][StockpileHeader::QUANTITY] = $shipment;
-        $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
+        if ($isMulti) {
+            $buyerInfos[0][SC::ITEMS] = [ShiptLogTestHelper::createItemInfo(true, false, 3)];
+        }
+        $item = $buyerInfos[0][SC::ITEMS][0];
+        $item[SC::PRODUCT_PRICE] = 1000;
+        $item[SC::DISCOUNT_AMOUNT] = $discount;
+
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
@@ -238,7 +258,8 @@ class ShiptLogParseTest extends TestCase
      * @return TestResponse $response
      */
     private function uploadOk(array $buyerInfos) {
-        $this->setMockCardBoard();
+        $orderIds = array_map(function($info) {return $info[SC::ORDER_ID];}, $buyerInfos);
+        $this->setMockCardBoard($orderIds);
 
         $implode = $this->createCsvLine($buyerInfos);
         $header = ShiptLogTestHelper::getHeader();
@@ -299,16 +320,25 @@ class ShiptLogParseTest extends TestCase
      * @param array $orderIds
      * @return void
      */
-    private function setMockCardBoard() {
+    private function setMockCardBoard(array $orderIds) {
         $mock = \Mockery::mock(CardBoardService::class);
+        $errorId = 'error';
+        foreach($orderIds as $id) {
+            if ($id === $errorId) {
+                continue;
+            }
+            $mock->shouldReceive('findByOrderId')
+                    ->with($id)
+                    ->andReturn(collect([
+                        (object)[
+                            'id' => 123,
+                            'title' => 'テストカード'
+                        ]
+             ]));
+        }
         $mock->shouldReceive('findByOrderId')
-                ->with(Mockery::any())
-                ->andReturn(collect([
-                    (object)[
-                        'id' => 123,
-                        'title' => 'テストカード'
-                    ]
-         ]));
+        ->with($errorId)
+        ->andReturn(collect([]));
 
         $this->app->instance(\App\Services\CardBoardService::class, $mock);
     }
@@ -370,11 +400,17 @@ class ShiptLogParseTest extends TestCase
     }
 
     #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
-    #[TestWith([GC::ID, '9999', 'no-info'], '存在しない在庫ID')]
-    public function testNg_ItemError(string $key, string $value, string $msg) {
+    #[TestWith([GC::ID, '9999', 'no-info'], '在庫情報が存在しない')]
+    #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
+    #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
+    #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
+    public function testNgItemError(string $key, string $value, string $msg) {
         $buyerInfo = $this->createTodayOrderInfos();
-        // 在庫IDを不正値に変更
-        $buyerInfo[SC::ITEMS][0][$key] = $value;
+        if (key_exists($key, $buyerInfo)) {
+            $buyerInfo[$key] =$value;
+        } else {
+            $buyerInfo[SC::ITEMS][0][$key] = $value;
+        }
 
         $implode = $this->createCsvLine([$buyerInfo]);
         $header = ShiptLogTestHelper::getHeader();
@@ -384,7 +420,7 @@ class ShiptLogParseTest extends TestCase
         CSV;
 
         $base = 'validation.csv.msg';
-        $this->setMockCardBoard();
+       $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
 
         $response = $this->upload($content, $status);

@@ -96,8 +96,8 @@ class ShiptLogService extends AbstractCsvService {
             $orderId = $row->order_id();
             $notionCard = CardBoard::findByOrderId($row->order_id());
             if ($notionCard->isEmpty()) {
-                logger()->error('該当するNotionカードがありません', ['order_id' => $orderId]);
-                $this->addError($row->number(), '該当するNotionカードがありません');
+                $msg =__('validation.csv.msg.no-notion') ;
+                $this->addError($row->number(), $msg);
                 continue;
          }
 
@@ -110,11 +110,20 @@ class ShiptLogService extends AbstractCsvService {
             }
             // 出荷商品情報
             $stock = Stockpile::find((int)$r[SC::PRODUCT_ID]);
+            $errorKey = '';
             if (is_null($stock)) {
-                $msg = __('validation.csv.msg.no-info');
+                $errorKey = 'no-info';
+            } else if ($stock->quantity == 0) {
+                $errorKey = 'zero_quantity';
+            } else if ($row->shipment() > $stock->quantity) {
+                $errorKey = 'excess-shipment';
+            }
+            if (!empty($errorKey)) {
+                $msg = __("validation.csv.msg.{$errorKey}");
                 $this->addError($row->number(), $msg);
                 continue;
             }
+
             $orders[$orderId][SC::ITEMS][] = [
                 StockpileHeader::STOCK => $stock,
                 SC::SHIPMENT => $row->shipment(),

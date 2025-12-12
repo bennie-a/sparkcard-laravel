@@ -182,7 +182,10 @@ return [
     ],
     'csv' => [
         'msg' => [
-            'no-info' => '在庫情報がありません',
+            'no-info' => '該当する在庫情報がありません',
+            'no-notion' => '注文番号に該当するNotionカードがありません',
+            'zero_quantity' => '在庫枚数がありません',
+            'excess-shipment' => '出荷枚数が在庫枚数がより多いです'
         ],
     ],
 

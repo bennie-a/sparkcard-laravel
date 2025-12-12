@@ -190,10 +190,10 @@ export default {
                 en_name: this.en_name,
                 color: this.color,
                 number: this.number,
-                isSkip: false,
+                is_skip: false,
                 imageurl: this.imageurl,
                 foiltype: ["通常版", "Foil"],
-                promotype_id:this.promotype_id
+                promotype_id:this.promotype_id,
             };
             const success = function (response, store) {
                 // this.back();
