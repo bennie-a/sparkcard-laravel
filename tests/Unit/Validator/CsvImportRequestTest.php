@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Validator;
 
 use Tests\TestCase;
 
+/**
+ * CsvImportRequestが存在しないため、動かない
+ */
 class CsvImportRequestTest extends TestCase
 {
     /**
@@ -17,7 +20,7 @@ class CsvImportRequestTest extends TestCase
      * @dataProvider dataprovider
      */
     public function test(array $data, bool $expected)
-    {  
+    {
         $request = new CsvImportRequest();
         $rules = $request->rules();
         $validator = Validator::make($data, $rules, $request->messages(), $request->attributes());

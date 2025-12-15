@@ -8,7 +8,11 @@ use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
 
 use App\Services\Constant\StockpileHeader;
+use Tests\Util\TestDateUtil;
 
+/**
+ * 注文CSV用テストデータを作成するクラス
+ */
 class ShiptLogTestHelper
 {
     /**
@@ -16,7 +20,7 @@ class ShiptLogTestHelper
      *
      * @return array
      */
-    public static  function createBuyerInfo(int $itemCount, string $shiptDate,
+    public static function createBuyerInfo(int $itemCount, string $shiptDate,
                                                             bool $isFoil = false, bool $isPromo = false, int $quantity = 1):array {
         $items = [];
         for ($i=0; $i < $itemCount; $i++) {
@@ -34,6 +38,16 @@ class ShiptLogTestHelper
             SC::ITEMS => $items
         ];
     }
+
+        /**
+     * 発送日が今日の注文情報を取得する。
+     *
+     * @return array
+     */
+    public static  function createTodayOrderInfos(): array {
+        return ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday());
+    }
+
 
     /**
      * 商品情報を1件作成する。

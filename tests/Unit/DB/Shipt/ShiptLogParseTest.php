@@ -1,8 +1,6 @@
 <?php
 
 namespace Tests\Unit\DB\Shipt;
-use App\Enum\CsvFlowType;
-use App\Enum\ShopPlatform;
 use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
 use App\Models\Stockpile;
@@ -32,7 +30,6 @@ use Tests\Util\TestDateUtil;
 
 /**
  * 出荷情報解析機能のテストケース
- * @covers ShiptLogController
  */
 #[CoversClass(ShiptLogController::class)]
 class ShiptLogParseTest extends TestCase
@@ -141,7 +138,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith(['<'], '出荷枚数 < 在庫枚数')]
     #[TestWith(['='], '出荷枚数 = 在庫枚数')]
     public function testOkShipment(string $symbol) {
-        $buyerInfo = $this->createTodayOrderInfos();
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         if ($symbol == '=') {
             $item = $buyerInfo[SC::ITEMS][0];
             $productId = $item[GC::ID];
@@ -168,7 +165,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([0], '割引なし')]
     #[TestWith([100], '割引あり')]
     public function testTotalPriceCalc(int $discount) {
-        $buyerInfos = [$this->createTodayOrderInfos(1)];
+        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
         // 商品価格と割引金額を設定
         $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
 
@@ -187,7 +184,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([true], '出荷枚数が複数枚_割引なし')]
     #[TestWith([true, 50], '出荷枚数が複数枚_割引あり')]
     public function testSinglePriceCalc(bool $isMulti, int $discount = 0): void {
-        $buyerInfos = [$this->createTodayOrderInfos(1)];
+        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
         // 商品価格と出荷枚数を設定
         if ($isMulti) {
             $buyerInfos[0][SC::ITEMS] = [ShiptLogTestHelper::createItemInfo(true, false, 3)];
@@ -348,7 +345,7 @@ class ShiptLogParseTest extends TestCase
     #[TestDox('ファイルエラー: ヘッダー不足')]
     #[Group('file-error')]
     public function testNgLackOfHeader(): void {
-        $buyerInfo = $this->createTodayOrderInfos();
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $header  = ShiptLogTestHelper::getHeader();
         // shipping_dateヘッダーを削除
         $header = str_replace(SC::SHIPPING_DATE, '', $header);
@@ -363,7 +360,7 @@ class ShiptLogParseTest extends TestCase
     #[TestDox('ファイルエラー: ヘッダーがない')]
     #[Group('file-error')]
     public function testNgNoHeader() : void {
-        $buyerInfo = $this->createTodayOrderInfos();
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $implode = $this->createCsvLine([$buyerInfo]);
         $content = <<<CSV
         {$implode}
@@ -407,7 +404,7 @@ class ShiptLogParseTest extends TestCase
     #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
     #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
     public function testNgItemError(string $key, string $value, string $msg) {
-        $buyerInfo = $this->createTodayOrderInfos();
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         if (key_exists($key, $buyerInfo)) {
             $buyerInfo[$key] =$value;
         } else {
@@ -498,16 +495,6 @@ class ShiptLogParseTest extends TestCase
             }
         }
         return $implode;
-    }
-
-    /**
-     * 発送日が今日の注文情報を取得する。
-     *
-     * @param integer $itemCount
-     * @return array
-     */
-    private function createTodayOrderInfos(): array {
-        return ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday());
     }
 
     /**
