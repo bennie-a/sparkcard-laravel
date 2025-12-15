@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests\Unit\DB\Shipt;
+
 use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
 use App\Models\Stockpile;
@@ -26,6 +27,7 @@ use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
+use Tests\Trait\ApiErrorAssertions;
 use Tests\Util\TestDateUtil;
 
 /**
@@ -34,6 +36,8 @@ use Tests\Util\TestDateUtil;
 #[CoversClass(ShiptLogController::class)]
 class ShiptLogParseTest extends TestCase
 {
+    use ApiErrorAssertions;
+
     public function setup():void {
         parent::setup();
         $this->seed(TruncateAllTables::class);
@@ -419,7 +423,7 @@ class ShiptLogParseTest extends TestCase
         CSV;
 
         $base = 'validation.csv.msg';
-       $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
+        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
 
         $response = $this->upload($content, $status);
@@ -461,18 +465,16 @@ class ShiptLogParseTest extends TestCase
         });
     }
 
-    private function assertRowError(TestResponse $response, int $status, string $msg) {
-        $response->assertJson(function(AssertableJson $json) use($status, $msg) {
-            $json->hasAll([EC::TITLE, GC::STATUS, EC::REQUEST, EC::DETAIL, EC::ROWS]);
-            $json->whereAll([
-                EC::TITLE => '不正な記載',
-                EC::DETAIL => 'CSVファイルに不正な記載があります。',
-                GC::STATUS => $status,
-                EC::REQUEST => 'api/shipping/parse',
-                EC::ROWS.".0.row" => 2,
-                EC::ROWS.".0.msg" => $msg,
-            ]);
-        });
+    /**
+     * CSVファイルの内容で発生したエラー情報を検証する。
+     *
+     * @param TestResponse $response
+     * @param integer $status
+     * @param string $msg
+     * @return void
+     */
+    public function assertRowError(TestResponse $response, int $status, string $msg) {
+        $this->assertCsvRowError($response, 'api/shipping/parse', [EC::ROW=> 2, EC::MSG => $msg]);
     }
 
     /**
