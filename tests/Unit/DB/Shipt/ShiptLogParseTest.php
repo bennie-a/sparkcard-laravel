@@ -430,6 +430,25 @@ class ShiptLogParseTest extends TestCase
         $this->assertRowError($response, $status, __("$base.$msg"));
     }
 
+    #[TestDox('バリデーションエラーが発生した時のエラー情報を検証する。')]
+    public function testNgValidator(): void
+    {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::SHIPPING_DATE] = 'aaa';
+
+        $implode = ShiptLogTestHelper::createCsvLine([$buyerInfo]);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+
+        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
+        $status = CustomResponse::HTTP_CSV_VALIDATION;
+        $response = $this->upload($content, $status);
+        $this->assertRowError($response, $status, '発送日はY/m/d形式の日付で入力してください');
+    }
+
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
         $base = 'validation.file';
         $expJson = [

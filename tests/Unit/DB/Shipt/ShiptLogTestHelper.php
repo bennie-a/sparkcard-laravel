@@ -137,7 +137,7 @@ class ShiptLogTestHelper
      * @param array $buyers
      * @return string
      */
-    public static  function createCsvLine(array $buyers):string {
+    public static function createCsvLine(array $buyers):string {
         $implode = '';
         foreach($buyers as $buyer) {
             $items = $buyer[SC::ITEMS];

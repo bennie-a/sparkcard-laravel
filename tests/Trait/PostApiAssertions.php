@@ -31,4 +31,23 @@ trait PostApiAssertions {
         $response = $this->post($this->getEndPoint().$query, $data, $header);
         return $response;
     }
+
+    /**
+     * 作成したヒアドキュメントから一時CSVファイルを作成する。
+     *
+     * @param string $content
+     * @return void
+     */
+    public function createCsvFile(string $content) {
+        Storage::fake('local');
+        $tmpFilePath = tempnam(sys_get_temp_dir(), 'import_');
+        $filename = basename($tmpFilePath).'.csv';
+        // ダミーCSVファイル作成
+        file_put_contents($tmpFilePath, $content);
+
+        // 一時ファイルから UploadedFile インスタンス作成
+        $file = new UploadedFile(
+            $tmpFilePath, $filename, 'text/csv', null, true);
+        return $file;
+    }
 }

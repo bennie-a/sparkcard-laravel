@@ -2,11 +2,13 @@
 namespace App\Files\Csv;
 
 use App\Exceptions\api\Csv\CsvFormatException;
+use App\Exceptions\api\Csv\CsvInvalidRowException;
 use App\Http\Response\CustomResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use League\Csv\Reader;
 use League\Csv\Statement;
+use App\Services\Constant\ErrorConstant as EC;
 
 /**
  * CSVファイル読み込みクラス
@@ -93,12 +95,7 @@ abstract class CsvReader {
         // CSVデータの入力値チェック
         $errors = $this->validator()->validate($records);
         if (!empty($errors)) {
-            $response = response()->json([
-                'status' => 'validation error',
-                'errors' => $errors
-            ], CustomResponse::HTTP_CSV_VALIDATION);
-            throw new HttpResponseException($response);
+            throw new CsvInvalidRowException($errors);
         }
-
     }
 }
