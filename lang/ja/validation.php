@@ -149,6 +149,7 @@ return [
     /**追加バリデーション */
     'halfsize' => ':attributeは半角英数字と記号を入力してください。',
     'shipping_postal_code.regex' => '郵便番号は「123-4567」の形式で入力してください。',
+    'shipping_city.regex' => '市区町村名は「市」「区」「町」「村」「郡」を最後につけてください。',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -220,7 +221,10 @@ return [
         SC::SINGLE_PRICE => '単価',
         SC::TOTAL_PRICE => '支払い価格',
         GlobalConstant::FILE => 'ファイル',
-        SC::POSTAL_CODE => '郵便番号'
+        SC::POSTAL_CODE => '郵便番号',
+        SC::STATE => '都道府県名',
+        SC::CITY => '市区町村名',
+        SC::ADDRESS_1 => 'その他住所1',
     ],
 
     'values' => [
