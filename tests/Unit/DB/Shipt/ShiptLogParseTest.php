@@ -446,7 +446,7 @@ class ShiptLogParseTest extends TestCase
         $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
         $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, '発送日はY/m/d形式の日付で入力してください');
+        $this->assertRowError($response, $status, '発送日はY/m/d形式の日付で入力してください。');
     }
 
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
@@ -556,6 +556,9 @@ class ShiptLogParseTest extends TestCase
         $response = $this->postJson('/api/shipping/parse', ['file' => $file], [
             'Content-Type' => 'multipart/form-data',
         ]);
+        if ($response->getStatusCode() != $status) {
+            logger()->error($response->json(EC::DETAIL));
+        }
         $response->assertStatus($status);
         return $response;
     }
