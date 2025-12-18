@@ -48,30 +48,27 @@ class ShiptValidatorTest extends TestCase
 
     #[Test]
     #[TestDox('郵便番号チェック')]
-    #[TestWith(['', 'required'], '未入力')]
-    #[TestWith(['aa', 'shipping_postal_code.regex'], '郵便番号が文字列')]
-    public function ngPostalCode(string $value, string $msgkey) {
-        $msg = __("validation.{$msgkey}", ['attribute' => '郵便番号']);
+    #[TestWith(['', '郵便番号は必ず入力してください。'], '未入力')]
+    #[TestWith(['aa', '郵便番号は「123-4567」の形式で入力してください。'], '郵便番号が文字列')]
+    public function ngPostalCode(string $value, string $msg) {
         $this->verifyBuyerError(SC::POSTAL_CODE, $value, $msg);
     }
 
     #[Test]
     #[TestDox('住所チェック')]
-    #[TestWith([SC::STATE, '', 'required'], '都道府県が未入力')]
-    #[TestWith([SC::STATE, 'アメリカ', 'in'], '都道府県が47都道府県以外')]
-    #[TestWith([SC::CITY, '', 'required'], '市区町村名が未入力')]
-    #[TestWith([SC::CITY, 'aaaa', 'shipping_city.regex'], '市区町村名が市区町村以外の文字列')]
-    #[TestWith([SC::ADDRESS_1, '', 'required'], 'その他住所1が未入力')]
-    public function ngAddress(string $key, string $value, string $msgkey) {
-        $attr = $this->getAttribute($key);
-        $msg = $this->getMsg($msgkey, $attr);
+    #[TestWith([SC::STATE, '', '都道府県名は必ず入力してください。'], '都道府県が未入力')]
+    #[TestWith([SC::STATE, 'アメリカ', '入力した都道府県名は不正です。'], '都道府県が47都道府県以外')]
+    #[TestWith([SC::CITY, '', '市区町村名は必ず入力してください。'], '市区町村名が未入力')]
+    #[TestWith([SC::CITY, 'aaaa', '市区町村名は「市」「区」「町」「村」「郡」を最後につけてください。'],
+                                                                                                                                '市区町村名が市区町村以外の文字列')]
+    #[TestWith([SC::ADDRESS_1, '', 'その他住所1は必ず入力してください。'], 'その他住所1が未入力')]
+    public function ngAddress(string $key, string $value, string $msg) {
         $this->verifyBuyerError($key, $value, $msg);
     }
 
     #[TestDox('商品コードチェック')]
-    #[TestWith(['', 'required'], '未入力')]
-    public function ngProductId(string $value, string $msgkey) {
-        $msg = $this->getMsg($msgkey, '商品コード');
+    #[TestWith(['', '商品コードは必ず入力してください。'], '未入力')]
+    public function ngProductId(string $value, string $msg) {
         $this->verifyBuyerError(SC::PRODUCT_ID, $value, $msg);
     }
 
@@ -105,17 +102,6 @@ class ShiptValidatorTest extends TestCase
         $expected = [EC::ROW => 2, EC::MSG => $msg];
         logger()->info(current($errors));
         $this->assertSame($expected, current($errors));
-    }
-
-    /**
-     * 名称を取得する。
-     *
-     * @param string $key
-     * @return string
-     */
-    private function getAttribute(string $key):string {
-        $attr = __("validation.attributes.".$key);
-        return $attr;
     }
 
     private function getMsg(string $msgkey, string $attribute) {

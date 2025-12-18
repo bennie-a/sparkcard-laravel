@@ -25,7 +25,6 @@ class ShiptValidator extends AbstractCsvValidator {
         ShiptCon::PRODUCT_NAME => 'required',
         Header::QUANTITY => 'required|numeric',
         ShiptCon::PRODUCT_PRICE => 'required|numeric',
-
     ];
    }
 
@@ -38,4 +37,17 @@ class ShiptValidator extends AbstractCsvValidator {
         return [
         ];
     }
+
+    /**
+     * 各機能固有のメッセージを取得する。
+     *
+     * @return array
+     */
+    public function messages():array {
+        return [
+            'shipping_postal_code.regex' => '郵便番号は「123-4567」の形式で入力してください。',
+            'shipping_city.regex' => '市区町村名は「市」「区」「町」「村」「郡」を最後につけてください。',
+        ];
+    }
+
 }
