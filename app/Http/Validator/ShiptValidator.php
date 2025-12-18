@@ -21,10 +21,11 @@ class ShiptValidator extends AbstractCsvValidator {
                                                             ,兵庫県,奈良県,和歌山県,鳥取県,島根県,岡山県,広島県,山口県,徳島県,香川県,愛媛県,高知県,福岡県,佐賀県,長崎県,熊本県,大分県,宮崎県,鹿児島県,沖縄県',
         ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
         ShiptCon::ADDRESS_1 => 'required|string',
-        ShiptCon::PRODUCT_ID => 'required|numeric',
+        ShiptCon::PRODUCT_ID => 'required|numeric|min:1',
         ShiptCon::PRODUCT_NAME => 'required',
-        Header::QUANTITY => 'required|numeric',
-        ShiptCon::PRODUCT_PRICE => 'required|numeric',
+        Header::QUANTITY => 'required|numeric|min:1',
+        ShiptCon::PRODUCT_PRICE => 'required|numeric|min:50',
+        ShiptCon::DISCOUNT_AMOUNT => 'required|numeric|min:0'
     ];
    }
 
@@ -35,6 +36,15 @@ class ShiptValidator extends AbstractCsvValidator {
      */
    protected function attributes():array {
         return [
+            ShiptCon::SHIPPING_DATE => '発送日',
+            ShiptCon::PRODUCT_PRICE => '商品価格',
+            ShiptCon::DISCOUNT_AMOUNT => '割引額',
+            ShiptCon::SINGLE_PRICE => '単価',
+            ShiptCon::TOTAL_PRICE => '支払い価格',
+            ShiptCon::PRODUCT_ID => '商品コード',
+            ShiptCon::PRODUCT_NAME =>'商品名',
+            Header::QUANTITY => '出荷枚数',
+            ShiptCon::DISCOUNT_AMOUNT => 'クーポン割引額'
         ];
     }
 

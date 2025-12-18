@@ -16,7 +16,7 @@ use Tests\Util\TestDateUtil;
 class ShiptLogTestHelper
 {
     /**
-     * 購入者情報をランダムで作成する。
+     *商品情報つき 購入者情報をランダムで作成する。
      *
      * @return array
      */
@@ -26,6 +26,18 @@ class ShiptLogTestHelper
         for ($i=0; $i < $itemCount; $i++) {
             $items[] = self::createItemInfo($isFoil, $isPromo, $quantity);
         }
+        $buyerInfo = self::createBuyerInfoOnly($shiptDate);
+        $buyerInfo[SC::ITEMS] = $items;
+        return $buyerInfo;
+    }
+
+    /**
+     * 購入者情報をランダムで作成する。
+     *
+     * @param string $shiptDate
+     * @return array
+     */
+    public static function createBuyerInfoOnly(string $shiptDate):array {
         return [
             SC::ORDER_ID => self::createOrderId(),
             SC::BUYER => fake()->name(),
@@ -35,11 +47,10 @@ class ShiptLogTestHelper
             SC::ADDRESS_1 => fake()->streetAddress(),
             SC::ADDRESS_2 => fake()->secondaryAddress(),
             SC::SHIPPING_DATE => $shiptDate,
-            SC::ITEMS => $items
         ];
     }
 
-        /**
+    /**
      * 発送日が今日の注文情報を取得する。
      *
      * @return array
