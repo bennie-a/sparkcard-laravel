@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Shipt;
 
-use App\Exceptions\api\Csv\CsvFormatException;
 use App\Files\Reader\ShiptLogCsvReader;
 use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Foundation\Http\FormRequest;
@@ -40,13 +39,6 @@ class ShiptUploadRequest extends FormRequest
                                         }],
         ];
     }
-
-    // public function prepareForValidation()
-    // {
-    //     if ($this->file(self::FILE)->getSize() === 0) {
-    //         throw new CsvFormatException('empty-file');
-    //     }
-    // }
 
     /**
      * アップロードされたファイルを読み込む。

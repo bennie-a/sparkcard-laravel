@@ -12,7 +12,6 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-use function Symfony\Component\HttpKernel\DataCollector\getMessage;
 
 class Handler extends ExceptionHandler
 {
@@ -78,7 +77,7 @@ class Handler extends ExceptionHandler
             ];
         if($e instanceof ApiException && $e->hasRows()) {
             $json[EC::ROWS] = $e->getRows();
-        } 
+        }
         logger()->info('エラー：', $json);
         return response()->json($json, $statusCode,  [
             'Content-Type' => 'application/problem+json',
