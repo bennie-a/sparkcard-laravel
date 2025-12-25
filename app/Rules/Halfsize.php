@@ -3,7 +3,6 @@
 namespace App\Rules;
 
 use Closure;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 /**
@@ -19,7 +18,7 @@ class Halfsize implements ValidationRule
      public function validate(string $attribute, mixed $value, Closure $fail): void
      {
         if (!empty($value) && \preg_match('/^[a-zA-Z0-9!-\/:-@ \[-`{-~]+$/', $value) == false) {
-            $fail('validation.halfsize')->translate();
+            $fail($attribute, __('validation.halfsize'));
         }
      }
 }

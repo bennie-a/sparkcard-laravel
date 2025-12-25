@@ -41,7 +41,7 @@ class ShiptLogController extends Controller
          * 在庫情報の数量から出荷量を引く。
          * Notionのカードに発送日、購入者名と「出荷準備中」を登録
          */
-        response()->json(Response::HTTP_CREATED);
+        return response(null, Response::HTTP_CREATED);
     }
 
     use ImportCsv;

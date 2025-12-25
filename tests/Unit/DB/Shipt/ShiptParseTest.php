@@ -34,7 +34,7 @@ use Tests\Util\TestDateUtil;
  * 出荷情報解析機能のテストケース
  */
 #[CoversClass(ShiptLogController::class)]
-class ShiptLogParseTest extends TestCase
+class ShiptParseTest extends TestCase
 {
     use ApiErrorAssertions;
 
