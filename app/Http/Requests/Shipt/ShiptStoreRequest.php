@@ -25,7 +25,9 @@ class ShiptStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            ShiptCon::ORDER_ID => ['required', new Halfsize()],
+            ShiptCon::BUYER => 'required',
+            ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
         ];
     }
 }

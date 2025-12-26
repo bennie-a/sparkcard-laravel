@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Validator;
 use App\Http\Validator\AbstractCsvValidator;
+use App\Rules\DateFormatRule;
 use App\Rules\Halfsize;
 use App\Rules\StateRule;
 use App\Services\Constant\ShiptConstant as ShiptCon;
@@ -17,7 +18,7 @@ class ShiptValidator extends AbstractCsvValidator {
     return [
         ShiptCon::ORDER_ID => ['required', new Halfsize()],
         ShiptCon::BUYER => 'required',
-        ShiptCon::SHIPPING_DATE => 'date_format:Y/m/d',
+        ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
         ShiptCon::POSTAL_CODE => 'required|regex:/^\d{3}-\d{4}$/',
         ShiptCon::STATE => ['required', StateRule::rules()],
         ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
