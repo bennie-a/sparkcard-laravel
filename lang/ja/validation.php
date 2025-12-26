@@ -215,6 +215,7 @@ return [
         StockpileHeader::QUANTITY => '枚数',
         GlobalConstant::FILE => 'ファイル',
         SC::POSTAL_CODE => '郵便番号',
+        SC::ORDER_ID => '注文番号',
         SC::STATE => '都道府県名',
         SC::CITY => '市区町村名',
         SC::ADDRESS_1 => 'その他住所1',

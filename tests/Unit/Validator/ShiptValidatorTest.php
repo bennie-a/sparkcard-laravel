@@ -52,6 +52,22 @@ class ShiptValidatorTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('注文番号チェック')]
+    #[DataProvider('orderIdProvider')]
+    public function ngOrderId(string $value, string $msg) {
+        $this->verifyBuyerError(SC::ORDER_ID, $value, $msg);
+    }
+
+    public static function orderIdProvider(): array
+    {
+        return [
+            '未入力' => ['', '注文番号は必ず入力してください。'],
+            '全角文字列' => ['ａｂｃ１２３', '注文番号は半角英数字と記号を入力してください。'],
+            '改行コード混在' => ["abc\n123", '注文番号は半角英数字と記号を入力してください。'],
+        ];
+    }
+
+    #[Test]
     #[TestDox('購入者名チェック')]
     public function ngBuyerName() {
         $this->verifyBuyerError(SC::BUYER, '', '購入者名は必ず入力してください。');

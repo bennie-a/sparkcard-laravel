@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Validator;
 use App\Http\Validator\AbstractCsvValidator;
+use App\Rules\Halfsize;
 use App\Rules\StateRule;
 use App\Services\Constant\ShiptConstant as ShiptCon;
 use App\Services\Constant\StockpileHeader as Header;
@@ -14,7 +15,7 @@ class ShiptValidator extends AbstractCsvValidator {
      */
    protected function validationRules():array {
     return [
-        ShiptCon::ORDER_ID => 'required',
+        ShiptCon::ORDER_ID => ['required', new Halfsize()],
         ShiptCon::BUYER => 'required',
         ShiptCon::SHIPPING_DATE => 'date_format:Y/m/d',
         ShiptCon::POSTAL_CODE => 'required|regex:/^\d{3}-\d{4}$/',
