@@ -3,6 +3,7 @@ namespace App\Http\Validator;
 use App\Http\Validator\AbstractCsvValidator;
 use App\Rules\DateFormatRule;
 use App\Rules\Halfsize;
+use App\Rules\PostalCodeRule;
 use App\Rules\StateRule;
 use App\Services\Constant\ShiptConstant as ShiptCon;
 use App\Services\Constant\StockpileHeader as Header;
@@ -19,7 +20,7 @@ class ShiptValidator extends AbstractCsvValidator {
         ShiptCon::ORDER_ID => ['required', new Halfsize()],
         ShiptCon::BUYER => 'required',
         ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
-        ShiptCon::POSTAL_CODE => 'required|regex:/^\d{3}-\d{4}$/',
+        ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
         ShiptCon::STATE => ['required', StateRule::rules()],
         ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
         ShiptCon::ADDRESS_1 => 'required|string',

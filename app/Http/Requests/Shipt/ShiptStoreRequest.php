@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Shipt;
 
+use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\ShiptConstant as ShiptCon;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -28,6 +30,12 @@ class ShiptStoreRequest extends FormRequest
             ShiptCon::ORDER_ID => ['required', new Halfsize()],
             ShiptCon::BUYER => 'required',
             ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
+            ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
+            ShiptCon::ADDRESS => 'required|string',
+            ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => 'required|numeric|min:1',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => 'required|numeric|min:1',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => 'required|numeric|min:50',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => 'required|numeric|min:1',
         ];
     }
 }

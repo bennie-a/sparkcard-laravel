@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Request;
 
-use App\Http\Requests\ArrivalSearchRequest;
+use App\Http\Requests\Arrival\ArrivalSearchRequest;
 use App\Services\Constant\SearchConstant as Con;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -46,8 +46,8 @@ class ArrivalSearchRequestTest extends AbstractValidationTest
     public function ngdata() {
         return [
             'パラメータなし' =>
-                            [[], 
-                                [Con::CARD_NAME =>  
+                            [[],
+                                [Con::CARD_NAME =>
                                 'カード名 / 入荷日(開始日) / 入荷日(終了日)の中で1個以上の項目を必ず入力してください。']]
         ];
     }
