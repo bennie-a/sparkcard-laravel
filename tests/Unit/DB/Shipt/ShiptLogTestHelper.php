@@ -31,6 +31,28 @@ class ShiptLogTestHelper
         return $buyerInfo;
     }
 
+    public static function createStoreRequest($itemCount = 1):array {
+        $buyerInfo = self::createBuyerInfo($itemCount, TestDateUtil::formatToday());
+        $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
+                                                                $buyerInfo[SC::ADDRESS_1].' '.$buyerInfo[SC::ADDRESS_2];
+        unset($buyerInfo[SC::STATE]);
+        unset($buyerInfo[SC::CITY]);
+        unset($buyerInfo[SC::ADDRESS_1]);
+        unset($buyerInfo[SC::ADDRESS_2]);
+
+        $items = array_map(function($item) {
+            return [
+                GC::ID => $item[GC::ID],
+                StockpileHeader::QUANTITY => $item[StockpileHeader::QUANTITY],
+                SC::TOTAL_PRICE =>$item[SC::PRODUCT_PRICE],
+                SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
+            ];
+        }, $buyerInfo[SC::ITEMS]);
+
+        $buyerInfo[SC::ITEMS] = $items;
+        return $buyerInfo;
+    }
+
     /**
      * 購入者情報をランダムで作成する。
      *
