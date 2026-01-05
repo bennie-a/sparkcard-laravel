@@ -41,7 +41,7 @@ class OrderResource extends JsonResource
         return [
             SC::ORDER_ID => $this[SC::ORDER_ID],
             SC::BUYER => $row->buyer(),
-            SC::SHIPPING_DATE => CarbonFormatUtil::toDateString($row->shipping_date()),
+            SC::SHIPPING_DATE => $row->shipping_date(),
             SC::ZIPCODE => $row->postal_code(),
             SC::ADDRESS => $row->address(),
             SC::ITEMS => $items,

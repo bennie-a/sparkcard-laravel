@@ -1,12 +1,14 @@
 <?php
 namespace Tests\Util;
+
+use App\Services\Constant\GlobalConstant;
 use Carbon\CarbonImmutable;
 
 /**
  * テストで使用する日付を取得する。
  */
 class TestDateUtil {
-    
+
     /**
      * 今日の日付を取得する。
      *
@@ -97,7 +99,6 @@ class TestDateUtil {
 
 
     public static function formatDate(CarbonImmutable $day):string {
-        $format = 'Y/m/d';
-        return $day->format($format);
+        return $day->format(GlobalConstant::DATE_FORMAT);
     }
 }

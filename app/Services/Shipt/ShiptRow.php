@@ -3,13 +3,13 @@ namespace App\Services\Shipt;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\ShiptConstant as SC;
-use Carbon\Carbon;
+use App\Libs\CarbonFormatUtil;
 
 /**
  * 出荷CSV1件分のクラス
  */
 class ShiptRow {
-    
+
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;
@@ -27,11 +27,7 @@ class ShiptRow {
 
     public function shipping_date() {
         $date = $this->row[SC::SHIPPING_DATE];
-        $carbon = new Carbon();
-        if (!empty($date)) {
-            $carbon = new Carbon($date);
-        }
-        return $carbon;
+        return CarbonFormatUtil::assignTodayIfMissing($date);
     }
 
     public function buyer() {
@@ -56,7 +52,7 @@ class ShiptRow {
     }
 
     public function address() {
-        $address = $this->row[SC::STATE].$this->row[SC::CITY]. 
+        $address = $this->row[SC::STATE].$this->row[SC::CITY].
                         $this->row[SC::ADDRESS_1];
         if (!empty($this->row[SC::ADDRESS_2])) {
             $address.= " ". $this->row[SC::ADDRESS_2];
@@ -82,7 +78,7 @@ class ShiptRow {
         }
         return $this->shipment;
     }
-    
+
     /**
      * 商品価格を取得する。
      *
@@ -97,7 +93,7 @@ class ShiptRow {
      *
      * @return int
      */
-    public function single_price():int {        
+    public function single_price():int {
         $price = $this->total_price() / $this->shipment();
         return round($price);
     }
@@ -134,7 +130,7 @@ class ShiptRow {
         if (preg_match('/^【(?<setcode>.+?)】(?:【(?<foil>Foil)】)?(?<name>.+?)(?:≪(?<promotype>.+?)≫)?\[(?<lang>[A-Z]{2})]/u', $productName, $matches)) {            $this->setcode = $matches[SC::SETCODE];
             $this->setcode = $matches[SC::SETCODE];
             $this->cardname =  $matches[GlobalConstant::NAME];
-            $this->promotype = $matches[CardConstant::PROMOTYPE] ?? ''; 
+            $this->promotype = $matches[CardConstant::PROMOTYPE] ?? '';
             $this->language = $matches[SC::LANG];
             $this->isFoil  = $matches['foil'] === 'Foil';
         } else {

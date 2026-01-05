@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\Api\Csv\CsvInvalidRowException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Shipt\ShiptStoreRequest;
 use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
 use App\Http\Resources\Shipt\OrderResource;
@@ -33,7 +34,9 @@ class ShiptLogController extends Controller
      * @param Request $request
      * @return response
      */
-    public function store(Request $request) {
+    public function store(ShiptStoreRequest $request) {
+        $detail = $request->only(ShiptCon::BUYER_INFO, ShiptCon::ITEMS);
+        logger()->debug($detail[ShiptCon::BUYER_INFO]);
         /**
          * 在庫情報を確認する。
          * ⇒ある⇒出荷ログを作成する
