@@ -6,7 +6,8 @@ use App\Repositories\Api\Mtg\ScryfallRepository;
 use App\Enum\CardColor;
 use App\Exceptions\api\NotFoundException;
 use App\Services\Constant\CardConstant;
-use App\Services\json\ScryfallCard;
+use App\Services\json\Scryfall\ScryfallCard;
+use App\Services\json\Scryfall\ScryfallTransformCard;
 use Illuminate\Http\Response;
 
 /**
@@ -46,8 +47,8 @@ class ScryfallService {
      */
     public function getImageUrl($details)
     {
-        if (MtgJsonUtil::hasKey('imageurl', $details)) {
-            return $details['imageurl'];
+        if (MtgJsonUtil::hasKey(CardConstant::IMAGE_URL, $details)) {
+            return $details[CardConstant::IMAGE_URL];
         }
         $multiverseId = MtgJsonUtil::getIfExists(CardConstant::MULTIVERSEID, $details);
         $json = [];
@@ -60,15 +61,13 @@ class ScryfallService {
             return null;
         }
         $layout = $json['layout'];
-        $images = [];
-        if ($layout == 'transform') {
-            // 両面カードの場合は表面のカードを取得する。
-            $faces = current($json['card_faces']);
-            $images = $faces['image_uris'];
+        $card = null;
+        if ($layout == 'transform' || $layout == 'reversible_card') {
+            $card = new ScryfallTransformCard($json);
         } else {
-            $images = $json['image_uris'];
+            $card = new ScryfallCard($json);
         }
-        return $images['png'];
+        return $card->imageurl()['png'];
     }
 
     public function getCardInfoByName(string $setcode, string $name) {
@@ -80,7 +79,7 @@ class ScryfallService {
     }
     /**
      * /cards/:code/:numberで情報を取得する。
-     * 
+     *
      * @param array $details
      * @return void
      */
@@ -98,7 +97,7 @@ class ScryfallService {
         $color = CardColor::findColor($card->colors(), $card->types());
         $promotype = \App\Facades\Promo::find($card);
         logger()->info('プロモタイプ', [$promotype]);
-        return ['name' => $card->name(), 
+        return ['name' => $card->name(),
                     'multiverse_id' => $card->multiverseId(),
                     'en_name' => $card->enname(),
                     'color' => $color->value,

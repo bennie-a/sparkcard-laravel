@@ -32,14 +32,25 @@ class PostCardDBRequest extends FormRequest
             'name'=>'required',
             'en_name'=>'required',
             'color'=>'required',
-            'multiverseId' => 'required_without_all:scryfallId,imageurl|integer',
-            'scryfallId' => ['required_without_all:multiverseId,imageurl', self::uuidrules()],
+            'multiverseId' => 'integer',
+            'scryfallId' => [self::uuidrules()],
             'number' => 'required',
-            CardConstant::IMAGE_URL => 'required_without_all:multiverseId,scryfallId',
             'is skip' => 'nullable|boolean',
             'foiltype' => 'required',
             CardConstant::PROMO_ID => 'required|integer',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $multiId = $this->input(CardConstant::MULTIVERSEID);
+            $scryId = $this->input(CardConstant::SCRYFALLID);
+            $imageurl = $this->input(CardConstant::IMAGE_URL);
+            if (empty($multiId) && empty($scryId) && empty($imageurl)) {
+                $validator->errors()->add('multiverseId/scryfallId/imageurl', 'multiverseIdかscryfallIdかimage_urlのいずれかを指定してください。');
+            }
+        });
     }
 
     public function attributes()
@@ -58,7 +69,7 @@ class PostCardDBRequest extends FormRequest
 
     /**
      * エラーメッセージを変更
-     * 
+     *
      * @return array
      */
     public function messages()

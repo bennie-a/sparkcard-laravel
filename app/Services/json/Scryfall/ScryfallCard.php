@@ -1,5 +1,5 @@
 <?php
-namespace app\Services\json;
+namespace App\Services\json\Scryfall;
 
 use App\Libs\MtgJsonUtil;
 use App\Services\json\AbstractCard;
@@ -69,15 +69,8 @@ class ScryfallCard extends AbstractCard {
     }
 
     public function imageurl() {
-        $imageuris = [];
-        if ($this->getJson()['layout'] == 'modal_dfc') {
-            $imageuris = current($this->getJson()['card_faces'])['image_uris'];
-        } else {
-            $imageuris =  $this->getJson()['image_uris'];
-        }
-
-
-        return $imageuris['png'];
+        $imageuris =  $this->getJson()['image_uris'];
+        return $imageuris;
     }
 
     protected function hasPromotype() {

@@ -8,6 +8,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Foiltype;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
@@ -51,19 +52,19 @@ class CardInfoDBTest extends TestCase
     public function test_getImage(string $setcode, int $multiId, string $scryId) {
         $name = fake()->realText(10);
         $params = $this->createParams($setcode, $name, 1, ['通常版']);
-        $params['multiverseId'] = $multiId;
+        $params[Con::MULTIVERSEID] = $multiId;
         if ($multiId > 0 && $scryId !== '') {
             unset($params[Con::IMAGE_URL]);
         }
         if(!empty($scryId)) {
-            $params['scryfallId'] = $scryId;
+            $params[Con::SCRYFALLID] = $scryId;
         }
         $this->post_execute($params, 201);
 
         $info = CardInfo::getCardinfo(
             Expansion::findBySetCode($setcode)->notion_id,
             $params[Con::NUMBER],
-            Foiltype::findByName('通常版')->id
+            Foiltype::findByAttr(Con::NON_FOIL)->id
         );
         $this->assertNotNull($info, 'カード情報の取得');
         $this->assertNotNull($info->image_url, '画像URLの取得');
@@ -74,7 +75,8 @@ class CardInfoDBTest extends TestCase
             'multiverseIdあり' => ['WAR', 462492, ''],
             'scryfallIdあり' => ['WAR', 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
             'image_urlあり_multiverseIdとscryfallIdなし' => ['WAR', 0, ''],
-            '両面カード' => ['NEO', 551715, (string)Str::uuid()],
+            '両面カード' => ['NEO', 551715, ''],
+            'リバーシブル・ボーダーレス' => ['ECL', 0, '19cba6be-7291-4788-9241-87dad3b68363'],
         ];
     }
 
