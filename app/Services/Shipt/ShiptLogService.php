@@ -22,6 +22,7 @@ use League\Csv\AbstractCsv;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\StockpileHeader;
+use DateTime;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -38,10 +39,10 @@ class ShiptLogService extends AbstractCsvService {
 
     /**
      * @see AbstractSmsService::store
-     * @param ShiptRow $row
+     * @param ShiptStoreRow $row
      * @return void
     */
-    protected function store($row) {
+    public function store($row) {
         $stock = Stockpile::findByShiptCsv($row);
         if (empty($stock)) {
             $this->addError($row->number(), '在庫データがありません');
@@ -73,13 +74,13 @@ class ShiptLogService extends AbstractCsvService {
 
         $stock->update();
 
-        $notionCard = CardBoard::findByOrderId($row->order_id());
-        if ($notionCard->isEmpty()) {
-            $this->addError($row->number(), '該当するNotionカードがありません');
-            return;
-        }
+        // $notionCard = CardBoard::findByOrderId($row->order_id());
+        // if ($notionCard->isEmpty()) {
+        //     $this->addError($row->number(), '該当するNotionカードがありません');
+        //     return;
+        // }
 
-        $this->updateNotion($notionCard[0], $row);
+        // $this->updateNotion($notionCard[0], $row);
         $this->addSuccess($row->number());
     }
 
@@ -141,7 +142,7 @@ class ShiptLogService extends AbstractCsvService {
         $page->setId($notionCard->getId());
         $page->set('購入者名', Text::value($row->buyer()));
         $page->set('Status', Select::value('出荷準備中'));
-        $page->set('発送日',  Date::value($row->shipping_date()));
+        $page->set('発送日',  Date::value(new DateTime($row->shipping_date())));
         $page->set('sparkcard_id', Number::value(0));
         CardBoard::updatePage($page);
 

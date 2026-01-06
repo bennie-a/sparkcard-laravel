@@ -35,15 +35,17 @@ class ShiptLogTestHelper
         $buyerInfo = self::createBuyerInfo($itemCount, TestDateUtil::formatToday());
         $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
                                                                 $buyerInfo[SC::ADDRESS_1].' '.$buyerInfo[SC::ADDRESS_2];
+        $buyerInfo[SC::ZIPCODE] = $buyerInfo[SC::POSTAL_CODE];
         unset($buyerInfo[SC::STATE]);
         unset($buyerInfo[SC::CITY]);
         unset($buyerInfo[SC::ADDRESS_1]);
         unset($buyerInfo[SC::ADDRESS_2]);
+        unset($buyerInfo[SC::POSTAL_CODE]);
 
         $items = array_map(function($item) {
             return [
                 GC::ID => $item[GC::ID],
-                StockpileHeader::QUANTITY => $item[StockpileHeader::QUANTITY],
+                SC::SHIPMENT => $item[StockpileHeader::QUANTITY],
                 SC::TOTAL_PRICE =>$item[SC::PRODUCT_PRICE],
                 SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
             ];

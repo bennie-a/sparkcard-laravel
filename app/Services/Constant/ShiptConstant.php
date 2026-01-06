@@ -20,7 +20,7 @@ class ShiptConstant extends StockpileHeader {
     public const CITY = "shipping_city";
     public const ADDRESS_1 = "shipping_address_1";
     public const ADDRESS_2  = "shipping_address_2";
-    public const ZIPCODE = "zipcode";
+    public const ZIPCODE = "zip_code";
     public const ADDRESS = "address";
     public const DISCOUNT_AMOUNT = "coupon_discount_amount";
     public const ITEMS = "items";

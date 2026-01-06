@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Shipt;
 
-use App\Libs\CarbonFormatUtil;
 use App\Rules\DateFormatRule;
 use App\Rules\Halfsize;
 use App\Rules\PostalCodeRule;
@@ -13,7 +12,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * 出荷情報登録に関するRequestクラス
  */
-class ShiptStoreRequest extends FormRequest
+class ShiptPostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,10 +33,10 @@ class ShiptStoreRequest extends FormRequest
             ShiptCon::ORDER_ID => ['required', new Halfsize()],
             ShiptCon::BUYER => 'required',
             ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
-            ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
+            ShiptCon::ZIPCODE => ['required', PostalCodeRule::rules()],
             ShiptCon::ADDRESS => 'required|string',
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => 'required|numeric|min:1',
-            // ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => 'required|numeric|min:1',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => 'required|numeric|min:1',
             ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => 'required|numeric|min:50',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => 'required|numeric|min:1',
         ];
@@ -45,13 +44,10 @@ class ShiptStoreRequest extends FormRequest
 
     public function passedValidation()
     {
-        $shiptdate = $this->input(ShiptCon::SHIPPING_DATE, CarbonFormatUtil::today());
-        $buyer = $this->only([ShiptCon::ORDER_ID, ShiptCon::BUYER,
-                                        ShiptCon::POSTAL_CODE, ShiptCon::ADDRESS]);
-        $buyer[ShiptCon::SHIPPING_DATE] = $shiptdate;
+        $info = $this->only([ShiptCon::ORDER_ID, ShiptCon::BUYER, ShiptCon::ZIPCODE,
+                                         ShiptCon::ADDRESS, ShiptCon::SHIPPING_DATE, ShiptCon::ITEMS]);
         $this->merge([
-            ShiptCon::BUYER_INFO => $buyer,
-            ShiptCon::ITEMS => $this->input(ShiptCon::ITEMS),
+            GlobalConstant::DATA => $info,
         ]);
     }
 }

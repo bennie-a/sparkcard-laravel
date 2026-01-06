@@ -10,6 +10,8 @@ use App\Libs\CarbonFormatUtil;
  */
 class ShiptRow {
 
+    protected array $row;
+
     public function __construct(int $number, array $row)
     {
         $this->number = $number + 2;

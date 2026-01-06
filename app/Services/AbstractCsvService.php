@@ -26,9 +26,9 @@ abstract class AbstractCsvService {
         $callback = function($row) {
             $this->store($row);
         };
-        $details = 
+        $details =
         $this->execute($records, $callback);
-        $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success), 
+        $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success),
                             'failed_rows' => count($this->error), 'failed_details' => $this->error,
                             'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
         return $result;
@@ -89,10 +89,10 @@ abstract class AbstractCsvService {
         return !empty($this->error);
     }
 
-    protected abstract function store($row);
+    public abstract function store($row);
 
     /**
-     * CSVファイル1行分のオブジェクトを作成する。 
+     * CSVファイル1行分のオブジェクトを作成する。
      *
      * @param integer $index
      * @param array $row
