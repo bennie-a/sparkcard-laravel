@@ -422,12 +422,12 @@ class ShiptParseTest extends TestCase
         {$implode}
         CSV;
 
-        $base = 'validation.csv.msg';
+        $base = 'validation.items';
         $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
 
         $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, __("$base.$msg"));
+        $this->assertRowError($response, $status, __("$base.$msg.detail"));
     }
 
     #[TestDox('バリデーションエラーが発生した時のエラー情報を検証する。')]

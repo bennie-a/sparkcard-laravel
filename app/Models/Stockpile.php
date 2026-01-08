@@ -34,6 +34,7 @@ class Stockpile extends Model
      *
      * @param ShippingRow $row
      * @return Stockpile|null
+     * @deprecated 5.1.0
      */
     public static function findByShiptCsv(ShiptRow $row): Stockpile|null {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
@@ -121,5 +122,19 @@ class Stockpile extends Model
     public static function findById(int $id): ?Stockpile
     {
         return self::where(GlobalConstant::ID, $id)->first();
+    }
+
+    public static function productName(int $stockId): string
+    {
+        $stock = self::find($stockId);
+        if (empty($stock)) {
+            return '';
+        }
+        $card = $stock->cardinfo;
+        if (empty($card)) {
+            return '';
+        }
+        return $card->name;
+
     }
 }

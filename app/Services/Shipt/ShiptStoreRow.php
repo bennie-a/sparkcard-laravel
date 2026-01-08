@@ -58,9 +58,12 @@ class ShiptStoreRow extends ShiptRow
     /**
      * 商品情報を取得する。
      *
-     * @return void
+     * @return array
      */
-    public function items() {
+    public function items():array {
+        if (!isset($this->row[SC::ITEMS])) {
+            return [];
+        }
         return $this->row[SC::ITEMS];
     }
 }

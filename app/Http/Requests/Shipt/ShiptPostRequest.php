@@ -35,6 +35,7 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
             ShiptCon::ZIPCODE => ['required', PostalCodeRule::rules()],
             ShiptCon::ADDRESS => 'required|string',
+            ShiptCon::ITEMS => 'required|array',
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => 'required|numeric|min:1',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => 'required|numeric|min:1',
             ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => 'required|numeric|min:50',

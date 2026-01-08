@@ -5,6 +5,7 @@ use App\Services\Constant\CardConstant as CCon;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
+use App\Services\Constant\ErrorConstant as EC;
 
 return [
 
@@ -180,13 +181,11 @@ return [
             'no-header' => 'CSVファイルにヘッダーがありません。',
         ],
     ],
-    'csv' => [
-        'msg' => [
-            'no-info' => '該当する在庫情報がありません',
-            'no-notion' => '注文番号に該当するNotionカードがありません',
-            'zero_quantity' => '在庫枚数がありません',
-            'excess-shipment' => '出荷枚数が在庫枚数がより多いです'
-        ],
+    SC::ITEMS => [
+        'no-info' => [EC::TITLE => '在庫情報なし', EC::DETAIL => '該当する在庫情報がありません'],
+        'no-notion' => [EC::TITLE => 'Notionカードなし', EC::DETAIL => '注文番号に該当するNotionカードがありません'],
+        'zero_quantity' => [EC::TITLE => '在庫枚数なし', EC::DETAIL => '在庫枚数がありません'],
+        'excess-shipment' => [EC::TITLE => '在庫枚数不足', EC::DETAIL => '出荷枚数が在庫枚数がより多いです']
     ],
 
     /*

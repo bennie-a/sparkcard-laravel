@@ -164,7 +164,7 @@ export default {
                     this.en_name = data["en_name"];
                     this.multiverse_id = data["multiverse_id"];
                     this.color = data["color"];
-                    this.imageurl = data["imageurl"];
+                    this.imageurl = data["imageurl"]["png"];
                     this.foiltype = data["foiltype"];
                 })
                 .catch((e) => {
@@ -191,7 +191,7 @@ export default {
                 color: this.color,
                 number: this.number,
                 is_skip: false,
-                imageurl: this.imageurl,
+                image_url: this.imageurl,
                 foiltype: ["通常版", "Foil"],
                 promotype_id:this.promotype_id,
             };

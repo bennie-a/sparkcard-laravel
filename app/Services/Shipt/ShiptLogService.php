@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Shipt;
 
+use App\Exceptions\api\Shipt\ShipmentOrderException;
 use App\Exceptions\NotFoundException;
 use App\Facades\CardBoard;
 use App\Files\CsvReader;
@@ -43,6 +44,13 @@ class ShiptLogService extends AbstractCsvService {
      * @return void
     */
     public function store($row) {
+        $items = $row->items();
+        if (!empty($items)) {
+            foreach ($items as $item) {
+
+                $this->storeItem($row, $item);
+            }
+        }
         $stock = Stockpile::findByShiptCsv($row);
         if (empty($stock)) {
             $this->addError($row->number(), '在庫データがありません');
@@ -95,44 +103,37 @@ class ShiptLogService extends AbstractCsvService {
         foreach ($records as $index => $r) {
             $row = $this->createRow($index, $r);
             $orderId = $row->order_id();
-            $notionCard = CardBoard::findByOrderId($row->order_id());
-            if ($notionCard->isEmpty()) {
-                $msg =__('validation.csv.msg.no-notion') ;
-                $this->addError($row->number(), $msg);
-                continue;
-         }
+            try {
+                $notionCard = CardBoard::findByOrderId($row->order_id());
+                if ($notionCard->isEmpty()) {
+                    throw new ShipmentOrderException(HttpResponse::HTTP_BAD_REQUEST, $row->number(), 'no-notion');
+             }
+                $stock = null;
+                $errorKey = '';
+                if(!isset($orders[$orderId])){
+                    // 新規生成
+                    $orders[$orderId] = [
+                        SC::ORDER_ID => $orderId,
+                        GlobalConstant::DATA => $row,
+                    ];
+                }
+                // 出荷商品情報チェック
+                $stockId = (int)$r[SC::PRODUCT_ID];
+                $this->checkShipment($stockId, $row->shipment());
+                $stock = Stockpile::find($stockId);
 
-            if(!isset($orders[$orderId])){
-                // 新規生成
-                $orders[$orderId] = [
-                    SC::ORDER_ID => $orderId,
-                    GlobalConstant::DATA => $row,
+                $orders[$orderId][SC::ITEMS][] = [
+                    StockpileHeader::STOCK => $stock,
+                    SC::SHIPMENT => $row->shipment(),
+                    SC::PRODUCT_PRICE => $row->product_price(),
+                    SC::DISCOUNT_AMOUNT => $row->discount(),
+                    SC::SINGLE_PRICE => $row->single_price(),
+                    SC::TOTAL_PRICE => $row->total_price()
                 ];
-            }
-            // 出荷商品情報
-            $stock = Stockpile::find((int)$r[SC::PRODUCT_ID]);
-            $errorKey = '';
-            if (is_null($stock)) {
-                $errorKey = 'no-info';
-            } else if ($stock->quantity == 0) {
-                $errorKey = 'zero_quantity';
-            } else if ($row->shipment() > $stock->quantity) {
-                $errorKey = 'excess-shipment';
-            }
-            if (!empty($errorKey)) {
-                $msg = __("validation.csv.msg.{$errorKey}");
-                $this->addError($row->number(), $msg);
+            } catch (ShipmentOrderException $e) {
+                $this->addError($row->number(), $e->getMsg());
                 continue;
             }
-
-            $orders[$orderId][SC::ITEMS][] = [
-                StockpileHeader::STOCK => $stock,
-                SC::SHIPMENT => $row->shipment(),
-                SC::PRODUCT_PRICE => $row->product_price(),
-                SC::DISCOUNT_AMOUNT => $row->discount(),
-                SC::SINGLE_PRICE => $row->single_price(),
-                SC::TOTAL_PRICE => $row->total_price()
-            ];
         }
         return array_values($orders);
     }
@@ -183,4 +184,26 @@ class ShiptLogService extends AbstractCsvService {
         // $log = ShippingLog::find($id);
     }
 
+    /**
+     * 出荷枚数と在庫数のチェックを行う。
+     *
+     * @param Stockpile $stock
+     * @param integer $shipment
+     * @return null
+     * @throws ShipmentOrderException
+     */
+    private function checkShipment(int $stockId, int $shipment) {
+            $errorKey = '';
+            $stock = Stockpile::find($stockId);
+            if (is_null($stock)) {
+                $errorKey = 'no-info';
+            } else if ($stock->quantity == 0) {
+                $errorKey = 'zero_quantity';
+            } else if ($shipment > $stock->quantity) {
+                $errorKey = 'excess-shipment';
+            }
+            if (!empty($errorKey)) {
+                throw new ShipmentOrderException(HttpResponse::HTTP_BAD_REQUEST, $stockId, $errorKey);
+            }
+    }
 }
