@@ -2,6 +2,7 @@
 namespace App\Services\Shipt;
 
 use App\Exceptions\api\Shipt\ShipmentOrderException;
+use App\Exceptions\api\Shipt\ShiptNotionException;
 use App\Exceptions\NotFoundException;
 use App\Facades\CardBoard;
 use App\Files\CsvReader;
@@ -44,28 +45,24 @@ class ShiptLogService extends AbstractCsvService {
      * @return void
     */
     public function store($row) {
+        $orderId = $row->order_id();
+        // Notionカードの存在チェック
+        $this->hasNotionCard($orderId);
+
         $items = $row->items();
         if (!empty($items)) {
             foreach ($items as $item) {
-
-                $this->storeItem($row, $item);
+                $stockId = (int)$item[SC::STOCK_ID];
+                $shipment = (int)$item[SC::SHIPMENT];
+                $this->checkShipment($stockId, $shipment);
             }
         }
         $stock = Stockpile::findByShiptCsv($row);
-        if (empty($stock)) {
-            $this->addError($row->number(), '在庫データがありません');
-            return;
-        }
         // 出荷ログから注文IDと氏名、在庫IDを検索。
         // ➞あればエラー
         $isExists = ShippingLog::isExists($row->order_id(), $row->buyer(), $stock->id);
         if ($isExists) {
             $this->addSkip($row->number(), '既に登録されています');
-            return;
-        }
-
-        if ($stock->quantity == 0) {
-            $this->addError($row->number(), '在庫が0枚です。');
             return;
         }
 
@@ -104,12 +101,7 @@ class ShiptLogService extends AbstractCsvService {
             $row = $this->createRow($index, $r);
             $orderId = $row->order_id();
             try {
-                $notionCard = CardBoard::findByOrderId($row->order_id());
-                if ($notionCard->isEmpty()) {
-                    throw new ShipmentOrderException(HttpResponse::HTTP_BAD_REQUEST, $row->number(), 'no-notion');
-             }
-                $stock = null;
-                $errorKey = '';
+                $this->hasNotionCard($orderId);
                 if(!isset($orders[$orderId])){
                     // 新規生成
                     $orders[$orderId] = [
@@ -189,7 +181,6 @@ class ShiptLogService extends AbstractCsvService {
      *
      * @param Stockpile $stock
      * @param integer $shipment
-     * @return null
      * @throws ShipmentOrderException
      */
     private function checkShipment(int $stockId, int $shipment) {
@@ -205,5 +196,12 @@ class ShiptLogService extends AbstractCsvService {
             if (!empty($errorKey)) {
                 throw new ShipmentOrderException(HttpResponse::HTTP_BAD_REQUEST, $stockId, $errorKey);
             }
+    }
+
+    private function hasNotionCard(string $orderId) {
+        $notionCard = CardBoard::findByOrderId($orderId);
+        if ($notionCard->isEmpty()) {
+            throw new ShiptNotionException();
+        }
     }
 }

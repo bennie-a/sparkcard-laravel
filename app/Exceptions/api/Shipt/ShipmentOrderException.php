@@ -14,7 +14,6 @@ class ShipmentOrderException extends ApiException
         $this->status = $status;
         $this->stockId = $stockId;
         $this->errorKey = $errorkey;
-        // $this->detail = __("$validation.detail.$keyword", ['values' => $value]);
     }
 
     public function getStatusCode(): int
