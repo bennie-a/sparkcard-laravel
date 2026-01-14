@@ -29,15 +29,6 @@ class ShiptStoreRow extends ShiptRow
     }
 
     /**
-     * 注文枚数を取得する。
-     *
-     * @return int
-     */
-    public function shipment():int {
-        return $this->row[SC::SHIPMENT];
-    }
-
-    /**
      * 1枚あたりの単価を計算する。
      *
      * @return int

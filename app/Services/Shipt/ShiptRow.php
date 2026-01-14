@@ -121,24 +121,4 @@ class ShiptRow {
     public function order_id() {
         return $this->row[SC::ORDER_ID];
     }
-
-    /**
-     * 商品名から各種情報を抽出する。
-     * @deprecated 5.1.0
-     * @return void
-     */
-    private function extract() {
-        $productName = $this->product_name();
-        if (preg_match('/^【(?<setcode>.+?)】(?:【(?<foil>Foil)】)?(?<name>.+?)(?:≪(?<promotype>.+?)≫)?\[(?<lang>[A-Z]{2})]/u', $productName, $matches)) {            $this->setcode = $matches[SC::SETCODE];
-            $this->setcode = $matches[SC::SETCODE];
-            $this->cardname =  $matches[GlobalConstant::NAME];
-            $this->promotype = $matches[CardConstant::PROMOTYPE] ?? '';
-            $this->language = $matches[SC::LANG];
-            $this->isFoil  = $matches['foil'] === 'Foil';
-        } else {
-            // パースに失敗した場合
-            $this->setcode = $this->cardname = $this->promotype = $this->language = '';
-            $this->isFoil = false;
-        }
-    }
 }

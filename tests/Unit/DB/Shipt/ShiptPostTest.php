@@ -3,8 +3,8 @@
 namespace Tests\Unit\DB\Shipt;
 
 use App\Http\Controllers\ShiptLogController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Services\CardBoardService;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,6 +14,8 @@ use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
+use App\Services\Constant\ShiptConstant as SC;
+use FiveamCode\LaravelNotionApi\Entities\Page;
 
 /**
  * 出荷情報登録のテストクラス
@@ -36,7 +38,38 @@ class ShiptPostTest extends TestCase
     public function ok(): void
     {
         $request = ShiptLogTestHelper::createStoreRequest();
+        $this->setMockCardBoard([$request[SC::ORDER_ID]]);
         $response = $this->post('api/shipping', $request);
         $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJsonStructure([
+            SC::ORDER_ID, GlobalConstant::CREATE_AT]);
+
+        $this->assertDatabaseHas('shipping_log', [
+            SC::ORDER_ID => $request[SC::ORDER_ID]]);
+    }
+
+    private function setMockCardBoard(array $orderIds) {
+        $mock = \Mockery::mock(CardBoardService::class);
+        $errorId = 'error';
+        foreach($orderIds as $id) {
+            if ($id === $errorId) {
+                continue;
+            }
+
+            $page = new Page();
+            $page->setId(fake()->uuid());
+            $mock->shouldReceive('findByOrderId')
+                    ->with($id)
+                    ->andReturn(collect([$page]));
+        }
+        $mock->shouldReceive('findByOrderId')
+        ->with($errorId)
+        ->andReturn(collect([]));
+
+        // Notion更新メソッドのモック設定
+        $mock->shouldReceive('updatePage')->once()
+        ->with(\Mockery::type(Page::class))->andReturnTrue();
+
+        $this->app->instance(\App\Services\CardBoardService::class, $mock);
     }
 }

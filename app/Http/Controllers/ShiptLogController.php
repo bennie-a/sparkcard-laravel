@@ -37,8 +37,9 @@ class ShiptLogController extends Controller
      */
     public function store(ShiptPostRequest $request) {
         $row = $request->only(GC::DATA);
-        $this->service->store(new ShiptStoreRow($row[GC::DATA]));
-        return response(null, Response::HTTP_CREATED);
+        $log = $this->service->store(new ShiptStoreRow($row[GC::DATA]));
+        return response([ShiptCon::ORDER_ID => $log->order_id,
+                                         GC::CREATE_AT => $log->create_at], Response::HTTP_CREATED);
     }
 
     use ImportCsv;

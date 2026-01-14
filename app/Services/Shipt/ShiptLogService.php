@@ -42,9 +42,9 @@ class ShiptLogService extends AbstractCsvService {
     /**
      * @see AbstractSmsService::store
      * @param ShiptStoreRow $row
-     * @return void
+     * @return ShippingLog
     */
-    public function store($row) {
+    public function store($row):ShippingLog {
         $orderId = $row->order_id();
         // Notionカードの存在チェック
         $this->hasNotionCard($orderId);
@@ -52,41 +52,33 @@ class ShiptLogService extends AbstractCsvService {
         $items = $row->items();
         if (!empty($items)) {
             foreach ($items as $item) {
-                $stockId = (int)$item[SC::STOCK_ID];
+                $stockId = (int)$item[GlobalConstant::ID];
                 $shipment = (int)$item[SC::SHIPMENT];
                 $this->checkShipment($stockId, $shipment);
+                // 出荷ログから注文IDと氏名、在庫IDを検索。
+                // ➞あればエラー
+                $isExists = ShippingLog::isExists($row->order_id(), $row->buyer(), $stockId);
+                if ($isExists) {
+                    logger()->warning("既に登録されています。注文ID:{$row->order_id()}, 氏名:{$row->buyer()}, 在庫ID:{$stockId}");
+                    continue;
+                }
+                $stock = Stockpile::find($stockId);
+                $log = [SC::ORDER_ID => $row->order_id(), SC::NAME => $row->buyer(), SC::ZIPCODE => $row->postal_code(),
+                            SC::ADDRESS => $row->address(), SC::STOCK_ID => $stockId, SC::QUANTITY => $shipment,
+                            SC::SHIPPING_DATE => $row->shipping_date(), SC::SINGLE_PRICE => $item[SC::SINGLE_PRICE],
+                            SC::TOTAL_PRICE => $item[SC::TOTAL_PRICE] ];
+                ShippingLog::create($log);
+
+                $stock->quantity = $stock->quantity - $shipment;
+                $stock->update();
             }
         }
-        $stock = Stockpile::findByShiptCsv($row);
-        // 出荷ログから注文IDと氏名、在庫IDを検索。
-        // ➞あればエラー
-        $isExists = ShippingLog::isExists($row->order_id(), $row->buyer(), $stock->id);
-        if ($isExists) {
-            $this->addSkip($row->number(), '既に登録されています');
-            return;
-        }
 
-        $log = ['order_id' => $row->order_id(), SC::NAME => $row->buyer(), 'zip_code' => $row->postal_code(), 'address' => $row->address(),
-                        'stock_id' => $stock['id'], SC::QUANTITY => $row->quantity(), 'shipping_date' => $row->shipping_date(),
-                    'single_price' => $row->product_price(), 'total_price' => $row->total_price() ];
-        ShippingLog::create($log);
+        $notionCard = CardBoard::findByOrderId($row->order_id());
+        $this->updateNotion($notionCard[0], $row);
 
-        $stock->quantity = $stock->quantity - $row->quantity();
-        if ($stock->quantity < 0) {
-            $this->addError($row->number(), '在庫が足りません。');
-            return;
-        }
-
-        $stock->update();
-
-        // $notionCard = CardBoard::findByOrderId($row->order_id());
-        // if ($notionCard->isEmpty()) {
-        //     $this->addError($row->number(), '該当するNotionカードがありません');
-        //     return;
-        // }
-
-        // $this->updateNotion($notionCard[0], $row);
-        $this->addSuccess($row->number());
+        $lastLog = ShippingLog::fetchLatestLog($orderId);
+        return $lastLog;
     }
 
     /**
@@ -198,6 +190,13 @@ class ShiptLogService extends AbstractCsvService {
             }
     }
 
+    /**
+     * 注文番号に紐づいたNotionカードが存在する
+     * チェックする。
+     *
+     * @param string $orderId 注文番号
+     * @throws ShiptNotionException
+     */
     private function hasNotionCard(string $orderId) {
         $notionCard = CardBoard::findByOrderId($orderId);
         if ($notionCard->isEmpty()) {
