@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\ShiptConstant as SC;
@@ -61,7 +63,17 @@ class ShippingLog extends Model
     }
 
     public function getShippingDateAttribute($value) {
-        return Carbon::parse($value)->format("Y/m/d");
+        return Carbon::parse($value)->format(GlobalConstant::DATE_FORMAT);
+    }
+
+    /**
+     * 作成日時を'Y/m/d H:m:s'形式で返す。
+     *
+     * @param string  $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value):string {
+        return CarbonFormatUtil::format($value);
     }
 
     /**

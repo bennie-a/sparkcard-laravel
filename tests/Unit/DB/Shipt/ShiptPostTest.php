@@ -3,6 +3,7 @@
 namespace Tests\Unit\DB\Shipt;
 
 use App\Http\Controllers\ShiptLogController;
+use App\Models\ShippingLog;
 use App\Services\CardBoardService;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Response;
@@ -15,7 +16,10 @@ use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
+use Carbon\CarbonImmutable;
 use FiveamCode\LaravelNotionApi\Entities\Page;
+use Illuminate\Testing\Fluent\AssertableJson;
+use Tests\Util\TestDateUtil;
 
 /**
  * 出荷情報登録のテストクラス
@@ -41,8 +45,16 @@ class ShiptPostTest extends TestCase
         $this->setMockCardBoard([$request[SC::ORDER_ID]]);
         $response = $this->post('api/shipping', $request);
         $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJsonStructure([
-            SC::ORDER_ID, GlobalConstant::CREATE_AT]);
+
+        $response->assertJson(function (AssertableJson $json) use ($request) {
+            $json->hasAll([SC::ORDER_ID, GlobalConstant::CREATE_AT]);
+
+            $orderId = $request[SC::ORDER_ID];
+
+            $lastLog = ShippingLog::fetchLatestLog($orderId);
+            $expected = TestDateUtil::formatDateTime($lastLog->created_at);
+            $json->whereAll([SC::ORDER_ID => $orderId, GlobalConstant::CREATE_AT => $expected]);
+        });
 
         $this->assertDatabaseHas('shipping_log', [
             SC::ORDER_ID => $request[SC::ORDER_ID]]);

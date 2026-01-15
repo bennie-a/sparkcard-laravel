@@ -1,7 +1,7 @@
 <?php
 namespace App\Libs;
 
-use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\GlobalConstant as GC;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 
@@ -13,6 +13,18 @@ class CarbonFormatUtil {
     public static function toDateString(string $date):string
     {
         return Carbon::parse($date)->format("Y/m/d");
+    }
+
+    /**
+     * 日付を指定したフォーマットで変換する。
+     *
+     * @param string $date
+     * @param string $format default 'Y/m/d H:i:s'
+     * @return string
+     */
+    public static function format(string $date, string $format = GC::DATE_TIME_FORMAT):string
+    {
+        return CarbonImmutable::parse($date)->format($format);
     }
 
     /**

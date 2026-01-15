@@ -101,4 +101,8 @@ class TestDateUtil {
     public static function formatDate(CarbonImmutable $day):string {
         return $day->format(GlobalConstant::DATE_FORMAT);
     }
+
+    public static function formatDateTime(string $day):string {
+        return CarbonImmutable::parse($day)->format(GlobalConstant::DATE_TIME_FORMAT);
+    }
 }
