@@ -33,7 +33,7 @@ class CarbonFormatUtil {
      * @param string $date
      * @return string
      */
-    public static function assignTodayIfMissing(string $date):string {
+    public static function assignTodayIfMissing($date):string {
         if (empty($date)) {
             return self::today();
         }
@@ -47,6 +47,6 @@ class CarbonFormatUtil {
      */
     public static function today():string {
         $today = CarbonImmutable::today();
-        return $today->format(GlobalConstant::DATE_FORMAT);
+        return $today->format(GC::DATE_FORMAT);
     }
 }

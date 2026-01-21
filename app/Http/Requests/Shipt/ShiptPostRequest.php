@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Shipt;
 
+use App\Libs\CarbonFormatUtil;
 use App\Rules\DateFormatRule;
 use App\Rules\Halfsize;
 use App\Rules\PostalCodeRule;
@@ -20,6 +21,14 @@ class ShiptPostRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function prepareForValidation()
+    {
+        $shiptDate = $this->input(ShiptCon::SHIPPING_DATE);
+        $this->merge([
+            ShiptCon::SHIPPING_DATE => CarbonFormatUtil::assignTodayIfMissing($shiptDate),
+        ]);
     }
 
     /**

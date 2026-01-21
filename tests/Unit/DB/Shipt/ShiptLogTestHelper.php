@@ -200,4 +200,20 @@ class ShiptLogTestHelper
         return implode(',', $array);
     }
 
+    /**
+     * 指定した文字列から日付を取得する。
+     * td:今日、tmr:明日、yd:昨日、'':空文字
+     * @param string $date
+     * @return string
+     */
+    public static function getShiptDate(string $date): string {
+        $date = match($date) {
+            'td' => TestDateUtil::formatToday(),
+            'tmr' => TestDateUtil::formatTomorrow(),
+            'yd' => TestDateUtil::formatYesterday(),
+            '' => ''
+        };
+        logger()->info("Testing shipping date: {$date}");
+        return $date;
+    }
 }
