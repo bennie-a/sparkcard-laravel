@@ -44,10 +44,10 @@ class ShiptPostTest extends TestCase
     #[TestWith([1], '商品情報が1件')]
     #[TestWith([2], '商品情報が2件')]
     #[TestDox('出荷情報の登録に成功することを検証する')]
-    public function ok(int $itemCount): void
+    public function ok_post(int $itemCount): void
     {
         $request = ShiptLogTestHelper::createStoreRequest($itemCount);
-        $this->execute($request);
+        $this->ok($request);
     }
 
     #[Test]
@@ -59,7 +59,42 @@ class ShiptPostTest extends TestCase
     public function ok_shippingDate(string $date): void{
         $request = ShiptLogTestHelper::createStoreRequest();
         $request[SC::SHIPPING_DATE] = ShiptLogTestHelper::getShiptDate($date);
-        $this->execute($request);
+        $this->ok($request);
+    }
+
+    #[Test]
+    #[TestDox('出荷枚数が在庫枚数より少ないか同等なら登録に成功することを検証する')]
+    #[TestWith(['<'], '出荷枚数 < 在庫枚数')]
+    #[TestWith(['='], '出荷枚数 = 在庫枚数')]
+    public function ok_shipment(string $symbol) {
+        $request = ShiptLogTestHelper::createStoreRequest();
+        if ($symbol == '=') {
+            $item = $request[SC::ITEMS][0];
+            $stockId = $item[GC::ID];
+            $stock = Stockpile::find((int)$stockId);
+            $item[SC::SHIPMENT] = $stock->quantity;
+        }
+        $this->ok($request);
+    }
+
+    #[Test]
+    #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
+    #[TestWith([GC::ID, '9999', 'no-info'], '在庫情報が存在しない')]
+    // #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
+    // #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
+    // #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
+    public function testNgItemError(string $key, string $value, string $msg) {
+        $request = ShiptLogTestHelper::createStoreRequest(2);
+        // 2件目の商品情報を不正にする
+        $request[SC::ITEMS][1][$key] = $value;
+
+        $response = $this->post('api/shipping', $request);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        // JSONレスポンスの検証
+        $response->assertJson(function (AssertableJson $json) use ($msg) {
+            $json->hasAll(['errors']);
+            $json->where('errors.1.message', "商品情報エラー: {$msg}");
+        });
     }
 
     /**
@@ -68,7 +103,7 @@ class ShiptPostTest extends TestCase
      * @param array $request
      * @return TestResponse
      */
-    private function execute(array $request) {
+    private function ok(array $request) {
         $orderId = $request[SC::ORDER_ID];
         $this->setMockCardBoard($orderId);
 

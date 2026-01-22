@@ -82,26 +82,21 @@ class ShiptParseTest extends TestCase
     }
 
     #[TestDox('発送日が正しく設定されているか確認する')]
-    #[TestWith(['today'], '今日')]
-    #[TestWith(['tomorrow'], '明日')]
-    #[TestWith(['yesterday'], '昨日')]
+    #[TestWith(['td'], '今日')]
+    #[TestWith(['tmr'], '明日')]
+    #[TestWith(['yd'], '昨日')]
     #[TestWith([''], '未入力')]
     public function testShippingDate(string $date) {
-        $date = match($date) {
-            'today' => TestDateUtil::formatToday(),
-            'tomorrow' => TestDateUtil::formatTomorrow(),
-            'yesterday' => TestDateUtil::formatYesterday(),
-            '' => ''
-        };
-        logger()->info("Testing shipping date: {$date}");
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $date)];
+        $shiptDate =ShiptLogTestHelper::getShiptDate($date);
+        logger()->info("Testing shipping date: {$shiptDate}");
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $shiptDate)];
 
         $response = $this->uploadOk($buyerInfos);
 
-        if (empty($date)) {
-            $date = TestDateUtil::formatToday();
+        if (empty($shiptDate)) {
+            $shiptDate = TestDateUtil::formatToday();
         }
-        $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $date);
+        $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $shiptDate);
     }
 
     #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
