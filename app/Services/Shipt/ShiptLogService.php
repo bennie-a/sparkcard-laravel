@@ -118,7 +118,8 @@ class ShiptLogService extends AbstractCsvService {
                     SC::PRODUCT_PRICE => $row->product_price(),
                     SC::DISCOUNT_AMOUNT => $row->discount(),
                     SC::SINGLE_PRICE => $row->single_price(),
-                    SC::TOTAL_PRICE => $row->total_price()
+                    SC::TOTAL_PRICE => $row->total_price(),
+                    SC::IS_REGISTERED => ShippingLog::isExists($orderId, $row->buyer(), $stockId),
                 ];
             } catch (ShipmentOrderException $e) {
                 $this->addError($row->number(), $e->getMsg());

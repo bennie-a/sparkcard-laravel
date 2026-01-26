@@ -29,6 +29,7 @@ class ShiptConstant extends StockpileHeader {
     public const TOTAL_PRICE = 'total_price';
     public const BUYER_INFO = 'buyer_info';
     public const STOCK_ID = 'stock_id';
+    public const IS_REGISTERED = 'isRegistered';
 
     #[Deprecated(since: "5.1.0", reason: "DBで管理するため不要")]
     public static function shippinglog_constants() {

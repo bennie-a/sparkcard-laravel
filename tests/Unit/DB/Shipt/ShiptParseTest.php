@@ -4,6 +4,7 @@ namespace Tests\Unit\DB\Shipt;
 
 use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
+use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
 use App\Services\Constant\CardConstant as CC;
@@ -249,6 +250,29 @@ class ShiptParseTest extends TestCase
         }
     }
 
+    #[TestDox('isRegisteredフラグが正しく設定されているか確認する')]
+    #[TestWith([false], '未登録')]
+    #[TestWith([true], '登録済み')]
+    public function testIsRegistered(bool $isRegistered) {
+        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
+        if ($isRegistered) {
+            $item = $buyerInfos[0][SC::ITEMS][0];
+            ShippingLog::create([
+                SC::ORDER_ID => $buyerInfos[0][SC::ORDER_ID],
+                GC::NAME => $buyerInfos[0][SC::BUYER],
+                SC::ZIPCODE => $buyerInfos[0][SC::POSTAL_CODE],
+                SC::ADDRESS => $buyerInfos[0][SC::STATE].$buyerInfos[0][SC::CITY].$buyerInfos[0][SC::ADDRESS_1].' '.$buyerInfos[0][SC::ADDRESS_2],
+                SC::SHIPPING_DATE => $buyerInfos[0][SC::SHIPPING_DATE],
+                SC::STOCK_ID => (int)$item[GC::ID],
+                StockpileHeader::QUANTITY => (int)$item[StockpileHeader::QUANTITY],
+                SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
+                SC::TOTAL_PRICE => (int)$item[SC::PRODUCT_PRICE],
+            ]);
+        }
+        $response = $this->uploadOk($buyerInfos);
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::IS_REGISTERED, $isRegistered);
+    }
+
     /**
      * アップロードOKパターン
      *
@@ -266,7 +290,7 @@ class ShiptParseTest extends TestCase
         {$implode}
         CSV;
         $response = $this->upload($content);
-                $response->assertJsonStructure([
+        $response->assertJsonStructure([
             '*' => [
                 SC::ORDER_ID,
                 SC::BUYER,
@@ -304,6 +328,7 @@ class ShiptParseTest extends TestCase
                         SC::DISCOUNT_AMOUNT,
                         SC::TOTAL_PRICE,
                         SC::SINGLE_PRICE,
+                        SC::IS_REGISTERED
                         ]
                     ]
                 ]
