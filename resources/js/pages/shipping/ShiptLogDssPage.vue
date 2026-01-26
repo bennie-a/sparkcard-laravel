@@ -37,7 +37,7 @@ const getDetail = async () => {
 
 const copyAddress = () => {
     isCopied.value = true;
-    let copyText = `${detail.value.zipcode}\n${detail.value.address}\n${detail.value.buyer_name}様`;
+    let copyText = `${detail.value.zip_code}\n${detail.value.address}\n${detail.value.buyer_name}様`;
     navigator.clipboard.writeText(copyText);
     setTimeout(() => {
         isCopied.value = false;
