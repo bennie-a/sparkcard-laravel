@@ -49,6 +49,7 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => 'required|numeric|min:1',
             ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => 'required|numeric|min:50',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => 'required|numeric|min:1',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => 'required|boolean',
         ];
     }
 
@@ -59,5 +60,12 @@ class ShiptPostRequest extends FormRequest
         $this->merge([
             GlobalConstant::DATA => $info,
         ]);
+    }
+
+    public function attributes()
+    {
+        return [
+            ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => '登録済みフラグ',
+        ];
     }
 }

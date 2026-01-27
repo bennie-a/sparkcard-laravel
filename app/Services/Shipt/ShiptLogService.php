@@ -53,16 +53,14 @@ class ShiptLogService extends AbstractCsvService {
         if (!empty($items)) {
             foreach ($items as $item) {
                 $stockId = (int)$item[GlobalConstant::ID];
+                // DB登録済みフラグがtrueの場合はスキップ
+                if ($item[SC::IS_REGISTERED]) {
+                    logger()->warning("既に登録されています。注文ID:{$row->order_id()}, 氏名:{$row->buyer()}, 在庫ID:{$stockId}");
+                    continue;
+                }
                 $shipment = (int)$item[SC::SHIPMENT];
                 try {
                     $this->checkShipment($stockId, $shipment);
-                    // 出荷ログから注文IDと氏名、在庫IDを検索。
-                    // ➞あればエラー
-                    $isExists = ShippingLog::isExists($row->order_id(), $row->buyer(), $stockId);
-                    if ($isExists) {
-                        logger()->warning("既に登録されています。注文ID:{$row->order_id()}, 氏名:{$row->buyer()}, 在庫ID:{$stockId}");
-                        continue;
-                    }
                     $stock = Stockpile::find($stockId);
                     $log = [SC::ORDER_ID => $row->order_id(), SC::NAME => $row->buyer(), SC::ZIPCODE => $row->postal_code(),
                                 SC::ADDRESS => $row->address(), SC::STOCK_ID => $stockId, SC::QUANTITY => $shipment,

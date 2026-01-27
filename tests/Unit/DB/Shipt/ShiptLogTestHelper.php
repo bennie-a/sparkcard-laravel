@@ -48,6 +48,7 @@ class ShiptLogTestHelper
                 SC::SHIPMENT => $item[StockpileHeader::QUANTITY],
                 SC::TOTAL_PRICE =>$item[SC::PRODUCT_PRICE],
                 SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
+                SC::IS_REGISTERED => false,
             ];
         }, $buyerInfo[SC::ITEMS]);
 

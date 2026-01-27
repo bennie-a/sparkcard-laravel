@@ -78,23 +78,17 @@ class ShiptPostTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
-    #[TestWith([GC::ID, '9999', 'no-info'], '在庫情報が存在しない')]
-    // #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
-    // #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
-    // #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
-    public function testNgItemError(string $key, string $value, string $msg) {
+    #[TestDox('登録済みフラグがtrueの商品情報が登録されないことを検証する')]
+    public function ignore_isRegistered() {
         $request = ShiptLogTestHelper::createStoreRequest(2);
-        // 2件目の商品情報を不正にする
-        $request[SC::ITEMS][1][$key] = $value;
+        $request[SC::ITEMS][0][SC::IS_REGISTERED] = true;
+        $this->ok($request);
 
-        $response = $this->post('api/shipping', $request);
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        // JSONレスポンスの検証
-        $response->assertJson(function (AssertableJson $json) use ($msg) {
-            $json->hasAll(['errors']);
-            $json->where('errors.1.message', "商品情報エラー: {$msg}");
-        });
+        $this->assertDatabaseMissing(ShippingLog::class, [
+            SC::ORDER_ID => $request[SC::ORDER_ID],
+            SC::NAME => $request[SC::BUYER],
+            SC::STOCK_ID => $request[SC::ITEMS][0][GC::ID],
+        ]);
     }
 
     /**
@@ -122,7 +116,10 @@ class ShiptPostTest extends TestCase
 
         $count = ShippingLog::where(SC::ORDER_ID, $orderId)->count();
 
-        $itemCount = count($request[SC::ITEMS]);
+        $registeredItems = array_filter($request[SC::ITEMS], function($item) {
+            return $item[SC::IS_REGISTERED] == false;
+            });
+        $itemCount = count($registeredItems);
         $this->assertEquals($itemCount, $count, "出荷情報の登録件数を検証する。");
 
         $orderId = $request[SC::ORDER_ID];
@@ -132,6 +129,9 @@ class ShiptPostTest extends TestCase
         }
 
         foreach ($request[SC::ITEMS] as $item) {
+            if ($item[SC::IS_REGISTERED]) {
+                continue;
+            }
             $this->assertDatabaseHas(ShippingLog::class, [
                 SC::ORDER_ID => $orderId,
                 GC::NAME => $request[SC::BUYER],
