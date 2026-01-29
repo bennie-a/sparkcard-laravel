@@ -2,6 +2,7 @@
 namespace Tests\Unit\Request\Shipt;
 use App\Http\Requests\Shipt\ShiptPostRequest;
 use App\Http\Requests\Shipt\ShiptStoreRequest;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Http\FormRequest;
 use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
 use Tests\Unit\Request\AbstractValidationTest;
@@ -41,6 +42,21 @@ class ShiptPostRequestTest extends AbstractValidationTest {
         unset($request[$key]);
         $attribute = ShiptLogTestHelper::attribute($key);
         $this->ng_pattern($request, [$key => $attribute.'は必ず入力してください。']);
+    }
+
+    #[Test]
+    #[TestWith([GlobalConstant::ID], '在庫ID')]
+    #[TestWith([SC::SHIPMENT], '出荷枚数')]
+    #[TestWith([SC::SINGLE_PRICE], '1枚あたりの単価')]
+    #[TestWith([SC::TOTAL_PRICE], '支払い金額')]
+    #[TestWith([SC::IS_REGISTERED], '登録済みフラグ')]
+    #[TestDox('商品情報の必須項目自体が未設定の場合のエラーチェック')]
+    public function ng_item_info_key_lacked(string $key) {
+        $request = ShiptLogTestHelper::createStoreRequest(2);
+        unset($request[SC::ITEMS][1][$key]);
+        $attribute = ShiptLogTestHelper::attribute($key);
+        $item_key = SC::ITEMS .'.1.'. $key;
+        $this->ng_pattern($request, [$item_key => $attribute.'は必ず入力してください。']);
     }
 
     #[Test]

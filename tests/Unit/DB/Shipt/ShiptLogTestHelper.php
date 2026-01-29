@@ -6,7 +6,7 @@ use App\Models\Stockpile;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
-
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
 use Tests\Util\TestDateUtil;
 
@@ -236,6 +236,11 @@ class ShiptLogTestHelper
             SC::ZIPCODE => '郵便番号',
             SC::ADDRESS => '住所',
             SC::ITEMS => '商品情報',
+            GlobalConstant::ID => '在庫ID',
+            SC::SHIPMENT => '出荷枚数',
+            SC::TOTAL_PRICE => '支払い金額',
+            SC::SINGLE_PRICE => '1枚あたりの単価',
+            SC::IS_REGISTERED => '登録済みフラグ',
             default => $key,
         };
     }

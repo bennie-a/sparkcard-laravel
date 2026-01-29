@@ -44,11 +44,11 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
             ShiptCon::ZIPCODE => ['required', PostalCodeRule::rules()],
             ShiptCon::ADDRESS => 'required|string',
-            ShiptCon::ITEMS => 'required|array',
-            ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => 'required|numeric|min:1',
-            ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => 'required|numeric|min:1',
-            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => 'required|numeric|min:50',
-            ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => 'required|numeric|min:1',
+            ShiptCon::ITEMS => ['required','array', 'min:1'],
+            ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:stockpile,id'],
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => ['required','integer','min:1'],
+            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => ['required', 'integer', 'min:50'],
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => ['required', 'integer','min:1'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => 'required|boolean',
         ];
     }
@@ -68,6 +68,10 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::ADDRESS => '住所',
             ShiptCon::ZIPCODE => '郵便番号',
             ShiptCon::ITEMS => '商品情報',
+            ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => '在庫ID',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => '出荷枚数',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => '1枚あたりの単価',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => '支払い金額',
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => '登録済みフラグ',
         ];
     }
