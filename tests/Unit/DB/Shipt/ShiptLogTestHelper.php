@@ -31,6 +31,13 @@ class ShiptLogTestHelper
         return $buyerInfo;
     }
 
+    /**
+     * 出荷情報登録APIのリクエストJSONを
+     * ランダムで作成する。
+     *
+     * @param integer $itemCount
+     * @return array
+     */
     public static function createStoreRequest($itemCount = 1):array {
         $buyerInfo = self::createBuyerInfo($itemCount, TestDateUtil::formatToday());
         $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
@@ -151,7 +158,6 @@ class ShiptLogTestHelper
         return uniqid('order_');
     }
 
-
     /**
      * 注文CSV用ヘッダー行を取得する。
      *
@@ -189,7 +195,6 @@ class ShiptLogTestHelper
         return $implode;
     }
 
-
     /**
      * 配列を','区切りの文字列に変換する。
      *
@@ -216,5 +221,22 @@ class ShiptLogTestHelper
         };
         logger()->info("Testing shipping date: {$date}");
         return $date;
+    }
+
+    /**
+     * キーから属性名を取得する。
+     *
+     * @param string $key
+     * @return string
+     */
+    public static function attribute(string $key):string {
+        return match($key) {
+            SC::ORDER_ID => '注文番号',
+            SC::BUYER => '購入者名',
+            SC::ZIPCODE => '郵便番号',
+            SC::ADDRESS => '住所',
+            SC::ITEMS => '商品情報',
+            default => $key,
+        };
     }
 }

@@ -65,6 +65,9 @@ class ShiptPostRequest extends FormRequest
     public function attributes()
     {
         return [
+            ShiptCon::ADDRESS => '住所',
+            ShiptCon::ZIPCODE => '郵便番号',
+            ShiptCon::ITEMS => '商品情報',
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => '登録済みフラグ',
         ];
     }

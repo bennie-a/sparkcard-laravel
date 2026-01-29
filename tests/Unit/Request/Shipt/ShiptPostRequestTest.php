@@ -30,6 +30,20 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     }
 
     #[Test]
+    #[TestWith([SC::ORDER_ID], '注文番号')]
+    #[TestWith([SC::BUYER], '購入者名')]
+    #[TestWith([SC::ZIPCODE], '郵便番号')]
+    #[TestWith([SC::ADDRESS], '住所')]
+    #[TestWith([SC::ITEMS], '商品情報')]
+    #[TestDox('購入者情報の必須項目自体が未設定の場合のエラーチェック')]
+    public function ng_buyer_info_key_lacked(string $key) {
+        $request = ShiptLogTestHelper::createStoreRequest();
+        unset($request[$key]);
+        $attribute = ShiptLogTestHelper::attribute($key);
+        $this->ng_pattern($request, [$key => $attribute.'は必ず入力してください。']);
+    }
+
+    #[Test]
     #[TestWith(['', '必ず入力してください。'], '未入力')]
     #[TestWith(['１２３４あ', '半角英数字と記号を入力してください。'], '全角数字')]
     #[TestDox('注文番号に関するエラーチェック')]
@@ -43,4 +57,6 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     {
         return new ShiptPostRequest();
     }
+
+
 }
