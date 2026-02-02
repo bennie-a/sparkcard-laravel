@@ -183,9 +183,7 @@ class ShiptLogService extends AbstractCsvService {
     private function checkShipment(int $stockId, int $shipment) {
             $errorKey = '';
             $stock = Stockpile::find($stockId);
-            if (is_null($stock)) {
-                $errorKey = 'no-info';
-            } else if ($stock->quantity == 0) {
+            if ($stock->quantity == 0) {
                 $errorKey = 'zero_quantity';
             } else if ($shipment > $stock->quantity) {
                 $errorKey = 'excess-shipment';

@@ -24,7 +24,7 @@ class ShiptValidator extends AbstractCsvValidator {
         ShiptCon::STATE => ['required', StateRule::rules()],
         ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
         ShiptCon::ADDRESS_1 => 'required|string',
-        ShiptCon::PRODUCT_ID => 'required|numeric|min:1',
+        ShiptCon::PRODUCT_ID => 'required|numeric|min:1|exists:stockpile,id',
         ShiptCon::PRODUCT_NAME => 'required',
         Header::QUANTITY => 'required|numeric|min:1',
         ShiptCon::PRODUCT_PRICE => 'required|numeric|min:50',

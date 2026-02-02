@@ -20,6 +20,7 @@ use Illuminate\Testing\TestResponse;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
@@ -422,8 +423,26 @@ class ShiptParseTest extends TestCase
             EC::DETAIL => 'ファイルはCSV形式でアップロードしてください']);
     }
 
+    #[Test]
+    #[TestDox('商品コードが存在しない場合、行数とメッセージが返ってくるか検証する。')]
+    public function ngNoProductId() {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::ITEMS][0][GC::ID] = '9999';
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+
+        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
+        $status = CustomResponse::HTTP_CSV_VALIDATION;
+
+        $response = $this->upload($content, $status);
+        $this->assertRowError($response, $status, '商品コードが存在しません。');
+    }
+
     #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
-    #[TestWith([GC::ID, '9999', 'no-info'], '在庫情報が存在しない')]
     #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
     #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
     #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
