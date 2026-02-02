@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Services\Constant\StockpileHeader;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class StockpileFactory extends Factory
     public function definition()
     {
         return [
-        'quantity' => fake()->numberBetween(0, 10)
+        StockpileHeader::QUANTITY => fake()->numberBetween(0, 10)
         ];
     }
 }

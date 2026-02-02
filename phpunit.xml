@@ -7,6 +7,10 @@
     <testsuite name="Feature">
       <directory suffix="Test.php">./tests/Feature</directory>
     </testsuite>
+    <testsuite name="Shipt">
+      <directory suffix="Test.php">./tests/unit/DB/Shipt</directory>
+      <file>./tests/unit/Validator/ShiptValidatorTest.php</file>
+    </testsuite>
   </testsuites>
   <php>
     <env name="APP_ENV" value="testing"/>

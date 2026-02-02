@@ -4,7 +4,7 @@ namespace App\Services\Constant;
 class CardConstant {
     const CARD = 'card';
 
-    const SET = 'set';  
+    const SET = 'set';
 
     const NAME = 'name';
 
@@ -16,12 +16,16 @@ class CardConstant {
 
     const FOIL_ID = 'foiltype_id';
 
+    const NON_FOIL = 'nonfoil';
+
+    const FOIL = 'foil';
+
     const NUMBER = 'number';
 
     const COLOR = 'color';
 
     const PROMOTYPE = 'promotype';
-    
+
     const MULTIVERSEID = 'multiverseId';
 
     const SCRYFALLID = 'scryfallId';
@@ -55,4 +59,6 @@ class CardConstant {
     const PROMO_ID = 'promotype_id';
 
     const IMAGE_URL = 'image_url';
+
 }
+

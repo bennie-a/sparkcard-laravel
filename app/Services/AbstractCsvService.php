@@ -1,17 +1,12 @@
 <?php
-namespace App\Services\Stock;
+namespace App\Services;
 
-use App\Files\CsvReader;
-use App\Http\Response\CustomResponse;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use App\Services\Stock\StockpileRow;
-
-use function Symfony\Component\Mailer\Command\execute;
+use App\Services\Constant\ErrorConstant as EC;
 
 /**
- * 在庫管理機能(Stock Management Service:SMS)の抽象クラス
+ * CSVファイル読み込みに関する抽象クラス
  */
-abstract class AbstractSmsService {
+abstract class AbstractCsvService {
 
     private $success = [];
 
@@ -31,19 +26,12 @@ abstract class AbstractSmsService {
         $callback = function($row) {
             $this->store($row);
         };
-        $details = 
+        $details =
         $this->execute($records, $callback);
-        $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success), 
+        $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success),
                             'failed_rows' => count($this->error), 'failed_details' => $this->error,
                             'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
         return $result;
-    }
-
-    protected function read(string $path) {
-        logger()->info('読み込み開始', [$path]);
-        $reader = $this->csvReader();
-        $records = $reader->read($path);
-        return $records;
     }
 
     /**
@@ -80,24 +68,31 @@ abstract class AbstractSmsService {
 
     protected function addSkip(int $number, string $judge) {
         logger()->info('skip', [$number, $judge]);
-        $this->ignore[] = ["number" => $number, "reason" => $judge];
+        $this->ignore[] = ["number" => $number, "msg" => $judge];
     }
 
     protected function addError(int $number, string $judge) {
-        logger()->info('error', [$number , $judge]);
-        $this->error[] = ["number" => $number, "reason" => $judge];
+        logger()->error('error', [$number , $judge]);
+        $this->error[] = [EC::ROW => $number, EC::MSG => $judge];
     }
 
-    protected abstract function store($row);
+    public function getError() {
+        return $this->error;
+    }
 
     /**
-     * 機能に応じたCsvReaderクラスを呼び出す。
-     * @return CsvReader
+     * ファイル内容にエラーが発生するか検証する。
+     *
+     * @return bool true:エラーあり、false:エラーなし
      */
-    protected abstract function csvReader();
+    public function hasError():bool {
+        return !empty($this->error);
+    }
+
+    public abstract function store($row);
 
     /**
-     * CSVファイル1行分のオブジェクトを作成する。 
+     * CSVファイル1行分のオブジェクトを作成する。
      *
      * @param integer $index
      * @param array $row

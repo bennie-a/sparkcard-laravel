@@ -2,7 +2,10 @@
 use App\Services\Constant\SearchConstant as Scon;
 use App\Services\Constant\ArrivalConstant as Acon;
 use App\Services\Constant\CardConstant as CCon;
+use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
+use App\Services\Constant\ErrorConstant as EC;
 
 return [
 
@@ -39,7 +42,7 @@ return [
     'current_password' => 'The password is incorrect.',
     'date' => ':attributeが日付形式ではありません。',
     'date_equals' => 'The :attribute must be a date equal to :date.',
-    'date_format' => 'The :attribute does not match the format :format.',
+    'date_format' => ':attributeは:format形式の日付で入力してください。',
     'declined' => 'The :attribute must be declined.',
     'declined_if' => 'The :attribute must be declined when :other is :value.',
     'different' => 'The :attribute and :other must be different.',
@@ -52,7 +55,7 @@ return [
     'email' => 'The :attribute must be a valid email address.',
     'ends_with' => 'The :attribute must end with one of the following: :values.',
     'enum' => 'The selected :attribute is invalid.',
-    'exists' => 'The selected :attribute is invalid.',
+    'exists' => ':attributeが存在しません。',
     'file' => 'The :attribute must be a file.',
     'filled' => 'The :attribute field must have a value.',
     'gt' => [
@@ -95,7 +98,7 @@ return [
         'string' => 'The :attribute must not be greater than :max characters.',
     ],
     'max_digits' => 'The :attribute must not have more than :max digits.',
-    'mimes' => 'The :attribute must be a file of type: :values.',
+    'mimes' => ':attributeは:values形式のファイルを指定してください',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
         'array' => 'The :attribute must have at least :min items.',
@@ -166,6 +169,24 @@ return [
             'prohibited_unless_vendor_type_id_3' => '取引先カテゴリIDが「買取」以外の時は取引先は入力しないでください。',
         ],
     ],
+    GlobalConstant::FILE => [
+        'title' => [
+            'empty-content' => '空データ',
+            'lack-of-header' => 'ヘッダー不足',
+            'no-header' => 'ヘッダーなし',
+        ],
+        'detail' => [
+            'empty-content' => 'ファイルにデータがありません。',
+            'lack-of-header' => 'ヘッダーが足りません: :values',
+            'no-header' => 'CSVファイルにヘッダーがありません。',
+        ],
+    ],
+    SC::ITEMS => [
+        'no-info' => [EC::TITLE => '在庫情報なし', EC::DETAIL => '該当する在庫情報がありません'],
+        'no-notion' => [EC::TITLE => 'Notionカードなし', EC::DETAIL => '注文番号に該当するNotionカードがありません'],
+        'zero_quantity' => [EC::TITLE => '在庫枚数なし', EC::DETAIL => '在庫枚数がありません'],
+        'excess-shipment' => [EC::TITLE => '在庫枚数不足', EC::DETAIL => '出荷枚数が在庫枚数がより多いです']
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -187,11 +208,20 @@ return [
         StockpileHeader::COST => '原価',
         Acon::VENDOR => '取引先名',
         CCon::NUMBER => 'カード番号',
-        Ccon::PROMO_ID => 'プロモタイプID'
+        Ccon::PROMO_ID => 'プロモタイプID',
+        SC::BUYER => '購入者名',
+        StockpileHeader::CONDITION => '状態',
+        StockpileHeader::QUANTITY => '枚数',
+        GlobalConstant::FILE => 'ファイル',
+        SC::POSTAL_CODE => '郵便番号',
+        SC::ORDER_ID => '注文番号',
+        SC::STATE => '都道府県名',
+        SC::CITY => '市区町村名',
+        SC::ADDRESS_1 => 'その他住所1',
     ],
 
     'values' => [
-        'shipping_date' => [
+        SC::SHIPPING_DATE => [
             'today' => '今日'
         ],
         Acon::ARRIVAL_DATE => [

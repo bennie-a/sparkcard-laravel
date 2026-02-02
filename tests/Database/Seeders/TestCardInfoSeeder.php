@@ -30,20 +30,20 @@ class TestCardInfoSeeder extends Seeder
         
         CardInfo::factory()->createOne([CCon::EXP_ID => $bro, 'name' => 'ドラゴンの運命',
         CCon::EN_NAME => 'Draconic Destiny', 'color_id' => 'R', CCon::NUMBER => '130',
-        CCon::IS_FOIL => false, 'image_url' => '', 'barcode' => 'xxxxxxxx', 'foiltype_id' => $nonfoil->id]);
+        CCon::IS_FOIL => false, 'barcode' => 'xxxxxxxx', 'foiltype_id' => $nonfoil->id]);
         CardInfo::factory()->createOne([CCon::EXP_ID => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
         CCon::EN_NAME => 'Phyrexian Dragon Engine', 'color_id' => 'R', CCon::NUMBER => '163',
-        CCon::IS_FOIL => false, 'image_url' => '', 'barcode' => 'xxxxxxxy', 'foiltype_id' => $nonfoil->id]);
+        CCon::IS_FOIL => false, 'barcode' => 'xxxxxxxy', 'foiltype_id' => $nonfoil->id]);
         CardInfo::factory()->createOne([CCon::EXP_ID => $bro, 'name' => 'ファイレクシアのドラゴン・エンジン',
         CCon::EN_NAME => 'Phyrexian Dragon Engine', 'color_id' => 'R', CCon::NUMBER => '163',
-        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id]);
+        CCon::IS_FOIL => true, 'foiltype_id' => $foil->id]);
 
         // 灯争大戦
         $war = $this->findNotionId('WAR');
         $jpwalker= $this->getPromoId('jpwalker');
         CardInfo::factory()->createOne([CCon::EXP_ID => $war, 'name' => '群れの声、アーリン',
         CCon::EN_NAME => 'Arlinn, Voice of the Pack', 'color_id' => 'G', CCon::NUMBER => '150',
-        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id, CCon::PROMO_ID => $jpwalker]);
+        CCon::IS_FOIL => true, 'image_url' => fake()->url(), 'foiltype_id' => $foil->id, CCon::PROMO_ID => $jpwalker]);
 
          // 神河：輝ける世界
          $neo = $this->findNotionId('NEO');
@@ -57,7 +57,7 @@ class TestCardInfoSeeder extends Seeder
         $showcase = $this->getPromoId('showcase');
         CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '告別',
         CCon::EN_NAME => 'Farewell', 'color_id' => 'W', CCon::NUMBER => '365',
-        CCon::IS_FOIL => true, 'image_url' => '', 'foiltype_id' => $foil->id, Ccon::PROMO_ID => $showcase]);
+        CCon::IS_FOIL => true, 'image_url' => fake()->url(), 'foiltype_id' => $foil->id, Ccon::PROMO_ID => $showcase]);
 
         // ファイレクシア：完全なる統一
         $one = $this->findNotionId('ONE');
@@ -86,6 +86,11 @@ class TestCardInfoSeeder extends Seeder
         CardInfo::factory()->createOne([CCon::EXP_ID => $xln, 'name' => '在庫情報なし',
         CCon::EN_NAME => 'No Info', 'color_id' => 'W', CCon::NUMBER => '1',
         CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id]);
+
+        CardInfo::factory()->createOne([CCon::EXP_ID => $one, 'name' => '機械の母、エリシュ・ノーン',
+        CCon::EN_NAME => 'Elesh Norn, Mother of Machines', 'color_id' => 'W', CCon::NUMBER => '298',
+        CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id, Ccon::PROMO_ID => $oilslick]);
+
     }
         
     protected function findNotionId(string $attr) : string {
