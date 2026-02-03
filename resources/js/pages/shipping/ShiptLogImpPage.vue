@@ -16,8 +16,10 @@
     const pglistRef = ref();
     const currentList = reactive([]);
 
+    const error = reactive([]);
+
     const upload = function() {
-        
+
     };
 
     const current = (data) => {
@@ -25,6 +27,7 @@
     }
 
     const uploadFile = async(file) => {
+        error.value = [];
         isLoading.value = true;
         const formData = new FormData();
         formData.append('file', file);
@@ -37,8 +40,9 @@
                 result.value = response.data;
                 resultCount.value = result.value.length;
                 console.log(result.value);
-            }).catch((error) => {
-                console.error('Error:', error);
+            }).catch((e) => {
+                error.value = e.response.data;
+                console.log('Error:', error.value);
             }).finally(() => {
                 isLoading.value = false;
             });
@@ -47,6 +51,14 @@
 </script>
 
 <template>
+    <div class="ui negative message" v-if="error.value">
+        <div class="header">{{ error.value.detail }}</div>
+        <ul class="list">
+            <li v-for="row in error.value.rows" :key="row.row">
+                {{ row.row }}行目：{{ row.msg }}
+            </li>
+        </ul>
+    </div>
     <div id="upload_form" class="ui form grid segment">
         <div class="seven wide column">
             <FileUpload type="csv" @action="uploadFile"/>
@@ -100,7 +112,7 @@
          :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
 
-</template>    
+</template>
 
 <style scoped>
 #upload_form {
