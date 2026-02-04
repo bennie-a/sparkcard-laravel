@@ -17,7 +17,7 @@
     const currentList = reactive([]);
 
     const error = reactive([]);
-
+    const hasError = ref(false);
     const upload = function() {
 
     };
@@ -27,6 +27,7 @@
     }
 
     const uploadFile = async(file) => {
+        hasError.value = false;
         error.value = [];
         isLoading.value = true;
         const formData = new FormData();
@@ -41,6 +42,7 @@
                 resultCount.value = result.value.length;
                 console.log(result.value);
             }).catch((e) => {
+                hasError.value = true;
                 error.value = e.response.data;
                 console.log('Error:', error.value);
             }).finally(() => {
@@ -51,7 +53,7 @@
 </script>
 
 <template>
-    <div class="ui negative message" v-if="error.value">
+    <div class="ui negative message" v-if="hasError">
         <div class="header">{{ error.value.detail }}</div>
         <ul class="list">
             <li v-for="row in error.value.rows" :key="row.row">

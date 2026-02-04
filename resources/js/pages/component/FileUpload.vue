@@ -1,15 +1,17 @@
 <template>
-  <input
-    id="embedpollfileinput"
-    type="file"
-    class="inputfile"
-    @change="onFileChange"
-  />
-  <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
-    <i class="file icon"></i>
-    選択する
-  </label>
-  <label class="ml-2">{{filename}}</label>
+    <div :key="filekey">
+        <input
+          id="embedpollfileinput"
+          type="file"
+          class="inputfile"
+          @change="onFileChange"
+        />
+        <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
+          <i class="file icon"></i>
+          選択する
+        </label>
+        <label class="ml-2">{{filename}}</label>
+    </div>
 </template>
 
 <style scoped>
@@ -28,6 +30,7 @@ import { useStore } from "vuex"
 import { defineProps, defineEmits, ref } from "vue"
 
 const store = useStore()
+const filekey = ref(0);
 
 const props = defineProps({
   type: { type: String, default: "csv" },
@@ -39,7 +42,7 @@ const filename = ref("ファイルを選択してください");
 // ファイルアップロードイベント
 const onFileChange = (e) => {
   store.dispatch("message/clear")
-
+  filekey.value = Date.now();
   const file = e.target.files[0]
   if (!file) return
   filename.value = file.name;
