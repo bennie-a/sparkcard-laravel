@@ -8,6 +8,7 @@
     import axios from 'axios';
     import condition from "../component/tag/ConditionTag.vue";
     import pglist from "../component/PgList.vue";
+    import cardlayout from "../component/CardLayout.vue";
 
     const router = useRouter();
     const result = reactive([]);
@@ -82,7 +83,7 @@
                {{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
             </div>
             <address id="buyer" class="ui secondary segment">
-                <p>〒{{ r.zipcode }}</p>
+                <p>〒{{ r.zip_code }}</p>
                 <p>{{ r.address }}</p>
                 <p class="name">{{ r.buyer_name }}様</p>
             </address>
@@ -91,20 +92,25 @@
                     <tr>
                         <th class="one wide center aligned">在庫ID</th>
                         <th>カード情報</th>
-                        <th class="one wide center aligned">状態</th>
-                        <th class="one wide center aligned">枚数</th>
+                        <th class="two wide center aligned">枚数</th>
+                        <th class="two wide center aligned">状態</th>
                         <th class="two wide center aligned">単価</th>
                         <th class="two wide center aligned">小計</th>
+                        <th class="one wide center aligned">登録済み</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, idx) in r.items" :key="idx">
-                        <td class="one wide center aligned">{{ item.id }}</td>
-                        <td>{{ item.card.name }}</td>
-                        <td class="one wide center aligned"><condition :name="item.condition"/></td>
-                        <td class="center aligned">{{ item.quantity }}枚</td>
-                        <td class="two wide center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
-                        <td class="two wide center aligned"><i class="bi bi-currency-yen"></i>{{ item.subtotal_price }}</td>
+                        <td class="one wide center aligned">{{ item.stock.id }}</td>
+                        <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
+                        <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
+                        <td class="center aligned">{{ item.shipment }}枚</td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
+                        <td class="two wide center aligned">
+                            <i class="check circle green big icon" v-if="item.isRegistered"></i>
+                            <i class="close icon" v-if="!item.isRegistered"></i>
+                        </td>
                     </tr>
                 </tbody>
             </table>
