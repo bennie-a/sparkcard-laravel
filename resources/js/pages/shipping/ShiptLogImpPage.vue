@@ -9,6 +9,7 @@
     import condition from "../component/tag/ConditionTag.vue";
     import pglist from "../component/PgList.vue";
     import cardlayout from "../component/CardLayout.vue";
+import { has } from 'lodash';
 
     const router = useRouter();
     const result = reactive([]);
@@ -19,6 +20,7 @@
 
     const error = reactive([]);
     const hasError = ref(false);
+    const hasResult = ref(false);
     const upload = function() {
 
     };
@@ -30,6 +32,7 @@
     const uploadFile = async(file) => {
         hasError.value = false;
         error.value = [];
+        hasResult.value = false;
         isLoading.value = true;
         const formData = new FormData();
         formData.append('file', file);
@@ -41,6 +44,7 @@
             }).then((response) => {
                 result.value = response.data;
                 resultCount.value = result.value.length;
+                hasResult.value = true;
                 console.log(result.value);
             }).catch((e) => {
                 hasError.value = true;
@@ -69,11 +73,11 @@
     </div>
     <div class="mt-3 ui grid">
         <div class="row">
-            <div class="four wide left floated column">
-                <button class="ui teal button" @click="router.back()">インポート</button>
-            </div>
-            <div class="seven wide right floated column ui right aligned">
+            <div class="seven wide left floated column">
                 <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+            </div>
+            <div class="four wide right floated column ui right aligned" v-if="hasResult">
+                <button class="ui teal button" @click="router.back()">インポート</button>
             </div>
         </div>
     </div>
@@ -92,8 +96,8 @@
                     <tr>
                         <th class="one wide center aligned">在庫ID</th>
                         <th>カード情報</th>
-                        <th class="two wide center aligned">枚数</th>
                         <th class="two wide center aligned">状態</th>
+                        <th class="two wide center aligned">枚数</th>
                         <th class="two wide center aligned">単価</th>
                         <th class="two wide center aligned">小計</th>
                         <th class="one wide center aligned">登録済み</th>
