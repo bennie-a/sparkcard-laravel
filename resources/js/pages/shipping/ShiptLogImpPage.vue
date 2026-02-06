@@ -10,6 +10,7 @@
     import pglist from "../component/PgList.vue";
     import cardlayout from "../component/CardLayout.vue";
 import { has } from 'lodash';
+import ModalButton from '../component/ModalButton.vue';
 
     const router = useRouter();
     const result = reactive([]);
@@ -21,9 +22,29 @@ import { has } from 'lodash';
     const error = reactive([]);
     const hasError = ref(false);
     const hasResult = ref(false);
-    const upload = function() {
-
-    };
+    const post = async function() {
+        isLoading.value = true;
+        await Promise.all(result.value.map(async (r) => {
+            const json = r;
+            json.items = json.items.map((item) => {
+                return {
+                    id: item.stock.id,
+                    shipment: item.shipment,
+                    single_price: item.single_price,
+                    total_price: item.total_price,
+                    isRegistered: item.isRegistered
+                };
+            });
+            await axios.post('/api/shipping', json)
+                .then((response) => {
+                    console.log('Imported:', response.data);
+                }).catch((e) => {
+                    console.log('Import Error:', e.response.data);
+                }).finally(() => {
+                    isLoading.value = false;
+                });
+        }));
+};
 
     const current = (data) => {
         currentList.value = data.response;
@@ -34,6 +55,7 @@ import { has } from 'lodash';
         error.value = [];
         hasResult.value = false;
         isLoading.value = true;
+        result.value = [];
         const formData = new FormData();
         formData.append('file', file);
 
@@ -71,13 +93,13 @@ import { has } from 'lodash';
             <FileUpload type="csv" @action="uploadFile"/>
         </div>
     </div>
-    <div class="mt-3 ui grid">
+    <div class="mt-1 ui grid">
         <div class="row">
-            <div class="seven wide left floated column">
-                <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+            <div class="three wide left floated column"  v-if="hasResult">
+                <ModalButton  @action="post()">インポート</ModalButton>
             </div>
-            <div class="four wide right floated column ui right aligned" v-if="hasResult">
-                <button class="ui teal button" @click="router.back()">インポート</button>
+            <div class="seven wide right floated column ui right aligned">
+                <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
             </div>
         </div>
     </div>
