@@ -1,16 +1,16 @@
 <script setup>
 
-    import { reactive, ref } from 'vue';
+    import { onMounted, reactive, ref } from 'vue';
     import { useRouter } from 'vue-router';
     import FileUpload from "../component/FileUpload.vue";
-    import pagination from "../component/ListPagination.vue";
     import Loading from "vue-loading-overlay";
     import axios from 'axios';
     import condition from "../component/tag/ConditionTag.vue";
     import pglist from "../component/PgList.vue";
     import cardlayout from "../component/CardLayout.vue";
-import { has } from 'lodash';
-import ModalButton from '../component/ModalButton.vue';
+    import ModalButton from '../component/ModalButton.vue';
+    import PiniaMsgForm from '../component/PiniaMsgForm.vue';
+    import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 
     const router = useRouter();
     const result = reactive([]);
@@ -22,8 +22,16 @@ import ModalButton from '../component/ModalButton.vue';
     const error = reactive([]);
     const hasError = ref(false);
     const hasResult = ref(false);
+    const piniaMsg = piniaMsgStore();
+
+    onMounted(() => {
+        piniaMsg.reset();
+    });
+
     const post = async function() {
         isLoading.value = true;
+        piniaMsg.reset();
+
         await Promise.all(result.value.map(async (r) => {
             const json = r;
             json.items = json.items.map((item) => {
@@ -41,9 +49,10 @@ import ModalButton from '../component/ModalButton.vue';
                 }).catch((e) => {
                     console.log('Import Error:', e.response.data);
                 }).finally(() => {
-                    isLoading.value = false;
                 });
-        }));
+            }));
+            isLoading.value = false;
+            piniaMsg.setMessage('success', 'インポートしました。');
 };
 
     const current = (data) => {
@@ -56,6 +65,7 @@ import ModalButton from '../component/ModalButton.vue';
         hasResult.value = false;
         isLoading.value = true;
         result.value = [];
+        piniaMsg.reset();
         const formData = new FormData();
         formData.append('file', file);
 
@@ -80,6 +90,7 @@ import ModalButton from '../component/ModalButton.vue';
 </script>
 
 <template>
+    <PiniaMsgForm></PiniaMsgForm>
     <div class="ui negative message" v-if="hasError">
         <div class="header">{{ error.value.detail }}</div>
         <ul class="list">
@@ -118,11 +129,11 @@ import ModalButton from '../component/ModalButton.vue';
                     <tr>
                         <th class="one wide center aligned">在庫ID</th>
                         <th>カード情報</th>
-                        <th class="two wide center aligned">状態</th>
-                        <th class="two wide center aligned">枚数</th>
+                        <th class="one wide center aligned">状態</th>
+                        <th class="one wide center aligned">枚数</th>
+                        <th class="two wide center aligned">クーポン</th>
                         <th class="two wide center aligned">単価</th>
                         <th class="two wide center aligned">小計</th>
-                        <th class="one wide center aligned">登録済み</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,12 +142,9 @@ import ModalButton from '../component/ModalButton.vue';
                         <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
+                        <td class="center aligned">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
-                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
-                        <td class="two wide center aligned">
-                            <i class="check circle green big icon" v-if="item.isRegistered"></i>
-                            <i class="close icon" v-if="!item.isRegistered"></i>
-                        </td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
                     </tr>
                 </tbody>
             </table>
