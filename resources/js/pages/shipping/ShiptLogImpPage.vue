@@ -28,32 +28,42 @@
         piniaMsg.reset();
     });
 
+    /**
+     * インポート実行
+     */
     const post = async function() {
         isLoading.value = true;
         piniaMsg.reset();
-
         await Promise.all(result.value.map(async (r) => {
-            const json = r;
-            json.items = json.items.map((item) => {
+            const json =
+                {
+                    order_id: r.order_id,
+                    shipping_date: r.shipping_date,
+                    buyer_name: r.buyer_name,
+                    zip_code: r.zip_code,
+                    address: r.address,
+                    items: []
+                };
+            json.items = r.items.map((i) => {
                 return {
-                    id: item.stock.id,
-                    shipment: item.shipment,
-                    single_price: item.single_price,
-                    total_price: item.total_price,
-                    isRegistered: item.isRegistered
+                    id: i.stock.id,
+                    shipment: i.shipment,
+                    single_price: i.single_price,
+                    total_price: i.total_price,
+                    isRegistered: i.isRegistered
                 };
             });
+
             await axios.post('/api/shipping', json)
                 .then((response) => {
                     console.log('Imported:', response.data);
                 }).catch((e) => {
                     console.log('Import Error:', e.response.data);
-                }).finally(() => {
                 });
             }));
-            isLoading.value = false;
-            piniaMsg.setMessage('success', 'インポートしました。');
-};
+        isLoading.value = false;
+        piniaMsg.setSuccess('インポートしました。');
+    };
 
     const current = (data) => {
         currentList.value = data.response;
@@ -77,7 +87,6 @@
                 result.value = response.data;
                 resultCount.value = result.value.length;
                 hasResult.value = true;
-                console.log(result.value);
             }).catch((e) => {
                 hasError.value = true;
                 error.value = e.response.data;
@@ -128,12 +137,13 @@
                 <thead>
                     <tr>
                         <th class="one wide center aligned">在庫ID</th>
-                        <th>カード情報</th>
-                        <th class="one wide center aligned">状態</th>
-                        <th class="one wide center aligned">枚数</th>
-                        <th class="two wide center aligned">クーポン</th>
-                        <th class="two wide center aligned">単価</th>
-                        <th class="two wide center aligned">小計</th>
+                        <th class="seven wide">カード情報</th>
+                        <th class="center aligned">状態</th>
+                        <th class="center aligned">枚数</th>
+                        <th class="center aligned">価格</th>
+                        <th class="center aligned">クーポン</th>
+                        <th class="center aligned">単価</th>
+                        <th class="center aligned">小計</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,6 +152,7 @@
                         <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
                         <td class="center aligned">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
