@@ -2,6 +2,7 @@
 namespace App\Http\Validator;
 
 use Illuminate\Support\Facades\Validator;
+use App\Services\Constant\ErrorConstant as EC;
 
 /**
  * CSV用のバリデーションクラス
@@ -19,10 +20,11 @@ abstract class AbstractCsvValidator {
         $attributes = $this->attributes();
 
         $errors = [];
+        $messages = array_merge($this->messages(), __('validation'));
         foreach($records as $key => $value) {
-            $validator = Validator::make($value, $rules, __('validation'), $attributes);
+            $validator = Validator::make($value, $rules, $messages, $attributes);
             if ($validator->fails()) {
-                $errors[] = [$key + 2 => $validator->errors()->all()];
+                $errors[] = [EC::ROW => $key + 2, EC::MSG  => $validator->errors()->first()];
             }
         }
         return $errors;
@@ -40,5 +42,12 @@ abstract class AbstractCsvValidator {
      */
     abstract protected function attributes():array;
 
-
+    /**
+     * 各機能固有のメッセージを取得する。
+     *
+     * @return array
+     */
+    public function messages():array {
+        return [];
+    }
 }

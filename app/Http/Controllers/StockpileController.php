@@ -21,7 +21,6 @@ class StockpileController extends Controller
         ini_set("max_input_time",300); // パース時間を300秒にセット
         $this->service = $service;
     }
-    use ImportCsv;
 
     /**
      * 在庫情報を検索する。

@@ -24,9 +24,8 @@
                 <option value="Land">土地</option>
             </select>
         </div>
-        <div class="seven wide column">
+        <div class="eight wide column">
             <file-upload @action="upload" type="json"></file-upload>
-            {{ filename }}
         </div>
     </article>
     <article class="mt-1" v-if="getCards.length != 0">
@@ -252,7 +251,7 @@ export default {
                     }
                     if (card.name != "") {
                         const success = function (response, store) {};
-                        card["isSkip"] = this.isSkip;
+                        card["is_skip"] = this.isSkip;
                         await task.post("/database/card", card, success);
                     }
                 })

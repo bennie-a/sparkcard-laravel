@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use App\Http\Response\CustomResponse;
-use Exception;
+use App\Services\Constant\ErrorConstant as EC;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -11,7 +12,6 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-use function Symfony\Component\HttpKernel\DataCollector\getMessage;
 
 class Handler extends ExceptionHandler
 {
@@ -53,7 +53,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): JsonResponse {
         $statusCode = match (true) {
-            $e instanceof CsvFormatException => CustomResponse::HTTP_CSV_VALIDATION,
             $e instanceof ValidationException => Response::HTTP_BAD_REQUEST,
             $e instanceof HttpException => $e->getStatusCode(),
             $e instanceof ApiExceptionInterface => $e->getStatusCode(),
@@ -62,10 +61,7 @@ class Handler extends ExceptionHandler
 
         $title = "";
         $detail = "";
-        if ($e instanceof CsvFormatException) {
-            $title = 'CSV Validation Error';
-            $detail = $e->getMessage();
-        } else if ($e instanceof ApiExceptionInterface) {
+        if ($e instanceof ApiExceptionInterface) {
             $title = $e->getTitle();
             $detail = $e->getDetail();
         } else if ($statusCode === Response::HTTP_BAD_REQUEST) {
@@ -74,11 +70,14 @@ class Handler extends ExceptionHandler
         }
 
         $json =[
-                'title' => $title,
-                'status' => $statusCode,
-                'detail' => $detail,
-                'request' => $request->path()
+                EC::TITLE => $title,
+                GlobalConstant::STATUS => $statusCode,
+                EC::DETAIL => $detail,
+                EC::REQUEST => $request->path()
             ];
+        if($e instanceof ApiException && $e->hasRows()) {
+            $json[EC::ROWS] = $e->getRows();
+        }
         logger()->info('エラー：', $json);
         return response()->json($json, $statusCode,  [
             'Content-Type' => 'application/problem+json',
@@ -111,9 +110,6 @@ class Handler extends ExceptionHandler
                         $title = 'Not Found';
                     case Response::HTTP_CONFLICT:
                         $title = 'Conflict';
-                    break;
-                    case CustomResponse::HTTP_NO_PROMOTYPE:
-                        $title = 'No Promotype';
                     break;
                     case CustomResponse::HTTP_NOT_FOUND_EXPANSION:
                         $title = 'Not Found Expansion';

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Libs\CarbonFormatUtil;
 use App\Libs\MtgJsonUtil;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\ShiptConstant as SC;
 use Carbon\Carbon;
 
 /**
@@ -30,7 +32,7 @@ class ShippingLog extends Model
                                     "slog.name as buyer_name", 'slog.zip_code as zip',
                                      'slog.address as address', 'slog.shipping_date as shipping_date',
                                     'slog.single_price', 'slog.total_price', 's.id as stock_id', 'c.name as cardname', 'e.name as setname','e.attr as exp_attr',
-                                     'c.image_url as image_url', 'c.number', 's.language as lang', 's.condition as condition', 
+                                     'c.image_url as image_url', 'c.number', 's.language as lang', 's.condition as condition',
                                      'c.isFoil as isFoil', 'f.name as foilname', 'c.promotype_id', 'p.name as promo_name'];
         $query = self::from("shipping_log as slog")->select($columns);
         return $query->join("stockpile as s", "s.id","=", "slog.stock_id")
@@ -42,10 +44,10 @@ class ShippingLog extends Model
     }
 
     public static function fetch($details) {
-        $buyer = $details[Header::BUYER];
+        $buyer = $details[SC::BUYER];
         $shiptDate = null;
-        if (MtgJsonUtil::hasKey(Header::SHIPPING_DATE, $details)) {
-            $shiptDate = $details[Header::SHIPPING_DATE];
+        if (MtgJsonUtil::hasKey(SC::SHIPPING_DATE, $details)) {
+            $shiptDate = $details[SC::SHIPPING_DATE];
         }
         $query = ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
         selectRaw('count(order_id) as item_count, sum(total_price) as total_price');
@@ -54,14 +56,24 @@ class ShippingLog extends Model
             $query = $query->where('name', 'LIKE', $pat);
         }
         if ($shiptDate != null) {
-            $query = $query->whereDate(Header::SHIPPING_DATE, $shiptDate);
+            $query = $query->whereDate(SC::SHIPPING_DATE, $shiptDate);
         }
         return $query->orderBy('shipping_date', 'desc')
             ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->get();
     }
 
     public function getShippingDateAttribute($value) {
-        return Carbon::parse($value)->format("Y/m/d");
+        return Carbon::parse($value)->format(GlobalConstant::DATE_FORMAT);
+    }
+
+    /**
+     * 作成日時を'Y/m/d H:m:s'形式で返す。
+     *
+     * @param string  $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value):string {
+        return CarbonFormatUtil::format($value);
     }
 
     /**
@@ -82,6 +94,17 @@ class ShippingLog extends Model
     }
 
     public static function isExistsByStockId(int $stockId):bool {
-        return ShippingLog::where("stock_id", "=", $stockId)->exists();
+        return ShippingLog::where(SC::STOCK_ID, "=", $stockId)->exists();
+    }
+
+    /**
+     * 注文IDと合致し、かつ最後に登録した出荷情報を取得する。
+     *
+     * @param string $orderId 注文ID
+     * @return ShippingLog
+     */
+    public static function fetchLatestLog(string $orderId):ShippingLog {
+        return ShippingLog::where(SC::ORDER_ID, $orderId)->latest()->first();
     }
 }
+

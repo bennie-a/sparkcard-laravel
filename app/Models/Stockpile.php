@@ -9,6 +9,8 @@ use App\Services\Constant\SearchConstant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\StockpileHeader as Header;
+use App\Services\Constant\StockpileHeader;
+use App\Services\Shipt\ShiptRow;
 use App\Services\Stock\ShippingRow;
 use Carbon\Carbon;
 
@@ -24,27 +26,7 @@ class Stockpile extends Model
     protected $fillable = ['id', 'card_id', 'language',  'condition', 'quantity', 'updated_at'];
 
     public function cardinfo() {
-        return $this->belongsTo('App\Models\CardInfo');
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param integer $card_id
-     * @param string $setcode
-     * @param string $condition
-     * @param string $language
-     * @param boolean $isFoil
-     * @return Stockpile|null
-     * @deprecated version 4.11.0
-     */
-    public static function find(int  $card_id, string $setcode, string $condition, string $language, bool $isFoil)  {
-        $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
-        $query = self::select($columns)->from('stockpile as s');
-        $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')->join('expansion as e', 'c.exp_id', '=', 'e.notion_id');
-        $stock = $query->where(['c.id' => $card_id, 'c.isFoil' => $isFoil,
-                                             's.condition' => $condition, 's.language' => $language, 'e.attr' => $setcode])->first();
-        return $stock;
+        return $this->belongsTo(CardInfo::class, StockpileHeader::CARD_ID, GlobalConstant::ID);
     }
 
     /**
@@ -52,8 +34,9 @@ class Stockpile extends Model
      *
      * @param ShippingRow $row
      * @return Stockpile|null
+     * @deprecated 5.1.0
      */
-    public static function findByShiptCsv(ShippingRow $row): Stockpile|null {
+    public static function findByShiptCsv(ShiptRow $row): Stockpile|null {
         $columns = ['s.id', 'c.name as cardname', 's.card_id as card_id', 's.condition', 's.quantity', 'c.isFoil as isFoil', 's.language'];
         $query = self::select($columns)->from('stockpile as s');
         $query = $query->join('card_info as c', 's.card_id',  '=', 'c.id')
@@ -92,7 +75,7 @@ class Stockpile extends Model
      * @return array
      */
     public static function fetch(array $details) {
-        $columns = ['s.id as stock_id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.name as name', 
+        $columns = ['s.id as stock_id', 'e.name as exp_name', 'e.attr as exp_attr', 'c.id', 'c.name as name',
                                 'c.color_id', 's.language', 's.condition', 's.quantity',
                                 'c.image_url', 'c.number', 'c.isFoil as isFoil', 'f.name as foiltype',
                                 'c.promotype_id', 'p.name as promo_name', 's.updated_at as updated_at'];
@@ -139,5 +122,19 @@ class Stockpile extends Model
     public static function findById(int $id): ?Stockpile
     {
         return self::where(GlobalConstant::ID, $id)->first();
+    }
+
+    public static function productName(int $stockId): string
+    {
+        $stock = self::find($stockId);
+        if (empty($stock)) {
+            return '';
+        }
+        $card = $stock->cardinfo;
+        if (empty($card)) {
+            return '';
+        }
+        return $card->name;
+
     }
 }

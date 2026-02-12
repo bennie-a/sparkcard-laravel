@@ -23,4 +23,14 @@ class ApiException extends Exception implements ApiExceptionInterface
     {
         return 'Unexpected error occurred.';
     }
+
+    public function getRows(): array
+    {
+        return [];
+    }
+
+    public function hasRows(): bool
+    {
+        return !empty($this->getRows());
+    }
 }

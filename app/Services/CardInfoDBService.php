@@ -95,7 +95,7 @@ class CardInfoDBService {
                     Con::PROMO_ID => $details[Con::PROMO_ID]
                 ];
                 $record = CardInfo::create($record);
-            } else if (!is_null($url) && boolval($details['isSkip']) !== true) {
+            } else if (!is_null($url) && boolval($details['is_skip']) !== true) {
                 logger()->info('update card:', $log);
                 $info->image_url = $url;
                 $info->name = $name;
@@ -108,7 +108,7 @@ class CardInfoDBService {
         };
     }
 
-    
+
     /**
      * Scryfallからカード情報を取得して、DBに登録する。
      *
@@ -128,7 +128,7 @@ class CardInfoDBService {
 
     /**
      * ランダム16桁のバーコードを取得する。
-     * @return string 生成した16桁のバーコード 
+     * @return string 生成した16桁のバーコード
      */
     private function barcode()
     {

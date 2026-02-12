@@ -38,7 +38,7 @@ abstract class AbstractCard implements CardInfoInterface {
      * foreignDataオブジェクトから日本語部分を取得する。
      *
      * @param [type] $json
-     * @return void 
+     * @return void
      */
     protected function getJpData($json) {
         if (!MtgJsonUtil::hasKey('foreignData', $json)) {
@@ -52,7 +52,7 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     public function getJson() {
-        return $this->json;        
+        return $this->json;
     }
 
     /**
@@ -82,8 +82,7 @@ abstract class AbstractCard implements CardInfoInterface {
         if (!empty($info)) {
             return $info->name;
         }
-        $name = $this->getJpnameByAPI($enname);
-        return $name != 'エラー' ? $name : "";
+        return '';
     }
 
     public function multiverseId()
@@ -110,7 +109,7 @@ abstract class AbstractCard implements CardInfoInterface {
     }
 
     public function promotype() {
-        
+
         $booster = 'boosterfun';
         if ($this->isTextless()) {
             return 'textless';
@@ -129,7 +128,7 @@ abstract class AbstractCard implements CardInfoInterface {
         if ($promo != $booster) {
             return $promo;
         }
-        
+
         // boosterfunの場合はframe_effectsを取得する。
         $frame = $this->frameEffects();
         $detector = SpCardDetectorFactory::create($this->getJson()["setCode"]);

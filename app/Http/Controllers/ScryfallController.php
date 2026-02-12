@@ -7,7 +7,12 @@ use App\Http\Requests\ScryfallRequest;
 use App\Services\ScryfallService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\StockpileHeader as Header;
 
+/**
+ * Scryfall APIに接続するコントローラークラス
+ */
 class ScryfallController extends Controller
 {
     private $service;
@@ -16,9 +21,9 @@ class ScryfallController extends Controller
      $this->service = $service;   
     }
     public function index(ScryfallRequest $request) {
-        $request->input(["setcode", "number","language"]);
+        $request->input([Header::SETCODE, Con::NUMBER, Header::LANGUAGE]);
         $card = $this->service->getCardInfoByNumber(
-                $request->input(), $request->input("number"), $request->input("language"));
+                $request->input(), $request->input(Con::NUMBER), Header::LANGUAGE);
         return response()->json($card, Response::HTTP_OK);
     }
 }

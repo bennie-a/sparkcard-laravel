@@ -14,7 +14,7 @@ class ScryfallRepository {
      * 略称から該当エキスパンションを取得する。
      *
      * @param string $attr 略称
-     * @return array エキスパンション情報 
+     * @return array エキスパンション情報
      */
     public function getExpansion(string $attr) {
         try {
@@ -40,7 +40,7 @@ class ScryfallRepository {
      */
     public function getCardByMultiverseId($id)
     {
-        $client = GuzzleClientFactory::create('scryfall');
+        $client = $this->client();
         $response = $client->request('GET', 'cards/multiverse/'.$id);
         return $this->getContents($response);
     }
@@ -53,7 +53,7 @@ class ScryfallRepository {
      */
     public function getCardByScryFallId($id)
     {
-        $client = GuzzleClientFactory::create('scryfall');
+        $client = $this->client();
         $response = $client->request('GET', 'cards/'.$id);
         return $this->getContents($response);
     }
@@ -74,7 +74,7 @@ class ScryfallRepository {
 
     public function getCardInfoByName(string $setcode, string $name) {
         try {
-            $param = [ 
+            $param = [
                 'query' => [
                     'exact' => $name,
                     'set'=> strtolower($setcode)

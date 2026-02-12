@@ -1,0 +1,604 @@
+<?php
+
+namespace Tests\Unit\DB\Shipt;
+
+use App\Http\Controllers\ShiptLogController;
+use App\Http\Response\CustomResponse;
+use App\Models\ShippingLog;
+use App\Models\Stockpile;
+use App\Services\CardBoardService;
+use App\Services\Constant\CardConstant as CC;
+use App\Services\Constant\GlobalConstant as GC;
+use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Constant\ErrorConstant as EC;
+use App\Services\Constant\StockpileHeader;
+use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Testing\TestResponse;
+use Mockery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\TestWith;
+use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
+use Tests\TestCase;
+use Tests\Trait\ApiErrorAssertions;
+use Tests\Util\TestDateUtil;
+
+/**
+ * 出荷情報解析機能のテストケース
+ */
+#[CoversClass(ShiptLogController::class)]
+class ShiptParseTest extends TestCase
+{
+    use ApiErrorAssertions;
+
+    public function setup():void {
+        parent::setup();
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
+     }
+
+    #[TestDox('購入者情報と注文商品が正しく集計されているか確認する')]
+    #[TestWith([1, 1], '購入者1人_出荷商品1件')]
+    #[TestWith([1, 2], '購入者1人_出荷商品2件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品1件')]
+    #[TestWith([2, 1], '購入者2人_出荷商品2件')]
+    public function testBuyerAndItemCount(int $buyerCount, int $itemCount): void
+    {
+        $today = TestDateUtil::formatToday();
+        $buyerInfos = [];
+        for ($i=0; $i < $buyerCount; $i++) {
+            $buyerInfos[] = ShiptLogTestHelper::createBuyerInfo($itemCount, $today);
+        }
+
+        $response = $this->uploadOk($buyerInfos);
+
+       // 購入者数確認
+        $response->assertJsonCount($buyerCount);
+
+        for($i = 0; $i < $buyerCount; $i++) {
+            $buyer = $buyerInfos[$i];
+            // 購入者情報の確認
+            $response->assertJson(function(AssertableJson $json) use($i, $buyer) {
+                $json->whereAll([
+                    "{$i}.". SC::ORDER_ID => $buyer[SC::ORDER_ID],
+                    "{$i}.". SC::BUYER => $buyer[SC::BUYER],
+                    "{$i}.". SC::ZIPCODE => $buyer[SC::POSTAL_CODE],
+                    "{$i}.". SC::ADDRESS =>
+                        $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
+                    "{$i}.". SC::SHIPPING_DATE => $buyer[SC::SHIPPING_DATE],
+                    "{$i}.". SC::ITEMS => fn($items) => count($items) == count($buyer[SC::ITEMS]),
+                ]);
+            });
+        }
+    }
+
+    #[TestDox('発送日が正しく設定されているか確認する')]
+    #[TestWith(['td'], '今日')]
+    #[TestWith(['tmr'], '明日')]
+    #[TestWith(['yd'], '昨日')]
+    #[TestWith([''], '未入力')]
+    public function testShippingDate(string $date) {
+        $shiptDate =ShiptLogTestHelper::getShiptDate($date);
+        logger()->info("Testing shipping date: {$shiptDate}");
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $shiptDate)];
+
+        $response = $this->uploadOk($buyerInfos);
+
+        if (empty($shiptDate)) {
+            $shiptDate = TestDateUtil::formatToday();
+        }
+        $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $shiptDate);
+    }
+
+    #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
+    #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
+    #[TestWith([true, false, false], '単品_通常版[Foil]')]
+    #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
+    #[TestWith([true, true, false], '単品_特別版[Foil]')]
+    #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
+    #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
+    #[TestWith([false, true, true], 'セット販売_特別版[Non-Foil]]')]
+    #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
+    public function testOkSingleAndSetcorrect(bool $isFoil, bool $isPromo, bool $isSet): void {
+        $shipment = $isSet ? 2 : 1;
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
+        $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
+            $stock = Stockpile::find((int)$item[GC::ID]);
+            // セット販売の商品名に変更
+            $item[SC::PRODUCT_NAME] = ShiptLogTestHelper::product_name($stock, $isSet);
+            logger()->info($item[SC::PRODUCT_NAME]);
+            $item[StockpileHeader::QUANTITY] = $isSet ? 1:$shipment;
+            return $item;
+        }, $buyerInfos[0][SC::ITEMS]);
+
+        $response = $this->uploadOk($buyerInfos);
+        $items = $buyerInfos[0][SC::ITEMS];
+        foreach ($items as $i => $item) {
+                $response->assertJson(function(AssertableJson $json) use($i, $item) {
+                    $base = "0.".SC::ITEMS.".{$i}.";
+                    $json->whereAll([
+                        $base.SC::SHIPMENT => $this->shipment($item),
+                        $base.SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                    ]);
+            });
+        }
+    }
+
+    #[TestDox('出荷枚数が在庫枚数より少ないか同等なら出荷情報が返ってくるか確認する')]
+    #[TestWith(['<'], '出荷枚数 < 在庫枚数')]
+    #[TestWith(['='], '出荷枚数 = 在庫枚数')]
+    public function testOkShipment(string $symbol) {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        if ($symbol == '=') {
+            $item = $buyerInfo[SC::ITEMS][0];
+            $productId = $item[GC::ID];
+            $stock = Stockpile::find((int)$productId);
+            $item[SC::SHIPMENT] = $stock->quantity;
+        }
+        $this->uploadOk([$buyerInfo]);
+    }
+
+    /**
+     * 出荷枚数を取得する。
+     *
+     * @return int
+     */
+    public function shipment(array $item):int {
+        $product_name = $item[SC::PRODUCT_NAME];
+        if (preg_match('/(\d+)枚\s*セット/u', $product_name, $matches)) {
+            return  (int) $matches[1];
+        }
+        return (int)$item[SC::QUANTITY];
+    }
+
+    #[TestDox('支払い金額が正しく計算されているか確認する')]
+    #[TestWith([0], '割引なし')]
+    #[TestWith([100], '割引あり')]
+    public function testTotalPriceCalc(int $discount) {
+        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
+        // 商品価格と割引金額を設定
+        $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
+
+        $response = $this->uploadOk($buyerInfos);
+
+        $exitem = current($buyerInfos[0][SC::ITEMS]);
+        $exProductPrice = $exitem[SC::PRODUCT_PRICE];
+        $exTotalPrice = $exProductPrice - $exitem[SC::DISCOUNT_AMOUNT];
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::PRODUCT_PRICE, $exProductPrice);
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::TOTAL_PRICE, $exTotalPrice);
+    }
+
+    #[TestDox('単価が正しく計算されているか確認する')]
+    #[TestWith([false], '出荷枚数1枚_割引なし')]
+    #[TestWith([false, 50], '出荷枚数1枚_割引あり')]
+    #[TestWith([true], '出荷枚数が複数枚_割引なし')]
+    #[TestWith([true, 50], '出荷枚数が複数枚_割引あり')]
+    public function testSinglePriceCalc(bool $isMulti, int $discount = 0): void {
+        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
+        // 商品価格と出荷枚数を設定
+        if ($isMulti) {
+            $buyerInfos[0][SC::ITEMS] = [ShiptLogTestHelper::createItemInfo(true, false, 3)];
+        }
+        $item = $buyerInfos[0][SC::ITEMS][0];
+        $item[SC::PRODUCT_PRICE] = 1000;
+        $item[SC::DISCOUNT_AMOUNT] = $discount;
+
+        $response = $this->uploadOk($buyerInfos);
+
+        $items = $buyerInfos[0][SC::ITEMS];
+        for ($i=0; $i < count($items); $i++) {
+            $item = $items[$i];
+            $exTotalPrice = $item[SC::PRODUCT_PRICE] - $item[SC::DISCOUNT_AMOUNT];
+            $exSinglePrice = (int)round($exTotalPrice / $item[StockpileHeader::QUANTITY]);
+            $response->assertJson(function(AssertableJson $json) use($i, $exSinglePrice) {
+            $json->whereAll([
+                "0.".SC::ITEMS.".{$i}.".SC::SINGLE_PRICE => $exSinglePrice,
+                ]);
+            });
+        }
+    }
+
+    #[TestDox('在庫情報が正しく表示されているか確認する')]
+    #[TestWith([false, false], '通常版')]
+    #[TestWith([true, false], '通常版のFoilカード')]
+    #[TestWith([false, true], '特別版')]
+    #[TestWith([true, true], '特別版のFoilカード')]
+    public function testStock(bool $isFoil = false, bool $isPromo = false): void {
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo)];
+        $response = $this->uploadOk($buyerInfos);
+
+        $items = $buyerInfos[0][SC::ITEMS];
+        foreach ($items as $i => $item) {
+            $stock = Stockpile::find((int)$item[GC::ID]);
+            $card = $stock->cardinfo;
+            $exp = $card->expansion;
+            $foil = $card->foiltype;
+            $promo = $card->promotype;
+
+            $response->assertJson(function(AssertableJson $json) use($i, $stock, $card, $exp, $foil, $promo) {
+                // 共通ベースパス
+                $base = "0." . SC::ITEMS . ".{$i}." . SC::STOCK;
+                $expected = [
+                    $base.".".GC::ID => $stock->id,
+                    $base.".".CC::CARD.".".GC::NAME => $card->name,
+                    $base.".".CC::CARD.".".CC::NUMBER => $card->number,
+                    $base.".".CC::CARD.".".CC::COLOR => $card->color_id,
+                    $base.".".CC::CARD.".".CC::IMAGE_URL => $card->image_url,
+                    $base.".".CC::CARD.".".CC::EXP.".".GC::NAME => $exp->name,
+                    $base.".".CC::CARD.".".CC::EXP.".".CC::ATTR => $exp->attr,
+                    $base.".".CC::CARD.".".CC::FOIL.".".GC::ID => $foil->id,
+                    $base.".".CC::CARD.".".CC::FOIL.".".GC::NAME => $foil->name,
+                    $base.".".CC::CARD.".".CC::PROMOTYPE.".".GC::ID => $promo->id,
+                    $base.".".CC::CARD.".".CC::PROMOTYPE.".".GC::NAME => $promo->name,
+                    $base.".".StockpileHeader::LANG => $stock->language,
+                    $base.".".StockpileHeader::CONDITION => $stock->condition,
+                    $base.".".StockpileHeader::QUANTITY => $stock->quantity,
+                ];
+
+                $json->whereAll($expected);
+            });
+        }
+    }
+
+    #[TestDox('isRegisteredフラグが正しく設定されているか確認する')]
+    #[TestWith([false], '未登録')]
+    #[TestWith([true], '登録済み')]
+    public function testIsRegistered(bool $isRegistered) {
+        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
+        if ($isRegistered) {
+            $item = $buyerInfos[0][SC::ITEMS][0];
+            ShippingLog::create([
+                SC::ORDER_ID => $buyerInfos[0][SC::ORDER_ID],
+                GC::NAME => $buyerInfos[0][SC::BUYER],
+                SC::ZIPCODE => $buyerInfos[0][SC::POSTAL_CODE],
+                SC::ADDRESS => $buyerInfos[0][SC::STATE].$buyerInfos[0][SC::CITY].$buyerInfos[0][SC::ADDRESS_1].' '.$buyerInfos[0][SC::ADDRESS_2],
+                SC::SHIPPING_DATE => $buyerInfos[0][SC::SHIPPING_DATE],
+                SC::STOCK_ID => (int)$item[GC::ID],
+                StockpileHeader::QUANTITY => (int)$item[StockpileHeader::QUANTITY],
+                SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
+                SC::TOTAL_PRICE => (int)$item[SC::PRODUCT_PRICE],
+            ]);
+        }
+        $response = $this->uploadOk($buyerInfos);
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::IS_REGISTERED, $isRegistered);
+    }
+
+    /**
+     * アップロードOKパターン
+     *
+     * @param array $buyerInfos
+     * @return TestResponse $response
+     */
+    private function uploadOk(array $buyerInfos) {
+        $orderIds = array_map(function($info) {return $info[SC::ORDER_ID];}, $buyerInfos);
+        $this->setMockCardBoard($orderIds);
+
+        $implode = $this->createCsvLine($buyerInfos);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+        $response = $this->upload($content);
+        $response->assertJsonStructure([
+            '*' => [
+                SC::ORDER_ID,
+                SC::BUYER,
+                SC::SHIPPING_DATE,
+                SC::ZIPCODE,
+                SC::ADDRESS,
+                SC::ITEMS => [
+                    '*' => [
+                        SC::STOCK => [
+                            GC::ID,
+                            CC::CARD => [
+                                GC::NAME,
+                                CC::EXP => [
+                                    GC::NAME,
+                                    CC::ATTR
+                                ],
+                                CC::NUMBER,
+                                CC::IMAGE_URL,
+                                CC::COLOR,
+                                CC::FOIL => [
+                                    GC::ID,
+                                    GC::NAME
+                                ],
+                                CC::PROMOTYPE => [
+                                    GC::ID,
+                                    GC::NAME
+                                ]
+                            ],
+                            StockpileHeader::CONDITION,
+                            StockpileHeader::LANG,
+                            StockpileHeader::QUANTITY
+                        ],
+                        SC::SHIPMENT,
+                        SC::PRODUCT_PRICE,
+                        SC::DISCOUNT_AMOUNT,
+                        SC::TOTAL_PRICE,
+                        SC::SINGLE_PRICE,
+                        SC::IS_REGISTERED
+                        ]
+                    ]
+                ]
+            ]);
+
+        return $response;
+    }
+
+    /**
+     * CardBoardServiceのMockを設定する。
+     *
+     * @param array $orderIds
+     * @return void
+     */
+    private function setMockCardBoard(array $orderIds) {
+        $mock = \Mockery::mock(CardBoardService::class);
+        $errorId = 'error';
+        foreach($orderIds as $id) {
+            if ($id === $errorId) {
+                continue;
+            }
+            $mock->shouldReceive('findByOrderId')
+                    ->with($id)
+                    ->andReturn(collect([
+                        (object)[
+                            'id' => 123,
+                            'title' => 'テストカード'
+                        ]
+             ]));
+        }
+        $mock->shouldReceive('findByOrderId')
+        ->with($errorId)
+        ->andReturn(collect([]));
+
+        $this->app->instance(\App\Services\CardBoardService::class, $mock);
+    }
+
+    #[TestDox('ファイルエラー: ヘッダー不足')]
+    #[Group('file-error')]
+    public function testNgLackOfHeader(): void {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $header  = ShiptLogTestHelper::getHeader();
+        // shipping_dateヘッダーを削除
+        $header = str_replace(SC::SHIPPING_DATE, '', $header);
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+        $this->verifyFileError($content, 'lack-of-header', SC::SHIPPING_DATE);
+    }
+
+    #[TestDox('ファイルエラー: ヘッダーがない')]
+    #[Group('file-error')]
+    public function testNgNoHeader() : void {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $content = <<<CSV
+        {$implode}
+        CSV;
+        $this->verifyFileError($content, 'no-header');
+    }
+
+    #[TestDox('ファイルエラー: データ行がない')]
+    #[Group('file-error')]
+    public function testNgEmptyData(): void {
+        $header  = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        CSV;
+        $this->verifyFileError($content, 'empty-content');
+    }
+
+    #[TestDox('ファイルエラー: 空ファイル')]
+    #[Group('file-error')]
+    public function testNgEmptyFile(): void {
+        $expJson = [
+            EC::TITLE => 'Validation Error',
+            EC::DETAIL => 'ファイルが空です',
+        ];
+        $this->uploadNg('', Response::HTTP_BAD_REQUEST, $expJson);
+    }
+
+    #[TestDox('ファイルエラー: CSV形式以外のファイルをアップロード')]
+    #[Group('file-error')]
+    public function testNgPngFile(): void {
+        $image = UploadedFile::fake()->create('test_image.png', 100, 'image/png');
+        $response = $this->uploadFile($image, Response::HTTP_BAD_REQUEST);
+        $this->assertJsonError($response, Response::HTTP_BAD_REQUEST, [
+            EC::TITLE => 'Validation Error',
+            EC::DETAIL => 'ファイルはCSV形式でアップロードしてください']);
+    }
+
+    #[Test]
+    #[TestDox('商品コードが存在しない場合、行数とメッセージが返ってくるか検証する。')]
+    public function ngNoProductId() {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::ITEMS][0][GC::ID] = '9999';
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+
+        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
+        $status = CustomResponse::HTTP_CSV_VALIDATION;
+
+        $response = $this->upload($content, $status);
+        $this->assertRowError($response, $status, '商品コードが存在しません。');
+    }
+
+    #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
+    #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
+    #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
+    #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
+    public function testNgItemError(string $key, string $value, string $msg) {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        if (key_exists($key, $buyerInfo)) {
+            $buyerInfo[$key] =$value;
+        } else {
+            $buyerInfo[SC::ITEMS][0][$key] = $value;
+        }
+
+        $implode = $this->createCsvLine([$buyerInfo]);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+
+        $base = 'validation.items';
+        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
+        $status = CustomResponse::HTTP_CSV_VALIDATION;
+
+        $response = $this->upload($content, $status);
+        $this->assertRowError($response, $status, __("$base.$msg.detail"));
+    }
+
+    #[TestDox('バリデーションエラーが発生した時のエラー情報を検証する。')]
+    public function testNgValidator(): void
+    {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::SHIPPING_DATE] = 'aaa';
+
+        $implode = ShiptLogTestHelper::createCsvLine([$buyerInfo]);
+        $header = ShiptLogTestHelper::getHeader();
+        $content = <<<CSV
+        {$header}
+        {$implode}
+        CSV;
+
+        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
+        $status = CustomResponse::HTTP_CSV_VALIDATION;
+        $response = $this->upload($content, $status);
+        $this->assertRowError($response, $status, '発送日はY/m/d形式の日付で入力してください。');
+    }
+
+    private function verifyFileError(string $content, string $keyword, string $value = ''): void {
+        $base = 'validation.file';
+        $expJson = [
+            EC::TITLE => __("$base.title.$keyword"),
+            EC::DETAIL => __("$base.detail.$keyword", ['values' => $value])
+        ];
+        $this->uploadNg($content, CustomResponse::HTTP_CSV_VALIDATION, $expJson);
+    }
+
+    private function uploadNg(string $content, int $status, array $expJson = []): TestResponse {
+        $response = $this->upload($content, $status);
+        $this->assertJsonError($response, $status, $expJson);
+        return $response;
+    }
+
+    /**
+     * エラーに関するJSON情報を検証する。
+     *
+     * @param TestResponse $response
+     * @param integer $status
+     * @param array $expJson
+     * @return void
+     */
+    private function assertJsonError(TestResponse $response, int $status, array $expJson = []): void {
+        $response->assertJson(function(AssertableJson $json) use($status, $expJson) {
+            $json->hasAll([EC::TITLE, GC::STATUS, EC::REQUEST, EC::DETAIL]);
+            $json->whereAll([
+                EC::TITLE => $expJson[EC::TITLE],
+                GC::STATUS => $status,
+                EC::DETAIL => $expJson[EC::DETAIL],
+                EC::REQUEST => 'api/shipping/parse',
+            ]);
+        });
+    }
+
+    /**
+     * CSVファイルの内容で発生したエラー情報を検証する。
+     *
+     * @param TestResponse $response
+     * @param integer $status
+     * @param string $msg
+     * @return void
+     */
+    public function assertRowError(TestResponse $response, int $status, string $msg) {
+        $this->assertCsvRowError($response, 'api/shipping/parse', [EC::ROW=> 2, EC::MSG => $msg]);
+    }
+
+    /**
+     * CSV1行分の文字列を作成する。
+     *
+     * @param array $buyers
+     * @return string
+     */
+    private function createCsvLine(array $buyers):string {
+        $implode = '';
+        foreach($buyers as $buyer) {
+            $items = $buyer[SC::ITEMS];
+            unset($buyer[SC::ITEMS]);
+            $buyerLine = array_values($buyer);
+            foreach($items as $item) {
+                $oneline = $buyerLine;
+                $oneline = array_merge($buyerLine, array_values($item));
+                $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
+                $oneline = [];
+            }
+        }
+        return $implode;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $content
+     * @param int $status
+     * @return \Illuminate\Testing\TestResponse
+     */
+    private function upload(string $content = '', int $status = Response::HTTP_CREATED) {
+        Storage::fake('local');
+        $tmpFilePath = tempnam(sys_get_temp_dir(), 'shipping_import_');
+        $filename = basename($tmpFilePath).'.csv';
+        try {
+            // ダミーCSVファイル作成
+            file_put_contents($tmpFilePath, $content);
+
+            // 一時ファイルから UploadedFile インスタンス作成
+            $file = new UploadedFile(
+                $tmpFilePath, $filename, 'text/csv', null, true);
+            $response = $this->uploadFile($file, $status);
+            return $response;
+        } finally {
+            if (file_exists($tmpFilePath)) {
+                unlink($tmpFilePath);
+            }
+        }
+    }
+
+    /**
+     * UploadedFileオブジェクトを指定してアップロードテストを実行する。
+     *
+     * @param UploadedFile $file
+     * @param int $status
+     * @return \Illuminate\Testing\TestResponse
+     */
+    private function uploadFile(UploadedFile $file, int $status = Response::HTTP_CREATED) {
+        $response = $this->postJson('/api/shipping/parse', ['file' => $file], [
+            'Content-Type' => 'multipart/form-data',
+        ]);
+        if ($response->getStatusCode() != $status) {
+            logger()->error($response->json(EC::DETAIL));
+        }
+        $response->assertStatus($status);
+        return $response;
+    }
+}

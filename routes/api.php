@@ -6,14 +6,13 @@ use App\Http\Controllers\Notion\ExpansionController;
 use App\Http\Controllers\CardJsonFileController;
 use App\Http\Controllers\DB\CardInfoDBController;
 use App\Http\Controllers\ScryfallController;
-use App\Http\Controllers\ShippingLogController;
 use App\Http\Controllers\StockpileController;
-use App\Http\Controllers\TranslateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Controllers\PromotypeController;
+use App\Http\Controllers\ShiptLogController;
 use App\Http\Controllers\VendorTypeController;
 
 /*
@@ -36,12 +35,12 @@ Route::resource('database/exp', ExpDBController::class);
 Route::resource('database/card', CardInfoDBController::class);
 Route::post('upload/card', [CardJsonFileController::class, 'uploadCardFile']);
 Route::resource('scryfall', ScryfallController::class);
-Route::post('stockpile/import', [StockpileController::class, 
+Route::post('stockpile/import', [StockpileController::class,
 'import']);
-Route::post('shipping/import', [ShippingLogController::class, 'import']);
+Route::post('shipping/parse', [ShiptLogController::class, 'parse']);
 Route::get('arrival/grouping', [ArrivalController::class, 'grouping']);
 Route::apiResource('arrival', ArrivalController::class);
-Route::apiResource('shipping', ShippingLogController::class);
+Route::apiResource('shipping', ShiptLogController::class);
 Route::get('stockpile', [StockpileController::class, 'index']);
 Route::get('vendor', [VendorTypeController::class, 'index']);
 Route::apiResource('base', BaseApiController::class);

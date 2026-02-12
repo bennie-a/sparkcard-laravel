@@ -1,12 +1,14 @@
 <?php
 namespace App\Files\Csv;
 
-use App\Exceptions\CsvFormatException;
+use App\Exceptions\api\Csv\CsvFormatException;
+use App\Exceptions\api\Csv\CsvInvalidRowException;
 use App\Http\Response\CustomResponse;
-use App\Http\Validator\AbstractCsvValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use League\Csv\Reader;
+use League\Csv\Statement;
+use App\Services\Constant\ErrorConstant as EC;
 
 /**
  * CSVファイル読み込みクラス
@@ -21,7 +23,7 @@ abstract class CsvReader {
      */
     public function read(string $path)
     {
-        // ファイルが存在するかチェック
+        // ファイル存在チェック
         if (!file_exists($path)) {
             $response = response()->json([
                 'status' => 'File Not Found',
@@ -30,42 +32,54 @@ abstract class CsvReader {
             throw new HttpResponseException($response);
         }
 
-        // 文字コードを取得する。
+        // 文字コード検出
         $character_codes = ['ASCII', 'ISO-2022-JP', 'UTF-8', 'EUC-JP', 'SJIS'];
         $file_encoding = mb_detect_encoding(file_get_contents($path), $character_codes, true);
         logger()->debug("文字コード：$file_encoding");
 
-        // CSVファイルを読み込む
-        $csv = Reader::createFromPath($path);
-        // 指定したヘッダーがファイルに存在するかチェック
-        $fileHeaders = $csv->fetchOne();
-        $exHeaders = $this->csvHeaders();
+        // league/csv 9.9対応: SplFileObject を使用
+        $reader = Reader::createFromPath($path, 'r');
 
-        $count = 0;
-        foreach($fileHeaders as $h) {
-            if(in_array($h, $exHeaders)) {
-                $count++;
+        // BOM除去 (もしUTF-8 BOM付きなら)
+        $reader->setOutputBOM(Reader::BOM_UTF8);
+
+        // 1行目をヘッダーとして取得
+        $reader->setHeaderOffset(0);
+        $fileHeaders = $reader->getHeader();
+
+        // ヘッダー検証
+        $exHeaders = $this->csvHeaders();
+        $missingHeaders = array_diff($exHeaders, $fileHeaders);
+        if (count($fileHeaders) == count($missingHeaders)) {
+            throw new CsvFormatException('no-header');
+        }
+        if (!empty($missingHeaders)) {
+            throw new CsvFormatException('lack-of-header', implode(', ', $missingHeaders));
+        }
+
+        // 全レコードを取得
+        $reader->setHeaderOffset(0);
+        $records = $reader->getRecords();
+        logger()->debug($reader->count() . "件のレコードを取得");
+        if ($reader->count() == 0) {
+            throw new CsvFormatException('empty-content');
+        }
+        $rows = [];
+        foreach ($records as $record) {
+            $convertedRow = [];
+            foreach ($record as $key => $value) {
+                $convertedRow[$key] = mb_convert_encoding($value, 'UTF-8', $file_encoding);
             }
+            $rows[] = $convertedRow;
         }
-        if (count($exHeaders) !== $count) {
-            $response = response()->json([
-                'status' => 'CSV Validation Error',
-                'error' => 'CSVファイルのヘッダーが足りません'
-            ], Response::HTTP_BAD_REQUEST);
-            throw new HttpResponseException($response);
-        }
-        
-        // ヘッダーを除いて1行ずつ配列にする
-        $csv->setHeaderOffset(0);
-        $records = [];
-        foreach ($csv as $row) {
-            $records[] = mb_convert_encoding($row, 'UTF-8', $file_encoding);
-        }
-        $this->validate($records);
-        return $records;
+
+        // バリデーション処理
+        $this->validate($rows);
+
+        return $rows;
     }
 
-    /** 
+    /**
      * CSVファイルのヘッダーを指定する。
      * @return  array
      */
@@ -75,18 +89,13 @@ abstract class CsvReader {
 
     /**
      * CSVファイルの入力チェックを行う。
-     * 
+     *
      */
     private function validate(array $records) {
         // CSVデータの入力値チェック
         $errors = $this->validator()->validate($records);
         if (!empty($errors)) {
-            $response = response()->json([
-                'status' => 'validation error',
-                'errors' => $errors
-            ], CustomResponse::HTTP_CSV_VALIDATION);
-            throw new HttpResponseException($response);
+            throw new CsvInvalidRowException($errors);
         }
-    
     }
 }
