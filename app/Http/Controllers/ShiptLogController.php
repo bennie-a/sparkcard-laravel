@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\Api\Csv\CsvInvalidRowException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shipt\ShiptPostRequest;
-use App\Http\Requests\Shipt\ShiptStoreRequest;
 use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
 use App\Http\Resources\Shipt\OrderResource;
 use App\Services\Constant\GlobalConstant as GC;
-use App\Traits\ImportCsv;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Shipt\ShiptLogService;
@@ -41,8 +39,6 @@ class ShiptLogController extends Controller
         return response([ShiptCon::ORDER_ID => $log->order_id,
                                          GC::CREATE_AT => $log->created_at], Response::HTTP_CREATED);
     }
-
-    use ImportCsv;
 
     /**
      * 入力した条件に該当する出荷情報を検索する。

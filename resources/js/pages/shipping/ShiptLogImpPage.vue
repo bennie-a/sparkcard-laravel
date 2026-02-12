@@ -1,7 +1,6 @@
 <script setup>
 
     import { onMounted, reactive, ref } from 'vue';
-    import { useRouter } from 'vue-router';
     import FileUpload from "../component/FileUpload.vue";
     import Loading from "vue-loading-overlay";
     import axios from 'axios';
@@ -12,11 +11,9 @@
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 
-    const router = useRouter();
     const result = reactive([]);
     const resultCount = ref(0);
     const isLoading = ref(false);
-    const pglistRef = ref();
     const currentList = reactive([]);
 
     const error = reactive([]);
@@ -153,7 +150,8 @@
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
-                        <td class="center aligned">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
+                        <td class="negative center aligned" v-if="item.coupon_discount_amount != 0">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
+                        <td class="center aligned" v-if="item.coupon_discount_amount == 0"><i class="bi bi-dash-lg"></i></td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
                     </tr>

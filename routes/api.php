@@ -35,9 +35,8 @@ Route::resource('database/exp', ExpDBController::class);
 Route::resource('database/card', CardInfoDBController::class);
 Route::post('upload/card', [CardJsonFileController::class, 'uploadCardFile']);
 Route::resource('scryfall', ScryfallController::class);
-Route::post('stockpile/import', [StockpileController::class, 
+Route::post('stockpile/import', [StockpileController::class,
 'import']);
-Route::post('shipping/import', [ShiptLogController::class, 'import']);
 Route::post('shipping/parse', [ShiptLogController::class, 'parse']);
 Route::get('arrival/grouping', [ArrivalController::class, 'grouping']);
 Route::apiResource('arrival', ArrivalController::class);
