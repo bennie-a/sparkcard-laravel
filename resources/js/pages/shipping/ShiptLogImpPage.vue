@@ -1,23 +1,65 @@
 <script setup>
 
-    import { reactive, ref } from 'vue';
-    import { useRouter } from 'vue-router';
+    import { onMounted, reactive, ref } from 'vue';
     import FileUpload from "../component/FileUpload.vue";
-    import pagination from "../component/ListPagination.vue";
     import Loading from "vue-loading-overlay";
     import axios from 'axios';
     import condition from "../component/tag/ConditionTag.vue";
     import pglist from "../component/PgList.vue";
+    import cardlayout from "../component/CardLayout.vue";
+    import ModalButton from '../component/ModalButton.vue';
+    import PiniaMsgForm from '../component/PiniaMsgForm.vue';
+    import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 
-    const router = useRouter();
     const result = reactive([]);
     const resultCount = ref(0);
     const isLoading = ref(false);
-    const pglistRef = ref();
     const currentList = reactive([]);
 
-    const upload = function() {
-        
+    const error = reactive([]);
+    const hasError = ref(false);
+    const hasResult = ref(false);
+    const piniaMsg = piniaMsgStore();
+
+    onMounted(() => {
+        piniaMsg.reset();
+    });
+
+    /**
+     * インポート実行
+     */
+    const post = async function() {
+        isLoading.value = true;
+        piniaMsg.reset();
+        await Promise.all(result.value.map(async (r) => {
+            const json =
+                {
+                    order_id: r.order_id,
+                    shipping_date: r.shipping_date,
+                    buyer_name: r.buyer_name,
+                    zip_code: r.zip_code,
+                    address: r.address,
+                    items: []
+                };
+            json.items = r.items.map((i) => {
+                return {
+                    id: i.stock.id,
+                    shipment: i.shipment,
+                    single_price: i.single_price,
+                    total_price: i.total_price,
+                    isRegistered: i.isRegistered
+                };
+            });
+
+            await axios.post('/api/shipping', json)
+                .then((response) => {
+                    console.log('Imported:', response.data);
+                }).catch((e) => {
+                    console.log('Import Error:', e.response.data);
+                });
+            }));
+        isLoading.value = false;
+        piniaMsg.setSuccess('インポートしました。');
     };
 
     const current = (data) => {
@@ -25,7 +67,12 @@
     }
 
     const uploadFile = async(file) => {
+        hasError.value = false;
+        error.value = [];
+        hasResult.value = false;
         isLoading.value = true;
+        result.value = [];
+        piniaMsg.reset();
         const formData = new FormData();
         formData.append('file', file);
 
@@ -36,9 +83,11 @@
             }).then((response) => {
                 result.value = response.data;
                 resultCount.value = result.value.length;
-                console.log(result.value);
-            }).catch((error) => {
-                console.error('Error:', error);
+                hasResult.value = true;
+            }).catch((e) => {
+                hasError.value = true;
+                error.value = e.response.data;
+                console.log('Error:', error.value);
             }).finally(() => {
                 isLoading.value = false;
             });
@@ -47,15 +96,24 @@
 </script>
 
 <template>
+    <PiniaMsgForm></PiniaMsgForm>
+    <div class="ui negative message" v-if="hasError">
+        <div class="header">{{ error.value.detail }}</div>
+        <ul class="list">
+            <li v-for="row in error.value.rows" :key="row.row">
+                {{ row.row }}行目：{{ row.msg }}
+            </li>
+        </ul>
+    </div>
     <div id="upload_form" class="ui form grid segment">
         <div class="seven wide column">
             <FileUpload type="csv" @action="uploadFile"/>
         </div>
     </div>
-    <div class="mt-3 ui grid">
+    <div class="mt-1 ui grid">
         <div class="row">
-            <div class="four wide left floated column">
-                <button class="ui teal button" @click="router.back()">インポート</button>
+            <div class="three wide left floated column"  v-if="hasResult">
+                <ModalButton  @action="post()">インポート</ModalButton>
             </div>
             <div class="seven wide right floated column ui right aligned">
                 <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
@@ -68,7 +126,7 @@
                {{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
             </div>
             <address id="buyer" class="ui secondary segment">
-                <p>〒{{ r.zipcode }}</p>
+                <p>〒{{ r.zip_code }}</p>
                 <p>{{ r.address }}</p>
                 <p class="name">{{ r.buyer_name }}様</p>
             </address>
@@ -76,21 +134,26 @@
                 <thead>
                     <tr>
                         <th class="one wide center aligned">在庫ID</th>
-                        <th>カード情報</th>
-                        <th class="one wide center aligned">状態</th>
-                        <th class="one wide center aligned">枚数</th>
-                        <th class="two wide center aligned">単価</th>
-                        <th class="two wide center aligned">小計</th>
+                        <th class="seven wide">カード情報</th>
+                        <th class="center aligned">状態</th>
+                        <th class="center aligned">枚数</th>
+                        <th class="center aligned">価格</th>
+                        <th class="center aligned">クーポン</th>
+                        <th class="center aligned">単価</th>
+                        <th class="center aligned">小計</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, idx) in r.items" :key="idx">
-                        <td class="one wide center aligned">{{ item.id }}</td>
-                        <td>{{ item.card.name }}</td>
-                        <td class="one wide center aligned"><condition :name="item.condition"/></td>
-                        <td class="center aligned">{{ item.quantity }}枚</td>
-                        <td class="two wide center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
-                        <td class="two wide center aligned"><i class="bi bi-currency-yen"></i>{{ item.subtotal_price }}</td>
+                        <td class="one wide center aligned">{{ item.stock.id }}</td>
+                        <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
+                        <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
+                        <td class="center aligned">{{ item.shipment }}枚</td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
+                        <td class="negative center aligned" v-if="item.coupon_discount_amount != 0">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
+                        <td class="center aligned" v-if="item.coupon_discount_amount == 0"><i class="bi bi-dash-lg"></i></td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
+                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -100,7 +163,7 @@
          :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
 
-</template>    
+</template>
 
 <style scoped>
 #upload_form {
