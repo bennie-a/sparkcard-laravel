@@ -22,27 +22,23 @@ class BaseOrderService
      * 認可コードからアクセストークン取得
      *
      */
-    public function getAccessToken(string $code): array
+    public function getAccessToken(string $code)
     {
         try {
-            $response = $this->client->post('oauth/token', [
-                'form_params' => [
-                    'grant_type'    => 'authorization_code',
-                    'client_id'     => config('baseapi.client_id'),
-                    'client_secret' => config('baseapi.secret'),
-                    'code'          => $code,
-                    'redirect_uri'  => config('baseapi.api_url'),
-                ],
-            ]);
+                $response = $this->client->post('/1/oauth/token', [
+                    'form_params' => [
+                        'grant_type'    => 'authorization_code',
+                        'client_id'     => config('baseapi.client_id'),
+                        'client_secret' => config('baseapi.secret'),
+                        'code'          => $code,
+                        'redirect_uri'  => config('baseapi.api_url'),
+                    ],
+                ]);
 
             return json_decode($response->getBody()->getContents(), true);
 
         } catch (RequestException $e) {
-            throw new \Exception(
-                $e->hasResponse()
-                    ? $e->getResponse()->getBody()->getContents()
-                    : $e->getMessage()
-            );
+            throw $e;
         }
     }
 
