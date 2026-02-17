@@ -42,23 +42,20 @@ class BaseOrderService
         }
     }
 
-    public function fetchOrders(array $query = [])
+    public function fetchOrders(string $accessToken, array $query = [])
     {
         try {
-            $response = $this->client->get('/orders', [
+            $response = $this->client->get('/1/orders', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ],
                 'query' => $query,
             ]);
-            logger()->info('BASE API Response: ' . $response->getBody());
+            logger()->debug(current($response->getHeader('Content-Type')));
             return json_decode($response->getBody()->getContents(), true);
 
         } catch (RequestException $e) {
-            throw new \Exception(
-                'BASE API request failed: ' .
-                ($e->hasResponse()
-                    ? $e->getResponse()->getBody()->getContents()
-                    : $e->getMessage()
-                )
-            );
+            throw $e;
         }
     }
 }

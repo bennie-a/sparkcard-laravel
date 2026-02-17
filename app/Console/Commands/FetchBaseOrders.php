@@ -29,18 +29,13 @@ class FetchBaseOrders extends Command
     public function handle(BaseOrderService $service)
     {
         try {
-            $code = 'cd3f6fb94715e5a07abdfa0a6e59d936';
-            $this->info(json_encode([
-            'grant_type' => 'authorization_code',
-            'client_id' => config('baseapi.client_id'),
-            'client_secret' => config('baseapi.secret'),
-            'code' => $code,
-            'redirect_uri' => config('baseapi.api_url'),
-        ], JSON_PRETTY_PRINT));
-
+            $code = 'a8e60c265cbf35ffe99896e63b0716c9';
             $token = $service->getAccessToken($code);
-        //  $orders = $service->fetchOrders(['start_ordered' => '2026-01-01', 'end_ordered' => '2026-01-31', 'limit' => 10]);
-            $this->info(json_encode($token, JSON_PRETTY_PRINT));
+            $accessToken = $token['access_token'];
+            $this->info('Access Token: ' . $accessToken);
+            $this->info('Refresh Token: ' . $token['refresh_token']);
+            $orders = $service->fetchOrders($accessToken, ['start_ordered' => '2026-02-01', 'end_ordered' => '2026-02-17', 'limit' => 10]);
+            $this->info('Fetched Orders: ' . json_encode($orders, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         } catch (\RequestException $e) {
             if ($e->hasResponse()) {
                     $this->error((string) $e->getResponse()->getBody());
