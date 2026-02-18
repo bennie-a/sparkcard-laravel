@@ -6,7 +6,7 @@
 :books: ドキュメント
 :art: デザインUI/UX
 :horse: パフォーマンス
-:wrench: ツール
+:wrench: 機能改修
 :rotating_light: テスト
 :hankey: 非推奨追加
 :wastebasket: 削除
