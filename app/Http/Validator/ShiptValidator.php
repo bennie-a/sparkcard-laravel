@@ -19,7 +19,6 @@ class ShiptValidator extends AbstractCsvValidator {
     return [
         ShiptCon::ORDER_ID => ['required', new Halfsize()],
         ShiptCon::BUYER => 'required',
-        ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
         ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
         ShiptCon::STATE => ['required', StateRule::rules()],
         ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
@@ -39,7 +38,6 @@ class ShiptValidator extends AbstractCsvValidator {
      */
    protected function attributes():array {
         return [
-            ShiptCon::SHIPPING_DATE => '発送日',
             ShiptCon::PRODUCT_PRICE => '商品価格',
             ShiptCon::DISCOUNT_AMOUNT => '割引額',
             ShiptCon::SINGLE_PRICE => '単価',

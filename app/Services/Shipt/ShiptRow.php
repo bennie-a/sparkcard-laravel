@@ -27,11 +27,6 @@ class ShiptRow {
         return $this->number;
     }
 
-    public function shipping_date() {
-        $date = $this->row[SC::SHIPPING_DATE];
-        return CarbonFormatUtil::assignTodayIfMissing($date);
-    }
-
     public function buyer() {
         return $this->row[SC::BUYER];
     }

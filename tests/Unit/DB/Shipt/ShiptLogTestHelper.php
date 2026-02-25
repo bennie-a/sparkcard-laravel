@@ -1,7 +1,10 @@
 <?php
 namespace Tests\Unit\DB\Shipt;
 
+use App\Enum\CsvFlowType;
+use App\Enum\ShopPlatform;
 use App\Exceptions\api\NotFoundException;
+use App\Models\CsvHeader;
 use App\Models\Stockpile;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\CardConstant as CC;
@@ -20,13 +23,13 @@ class ShiptLogTestHelper
      *
      * @return array
      */
-    public static function createBuyerInfo(int $itemCount, string $shiptDate,
+    public static function createBuyerInfo(int $itemCount,
                                                             bool $isFoil = false, bool $isPromo = false, int $quantity = 1):array {
         $items = [];
         for ($i=0; $i < $itemCount; $i++) {
             $items[] = self::createItemInfo($isFoil, $isPromo, $quantity);
         }
-        $buyerInfo = self::createBuyerInfoOnly($shiptDate);
+        $buyerInfo = self::createBuyerInfoOnly();
         $buyerInfo[SC::ITEMS] = $items;
         return $buyerInfo;
     }
@@ -66,10 +69,9 @@ class ShiptLogTestHelper
     /**
      * 購入者情報をランダムで作成する。
      *
-     * @param string $shiptDate
      * @return array
      */
-    public static function createBuyerInfoOnly(string $shiptDate):array {
+    public static function createBuyerInfoOnly():array {
         return [
             SC::ORDER_ID => self::createOrderId(),
             SC::BUYER => fake()->name(),
@@ -78,7 +80,6 @@ class ShiptLogTestHelper
             SC::CITY => fake()->city(),
             SC::ADDRESS_1 => fake()->streetAddress(),
             SC::ADDRESS_2 => fake()->secondaryAddress(),
-            SC::SHIPPING_DATE => $shiptDate,
         ];
     }
 
@@ -88,7 +89,7 @@ class ShiptLogTestHelper
      * @return array
      */
     public static  function createTodayOrderInfos(): array {
-        return ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday());
+        return ShiptLogTestHelper::createBuyerInfo(1);
     }
 
 
@@ -166,7 +167,7 @@ class ShiptLogTestHelper
     public static  function getHeader() {
         $header = [
                                 SC::ORDER_ID, SC::BUYER, SC::POSTAL_CODE, SC::STATE,
-                                SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2, SC::SHIPPING_DATE,
+                                SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2,
                                 SC::PRODUCT_ID, SC::PRODUCT_NAME, StockpileHeader::QUANTITY,
                                 SC::PRODUCT_PRICE, SC::DISCOUNT_AMOUNT
                             ];
