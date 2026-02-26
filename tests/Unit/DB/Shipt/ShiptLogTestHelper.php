@@ -69,7 +69,7 @@ class ShiptLogTestHelper
      * @param string $shiptDate
      * @return array
      */
-    public static function createBuyerInfoOnly():array {
+    public static function createBuyerInfoOnly(string $shiptDate):array {
         return [
             SC::ORDER_ID => self::createOrderId(),
             SC::BUYER => fake()->name(),
@@ -78,6 +78,7 @@ class ShiptLogTestHelper
             SC::CITY => fake()->city(),
             SC::ADDRESS_1 => fake()->streetAddress(),
             SC::ADDRESS_2 => fake()->secondaryAddress(),
+            SC::SHIPPING_DATE => $shiptDate,
         ];
     }
 
