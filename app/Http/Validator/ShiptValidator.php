@@ -19,7 +19,6 @@ class ShiptValidator extends AbstractCsvValidator {
     return [
         ShiptCon::ORDER_ID => ['required', new Halfsize()],
         ShiptCon::BUYER => 'required',
-        ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
         ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
         ShiptCon::STATE => ['required', StateRule::rules()],
         ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
