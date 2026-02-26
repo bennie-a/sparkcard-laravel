@@ -39,7 +39,6 @@ class ShiptValidator extends AbstractCsvValidator {
    protected function attributes():array {
         return [
             ShiptCon::PRODUCT_PRICE => '商品価格',
-            ShiptCon::DISCOUNT_AMOUNT => '割引額',
             ShiptCon::SINGLE_PRICE => '単価',
             ShiptCon::TOTAL_PRICE => '支払い価格',
             ShiptCon::PRODUCT_ID => '商品コード',
