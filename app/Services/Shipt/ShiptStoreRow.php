@@ -47,6 +47,15 @@ class ShiptStoreRow extends ShiptRow
     }
 
     /**
+     * 発送日を取得する。
+     *
+     * @return string
+     */
+    public function shipping_date():string {
+        return $this->row[SC::SHIPPING_DATE];
+    }
+
+    /**
      * 商品情報を取得する。
      *
      * @return array

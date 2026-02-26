@@ -23,14 +23,6 @@ class ShiptPostRequest extends FormRequest
         return true;
     }
 
-    public function prepareForValidation()
-    {
-        $shiptDate = $this->input(ShiptCon::SHIPPING_DATE);
-        $this->merge([
-            ShiptCon::SHIPPING_DATE => CarbonFormatUtil::assignTodayIfMissing($shiptDate),
-        ]);
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -41,7 +33,7 @@ class ShiptPostRequest extends FormRequest
         return [
             ShiptCon::ORDER_ID => ['required', new Halfsize()],
             ShiptCon::BUYER => 'required',
-            ShiptCon::SHIPPING_DATE => DateFormatRule::slashRules(),
+            ShiptCon::SHIPPING_DATE => ['required', DateFormatRule::slashRules()],
             ShiptCon::ZIPCODE => ['required', PostalCodeRule::rules()],
             ShiptCon::ADDRESS => 'required|string',
             ShiptCon::ITEMS => ['required','array', 'min:1'],

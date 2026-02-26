@@ -42,10 +42,11 @@ class ShiptLogTestHelper
      * @return array
      */
     public static function createStoreRequest($itemCount = 1):array {
-        $buyerInfo = self::createBuyerInfo($itemCount, TestDateUtil::formatToday());
+        $buyerInfo = self::createBuyerInfo($itemCount);
         $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
                                                                 $buyerInfo[SC::ADDRESS_1].' '.$buyerInfo[SC::ADDRESS_2];
         $buyerInfo[SC::ZIPCODE] = $buyerInfo[SC::POSTAL_CODE];
+        $buyerInfo[SC::SHIPPING_DATE] = TestDateUtil::formatToday();
         unset($buyerInfo[SC::STATE]);
         unset($buyerInfo[SC::CITY]);
         unset($buyerInfo[SC::ADDRESS_1]);
@@ -242,6 +243,7 @@ class ShiptLogTestHelper
             SC::TOTAL_PRICE => '支払い金額',
             SC::SINGLE_PRICE => '1枚あたりの単価',
             SC::IS_REGISTERED => '登録済みフラグ',
+            SC::SHIPPING_DATE => '発送日',
             default => $key,
         };
     }
