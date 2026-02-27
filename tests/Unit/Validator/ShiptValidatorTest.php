@@ -3,9 +3,9 @@
 namespace Tests\Unit\Validator;
 
 use App\Http\Validator\ShiptValidator;
+use App\Models\Stockpile;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\ErrorConstant as EC;
-use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
@@ -14,7 +14,6 @@ use App\Services\Constant\StockpileHeader;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Util\TestDateUtil;
 
 /**
@@ -41,7 +40,6 @@ class ShiptValidatorTest extends TestCase
     {
         return [
             '全て入力済み' => ['', ''],
-            '発送日が未入力' => [SC::SHIPPING_DATE, ''],
             '住所2が未入力' => [SC::ADDRESS_2, ''],
             '市町村名が市名' => [SC::CITY, '○○市'],
             '市町村名が区名' => [SC::CITY, '○○区'],
@@ -72,21 +70,6 @@ class ShiptValidatorTest extends TestCase
     public function ngBuyerName() {
         $this->verifyBuyerError(SC::BUYER, '', '購入者名は必ず入力してください。');
     }
-
-    #[Test]
-    #[TestDox('発送日チェック')]
-    #[DataProvider('shippingDateProvider')]
-    public function ngShippingDate($value, $msg) {
-        $this->verifyBuyerError(SC::SHIPPING_DATE, $value, $msg);
-    }
-
-    public static function shippingDateProvider(): array
-{
-    return [
-        '日付ではない' => ['1111', '発送日はY/m/d形式の日付で入力してください。'],
-        'Y/m/d形式ではない' => ['2025-12-18', '発送日はY/m/d形式の日付で入力してください。'],
-    ];
-}
 
     #[Test]
     #[TestDox('郵便番号チェック')]
@@ -138,7 +121,8 @@ class ShiptValidatorTest extends TestCase
             '未入力' => ['', '商品コードは必ず入力してください。'],
             '文字列' => ['aaa', '商品コードは半角数字を入力してください。'],
             '全角数字' => ['１２３', '商品コードは半角数字を入力してください。'],
-            '0' => ['0', '商品コードは1以上の数字を入力してください。'],
+            '商品コードが0' => ['0', '商品コードは1以上の数字を入力してください。'],
+            '存在しないID' => ['999999', '商品コードがDBに存在しません。'],
         ];
     }
 
@@ -265,10 +249,19 @@ class ShiptValidatorTest extends TestCase
      */
     public function createBuyerInfo() {
         $buyer = ShiptLogTestHelper::createBuyerInfoOnly(TestDateUtil::formatToday());
-        $item =  [GlobalConstant::ID => fake()->randomNumber(), SC::PRODUCT_NAME => fake()->text(50),
+        $item =  [GlobalConstant::ID => $this->randomStockId(), SC::PRODUCT_NAME => fake()->text(50),
                     StockpileHeader::QUANTITY => fake()->numberBetween(1, 10),
                     SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
         $buyer[SC::ITEMS] = [$item];
         return $buyer;
+    }
+
+        /**
+         * StockpileテーブルからランダムでIDを取得する。
+         *
+         * @return integer
+         */
+        private function randomStockId():int {
+            return Stockpile::inRandomOrder()->first()->id;
         }
 }

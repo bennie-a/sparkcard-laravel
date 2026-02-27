@@ -76,29 +76,10 @@ class ShiptParseTest extends TestCase
                     "{$i}.". SC::ZIPCODE => $buyer[SC::POSTAL_CODE],
                     "{$i}.". SC::ADDRESS =>
                         $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
-                    "{$i}.". SC::SHIPPING_DATE => $buyer[SC::SHIPPING_DATE],
                     "{$i}.". SC::ITEMS => fn($items) => count($items) == count($buyer[SC::ITEMS]),
                 ]);
             });
         }
-    }
-
-    #[TestDox('発送日が正しく設定されているか確認する')]
-    #[TestWith(['td'], '今日')]
-    #[TestWith(['tmr'], '明日')]
-    #[TestWith(['yd'], '昨日')]
-    #[TestWith([''], '未入力')]
-    public function testShippingDate(string $date) {
-        $shiptDate =ShiptLogTestHelper::getShiptDate($date);
-        logger()->info("Testing shipping date: {$shiptDate}");
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $shiptDate)];
-
-        $response = $this->uploadOk($buyerInfos);
-
-        if (empty($shiptDate)) {
-            $shiptDate = TestDateUtil::formatToday();
-        }
-        $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $shiptDate);
     }
 
     #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
@@ -215,7 +196,7 @@ class ShiptParseTest extends TestCase
     #[TestWith([false, true], '特別版')]
     #[TestWith([true, true], '特別版のFoilカード')]
     public function testStock(bool $isFoil = false, bool $isPromo = false): void {
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $isFoil, $isPromo)];
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
@@ -263,7 +244,7 @@ class ShiptParseTest extends TestCase
                 GC::NAME => $buyerInfos[0][SC::BUYER],
                 SC::ZIPCODE => $buyerInfos[0][SC::POSTAL_CODE],
                 SC::ADDRESS => $buyerInfos[0][SC::STATE].$buyerInfos[0][SC::CITY].$buyerInfos[0][SC::ADDRESS_1].' '.$buyerInfos[0][SC::ADDRESS_2],
-                SC::SHIPPING_DATE => $buyerInfos[0][SC::SHIPPING_DATE],
+                SC::SHIPPING_DATE => TestDateUtil::formatToday(),
                 SC::STOCK_ID => (int)$item[GC::ID],
                 StockpileHeader::QUANTITY => (int)$item[StockpileHeader::QUANTITY],
                 SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
@@ -295,7 +276,6 @@ class ShiptParseTest extends TestCase
             '*' => [
                 SC::ORDER_ID,
                 SC::BUYER,
-                SC::SHIPPING_DATE,
                 SC::ZIPCODE,
                 SC::ADDRESS,
                 SC::ITEMS => [
@@ -335,7 +315,9 @@ class ShiptParseTest extends TestCase
                 ]
             ]);
 
-        return $response;
+            $response->assertJsonMissingPath('*.'.SC::SHIPPING_DATE, '存在しない商品名');
+
+            return $response;
     }
 
     /**
@@ -373,13 +355,13 @@ class ShiptParseTest extends TestCase
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $header  = ShiptLogTestHelper::getHeader();
         // shipping_dateヘッダーを削除
-        $header = str_replace(SC::SHIPPING_DATE, '', $header);
+        $header = str_replace(SC::PRODUCT_ID, '', $header);
         $implode = $this->createCsvLine([$buyerInfo]);
         $content = <<<CSV
         {$header}
         {$implode}
         CSV;
-        $this->verifyFileError($content, 'lack-of-header', SC::SHIPPING_DATE);
+        $this->verifyFileError($content, 'lack-of-header', SC::PRODUCT_ID);
     }
 
     #[TestDox('ファイルエラー: ヘッダーがない')]
@@ -423,25 +405,6 @@ class ShiptParseTest extends TestCase
             EC::DETAIL => 'ファイルはCSV形式でアップロードしてください']);
     }
 
-    #[Test]
-    #[TestDox('商品コードが存在しない場合、行数とメッセージが返ってくるか検証する。')]
-    public function ngNoProductId() {
-        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
-        $buyerInfo[SC::ITEMS][0][GC::ID] = '9999';
-        $implode = $this->createCsvLine([$buyerInfo]);
-        $header = ShiptLogTestHelper::getHeader();
-        $content = <<<CSV
-        {$header}
-        {$implode}
-        CSV;
-
-        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
-        $status = CustomResponse::HTTP_CSV_VALIDATION;
-
-        $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, '商品コードが存在しません。');
-    }
-
     #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
     #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
     #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
@@ -473,7 +436,7 @@ class ShiptParseTest extends TestCase
     public function testNgValidator(): void
     {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
-        $buyerInfo[SC::SHIPPING_DATE] = 'aaa';
+        $buyerInfo[SC::POSTAL_CODE] = 'aaa';
 
         $implode = ShiptLogTestHelper::createCsvLine([$buyerInfo]);
         $header = ShiptLogTestHelper::getHeader();
@@ -485,7 +448,7 @@ class ShiptParseTest extends TestCase
         $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
         $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, '発送日はY/m/d形式の日付で入力してください。');
+        $this->assertRowError($response, $status, '郵便番号は「123-4567」の形式で入力してください。');
     }
 
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {

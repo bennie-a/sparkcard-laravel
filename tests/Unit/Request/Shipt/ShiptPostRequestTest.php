@@ -10,6 +10,7 @@ use App\Services\Constant\ShiptConstant as SC;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
+use Tests\Util\TestDateUtil;
 
 /**
  * ShiptPostRequestクラスをテストするクラス
@@ -18,15 +19,10 @@ use PHPUnit\Framework\Attributes\TestWith;
 class ShiptPostRequestTest extends AbstractValidationTest {
 
     #[Test]
-    #[TestWith(['td'], '発送日が今日')]
-    #[TestWith(['yd'], '発送日が昨日')]
-    #[TestWith(['tmr'], '発送日が明日')]
-    #[TestWith([''], '発送日が未入力')]
-    #[TestDox('発送日に関する正常系テスト')]
-    public function ok_shippingDate(string $dateKey): void {
-        $date = ShiptLogTestHelper::getShiptDate($dateKey);
+    #[TestDox('全項目を入力した正常テスト')]
+    public function ok(): void {
         $request = ShiptLogTestHelper::createStoreRequest();
-        $request[SC::SHIPPING_DATE] = $date;
+        $request[SC::SHIPPING_DATE] = TestDateUtil::formatToday();
         $this->ok_pattern($request);
     }
 
@@ -36,6 +32,7 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestWith([SC::ZIPCODE], '郵便番号')]
     #[TestWith([SC::ADDRESS], '住所')]
     #[TestWith([SC::ITEMS], '商品情報')]
+    #[TestWith([SC::SHIPPING_DATE], '発送日')]
     #[TestDox('購入者情報の必須項目が未設定の場合のエラーチェック')]
     public function ng_buyer_info_key_lacked(string $key) {
         $request = ShiptLogTestHelper::createStoreRequest();
@@ -55,7 +52,7 @@ class ShiptPostRequestTest extends AbstractValidationTest {
         $request = ShiptLogTestHelper::createStoreRequest();
         unset($request[SC::ITEMS][0][$key]);
         $this->ng_item_info($key, $request, 'は必ず入力してください。');
-        }
+    }
 
     #[Test]
     #[TestWith(['', 'は必ず入力してください。'], '未入力')]
@@ -88,6 +85,13 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestDox('住所に関するエラーチェック')]
     public function ng_address(string $value, string $msg): void {
         $this->ng_buyer_info(SC::ADDRESS, $value, $msg);
+    }
+
+    #[Test]
+    #[TestWith(['aa', 'はY/m/d形式の日付で入力してください。'], '日付形式ではない')]
+    #[TestDox('発送日に関するエラーチェック')]
+    public function ng_shipping_date(string $value, string $msg): void {
+        $this->ng_buyer_info(SC::SHIPPING_DATE, $value, $msg);
     }
 
     #[Test]
