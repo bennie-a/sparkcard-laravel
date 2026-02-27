@@ -10,6 +10,8 @@
     import ModalButton from '../component/ModalButton.vue';
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
+    import scdatepicker from "../component/SCDatePicker.vue";
+
 
     const result = reactive([]);
     const resultCount = ref(0);
@@ -20,6 +22,7 @@
     const hasError = ref(false);
     const hasResult = ref(false);
     const piniaMsg = piniaMsgStore();
+    const shiptDate = ref(new Date());
 
     onMounted(() => {
         piniaMsg.reset();
@@ -32,10 +35,12 @@
         isLoading.value = true;
         piniaMsg.reset();
         await Promise.all(result.value.map(async (r) => {
+            const formatShiptDate = shiptDate.value.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit",
+            day: "2-digit"})
             const json =
                 {
                     order_id: r.order_id,
-                    shipping_date: r.shipping_date,
+                    shipping_date: formatShiptDate,
                     buyer_name: r.buyer_name,
                     zip_code: r.zip_code,
                     address: r.address,
@@ -111,19 +116,23 @@
         </div>
     </div>
     <div class="mt-1 ui grid">
-        <div class="row">
-            <div class="three wide left floated column"  v-if="hasResult">
-                <ModalButton  @action="post()">インポート</ModalButton>
-            </div>
-            <div class="seven wide right floated column ui right aligned">
-                <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
-            </div>
+        <div class="ui form" v-if="hasResult">
+                <div class="two fields">
+                    <div class="nine wide column field">
+                        <label>発送日</label>
+                        <scdatepicker v-model="shiptDate"></scdatepicker>
+                    </div>
+                    <div class="seven wide column field">
+                        <label style="visibility: hidden">インポートボタン</label>
+                            <ModalButton  @action="post()">インポート</ModalButton>
+                        </div>
+                </div>
         </div>
     </div>
-    <div class="mt-1">
+    <div class="mt-2" v-if="hasResult">
         <div class="ui padded segment" v-for="(r, index) in result.value" :key="index">
             <div>
-               {{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
+                {{r.order_id}}
             </div>
             <address id="buyer" class="ui secondary segment">
                 <p>〒{{ r.zip_code }}</p>
@@ -158,9 +167,12 @@
                 </tbody>
             </table>
         </div>
+        <div class="ui center aligned container">
+            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+        </div>
     </div>
-        <loading
-         :active="isLoading"
+    <loading
+    :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
 
 </template>
