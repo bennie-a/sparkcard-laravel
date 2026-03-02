@@ -130,37 +130,52 @@
         </div>
     </div>
     <div class="mt-2" v-if="hasResult">
-        <div class="ui padded segment" v-for="(r, index) in result.value" :key="index">
-            <div>
+        <div class="ui grid segment" v-for="(r, index) in result.value" :key="index" style="padding:1rem">
+            <div class="pl-0">
                 {{r.order_id}}
             </div>
-            <address id="buyer" class="ui secondary segment">
-                <p>〒{{ r.zip_code }}</p>
-                <p>{{ r.address }}</p>
-                <p class="name">{{ r.buyer_name }}様</p>
-            </address>
+            <div class="ui three column row">
+                <address id="buyer" class="column ui secondary segment">
+                    <p>〒{{ r.zip_code }}</p>
+                    <p>{{ r.address }}</p>
+                    <p class="name">{{ r.buyer_name }}様</p>
+                </address>
+                <div class="column">
+                    <dl id="price">
+                        <div class="list">
+                            <dt>クーポン割引</dt>
+                            <dd>ー</dd>
+                        </div>
+                        <div class="list">
+                            <dt>送料</dt>
+                            <dd><i class="bi bi-currency-yen"></i>85</dd>
+                        </div>
+                        <div class="list">
+                            <dt>合計金額</dt>
+                            <dd><i class="bi bi-currency-yen"></i>{{ r.total_price }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
             <table class="ui striped table">
                 <thead>
                     <tr>
-                        <th class="one wide center aligned">在庫ID</th>
-                        <th class="seven wide">カード情報</th>
+                        <th class="center aligned">在庫ID</th>
+                        <th class="eight wide">カード情報</th>
                         <th class="center aligned">状態</th>
                         <th class="center aligned">枚数</th>
                         <th class="center aligned">価格</th>
-                        <th class="center aligned">クーポン</th>
                         <th class="center aligned">単価</th>
                         <th class="center aligned">小計</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, idx) in r.items" :key="idx">
-                        <td class="one wide center aligned">{{ item.stock.id }}</td>
+                        <td class="center aligned">{{ item.stock.id }}</td>
                         <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
-                        <td class="negative center aligned" v-if="item.coupon_discount_amount != 0">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
-                        <td class="center aligned" v-if="item.coupon_discount_amount == 0"><i class="bi bi-dash-lg"></i></td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
                     </tr>
@@ -193,4 +208,20 @@
     margin-top: 1rem;
 }
 
+#price .list {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+#price .list dt {
+    font-weight: 700;
+    }
+#price .list dt::after {
+    content: ":";
+    margin-left: 0.25rem;
+}
+
+#price .list dd {
+text-align:  center;
+margin: 0;
+}
 </style>

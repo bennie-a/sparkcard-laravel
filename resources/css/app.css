@@ -34,7 +34,7 @@ body {
     padding-block: 0.8rem;
 }
 
-#main>.ui.header {   
+#main>.ui.header {
     color:var(--gray) !important;
 }
 
@@ -81,6 +81,10 @@ body {
 
 .text-center {
     text-align: center;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
 }
 .pl-2 {
     padding-left: 2em !important;
