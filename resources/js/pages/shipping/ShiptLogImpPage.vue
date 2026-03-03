@@ -144,7 +144,7 @@
                     <dl id="price">
                         <div class="list">
                             <dt>クーポン割引</dt>
-                            <dd>ー</dd>
+                            <dd><i class="bi bi-currency-yen"></i>0</dd>
                         </div>
                         <div class="list">
                             <dt>送料</dt>
@@ -214,7 +214,10 @@
 }
 #price .list dt {
     font-weight: 700;
-    }
+    text-align: right;
+    width: 30%;
+}
+
 #price .list dt::after {
     content: ":";
     margin-left: 0.25rem;
