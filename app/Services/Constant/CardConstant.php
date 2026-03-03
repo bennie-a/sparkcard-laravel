@@ -6,6 +6,7 @@ class CardConstant {
 
     const SET = 'set';
 
+    /**@deprecated("5.1.0") */
     const NAME = 'name';
 
     const EN_NAME = 'en_name';

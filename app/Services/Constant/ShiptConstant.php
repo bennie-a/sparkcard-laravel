@@ -23,6 +23,7 @@ class ShiptConstant extends StockpileHeader {
     public const ZIPCODE = "zip_code";
     public const ADDRESS = "address";
     public const DISCOUNT_AMOUNT = "coupon_discount_amount";
+    public const FEE = "shipping_fee";
     public const ITEMS = "items";
     public const SHIPMENT = 'shipment';
     public const SINGLE_PRICE = 'single_price';
@@ -30,10 +31,4 @@ class ShiptConstant extends StockpileHeader {
     public const BUYER_INFO = 'buyer_info';
     public const STOCK_ID = 'stock_id';
     public const IS_REGISTERED = 'isRegistered';
-
-    #[Deprecated(since: "5.1.0", reason: "DBで管理するため不要")]
-    public static function shippinglog_constants() {
-        return [self::ORDER_ID, self::SHIPPING_DATE, self::PRODUCT_ID, self::BUYER, self::PRODUCT_NAME, self::QUANTITY,
-                     self::PRODUCT_PRICE, self::POSTAL_CODE, self::STATE, self::CITY, self::ADDRESS_1,self::ADDRESS_2, self::DISCOUNT_AMOUNT];
-    }
 }

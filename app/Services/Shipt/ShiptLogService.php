@@ -10,6 +10,7 @@ use App\Files\Reader\ShiptLogCsvReader;
 use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
+use App\Repositories\Api\Shipt\ShiptRepository;
 use App\Services\AbstractCsvService;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
@@ -30,6 +31,12 @@ use DateTime;
  * 出荷ログ機能のサービスクラス
  */
 class ShiptLogService extends AbstractCsvService {
+
+    private $repo;
+    public function __construct() {
+        $this->repo = new ShiptRepository();
+    }
+
     /**
      * 出荷ログ用のCSV読み込みクラスを取得する。
      * @see CsvReader::csvReader
@@ -115,8 +122,6 @@ class ShiptLogService extends AbstractCsvService {
                     SC::SHIPMENT => $row->shipment(),
                     SC::PRODUCT_PRICE => $row->product_price(),
                     SC::DISCOUNT_AMOUNT => $row->discount(),
-                    SC::SINGLE_PRICE => $row->single_price(),
-                    SC::TOTAL_PRICE => $row->total_price(),
                     SC::IS_REGISTERED => ShippingLog::isExists($orderId, $row->buyer(), $stockId),
                 ];
             } catch (ShipmentOrderException $e) {
