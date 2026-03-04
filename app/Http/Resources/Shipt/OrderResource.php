@@ -36,17 +36,21 @@ class OrderResource extends JsonResource
         $coupon = array_reduce($shiptData, function($carry, $item) {
             return $carry + $item[SC::DISCOUNT_AMOUNT];
         }, 0);
+
+        // 商品価格の合計 - クーポン割引額の合計
+        $totalPrice = $this->calcTotalPrice($productPrice, $coupon);
         // 送料
         $shiptFee = ShiptMethod::findByPrice($productPrice)->price;
+
+        $shiptFeePerItems = round($shiptFee / count($shiptData));
         foreach ($shiptData as &$s) {
             $stock = $s[SC::STOCK];
-            $totalPrice = $this->calcTotalPrice($s[SC::PRODUCT_PRICE], $s[SC::DISCOUNT_AMOUNT]);
+            $subTotalPrice = $this->calcSubTotalPrice($s, $shiptFeePerItems);
             $items[] = [
                 SC::STOCK => new ItemResource($stock),
                 SC::SHIPMENT => $s[SC::SHIPMENT],
-                SC::PRODUCT_PRICE => $s[SC::PRODUCT_PRICE],
-                SC::TOTAL_PRICE => $totalPrice,
-                SC::SINGLE_PRICE => $this->calcSinglePrice($totalPrice, $shiptFee, $s[SC::SHIPMENT]),
+                SC::TOTAL_PRICE => $subTotalPrice,
+                SC::SINGLE_PRICE => $this->calcSinglePrice($subTotalPrice, $shiptFeePerItems, $s[SC::SHIPMENT]),
                 SC::IS_REGISTERED => $s[SC::IS_REGISTERED],
             ];
         }
@@ -56,7 +60,6 @@ class OrderResource extends JsonResource
             SC::ZIPCODE => $row->postal_code(),
             SC::ADDRESS => $row->address(),
             SC::FEE => $shiptFee,
-            SC::PRODUCT_PRICE => $productPrice,
             SC::TOTAL_PRICE => $totalPrice,
             SC::DISCOUNT_AMOUNT => $coupon,
             SC::ITEMS => $items,
@@ -78,12 +81,22 @@ class OrderResource extends JsonResource
      * 単価を算出する。
      *
      * @param integer $totalPrice 支払い金額
-     * @param integer $shiptFee 送料
+     * @param integer $shiptFeePerItems 1商品あたりの送料
      * @param integer $shipment 注文枚数
      * @return integer 単価
      */
-    private function calcSinglePrice(int $totalPrice,  int $shiptFee, int $shipment):int {
-        $perShipment = round($shiptFee / $shipment);
-        return round(($totalPrice - $perShipment) / $shipment);
+    private function calcSinglePrice(int $totalPrice,  int $shiptFeePerItems, int $shipment):int {
+        return round(($totalPrice - $shiptFeePerItems) / $shipment);
+    }
+
+    /**
+     * 各商品の小計を算出する。
+     *
+     * @param array $itemData 商品情報
+     * @param integer $shiptFeePerItems 1商品あたりの送料
+     * @return integer 小計
+     */
+    private function calcSubTotalPrice(array $itemData, int $shiptFeePerItems):int {
+        return $itemData[SC::PRODUCT_PRICE] - $itemData[SC::DISCOUNT_AMOUNT] - $shiptFeePerItems;
     }
 }

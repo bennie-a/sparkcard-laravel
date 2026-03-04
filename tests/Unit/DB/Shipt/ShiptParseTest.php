@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\DB\Shipt;
 
+use App\Enum\ShiptMethod;
 use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
+use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
@@ -68,6 +70,11 @@ class ShiptParseTest extends TestCase
 
         for($i = 0; $i < $buyerCount; $i++) {
             $buyer = $buyerInfos[$i];
+            // 合計額の算出
+            $totalPrice = array_reduce($buyer[SC::ITEMS], function($carry, $item) {
+                return $carry + ($item[SC::PRODUCT_PRICE] - $item[SC::DISCOUNT_AMOUNT]);
+            }, 0);
+
             // 購入者情報の確認
             $response->assertJson(function(AssertableJson $json) use($i, $buyer) {
                 $json->whereAll([
@@ -143,21 +150,38 @@ class ShiptParseTest extends TestCase
         return (int)$item[SC::QUANTITY];
     }
 
-    #[TestDox('支払い金額が正しく計算されているか確認する')]
-    #[TestWith([0], '割引なし')]
-    #[TestWith([100], '割引あり')]
+    #[TestWith([300, 'ミニレター'], '1500円未満はミニレター')]
+    #[TestWith([1500, 'クリックポスト'], '1500円以上10000円未満はクリックポスト')]
+    #[TestWith([10000, '簡易書留'], '10000円以上は簡易書留')]
+    #[TestDox('送料が正しく設定されているか確認する')]
+    public function testShippingFee(int $productPrice, String $method) {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE] = $productPrice;
+
+        $response = $this->uploadOk([$buyerInfo]);
+        $expectedFee = Shipping::findByMethod($method)->price;
+
+        $response->assertJsonPath('0.'.SC::FEE, $expectedFee);
+    }
+
+    #[TestDox('合計金額とクーポン割引合計額が正しく計算されているか確認する')]
+    #[TestWith([0], 'クーポン割引なし')]
+    #[TestWith([100], 'クーポン割引あり')]
     public function testTotalPriceCalc(int $discount) {
-        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
-        // 商品価格と割引金額を設定
-        $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(2)];
+        // 割引金額を設定
+        foreach ($buyerInfos[0][SC::ITEMS] as &$item) {
+            $item[SC::DISCOUNT_AMOUNT] = $discount;
+        }
 
         $response = $this->uploadOk($buyerInfos);
 
-        $exitem = current($buyerInfos[0][SC::ITEMS]);
-        $exProductPrice = $exitem[SC::PRODUCT_PRICE];
-        $exTotalPrice = $exProductPrice - $exitem[SC::DISCOUNT_AMOUNT];
-        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::PRODUCT_PRICE, $exProductPrice);
-        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::TOTAL_PRICE, $exTotalPrice);
+        $exTotalPrice = array_reduce($buyerInfos[0][SC::ITEMS], function($carry, $item) {
+            return $carry + $item[SC::PRODUCT_PRICE];
+        }, 0);
+        $exDiscount = $discount * 2;
+        $response->assertJsonPath('0.'.SC::TOTAL_PRICE, $exTotalPrice - $exDiscount);
+        $response->assertJsonPath('0.'.SC::DISCOUNT_AMOUNT, $exDiscount);
     }
 
     #[TestDox('単価が正しく計算されているか確認する')]
@@ -278,6 +302,9 @@ class ShiptParseTest extends TestCase
                 SC::BUYER,
                 SC::ZIPCODE,
                 SC::ADDRESS,
+                SC::TOTAL_PRICE,
+                SC::DISCOUNT_AMOUNT,
+                SC::FEE,
                 SC::ITEMS => [
                     '*' => [
                         SC::STOCK => [
@@ -305,8 +332,6 @@ class ShiptParseTest extends TestCase
                             StockpileHeader::QUANTITY
                         ],
                         SC::SHIPMENT,
-                        SC::PRODUCT_PRICE,
-                        SC::DISCOUNT_AMOUNT,
                         SC::TOTAL_PRICE,
                         SC::SINGLE_PRICE,
                         SC::IS_REGISTERED
