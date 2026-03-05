@@ -28,14 +28,14 @@ class OrderResource extends JsonResource
         $row = $this[GlobalConstant::DATA];
         $shiptData = $this[SC::ITEMS];
         // 商品価格の合計
-        $productPrice = array_reduce($shiptData, function($carry, $item) {
-            return $carry + $item[SC::PRODUCT_PRICE];
-        }, 0);
+        $productPrice = $this->collection($shiptData)->sum(function($item) {
+            return $item[SC::PRODUCT_PRICE];
+        });
 
         // クーポン割引額の合計
-        $coupon = array_reduce($shiptData, function($carry, $item) {
-            return $carry + $item[SC::DISCOUNT_AMOUNT];
-        }, 0);
+        $coupon = $this->collection($shiptData)->sum(function($item) {
+            return $item[SC::DISCOUNT_AMOUNT];
+        });
 
         // 商品価格の合計 - クーポン割引額の合計
         $totalPrice = $this->calcTotalPrice($productPrice, $coupon);

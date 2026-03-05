@@ -100,7 +100,7 @@ class ShiptParseTest extends TestCase
     #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
     public function testOkSingleAndSetcorrect(bool $isFoil, bool $isPromo, bool $isSet): void {
         $shipment = $isSet ? 2 : 1;
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $isFoil, $isPromo, $shipment)];
         $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
             $stock = Stockpile::find((int)$item[GC::ID]);
             // セット販売の商品名に変更
@@ -117,7 +117,7 @@ class ShiptParseTest extends TestCase
                     $base = "0.".SC::ITEMS.".{$i}.";
                     $json->whereAll([
                         $base.SC::SHIPMENT => $this->shipment($item),
-                        $base.SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                        $base.SC::STOCK.'.'.GC::ID => $item[GC::ID],
                     ]);
             });
         }
