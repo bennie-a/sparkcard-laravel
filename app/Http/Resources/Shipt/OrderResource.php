@@ -50,7 +50,7 @@ class OrderResource extends JsonResource
                 SC::STOCK => new ItemResource($stock),
                 SC::SHIPMENT => $s[SC::SHIPMENT],
                 SC::TOTAL_PRICE => $subTotalPrice,
-                SC::SINGLE_PRICE => $this->calcSinglePrice($subTotalPrice, $shiptFeePerItems, $s[SC::SHIPMENT]),
+                SC::SINGLE_PRICE => $this->calcSinglePrice($subTotalPrice, $s[SC::SHIPMENT]),
                 SC::IS_REGISTERED => $s[SC::IS_REGISTERED],
             ];
         }
@@ -81,12 +81,11 @@ class OrderResource extends JsonResource
      * 単価を算出する。
      *
      * @param integer $totalPrice 支払い金額
-     * @param integer $shiptFeePerItems 1商品あたりの送料
      * @param integer $shipment 注文枚数
      * @return integer 単価
      */
-    private function calcSinglePrice(int $totalPrice,  int $shiptFeePerItems, int $shipment):int {
-        return round(($totalPrice - $shiptFeePerItems) / $shipment);
+    private function calcSinglePrice(int $subtotalPrice, int $shipment):int {
+        return (int)round($subtotalPrice / $shipment);
     }
 
     /**
