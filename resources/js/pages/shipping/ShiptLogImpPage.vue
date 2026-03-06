@@ -142,13 +142,16 @@
                 </address>
                 <div class="column">
                     <dl id="price">
-                        <div class="list">
+                        <div class="list" v-if="r.coupon_discount_amount != 0">
                             <dt>クーポン割引</dt>
-                            <dd><i class="bi bi-currency-yen"></i>0</dd>
+                            <dd>
+                                <i class="bi bi-dash"></i>
+                                <i class="bi bi-currency-yen"></i>{{ r.coupon_discount_amount }}
+                            </dd>
                         </div>
                         <div class="list">
                             <dt>送料</dt>
-                            <dd><i class="bi bi-currency-yen"></i>85</dd>
+                            <dd><i class="bi bi-currency-yen"></i>{{ r.shipping_fee }}</dd>
                         </div>
                         <div class="list">
                             <dt>合計金額</dt>
@@ -160,11 +163,10 @@
             <table class="ui striped table">
                 <thead>
                     <tr>
-                        <th class="center aligned">在庫ID</th>
+                        <th class="one wide center aligned">在庫ID</th>
                         <th class="eight wide">カード情報</th>
                         <th class="center aligned">状態</th>
                         <th class="center aligned">枚数</th>
-                        <th class="center aligned">価格</th>
                         <th class="center aligned">単価</th>
                         <th class="center aligned">小計</th>
                     </tr>
@@ -175,7 +177,6 @@
                         <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
-                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
                     </tr>
@@ -193,6 +194,11 @@
 </template>
 
 <style scoped>
+
+.ui.grid > table {
+    padding: 0;
+}
+
 #upload_form {
     padding: 1rem;
 }
@@ -220,11 +226,11 @@
 
 #price .list dt::after {
     content: ":";
-    margin-left: 0.25rem;
 }
 
 #price .list dd {
-text-align:  center;
-margin: 0;
+    text-align:  center;
+    margin: 0;
+    margin-left: 0.4rem;
 }
 </style>
