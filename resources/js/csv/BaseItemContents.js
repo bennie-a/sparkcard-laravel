@@ -10,11 +10,14 @@ export default () => {
         header: [
             "商品ID",
             "商品名",
+            "種類ID",
+            "種類名",
             "説明",
             "価格",
             "在庫数",
             "公開状態",
             "表示順",
+            "種類在庫数",
             "画像1",
             "画像2",
             "画像3",
@@ -24,11 +27,14 @@ export default () => {
             let json = [
                 c.baseId,
                 toItemName(c),
+                "",
+                "",
                 this.description(c),
                 this.price(c.price),
                 c.stock,
                 "1",
                 index,
+                "",
                 toSurfaceName(c),
                 toNoLabelName(c)
             ];

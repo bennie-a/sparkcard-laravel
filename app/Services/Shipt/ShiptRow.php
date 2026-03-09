@@ -27,11 +27,6 @@ class ShiptRow {
         return $this->number;
     }
 
-    public function shipping_date() {
-        $date = $this->row[SC::SHIPPING_DATE];
-        return CarbonFormatUtil::assignTodayIfMissing($date);
-    }
-
     public function buyer() {
         return $this->row[SC::BUYER];
     }
@@ -92,7 +87,7 @@ class ShiptRow {
 
     /**
      * 1枚あたりの単価を計算する。
-     *
+     *@deprecated 5.2.0
      * @return int
      */
     public function single_price():int {
@@ -102,7 +97,7 @@ class ShiptRow {
 
     /**
      * 支払い価格を計算する。
-     *
+     * @deprecated 5.2.0
      * @return integer
      */
     public function total_price():int {

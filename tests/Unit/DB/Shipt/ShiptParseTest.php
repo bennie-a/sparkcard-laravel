@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\DB\Shipt;
 
+use App\Enum\ShiptMethod;
 use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
+use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
@@ -68,6 +70,11 @@ class ShiptParseTest extends TestCase
 
         for($i = 0; $i < $buyerCount; $i++) {
             $buyer = $buyerInfos[$i];
+            // 合計額の算出
+            $totalPrice = array_reduce($buyer[SC::ITEMS], function($carry, $item) {
+                return $carry + ($item[SC::PRODUCT_PRICE] - $item[SC::DISCOUNT_AMOUNT]);
+            }, 0);
+
             // 購入者情報の確認
             $response->assertJson(function(AssertableJson $json) use($i, $buyer) {
                 $json->whereAll([
@@ -76,29 +83,10 @@ class ShiptParseTest extends TestCase
                     "{$i}.". SC::ZIPCODE => $buyer[SC::POSTAL_CODE],
                     "{$i}.". SC::ADDRESS =>
                         $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
-                    "{$i}.". SC::SHIPPING_DATE => $buyer[SC::SHIPPING_DATE],
                     "{$i}.". SC::ITEMS => fn($items) => count($items) == count($buyer[SC::ITEMS]),
                 ]);
             });
         }
-    }
-
-    #[TestDox('発送日が正しく設定されているか確認する')]
-    #[TestWith(['td'], '今日')]
-    #[TestWith(['tmr'], '明日')]
-    #[TestWith(['yd'], '昨日')]
-    #[TestWith([''], '未入力')]
-    public function testShippingDate(string $date) {
-        $shiptDate =ShiptLogTestHelper::getShiptDate($date);
-        logger()->info("Testing shipping date: {$shiptDate}");
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $shiptDate)];
-
-        $response = $this->uploadOk($buyerInfos);
-
-        if (empty($shiptDate)) {
-            $shiptDate = TestDateUtil::formatToday();
-        }
-        $response->assertJsonPath('0.'.SC::SHIPPING_DATE, $shiptDate);
     }
 
     #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
@@ -112,7 +100,7 @@ class ShiptParseTest extends TestCase
     #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
     public function testOkSingleAndSetcorrect(bool $isFoil, bool $isPromo, bool $isSet): void {
         $shipment = $isSet ? 2 : 1;
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo, $shipment)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $isFoil, $isPromo, $shipment)];
         $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
             $stock = Stockpile::find((int)$item[GC::ID]);
             // セット販売の商品名に変更
@@ -129,7 +117,7 @@ class ShiptParseTest extends TestCase
                     $base = "0.".SC::ITEMS.".{$i}.";
                     $json->whereAll([
                         $base.SC::SHIPMENT => $this->shipment($item),
-                        $base.SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                        $base.SC::STOCK.'.'.GC::ID => $item[GC::ID],
                     ]);
             });
         }
@@ -162,50 +150,54 @@ class ShiptParseTest extends TestCase
         return (int)$item[SC::QUANTITY];
     }
 
-    #[TestDox('支払い金額が正しく計算されているか確認する')]
-    #[TestWith([0], '割引なし')]
-    #[TestWith([100], '割引あり')]
-    public function testTotalPriceCalc(int $discount) {
-        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
-        // 商品価格と割引金額を設定
-        $buyerInfos[0][SC::ITEMS][0][SC::DISCOUNT_AMOUNT] = $discount;
+    #[TestWith([300, 'ミニレター'], '1500円未満はミニレター')]
+    #[TestWith([1500, 'クリックポスト'], '1500円以上10000円未満はクリックポスト')]
+    #[TestWith([10000, '簡易書留'], '10000円以上は簡易書留')]
+    #[TestDox('送料が正しく設定されているか確認する')]
+    public function testShippingFee(int $productPrice, String $method) {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE] = $productPrice;
 
-        $response = $this->uploadOk($buyerInfos);
+        $response = $this->uploadOk([$buyerInfo]);
+        $expectedFee = Shipping::findByMethod($method)->price;
 
-        $exitem = current($buyerInfos[0][SC::ITEMS]);
-        $exProductPrice = $exitem[SC::PRODUCT_PRICE];
-        $exTotalPrice = $exProductPrice - $exitem[SC::DISCOUNT_AMOUNT];
-        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::PRODUCT_PRICE, $exProductPrice);
-        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::TOTAL_PRICE, $exTotalPrice);
+        $response->assertJsonPath('0.'.SC::FEE, $expectedFee);
     }
 
-    #[TestDox('単価が正しく計算されているか確認する')]
-    #[TestWith([false], '出荷枚数1枚_割引なし')]
-    #[TestWith([false, 50], '出荷枚数1枚_割引あり')]
-    #[TestWith([true], '出荷枚数が複数枚_割引なし')]
-    #[TestWith([true, 50], '出荷枚数が複数枚_割引あり')]
-    public function testSinglePriceCalc(bool $isMulti, int $discount = 0): void {
-        $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
-        // 商品価格と出荷枚数を設定
-        if ($isMulti) {
-            $buyerInfos[0][SC::ITEMS] = [ShiptLogTestHelper::createItemInfo(true, false, 3)];
+    #[TestDox('合計金額とクーポン割引合計額、商品別の小計、単価が正しく計算されているか確認する')]
+    #[TestWith([0, 1], '1商品1枚_割引なし')]
+    #[TestWith([0, 1, 2], '1商品2枚_割引なし')]
+    #[TestWith([0, 2, 1], '2商品1枚ずつ_割引なし')]
+    #[TestWith([0, 2, 2], '2商品2枚ずつ_割引なし')]
+    #[TestWith([100, 1, 1], '1商品1枚_割引あり')]
+    #[TestWith([50, 1, 2], '1商品2枚_割引あり')]
+    #[TestWith([80, 1, 2], '2商品1枚_割引あり')]
+    #[TestWith([110, 2, 2], '2商品2枚_割引あり')]
+    public function testTotalPriceCalc(int $discount, int $itemCount, int $quantity = 1): void {
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo($itemCount, false, false, $quantity)];
+        foreach ($buyerInfos[0][SC::ITEMS] as &$item) {
+            $item[StockpileHeader::QUANTITY] = $quantity;
+            $item[SC::DISCOUNT_AMOUNT] = $discount;
         }
-        $item = $buyerInfos[0][SC::ITEMS][0];
-        $item[SC::PRODUCT_PRICE] = 1000;
-        $item[SC::DISCOUNT_AMOUNT] = $discount;
-
         $response = $this->uploadOk($buyerInfos);
 
-        $items = $buyerInfos[0][SC::ITEMS];
-        for ($i=0; $i < count($items); $i++) {
-            $item = $items[$i];
-            $exTotalPrice = $item[SC::PRODUCT_PRICE] - $item[SC::DISCOUNT_AMOUNT];
-            $exSinglePrice = (int)round($exTotalPrice / $item[StockpileHeader::QUANTITY]);
-            $response->assertJson(function(AssertableJson $json) use($i, $exSinglePrice) {
-            $json->whereAll([
-                "0.".SC::ITEMS.".{$i}.".SC::SINGLE_PRICE => $exSinglePrice,
-                ]);
-            });
+        $items = current($buyerInfos)[SC::ITEMS];
+        $exTotalPrice = array_reduce($items, function($carry, $item) {
+            return $carry + $item[SC::PRODUCT_PRICE];
+        }, 0);
+        $shiptFee = ShiptMethod::findByPrice($exTotalPrice)->price;
+
+        $exDiscount = $discount * $itemCount;
+        $response->assertJsonPath('0.'.SC::TOTAL_PRICE, $exTotalPrice - $exDiscount);
+        $response->assertJsonPath('0.'.SC::DISCOUNT_AMOUNT, $exDiscount);
+
+        $shiptFeePerItems = (int)round($shiptFee / $itemCount);
+        // 商品ごとの合計金額と単価が正しいか確認
+        for ($i=0; $i < $itemCount; $i++) {
+            $exSubtotal = $items[$i][SC::PRODUCT_PRICE] - $items[$i][SC::DISCOUNT_AMOUNT] - $shiptFeePerItems;
+            $exSingle = (int)round($exSubtotal / $quantity);
+            $response->assertJsonPath("0.".SC::ITEMS.".{$i}.".SC::TOTAL_PRICE, $exSubtotal);
+            $response->assertJsonPath("0.".SC::ITEMS.".{$i}.".SC::SINGLE_PRICE, $exSingle);
         }
     }
 
@@ -215,7 +207,7 @@ class ShiptParseTest extends TestCase
     #[TestWith([false, true], '特別版')]
     #[TestWith([true, true], '特別版のFoilカード')]
     public function testStock(bool $isFoil = false, bool $isPromo = false): void {
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, TestDateUtil::formatToday(), $isFoil, $isPromo)];
+        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $isFoil, $isPromo)];
         $response = $this->uploadOk($buyerInfos);
 
         $items = $buyerInfos[0][SC::ITEMS];
@@ -263,7 +255,7 @@ class ShiptParseTest extends TestCase
                 GC::NAME => $buyerInfos[0][SC::BUYER],
                 SC::ZIPCODE => $buyerInfos[0][SC::POSTAL_CODE],
                 SC::ADDRESS => $buyerInfos[0][SC::STATE].$buyerInfos[0][SC::CITY].$buyerInfos[0][SC::ADDRESS_1].' '.$buyerInfos[0][SC::ADDRESS_2],
-                SC::SHIPPING_DATE => $buyerInfos[0][SC::SHIPPING_DATE],
+                SC::SHIPPING_DATE => TestDateUtil::formatToday(),
                 SC::STOCK_ID => (int)$item[GC::ID],
                 StockpileHeader::QUANTITY => (int)$item[StockpileHeader::QUANTITY],
                 SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
@@ -295,9 +287,11 @@ class ShiptParseTest extends TestCase
             '*' => [
                 SC::ORDER_ID,
                 SC::BUYER,
-                SC::SHIPPING_DATE,
                 SC::ZIPCODE,
                 SC::ADDRESS,
+                SC::TOTAL_PRICE,
+                SC::DISCOUNT_AMOUNT,
+                SC::FEE,
                 SC::ITEMS => [
                     '*' => [
                         SC::STOCK => [
@@ -325,8 +319,6 @@ class ShiptParseTest extends TestCase
                             StockpileHeader::QUANTITY
                         ],
                         SC::SHIPMENT,
-                        SC::PRODUCT_PRICE,
-                        SC::DISCOUNT_AMOUNT,
                         SC::TOTAL_PRICE,
                         SC::SINGLE_PRICE,
                         SC::IS_REGISTERED
@@ -335,7 +327,9 @@ class ShiptParseTest extends TestCase
                 ]
             ]);
 
-        return $response;
+            $response->assertJsonMissingPath('*.'.SC::SHIPPING_DATE, '存在しない商品名');
+
+            return $response;
     }
 
     /**
@@ -373,13 +367,13 @@ class ShiptParseTest extends TestCase
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $header  = ShiptLogTestHelper::getHeader();
         // shipping_dateヘッダーを削除
-        $header = str_replace(SC::SHIPPING_DATE, '', $header);
+        $header = str_replace(SC::PRODUCT_ID, '', $header);
         $implode = $this->createCsvLine([$buyerInfo]);
         $content = <<<CSV
         {$header}
         {$implode}
         CSV;
-        $this->verifyFileError($content, 'lack-of-header', SC::SHIPPING_DATE);
+        $this->verifyFileError($content, 'lack-of-header', SC::PRODUCT_ID);
     }
 
     #[TestDox('ファイルエラー: ヘッダーがない')]
@@ -423,25 +417,6 @@ class ShiptParseTest extends TestCase
             EC::DETAIL => 'ファイルはCSV形式でアップロードしてください']);
     }
 
-    #[Test]
-    #[TestDox('商品コードが存在しない場合、行数とメッセージが返ってくるか検証する。')]
-    public function ngNoProductId() {
-        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
-        $buyerInfo[SC::ITEMS][0][GC::ID] = '9999';
-        $implode = $this->createCsvLine([$buyerInfo]);
-        $header = ShiptLogTestHelper::getHeader();
-        $content = <<<CSV
-        {$header}
-        {$implode}
-        CSV;
-
-        $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
-        $status = CustomResponse::HTTP_CSV_VALIDATION;
-
-        $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, '商品コードが存在しません。');
-    }
-
     #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
     #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
     #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
@@ -473,7 +448,7 @@ class ShiptParseTest extends TestCase
     public function testNgValidator(): void
     {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
-        $buyerInfo[SC::SHIPPING_DATE] = 'aaa';
+        $buyerInfo[SC::POSTAL_CODE] = 'aaa';
 
         $implode = ShiptLogTestHelper::createCsvLine([$buyerInfo]);
         $header = ShiptLogTestHelper::getHeader();
@@ -485,7 +460,7 @@ class ShiptParseTest extends TestCase
         $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
         $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, '発送日はY/m/d形式の日付で入力してください。');
+        $this->assertRowError($response, $status, '郵便番号は「123-4567」の形式で入力してください。');
     }
 
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
