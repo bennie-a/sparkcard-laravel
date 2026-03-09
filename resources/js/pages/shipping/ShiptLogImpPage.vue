@@ -10,6 +10,8 @@
     import ModalButton from '../component/ModalButton.vue';
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
+    import scdatepicker from "../component/SCDatePicker.vue";
+
 
     const result = reactive([]);
     const resultCount = ref(0);
@@ -20,6 +22,7 @@
     const hasError = ref(false);
     const hasResult = ref(false);
     const piniaMsg = piniaMsgStore();
+    const shiptDate = ref(new Date());
 
     onMounted(() => {
         piniaMsg.reset();
@@ -32,10 +35,12 @@
         isLoading.value = true;
         piniaMsg.reset();
         await Promise.all(result.value.map(async (r) => {
+            const formatShiptDate = shiptDate.value.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit",
+            day: "2-digit"})
             const json =
                 {
                     order_id: r.order_id,
-                    shipping_date: r.shipping_date,
+                    shipping_date: formatShiptDate,
                     buyer_name: r.buyer_name,
                     zip_code: r.zip_code,
                     address: r.address,
@@ -111,61 +116,89 @@
         </div>
     </div>
     <div class="mt-1 ui grid">
-        <div class="row">
-            <div class="three wide left floated column"  v-if="hasResult">
-                <ModalButton  @action="post()">インポート</ModalButton>
-            </div>
-            <div class="seven wide right floated column ui right aligned">
-                <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
-            </div>
+        <div class="ui form" v-if="hasResult">
+                <div class="two fields">
+                    <div class="nine wide column field">
+                        <label>発送日</label>
+                        <scdatepicker v-model="shiptDate"></scdatepicker>
+                    </div>
+                    <div class="seven wide column field">
+                        <label style="visibility: hidden">インポートボタン</label>
+                            <ModalButton  @action="post()">インポート</ModalButton>
+                        </div>
+                </div>
         </div>
     </div>
-    <div class="mt-1">
-        <div class="ui padded segment" v-for="(r, index) in result.value" :key="index">
-            <div>
-               {{r.order_id}}<label class="ml-1 ui red  label">{{r.shipping_date}}発送</label>
+    <div class="mt-2" v-if="hasResult">
+        <div class="ui grid segment" v-for="(r, index) in result.value" :key="index" style="padding:1rem">
+            <div class="pl-0">
+                {{r.order_id}}
             </div>
-            <address id="buyer" class="ui secondary segment">
-                <p>〒{{ r.zip_code }}</p>
-                <p>{{ r.address }}</p>
-                <p class="name">{{ r.buyer_name }}様</p>
-            </address>
+            <div class="ui three column row">
+                <address id="buyer" class="column ui secondary segment">
+                    <p>〒{{ r.zip_code }}</p>
+                    <p>{{ r.address }}</p>
+                    <p class="name">{{ r.buyer_name }}様</p>
+                </address>
+                <div class="column">
+                    <dl id="price">
+                        <div class="list" v-if="r.coupon_discount_amount != 0">
+                            <dt>クーポン割引</dt>
+                            <dd>
+                                <i class="bi bi-dash"></i>
+                                <i class="bi bi-currency-yen"></i>{{ r.coupon_discount_amount }}
+                            </dd>
+                        </div>
+                        <div class="list">
+                            <dt>送料</dt>
+                            <dd><i class="bi bi-currency-yen"></i>{{ r.shipping_fee }}</dd>
+                        </div>
+                        <div class="list">
+                            <dt>合計金額</dt>
+                            <dd><i class="bi bi-currency-yen"></i>{{ r.total_price }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
             <table class="ui striped table">
                 <thead>
                     <tr>
                         <th class="one wide center aligned">在庫ID</th>
-                        <th class="seven wide">カード情報</th>
+                        <th class="eight wide">カード情報</th>
                         <th class="center aligned">状態</th>
                         <th class="center aligned">枚数</th>
-                        <th class="center aligned">価格</th>
-                        <th class="center aligned">クーポン</th>
                         <th class="center aligned">単価</th>
                         <th class="center aligned">小計</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, idx) in r.items" :key="idx">
-                        <td class="one wide center aligned">{{ item.stock.id }}</td>
+                        <td class="center aligned">{{ item.stock.id }}</td>
                         <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
-                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.product_price }}</td>
-                        <td class="negative center aligned" v-if="item.coupon_discount_amount != 0">&#8722;<i class="bi bi-currency-yen"></i>{{ item.coupon_discount_amount }}</td>
-                        <td class="center aligned" v-if="item.coupon_discount_amount == 0"><i class="bi bi-dash-lg"></i></td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
                         <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div class="ui center aligned container">
+            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+        </div>
     </div>
-        <loading
-         :active="isLoading"
+    <loading
+    :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
 
 </template>
 
 <style scoped>
+
+.ui.grid > table {
+    padding: 0;
+}
+
 #upload_form {
     padding: 1rem;
 }
@@ -181,4 +214,23 @@
     margin-top: 1rem;
 }
 
+#price .list {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+#price .list dt {
+    font-weight: 700;
+    text-align: right;
+    width: 30%;
+}
+
+#price .list dt::after {
+    content: ":";
+}
+
+#price .list dd {
+    text-align:  center;
+    margin: 0;
+    margin-left: 0.4rem;
+}
 </style>

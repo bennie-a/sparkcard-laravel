@@ -18,7 +18,6 @@ use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
-use Carbon\CarbonImmutable;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -54,7 +53,6 @@ class ShiptPostTest extends TestCase
     #[TestWith(['td'], '今日')]
     #[TestWith(['tmr'], '明日')]
     #[TestWith(['yd'], '昨日')]
-    #[TestWith([''], '未入力')]
     #[TestDox('発送日がどの日付でも登録できることを検証する')]
     public function ok_shippingDate(string $date): void{
         $request = ShiptLogTestHelper::createStoreRequest();

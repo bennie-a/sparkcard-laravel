@@ -55,7 +55,7 @@ return [
     'email' => 'The :attribute must be a valid email address.',
     'ends_with' => 'The :attribute must end with one of the following: :values.',
     'enum' => 'The selected :attribute is invalid.',
-    'exists' => ':attributeが存在しません。',
+    'exists' => ':attributeがDBに存在しません。',
     'file' => 'The :attribute must be a file.',
     'filled' => 'The :attribute field must have a value.',
     'gt' => [
@@ -218,6 +218,7 @@ return [
         SC::STATE => '都道府県名',
         SC::CITY => '市区町村名',
         SC::ADDRESS_1 => 'その他住所1',
+        SC::SHIPPING_DATE => '発送日',
     ],
 
     'values' => [
