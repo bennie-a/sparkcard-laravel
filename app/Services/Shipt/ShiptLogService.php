@@ -154,7 +154,7 @@ class ShiptLogService extends AbstractCsvService {
                             SC::LANG => $slog[SC::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL],
                             SC::FOIL => ['is_foil' => $slog['isFoil'], GC::NAME => $slog['foilname']],
                             'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
-                            Con::PROMOTYPE => [GlobalConstant::ID => $slog->promotype_id, GlobalConstant::NAME => $slog->promo_name
+                            Con::PROMOTYPE => [GC::ID => $slog->promotype_id, GC::NAME => $slog->promo_name
                 ]];
         });
         // $items = array_map(function($log) {
@@ -162,7 +162,7 @@ class ShiptLogService extends AbstractCsvService {
         $slog = $list[0];
         $info = [SC::ORDER_ID => $slog->order_id, SC::BUYER => $slog[SC::BUYER],
                         SC::SHIPPING_DATE => $slog->shipping_date,  SC::ZIPCODE => '〒'.$slog->zip,
-                        SC::ADDRESS => $slog->address, GlobalConstant::CARD => $items->toArray()];
+                        SC::ADDRESS => $slog->address, GC::CARD => $items->toArray()];
         return $info;
         // $log = ShippingLog::find($id);
     }
