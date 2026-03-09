@@ -48,7 +48,7 @@ class ShiptLogService extends AbstractCsvService {
         $items = $row->items();
         if (!empty($items)) {
             foreach ($items as $item) {
-                $stockId = (int)$item[GlobalConstant::ID];
+                $stockId = (int)$item[GC::ID];
                 // DB登録済みフラグがtrueの場合はスキップ
                 if ($item[SC::IS_REGISTERED]) {
                     logger()->warning("既に登録されています。注文ID:{$row->order_id()}, 氏名:{$row->buyer()}, 在庫ID:{$stockId}");
