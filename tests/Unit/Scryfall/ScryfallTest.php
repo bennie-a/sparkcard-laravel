@@ -2,17 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\ScryfallController;
 use App\Services\Constant\CardConstant as Con;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Constant\GlobalConstant as GCon;
 use App\Services\Constant\StockpileHeader as Header;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * ScryfallControllerのテスト
- */
+#[CoversMethod(ScryfallController::class, 'index')]
 class ScryfallTest extends TestCase
 {
     /**

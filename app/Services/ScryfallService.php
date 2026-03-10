@@ -81,14 +81,10 @@ class ScryfallService {
      * /cards/:code/:numberで情報を取得する。
      *
      * @param array $details
-     * @return void
+     * @return array
      */
     public function getCardInfoByNumber(array $details) {
-        $setcode = $details["setcode"];
-        $number = $details["number"];
-        $language = $details["language"];
-        $contents = $this->repo->getCardInfoByNumber($setcode, $number, $language);
-        // $card = CardInfoFactory::create($contents);
+        $contents = $this->repo->getCardInfoByNumber($details);
         return $this->toArray($contents);
     }
 

@@ -4,6 +4,8 @@ use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Response;
+use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\StockpileHeader as Header;
 
 /**
  * scryfall.comのAPI呼び出しクラス
@@ -61,13 +63,15 @@ class ScryfallRepository {
     /**
      * セット略称とカード番号から情報を取得する。
      *
-     * @param string $setCode
-     * @param integer $number
+     * @param array $details リクエストパラメータ
      * @return array
      */
-    public function getCardInfoByNumber(string $setCode, int $number, string $language) {
+    public function getCardInfoByNumber(array $details) {
         $client = $this->client();
-        $rowerCode = \mb_strtolower($setCode);
+        $setcode = $details[Header::SETCODE];
+        $number = $details[Con::NUMBER];
+        $language = $details[Header::LANGUAGE];
+        $rowerCode = \mb_strtolower($setcode);
         $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
         return $this->getContents($response);
     }
