@@ -1,6 +1,5 @@
 <?php
-namespace App\Services;
-
+namespace App\Services\Api;
 use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
 use App\Enum\CardColor;
@@ -85,7 +84,8 @@ class ScryfallService {
      */
     public function getCardInfoByNumber(array $details) {
         $contents = $this->repo->getCardInfoByNumber($details);
-        return $this->toArray($contents);
+        return $contents;
+        // return $this->toArray($contents);
     }
 
     protected function toArray(array $contents) {

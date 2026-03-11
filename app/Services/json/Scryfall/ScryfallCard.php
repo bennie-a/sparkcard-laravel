@@ -73,6 +73,11 @@ class ScryfallCard extends AbstractCard {
         return $imageuris;
     }
 
+    public function png() {
+        $imageuris =  $this->imageurl();
+        return $imageuris['png'];
+    }
+
     protected function hasPromotype() {
         return MtgJsonUtil::hasKey('promo_types', $this->getJson());
     }

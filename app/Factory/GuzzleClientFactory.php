@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Factory;
+
+use App\Enum\ExternalApi;
 use GuzzleHttp\Client;
 
 use Illuminate\Support\Arr;
@@ -23,5 +25,11 @@ class GuzzleClientFactory {
     public static function createByUrl($url) {
         $client = new Client(['base_uri' => $url, 'allow_redirects' => ['track_redirects' => true]]);
         return $client;
+    }
+
+    public static function createClient(ExternalApi $api) {
+        $client = $api->client();
+        $guzzleClient = new Client(['base_uri' => $client->baseUrl(), 'headers' => $client->headers(), 'allow_redirects' => ['track_redirects' => true]]);
+        return $guzzleClient;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 namespace App\Repositories\Api\Mtg;
+
+use App\Enum\ExternalApi;
 use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;
 use GuzzleHttp\Exception\ClientException;
@@ -104,7 +106,7 @@ class ScryfallRepository {
     }
 
     private function client() {
-        return GuzzleClientFactory::create('scryfall');
+        return GuzzleClientFactory::createClient(ExternalApi::SCRYFALL);
     }
 }
 ?>
