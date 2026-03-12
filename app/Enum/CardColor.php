@@ -71,7 +71,7 @@ enum CardColor:string {
         return $color;
     }
 
-    
+
     public function colorMulti() {
         $ope = "not";
         switch($this) {
@@ -141,7 +141,7 @@ enum CardColor:string {
 
     /**
      * カード情報からCardColorを取得する。
-     * 
+     *
      */
     public static function match(array $card) {
         $colorKey = "colors";
@@ -150,25 +150,25 @@ enum CardColor:string {
         // 無色
         if (!array_key_exists($colorKey, $card)) {
             return CardColor::LESS;
-        } 
+        }
         $colorArray = $card[$colorKey];
         return self::findColor($colorArray, $types);
     }
 
     public static function findColor(array $color, array $cardtype) {
         // アーティファクト
-        if ($cardtype === ['Artifact'] && empty($color)) {
+        if (self::isArtifact($color, $cardtype)) {
             return CardColor::ARTIFACT;
         }
         // 土地
-        if (in_array('Land', $cardtype)) {
+        if (self::isLand($cardtype)) {
             return CardColor::LAND;
         }
 
         // 無色
         if (empty($color)) {
             return CardColor::LESS;
-        } 
+        }
 
         // 多色
         if (count($color) > 1) {
@@ -176,5 +176,33 @@ enum CardColor:string {
         }
         // 単色
         return CardColor::tryFrom(current($color));
+    }
+
+    /**
+     * カードの色がアーティファクトか判断する。
+     *
+     * @param array $color カードの色
+     * @param array $cardtype カードタイプ
+     * @return boolean
+     */
+    private static function isArtifact(array $color, array $cardtype):bool {
+        // 含む要素があるか判定
+        return self::isContains($cardtype, 'Artifact') && empty($color);
+    }
+
+    /**
+     * カードの色が土地か判断する。
+     *
+     * @param array $cardtype カードタイプ
+     * @return boolean
+     */
+    private static function isLand(array $cardtype):bool {
+        return self::isContains($cardtype, 'Land');
+    }
+
+    private static function isContains(array $cardtype, string $target):bool {
+        // 含む要素があるか判定
+        $results = array_filter($cardtype, fn($item) => str_contains($item, $target));
+        return count($results) > 0;
     }
 }
