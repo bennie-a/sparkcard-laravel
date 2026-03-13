@@ -24,27 +24,18 @@ class ScryfallResource extends JsonResource
     {
         $card = new ScryfallCard($this->resource);
         $color = CardColor::findColor($card->colors(), $card->types());
+        $promotype = \App\Facades\Promo::find($card);
 
         return [
+            CCon::SET => $card->setcode(),
             GCon::NAME => $card->name(),
             CCon::EN_NAME => $card->enname(),
             CCon::IMAGE_URL => $card->png(),
             CCon::MULTIVERSEID => $card->multiverseId(),
             CCon::COLOR => $color->value,
-            // CCon::PROMOTYPE => $card->promotype(),
-            // CCon::NUMBER => $card->number(),
-            // CCon::SETCODE => $card->setcode(),
-            ];
+            CCon::PROMOTYPE => $promotype,
+            CCon::NUMBER => $card->number(),
+            CCon::FOIL_TYPE => $card->foiltype()
+        ];
     }
-            // return ['name' => $card->name(),
-            //         'multiverse_id' => $card->multiverseId(),
-            //         'en_name' => $card->enname(),
-            //         'color' => $color->value,
-            //         'promotype'=>$promotype,
-            //         'imageurl' => $card->imageurl(),
-            //         'number' => $card->number(),
-            //         'setcode' => $card->setcode(),
-            //         'reprint' => $card->reprint(),
-            //         'foiltype' => $card->foiltype()
-            // ];
 }
