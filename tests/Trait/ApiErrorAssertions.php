@@ -33,4 +33,15 @@ trait ApiErrorAssertions {
         });
     }
 
+    public function assertApiError(TestResponse $response, string $endpoint, string $title, string $detail, int $status) {
+        $response->assertJson(function(AssertableJson $json) use($endpoint, $title, $detail, $status) {
+            $json->hasAll([EC::TITLE, GC::STATUS, EC::REQUEST, EC::DETAIL]);
+            $json->whereAll([
+                EC::TITLE => $title,
+                EC::DETAIL => $detail,
+                GC::STATUS => $status,
+                EC::REQUEST => $endpoint,
+            ]);
+        });
+    }
 }

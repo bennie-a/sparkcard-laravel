@@ -1,7 +1,9 @@
 <?php
 namespace App\Repositories\Api\Mtg;
 
+use ApiConnectException;
 use App\Enum\ExternalApi;
+use App\Exceptions\api\NoContentException;
 use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;
 use GuzzleHttp\Exception\ClientException;
@@ -69,12 +71,24 @@ class ScryfallRepository {
      * @return array
      */
     public function getCardInfoByNumber(array $details) {
-        $client = $this->client();
-        $setcode = $details[Header::SETCODE];
-        $number = $details[Con::NUMBER];
-        $language = $details[Header::LANGUAGE];
-        $rowerCode = \mb_strtolower($setcode);
-        $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
+        try {
+            $client = $this->client();
+            $setcode = $details[Header::SETCODE];
+            $number = $details[Con::NUMBER];
+            $language = $details[Header::LANGUAGE];
+            $rowerCode = \mb_strtolower($setcode);
+            $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
+        } catch (ClientException $e) {
+            if ($e->hasResponse()) {
+                $errorResponse = $e->getResponse();
+                $statusCode = $errorResponse->getStatusCode();
+                if ($statusCode == Response::HTTP_NOT_FOUND) {
+                    logger()->error('Not Found in Scryfall');
+                    throw new NoContentException();
+                }
+                throw new ApiConnectException();
+            }
+        }
         return $this->getContents($response);
     }
 

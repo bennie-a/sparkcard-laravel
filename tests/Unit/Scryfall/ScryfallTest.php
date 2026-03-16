@@ -2,17 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Api\Client\ScryfallClient;
 use App\Enum\CardColor;
-use App\Enum\ExternalApi;
 use App\Http\Controllers\ScryfallController;
 use App\Services\Constant\CardConstant as Con;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Constant\GlobalConstant as GCon;
 use App\Services\Constant\StockpileHeader as Header;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -20,12 +15,14 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
+use Tests\Trait\ApiErrorAssertions;
 
 #[TestDox('エンドポイントが"api/scryfall"のテストクラス')]
 #[CoversMethod(ScryfallController::class, 'index')]
 class ScryfallTest extends TestCase
 {
 
+    use ApiErrorAssertions;
     public function setUp(): void
     {
         parent::setUp();
@@ -118,6 +115,15 @@ class ScryfallTest extends TestCase
             '上下二面カード' => ['AKH', 210, '4/c/4cffc5c9-0115-4a8f-9665-a3fbdd4179c2.png?1540281378'],
             '表裏両面カード' => ['MH3', 261, '3/0/305ae3b5-7c12-43ad-b19f-dbd04c9afcf7.png?1730229671'],
         ];
+    }
+
+    #[Test]
+    #[TestDox('存在しないカード情報をリクエストした場合、404エラーが返ることを検証する。')]
+    public function nocardinfo()
+    {
+        $query = [Header::SETCODE => 'ECL', Con::NUMBER => '9999', Header::LANGUAGE => 'ja'];
+        $response = $this->call('GET', '/api/scryfall', $query);
+        $this->assertApiError($response, 'api/scryfall', '情報なし', '指定した情報がありません。', 404);
     }
 
     public function ok(string $setcode, string $number, string $lang)
