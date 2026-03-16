@@ -13,7 +13,7 @@ class ScryfallProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('ScryfallServ', 'App\Services\ScryfallService');
+        $this->app->bind('ScryfallServ', 'App\Services\Api\ScryfallService');
     }
 
     /**

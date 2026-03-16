@@ -4,7 +4,7 @@ namespace App\Services\json\Scryfall;
 use App\Libs\MtgJsonUtil;
 use App\Services\json\AbstractCard;
 use App\Services\Constant\CardConstant as Con;
-
+use App\Services\Constant\GlobalConstant as GCon;
 
 class ScryfallCard extends AbstractCard {
 
@@ -37,7 +37,7 @@ class ScryfallCard extends AbstractCard {
      * @return string
      */
     public function enname():string {
-        return $this->getJson()[Con::NAME];
+        return $this->getJson()[GCon::NAME];
     }
 
     /**
@@ -69,8 +69,23 @@ class ScryfallCard extends AbstractCard {
     }
 
     public function imageurl() {
+        if (MtgJsonUtil::hasKey('card_faces', $this->getJson()) && $this->getJson()['layout'] !== 'split') {
+            $cardFaces = $this->getJson()['card_faces'];
+            $imageuris = $cardFaces[0]['image_uris'];
+            return $imageuris;
+        }
         $imageuris =  $this->getJson()['image_uris'];
         return $imageuris;
+    }
+
+    /**
+     * png画像のURLを取得する。
+     *
+     * @return string
+     */
+    public function png() {
+        $imageuris =  $this->imageurl();
+        return $imageuris['png'];
     }
 
     protected function hasPromotype() {
