@@ -49,6 +49,7 @@ class CardInfoDBTest extends TestCase
  * @return void
  */
     #[DataProvider('imageprovider')]
+    #[TestDox('画像URLの取得に関する検証')]
     public function test_getImage(string $setcode, int $multiId, string $scryId) {
         $name = fake()->realText(10);
         $params = $this->createParams($setcode, $name, 1, ['通常版']);
