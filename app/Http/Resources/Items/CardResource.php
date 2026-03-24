@@ -25,7 +25,7 @@ class CardResource extends JsonResource
             CCon::NUMBER => $this->number,
             CCon::COLOR => $this->color_id,
             CCon::IMAGE_URL => $this->image_url,
-            CCon::FOIL => [GCon::ID => $this->foiltype->id, GCon::NAME => $this->foiltype->name],
+            CCon::FOIL => [GCon::ID => $this->foiltype->id, GCon::NAME => $this->foiltype->name, 'is_foil' => $this->isFoil ],
             CCon::PROMOTYPE => [GCon::ID => $this->promotype->id, GCon::NAME => $this->promotype->name]
         ];
     }
