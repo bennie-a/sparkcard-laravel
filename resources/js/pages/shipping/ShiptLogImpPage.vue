@@ -137,7 +137,7 @@
             <div class="ui three column row">
                 <address id="buyer" class="column ui secondary segment">
                     <p>〒{{ r.zip_code }}</p>
-                    <p>{{ r.address }}</p>
+                    <p >{{ r.address }}</p>
                     <p class="name">{{ r.buyer_name }}様</p>
                 </address>
                 <div class="column">
@@ -204,7 +204,7 @@
 }
 
 #buyer > p {
-    line-height: 0.6rem;
+    line-height: 1rem;
     color: #444;
 }
 

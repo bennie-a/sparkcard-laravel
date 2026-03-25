@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\ScryfallController;
 use App\Http\Controllers\DB\ExpDBController;
 use App\Http\Controllers\Notion\CardController;
 use App\Http\Controllers\Notion\ExpansionController;
 use App\Http\Controllers\CardJsonFileController;
 use App\Http\Controllers\DB\CardInfoDBController;
-use App\Http\Controllers\ScryfallController;
 use App\Http\Controllers\StockpileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

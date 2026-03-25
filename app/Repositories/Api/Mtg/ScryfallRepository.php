@@ -1,9 +1,15 @@
 <?php
 namespace App\Repositories\Api\Mtg;
+
+use ApiConnectException;
+use App\Enum\ExternalApi;
+use App\Exceptions\api\NoContentException;
 use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Response;
+use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\StockpileHeader as Header;
 
 /**
  * scryfall.comのAPI呼び出しクラス
@@ -61,14 +67,28 @@ class ScryfallRepository {
     /**
      * セット略称とカード番号から情報を取得する。
      *
-     * @param string $setCode
-     * @param integer $number
+     * @param array $details リクエストパラメータ
      * @return array
      */
-    public function getCardInfoByNumber(string $setCode, int $number, string $language) {
-        $client = $this->client();
-        $rowerCode = \mb_strtolower($setCode);
-        $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
+    public function getCardInfoByNumber(array $details) {
+        try {
+            $client = $this->client();
+            $setcode = $details[Header::SETCODE];
+            $number = $details[Con::NUMBER];
+            $language = $details[Header::LANGUAGE];
+            $rowerCode = \mb_strtolower($setcode);
+            $response = $client->request('GET', 'cards/'.$rowerCode.'/'.$number.'/'.$language);
+        } catch (ClientException $e) {
+            if ($e->hasResponse()) {
+                $errorResponse = $e->getResponse();
+                $statusCode = $errorResponse->getStatusCode();
+                if ($statusCode == Response::HTTP_NOT_FOUND) {
+                    logger()->error('Not Found in Scryfall');
+                    throw new NoContentException();
+                }
+                throw new ApiConnectException();
+            }
+        }
         return $this->getContents($response);
     }
 
@@ -100,7 +120,7 @@ class ScryfallRepository {
     }
 
     private function client() {
-        return GuzzleClientFactory::create('scryfall');
+        return GuzzleClientFactory::createClient(ExternalApi::SCRYFALL);
     }
 }
 ?>

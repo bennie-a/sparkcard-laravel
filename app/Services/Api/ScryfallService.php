@@ -1,10 +1,10 @@
 <?php
-namespace App\Services;
-
+namespace App\Services\Api;
 use App\Libs\MtgJsonUtil;
 use App\Repositories\Api\Mtg\ScryfallRepository;
 use App\Enum\CardColor;
 use App\Exceptions\api\NotFoundException;
+use App\Factory\CardInfoFactory;
 use App\Services\Constant\CardConstant;
 use App\Services\json\Scryfall\ScryfallCard;
 use App\Services\json\Scryfall\ScryfallTransformCard;
@@ -70,6 +70,13 @@ class ScryfallService {
         return $card->imageurl()['png'];
     }
 
+    /**
+     * @deprecated(version:5.2.2)
+     *
+     * @param string $setcode
+     * @param string $name
+     * @return void
+     */
     public function getCardInfoByName(string $setcode, string $name) {
         $contents = $this->repo->getCardInfoByName($setcode, $name);
         if (empty($contents)) {
@@ -81,18 +88,17 @@ class ScryfallService {
      * /cards/:code/:numberで情報を取得する。
      *
      * @param array $details
-     * @return void
+     * @return array
      */
     public function getCardInfoByNumber(array $details) {
-        $setcode = $details["setcode"];
-        $number = $details["number"];
-        $language = $details["language"];
-        $contents = $this->repo->getCardInfoByNumber($setcode, $number, $language);
-        // $card = CardInfoFactory::create($contents);
-        return $this->toArray($contents);
+        $json = $this->repo->getCardInfoByNumber($details);
+        return $json;
     }
 
-    protected function toArray(array $contents) {
+    /**
+     * @deprecated(version: '5.2.2', reason: 'toArrayメソッドはScryfallResourceクラスに移動しました。')
+     */
+    private function toArray(array $contents) {
         $card = new ScryfallCard($contents);
         $color = CardColor::findColor($card->colors(), $card->types());
         $promotype = \App\Facades\Promo::find($card);

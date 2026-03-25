@@ -162,16 +162,17 @@ export default {
                     let data = response.data;
                     this.name = data["name"];
                     this.en_name = data["en_name"];
-                    this.multiverse_id = data["multiverse_id"];
+                    this.multiverse_id = data["multiverseId"];
                     this.color = data["color"];
-                    this.imageurl = data["imageurl"]["png"];
+                    this.imageurl = data["image_url"];
                     this.foiltype = data["foiltype"];
                 })
                 .catch((e) => {
+                    console.log(e);
                     if (e.response.status != 200) {
                         this.$store.dispatch(
                             "message/error",
-                            "カード情報がありません。"
+                            e.response.data.detail
                         );
                     }
                 })
