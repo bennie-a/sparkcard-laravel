@@ -26,5 +26,6 @@ class FoiltypeSeeder extends Seeder
         Foiltype::create(['attr' => 'neonink', 'name' => 'ネオンインクFoil']);
         Foiltype::create(['attr' => 'doubleexposure', 'name' => 'Foil']);
         Foiltype::create(['attr' => 'firstplacefoil', 'name' => 'ファーストプレイス・Foil']);
+        Foiltype::create(['attr' => 'signed', 'name' => '箔押し']);
     }
 }
