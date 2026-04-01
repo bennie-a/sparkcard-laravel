@@ -47,7 +47,7 @@ class ScryfallTest extends TestCase
 
     #[Test]
     #[TestWith(['ECL', '4', 0], 'multiverseidなし')]
-    #[TestWith(['WAR', '272', 463894], 'multiverseidあり')]
+    #[TestWith(['WAR', '1', 462248], 'multiverseidあり')]
     #[TestDox('レスポンスのmultiverseIdの有無を検証する')]
     public function multiverseId(string $setcode, string $number, int $multiverseId) {
         $response = $this->ok($setcode, $number, 'ja');
@@ -72,6 +72,14 @@ class ScryfallTest extends TestCase
     public function color(string $number, CardColor $excolor) {
         $response = $this->ok('ECL', $number, 'en');
         $response->assertJsonPath(Con::COLOR, $excolor->value);
+    }
+
+    #[Test]
+    #[TestDox('アート・カードを取得した際、色とFoilタイプが正しいことを検証する。')]
+    public function artcard() {
+        $response = $this->ok('AFIN', '37', 'en');
+        $response->assertJsonPath(Con::COLOR, CardColor::ART->value);
+        $response->assertJsonPath(Con::FOIL_TYPE, ['通常版', '箔押し']);
     }
 
     #[Test]
