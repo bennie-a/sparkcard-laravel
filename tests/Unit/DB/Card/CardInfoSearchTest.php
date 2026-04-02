@@ -2,10 +2,13 @@
 
 namespace Tests\Unit\DB\Card;
 
+use App\Enum\CardColor;
 use Tests\TestCase;
 use App\Services\Constant\CardConstant as Con;
-use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\GlobalConstant as GCon;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
@@ -33,7 +36,7 @@ class CardInfoSearchTest extends TestCase
     #[DataProvider('stockpileprovider')]
     public function test_stockpile(array $condition, int $quantity)
     {
-        $query = [Con::NAME => $condition[0], Con::SET =>$condition [1],
+        $query = [GCon::NAME => $condition[0], Con::SET =>$condition [1],
                                  Con::COLOR => $condition[2], Con::IS_FOIL => $condition[3]];
         $response = $this->assert_OK($query);
         $json = $response->json();
@@ -44,11 +47,8 @@ class CardInfoSearchTest extends TestCase
         return [
             '在庫情報なし' => [['在庫情報なし', '', '', false], 0],
             '在庫が0' => [['ドラゴンの運命', '', '', false], 0],
-            '在庫が1以上' => [['ドロスの魔神', '', '', false], 1],
+            '在庫が1以上' => [['放浪皇', '', '', false], 1],
             'カード番号に\'s\'が含まれている' => [['', 'XLN', 'W', true], 0],
-            '色のみ' => [],
-            'Foilのみ' => [],
-            '全入力' => []
         ];
     }
 
@@ -60,18 +60,18 @@ class CardInfoSearchTest extends TestCase
      */
     #[DataProvider('promoTypeProvider')]
     public function test_promotype(String $name, int $promotypeId = 1,  String $promoType = '') {
-        $query = [Con::NAME => $name, Con::SET =>'', Con::COLOR => '', Con::IS_FOIL => false];
+        $query = [GCon::NAME => $name, Con::SET =>'', Con::COLOR => '', Con::IS_FOIL => false];
         $response = $this->assert_OK($query);
         $response->assertOk();
 
         $json = $response->json();
         $this->assertGreaterThan(0, count($json), '件数');
         foreach ($json as $card) {
-            $this->assertEquals($name, $card[Con::NAME], 'カード名');
+            $this->assertEquals($name, $card[GCon::NAME], 'カード名');
             $this->assertArrayHasKey(Con::PROMOTYPE, $card, 'プロモタイプ');
             $promo = $card[Con::PROMOTYPE];
-            $this->assertEquals($promotypeId, $promo[GlobalConstant::ID], 'プロモタイプID');
-            $this->assertEquals($promoType, $promo[GlobalConstant::NAME], 'プロモタイプ名');
+            $this->assertEquals($promotypeId, $promo[GCon::ID], 'プロモタイプID');
+            $this->assertEquals($promoType, $promo[GCon::NAME], 'プロモタイプ名');
         }
     }
 
@@ -82,8 +82,18 @@ class CardInfoSearchTest extends TestCase
         ];
     }
 
-    public function cardProvider() {
-        
+    #[TestWith([false, ''], '通常版')]
+    #[TestWith([true, '箔押し'], '箔押し版')]
+    #[TestDox('アート・カード検索')]
+    public function test_artcard(bool $isFoil, string $foiltype) {
+        $query = [GCon::NAME => '', Con::SET => '', Con::COLOR => CardColor::ART->value, Con::IS_FOIL => $isFoil];
+        $response = $this->assert_OK($query);
+        $response->assertJsonCount(1);
+        $response->assertJsonPath('0.color', CardColor::ART->text());
+        $response->assertJsonPath('0.foil.is_foil', $isFoil);
+        $response->assertJsonPath('0.foil.name', $foiltype);
+        $response->assertJsonPath('0.price', 1);
+        $response->assertOk();
     }
 
     /**

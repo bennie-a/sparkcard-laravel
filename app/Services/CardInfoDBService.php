@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Enum\CardColor;
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\api\NoExpException;
 use App\Exceptions\api\NoFoilTypeException;
@@ -15,8 +16,7 @@ use App\Facades\WisdomGuild;
 use App\Models\Foiltype;
 use App\Models\Promotype;
 use App\Services\Constant\CardConstant as Con;
-use App\Services\Constant\CardConstant;
-use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -33,14 +33,18 @@ class CardInfoDBService {
     public function fetch($details)
     {
         $condition = [
-                    'card_info.name' => $details[Con::NAME],
+                    'card_info.name' => $details[GCon::NAME],
                     'card_info.color_id' => $details[Con::COLOR],
                     'e.attr' => $details[Con::SET],
                     'card_info.isFoil' => $details[Con::IS_FOIL]];
         $list = CardInfo::fetchByCondition($condition);
 
         foreach ($list as $info) {
-            $price = WisdomGuild::getPrice($info[Con::EN_NAME]);
+            if ($info['color_id'] === CardColor::ART->value) {
+                $price = 1;
+            } else {
+                $price = WisdomGuild::getPrice($info[Con::EN_NAME]);
+            }
             $info[Con::PRICE] = $price;
         }
 

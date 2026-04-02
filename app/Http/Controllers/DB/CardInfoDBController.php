@@ -4,6 +4,7 @@ namespace App\Http\Controllers\DB;
 
 use App\Exceptions\api\NoContentException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Card\CardSearchRequest;
 use App\Http\Requests\CsvFileRequest;
 use App\Http\Requests\PostCardDBRequest;
 use App\Http\Resources\CardInfoResource;
@@ -31,7 +32,7 @@ class CardInfoDBController extends Controller
      * @param Request $request 検索条件(set,color)
      * @return Response
      */
-    public function index(Request $request)
+    public function index(CardSearchRequest $request)
     {
         ini_set("max_execution_time",180); // タイムアウトを180秒にセット
         ini_set("max_input_time",180); // パース時間を180秒にセット
