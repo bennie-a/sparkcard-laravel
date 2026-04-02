@@ -27,7 +27,7 @@ use App\Services\Constant\ArrivalConstant as ACon;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\NotionStatus;
 use App\Services\Constant\SearchConstant as Scon;
-use FiveamCode\LaravelNotionApi\Notion;
+
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\Arrival\PostStockpileSeeder;
@@ -52,7 +52,7 @@ class ArrivalLogPostTest extends TestCase
         $this->seed(TestCardInfoSeeder::class);
         $this->seed(PostStockpileSeeder::class);
         $this->repo = new CardBoardRepository();
-        
+
         $deletePage = $this->repo->findBySparkcardId(13);
         if (!empty($deletePage)) {
             $this->toCompleteCard($deletePage);
@@ -115,10 +115,10 @@ class ArrivalLogPostTest extends TestCase
             $repo = new CardBoardRepository();
             $card = $repo->findBySparkcardId($info->id);
             assertEquals('日本語', $card->getProperty(JA::LANG)->getName());
-            
+
             $color = MainColor::find($info->color_id);
             assertEquals($color->name, $card->getProperty(JA::COLOR)->getName(), JA::COLOR);
-            
+
             if ($card->getId() === 'b4c3cc34-ca79-4109-b26d-068e3975fd2f') {
                 assertNotEquals($market_price, $card->getProperty(JA::PRICE)->getNumber(), 'Notionの価格');
                 assertEquals(5, $card->getProperty(JA::QTY)->getNumber(), 'Notionの枚数');
