@@ -18,6 +18,7 @@ use App\Services\json\StarterCard;
 use App\Services\json\TransformCard;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\CardConstant;
+use App\Services\json\ArtCard;
 
 /**
  * JSONファイルに記載されたカード情報の形式に沿って
@@ -35,6 +36,10 @@ class CardInfoFactory {
     public static function create($json) {
         if (self::isExclude($json)) {
             return new ExcludeCard($json);
+        }
+
+        if (self::isArtCard($json)) {
+            return new ArtCard($json);
         }
         // 2機能以上のカード
         if (MtgJsonUtil::hasKey(Con::SIDE, $json)) {
@@ -149,6 +154,16 @@ class CardInfoFactory {
             return ExcludePromo::existsByAttr($promotypes);
         }
         return false;
+    }
+
+    /**
+     * カードタイプがアート・カードか判別する。
+     *
+     * @param array $json
+     * @return boolean
+     */
+    private static function isArtCard(array $json):bool {
+        return $json[Con::LAYOUT] == 'art_series';
     }
 
     /**

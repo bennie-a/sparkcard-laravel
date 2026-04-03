@@ -305,24 +305,36 @@ abstract class AbstractCard implements CardInfoInterface {
 
     public function foiltype() {
         $foiltype = [];
-        if($this->isSpecialFoil()) {
+
+        if ($this->isSpecialFoil()) {
             $type = $this->specialFoil();
             $typename = $this->findFoilName($type);
             array_push($foiltype, $typename);
         } else {
             $finishes = $this->finishes();
-            $foiltype = array_map(function($f) {
-                if ($f == 'nonfoil') {
-                    return '通常版';
-                } else if ($f== 'foil') {
-                    return 'Foil';
-                } else {
-                    $typename = $this->findFoilName($f);
-                    return $typename;
-                }
-                }, $finishes);
+            $foiltype = array_map([$this, 'mapFoilType'], $finishes);
+
         }
+
+        // null を削除
+        $foiltype = array_values(array_filter($foiltype, function($v) {
+            return $v !== null;
+        }));
+
         return $foiltype;
+    }
+
+    /**
+     * array_map用の処理を分離
+     */
+    protected function mapFoilType($f) {
+        if ($f === 'nonfoil') {
+            return '通常版';
+        } elseif ($f === 'foil') {
+            return 'Foil';
+        } else {
+            return $this->findFoilName($f);
+        }
     }
 
     private function findFoilName(string $attr) {

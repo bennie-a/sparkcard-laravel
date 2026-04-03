@@ -1,15 +1,13 @@
 <?php
 namespace Tests\Unit\Upload;
+
+use App\Libs\MtgJsonUtil;
 use App\Models\Promotype;
-use App\Models\Stockpile;
-use App\Services\Constant\StockpileHeader;
 use Tests\TestCase;
 use App\Services\Constant\CardConstant as Column;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Database\Seeders\DatabaseSeeder;
-use Tests\Database\Seeders\TestExpansionSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\Trait\PostApiAssertions;
 
@@ -29,19 +27,24 @@ abstract class AbstractCardJsonFileTest extends TestCase{
     protected function ok(string $setcode, bool $isDraft = false, ?string $color = '') {
         $response = $this->ok_response($setcode, $isDraft, $color);
         $result = $response->json('cards');
+        $this->assertNotCount(0, $result, 'カード情報が取得できているか');
         return $result;
     }
 
     protected function ok_response(string $setcode, bool $isDraft = false, ?string $color = '') {
         $filename = strtolower($setcode).'.json';
         $json = $this->json_decode($filename);
-        $cards = $json['data']['cards'];
+        $jsondata = $json['data'];
         $data = [
             'data' => [
-                'cards' => $cards,
-                'code' => $json['data']['code']
+                'code' => $jsondata['code']
             ]
         ];
+        if (MtgJsonUtil::hasKey('tokens', $jsondata)) {
+            $data['data']['tokens'] = $jsondata['tokens'];
+        } else {
+            $data['data']['cards'] = $jsondata['cards'];
+        }
         $query = sprintf('?setcode=%s&isDraft=%s&color=%s', $setcode, $isDraft, $color);
         $response = $this->upload_OK($query, $data);
 
@@ -63,7 +66,7 @@ abstract class AbstractCardJsonFileTest extends TestCase{
         $this->assertEquals($expected->id, $actualcard[Column::PROMO_ID], 'プロモタイプ');
         $this->assertNotEmpty($actualcard[Column::SCRYFALLID], '{Column::SCRYFALLID}');
     }
-    
+
     /**
      * 特定の特別版が含まれていないか検証する。
      * @return void
@@ -92,7 +95,7 @@ abstract class AbstractCardJsonFileTest extends TestCase{
         }
         return null;
     }
-        
+
     /**
      * mutiverseIdかscryfallIdに該当するカード情報を取得する。
      *
@@ -106,7 +109,7 @@ abstract class AbstractCardJsonFileTest extends TestCase{
             if (!empty($multiId)) {
                 if ($a[Column::MULTIVERSEID] == $multiId) {
                     return $a;
-                }   
+                }
             } else if ($a[Column::SCRYFALLID] == $scryId) {
                 return $a;
             }
