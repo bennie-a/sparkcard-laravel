@@ -30,4 +30,11 @@ class CardSearchRequest extends FormRequest
             Con::IS_FOIL => 'boolean',
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            Con::IS_FOIL => filter_var($this->isFoil, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+        ]);
+    }
 }
