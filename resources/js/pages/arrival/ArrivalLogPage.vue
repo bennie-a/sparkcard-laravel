@@ -57,7 +57,7 @@ const fetch =  async () => {
                             })
                             .finally(() => {
                                 isLoading.value = false;
-                            });    
+                            });
 
 }
 

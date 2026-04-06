@@ -60,7 +60,7 @@ class CardInfoDBService {
      */
     public function post($setCode, $details)
     {
-        $name = $details[GlobalConstant::NAME];
+        $name = $details[GCon::NAME];
         $foiltype = $details[Con::FOIL_TYPE];
         $exp = Expansion::where('attr', $setCode)->first();
         if (\is_null($exp)) {
@@ -88,12 +88,12 @@ class CardInfoDBService {
                 logger()->info("insert card.",$log);
                 $record = [
                     'exp_id'=> $exp->notion_id,
-                     GlobalConstant::NAME => $name,
+                     GCon::NAME => $name,
                     'barcode' => $this->barcode(),
-                    'en_name' => $details['en_name'],
-                    'color_id' => $details['color'],
+                    Con::EN_NAME => $details['en_name'],
+                    'color_id' => $details[Con::COLOR],
                     Con::NUMBER => $details[Con::NUMBER],
-                    'image_url' => $url,
+                    Con::IMAGE_URL => $url,
                     'isFoil' => $isFoil,
                     Con::FOIL_ID => $foiltype->id,
                     Con::PROMO_ID => $details[Con::PROMO_ID]
