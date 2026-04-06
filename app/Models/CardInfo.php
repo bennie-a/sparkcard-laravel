@@ -42,17 +42,17 @@ class CardInfo extends Model
      */
     public static function fetchByCondition($condition)
     {
-        // DB::enableQueryLog();
         $columns = ['card_info.exp_id', 'e.name as exp_name', 'e.attr as exp_attr', 'card_info.id', 'card_info.number',
-                 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url', 
+                 'card_info.name','card_info.en_name','card_info.color_id','card_info.image_url',
                  'card_info.isFoil', 'f.name as foiltype', 's.condition', 's.quantity', 'card_info.promotype_id', 'p.name as promo_name'];
         $name = $condition['card_info.name'];
         $query = self::select($columns);
+        $query = $query->where('card_info.isFoil', $condition['card_info.isFoil']);
         if (!empty($name)) {
             $query = $query->where('card_info.name', 'like', '%'.$name.'%');
         }
         foreach($condition as $key => $value) {
-            if (strcmp('card_info.name', $key) == 0) {
+            if (strcmp('card_info.name', $key) == 0 || strcmp('card_info.isFoil', $key) == 0) {
                 continue;
             }
             if (!empty($value)) {
@@ -64,7 +64,6 @@ class CardInfo extends Model
                                 ->join('foiltype as f', 'f.id', '=', 'card_info.foiltype_id')
                                 ->join('promotype as p', 'p.id', '=', 'card_info.promotype_id')
                                 ->orderBy('e.release_date', 'desc')->orderByRaw('CAST(replace(card_info.number, \'s\',\'\') as integer ) asc')->get();
-        // logger()->debug(DB::getQueryLog());
         return $cardList;
     }
 
@@ -110,7 +109,7 @@ class CardInfo extends Model
      * @param [type] $isFoil
      * @deprecated version 4.11.0
      * @return カード情報
-     */  
+     */
     public static function findSpecificCard($exp_id, $name, $foiltype_id)
     {
         $columns = ['card_info.name', 'card_info.barcode', 'card_info.number'];

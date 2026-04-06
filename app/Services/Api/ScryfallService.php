@@ -6,6 +6,7 @@ use App\Enum\CardColor;
 use App\Exceptions\api\NotFoundException;
 use App\Factory\CardInfoFactory;
 use App\Services\Constant\CardConstant;
+use App\Services\json\Scryfall\ScryfallArtCard;
 use App\Services\json\Scryfall\ScryfallCard;
 use App\Services\json\Scryfall\ScryfallTransformCard;
 use Illuminate\Http\Response;
@@ -92,7 +93,14 @@ class ScryfallService {
      */
     public function getCardInfoByNumber(array $details) {
         $json = $this->repo->getCardInfoByNumber($details);
-        return $json;
+        $card = null;
+        if ($json['layout'] == 'art_series') {
+            $card = new ScryfallArtCard($json);
+        } else {
+            $card = new ScryfallCard($json);
+        }
+
+        return $card;
     }
 
     /**

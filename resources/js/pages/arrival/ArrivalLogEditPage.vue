@@ -79,7 +79,7 @@
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
             <h2 class="ui medium header" v-if="detail.card.foil">
-                {{ detail.card.name }}&#91;{{ detail.lang }}&#93;<foiltag :isFoil="detail.card.foil.is_foil" :name="detail.card.foil.name"/>
+                {{ detail.card.name }}&#91;{{ detail.lang }}&#93;<foiltag :isFoil="detail.card.foil.is_foil" :foiltype="detail.card.foil.name"/>
                 <div class="sub header"  v-if="detail.card.exp">
                         {{detail.card.exp.name}}&#91;{{ detail.card.exp.attr }}&#93;&#35;{{ detail.card.number }}
                 </div>
@@ -100,7 +100,7 @@
                     <label>原価</label>
                     <div class="ui left icon input">
                         <input type="number" step="1" min="1" v-model="detail.cost">
-                        <i class="yen sign icon"></i>                       
+                        <i class="yen sign icon"></i>
                     </div>
                 </div>
                 <div class="four wide field">

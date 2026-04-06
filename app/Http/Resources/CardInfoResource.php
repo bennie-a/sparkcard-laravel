@@ -23,8 +23,8 @@ class CardInfoResource extends JsonResource
     {
         $array =  [
             GCon::ID => $this->id,
-            Con::NAME => $this->name,
-            Con::EXP => [Con::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
+            GCon::NAME => $this->name,
+            Con::EXP => [GCon::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
             Con::NUMBER => $this->number,
             Con::COLOR => CardColor::tryFrom($this->color_id)->text(),
             Con::IMAGE_URL => $this->image_url,

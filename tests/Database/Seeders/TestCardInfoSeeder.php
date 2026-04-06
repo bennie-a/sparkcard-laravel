@@ -12,7 +12,7 @@ use App\Services\Constant\CardConstant as CCon;
 
 class TestCardInfoSeeder extends Seeder
 {
-    
+
     /**
      * Run the database seeds.
      *
@@ -27,7 +27,7 @@ class TestCardInfoSeeder extends Seeder
 
         // 兄弟戦争
         $bro = $this->findNotionId('BRO');
-        
+
         CardInfo::factory()->createOne([CCon::EXP_ID => $bro, 'name' => 'ドラゴンの運命',
         CCon::EN_NAME => 'Draconic Destiny', 'color_id' => 'R', CCon::NUMBER => '130',
         CCon::IS_FOIL => false, 'barcode' => 'xxxxxxxx', 'foiltype_id' => $nonfoil->id]);
@@ -58,6 +58,16 @@ class TestCardInfoSeeder extends Seeder
         CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '告別',
         CCon::EN_NAME => 'Farewell', 'color_id' => 'W', CCon::NUMBER => '365',
         CCon::IS_FOIL => true, 'image_url' => fake()->url(), 'foiltype_id' => $foil->id, Ccon::PROMO_ID => $showcase]);
+
+        CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '放浪皇',
+        CCon::EN_NAME => 'The Wandering Emperor', 'color_id' => 'Art', CCon::NUMBER => '50',
+        CCon::IS_FOIL => false, 'image_url' => fake()->url(), 'foiltype_id' => $nonfoil->id, Ccon::PROMO_ID => 1]);
+
+        $signed = Foiltype::findByAttr('signed');
+        CardInfo::factory()->createOne([CCon::EXP_ID => $neo, 'name' => '放浪皇',
+        CCon::EN_NAME => 'The Wandering Emperor', 'color_id' => 'Art', CCon::NUMBER => '50',
+        CCon::IS_FOIL => true, 'image_url' => fake()->url(), 'foiltype_id' => $signed->id, Ccon::PROMO_ID => 1]);
+
 
         // ファイレクシア：完全なる統一
         $one = $this->findNotionId('ONE');
@@ -92,7 +102,7 @@ class TestCardInfoSeeder extends Seeder
         CCon::IS_FOIL => false, 'foiltype_id' => $nonfoil->id, Ccon::PROMO_ID => $oilslick]);
 
     }
-        
+
     protected function findNotionId(string $attr) : string {
         $set = Expansion::findBySetCode($attr);
         return $set->notion_id;

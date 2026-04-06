@@ -15,6 +15,7 @@ enum CardColor:string {
     case ARTIFACT = "A";
     case LAND = "Land";
     case TOKEN = "T";
+    case ART="Art";
     case UNDEFINED = "E";
 
     public function text() {
@@ -29,6 +30,7 @@ enum CardColor:string {
             self::ARTIFACT => "アーティファクト",
             self::LAND => "土地",
             self::TOKEN => "トークン",
+            self::ART => "アート・カード",
             self::UNDEFINED => JA::UNDEFINED
         };
     }

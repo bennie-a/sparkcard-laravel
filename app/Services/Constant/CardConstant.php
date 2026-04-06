@@ -61,5 +61,7 @@ class CardConstant {
 
     const IMAGE_URL = 'image_url';
 
+    const LAYOUT = 'layout';
+
 }
 

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\MainColor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MainColorSeeder extends Seeder
 {
@@ -15,6 +16,7 @@ class MainColorSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('main_color')->truncate();
         MainColor::create(['attr' => "B",  'name' => "黒"]);
         MainColor::create(['attr' => "G", 'name' => "緑"]);
         MainColor::create(['attr' => "R", 'name' => "赤"]);
@@ -25,6 +27,7 @@ class MainColorSeeder extends Seeder
         MainColor::create(['attr' => "A", 'name' => "アーティファクト"]);
         MainColor::create(['attr' => "L", 'name' => "無色"]);
         MainColor::create(['attr' => "T", 'name' => "トークン"]);
+        MainColor::create(['attr' => "Art", 'name' => "アート・カード"]);
         //
     }
 }

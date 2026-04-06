@@ -22,7 +22,7 @@ class ScryfallResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $card = new ScryfallCard($this->resource);
+        $card = $this->resource;
         $color = CardColor::findColor($card->colors(), $card->types());
         $promotype = \App\Facades\Promo::find($card);
 

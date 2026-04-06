@@ -22,6 +22,7 @@
                 <option value="L">無色</option>
                 <option value="A">アーティファクト</option>
                 <option value="Land">土地</option>
+                <option value="Art">アート・カード</option>
             </select>
         </div>
         <div class="eight wide column">
