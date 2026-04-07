@@ -17,6 +17,7 @@ import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import CardInfoBulkPage from "./pages/config/CardInfoBulkPage.vue";
+import BaseApiIntegration from "./pages/baseshop/BaseApiIntegration.vue";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
 const arrivalDssLinks = {url:"/arrival/date/", title:""};
@@ -25,6 +26,7 @@ const routes = [
         path: "/",
         component: Index,
         meta: {
+            layout: 'default',
             title: "入荷登録",
             description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
         },
@@ -146,11 +148,20 @@ const routes = [
         },
     },
     {
-        path: "/shipping/import",
+        path: "/shipping/mercari/import",
         component:ShiptLogImpPage,
         meta:{
-            title:"出荷情報一括登録",
-            description:"CSVファイルから出荷情報を一括登録します。",
+            title:"メルカリ注文情報一括登録",
+            description:"メルカリShopsから出荷情報をCSVファイルで一括登録します。",
+        }
+    },
+    {
+        path: "/shipping/base/import",
+        component:BaseApiIntegration,
+        meta:{
+            layout:'blank',
+            title:"BASE注文情報一括登録",
+            description:"BASEショップの注文情報を一括登録します。",
         }
     },
     {
