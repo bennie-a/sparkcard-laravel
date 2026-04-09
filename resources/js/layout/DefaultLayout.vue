@@ -89,6 +89,17 @@ export default {
     mounted: function () {
         this.$store.dispatch("clearCards");
         this.$store.dispatch("clearMessage");
+
+        // メイン部分のリサイズ検知
+        const main = document.querySelector("#main");
+        const resizeObserver = new ResizeObserver((entries) => {
+            this.mainHeight = this.$refs.main.clientHeight;
+        });
+        resizeObserver.observe(main);
+        this.sidebarHeight = this.$refs.sidebar.clientHeight;
+        this.mainHeight = this.$refs.main.clientHeight;
+        this.initHeight = this.mainHeight;
+        this.isMounted = true;
     },
 };
 </script>
