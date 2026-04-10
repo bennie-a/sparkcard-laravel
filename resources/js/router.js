@@ -8,7 +8,7 @@ import PostExPage from "./pages/config/PostExPage.vue";
 import StockpilePage from "./pages/stockpile/StockpilePage.vue";
 import ShiptLogPage from "./pages/shipping/ShiptLogPage.vue";
 import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
-import ShiptLogImpPage from "./pages/shipping/ShiptLogImpPage.vue";
+import ShiptLogImpPage from "./pages/mercari/ShiptMercariImpPage.vue";
 import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import{ store} from './store';
@@ -18,6 +18,8 @@ import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import CardInfoBulkPage from "./pages/config/CardInfoBulkPage.vue";
 import BaseApiIntegration from "./pages/baseshop/BaseApiIntegration.vue";
+import ShiptLogBaseImpPage from "./pages/baseshop/ShiptBaseImpPage.vue";
+import { authGuard } from "./auth/auth-guard";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
 const arrivalDssLinks = {url:"/arrival/date/", title:""};
@@ -148,23 +150,6 @@ const routes = [
         },
     },
     {
-        path: "/shipping/mercari/import",
-        component:ShiptLogImpPage,
-        meta:{
-            title:"メルカリ注文情報一括登録",
-            description:"メルカリShopsから出荷情報をCSVファイルで一括登録します。",
-        }
-    },
-    {
-        path: "/shipping/base/import",
-        component:BaseApiIntegration,
-        meta:{
-            layout:'blank',
-            title:"BASE注文情報一括登録",
-            description:"BASEショップの注文情報を一括登録します。",
-        }
-    },
-    {
         path: "/shipping/",
         component:ShiptLogPage,
         meta:{
@@ -186,7 +171,31 @@ const routes = [
                 },
             ]
         }
-    }
+    },
+    {
+        path: "/mercari/shipt/import",
+        component:ShiptLogImpPage,
+        meta:{
+            title:"メルカリ注文情報一括登録",
+            description:"メルカリShopsから出荷情報をCSVファイルで一括登録します。",
+        }
+    },
+    {
+        path: "/base/auth/",
+        component:BaseApiIntegration,
+        meta:{
+            layout:'blank',
+        },
+    },
+    {
+        path: "/base/shipt/import",
+        component:ShiptLogBaseImpPage,
+        meta:{
+            title:"BASE注文情報一括登録",
+            description:"BASEショップの注文情報を一括登録します。",
+        }
+    },
+
 ];
 
 // VueRouterインスタンスを作成する
@@ -195,16 +204,7 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    router['referrer'] = from;
-    store.dispatch("loading/start");
-    next();
-});
-
-router.afterEach(() => {
-    store.dispatch("loading/stop");
-});
-
+authGuard(router);
 // VueRouterインスタンスをエクスポートする
 // app.jsでインポートするため
 export default router;

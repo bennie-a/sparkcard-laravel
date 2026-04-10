@@ -14,6 +14,8 @@
         </main>
     </div>
 </template>
+<script>
+</script>
 <style scoped>
 .blank-layout {
   min-height: 100vh;

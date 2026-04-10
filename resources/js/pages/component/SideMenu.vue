@@ -77,17 +77,17 @@
                     <li>
                         <router-link
                             class="nav-link"
-                            :class="{ active: $route.path === '/shipping/mercari/import' }"
+                            :class="{ active: $route.path === '/mercari/shipt/import' }"
                             aria-current="page"
-                            to="/shipping/mercari/import"
+                            to="/mercari/shipt/import"
                             ><i class="bi bi-upload"></i>メルカリ一括登録</router-link>
                     </li>
                     <li>
                         <router-link
                             class="nav-link"
-                            :class="{ active: $route.path === '/shipping/base/import' }"
+                            :class="{ active: $route.path === '/base/shipt/import' }"
                             aria-current="page"
-                            to="/shipping/base/import"
+                            to="/base/shipt/import"
                             ><i class="bi bi-upload"></i>BASE一括登録</router-link>
                     </li>
                     <li>

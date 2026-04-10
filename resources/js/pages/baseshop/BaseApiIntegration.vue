@@ -1,6 +1,6 @@
 <template>
     <div class="ui middle center aligned grid">
-        <div class="five wide column">
+        <div class="six wide column">
             <h1 class="ui header">
                 <i class="linkify icon"></i>
                 <div class="content">BASE APIと連携する
@@ -41,7 +41,7 @@
 </template>
 <style scoped>
 .ui.header .content {
-    align-items: left;
+    text-align: left;
 }
 
 .ui.form .field {
