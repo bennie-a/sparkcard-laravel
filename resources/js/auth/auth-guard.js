@@ -8,7 +8,8 @@ export const authGuard = (router) => {
             store.dispatch("loading/start");
             // BASE API認証
             if (to.path === "/base/shipt/import") {
-                return next('/base/auth/');
+                router.push({ path: "/base/auth/", state: { from: to.path } });
+                return;
             }
             next();
     });

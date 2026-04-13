@@ -188,7 +188,7 @@ const routes = [
         },
     },
     {
-        path: "/base/shipt/import",
+        path: "/base/shipt/import/",
         component:ShiptLogBaseImpPage,
         meta:{
             title:"BASE注文情報一括登録",

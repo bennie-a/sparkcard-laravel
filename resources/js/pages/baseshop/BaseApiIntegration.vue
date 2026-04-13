@@ -1,3 +1,13 @@
+<script setup>
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const nextPage = () => {
+    console.log('認可コードを設定して連携します。');
+    router.push("/base/shipt/import/");
+};
+</script>
 <template>
     <div class="ui middle center aligned grid">
         <div class="six wide column">
@@ -13,7 +23,7 @@
                     <div class="sub header">連携前に認可サーバーから認可コードを取得してください。(別画面に表示されます。)</div>
                     </h3>
                 <div class="ui attached segment center aligned">
-                    <button  class="ui red button"><i class="external alternate icon"></i>認可サーバーを表示する</button>
+                    <button  class="ui red button" ><i class="external alternate icon"></i>認可サーバーを表示する</button>
                 </div>
             </section>
             <section class="mt-2">
@@ -25,7 +35,7 @@
                         </div>
 
                         <div class="ui center aligned">
-                        <button class="ui teal button">
+                        <button class="ui teal button" @click="nextPage">
                             <i class="linkify icon"></i>
                             連携する
                         </button>
