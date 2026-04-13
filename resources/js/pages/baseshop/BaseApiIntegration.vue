@@ -5,7 +5,7 @@ const router = useRouter();
 
 const nextPage = () => {
     console.log('認可コードを設定して連携します。');
-    router.push("/base/shipt/import/");
+    router.push(history.state.from);
 };
 </script>
 <template>

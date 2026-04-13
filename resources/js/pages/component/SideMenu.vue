@@ -85,7 +85,7 @@
                     <li>
                         <router-link
                             class="nav-link"
-                            :class="{ active: $route.path === '/base/shipt/import' }"
+                            :class="{ active: $route.path === '/base/shipt/import/' }"
                             aria-current="page"
                             to="/base/shipt/import"
                             ><i class="bi bi-upload"></i>BASE一括登録</router-link>
