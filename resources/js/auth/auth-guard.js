@@ -1,4 +1,6 @@
 import{ store} from '@/store';
+import {baseConnected } from "@/stores/auth/baseConnected";
+import { storeToRefs } from 'pinia';
 
 // 認証に関するスクリプト
 export const authGuard = (router) => {
@@ -7,9 +9,21 @@ export const authGuard = (router) => {
             router['referrer'] = from;
             store.dispatch("loading/start");
             // BASE API認証
-            if (to.path === "/base/shipt/import") {
-                router.push({ path: "/base/auth/", state: { from: to.path + '/' } });
-                return;
+            const requiresBase = to.meta?.requiresBase ?? false;
+            if (!requiresBase) {
+                return next();
+            }
+
+            const baseStore = baseConnected();
+            const {isConnected, expiresAt} = storeToRefs(baseStore);
+
+            if (!isConnected.value) {
+                return next({
+                                path: "/base/auth/",
+                                query: {
+                                    redirect: to.fullPath
+                                }
+                            });
             }
             next();
     });

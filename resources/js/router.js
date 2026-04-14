@@ -193,6 +193,7 @@ const routes = [
         meta:{
             title:"BASE注文情報一括登録",
             description:"BASEショップの注文情報を一括登録します。",
+            requiresBase:true
         }
     },
 

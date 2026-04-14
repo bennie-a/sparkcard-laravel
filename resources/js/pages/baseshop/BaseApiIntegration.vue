@@ -1,11 +1,14 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { baseConnected } from '@/stores/auth/baseConnected';
 const router = useRouter();
+const route = useRoute();
 
 const nextPage = () => {
-    console.log('認可コードを設定して連携します。');
-    router.push(history.state.from);
+//    console.log(route.query.redirect);
+    const baseStore = baseConnected();
+    baseStore.connect();
+    router.push(route.query.redirect);
 };
 </script>
 <template>
