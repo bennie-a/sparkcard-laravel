@@ -74,6 +74,7 @@
                             <option value="G">緑</option>
                             <option value="M">多色</option>
                             <option value="A">アーティファクト</option>
+                            <option value="L">無色</option>
                             <option value="Land">土地</option>
                             <option value="T">トークン</option>
                             <option value="Art">アート・カード</option>
