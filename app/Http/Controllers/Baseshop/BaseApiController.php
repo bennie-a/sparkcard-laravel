@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Baseshop;
 use App\Factory\GuzzleClientFactory;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\TransferStats;
@@ -28,7 +27,7 @@ class BaseApiController extends Controller
         return redirect()->to($redirect_url);
         // $response = $client->get('1/oauth/authorize',  ['query' => $query, 'content-type' => 'application/json']);
         // $contents = $response->getBody()->getContents();
-        
+
         // $code = explode('=', $contents)[1];
         // return response($contents, $response->getStatusCode());
     }
