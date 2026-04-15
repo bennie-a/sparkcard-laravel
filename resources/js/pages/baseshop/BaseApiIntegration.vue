@@ -1,9 +1,30 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import { baseConnected } from '@/stores/auth/baseConnected';
+import { mount } from '@vue/test-utils';
+import { onMounted, ref } from 'vue';
+import Loading from "vue-loading-overlay";
+import axios from 'axios';
+
 const router = useRouter();
 const route = useRoute();
+const isLoading = ref(false);
+const authUrl = ref("");
 
+const toAuthServer = async() => {
+    isLoading.value = true;
+    await axios.get('/api/base/oauth/connect')
+        .then((response) => {
+            const authorizationEndpoint = response.data.url;
+            window.open(authorizationEndpoint, '_blank');
+        })
+        .catch((e) => {
+            console.error(e.statusCode);
+        })
+        .finally(() => {
+            isLoading.value = false;
+        });
+};
 const nextPage = () => {
 //    console.log(route.query.redirect);
     const baseStore = baseConnected();
@@ -26,7 +47,8 @@ const nextPage = () => {
                     <div class="sub header">連携前に認可サーバーから認可コードを取得してください。(別画面に表示されます。)</div>
                     </h3>
                 <div class="ui attached segment center aligned">
-                    <button  class="ui red button" ><i class="external alternate icon"></i>認可サーバーを表示する</button>
+                    <button  class="ui red button" @click="toAuthServer"><i class="external alternate icon"></i>認可サーバーを表示する</button>
+
                 </div>
             </section>
             <section class="mt-2">
@@ -51,6 +73,10 @@ const nextPage = () => {
           </section>
         </div>
     </div>
+        <loading
+         :active="isLoading"
+         :can-cancel="false" :is-full-page="true" />
+
 </template>
 <style scoped>
 .ui.header .content {
