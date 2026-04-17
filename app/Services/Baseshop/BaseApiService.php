@@ -1,23 +1,31 @@
 <?php
 
-namespace App\Services\BaseApi;
+namespace App\Services\Baseshop;
 
 use App\Factory\GuzzleClientFactory;
+use App\Repositories\Api\Baseshop\BaseApiRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-class BaseOrderService
+class BaseApiService
 {
     protected Client $client;
 
-    public function __construct()
+    private $repo;
+    public function __construct(BaseApiRepository $repo)
     {
-        $this->client = new Client([
-            'base_uri' => 'https://api.thebase.in/1/',
-            'timeout'  => 10,
-        ]);
+        $this->repo = $repo;
     }
 
+    /**
+     * BASE APIからアクセストークンとリフレッシュトークンを取得して、DBに登録する。
+     *
+     * @param string $code
+     * @return void
+     */
+    public function registerToken(string $code) {
+        $this->repo->getAccessToken($code);
+    }
         /**
      * 認可コードからアクセストークン取得
      *

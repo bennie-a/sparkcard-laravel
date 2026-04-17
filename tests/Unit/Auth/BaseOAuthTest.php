@@ -24,4 +24,15 @@ class BaseOAuthTest extends TestCase
 
         $response->assertJsonPath('url', $expected);
     }
+
+    #[Test]
+    #[TestDox('アクセストークンとリフレッシュトークンを登録するテスト')]
+    public function test_callback(): void
+    {
+        $code = 'test_code';
+        $params = ['code' => $code];
+        $response = $this->post('/api/base/oauth/callback', $params);
+        $response->assertStatus(201);
+        $response->assertJsonPath('code', $code);
+    }
 }
