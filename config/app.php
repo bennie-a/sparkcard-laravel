@@ -2,6 +2,7 @@
 
 use App\Facades\PromotypeFacade;
 use App\Facades\WisdomGuild;
+use App\Providers\BaseApiProvider;
 use App\Providers\ExServiceProvider;
 use App\Providers\MtgDevProvider;
 use App\Providers\WisdomServProvider;
@@ -201,7 +202,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
-         *追加クラス 
+         *追加クラス
          */
         App\Providers\PromotypeProvider::class,
         App\Providers\ExServiceProvider::class,
@@ -212,7 +213,7 @@ return [
         App\Providers\StockpileServiceProvider::class,
         App\Providers\WisdomServProvider::class,
         App\Providers\ScryfallProvider::class,
-        App\Providers\APIHandlerProvider::class
+        App\Providers\APIHandlerProvider::class,
     ],
 
     /*

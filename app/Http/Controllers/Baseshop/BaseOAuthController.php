@@ -43,8 +43,8 @@ class BaseOAuthController extends Controller
     public function callback(BaseCallbackRequest $request)
     {
         $code = $request->input(BCon::AUTH_CODE);
-        $this->service->registerToken($code);
-        return response()->json(['code' => $code], Response::HTTP_CREATED);
+        $isConnected = $this->service->registerToken($code);
+        return response()->json(['connected' => $isConnected], Response::HTTP_CREATED);
     }
 
     /**

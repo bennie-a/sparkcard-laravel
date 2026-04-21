@@ -1,4 +1,6 @@
 <?php
+namespace App\Api\Client;
+use App\Api\Client\AbstractApiClient;
 
 /**
  * BASE APIの接続設定クラス

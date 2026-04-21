@@ -13,5 +13,6 @@ interface BaseApiRepositoryInterface
      * @return array
      */
     public function getAccessToken(string $code):array;
-    // public function fetchOrders(string $accessToken, array $query = []);
-}
+
+    public function registToken(array $tokens);
+    }

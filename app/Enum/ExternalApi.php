@@ -21,7 +21,7 @@ enum ExternalApi: string
     public function client(): AbstractApiClient
     {
         return match($this) {
-            self::BASE => new \App\Api\Client\BaseClient(),
+            self::BASE => new \App\Api\Client\BaseApiClient(),
             // self::WISDOM_GUILD => new \App\Api\Client\WisdomGuildClient(),
             self::SCRYFALL => new ScryfallClient(),
             // self::MTGDEV => new \App\Api\Client\MtgDevClient(),

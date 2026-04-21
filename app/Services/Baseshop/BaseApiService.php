@@ -2,8 +2,7 @@
 
 namespace App\Services\Baseshop;
 
-use App\Factory\GuzzleClientFactory;
-use App\Repositories\Api\Baseshop\BaseApiRepository;
+use App\Repositories\Api\Baseshop\BaseApiRepositoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -12,7 +11,7 @@ class BaseApiService
     protected Client $client;
 
     private $repo;
-    public function __construct(BaseApiRepository $repo)
+    public function __construct(BaseApiRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
@@ -24,30 +23,15 @@ class BaseApiService
      * @return void
      */
     public function registerToken(string $code) {
-        $this->repo->getAccessToken($code);
-    }
-        /**
-     * 認可コードからアクセストークン取得
-     *
-     */
-    public function getAccessToken(string $code)
-    {
         try {
-                $response = $this->client->post('/1/oauth/token', [
-                    'form_params' => [
-                        'grant_type'    => 'authorization_code',
-                        'client_id'     => config('baseapi.client_id'),
-                        'client_secret' => config('baseapi.secret'),
-                        'code'          => $code,
-                        'redirect_uri'  => config('baseapi.api_url'),
-                    ],
-                ]);
-
-            return json_decode($response->getBody()->getContents(), true);
-
+            $tokens = $this->repo->getAccessToken($code);
+            logger()->debug('取得したトークン', $tokens);
+            // トークンをDBに保存する処理をここに追加
+            $this->repo->registToken($tokens);
         } catch (RequestException $e) {
             throw $e;
         }
+        return true;
     }
 
     public function fetchOrders(string $accessToken, array $query = [])
