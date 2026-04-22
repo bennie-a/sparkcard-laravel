@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\tests\Unit\Auth;
 
+use App\Exceptions\api\Baseshop\BaseApiException;
 use App\Models\BaseToken;
 use App\Repositories\Api\Baseshop\BaseApiRepository;
-use App\Repositories\Api\Baseshop\BaseApiRepositoryInterface;
 use Carbon\CarbonImmutable;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -41,9 +43,8 @@ class BaseOAuthTest extends TestCase
 
     #[Test]
     #[TestDox('アクセストークンとリフレッシュトークンを登録するテスト')]
-    public function test_callback(): void
+    public function ok_callback(): void
     {
-        $mock = Mockery::mock(BaseApiRepository::class)->makePartial();
         $code = 'test_code';
         $exToken = [
                 'access_token' => Uuid::uuid4()->toString(),
@@ -51,12 +52,7 @@ class BaseOAuthTest extends TestCase
                 'refresh_token' => Uuid::uuid4()->toString(),
                 'expires_in' => 3600];
 
-        $mock->shouldReceive('getAccessToken')
-            ->once()
-            ->with($code)
-            ->andReturn($exToken);
-
-        $this->app->instance(BaseApiRepositoryInterface::class, $mock);
+        $this->mockRepository($code, $exToken);
         $params = ['code' => $code];
         $response = $this->post('/api/base/oauth/callback', $params);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -69,5 +65,38 @@ class BaseOAuthTest extends TestCase
 
         $diff  = $token->expires_at->diffInSeconds(CarbonImmutable::now()->addHour());
         $this->assertLessThanOrEqual(5, $diff); // 5秒以内の誤差を許容
-        }
+    }
+
+    #[Test]
+    #[TestDox('認可コードが不正な場合のテスト')]
+    public function ng_invalid_code() {
+        $code = 'test_code';
+        $exToken = [
+            'error' => 'invalid_request',
+            'error_description' => '不正な認可コードです。.'
+        ];
+
+        $params = ['code' => $code];
+        $mock = Mockery::mock(BaseApiRepository::class)->makePartial();
+        $mock->shouldReceive('getAccessToken')
+            ->once()
+            ->with($code)
+            ->andThrow(new BaseApiException(json_encode($exToken)));
+
+        $this->app->instance(BaseApiRepository::class, $mock);
+        $response = $this->post('/api/base/oauth/callback', $params);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+
+    }
+
+    private function mockRepository($code, $exToken)
+    {
+        $mock = Mockery::mock(BaseApiRepository::class)->makePartial();
+        $mock->shouldReceive('getAccessToken')
+            ->once()
+            ->with($code)
+            ->andReturn($exToken);
+
+        $this->app->instance(BaseApiRepository::class, $mock);
+    }
 }

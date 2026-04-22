@@ -2,6 +2,7 @@
 
 namespace App\Services\Baseshop;
 
+use App\Repositories\Api\Baseshop\BaseApiRepository;
 use App\Repositories\Api\Baseshop\BaseApiRepositoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -11,7 +12,7 @@ class BaseApiService
     protected Client $client;
 
     private $repo;
-    public function __construct(BaseApiRepositoryInterface $repo)
+    public function __construct(BaseApiRepository $repo)
     {
         $this->repo = $repo;
     }
@@ -23,14 +24,10 @@ class BaseApiService
      * @return void
      */
     public function registerToken(string $code) {
-        try {
-            $tokens = $this->repo->getAccessToken($code);
-            logger()->debug('取得したトークン', $tokens);
-            // トークンをDBに保存する処理をここに追加
-            $this->repo->registToken($tokens);
-        } catch (RequestException $e) {
-            throw $e;
-        }
+        $tokens = $this->repo->getAccessToken($code);
+        logger()->debug('取得したトークン', $tokens);
+        // トークンをDBに保存する処理をここに追加
+        $this->repo->registToken($tokens);
         return true;
     }
 

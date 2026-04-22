@@ -3,13 +3,15 @@
 namespace App\Repositories\Api\Baseshop;
 
 use App\Enum\ExternalApi;
+use App\Exceptions\api\Baseshop\BaseApiException;
 use App\Factory\GuzzleClientFactory;
 use App\Models\BaseToken;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * BASE APIとの連携クラス
  */
-class BaseApiRepository implements BaseApiRepositoryInterface
+class BaseApiRepository
 {
 
     /**
@@ -21,8 +23,8 @@ class BaseApiRepository implements BaseApiRepositoryInterface
     public function getAccessToken(string $code):array
     {
         try {
-            GuzzleClientFactory::createClient(ExternalApi::BASE);
-            $response = $this->client->post('/1/oauth/token', [
+            $client = GuzzleClientFactory::createClient(ExternalApi::BASE);
+            $response = $client->post('/1/oauth/token', [
                 'form_params' => [
                     'grant_type'    => 'authorization_code',
                     'client_id'     => config('baseapi.client_id'),
@@ -35,7 +37,10 @@ class BaseApiRepository implements BaseApiRepositoryInterface
             return json_decode($response->getBody()->getContents(), true);
 
         } catch (RequestException $e) {
-            throw $e;
+            $response  = $e->getResponse();
+            $contents = $response->getBody()->getContents();
+
+            throw new BaseApiException($contents);
         }
     }
 
