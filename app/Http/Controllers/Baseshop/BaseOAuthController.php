@@ -3,14 +3,23 @@
 namespace App\Http\Controllers\Baseshop;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\BaseCallbackRequest;
+use App\Services\Baseshop\BaseApiService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Constant\BaseApiConstant as BCon;
 
 /**
  * BASE APIの認証関連クラス
  */
 class BaseOAuthController extends Controller
 {
+
+    private $service;
+    public function __construct(BaseApiService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * 認可サーバーへのURLを取得する。
      *
@@ -28,13 +37,14 @@ class BaseOAuthController extends Controller
     /**
      * BASE APIからアクセストークンとリフレッシュトークンを登録する。
      *
-     * @param Request $request
-     * @return void
+     * @param BaseCallbackRequest $request
+     * @return Response
      */
-    public function callback(Request $request)
+    public function callback(BaseCallbackRequest $request)
     {
-        $code = $request->query('code');
-        return response()->json(['code' => $code]);
+        $code = $request->input(BCon::AUTH_CODE);
+        $isConnected = $this->service->registerToken($code);
+        return response()->json(['connected' => $isConnected], Response::HTTP_CREATED);
     }
 
     /**

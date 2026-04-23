@@ -26,7 +26,7 @@ class CardSearchRequest extends FormRequest
         return [
             GCon::NAME => 'nullable|string|max:255',
             Con::SET => 'nullable|string|max:255',
-            Con::COLOR => 'nullable|string|in:W,U,B,R,G,L,Land,Art,T,M',
+            Con::COLOR => 'nullable|string|in:W,U,B,R,G,L,Land,A,Art,T,M',
             Con::IS_FOIL => 'boolean',
         ];
     }
