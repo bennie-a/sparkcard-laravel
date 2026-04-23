@@ -7,6 +7,7 @@ use App\Exceptions\api\Baseshop\BaseApiException;
 use App\Factory\GuzzleClientFactory;
 use App\Models\BaseToken;
 use GuzzleHttp\Exception\RequestException;
+use App\Services\Constant\BaseApiConstant as BCon;
 
 /**
  * BASE APIとの連携クラス
@@ -53,9 +54,9 @@ class BaseApiRepository
     public function registToken(array $tokens)
     {
         BaseToken::create([
-            'access_token' => $tokens['access_token'],
-            'refresh_token' => $tokens['refresh_token'],
-            'expires_at' => now()->addSeconds($tokens['expires_in'])
+            BCon::ACCESS_TOKEN => $tokens[BCon::ACCESS_TOKEN],
+            BCon::REFRESH_TOKEN => $tokens[BCon::REFRESH_TOKEN],
+            BCon::EXPIRES_IN => now()->addSeconds($tokens[BCon::EXPIRES_IN])
         ]);
     }
 }

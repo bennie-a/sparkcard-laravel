@@ -6,16 +6,15 @@ use App\Exceptions\api\Baseshop\BaseApiException;
 use App\Models\BaseToken;
 use App\Repositories\Api\Baseshop\BaseApiRepository;
 use Carbon\CarbonImmutable;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
+use App\Services\Constant\BaseApiConstant as BCon;
 
 #[TestDox('BASE APIの認証関連のテスト')]
 #[CoversClass(BaseOAuthController::class)]
@@ -47,23 +46,23 @@ class BaseOAuthTest extends TestCase
     {
         $code = 'test_code';
         $exToken = [
-                'access_token' => Uuid::uuid4()->toString(),
-                'token_type' => 'bearer',
-                'refresh_token' => Uuid::uuid4()->toString(),
-                'expires_in' => 3600];
+            BCon::ACCESS_TOKEN => Uuid::uuid4()->toString(),
+            'token_type' => 'bearer',
+            BCon::REFRESH_TOKEN => Uuid::uuid4()->toString(),
+            BCon::EXPIRES_IN => 3600];
 
         $this->mockRepository($code, $exToken);
         $params = ['code' => $code];
         $response = $this->post('/api/base/oauth/callback', $params);
         $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJsonPath('connected', true);
+        $response->assertJsonPath(BCon::CONNECTED, true);
 
         $this->assertEquals(1, BaseToken::all()->count());
         $token = BaseToken::first();
-        $this->assertEquals($exToken['access_token'], $token->access_token);
-        $this->assertEquals($exToken['refresh_token'], $token->refresh_token);
+        $this->assertEquals($exToken[BCon::ACCESS_TOKEN], $token->access_token);
+        $this->assertEquals($exToken[BCon::REFRESH_TOKEN], $token->refresh_token);
 
-        $diff  = $token->expires_at->diffInSeconds(CarbonImmutable::now()->addHour());
+        $diff  = $token->expires_in->diffInSeconds(CarbonImmutable::now()->addHour());
         $this->assertLessThanOrEqual(5, $diff); // 5秒以内の誤差を許容
     }
 
@@ -86,7 +85,14 @@ class BaseOAuthTest extends TestCase
         $this->app->instance(BaseApiRepository::class, $mock);
         $response = $this->post('/api/base/oauth/callback', $params);
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
+    }
 
+    #[Test]
+    #[TestDox('BASE APIの連携ステータスがOKか確認する。')]
+    public function ok_status() {
+        $response = $this->get('/api/base/oauth/status');
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonPath(BCon::CONNECTED, true);
     }
 
     private function mockRepository($code, $exToken)

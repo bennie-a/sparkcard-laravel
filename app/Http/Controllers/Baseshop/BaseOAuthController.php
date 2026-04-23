@@ -16,6 +16,7 @@ class BaseOAuthController extends Controller
 {
 
     private $service;
+
     public function __construct(BaseApiService $service)
     {
         $this->service = $service;
@@ -44,7 +45,7 @@ class BaseOAuthController extends Controller
     {
         $code = $request->input(BCon::AUTH_CODE);
         $isConnected = $this->service->registerToken($code);
-        return response()->json(['connected' => $isConnected], Response::HTTP_CREATED);
+        return response()->json([BCon::CONNECTED => $isConnected], Response::HTTP_CREATED);
     }
 
     /**
@@ -54,6 +55,6 @@ class BaseOAuthController extends Controller
      */
     public function status()
     {
-
+        return response()->json([BCon::CONNECTED => true], Response::HTTP_OK);
     }
 }

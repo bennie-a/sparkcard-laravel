@@ -14,13 +14,13 @@ class BaseToken extends Model
     protected $fillable = [
         'access_token',
         'refresh_token',
-        'expires_at',
+        'expires_in',
     ];
 
     // 暗号化
     protected $casts = [
         'access_token' => 'encrypted',
         'refresh_token' => 'encrypted',
-        'expires_at' => 'datetime',
+        'expires_in' => 'datetime',
     ];
 }
