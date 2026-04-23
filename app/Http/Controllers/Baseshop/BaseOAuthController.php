@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Baseshop;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\BaseCallbackRequest;
-use App\Services\Baseshop\BaseApiService;
+use App\Services\Baseshop\BaseOAuthService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Constant\BaseApiConstant as BCon;
@@ -17,7 +17,7 @@ class BaseOAuthController extends Controller
 
     private $service;
 
-    public function __construct(BaseApiService $service)
+    public function __construct(BaseOAuthService $service)
     {
         $this->service = $service;
     }

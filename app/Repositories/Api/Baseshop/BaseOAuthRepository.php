@@ -10,9 +10,9 @@ use GuzzleHttp\Exception\RequestException;
 use App\Services\Constant\BaseApiConstant as BCon;
 
 /**
- * BASE APIとの連携クラス
+ * BASE APIの認証関連のリポジトリクラス
  */
-class BaseApiRepository
+class BaseOAuthRepository
 {
 
     /**

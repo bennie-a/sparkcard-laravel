@@ -2,17 +2,16 @@
 
 namespace App\Services\Baseshop;
 
-use App\Repositories\Api\Baseshop\BaseApiRepository;
-use App\Repositories\Api\Baseshop\BaseApiRepositoryInterface;
+use App\Repositories\Api\Baseshop\BaseOAuthRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
-class BaseApiService
+class BaseOAuthService
 {
     protected Client $client;
 
     private $repo;
-    public function __construct(BaseApiRepository $repo)
+    public function __construct(BaseOAuthRepository $repo)
     {
         $this->repo = $repo;
     }

@@ -5,6 +5,7 @@ namespace Tests\Feature\tests\Unit\Auth;
 use App\Exceptions\api\Baseshop\BaseApiException;
 use App\Models\BaseToken;
 use App\Repositories\Api\Baseshop\BaseApiRepository;
+use App\Repositories\Api\Baseshop\BaseOAuthRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,7 @@ class BaseOAuthTest extends TestCase
             BCon::REFRESH_TOKEN => Uuid::uuid4()->toString(),
             BCon::EXPIRES_IN => 3600];
 
-        $this->mockRepository($code, $exToken);
+        $this->mockRepository('getAccessToken', $code, $exToken);
         $params = ['code' => $code];
         $response = $this->post('/api/base/oauth/callback', $params);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -76,13 +77,13 @@ class BaseOAuthTest extends TestCase
         ];
 
         $params = ['code' => $code];
-        $mock = Mockery::mock(BaseApiRepository::class)->makePartial();
+        $mock = Mockery::mock(BaseOAuthRepository::class)->makePartial();
         $mock->shouldReceive('getAccessToken')
             ->once()
             ->with($code)
             ->andThrow(new BaseApiException(json_encode($exToken)));
 
-        $this->app->instance(BaseApiRepository::class, $mock);
+        $this->app->instance(BaseOAuthRepository::class, $mock);
         $response = $this->post('/api/base/oauth/callback', $params);
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
     }
@@ -95,14 +96,14 @@ class BaseOAuthTest extends TestCase
         $response->assertJsonPath(BCon::CONNECTED, true);
     }
 
-    private function mockRepository($code, $exToken)
+    private function mockRepository($method, $code, $exToken)
     {
-        $mock = Mockery::mock(BaseApiRepository::class)->makePartial();
-        $mock->shouldReceive('getAccessToken')
+        $mock = Mockery::mock(BaseOAuthRepository::class)->makePartial();
+        $mock->shouldReceive($method)
             ->once()
             ->with($code)
             ->andReturn($exToken);
 
-        $this->app->instance(BaseApiRepository::class, $mock);
+        $this->app->instance(BaseOAuthRepository::class, $mock);
     }
 }
