@@ -44,7 +44,7 @@ class BaseOAuthController extends Controller
     public function callback(BaseCallbackRequest $request)
     {
         $code = $request->input(BCon::AUTH_CODE);
-        $isConnected = $this->service->registerToken($code);
+        $isConnected = $this->service->registToken($code);
         return response()->json([BCon::CONNECTED => $isConnected], Response::HTTP_CREATED);
     }
 
@@ -55,6 +55,7 @@ class BaseOAuthController extends Controller
      */
     public function status()
     {
-        return response()->json([BCon::CONNECTED => true], Response::HTTP_OK);
+        $isConnected = $this->service->isConnected();
+        return response()->json([BCon::CONNECTED => $isConnected], Response::HTTP_OK);
     }
 }

@@ -59,4 +59,14 @@ class BaseOAuthRepository
             BCon::EXPIRES_IN => now()->addSeconds($tokens[BCon::EXPIRES_IN])
         ]);
     }
+
+    /**
+     * 有効期限が最新のアクセストークンを1件取得する。
+     *
+     * @return BaseToken
+     */
+    public function getLatestToken() {
+        $record = BaseToken::fetchLastRecord();
+        return $record;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Services\Baseshop;
 
 use App\Repositories\Api\Baseshop\BaseOAuthRepository;
+use Carbon\CarbonImmutable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -22,12 +23,29 @@ class BaseOAuthService
      * @param string $code
      * @return void
      */
-    public function registerToken(string $code) {
+    public function registToken(string $code) {
         $tokens = $this->repo->getAccessToken($code);
         logger()->debug('取得したトークン', $tokens);
         // トークンをDBに保存する処理をここに追加
         $this->repo->registToken($tokens);
         return true;
+    }
+
+    /**
+     * BASE APIと連携済みか検証する。
+     *
+     * @return boolean
+     */
+    public function isConnected() {
+        $record = $this->repo->getLatestToken();
+        $now = CarbonImmutable::now();
+        $diff = $record->expires_in->diffInMinutes($now);
+
+        if ($diff <= 60) {
+            return true;
+        }
+
+        return false;
     }
 
     public function fetchOrders(string $accessToken, array $query = [])
