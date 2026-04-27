@@ -38,6 +38,10 @@ class BaseOAuthService
      */
     public function isConnected() {
         $record = $this->repo->getLatestToken();
+        // トークンが未登録の場合は連携していないとみなす。
+        if (!$record) {
+            return false;
+        }
         $now = CarbonImmutable::now();
         $diff = $record->expires_in->diffInMinutes($now);
 
@@ -45,7 +49,10 @@ class BaseOAuthService
             return true;
         }
 
-        return false;
+        $refreshToken = $record->refresh_token;
+        $tokens = $this->repo->refreshAccessToken($refreshToken);
+        $this->repo->updateToken($record, $tokens);
+        return true;
     }
 
     public function fetchOrders(string $accessToken, array $query = [])

@@ -55,13 +55,7 @@ class BaseOAuthTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonPath(BCon::CONNECTED, true);
 
-        $this->assertEquals(1, BaseToken::all()->count());
-        $token = BaseToken::first();
-        $this->assertEquals($exToken[BCon::ACCESS_TOKEN], $token->access_token);
-        $this->assertEquals($exToken[BCon::REFRESH_TOKEN], $token->refresh_token);
-
-        $diff  = $token->expires_in->diffInSeconds(CarbonImmutable::now()->addHour());
-        $this->assertLessThanOrEqual(5, $diff); // 5秒以内の誤差を許容
+        $this->verifyToken($exToken);
     }
 
     #[Test]
@@ -90,22 +84,23 @@ class BaseOAuthTest extends TestCase
     #[TestDox('status:アクセストークンが有効期限内なら「連携済み」')]
     public function ok_status_exp() {
         $extoken = $this->createRandomToken();
-        BaseToken::create([
-            BCon::ACCESS_TOKEN => $extoken[BCon::ACCESS_TOKEN],
-            BCon::REFRESH_TOKEN => $extoken[BCon::REFRESH_TOKEN],
-            BCon::EXPIRES_IN => now()->addSeconds($extoken[BCon::EXPIRES_IN])
-        ]);
+        $this->saveBaseToken($extoken);
 
-        $response = $this->get('/api/base/oauth/status');
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonPath(BCon::CONNECTED, true);
+        $this->executeStatusTest(true);
     }
 
     #[Test]
     #[Group('status')]
     #[TestDox('status:アクセストークンが有効期限切れなら再発行した上で「連携済み」')]
     public function ok_status_expired() {
+        $expiredToken = $this->createRandomToken();
+        $this->saveBaseToken($expiredToken, -3660); // 有効期限を1時間1分前に設定
 
+        $exToken = $this->createRandomToken();
+        $this->mockRepository('refreshAccessToken', $expiredToken[BCon::REFRESH_TOKEN], $exToken);
+
+        $this->executeStatusTest(true);
+        $this->verifyToken($exToken);
     }
 
     #[Test]
@@ -128,6 +123,35 @@ class BaseOAuthTest extends TestCase
 
     }
 
+    /**
+     * エンドポイントが'/api/base/oauth/status'のレスポンスを
+     * 検証する。
+     *
+     * @param boolean $isConnected
+     * @return void
+     */
+    private function executeStatusTest(bool $isConnected) {
+        $response = $this->get('/api/base/oauth/status');
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonPath(BCon::CONNECTED, $isConnected);
+
+    }
+
+    /**
+     * base_tokenテーブルにレコードを1件登録する。
+     *
+     * @param array $extoken ランダムなアクセストークン情報
+     * @param integer $expiresIn アクセストークンの有効期限（秒）
+     * @return void
+     */
+    private function saveBaseToken(array $extoken, int $expiresIn = 3600) {
+        BaseToken::create([
+            BCon::ACCESS_TOKEN => $extoken[BCon::ACCESS_TOKEN],
+            BCon::REFRESH_TOKEN => $extoken[BCon::REFRESH_TOKEN],
+            BCon::EXPIRES_IN => now()->addSeconds($expiresIn)
+        ]);
+    }
+
     private function mockRepository($method, $code, $exToken)
     {
         $mock = Mockery::mock(BaseOAuthRepository::class)->makePartial();
@@ -138,6 +162,23 @@ class BaseOAuthTest extends TestCase
 
         $this->app->instance(BaseOAuthRepository::class, $mock);
     }
+
+    /**
+     * base_tokenテーブルのレコードを検証する。
+     *
+     * @param array $exToken
+     * @return void
+     */
+    private function verifyToken(array $exToken) {
+        $this->assertEquals(1, BaseToken::all()->count());
+        $token = BaseToken::first();
+        $this->assertEquals($exToken[BCon::ACCESS_TOKEN], $token->access_token);
+        $this->assertEquals($exToken[BCon::REFRESH_TOKEN], $token->refresh_token);
+
+        $diff  = $token->expires_in->diffInSeconds(CarbonImmutable::now()->addHour());
+        $this->assertLessThanOrEqual(5, $diff); // 5秒以内の誤差を許容
+    }
+
 
     /**
      * テスト用のトークンをランダムに生成する。
