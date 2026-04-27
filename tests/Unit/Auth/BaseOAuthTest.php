@@ -4,7 +4,6 @@ namespace Tests\Feature\tests\Unit\Auth;
 
 use App\Exceptions\api\Baseshop\BaseApiException;
 use App\Models\BaseToken;
-use App\Repositories\Api\Baseshop\BaseApiRepository;
 use App\Repositories\Api\Baseshop\BaseOAuthRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Response;
@@ -107,20 +106,31 @@ class BaseOAuthTest extends TestCase
     #[Group('status')]
     #[TestDox('status:アクセストークンが未登録なら「未連携」')]
     public function ng_status_no_token() {
-
+        $this->executeStatusTest(false);
     }
 
     #[Test]
     #[Group('status')]
-    #[TestDox('status:リフレッシュトークンが有効期限切れなら「未連携」')]
+    #[TestDox('status:BASE APIのトークン再発行に失敗した場合、HTTPステータスコード「400」とエラーメッセージを返す。')]
     public function ng_status_expired_refresh_token() {
+        $exError = [
+            'error' => 'invalid_request',
+            'error_description' => 'リフレッシュトークンの有効期限が切れています。'
+        ];
 
-    }
+        $extoken = $this->createRandomToken();
+        $this->saveBaseToken($extoken, -5000);
 
-    #[Test]
-    #[TestDox('再発行に失敗した場合、「未連携」と判断するテスト')]
-    public function ng_status_faiure_refresh() {
+        $mock = Mockery::mock(BaseOAuthRepository::class)->makePartial();
+        $mock->shouldReceive('refreshAccessToken')
+            ->once()
+            ->with($extoken[BCon::REFRESH_TOKEN])
+            ->andThrow(new BaseApiException(json_encode($exError)));
 
+        $this->app->instance(BaseOAuthRepository::class, $mock);
+        $response = $this->get('/api/base/oauth/status');
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJsonPath('detail', $exError['error_description']);
     }
 
     /**
