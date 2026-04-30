@@ -1,6 +1,6 @@
 import {ref} from 'vue';
 import {defineStore} from 'pinia';
-export const useLoadingStore = defineStore('useLoadingStore', () => {
+export const LoadingStore = defineStore('LoadingStore', () => {
     const isLoading = ref(false);
 
     // Loading画面を表示する。
@@ -11,5 +11,6 @@ export const useLoadingStore = defineStore('useLoadingStore', () => {
     function stop() {
         isLoading.value = false;
     }
-    return {isLoading, start, stop}
-}
+
+    return {start, stop, isLoading};
+});

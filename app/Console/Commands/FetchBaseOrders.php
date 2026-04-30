@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\BaseApi\BaseOrderService;
+use App\Services\Baseshop\BaseApiService;
 use Illuminate\Console\Command;
 
 class FetchBaseOrders extends Command
@@ -26,7 +26,7 @@ class FetchBaseOrders extends Command
      * ※認可コードは期限が1時間のため、次のURLから取得すること。
      * https://api.thebase.in/1/oauth/authorize?response_type=code&client_id=e344b1c2d02a1e9b2930cb81e9ca36b4&redirect_uri=https://sparkcard.vercel.app/&scope=read_orders
      */
-    public function handle(BaseOrderService $service)
+    public function handle(BaseApiService $service)
     {
         try {
             $code = 'a8e60c265cbf35ffe99896e63b0716c9';
