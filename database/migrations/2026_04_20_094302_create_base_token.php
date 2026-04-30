@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('access_token')->comment('アクセストークン')->notNull();
             $table->text('refresh_token')->comment('リフレッシュトークン')->notNull();
-            $table->dateTime('expires_at')->comment('有効期限')->notNull();
+            $table->dateTime('expires_in')->comment('有効期限')->notNull();
             $table->timestamps();
         });
     }

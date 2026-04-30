@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Baseshop;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\BaseCallbackRequest;
-use App\Services\Baseshop\BaseApiService;
+use App\Services\Baseshop\BaseOAuthService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Constant\BaseApiConstant as BCon;
@@ -16,7 +16,8 @@ class BaseOAuthController extends Controller
 {
 
     private $service;
-    public function __construct(BaseApiService $service)
+
+    public function __construct(BaseOAuthService $service)
     {
         $this->service = $service;
     }
@@ -43,8 +44,8 @@ class BaseOAuthController extends Controller
     public function callback(BaseCallbackRequest $request)
     {
         $code = $request->input(BCon::AUTH_CODE);
-        $isConnected = $this->service->registerToken($code);
-        return response()->json(['connected' => $isConnected], Response::HTTP_CREATED);
+        $isConnected = $this->service->registToken($code);
+        return response()->json([BCon::CONNECTED => $isConnected], Response::HTTP_CREATED);
     }
 
     /**
@@ -54,6 +55,7 @@ class BaseOAuthController extends Controller
      */
     public function status()
     {
-
+        $isConnected = $this->service->isConnected();
+        return response()->json([BCon::CONNECTED => $isConnected], Response::HTTP_OK);
     }
 }
