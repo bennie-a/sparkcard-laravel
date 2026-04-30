@@ -11,7 +11,7 @@ class BaseOAuthService
 {
     protected Client $client;
 
-    private $repo;
+    private BaseOAuthRepository $repo;
     public function __construct(BaseOAuthRepository $repo)
     {
         $this->repo = $repo;
@@ -49,6 +49,7 @@ class BaseOAuthService
             return true;
         }
 
+        logger()->info('アクセストークン再発行');
         $refreshToken = $record->refresh_token;
         $tokens = $this->repo->refreshAccessToken($refreshToken);
         $this->repo->updateToken($record, $tokens);

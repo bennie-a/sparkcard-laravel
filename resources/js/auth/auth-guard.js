@@ -1,35 +1,52 @@
 import{ store} from '@/store';
 import {baseConnected } from "@/stores/auth/baseConnected";
+import {LoadingStore} from '@/stores/loading/Loading';
+import axios from 'axios';
 import { storeToRefs } from 'pinia';
 
 // 認証に関するスクリプト
 export const authGuard = (router) => {
 
-    router.beforeEach((to, from, next) => {
+    router.beforeEach(async(to, from, next) => {
+            const loading  = LoadingStore();
             router['referrer'] = from;
-            store.dispatch("loading/start");
+
+            loading.start();
             // BASE API認証
             const requiresBase = to.meta?.requiresBase ?? false;
-            if (!requiresBase) {
+            const baseStore = baseConnected();
+            if (!requiresBase || baseStore.hasConnected()) {
                 return next();
             }
 
-            const baseStore = baseConnected();
-            const {isConnected, expiresAt} = storeToRefs(baseStore);
-
-            if (!isConnected.value) {
-                return next({
-                                path: "/base/auth/",
-                                query: {
-                                    redirect: to.fullPath
-                                }
-                            });
-            }
-            next();
-    });
+            await axios.get('/api/base/oauth/status')
+                .then((response) => {
+                    const isConnected = response.data.connected;
+                    if (isConnected) {
+                        baseStore.connect();
+                        return next();
+                    } else {
+                        return next({
+                                        path: "/base/auth/",
+                                        query: {
+                                            redirect: to.fullPath
+                                        }
+                                    });
+                    }
+                })
+                .catch(() => {
+                    return next({
+                                    path: "/base/auth/",
+                                    query: {
+                                        redirect: to.fullPath
+                                    }
+                                });
+                })
+            });
 
     router.afterEach(() => {
-        store.dispatch("loading/stop");
+        const loading  = LoadingStore();
+        loading.stop();
     });
 
 };
