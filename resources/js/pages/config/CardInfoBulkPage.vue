@@ -57,7 +57,7 @@
                             <td>
                                 {{ card.en_name }}
                             </td>
-                            <td>{{ join(card.foiltype) }}</td>
+                            <td></td>
                             <td>
                                 <label
                                     class="ui large label"
