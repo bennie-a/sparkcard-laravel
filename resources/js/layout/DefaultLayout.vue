@@ -81,7 +81,8 @@ onMounted(() => {
     <div class="ui pointing menu">
       <div class="header navbar-brand">
         <router-link to="/" class="navbar-brand">
-          <i class="bi bi-gem"></i> SPARKCARD
+          <span class="mdi mdi-diamond-stone"></span>
+          SPARKCARD
         </router-link>
       </div>
 
@@ -91,7 +92,8 @@ onMounted(() => {
           class="item"
           :class="{ active: route.path === '/config/expansion' }"
         >
-          <i class="cogs icon"></i>マスタ設定
+          <v-icon icon="mdi-cog"></v-icon>
+          マスタ設定
         </router-link>
       </div>
     </div>
