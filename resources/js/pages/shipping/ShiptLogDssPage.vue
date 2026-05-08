@@ -70,7 +70,7 @@ onMounted(async() => {
                         <p>{{ detail.buyer_name }}様</p>
                     </address>
                     <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
-                        <i class="bi bi-clipboard-fill mr-half"></i>コピー
+                        <span class="mdi mdi-clipboard"></span>コピー
                     </button>
                     <div v-if="isCopied" class="ui left pointing teal label">コピーしました</div>
             </div>
