@@ -95,8 +95,8 @@ onMounted(async() => {
                 </td>
                 <td class="center aligned"><condition :name="i.condition"/></td>
                 <td class="center aligned">{{i.quantity}}枚</td>
-                <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ i.single_price }}</td>
-                <td class="center aligned"><i class="bi bi-currency-yen"></i>{{i.subtotal_price}}</td>
+                <td class="center aligned">¥{{ i.single_price }}</td>
+                <td class="center aligned">¥{{i.subtotal_price}}</td>
             </tr>
             </tbody>
         </table>

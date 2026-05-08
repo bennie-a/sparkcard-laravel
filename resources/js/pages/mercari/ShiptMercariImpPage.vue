@@ -145,17 +145,17 @@
                         <div class="list" v-if="r.coupon_discount_amount != 0">
                             <dt>クーポン割引</dt>
                             <dd>
-                                <i class="bi bi-dash"></i>
-                                <i class="bi bi-currency-yen"></i>{{ r.coupon_discount_amount }}
+                                <span class="mdi mdi-minus"></span>
+                                ¥{{ r.coupon_discount_amount }}
                             </dd>
                         </div>
                         <div class="list">
                             <dt>送料</dt>
-                            <dd><i class="bi bi-currency-yen"></i>{{ r.shipping_fee }}</dd>
+                            <dd>¥{{ r.shipping_fee }}</dd>
                         </div>
                         <div class="list">
                             <dt>合計金額</dt>
-                            <dd><i class="bi bi-currency-yen"></i>{{ r.total_price }}</dd>
+                            <dd>¥{{ r.total_price }}</dd>
                         </div>
                     </dl>
                 </div>
@@ -177,8 +177,8 @@
                         <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
                         <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
                         <td class="center aligned">{{ item.shipment }}枚</td>
-                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.single_price }}</td>
-                        <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ item.total_price }}</td>
+                        <td class="center aligned">¥{{ item.single_price }}</td>
+                        <td class="center aligned">¥{{ item.total_price }}</td>
                     </tr>
                 </tbody>
             </table>

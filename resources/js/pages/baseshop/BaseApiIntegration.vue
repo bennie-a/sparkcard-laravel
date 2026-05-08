@@ -52,7 +52,7 @@ const connect = async() => {
     <div class="ui middle center aligned grid">
         <div class="six wide column">
             <h1 class="ui header">
-                <i class="linkify icon"></i>
+                <v-icon icon="mdi-link-variant"></v-icon>
                 <div class="content">BASE APIと連携する
                     <div class="sub header">BASE APIと連携するために認可コードを設定します。</div>
                 </div>
@@ -68,7 +68,7 @@ const connect = async() => {
                     <div class="sub header">連携前に認可サーバーから認可コードを取得してください。(別画面に表示されます。)</div>
                     </h3>
                 <div class="ui attached segment center aligned">
-                    <button  class="ui red button" @click="toAuthServer"><i class="external alternate icon"></i>認可サーバーを表示する</button>
+                    <button  class="ui red button" @click="toAuthServer"><span class="mdi mdi-open-in-new"></span> 認可サーバーを表示する</button>
 
                 </div>
             </section>
@@ -82,7 +82,7 @@ const connect = async() => {
 
                         <div class="ui center aligned">
                         <button class="ui teal button" @click="connect">
-                            <i class="linkify icon"></i>
+                            <span class="mdi mdi-link-variant"></span>
                             連携する
                         </button>
                         </div>
@@ -90,7 +90,7 @@ const connect = async() => {
                 </div>
               </section>
             <section class="ui center aligned mt-3">
-                <router-link to="/"><i class="arrow left icon"></i>トップページに戻る</router-link>
+                <router-link to="/"><v-icon icon="mdi-arrow-left"></v-icon> トップページに戻る</router-link>
           </section>
         </div>
     </div>
