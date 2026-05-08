@@ -141,11 +141,11 @@ const deleteLog = async(arrival_id) => {
                     <td class="center aligned">{{log.quantity}}枚</td>
                     <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ log.cost }}</td>
                     <td class="center aligned selectable">
-                        <a @click="toEditPage(log.id)"><i class="edit icon"></i></a>
+                        <a @click="toEditPage(log.id)"><v-icon icon="mdi-square-edit-outline" size="large"></v-icon></a>
                     </td>
                     <td class="center aligned">
                         <ModalButton  :msg="`入荷ID[${log.id}]を削除しますか？`" @action="deleteLog(log.id)">
-                            <i class="trash alternate outline icon"></i>
+                            <v-icon icon="mdi-trash-can-outline" size=""></v-icon>
                         </ModalButton>
                     </td>
                 </tr>

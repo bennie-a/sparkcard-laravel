@@ -141,10 +141,12 @@ const toDssPage = (arrivalDate, vendor_id) => {
                     <td class="center aligned">
                         {{r.item_count}}点
                     </td>
-                    <td class=" center aligned"><i class="bi bi-currency-yen"></i>{{ r.sum_cost }}</td>
+                    <td class=" center aligned">
+                        ¥{{ r.sum_cost }}
+                    </td>
                     <td class="center aligned selectable">
                         <a @click="toDssPage(r.arrival_date, r.vendor.id)">
-                            <i class="angle double right icon"></i>
+                        <v-icon icon="mdi-chevron-double-right"></v-icon>
                         </a>
                     </td>
                 </tr>
