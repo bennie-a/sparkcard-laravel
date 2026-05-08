@@ -3,7 +3,7 @@
         <div class="ui list">
             <div class="item">
                 <div class="ui small header">
-                    在庫
+                    <v-icon icon="mdi-bank"></v-icon>在庫
                 </div>
                 <ul>
                     <li>
@@ -12,7 +12,7 @@
                             :class="{ active: $route.path === '/' }"
                             aria-current="page"
                             to="/"
-                            ><i class="bi bi-plus-circle-fill"></i>登録</router-link
+                            ><v-icon icon="mdi-plus-circle-outline"></v-icon>登録</router-link
                         >
                     </li>
                     <li>
@@ -21,14 +21,14 @@
                             :class="{ active: $route.path === '/stockpile/' }"
                             aria-current="page"
                             to="/stockpile/"
-                            ><i class="bi bi-search"></i>検索</router-link
+                            ><v-icon icon="mdi-text-search-variant"></v-icon>検索</router-link
                         >
                     </li>
                 </ul>
             </div>
             <div class="item">
                 <div class="ui small header">
-                   入荷
+                   <v-icon icon="mdi-book-multiple"></v-icon>入荷
                 </div>
                 <ul>
                     <li>
@@ -37,14 +37,14 @@
                             :class="{ active: $route.path === '/arrival' }"
                             aria-current="page"
                             to="/arrival"
-                            ><i class="bi bi-search"></i>検索</router-link
+                            ><v-icon icon="mdi-text-search-variant"></v-icon>検索</router-link
                         >
                     </li>
                 </ul>
             </div>
             <div class="item">
                 <div class="ui small header">
-                   エクスポート
+                   <v-icon icon="mdi-file-download"></v-icon>エクスポート
                 </div>
                 <ul>
                     <li>
@@ -52,8 +52,7 @@
                             to="/base/newitem"
                             class="nav-link"
                             :class="{ active: $route.path === '/base/newitem' }"
-                            ><i class="bi bi-filetype-csv"></i
-                            >BASE用CSV</router-link
+                            ><v-icon icon="mdi-file-delimited-outline"></v-icon>BASE用CSV</router-link
                         >
                     </li>
                     <li>
@@ -63,15 +62,14 @@
                             :class="{
                                 active: $route.path === '/mercari/newitem',
                             }"
-                            ><i class="bi bi-filetype-csv"></i
-                            >メルカリ用CSV</router-link
+                            ><v-icon icon="mdi-file-delimited-outline"></v-icon>メルカリ用CSV</router-link
                         >
                     </li>
                 </ul>
             </div>
             <div class="item">
                 <div class="ui small header">
-                   出荷
+                   <v-icon icon="mdi-truck"></v-icon>出荷
                 </div>
                 <ul>
                     <li>
@@ -80,7 +78,7 @@
                             :class="{ active: $route.path === '/mercari/shipt/import' }"
                             aria-current="page"
                             to="/mercari/shipt/import"
-                            ><i class="bi bi-upload"></i>メルカリ一括登録</router-link>
+                            ><v-icon icon="mdi-database-arrow-up-outline"></v-icon>メルカリ一括登録</router-link>
                     </li>
                     <li>
                         <router-link
@@ -88,7 +86,7 @@
                             :class="{ active: $route.path === '/base/shipt/import/' }"
                             aria-current="page"
                             to="/base/shipt/import"
-                            ><i class="bi bi-upload"></i>BASE一括登録</router-link>
+                            >BASE一括登録</router-link>
                     </li>
                     <li>
                         <router-link
@@ -96,7 +94,7 @@
                             :class="{ active: $route.path === '/shipping/' }"
                             aria-current="page"
                             to="/shipping/"
-                            ><i class="bi bi-search"></i>検索</router-link
+                            ><v-icon icon="mdi-text-search-variant"></v-icon>検索</router-link
                         >
                     </li>
                 </ul>
@@ -122,11 +120,11 @@ import { version } from "../../../../package";
     color: #d1ddf3;
     font-weight: 700;
     margin-left: 0.7em;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 div.item > ul {
-    padding-left: 0;
+    padding-left: 0.4em;
     margin-top: 0.5em;
 }
 div.item > ul > li {
