@@ -177,7 +177,8 @@ export default {
     mounted: async function () {
         this.isLoading = true;
         await axios.get('/api/database/exp/' + this.setCode, {})
-                            .then((response) => {
+        .then((response) => {
+                                this.$store.dispatch("clearCards");
                                 this.setName = response.data.name;
                             })
                             .catch((e) => {
