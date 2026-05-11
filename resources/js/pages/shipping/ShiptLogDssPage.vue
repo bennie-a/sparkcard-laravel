@@ -70,7 +70,7 @@ onMounted(async() => {
                         <p>{{ detail.buyer_name }}様</p>
                     </address>
                     <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
-                        <i class="bi bi-clipboard-fill mr-half"></i>コピー
+                        <span class="mdi mdi-clipboard"></span>コピー
                     </button>
                     <div v-if="isCopied" class="ui left pointing teal label">コピーしました</div>
             </div>
@@ -95,8 +95,8 @@ onMounted(async() => {
                 </td>
                 <td class="center aligned"><condition :name="i.condition"/></td>
                 <td class="center aligned">{{i.quantity}}枚</td>
-                <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ i.single_price }}</td>
-                <td class="center aligned"><i class="bi bi-currency-yen"></i>{{i.subtotal_price}}</td>
+                <td class="center aligned">¥{{ i.single_price }}</td>
+                <td class="center aligned">¥{{i.subtotal_price}}</td>
             </tr>
             </tbody>
         </table>

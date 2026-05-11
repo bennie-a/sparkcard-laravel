@@ -44,7 +44,7 @@
                         class="two wide columns"
                     />
                     <button class="ui button" @click="search">
-                        <i class="search icon"></i>
+                        <v-icon icon="mdi-magnify" size=""></v-icon>
                     </button>
                 </div>
             </div>
@@ -74,8 +74,10 @@
                             <option value="G">緑</option>
                             <option value="M">多色</option>
                             <option value="A">アーティファクト</option>
+                            <option value="L">無色</option>
                             <option value="Land">土地</option>
                             <option value="T">トークン</option>
+                            <option value="Art">アート・カード</option>
                         </select>
                     </div>
                     <div class="eight wide field">
@@ -94,7 +96,7 @@
                     </div>
                 </div>
                 <ModalButton @action="store"
-                    ><i class="checkmark icon"></i>
+                    ><span class="mdi mdi-check-bold"></span>
                     登録する
                 </ModalButton>
             </div>

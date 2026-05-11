@@ -90,7 +90,7 @@ class Stockpile extends Model
         }
         $setname = MtgJsonUtil::hasKey(SearchConstant::SET_NAME, $details) ? $details[SearchConstant::SET_NAME] : '';
         if (!empty($setname)) {
-            $query = $query->where('e.name', 'like', '%'.$setname.'%');
+            $query = $query->where('e.attr', 'like', '%'.$setname.'%');
         }
         $limit = $details[SearchConstant::LIMIT];
         if (!empty($limit) && $limit > 0) {

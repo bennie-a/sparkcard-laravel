@@ -7,7 +7,7 @@
           @change="onFileChange"
         />
         <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
-          <i class="file icon"></i>
+          <span class="mdi mdi-file"></span>
           選択する
         </label>
         <label class="ml-2">{{filename}}</label>

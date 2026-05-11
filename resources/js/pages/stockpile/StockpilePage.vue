@@ -67,13 +67,13 @@ export default {
     <message-area/>
     <article class="mt-1 ui form segment">
         <div class="two fields">
-            <div class="five wide field">
+            <div class="four wide field">
                 <label>カード名(一部)</label>
                 <input v-model="cardname" type="text">
             </div>
 
-            <div class="four wide field">
-                <label for="">セット名(ex:ローウィン)</label>
+            <div class="three wide field">
+                <label for="">セット略称(ex:LRW)</label>
                 <div class="ui input">
                     <input v-model="setname" type="text">
                 </div>
@@ -114,7 +114,7 @@ export default {
                     <td>{{ s.id }}</td>
                     <td>
                             <h4 class="ui image header">
-                                <img    
+                                <img
                                 :src="s.card.image_url"
                                 class="ui mini rounded image"
                                 @click="$refs.modal[index].showImage(s.id)"

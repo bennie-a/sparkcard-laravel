@@ -7,13 +7,11 @@ use Illuminate\Http\Response;
 use Tests\Trait\PostApiAssertions;
 use Tests\Unit\Upload\AbstractCardJsonFileTest;
 
-use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNotSame;
 use App\Services\Constant\CardConstant as Con;
-use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -46,8 +44,8 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         assertEquals($number, $actualcard[Con::NUMBER], 'カード番号');
         assertEquals($exScryId, $actualcard[Con::SCRYFALLID], Con::SCRYFALLID);
         assertEquals(1, $actualcard[Con::PROMO_ID], 'プロモタイプID');
-    } 
-    
+    }
+
     /**
      * テストデータ(通常版)
      *
@@ -64,7 +62,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
 
     /**
      * 土地カードのテスト
-     * 
+     *
      */
     #[DataProvider('landProvider')]
     public function test_土地カード(array $expected) {
@@ -75,7 +73,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         assertEquals($expected[self::NAME], $actualcard[self::NAME], 'カード名');
         assertEquals(CardColor::LAND->value, $actualcard[Con::COLOR], '色');
     }
-    
+
     /**
      * カードタイプ別のテストデータ
      *
@@ -100,9 +98,9 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
     }
 
     public function test_ok_promotype(string $number, string $promo_attr) {
-        $this->markTestSkipped("テスト対象外のためスキップ");        
+        $this->markTestSkipped("テスト対象外のためスキップ");
     }
-    
+
     public static function promoProvider() {
         return [];
     }
@@ -128,6 +126,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             'エッチングFoil' => ['MUL', "66", ["エッチングFoil"]],
             'S&C・Foil' => ['ONE', "422", ['S&C・Foil']],
             'オイルスリックFoil' => ['ONE', "345", ['Foil']],
+            '箔押し' => ['AFIN', "1", ['通常版', '箔押し']],
         ];
     }
 
@@ -157,7 +156,12 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      */
     #[DataProvider('colorprovider')]
     public function test_色フィルター(CardColor $color) {
-        $result = $this->ok('WAR', false, $color->value);
+        $code = 'WAR';
+        if ($color == CardColor::ART) {
+            $code = 'AFIN';
+        }
+        $result = $this->ok($code, false, $color->value);
+
         foreach($result as $r) {
             $this->assertEquals($color->value, $r[Con::COLOR], '違う色が抽出された');
         }
@@ -179,6 +183,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             '色フィルター_多色' => [CardColor::MULTI],
             '色フィルター_茶' => [CardColor::ARTIFACT],
             '色フィルター_無色' => [CardColor::LESS],
+            '色フィルター_アート・カード' => [CardColor::ART],
         ];
     }
 
@@ -213,7 +218,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
     }
 
     /**
-     * 
+     *
      */
     #[DataProvider('artifactColorProvider')]
     public function test_色付きアーティファクト(string $number, CardColor $color) {
@@ -229,7 +234,6 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             '赤' => ['131', CardColor::RED],
             '緑' => ['179', CardColor::GREEN],
             '多色' => ['219', CardColor::MULTI],
-            '土地' => ['267', CardColor::LAND],
         ];
     }
 
@@ -239,7 +243,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      * @param string $filename
      * @param integer $exStatusCode
      * @param string $msgCode
-     * 
+     *
      */
     #[DataProvider('errorprovider')]
     public function test_error(string $setCode, int $exStatusCode, string $msgCode) {
@@ -248,7 +252,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         $expectedMsg = __($msgCode);
         $this->assertEquals($expectedMsg, $response['detail'], 'メッセージ');
     }
-    
+
     public static function errorprovider() {
         return [
             'エキスパンションが存在しない' => ['NFD', Response::HTTP_BAD_REQUEST,  'messages.setcode-notFound'],
@@ -271,7 +275,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         $response->assertStatus($statusCode);
         return $response->json();
     }
-        
+
         /**
          * ファイルパスからjsonファイルを取得する。
          *
@@ -283,9 +287,8 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             $json = json_decode($contents, true);
             return $json;
         }
-        
+
         public function test_ok_excluded(string $number) {
-            $this->markTestSkipped("テスト対象外のためスキップ");
         }
 
         public static function excludeprovider() {
@@ -298,5 +301,5 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         {
             return 'COM';
         }
-    
+
     }

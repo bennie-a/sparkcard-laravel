@@ -52,11 +52,11 @@
                                 class="ui button teal"
                                 @click="toPostCardPage(ex.name, ex.attr)"
                             >
-                            <i class="plus circle icon"></i>1件登録
+                            <v-icon icon="mdi-plus-circle"></v-icon>1件登録
                             </button>
                             <div class="or"></div>
                             <button class="ui button teal" @click="toCsvCardPage(ex.attr)">
-                                <i class="file alternate icon"></i>一括登録</button>
+                                <v-icon icon="mdi-file-document-outline"></v-icon>一括登録</button>
                         </div>
                     </td>
                 </tr>

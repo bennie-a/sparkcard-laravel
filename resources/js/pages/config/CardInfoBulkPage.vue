@@ -22,6 +22,7 @@
                 <option value="L">無色</option>
                 <option value="A">アーティファクト</option>
                 <option value="Land">土地</option>
+                <option value="Art">アート・カード</option>
             </select>
         </div>
         <div class="eight wide column">
@@ -56,7 +57,7 @@
                             <td>
                                 {{ card.en_name }}
                             </td>
-                            <td>{{ join(card.foiltype) }}</td>
+                            <td></td>
                             <td>
                                 <label
                                     class="ui large label"
@@ -176,7 +177,8 @@ export default {
     mounted: async function () {
         this.isLoading = true;
         await axios.get('/api/database/exp/' + this.setCode, {})
-                            .then((response) => {
+        .then((response) => {
+                                this.$store.dispatch("clearCards");
                                 this.setName = response.data.name;
                             })
                             .catch((e) => {

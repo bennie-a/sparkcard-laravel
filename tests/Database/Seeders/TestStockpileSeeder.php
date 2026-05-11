@@ -29,23 +29,28 @@ class TestStockpileSeeder extends Seeder
         Stockpile::create(['card_id' => $zero->id, 'condition' => 'NM', 'quantity' => 0, 'language' => 'JP']);
 
         $dross = CardInfo::findSingleCard('ONE', 'ドロスの魔神', false);
-        Stockpile::create(['card_id' => $dross->id, 'condition' => 'NM', 'quantity' => 1, 'language' => 'JP']);
+        Stockpile::create(['card_id' => $dross->id, 'condition' => 'NM', 'quantity' => 1, 'language' => 'EN']);
 
         $jace = CardInfo::findSingleCard('ONE', '完成化した精神、ジェイス', false);
         Stockpile::create(['card_id' => $jace->id, 'condition' => 'NM-', 'quantity' => 2, 'language' => 'JP']);
-        
+
+        $signed = CardInfo::findSingleCard('NEO', '放浪皇', true);
+        Stockpile::create(['card_id' => $signed->id, 'condition' => 'NM', 'quantity' => 2, 'language' => 'EN']);
+
         $cardIds = range(4, 12);
         $cardIds = array_diff($cardIds, array(9, 10));
         $cardIds = array_values(($cardIds));
         $stocks = array_map(function($c) {
             return ['card_id' => $c, 'condition' => 'NM', 'language' => 'JP'];
         }, $cardIds);
-        
+
         Stockpile::factory()->createMany($stocks);
 
         $one = Expansion::findBySetCode('ONE');
         $norn = CardInfo::getCardinfo($one->notion_id, '298', 1);
-        Stockpile::create(['card_id' => $norn->id, 'condition' => 'NM-', 
+        Stockpile::create(['card_id' => $norn->id, 'condition' => 'NM-',
                                             'quantity' => fake()->numberBetween(0, 10), 'language' => 'EN']);
-    }    
+
+
+    }
 }
