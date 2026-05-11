@@ -36,7 +36,7 @@ const fetch =  async () => {
                             })
                             .finally(() => {
                                 isLoading.value = false;
-                            });    
+                            });
 };
 
 // 詳細画面を表示する。
@@ -122,11 +122,11 @@ const toDateString = (date) => {
                         <span class="sub header">〒{{ r.zip_code }} {{ r.address }}</span>
                     </h3>
                     </td>
-                    <td><i class="bi bi-currency-yen"></i>{{ r.total_price }}</td>
+                    <td>¥{{ r.total_price }}</td>
                     <td :class="[isToday(r.shipping_date) ? 'positive': '', isToday(r.shipping_date)?'tobold':'']">{{ r.shipping_date }}</td>
                     <td class="one wide center aligned">{{r.item_count}}点</td>
                     <td class="center aligned selectable">
-                        <a @click="toDssPage(r.order_id)"><i class="angle double right icon"></i></a>
+                        <a @click="toDssPage(r.order_id)"><v-icon icon="mdi-chevron-double-right"></v-icon></a>
                     </td>
                 </tr>
             </tbody>

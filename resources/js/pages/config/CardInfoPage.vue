@@ -44,7 +44,7 @@
                         class="two wide columns"
                     />
                     <button class="ui button" @click="search">
-                        <i class="search icon"></i>
+                        <v-icon icon="mdi-magnify" size=""></v-icon>
                     </button>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <ModalButton @action="store"
-                    ><i class="checkmark icon"></i>
+                    ><span class="mdi mdi-check-bold"></span>
                     登録する
                 </ModalButton>
             </div>

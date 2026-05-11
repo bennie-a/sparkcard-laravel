@@ -98,9 +98,9 @@
                 </div>
                 <div class="four wide field">
                     <label>原価</label>
-                    <div class="ui left icon input">
+                    <div class="ui left labeled input">
+                        <label class="ui basic label"><span class="mdi mdi-currency-jpy"></span></label>
                         <input type="number" step="1" min="1" v-model="detail.cost">
-                        <i class="yen sign icon"></i>
                     </div>
                 </div>
                 <div class="four wide field">
@@ -128,10 +128,10 @@
             </div>
             <div class="two fields">
                 <div class="six wide field">
-                    <button class="ui basic teal button" @click="toDssPage"><i class="angle double left icon"></i>入荷詳細に戻る</button>
+                    <button class="ui basic teal button" @click="toDssPage"><span class="mdi mdi-chevron-double-left"></span>入荷詳細に戻る</button>
                 </div>
                 <div class="five wide field">
-                    <ModalButton :msg="`変更してもよろしいですか？`" @action="update()"><i class="pencil alternate icon"></i>変更する</ModalButton>
+                    <ModalButton :msg="`変更してもよろしいですか？`" @action="update()"><span class="mdi mdi-pencil"></span>変更する</ModalButton>
                 </div>
             </div>
         </div>
