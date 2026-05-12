@@ -19,7 +19,7 @@ body {
     padding-block: 0.8rem !important;
 }
 
-.navbar-brand {
+.v-app-bar-title {
     font-size: 1.8rem;
     font-family: "Exo 2", sans-serif;
     background-image: linear-gradient(to top right, #1e50a2 0%, #d43f8d 100%);

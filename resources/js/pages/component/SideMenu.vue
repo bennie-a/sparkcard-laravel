@@ -1,4 +1,11 @@
 <template>
+    <v-list>
+        <v-list-subheader>在庫</v-list-subheader>
+        <v-list-item title="登録"  class="text-primary" value="add" :to="'/'"></v-list-item>
+        <v-list-item title="検索" :to="'/stockpile/'"></v-list-item>
+        <v-list-group value="admin">
+        </v-list-group>
+    </v-list>
     <div id="sidemenu" class="three column row">
         <div class="ui list">
             <div class="item">
@@ -109,10 +116,10 @@
 import { version } from "../../../../package";
 </script>
 <style scoped>
-#logo {
-    background: white;
-    padding: 1rem 0.5rem;
+a {
+    background: transparent;
 }
+
 #sidemenu {
     padding-top: 2rem;
 }

@@ -77,29 +77,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <header>
-    <div class="ui pointing menu">
-      <div class="header navbar-brand">
-        <router-link to="/" class="navbar-brand">
-          <span class="mdi mdi-diamond-stone"></span>
-          SPARKCARD
-        </router-link>
-      </div>
+    <v-layout>
+        <v-app-bar>
+            <v-app-bar-title><span class="mdi mdi-diamond-stone"></span>SPARKCARD</v-app-bar-title>
+            <v-toolbar-items>
+                <v-btn prepend-icon="mdi-cog" variant="text">マスタ設定</v-btn>
+            </v-toolbar-items>
+        </v-app-bar>
+        <v-navigation-drawer>
+            <SideMenu />
+        </v-navigation-drawer>
+        <v-main class="d-flex align-center justify-center" height="100vh">
+      <v-container>
+        <h1>{{ route.meta.title }}</h1>
+          {{ route.meta.description }}
+        <v-sheet
+          border="dashed md"
+          color="surface-light"
+          height="200"
+          rounded="lg"
+          width="100%"
+        ></v-sheet>
+      </v-container>
+    </v-main>
+    </v-layout>
 
-      <div class="right menu">
-        <router-link
-          to="/config/expansion"
-          class="item"
-          :class="{ active: route.path === '/config/expansion' }"
-        >
-          <v-icon icon="mdi-cog"></v-icon>
-          マスタ設定
-        </router-link>
-      </div>
-    </div>
-  </header>
 
-  <div id="contents" class="ui grid padded">
+  <!-- <div id="contents" class="ui grid padded">
     <nav
       ref="sidebar"
       class="three wide column blue"
@@ -130,14 +134,13 @@ onMounted(() => {
         <router-view />
       </section>
 
-      <!-- ローディング -->
-      <Loading
+       <Loading
         :active="isLoading"
         :can-cancel="false"
         :is-full-page="true"
       />
     </main>
-  </div>
+  </div>  -->
 </template>
 
 <style scoped>
