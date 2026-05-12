@@ -79,12 +79,16 @@ onMounted(() => {
 <template>
     <v-layout>
         <v-app-bar>
-            <v-app-bar-title><span class="mdi mdi-diamond-stone"></span>SPARKCARD</v-app-bar-title>
+            <v-app-bar-title>
+                <router-link to="/">
+                    <span class="mdi mdi-diamond-stone"></span>SPARKCARD
+                </router-link>
+            </v-app-bar-title>
             <v-toolbar-items>
-                <v-btn prepend-icon="mdi-cog" variant="text">マスタ設定</v-btn>
+                <v-btn prepend-icon="mdi-cog" variant="text" :to="'/config/expansion/'">マスタ設定</v-btn>
             </v-toolbar-items>
         </v-app-bar>
-        <v-navigation-drawer>
+        <v-navigation-drawer :width="300">
             <SideMenu />
         </v-navigation-drawer>
         <v-main class="d-flex align-center justify-center" height="100vh">

@@ -5,85 +5,8 @@
             <v-list-item-title><v-icon :icon="m.icon"></v-icon> {{ m.name }}</v-list-item-title>
         </v-list-item>
     </v-list>
-    <div id="sidemenu" class="three column row">
-        <div class="ui list">
-            <div class="item">
-                <div class="ui small header">
-                   <v-icon icon="mdi-book-multiple"></v-icon>入荷
-                </div>
-                <ul>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/arrival' }"
-                            aria-current="page"
-                            to="/arrival"
-                            ><v-icon icon="mdi-text-search-variant"></v-icon>検索</router-link
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div class="item">
-                <div class="ui small header">
-                   <v-icon icon="mdi-file-download"></v-icon>エクスポート
-                </div>
-                <ul>
-                    <li>
-                        <router-link
-                            to="/base/newitem"
-                            class="nav-link"
-                            :class="{ active: $route.path === '/base/newitem' }"
-                            ><v-icon icon="mdi-file-delimited-outline"></v-icon>BASE用CSV</router-link
-                        >
-                    </li>
-                    <li>
-                        <router-link
-                            to="/mercari/newitem"
-                            class="nav-link"
-                            :class="{
-                                active: $route.path === '/mercari/newitem',
-                            }"
-                            ><v-icon icon="mdi-file-delimited-outline"></v-icon>メルカリ用CSV</router-link
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div class="item">
-                <div class="ui small header">
-                   <v-icon icon="mdi-truck"></v-icon>出荷
-                </div>
-                <ul>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/mercari/shipt/import' }"
-                            aria-current="page"
-                            to="/mercari/shipt/import"
-                            ><v-icon icon="mdi-database-arrow-up-outline"></v-icon>メルカリ一括登録</router-link>
-                    </li>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/base/shipt/import/' }"
-                            aria-current="page"
-                            to="/base/shipt/import"
-                            >BASE一括登録</router-link>
-                    </li>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/shipping/' }"
-                            aria-current="page"
-                            to="/shipping/"
-                            ><v-icon icon="mdi-text-search-variant"></v-icon>検索</router-link
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div class="ui divider"></div>
-            <span>ver.{{ version }}</span>
-        </div>
-    </div>
+    <div class="ui divider"></div>
+    <v-footer>ver.{{ version }}</v-footer>
 </template>
 <script setup>
 //package.jsonからバージョンを取得。
@@ -107,6 +30,56 @@ const naviList = ref([
             }
         ]
     },
+    {
+        name: "入荷",
+        icon: "mdi-book-multiple",
+        menu:[
+            {
+                name: "検索",
+                link: "/arrival/",
+                icon: "mdi-text-search-variant"
+            }
+        ]
+    },
+    {
+        name: "エクスポート",
+        icon: "mdi-file-download",
+        menu:[
+            {
+                name: "BASE用CSV",
+                link: "/base/newitem/",
+                icon: "mdi-file-delimited-outline"
+            },
+            {
+                name: "メルカリ用CSV",
+                link: "/mercari/newitem/",
+                icon: "mdi-file-delimited-outline"
+            }
+        ]
+    },
+    {
+        name: "注文",
+        icon: "mdi-truck",
+        menu:[
+            {
+                name: "インポート",
+                link: "/mercari/shipt/import",
+                icon: "mdi-database-arrow-up-outline"
+            },
+            {
+                name: "BASE用インポート",
+                link: "/base/shipt/import/",
+                icon: "mdi-database-arrow-up-outline"
+            },
+            {
+                name: "検索",
+                link: "/shipping/",
+                icon: "mdi-text-search-variant"
+            }
+        ]
+    },
+
+
 ]);
 </script>
 <style scoped>
