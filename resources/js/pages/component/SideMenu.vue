@@ -1,38 +1,12 @@
 <template>
-    <v-list>
-        <v-list-subheader>在庫</v-list-subheader>
-        <v-list-item title="登録"  class="text-primary" value="add" :to="'/'"></v-list-item>
-        <v-list-item title="検索" :to="'/stockpile/'"></v-list-item>
-        <v-list-group value="admin">
-        </v-list-group>
+    <v-list v-for="n in naviList" :key="n.name">
+        <v-list-subheader><v-icon :icon="n.icon"></v-icon> {{ n.name }}</v-list-subheader>
+        <v-list-item v-for="m in n.menu" :key="m.name" :to="m.link">
+            <v-list-item-title><v-icon :icon="m.icon"></v-icon> {{ m.name }}</v-list-item-title>
+        </v-list-item>
     </v-list>
     <div id="sidemenu" class="three column row">
         <div class="ui list">
-            <div class="item">
-                <div class="ui small header">
-                    <v-icon icon="mdi-bank"></v-icon>在庫
-                </div>
-                <ul>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/' }"
-                            aria-current="page"
-                            to="/"
-                            ><v-icon icon="mdi-plus-circle-outline"></v-icon>登録</router-link
-                        >
-                    </li>
-                    <li>
-                        <router-link
-                            class="nav-link"
-                            :class="{ active: $route.path === '/stockpile/' }"
-                            aria-current="page"
-                            to="/stockpile/"
-                            ><v-icon icon="mdi-text-search-variant"></v-icon>検索</router-link
-                        >
-                    </li>
-                </ul>
-            </div>
             <div class="item">
                 <div class="ui small header">
                    <v-icon icon="mdi-book-multiple"></v-icon>入荷
@@ -113,7 +87,27 @@
 </template>
 <script setup>
 //package.jsonからバージョンを取得。
+import { ref } from "vue";
 import { version } from "../../../../package";
+
+const naviList = ref([
+    {
+        name: "在庫",
+        icon: "mdi-bank",
+        menu:[
+            {
+                name: "登録",
+                link: "/",
+                icon: "mdi-plus-circle-outline"
+            },
+            {
+                name: "検索",
+                link: "/stockpile/",
+                icon: "mdi-text-search-variant"
+            }
+        ]
+    },
+]);
 </script>
 <style scoped>
 a {
