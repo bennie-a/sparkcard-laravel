@@ -91,11 +91,10 @@ watch(route, () => {
         <v-navigation-drawer :width="300">
             <SideMenu />
         </v-navigation-drawer>
-        <v-main class="d-flex align-center justify-center" min-height="100vh">
+        <v-main class="mt-4 d-flex align-center justify-center" min-height="95vh">
       <v-container>
         <h1>{{ route.meta.title }}</h1>
-          <span>{{ route.meta.description }}</span>
-          <section class="mt-2 ">
+          <section class="mt-6 ">
            <router-view />
           </section>
       </v-container>
@@ -160,5 +159,9 @@ watch(route, () => {
 
 #contents {
   background-color: whitesmoke;
+}
+
+.v-container {
+  max-width: 1150px !important;
 }
 </style>

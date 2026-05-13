@@ -171,7 +171,7 @@ const hasResult = () => {
 
 <template>
     <message-area />
-    <article class="mt-1 ui form segment">
+    <article class="ui form segment">
         <div class="five fields">
             <div class="field">
                 <label>カード名(一部)</label>
