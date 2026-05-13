@@ -5,8 +5,10 @@
             <v-list-item-title><v-icon :icon="m.icon"></v-icon> {{ m.name }}</v-list-item-title>
         </v-list-item>
     </v-list>
-    <div class="ui divider"></div>
-    <v-footer>ver.{{ version }}</v-footer>
+    <div class="mt-auto pa-4 text-overline text-medium-emphasis">
+        <div class="ui divider"></div>
+        <span><v-icon icon="mdi mdi-tag-outline"></v-icon>{{ version }}</span>
+    </div>
 </template>
 <script setup>
 //package.jsonからバージョンを取得。
