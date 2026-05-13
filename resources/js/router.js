@@ -29,7 +29,7 @@ const routes = [
         component: Index,
         meta: {
             layout: 'default',
-            title: "入荷登録",
+            title: "在庫登録",
             description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
         },
     },

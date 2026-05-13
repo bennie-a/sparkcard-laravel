@@ -57,23 +57,23 @@ watch(route, () => {
 // ----------------------
 // mounted処理
 // ----------------------
-onMounted(() => {
-  nextTick(() => {
-    if (!main.value) return
+// onMounted(() => {
+//   nextTick(() => {
+//     if (!main.value) return
 
-    const resizeObserver = new ResizeObserver(() => {
-      mainHeight.value = main.value.clientHeight
-    })
+//     const resizeObserver = new ResizeObserver(() => {
+//       mainHeight.value = main.value.clientHeight
+//     })
 
-    resizeObserver.observe(main.value)
+//     resizeObserver.observe(main.value)
 
-    sidebarHeight.value = sidebar.value?.clientHeight || 0
-    mainHeight.value = main.value.clientHeight
-    initHeight.value = mainHeight.value
+//     sidebarHeight.value = sidebar.value?.clientHeight || 0
+//     mainHeight.value = main.value.clientHeight
+//     initHeight.value = mainHeight.value
 
-    isMounted.value = true
-  })
-})
+//     isMounted.value = true
+//   })
+// })
 </script>
 
 <template>
@@ -91,17 +91,13 @@ onMounted(() => {
         <v-navigation-drawer :width="300">
             <SideMenu />
         </v-navigation-drawer>
-        <v-main class="d-flex align-center justify-center" height="100vh">
+        <v-main class="d-flex align-center justify-center" min-height="100vh">
       <v-container>
         <h1>{{ route.meta.title }}</h1>
-          {{ route.meta.description }}
-        <v-sheet
-          border="dashed md"
-          color="surface-light"
-          height="200"
-          rounded="lg"
-          width="100%"
-        ></v-sheet>
+          <span>{{ route.meta.description }}</span>
+          <section class="mt-2 ">
+           <router-view />
+          </section>
       </v-container>
     </v-main>
     </v-layout>

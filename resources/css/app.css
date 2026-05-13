@@ -14,11 +14,11 @@ body {
     font-family: "Noto Sans JP", sans-serif !important;
 }
 
-/* ヘッダー */
-.ui.menu .item {
-    padding-block: 0.8rem !important;
+.v-application {
+    font-family: "Noto Sans JP", sans-serif !important;
 }
 
+/* ヘッダー */
 .v-app-bar-title {
     font-size: 1.8rem;
     font-family: "Exo 2", sans-serif;
@@ -29,14 +29,6 @@ body {
     vertical-align: top;
     font-weight: 400;
     padding-left: 0.5rem;
-}
-.ui .header {
-    font-family: "Noto Sans JP", sans-serif !important;
-    padding-block: 0.8rem;
-}
-
-#main>.ui.header {
-    color:var(--gray) !important;
 }
 
 .ui.form .field>label {
