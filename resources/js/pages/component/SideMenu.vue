@@ -1,13 +1,13 @@
 <template>
     <v-list v-for="n in naviList" :key="n.name">
-        <v-list-subheader><v-icon :icon="n.icon"></v-icon> {{ n.name }}</v-list-subheader>
+        <v-list-subheader color="blue-lighten-4" class="text-title-medium"><v-icon :icon="n.icon"></v-icon> {{ n.name }}</v-list-subheader>
         <v-list-item v-for="m in n.menu" :key="m.name" :to="m.link">
             <v-list-item-title><v-icon :icon="m.icon"></v-icon> {{ m.name }}</v-list-item-title>
         </v-list-item>
     </v-list>
-    <div class="mt-auto pa-4 text-overline text-medium-emphasis">
+    <div class="mt-auto pa-4 text-overline text-medium-emphasis text-center">
         <div class="ui divider"></div>
-        <span><v-icon icon="mdi mdi-tag-outline"></v-icon>{{ version }}</span>
+        <span id="version"><v-icon icon="mdi mdi-tag-outline"></v-icon>ver.{{ version }}</span>
     </div>
 </template>
 <script setup>
@@ -85,53 +85,20 @@ const naviList = ref([
 ]);
 </script>
 <style scoped>
-a {
-    background: transparent;
+#version {
+    color: #FAFAFA;
 }
 
-#sidemenu {
-    padding-top: 2rem;
-}
-.ui.list > .item .header {
-    color: #d1ddf3;
-    font-weight: 700;
-    margin-left: 0.7em;
-    font-size: 1.3rem;
-}
-
-div.item > ul {
-    padding-left: 0.4em;
-    margin-top: 0.5em;
-}
-div.item > ul > li {
-    list-style: none;
-}
-
-span {
-    text-align: center;
-    display: block;
-}
-
-div.item > ul > li > a {
-    padding: 0.8em 1em;
-    display: block;
-    color: white;
-    line-height: 1.4;
-    font-size: 1.1rem;
+.v-list-item-title {
+    color: #FAFAFA;
     font-weight: 500;
 }
-div.item > ul > li > a:hover {
-    background: #2766cc;
+
+.v-list-item:hover {
+    background: #0D47A1;
 }
 
-div.item > ul > li > a.active {
-    font-weight: 500;
-    background: #2766cc;
-    border-right: 5px solid #cc5df1;
-}
-
-i {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
+.v-list-item--active {
+    background: #0D47A1!important;
 }
 </style>

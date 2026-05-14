@@ -88,16 +88,16 @@ watch(route, () => {
                 <v-btn prepend-icon="mdi-cog" variant="text" :to="'/config/expansion/'">マスタ設定</v-btn>
             </v-toolbar-items>
         </v-app-bar>
-        <v-navigation-drawer :width="300">
+        <v-navigation-drawer :width="300" class="bg-blue-darken-3">
             <SideMenu />
         </v-navigation-drawer>
         <v-main class="mt-4 d-flex align-center justify-center" min-height="95vh">
-      <v-container>
-        <h1>{{ route.meta.title }}</h1>
-          <section class="mt-6 ">
-           <router-view />
-          </section>
-      </v-container>
+        <v-container>
+            <h1>{{ route.meta.title }}</h1>
+            <v-sheet class="mt-6 pa-7" rounded>
+                <router-view />
+            </v-sheet>
+        </v-container>
     </v-main>
     </v-layout>
 
