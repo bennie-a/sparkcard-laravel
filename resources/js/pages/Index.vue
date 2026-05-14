@@ -35,6 +35,23 @@ let result = reactive([]);
 let count = ref(12);
 const resultCount = ref(0);
 
+const rules = {
+required: value => !!value || 'Field is required',
+}
+
+const colorItems = [
+    {state:'白', abbr:'W'},
+    {state:'青', abbr:'U'},
+    {state:'黒', abbr:'B'},
+    {state:'赤', abbr:'R'},
+    {state:'緑', abbr:'G'},
+    {state:'多色', abbr:'M'},
+    {state:'無色', abbr:'L'},
+    {state:'アーティファクト', abbr:'A'},
+    {state:'土地', abbr:'Land'},
+    {state:'アート・カード', abbr:'Art'},
+];
+
 // Vuex Storeへのアクセス（例: 仮想的なuseStore）
 import { useStore } from "vuex";
 const store = useStore();
@@ -171,67 +188,45 @@ const hasResult = () => {
 
 <template>
     <message-area />
-    <article class="ui form segment">
-        <div class="five fields">
-            <div class="field">
-                <label>カード名(一部)</label>
-                <input v-model="name" type="text" />
-            </div>
-
-            <div class="three wide column field">
-                <label for="">セット名</label>
-                <div class="ui input">
-                    <input
-                        v-model="selectedSet"
-                        type="text"
-                        autocomplete="on"
-                        list="setlist"
-                    />
-                    <datalist id="setlist">
-                        <option v-for="n in suggestions"
-                        :key="n">
-                            {{ n.attr }}
-                        </option>
-                    </datalist>
-                </div>
-            </div>
-            <div class="two wide column field">
-                <label>色</label>
-                <select v-model="color" class="ui dropdown">
-                    <option value=""></option>
-                    <option value="W">白</option>
-                    <option value="U">青</option>
-                    <option value="B">黒</option>
-                    <option value="R">赤</option>
-                    <option value="G">緑</option>
-                    <option value="M">多色</option>
-                    <option value="L">無色</option>
-                    <option value="A">アーティファクト</option>
-                    <option value="Land">土地</option>
-                    <option value="Art">アート・カード</option>
-                </select>
-            </div>
-            <div class="three wide column field">
-                <label for="">通常版orFoil</label>
-                <div class="ui toggle checkbox">
-                    <input v-model="isFoil" type="checkbox" name="isFoil" />
-                    <label for="isFoil">Foilのみ検索する</label>
-                </div>
-            </div>
-            <div class="field">
-                <label class="hidden">検索ボタン</label>
-                <button
-                    id="search"
-                    class="ui button teal ml-1"
-                    :class="{ disabled: selectedSet == '' && name == '' }"
-                    style=""
-                    @click="search"
-                >
-                    検索する
-                </button>
-            </div>
-        </div>
-    </article>
+    <v-sheet color="grey-lighten-4" rounded class="pa-4">
+        <v-row class="">
+            <v-col cols="3">
+                <v-text-field
+                label="カード名(一部)"
+                    v-model="name"></v-text-field>
+            </v-col>
+            <v-col cols="2">
+                <v-text-field
+                    label="セット略称" v-model="selectedSet"></v-text-field>
+            </v-col>
+            <v-col cols="3">
+                <v-select
+                    label="色"
+                    v-model="color"
+                    :items="colorItems"
+                    item-title="state"
+                    item-value="abbr"
+                    variant="outlined"
+                    density="compact"
+                    bg-color="white"
+                    clearable
+                ></v-select>
+            </v-col>
+            <v-col cols="2">
+                <v-switch
+                    label="通常版/Foil"
+                    v-model="isFoil"
+                    color="primary"
+                    hide-details
+                ></v-switch>
+            </v-col>
+        </v-row>
+        <v-row class="mt-0 justify-end" gap="0">
+            <v-col cols="2" class="text-right">
+                <v-btn @click="search">検索する</v-btn>
+            </v-col>
+        </v-row>
+    </v-sheet>
     <article class="mt-2">
         <h2
             v-if="hasResult()"

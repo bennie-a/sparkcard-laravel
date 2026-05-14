@@ -18,6 +18,11 @@ body {
     font-family: "Noto Sans JP", sans-serif !important;
 }
 
+.v-btn {
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
 /* ヘッダー */
 .v-app-bar-title {
     font-size: 1.8rem;

@@ -43,6 +43,19 @@ const vuetify = createVuetify({
       mdi,
     },
   },
+  defaults: {
+        VTextField: {
+            variant: 'outlined',
+            density: 'compact',
+            bgColor: 'white',
+            clearable: true,
+        },
+        VBtn:{
+            variant: 'flat',
+            rounded: 'xs',
+            color: 'teal-lighten-1',
+        }
+    }
 });
 app.use(vuetify);
 
