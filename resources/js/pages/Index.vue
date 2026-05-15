@@ -40,16 +40,16 @@ required: value => !!value || 'Field is required',
 }
 
 const colorItems = [
-    {state:'白', abbr:'W'},
-    {state:'青', abbr:'U'},
-    {state:'黒', abbr:'B'},
-    {state:'赤', abbr:'R'},
-    {state:'緑', abbr:'G'},
-    {state:'多色', abbr:'M'},
-    {state:'無色', abbr:'L'},
-    {state:'アーティファクト', abbr:'A'},
-    {state:'土地', abbr:'Land'},
-    {state:'アート・カード', abbr:'Art'},
+    {state:'白', item_value:'W'},
+    {state:'青', item_value:'U'},
+    {state:'黒', item_value:'B'},
+    {state:'赤', item_value:'R'},
+    {state:'緑', item_value:'G'},
+    {state:'多色', item_value:'M'},
+    {state:'無色', item_value:'L'},
+    {state:'アーティファクト', item_value:'A'},
+    {state:'土地', item_value:'Land'},
+    {state:'アート・カード', item_value:'Art'},
 ];
 
 // Vuex Storeへのアクセス（例: 仮想的なuseStore）
@@ -205,7 +205,7 @@ const hasResult = () => {
                     v-model="color"
                     :items="colorItems"
                     item-title="state"
-                    item-value="abbr"
+                    item-value="item_value"
                     variant="outlined"
                     density="compact"
                     bg-color="white"

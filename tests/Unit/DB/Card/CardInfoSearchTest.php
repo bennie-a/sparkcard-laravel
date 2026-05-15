@@ -52,6 +52,19 @@ class CardInfoSearchTest extends TestCase
         ];
     }
 
+    #[TestWith([GCon::NAME], 'カード名')]
+    #[TestWith([Con::SET], 'セット名')]
+    #[TestWith([Con::COLOR], '色')]
+    #[TestDox('検索項目の一部が不足していてもエラーにならないこと')]
+    public function test_missing_item(string $param) {
+        $query = [GCon::NAME => '放浪', Con::SET =>'NEO', Con::COLOR => 'W', Con::IS_FOIL => false];
+        unset($query[$param]);
+        array_values($query);
+
+        $response = $this->execute($query);
+        $this->assertNotEquals(500, $response->getStatusCode(), 'HTTPステータスコード');
+    }
+
     /**
      * 通常版/特別版のカード名について検証する。
      *
