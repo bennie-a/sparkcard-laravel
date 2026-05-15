@@ -22,7 +22,7 @@ const components = {
 
 // リアクティブデータの定義
 const selectedSet = ref("");
-const color = ref("");
+const selectedColor = ref("");
 const isFoil = ref(false);
 const name = ref("");
 const arrivalDate = ref(new Date());
@@ -40,16 +40,16 @@ required: value => !!value || 'Field is required',
 }
 
 const colorItems = [
-    {state:'白', item_value:'W'},
-    {state:'青', item_value:'U'},
-    {state:'黒', item_value:'B'},
-    {state:'赤', item_value:'R'},
-    {state:'緑', item_value:'G'},
-    {state:'多色', item_value:'M'},
-    {state:'無色', item_value:'L'},
-    {state:'アーティファクト', item_value:'A'},
-    {state:'土地', item_value:'Land'},
-    {state:'アート・カード', item_value:'Art'},
+    {icon:'mdi-weather-sunny', item_value:'W', color:'yellow-lighten-1'},
+    {icon:'mdi-water', item_value:'U', color:'blue-lighten-1'},
+    {icon:'mdi-skull', item_value:'B', color:'grey-darken-3'},
+    {icon:'mdi-fire', item_value:'R', color:'red-lighten-1'},
+    {icon:'mdi-pine-tree-variant', item_value:'G', color:'green-lighten-1'},
+    {icon:'mdi-multiplication-box', item_value:'M', color:'orange-lighten-1'},
+    {icon:'mdi-invert-colors-off', item_value:'L', color:'purple-lighten-1'},
+    {icon:'mdi-key', item_value:'A', color:'blue-grey-lighten-1'},
+    {icon:'mdi-land-plots', item_value:'Land', color:'brown-lighten-1'},
+    {icon:'mdi-palette', item_value:'Art', color:'pink-lighten-1'},
 ];
 
 // Vuex Storeへのアクセス（例: 仮想的なuseStore）
@@ -107,7 +107,7 @@ const search = async () => {
         params: {
         name: name.value,
         set: selectedSet.value,
-        color: color.value,
+        selectedColor: selectedColor.value,
         isFoil: isFoil.value,
         },
     };
@@ -202,7 +202,7 @@ const hasResult = () => {
             <v-col cols="3">
                 <v-select
                     label="色"
-                    v-model="color"
+                    v-model="selectedColor"
                     :items="colorItems"
                     item-title="state"
                     item-value="item_value"
@@ -222,6 +222,18 @@ const hasResult = () => {
             </v-col>
         </v-row>
         <v-row class="mt-0 justify-end" gap="0">
+            <v-col cols="6">
+                <v-chip-group v-model="selectedColor" column selected-class="">
+                    <v-chip v-for="color in colorItems" :key="color.item_value" :value="color.item_value"
+                     class="ma-1 bg-white" :variant="selectedColor === color.item_value ? 'flat' : 'outlined'"
+                     :color="color.color">
+                        <div class="d-flex align-center ga-1">
+                            <v-icon :icon="color.icon" size="18"/>{{ color.item_value }}
+                        </div>
+                    </v-chip>
+                </v-chip-group>
+                {{ selectedColor }}
+            </v-col>
             <v-col cols="2" class="text-right">
                 <v-btn @click="search">検索する</v-btn>
             </v-col>
