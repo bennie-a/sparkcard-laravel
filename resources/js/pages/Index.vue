@@ -275,6 +275,25 @@ const hasResult = () => {
                 </div>
             </div>
         </div>
+        <section>
+            <v-row>
+                <v-col cols="3" v-for="(card, index) in currentList.value" :key="index">
+                    <v-card>
+                        <div class="text-label-large font-weight-regular text-end pa-2">
+                            <span  class="text-grey-darken-1">#{{card.id}}</span>
+                        </div>
+                        <v-img :src="card.image_url"  cover height="140" class="image-position"></v-img>
+                        <v-card-title  class="text-title-medium text-wrap mb-0 pb-0">
+                            {{ card.name }}<foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" />
+                        </v-card-title>
+                        <v-card-subtitle class="text-wrap">
+                            {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}
+                        </v-card-subtitle>
+                        <v-card-text class="pt-1">平均価格: <span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </section>
         <div class="mt-1 ui four cards">
             <div
                 v-for="(card, index) in currentList.value"
@@ -352,11 +371,10 @@ const hasResult = () => {
     </article>
 </template>
 <style scoped>
-div.card > .image {
-    height: 120px !important;
-    overflow: hidden;
-    /* height: min-content; */
+.image-position:deep(img) {
+  object-position: center -40px; /* 右側を基準に表示 */
 }
+
 div.image img {
     width: fit-content;
     height: 100% !important;
