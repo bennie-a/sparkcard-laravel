@@ -40,16 +40,16 @@ required: value => !!value || 'Field is required',
 }
 
 const colorItems = [
-    {icon:'mdi-weather-sunny', item_value:'W', color:'yellow-lighten-1'},
-    {icon:'mdi-water', item_value:'U', color:'blue-lighten-1'},
-    {icon:'mdi-skull', item_value:'B', color:'grey-darken-3'},
-    {icon:'mdi-fire', item_value:'R', color:'red-lighten-1'},
-    {icon:'mdi-pine-tree-variant', item_value:'G', color:'green-lighten-1'},
-    {icon:'mdi-multiplication-box', item_value:'M', color:'orange-lighten-1'},
-    {icon:'mdi-invert-colors-off', item_value:'L', color:'purple-lighten-1'},
-    {icon:'mdi-key', item_value:'A', color:'blue-grey-lighten-1'},
-    {icon:'mdi-land-plots', item_value:'Land', color:'brown-lighten-1'},
-    {icon:'mdi-palette', item_value:'Art', color:'pink-lighten-1'},
+    {state:'白', icon:'mdi-weather-sunny', item_value:'W', color:'yellow-lighten-1'},
+    {state:'青', icon:'mdi-water', item_value:'U', color:'blue-lighten-1'},
+    {state:'黒', icon:'mdi-skull', item_value:'B', color:'grey-darken-3'},
+    {state:'赤', icon:'mdi-fire', item_value:'R', color:'red-lighten-1'},
+    {state:'緑', icon:'mdi-pine-tree-variant', item_value:'G', color:'green-lighten-1'},
+    {state:'多色', icon:'mdi-multiplication-box', item_value:'M', color:'orange-lighten-1'},
+    {state:'無色', icon:'mdi-invert-colors-off', item_value:'L', color:'purple-lighten-1'},
+    {state:'アーティファクト', icon:'mdi-key', item_value:'A', color:'blue-grey-lighten-1'},
+    {state:'土地', icon:'mdi-land-plots', item_value:'Land', color:'brown-lighten-1'},
+    {state:'アートカード', icon:'mdi-palette', item_value:'Art', color:'pink-lighten-1'},
 ];
 
 // Vuex Storeへのアクセス（例: 仮想的なuseStore）
@@ -193,12 +193,23 @@ const hasResult = () => {
             <v-col cols="3">
                 <v-text-field
                 label="カード名(一部)"
-                    v-model="name"></v-text-field>
+                    v-model="name" clearable></v-text-field>
             </v-col>
             <v-col cols="2">
                 <v-text-field
-                    label="セット略称" v-model="selectedSet"></v-text-field>
+                    label="セット略称" v-model="selectedSet" clearable></v-text-field>
             </v-col>
+            <!-- <v-col cols="5">
+                <v-chip-group v-model="selectedColor" column selected-class="">
+                    <v-chip v-for="color in colorItems" :key="color.item_value" :value="color.item_value"
+                     class="ma-1 bg-white" :variant="selectedColor === color.item_value ? 'flat' : 'outlined'"
+                     :color="color.color">
+                        <div class="d-flex align-center ga-1">
+                            <v-icon :icon="color.icon" size="18"/>{{ color.item_value }}
+                        </div>
+                    </v-chip>
+                </v-chip-group>
+            </v-col> -->
             <v-col cols="3">
                 <v-select
                     label="色"
@@ -210,29 +221,14 @@ const hasResult = () => {
                     density="compact"
                     bg-color="white"
                     clearable
-                ></v-select>
+                >
+            </v-select>
             </v-col>
             <v-col cols="2">
-                <v-switch
-                    label="通常版/Foil"
-                    v-model="isFoil"
-                    color="primary"
-                    hide-details
-                ></v-switch>
-            </v-col>
-        </v-row>
-        <v-row class="mt-0 justify-end" gap="0">
-            <v-col cols="6">
-                <v-chip-group v-model="selectedColor" column selected-class="">
-                    <v-chip v-for="color in colorItems" :key="color.item_value" :value="color.item_value"
-                     class="ma-1 bg-white" :variant="selectedColor === color.item_value ? 'flat' : 'outlined'"
-                     :color="color.color">
-                        <div class="d-flex align-center ga-1">
-                            <v-icon :icon="color.icon" size="18"/>{{ color.item_value }}
-                        </div>
-                    </v-chip>
-                </v-chip-group>
-                {{ selectedColor }}
+                <v-btn-toggle  v-model="isFoil" border divided mandatory density="comfortable">
+                    <v-btn :value="false">通常版</v-btn>
+                    <v-btn :value="true">Foil</v-btn>
+                </v-btn-toggle>
             </v-col>
             <v-col cols="2" class="text-right">
                 <v-btn @click="search">検索する</v-btn>
