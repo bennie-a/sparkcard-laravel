@@ -91,7 +91,7 @@ watch(route, () => {
         <v-navigation-drawer :width="300" class="bg-blue-darken-3">
             <SideMenu />
         </v-navigation-drawer>
-        <v-main class="mt-4 d-flex align-center justify-center" min-height="95vh">
+        <v-main class="mt-4 d-flex  justify-start" min-height="98vh">
         <v-container>
             <h1>{{ route.meta.title }}</h1>
             <v-sheet class="mt-6 pa-7" rounded>
@@ -143,7 +143,7 @@ watch(route, () => {
 </template>
 
 <style scoped>
-.ui.grid {
+/* .ui.grid {
   height: 100%;
   min-height: 100%;
 }
@@ -159,7 +159,7 @@ watch(route, () => {
 
 #contents {
   background-color: whitesmoke;
-}
+} */
 
 .v-container {
   max-width: 1150px !important;

@@ -235,12 +235,12 @@ const hasResult = () => {
             </v-col>
         </v-row>
     </v-sheet>
-    <article class="mt-2">
+    <article class="mt-10">
         <h2
             v-if="hasResult()"
-            class="ui medium dividing header"
+            class="text-title-medium"
         >
-            {{ resultCount }}件
+           検索結果： {{ resultCount }}件
         </h2>
         <div v-if="hasResult()" class="mt-2 ui form">
             <div class="four fields">
