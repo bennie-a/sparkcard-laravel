@@ -48,7 +48,6 @@ const vuetify = createVuetify({
             variant: 'outlined',
             density: 'compact',
             bgColor: 'white',
-            clearable: true,
         },
         VBtn:{
             variant: 'flat',

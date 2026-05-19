@@ -52,6 +52,8 @@ const colorItems = [
     {state:'アートカード', icon:'mdi-palette', item_value:'Art', color:'pink-lighten-1'},
 ];
 
+const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
+
 // Vuex Storeへのアクセス（例: 仮想的なuseStore）
 import { useStore } from "vuex";
 const store = useStore();
@@ -290,11 +292,34 @@ const hasResult = () => {
                         <v-card-subtitle class="text-wrap">
                             {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}
                         </v-card-subtitle>
-                        <v-card-text class="pt-1 text-right">
-                            <p>平均価格：<span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></p>
-                            <p>在庫：{{ card.quantity }}</p>
+                        <v-card-text class="pt-0 text-high-emphasis text-right">
+                            <p class="mt-1 mb-0">平均価格：<span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></p>
+                            <p class="mt-0">在庫：<span v-if="card.quantity > 0">{{ card.quantity }}</span><span v-else>0</span></p>
+                            <lang v-model="card.language"></lang>
+                        <v-row>
+                            <v-col cols="12">
+                            </v-col>
+                        </v-row>
+                        <v-row class="text-center" gap="10">
+                            <v-col>
+                                <v-select
+                                    v-model="card.condition"
+                                    variant="outlined"
+                                    :items="conditions"
+                                    density="compact"
+                                    label="状態"></v-select>
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                    v-model="card.stock"
+                                    type="number"
+                                    step="1"
+                                    min="0"
+                                    suffix="枚"></v-text-field>
+                                </v-col>
+                            </v-row>
                         </v-card-text>
-                    </v-card>
+                        </v-card>
                 </v-col>
             </v-row>
         </section>
