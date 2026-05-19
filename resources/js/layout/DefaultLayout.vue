@@ -93,7 +93,7 @@ watch(route, () => {
         </v-navigation-drawer>
         <v-main class="mt-2 d-flex  justify-start" min-height="98vh">
         <v-container>
-            <h1>{{ route.meta.title }}</h1>
+            <h1 class="text-headline-medium">{{ route.meta.title }}</h1>
             <v-sheet class="mt-6 pa-7" rounded>
                 <router-view />
             </v-sheet>

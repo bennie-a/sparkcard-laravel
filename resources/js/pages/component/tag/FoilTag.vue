@@ -1,10 +1,8 @@
 <template>
-    <label
-        class="ui horizontal label"
-        v-if="isFoil"
-        :class="foilClass(foiltype)"
-        ><i class="star icon"></i>{{ foiltype }}</label
-    >
+    <v-chip variant="flat" label density="compact" size="small" :class="foilClass(foiltype)">
+        <v-icon icon="mdi-creation" class="mr-1"></v-icon>
+        {{ foiltype }}
+        </v-chip>
 </template>
 <script>
 export default {
@@ -16,9 +14,9 @@ export default {
         foilClass: function () {
             return (name) => {
                 if (name == "Foil") {
-                    return "topaz";
+                    return "bg-yellow-darken-2";
                 }
-                return "ruby";
+                return "bg-pink-darken-2";
             };
         },
     },

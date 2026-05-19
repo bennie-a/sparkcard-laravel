@@ -279,17 +279,21 @@ const hasResult = () => {
             <v-row>
                 <v-col cols="3" v-for="(card, index) in currentList.value" :key="index">
                     <v-card>
-                        <div class="text-label-large font-weight-regular text-end pa-2">
+                        <div class="d-flex text-label-large font-weight-regular text-start pa-2">
                             <span  class="text-grey-darken-1">#{{card.id}}</span>
+                            <span class="ml-2"><foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" /></span>
                         </div>
                         <v-img :src="card.image_url"  cover height="140" class="image-position"></v-img>
                         <v-card-title  class="text-title-medium text-wrap mb-0 pb-0">
-                            {{ card.name }}<foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" />
+                            {{ card.name }}
                         </v-card-title>
                         <v-card-subtitle class="text-wrap">
                             {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}
                         </v-card-subtitle>
-                        <v-card-text class="pt-1">平均価格: <span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></v-card-text>
+                        <v-card-text class="pt-1 text-right">
+                            <p>平均価格：<span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></p>
+                            <p>在庫：{{ card.quantity }}</p>
+                        </v-card-text>
                     </v-card>
                 </v-col>
             </v-row>
