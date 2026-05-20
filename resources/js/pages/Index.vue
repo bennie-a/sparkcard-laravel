@@ -190,8 +190,8 @@ const hasResult = () => {
 
 <template>
     <message-area />
-    <v-sheet color="grey-lighten-4" rounded class="pa-4">
-        <v-row class="">
+    <v-sheet rounded class="form_sheet pa-4">
+        <v-row gap="10">
             <v-col cols="3">
                 <v-text-field
                 label="カード名(一部)"
@@ -201,27 +201,13 @@ const hasResult = () => {
                 <v-text-field
                     label="セット略称" v-model="selectedSet" clearable></v-text-field>
             </v-col>
-            <!-- <v-col cols="5">
-                <v-chip-group v-model="selectedColor" column selected-class="">
-                    <v-chip v-for="color in colorItems" :key="color.item_value" :value="color.item_value"
-                     class="ma-1 bg-white" :variant="selectedColor === color.item_value ? 'flat' : 'outlined'"
-                     :color="color.color">
-                        <div class="d-flex align-center ga-1">
-                            <v-icon :icon="color.icon" size="18"/>{{ color.item_value }}
-                        </div>
-                    </v-chip>
-                </v-chip-group>
-            </v-col> -->
-            <v-col cols="3">
+            <v-col cols="3/12">
                 <v-select
                     label="色"
                     v-model="selectedColor"
                     :items="colorItems"
                     item-title="state"
                     item-value="item_value"
-                    variant="outlined"
-                    density="compact"
-                    bg-color="white"
                     clearable
                 >
             </v-select>
@@ -244,35 +230,30 @@ const hasResult = () => {
         >
            検索結果： {{ resultCount }}件
         </h2>
-        <div v-if="hasResult()" class="mt-2 ui form">
+        <div v-if="hasResult()" class="mt-2">
+            <v-sheet class="form_sheet pa-4">
+                <v-row gap="12">
+                    <v-col cols="2/10">
+                        <vendorType v-model="vendorNum"></vendorType>
+                    </v-col>
+                    <v-col cols="2/10">
+                        <v-text-field label="取引先" v-model="vendor" :disabled="isVendorDisabled" clearable></v-text-field>
+                    </v-col>
+                    <v-col cols="1/10">
+                        <v-text-field type="number" prefix="¥" label="原価" v-model="cost"></v-text-field>
+                    </v-col>
+                    <v-col></v-col>
+                    <v-col class="text-right">
+                        <v-btn>登録する</v-btn>
+                    </v-col>
+                </v-row>
+            </v-sheet>
             <div class="four fields">
-                <div class="three wide column field">
-                    <label for="">入荷カテゴリ</label>
-                    <vendorType v-model="vendorNum"></vendorType>
-                </div>
-                <div class="three wide column field">
-                    <label for="">取引先</label>
-                    <input type="text" v-model="vendor" :disabled="isVendorDisabled">
-                </div>
                 <div class="three wide column field">
                     <label>入荷日</label>
                     <scdatepicker v-model="arrivalDate"></scdatepicker>
                 </div>
-                <div class="two wide column field">
-                    <label>原価</label>
-                    <div class="ui middle right labeled input">
-                        <input
-                            v-model="cost"
-                            type="number"
-                            step="1"
-                            min="1"
-                            class="text-stock"
-                        />
-                        <div class="ui basic label">円</div>
-                    </div>
-                </div>
                 <div class="three wide column field">
-                    <label style="visibility: hidden">登録ボタン</label>
                     <ModalButton @action="regist"> 登録する </ModalButton>
                 </div>
             </div>
@@ -292,15 +273,16 @@ const hasResult = () => {
                         <v-card-subtitle class="text-wrap">
                             {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}
                         </v-card-subtitle>
-                        <v-card-text class="pt-0 text-high-emphasis text-right">
-                            <p class="mt-1 mb-0">平均価格：<span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></p>
-                            <p class="mt-0">在庫：<span v-if="card.quantity > 0">{{ card.quantity }}</span><span v-else>0</span></p>
-                            <lang v-model="card.language"></lang>
-                        <v-row>
+                        <v-card-text class="pt-0 text-high-emphasis">
+                            <p class="mt-1 mb-0">在庫：<span v-if="card.quantity > 0">{{ card.quantity }}</span><span v-else>0</span></p>
+                            <p class="text-right mt-0 mb-0">平均価格：<span class="text-title-large font-weight-bold">&#xa5;{{ card.price }}</span></p>
+                            <v-divider tickness="1" class="my-2"></v-divider>
+                            <v-row>
                             <v-col cols="12">
+                            <lang v-model="card.language"></lang>
                             </v-col>
                         </v-row>
-                        <v-row class="text-center" gap="10">
+                        <v-row  gap="10">
                             <v-col>
                                 <v-select
                                     v-model="card.condition"
@@ -323,74 +305,6 @@ const hasResult = () => {
                 </v-col>
             </v-row>
         </section>
-        <div class="mt-1 ui four cards">
-            <div
-                v-for="(card, index) in currentList.value"
-                :key="index"
-                class="card gallery"
-            >
-                <div class="content">
-                    <foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" />
-                    <div class="right floated meta">#{{ card.id }}</div>
-                </div>
-                <div class="image">
-                    <img
-                        class=""
-                        :src="card.image_url"
-                        @click="$refs.modal[index].showImage(card.id)"
-                    />
-                    <image-modal :id="card.id" ref="modal" :url="card.image_url" />
-                </div>
-                <div class="content">
-                    <div class="header">
-                        {{ card.name }}
-                        <div v-if="card.promotype.id != '1'">&#8810;{{card.promotype.name}}&#8811;</div>
-                    </div>
-                    <div class="meta">
-                        {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}
-                    </div>
-                    <div class="description ui right floated">
-                        平均価格:<span class="price"
-                            >&#xa5;{{ card.price }}</span
-                        >
-                    </div>
-                    <div>在庫：{{ card.quantity }}</div>
-                </div>
-                <div class="content">
-                    <div class="ui form">
-                        <lang v-model="card.language"></lang>
-                        <div class="two fields">
-                            <div class="eight wide field">
-                                <label for="">状態</label>
-                                <select
-                                    v-model="card.condition"
-                                    class="ui fluid dropdown"
-                                >
-                                    <option value="NM">NM</option>
-                                    <option value="NM-">NM-</option>
-                                    <option value="EX+">EX+</option>
-                                    <option value="EX">EX</option>
-                                    <option value="PLD">PLD</option>
-                                </select>
-                            </div>
-                            <div class="eight wide field">
-                                <label>枚数</label>
-                                <div class="ui middle right labeled input">
-                                    <input
-                                        v-model="card.stock"
-                                        type="number"
-                                        step="1"
-                                        min="0"
-                                        class="text-stock"
-                                    />
-                                    <div class="ui basic label">枚</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div  v-show="hasResult()" class="ui centered grid mt-2 mb-1">
             <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current" v-model:perPage="count"></pglist>
         </div>

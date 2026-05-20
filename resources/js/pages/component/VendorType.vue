@@ -12,11 +12,10 @@ onBeforeMount(async() => {
             })
             .catch((e) => {
                 console.error(e);
-            })    
+            })
 });
 </script>
 <template>
-<select v-model="vendorType" class="mr-1 ui dropdown">
-    <option v-for="t in vendorTypeList.value" :key="t.id" :value="t.id">{{t.name }}</option>
-</select>
+<v-select v-model="vendorType" :items="vendorTypeList.value"
+    item-title="name" item-value="id" label="入荷先カテゴリ"></v-select>
 </template>

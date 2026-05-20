@@ -53,7 +53,12 @@ const vuetify = createVuetify({
             variant: 'flat',
             rounded: 'xs',
             color: 'teal-lighten-1',
-        }
+        },
+        VSelect: {
+            variant: 'outlined',
+            density: 'compact',
+            bgColor: 'white',
+        },
     }
 });
 app.use(vuetify);

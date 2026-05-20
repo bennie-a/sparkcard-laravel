@@ -39,6 +39,10 @@ a:-webkit-any-link  {
     text-decoration: none!important;
 }
 
+.form_sheet {
+    background-color: #f5f5f5;
+}
+
 .ui.form .field>label {
     color:var(--gray) !important;
     font-weight: 500 !important;
