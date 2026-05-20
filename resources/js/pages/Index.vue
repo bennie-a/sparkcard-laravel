@@ -191,13 +191,13 @@ const hasResult = () => {
 <template>
     <message-area />
     <v-sheet rounded class="form_sheet pa-4">
-        <v-row gap="10">
+        <v-row gap="15">
             <v-col cols="3">
                 <v-text-field
                 label="カード名(一部)"
                     v-model="name" clearable></v-text-field>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2/15">
                 <v-text-field
                     label="セット略称" v-model="selectedSet" clearable></v-text-field>
             </v-col>
@@ -213,13 +213,13 @@ const hasResult = () => {
             </v-select>
             </v-col>
             <v-col cols="2">
-                <v-btn-toggle  v-model="isFoil" border divided mandatory density="comfortable">
+                <v-btn-toggle  v-model="isFoil" border divided mandatory density="comfortable" color="teal-lighten-1">
                     <v-btn :value="false">通常版</v-btn>
                     <v-btn :value="true">Foil</v-btn>
                 </v-btn-toggle>
             </v-col>
             <v-col cols="2" class="text-right">
-                <v-btn @click="search">検索する</v-btn>
+                <v-btn @click="search" color="teal-lighten-1">検索する</v-btn>
             </v-col>
         </v-row>
     </v-sheet>
@@ -233,26 +233,31 @@ const hasResult = () => {
         <div v-if="hasResult()" class="mt-2">
             <v-sheet class="form_sheet pa-4">
                 <v-row gap="12">
-                    <v-col cols="2/10">
+                    <v-col cols="3">
                         <vendorType v-model="vendorNum"></vendorType>
                     </v-col>
-                    <v-col cols="2/10">
+                    <v-col cols="2">
                         <v-text-field label="取引先" v-model="vendor" :disabled="isVendorDisabled" clearable></v-text-field>
                     </v-col>
-                    <v-col cols="1/10">
+                    <v-col cols="2">
+                        <v-date-input
+                        v-model="arrivalDate"
+                        label="入荷日"
+                        variant="outlined"
+                        input-format="yyyy/mm/dd"
+                        prepend-icon=""
+                        prepend-inner-icon="mdi-calendar-today"
+                        />
+                    </v-col>
+                    <v-col cols="2">
                         <v-text-field type="number" prefix="¥" label="原価" v-model="cost"></v-text-field>
                     </v-col>
-                    <v-col></v-col>
                     <v-col class="text-right">
-                        <v-btn>登録する</v-btn>
+                        <v-btn color="teal-lighten-1">登録する</v-btn>
                     </v-col>
                 </v-row>
             </v-sheet>
             <div class="four fields">
-                <div class="three wide column field">
-                    <label>入荷日</label>
-                    <scdatepicker v-model="arrivalDate"></scdatepicker>
-                </div>
                 <div class="three wide column field">
                     <ModalButton @action="regist"> 登録する </ModalButton>
                 </div>

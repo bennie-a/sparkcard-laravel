@@ -19,6 +19,7 @@ import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { VDateInput } from 'vuetify/labs/VDateInput'
 
 
 // ルータをインストール
@@ -31,7 +32,10 @@ app.use(Datepicker);
 app.use(Loading);
 
 const vuetify = createVuetify({
-  components,
+  components:{
+    ...components,
+    VDateInput
+  },
   directives,
     theme: {
       defaultTheme: 'light'
@@ -52,13 +56,15 @@ const vuetify = createVuetify({
         VBtn:{
             variant: 'flat',
             rounded: 'xs',
-            color: 'teal-lighten-1',
         },
         VSelect: {
             variant: 'outlined',
             density: 'compact',
             bgColor: 'white',
         },
+        VDateInput:{
+            density:'compact',
+        }
     }
 });
 app.use(vuetify);
