@@ -32,8 +32,9 @@ const vendorNum = ref(1);
 const vendor = ref("");
 const currentList = reactive([]);
 let result = reactive([]);
-let count = ref(12);
 const resultCount = ref(0);
+const itemPerPage = 12;
+const page = ref(1);
 
 const rules = {
 required: value => !!value || 'Field is required',
@@ -109,11 +110,12 @@ const search = async () => {
         params: {
         name: name.value,
         set: selectedSet.value,
-        selectedColor: selectedColor.value,
+        color: selectedColor.value,
         isFoil: isFoil.value,
         },
     };
 
+    console.log(query);
   try {
     const response = await axios.get("/api/database/card", query);
     result.value = response.data.map((f) => {
@@ -178,9 +180,21 @@ const formatPrice = (price) => {
         : formattedPrice;
     };
 
-const current = (data) => {
-        currentList.value = data.response;
+// ページ数をクリックした際の内容を取得する。
+const paginatedList = computed(() => {
+    if (resultCount.value == 0) {
+        return [];
     }
+    const start = (page.value - 1) * itemPerPage;
+    const end = start + itemPerPage;
+
+    return result.value.slice(start, end);
+});
+
+// ページ数を取得する。
+const pageCount = computed(() =>{
+    return Math.ceil(resultCount.value / itemPerPage);
+});
 
 const hasResult = () => {
     return resultCount.value > 0;
@@ -236,7 +250,7 @@ const hasResult = () => {
                     <v-col cols="3">
                         <vendorType v-model="vendorNum"></vendorType>
                     </v-col>
-                    <v-col cols="2">
+                    <v-col cols="3">
                         <v-text-field label="取引先" v-model="vendor" :disabled="isVendorDisabled" clearable></v-text-field>
                     </v-col>
                     <v-col cols="2">
@@ -257,15 +271,15 @@ const hasResult = () => {
                     </v-col>
                 </v-row>
             </v-sheet>
-            <div class="four fields">
+            <!-- <div class="four fields">
                 <div class="three wide column field">
                     <ModalButton @action="regist"> 登録する </ModalButton>
                 </div>
-            </div>
+            </div> -->
         </div>
-        <section>
+        <section class="mt-6">
             <v-row>
-                <v-col cols="3" v-for="(card, index) in currentList.value" :key="index">
+                <v-col cols="3" v-for="(card, index) in paginatedList" :key="index">
                     <v-card>
                         <div class="d-flex text-label-large font-weight-regular text-start pa-2">
                             <span  class="text-grey-darken-1">#{{card.id}}</span>
@@ -309,10 +323,11 @@ const hasResult = () => {
                         </v-card>
                 </v-col>
             </v-row>
+            <!--Pagination-->
+            <div class="mt-6" v-if="hasResult()">
+                <v-pagination v-model="page" :length="pageCount" rounded="circle" :total-visible="5"></v-pagination>
+            </div>
         </section>
-        <div  v-show="hasResult()" class="ui centered grid mt-2 mb-1">
-            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current" v-model:perPage="count"></pglist>
-        </div>
         <loading
          :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
@@ -339,38 +354,5 @@ div.gallery div.header {
 div.gallery span.price {
     font-weight: 700;
     font-size: 1.3rem;
-}
-
-input.text-stock {
-    width: 6vw;
-}
-
-.radio-button > :first-child,
-.radio-button > label span {
-    margin-right: 0.5rem !important;
-
-    cursor: pointer;
-}
-
-.ui.form .inline.field > :first-child {
-    margin-right: 0 !important;
-}
-.radio-button {
-    line-height: 3;
-}
-.radio-button > label input {
-    display: none; /* デフォルトのinputは非表示にする */
-}
-.radio-button > label span {
-    padding: 5px 10px !important; /* 上下左右に余白をトル */
-    border-radius: 5px;
-    color: var(--teal);
-    border: 1px solid var(--teal);
-}
-
-label input:checked + span {
-    color: #fff; /* 文字色を白に */
-    background: var(--teal); /* 背景色を薄い赤に */
-    border: 0;
 }
 </style>
