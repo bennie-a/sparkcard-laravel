@@ -10,7 +10,8 @@
     import pglist from "./component/PgList.vue";
     import { AxiosTask } from "../component/AxiosTask";
     import vendorType from './component/VendorType.vue';
-    import lang from './component/Language.vue';
+    import lang from './component/selection/Language.vue';
+    import colorDropdown from "./component/selection/ColorDropdown.vue";
 
 // コンポーネントの登録
 const components = {
@@ -39,19 +40,6 @@ const page = ref(1);
 const rules = {
 required: value => !!value || 'Field is required',
 }
-
-const colorItems = [
-    {state:'白', icon:'mdi-weather-sunny', item_value:'W', color:'yellow-lighten-1'},
-    {state:'青', icon:'mdi-water', item_value:'U', color:'blue-lighten-1'},
-    {state:'黒', icon:'mdi-skull', item_value:'B', color:'grey-darken-3'},
-    {state:'赤', icon:'mdi-fire', item_value:'R', color:'red-lighten-1'},
-    {state:'緑', icon:'mdi-pine-tree-variant', item_value:'G', color:'green-lighten-1'},
-    {state:'多色', icon:'mdi-multiplication-box', item_value:'M', color:'orange-lighten-1'},
-    {state:'無色', icon:'mdi-invert-colors-off', item_value:'L', color:'purple-lighten-1'},
-    {state:'アーティファクト', icon:'mdi-key', item_value:'A', color:'blue-grey-lighten-1'},
-    {state:'土地', icon:'mdi-land-plots', item_value:'Land', color:'brown-lighten-1'},
-    {state:'アートカード', icon:'mdi-palette', item_value:'Art', color:'pink-lighten-1'},
-];
 
 const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
 
@@ -216,15 +204,7 @@ const hasResult = () => {
                     label="セット略称" v-model="selectedSet" clearable></v-text-field>
             </v-col>
             <v-col cols="3/12">
-                <v-select
-                    label="色"
-                    v-model="selectedColor"
-                    :items="colorItems"
-                    item-title="state"
-                    item-value="item_value"
-                    clearable
-                >
-            </v-select>
+                <colorDropdown v-model="selectedColor"></colorDropdown>
             </v-col>
             <v-col cols="2">
                 <v-btn-toggle  v-model="isFoil" border divided mandatory density="comfortable" color="teal-lighten-1">
