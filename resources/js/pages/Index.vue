@@ -104,7 +104,6 @@ const search = async () => {
         },
     };
 
-    console.log(query);
   try {
     const response = await axios.get("/api/database/card", query);
     result.value = response.data.map((f) => {
@@ -253,7 +252,7 @@ const hasResult = () => {
                             <span  class="text-grey-darken-1">#{{card.id}}</span>
                             <span class="ml-2"><foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" /></span>
                         </div>
-                        <v-img :src="card.image_url"  cover height="140" class="image-position"></v-img>
+                        <image-modal :id="card.id" ref="modal" :url="card.image_url" />
                         <v-card-title  class="text-title-medium text-wrap mb-0 pb-0">
                             {{ card.name }}
                         </v-card-title>
@@ -284,6 +283,7 @@ const hasResult = () => {
                                     type="number"
                                     step="1"
                                     min="0"
+                                    label="枚数"
                                     suffix="枚"></v-text-field>
                                 </v-col>
                             </v-row>
@@ -302,9 +302,6 @@ const hasResult = () => {
      :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
-.image-position:deep(img) {
-  object-position: center -40px; /* 右側を基準に表示 */
-}
 
 div.image img {
     width: fit-content;

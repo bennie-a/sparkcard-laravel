@@ -1,5 +1,4 @@
 <script setup>
-import datepicker from "@vuepic/vue-datepicker";
 import { ref} from "vue";
 const selectedDate = defineModel('selectedDate', {type:Date, required:true});
 defineProps({'datelabel': {type:String, required:true}});
