@@ -12,21 +12,22 @@
     import vendorType from './component/VendorType.vue';
     import lang from './component/selection/Language.vue';
     import colorDropdown from "./component/selection/ColorDropdown.vue";
+    import datePicker from "./component/SCDatePicker.vue";
 
-// コンポーネントの登録
-const components = {
-        MessageArea,
-        ModalButton,
-        ImageModal,
-        pglist,
-        };
+    // コンポーネントの登録
+    const components = {
+            MessageArea,
+            ModalButton,
+            ImageModal,
+            pglist,
+            };
 
 // リアクティブデータの定義
 const selectedSet = ref("");
 const selectedColor = ref("");
 const isFoil = ref(false);
 const name = ref("");
-const arrivalDate = ref(new Date());
+const arrivalDate = ref(new Date);
 const cost = ref(28);
 const isLoading = ref(false);
 const vendorNum = ref(1);
@@ -203,7 +204,7 @@ const hasResult = () => {
                 <v-text-field
                     label="セット略称" v-model="selectedSet" clearable></v-text-field>
             </v-col>
-            <v-col cols="3/12">
+            <v-col cols="3/13">
                 <colorDropdown v-model="selectedColor"></colorDropdown>
             </v-col>
             <v-col cols="2">
@@ -234,14 +235,8 @@ const hasResult = () => {
                         <v-text-field label="取引先" v-model="vendor" :disabled="isVendorDisabled" clearable></v-text-field>
                     </v-col>
                     <v-col cols="2">
-                        <v-date-input
-                        v-model="arrivalDate"
-                        label="入荷日"
-                        variant="outlined"
-                        input-format="yyyy/mm/dd"
-                        prepend-icon=""
-                        prepend-inner-icon="mdi-calendar-today"
-                        />
+                        <datePicker v-model:selectedDate="arrivalDate"  datelabel="入荷日"></datePicker>
+
                     </v-col>
                     <v-col cols="2">
                         <v-text-field type="number" prefix="¥" label="原価" v-model="cost"></v-text-field>

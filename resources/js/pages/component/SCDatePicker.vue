@@ -1,7 +1,8 @@
 <script setup>
 import datepicker from "@vuepic/vue-datepicker";
 import { ref} from "vue";
-const newSelectedDate = defineModel({type:Date, required:true});
+const selectedDate = defineModel('selectedDate', {type:Date, required:true});
+defineProps({'datelabel': {type:String, required:true}});
 
 // 日付をYYYY/MM/dd形式に整形する。
 const dateFormat = (date) => {
@@ -12,13 +13,13 @@ const dateFormat = (date) => {
 }
 </script>
 <template>
-        <datepicker
-        v-model="newSelectedDate"
-        input-class-name="dp_custom_input"
-        locale="jp"
-        :enable-time-picker="false"
-        :format="dateFormat"
-        auto-apply
+    <v-date-input
+    v-model="selectedDate"
+    :label="datelabel"
+    variant="outlined"
+    input-format="yyyy/mm/dd"
+    prepend-icon=""
+    prepend-inner-icon="mdi-calendar-today"
     />
 </template>
 <style>
