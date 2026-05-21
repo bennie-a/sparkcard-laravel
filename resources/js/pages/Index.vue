@@ -242,7 +242,7 @@ const hasResult = () => {
                         <v-text-field type="number" prefix="¥" label="原価" v-model="cost"></v-text-field>
                     </v-col>
                     <v-col class="text-right">
-                        <v-btn color="teal-lighten-1">登録する</v-btn>
+                        <ModalButton @action="regist"> 登録する </ModalButton>
                     </v-col>
                 </v-row>
             </v-sheet>
