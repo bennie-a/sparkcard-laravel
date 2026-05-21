@@ -180,7 +180,7 @@ const paginatedList = computed(() => {
     return result.value.slice(start, end);
 });
 
-// ページ数を取得する。
+// 総ページ数を取得する。
 const pageCount = computed(() =>{
     return Math.ceil(resultCount.value / itemPerPage);
 });
@@ -218,14 +218,12 @@ const hasResult = () => {
             </v-col>
         </v-row>
     </v-sheet>
-    <article class="mt-10">
-        <h2
-            v-if="hasResult()"
-            class="text-title-medium"
+    <article class="mt-10" v-if="hasResult()">
+        <h2 class="text-title-medium"
         >
            検索結果： {{ resultCount }}件
         </h2>
-        <div v-if="hasResult()" class="mt-2">
+        <div class="mt-2">
             <v-sheet class="form_sheet pa-4">
                 <v-row gap="12">
                     <v-col cols="3">
@@ -246,11 +244,6 @@ const hasResult = () => {
                     </v-col>
                 </v-row>
             </v-sheet>
-            <!-- <div class="four fields">
-                <div class="three wide column field">
-                    <ModalButton @action="regist"> 登録する </ModalButton>
-                </div>
-            </div> -->
         </div>
         <section class="mt-6">
             <v-row>
@@ -299,14 +292,14 @@ const hasResult = () => {
                 </v-col>
             </v-row>
             <!--Pagination-->
-            <div class="mt-6" v-if="hasResult()">
+            <div class="mt-6">
                 <v-pagination v-model="page" :length="pageCount" rounded="circle" :total-visible="5"></v-pagination>
             </div>
         </section>
-        <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
     </article>
+    <loading
+     :active="isLoading"
+     :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 .image-position:deep(img) {

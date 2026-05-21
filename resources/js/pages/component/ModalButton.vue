@@ -6,7 +6,10 @@
         {msg: { type: String, default: "登録してもよろしいですか?" }}
     );
 
-   const execute = () =>{
+    const emit = defineEmits(['action']);
+
+    const execute = () =>{
+        emit('action');
         dialog.value = false;
    };
 // export default {
