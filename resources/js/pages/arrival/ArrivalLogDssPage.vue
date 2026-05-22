@@ -13,7 +13,7 @@ import { apiDeleteService } from "@/component/ApiDeleteService";
 import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
-import ModalButton from "../component/ModalButton.vue";
+import ModalButton from "../component/modal/ModalButton.vue";
 import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import { storeToRefs } from "pinia";
 

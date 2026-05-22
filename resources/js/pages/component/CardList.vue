@@ -105,7 +105,7 @@
 import ListPagination from "./ListPagination.vue";
 import FoilTag from "./tag/FoilTag.vue";
 import ConditionTag from "./tag/ConditionTag.vue";
-import ImageModal from "./ImageModal.vue";
+import ImageModal from "./modal/ImageModal.vue";
 
 export default {
     components: {

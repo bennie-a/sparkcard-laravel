@@ -5,7 +5,7 @@ import {useRoute, useRouter} from "vue-router";
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import condition from "../component/tag/ConditionTag.vue";
-import imagemodal from '../component/ImageModal.vue';
+import imagemodal from '../component/modal/ImageModal.vue';
 import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
 

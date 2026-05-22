@@ -3,9 +3,9 @@
     import axios from "axios";
     import loading from "vue-loading-overlay";
     import MessageArea from "./component/MessageArea.vue";;
-    import ModalButton from "./component/ModalButton.vue";
+    import ModalButton from "./component/modal/ModalButton.vue";
     import foiltag from "./component/tag/FoilTag.vue";
-    import ImageModal from "./component/ImageModal.vue";
+    import ImageModal from "./component/modal/ImageModal.vue";
     import scdatepicker from "./component/SCDatePicker.vue";
     import pglist from "./component/PgList.vue";
     import { AxiosTask } from "../component/AxiosTask";

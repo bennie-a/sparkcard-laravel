@@ -7,7 +7,7 @@
     import condition from "../component/tag/ConditionTag.vue";
     import pglist from "../component/PgList.vue";
     import cardlayout from "../component/CardLayout.vue";
-    import ModalButton from '../component/ModalButton.vue';
+    import ModalButton from '../component/modal/ModalButton.vue';
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
     import scdatepicker from "../component/SCDatePicker.vue";

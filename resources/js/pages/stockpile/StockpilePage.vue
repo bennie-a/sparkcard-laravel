@@ -5,7 +5,7 @@ import axios from "axios";
 import ListPagination from "../component/ListPagination.vue";
 import FoilTag from "../component/tag/FoilTag.vue";
 import ConditionTag from "../component/tag/ConditionTag.vue";
-import ImageModal from "../component/ImageModal.vue";
+import ImageModal from "../component/modal/ImageModal.vue";
 import CardLayout from "../component/CardLayout.vue";
 
 export default {

@@ -67,7 +67,7 @@
 import { AxiosTask } from "../../component/AxiosTask";
 import MessageArea from "../component/MessageArea.vue";
 import Datepicker from "@vuepic/vue-datepicker";
-import ModalButton from "../component/ModalButton.vue";
+import ModalButton from "../component/modal/ModalButton.vue";
 
 export default {
     data() {
