@@ -28,6 +28,7 @@
     const currentList = reactive([]);
     let result = reactive([]);
     const resultCount = ref(0);
+    const isValid = ref(false);
 
     const {
         page, pageCount, paginatedList, resetPage
@@ -36,11 +37,14 @@
     const rules = {
         required: value => !!value || 'Field is required',
     }
-
+    const requireEither = (v) => {
+        return !!name.value || !!selectedSet.value || 'カード名かセット略称のどちらかを入力してください。'
+    }
     const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
 
     // Vuex Storeへのアクセス（例: 仮想的なuseStore）
     import { useStore } from "vuex";
+    import { set } from "lodash";
     const store = useStore();
 
     const isVendorDisabled = computed(() => {
@@ -141,22 +145,22 @@
 
 <template>
     <message-area />
-    <v-sheet rounded class="form_sheet pa-4">
+    <v-form rounded class="form_sheet pa-4" v-model="isValid">
         <v-row gap="15">
             <v-col cols="3">
                 <v-text-field
-                label="カード名(一部)"
-                    v-model="name" clearable></v-text-field>
+                label="カード名"
+                    v-model="name" clearable hint="カード名の一部を指定" :rules="[requireEither]"></v-text-field>
             </v-col>
             <v-col cols="2/15">
                 <v-text-field
-                    label="セット略称" v-model="selectedSet" clearable></v-text-field>
+                    label="セット略称" v-model="selectedSet" clearable hint="英数字のみ" :rules="[requireEither]"></v-text-field>
             </v-col>
             <v-col cols="3/13">
                 <colorDropdown v-model="selectedColor"></colorDropdown>
             </v-col>
             <v-col cols="2">
-                <v-btn-toggle  v-model="isFoil" border divided mandatory density="comfortable" color="teal-lighten-1">
+                <v-btn-toggle  v-model="isFoil" bord    er divided mandatory density="comfortable" color="teal-lighten-1">
                     <v-btn :value="false">通常版</v-btn>
                     <v-btn :value="true">Foil</v-btn>
                 </v-btn-toggle>
@@ -165,7 +169,7 @@
                 <v-btn @click="search" color="teal-lighten-1">検索する</v-btn>
             </v-col>
         </v-row>
-    </v-sheet>
+    </v-form>
     <article class="mt-10" v-if="hasResult()">
         <h2 class="text-title-medium"
         >
