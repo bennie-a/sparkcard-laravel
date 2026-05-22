@@ -3,7 +3,6 @@
 
     defineProps({
         url: { type: String, required: true },
-        id: { type: Number, required: true },
         height : {type:Number, default:140}
     });
     const dialog = ref(false);

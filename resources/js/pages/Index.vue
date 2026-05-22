@@ -252,7 +252,7 @@ const hasResult = () => {
                             <span  class="text-grey-darken-1">#{{card.id}}</span>
                             <span class="ml-2"><foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" /></span>
                         </div>
-                        <image-modal :id="card.id" ref="modal" :url="card.image_url" />
+                        <image-modal :url="card.image_url" />
                         <v-card-title  class="text-title-medium text-wrap mb-0 pb-0">
                             {{ card.name }}
                         </v-card-title>
