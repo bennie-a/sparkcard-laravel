@@ -7,186 +7,135 @@
     import foiltag from "./component/tag/FoilTag.vue";
     import ImageModal from "./component/modal/ImageModal.vue";
     import scdatepicker from "./component/SCDatePicker.vue";
-    import pglist from "./component/PgList.vue";
     import { AxiosTask } from "../component/AxiosTask";
     import vendorType from './component/VendorType.vue';
     import lang from './component/selection/Language.vue';
     import colorDropdown from "./component/selection/ColorDropdown.vue";
     import datePicker from "./component/SCDatePicker.vue";
+    import ListPagination from "./component/pagination/ListPagination.vue";
+    import { usePagenate } from "./component/pagination/UsePaginate";
 
-    // コンポーネントの登録
-    const components = {
-            MessageArea,
-            ModalButton,
-            ImageModal,
-            pglist,
-            };
+    // リアクティブデータの定義
+    const selectedSet = ref("");
+    const selectedColor = ref("");
+    const isFoil = ref(false);
+    const name = ref("");
+    const arrivalDate = ref(new Date);
+    const cost = ref(28);
+    const isLoading = ref(false);
+    const vendorNum = ref(1);
+    const vendor = ref("");
+    const currentList = reactive([]);
+    let result = reactive([]);
+    const resultCount = ref(0);
 
-// リアクティブデータの定義
-const selectedSet = ref("");
-const selectedColor = ref("");
-const isFoil = ref(false);
-const name = ref("");
-const arrivalDate = ref(new Date);
-const cost = ref(28);
-const isLoading = ref(false);
-const vendorNum = ref(1);
-const vendor = ref("");
-const currentList = reactive([]);
-let result = reactive([]);
-const resultCount = ref(0);
-const itemPerPage = 12;
-const page = ref(1);
+    const {
+        page, pageCount, paginatedList, resetPage
+    } = usePagenate(result, 12);
 
-const rules = {
-required: value => !!value || 'Field is required',
-}
-
-const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
-
-// Vuex Storeへのアクセス（例: 仮想的なuseStore）
-import { useStore } from "vuex";
-const store = useStore();
-
-// 計算プロパティ
-const isDisabled = computed(() => {
-  const selected = store.getters["csvOption/selectedList"];
-  return selected.length === 0;
-});
-
-const suggestions = computed(() => {
-  return store.getters["expansion/suggestions"];
-});
-
-const isVendorDisabled = computed(() => {
-  if (vendorNum.value !== 3) {
-    vendor.value = "";
-    return true;
-  }
-  return false;
-});
-
-// メソッド
-const suggestSet = () => {
-  if (selectedSet.value === "") return;
-
-  store.dispatch("expansion/clear");
-  const task = new AxiosTask(store);
-  const query = { params: { query: selectedSet.value } };
-
-  task.get(
-    "/database/exp",
-    query,
-    (response) => {
-      store.dispatch("expansion/setSuggestions", response.data);
-      console.log(response.data);
-    },
-    (e) => {
-      console.error(e);
+    const rules = {
+        required: value => !!value || 'Field is required',
     }
-  );
-};
 
-const search = async () => {
-    isLoading.value = true;
-    store.dispatch("message/clear");
-    store.dispatch("clearCards");
-    store.dispatch("clearMessage");
-    result.value = [];
-    resultCount.value = 0;
+    const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
 
-    const query = {
-        params: {
-        name: name.value,
-        set: selectedSet.value,
-        color: selectedColor.value,
-        isFoil: isFoil.value,
-        },
-    };
+    // Vuex Storeへのアクセス（例: 仮想的なuseStore）
+    import { useStore } from "vuex";
+    const store = useStore();
 
-  try {
-    const response = await axios.get("/api/database/card", query);
-    result.value = response.data.map((f) => {
-            f.language = "JP";
-            return f;
-            });
-    resultCount.value = result.value.length;
-        } catch (e) {
-            let data = e.response.data;
-            console.log(data);
-            store.dispatch("message/error", data.detail);
-        } finally {
-            isLoading.value = false;
-        }
-    };
+    const isVendorDisabled = computed(() => {
+    if (vendorNum.value !== 3) {
+        vendor.value = "";
+        return true;
+    }
+    return false;
+    });
 
-const regist = async () => {
-    store.dispatch("setLoad", true);
-    store.dispatch("message/clear");
-    store.dispatch("clearMessage");
-    const card = result.value;
-    const filtered = card.filter((c) => c.stock != null && c.stock > 0);
+    const search = async () => {
+        resetPage();
+        isLoading.value = true;
+        store.dispatch("message/clear");
+        store.dispatch("clearCards");
+        store.dispatch("clearMessage");
+        result.value = [];
+        resultCount.value = 0;
+
+        const query = {
+            params: {
+            name: name.value,
+            set: selectedSet.value,
+            color: selectedColor.value,
+            isFoil: isFoil.value,
+            },
+        };
 
     try {
-        await Promise.all(
-        filtered.map(async (c) => {
-            const query = {
-            card_id: c.id,
-            language: c.language,
-            quantity: c.stock,
-            cost: cost.value,
-            vendor_type_id: vendorNum.value,
-            vendor: vendor.value,
-            market_price: formatPrice(c.price),
-            condition: c.condition,
-            attr: c.exp.attr,
-            isFoil: c.isFoil,
-            arrival_date: arrivalDate.value,
-            };
-
-            const response = await axios.post("api/arrival", query);
-            if (response.status === 201) {
-                    console.log(c.name + ": 登録完了");
+        const response = await axios.get("/api/database/card", query);
+        result.value = response.data.map((f) => {
+                f.language = "JP";
+                return f;
+                });
+        resultCount.value = result.value.length;
+            } catch (e) {
+                let data = e.response.data;
+                console.log(data);
+                store.dispatch("message/error", data.detail);
+            } finally {
+                isLoading.value = false;
             }
-        })
-        );
-        store.dispatch("setSuccessMessage", "登録が完了しました。");
-    } catch ({ response }) {
-        const data = response.data;
-        const msg = `ステータスコード: ${response.status} ${data.message}`;
-        console.error(msg);
-        store.dispatch("message/error", msg);
-    } finally {
-        store.dispatch("setLoad", false);
+        };
+
+    const regist = async () => {
+        store.dispatch("setLoad", true);
+        store.dispatch("message/clear");
+        store.dispatch("clearMessage");
+        const card = result.value;
+        const filtered = card.filter((c) => c.stock != null && c.stock > 0);
+
+        try {
+            await Promise.all(
+            filtered.map(async (c) => {
+                const query = {
+                card_id: c.id,
+                language: c.language,
+                quantity: c.stock,
+                cost: cost.value,
+                vendor_type_id: vendorNum.value,
+                vendor: vendor.value,
+                market_price: formatPrice(c.price),
+                condition: c.condition,
+                attr: c.exp.attr,
+                isFoil: c.isFoil,
+                arrival_date: arrivalDate.value,
+                };
+
+                const response = await axios.post("api/arrival", query);
+                if (response.status === 201) {
+                        console.log(c.name + ": 登録完了");
+                }
+            })
+            );
+            store.dispatch("setSuccessMessage", "登録が完了しました。");
+            } catch ({ response }) {
+                const data = response.data;
+                const msg = `ステータスコード: ${response.status} ${data.message}`;
+                console.error(msg);
+                store.dispatch("message/error", msg);
+            } finally {
+                store.dispatch("setLoad", false);
+            }
+        };
+
+    const formatPrice = (price) => {
+        const formattedPrice = String(price);
+        return formattedPrice.includes(",")
+            ? formattedPrice.replace(",", "")
+            : formattedPrice;
+        };
+
+    const hasResult = () => {
+        return resultCount.value > 0;
     }
-    };
-
-const formatPrice = (price) => {
-    const formattedPrice = String(price);
-    return formattedPrice.includes(",")
-        ? formattedPrice.replace(",", "")
-        : formattedPrice;
-    };
-
-// ページ数をクリックした際の内容を取得する。
-const paginatedList = computed(() => {
-    if (resultCount.value == 0) {
-        return [];
-    }
-    const start = (page.value - 1) * itemPerPage;
-    const end = start + itemPerPage;
-
-    return result.value.slice(start, end);
-});
-
-// 総ページ数を取得する。
-const pageCount = computed(() =>{
-    return Math.ceil(resultCount.value / itemPerPage);
-});
-
-const hasResult = () => {
-    return resultCount.value > 0;
-}
 
 </script>
 
@@ -293,7 +242,7 @@ const hasResult = () => {
             </v-row>
             <!--Pagination-->
             <div class="mt-6">
-                <v-pagination v-model="page" :length="pageCount" rounded="circle" :total-visible="5"></v-pagination>
+                <ListPagination v-model="page" :length="pageCount"></ListPagination>
             </div>
         </section>
     </article>

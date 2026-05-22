@@ -102,7 +102,7 @@
     </article>
 </template>
 <script>
-import ListPagination from "./ListPagination.vue";
+import ListPagination from "./pagination/ListPagination.vue";
 import FoilTag from "./tag/FoilTag.vue";
 import ConditionTag from "./tag/ConditionTag.vue";
 import ImageModal from "./modal/ImageModal.vue";

@@ -100,7 +100,7 @@
 import Loading from "vue-loading-overlay";
 import FileUpload from "../component/FileUpload.vue";
 import MessageArea from "../component/MessageArea.vue";
-import ListPagination from "../component/ListPagination.vue";
+import ListPagination from "../component/pagination/ListPagination.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
 import FoilTag from "../component/tag/FoilTag.vue";
