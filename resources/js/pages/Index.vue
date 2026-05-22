@@ -301,23 +301,3 @@ const hasResult = () => {
      :active="isLoading"
      :can-cancel="false" :is-full-page="true" />
 </template>
-<style scoped>
-
-div.image img {
-    width: fit-content;
-    height: 100% !important;
-    object-position: 50% 20%;
-    object-fit: cover;
-    cursor: pointer;
-}
-
-div.gallery div.header {
-    font-size: 1rem !important;
-    padding-top: 0.5rem;
-    padding-bottom: 0rem;
-}
-div.gallery span.price {
-    font-weight: 700;
-    font-size: 1.3rem;
-}
-</style>
