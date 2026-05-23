@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, reactive, computed, onMounted } from "vue";
+    import { ref, reactive, computed, onMounted, watch } from "vue";
     import axios from "axios";
     import loading from "vue-loading-overlay";
     import MessageArea from "./component/MessageArea.vue";;
@@ -28,8 +28,7 @@
     const currentList = reactive([]);
     let result = reactive([]);
     const resultCount = ref(0);
-    const isValid = ref(false);
-
+    const errMsgs = ref("");
     const {
         page, pageCount, paginatedList, resetPage
     } = usePagenate(result, 12);
@@ -37,9 +36,12 @@
     const rules = {
         required: value => !!value || 'Field is required',
     }
-    const requireEither = (v) => {
-        return !!name.value || !!selectedSet.value || 'カード名かセット略称のどちらかを入力してください。'
+
+    const require = () => {
+        return name.value || selectedSet.value ?  true : 'カード名かセット略称のどちらかを入力してください。'
+
     }
+
     const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
 
     // Vuex Storeへのアクセス（例: 仮想的なuseStore）
@@ -57,6 +59,12 @@
 
     const search = async () => {
         resetPage();
+        errMsgs.value = "";
+        if (name.value == "" && selectedSet.value == "") {
+            errMsgs.value = 'カード名かセット略称のどちらかを入力してください。';
+            return;
+        }
+
         isLoading.value = true;
         store.dispatch("message/clear");
         store.dispatch("clearCards");
@@ -145,16 +153,17 @@
 
 <template>
     <message-area />
+    {{ errMsgs }}
     <v-form rounded class="form_sheet pa-4" v-model="isValid">
         <v-row gap="15">
             <v-col cols="3">
                 <v-text-field
                 label="カード名"
-                    v-model="name" clearable hint="カード名の一部を指定" :rules="[requireEither]"></v-text-field>
+                    v-model="name" clearable hint="カード名の一部を指定"></v-text-field>
             </v-col>
             <v-col cols="2/15">
                 <v-text-field
-                    label="セット略称" v-model="selectedSet" clearable hint="英数字のみ" :rules="[requireEither]"></v-text-field>
+                    label="セット略称" v-model="selectedSet" clearable hint="英数字のみ"></v-text-field>
             </v-col>
             <v-col cols="3/13">
                 <colorDropdown v-model="selectedColor"></colorDropdown>
