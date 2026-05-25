@@ -167,7 +167,7 @@
                 <colorDropdown v-model="selectedColor"></colorDropdown>
             </v-col>
             <v-col cols="2">
-                <v-btn-toggle  v-model="isFoil" bord    er divided mandatory density="comfortable" color="teal-lighten-1">
+                <v-btn-toggle  v-model="isFoil" border divided mandatory density="comfortable" color="teal-lighten-1">
                     <v-btn :value="false">通常版</v-btn>
                     <v-btn :value="true">Foil</v-btn>
                 </v-btn-toggle>
