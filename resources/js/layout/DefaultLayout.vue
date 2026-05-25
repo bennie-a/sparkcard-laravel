@@ -6,7 +6,8 @@ import Loading from "vue-loading-overlay"
 import "vue-loading-overlay/dist/css/index.css"
 
 import { LoadingStore } from '@/stores/loading/Loading'
-import { storeToRefs } from "pinia"
+import { storeToRefs } from "pinia";
+import MessageArea from '../pages/component/msg/MessageArea.vue'
 
 // ----------------------
 // store
@@ -24,56 +25,6 @@ const route = useRoute()
 // ----------------------
 const sidebar = ref(null)
 const main = ref(null)
-
-// ----------------------
-// layout state
-// ----------------------
-const initHeight = ref(0)
-const sidebarHeight = ref(0)
-const mainHeight = ref(0)
-const isMounted = ref(false)
-
-// ----------------------
-// computed
-// ----------------------
-const higherHeightPx = computed(() => {
-  return isMounted.value
-    ? Math.max(sidebarHeight.value, mainHeight.value) + "px"
-    : null
-})
-
-// ----------------------
-// route watch（旧watch置き換え）
-// ----------------------
-watch(route, () => {
-  // Vuex使ってるならそのまま
-  // ※ ここはPiniaに寄せた方がいい
-  // store.dispatch("clearCards")
-  // store.dispatch("clearMessage")
-
-  mainHeight.value = initHeight.value
-})
-
-// ----------------------
-// mounted処理
-// ----------------------
-// onMounted(() => {
-//   nextTick(() => {
-//     if (!main.value) return
-
-//     const resizeObserver = new ResizeObserver(() => {
-//       mainHeight.value = main.value.clientHeight
-//     })
-
-//     resizeObserver.observe(main.value)
-
-//     sidebarHeight.value = sidebar.value?.clientHeight || 0
-//     mainHeight.value = main.value.clientHeight
-//     initHeight.value = mainHeight.value
-
-//     isMounted.value = true
-//   })
-// })
 </script>
 
 <template>
@@ -94,6 +45,7 @@ watch(route, () => {
         <v-main class="mt-2 d-flex  justify-start" min-height="98vh">
         <v-container>
             <h1 class="text-headline-medium">{{ route.meta.title }}</h1>
+            <MessageArea></MessageArea>
             <v-sheet class="mt-6 pa-7" rounded>
                 <router-view />
             </v-sheet>

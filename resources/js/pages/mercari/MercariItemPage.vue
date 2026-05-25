@@ -17,7 +17,7 @@
 <script>
 import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
-import MessageArea from "../component/MessageArea.vue";
+import MessageArea from "../component/msg/MessageArea.vue";
 import SearchForm from "../component/SearchForm.vue";
 import CSVUpload from "../component/CSVUpload.vue";
 import DownloadButton from "../component/DownloadButton.vue";

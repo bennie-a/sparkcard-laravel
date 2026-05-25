@@ -8,7 +8,6 @@
     import condition from "../component/tag/ConditionTag.vue";
     import foiltag from "../component/tag/FoilTag.vue";
     import ModalButton from "../component/modal/ModalButton.vue";
-    import { piniaMsgStore } from "@/stores/global/PiniaMsg";
     import {apiPutService} from "@/component/ApiPutService";
     import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
     import UseDateFormatter from '../../functions/UseDateFormatter.js';

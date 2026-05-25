@@ -14,7 +14,6 @@ import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 
-import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 import { storeToRefs } from 'pinia';
 
 const gcStore = groupConditionStore();

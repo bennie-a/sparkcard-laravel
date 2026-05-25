@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useStore} from 'vuex';
-import { piniaMsgStore } from "@/stores/global/PiniaMsg";
+// import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 
 export const apiPutService = {
     // PUTメソッドでAPIを呼び出す。

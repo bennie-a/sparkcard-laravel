@@ -2,7 +2,7 @@
     import { ref, reactive, computed, onMounted, watch } from "vue";
     import axios from "axios";
     import loading from "vue-loading-overlay";
-    import MessageArea from "./component/MessageArea.vue";;
+    import MessageArea from "./component/msg/MessageArea.vue";;
     import ModalButton from "./component/modal/ModalButton.vue";
     import foiltag from "./component/tag/FoilTag.vue";
     import ImageModal from "./component/modal/ImageModal.vue";
@@ -152,9 +152,7 @@
 </script>
 
 <template>
-    <message-area />
-    {{ errMsgs }}
-    <v-form rounded class="form_sheet pa-4" v-model="isValid">
+    <v-form rounded class="form_sheet pa-4">
         <v-row gap="15">
             <v-col cols="3">
                 <v-text-field

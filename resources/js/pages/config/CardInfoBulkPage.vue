@@ -99,7 +99,7 @@
 <script>
 import Loading from "vue-loading-overlay";
 import FileUpload from "../component/FileUpload.vue";
-import MessageArea from "../component/MessageArea.vue";
+import MessageArea from "../component/msg/MessageArea.vue";
 import ListPagination from "../component/pagination/ListPagination.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";

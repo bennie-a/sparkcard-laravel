@@ -65,7 +65,7 @@
 </template>
 <script>
 import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/MessageArea.vue";
+import MessageArea from "../component/msg/MessageArea.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import ModalButton from "../component/modal/ModalButton.vue";
 

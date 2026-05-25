@@ -68,7 +68,7 @@
 <script>
 import NowLoading from "../component/NowLoading.vue";
 import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/MessageArea.vue";
+import MessageArea from "../component/msg/MessageArea.vue";
 
 export default {
     data() {

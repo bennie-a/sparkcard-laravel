@@ -15,7 +15,6 @@ import{ store} from './store';
 import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
-import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import CardInfoBulkPage from "./pages/config/CardInfoBulkPage.vue";
 import BaseApiIntegration from "./pages/baseshop/BaseApiIntegration.vue";
 import ShiptLogBaseImpPage from "./pages/baseshop/ShiptBaseImpPage.vue";

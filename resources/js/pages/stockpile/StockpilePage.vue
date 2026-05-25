@@ -1,5 +1,5 @@
 <script>
-import MessageArea from "../component/MessageArea.vue";
+import MessageArea from "../component/msg/MessageArea.vue";
 import Loading from "vue-loading-overlay";
 import axios from "axios";
 import ListPagination from "../component/pagination/ListPagination.vue";

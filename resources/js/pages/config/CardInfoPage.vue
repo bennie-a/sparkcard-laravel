@@ -115,7 +115,7 @@
 </template>
 <script>
 import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/MessageArea.vue";
+import MessageArea from "../component/msg/MessageArea.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import axios from "axios";
 import Loading from "vue-loading-overlay";
