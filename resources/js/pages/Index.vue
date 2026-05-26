@@ -14,6 +14,9 @@
     import datePicker from "./component/SCDatePicker.vue";
     import ListPagination from "./component/pagination/ListPagination.vue";
     import { usePagenate } from "./component/pagination/UsePaginate";
+    import {MsgStore} from "./component/msg/MsgStore";
+
+    const msgStore = MsgStore();
 
     // リアクティブデータの定義
     const selectedSet = ref("");
@@ -59,16 +62,13 @@
 
     const search = async () => {
         resetPage();
-        errMsgs.value = "";
+        msgStore.clear();
         if (name.value == "" && selectedSet.value == "") {
-            errMsgs.value = 'カード名かセット略称のどちらかを入力してください。';
+            msgStore.error('カード名かセット略称のどちらかを入力してください。');
             return;
         }
 
         isLoading.value = true;
-        store.dispatch("message/clear");
-        store.dispatch("clearCards");
-        store.dispatch("clearMessage");
         result.value = [];
         resultCount.value = 0;
 
@@ -91,16 +91,16 @@
             } catch (e) {
                 let data = e.response.data;
                 console.log(data);
-                store.dispatch("message/error", data.detail);
+                msgStore.error(data.detail);
             } finally {
                 isLoading.value = false;
             }
         };
 
     const regist = async () => {
-        store.dispatch("setLoad", true);
-        store.dispatch("message/clear");
-        store.dispatch("clearMessage");
+        msgStore.clear();
+        loading.value = true;
+
         const card = result.value;
         const filtered = card.filter((c) => c.stock != null && c.stock > 0);
 
@@ -127,14 +127,14 @@
                 }
             })
             );
-            store.dispatch("setSuccessMessage", "登録が完了しました。");
+            msgStore.success("登録が完了しました。");
             } catch ({ response }) {
                 const data = response.data;
                 const msg = `ステータスコード: ${response.status} ${data.message}`;
                 console.error(msg);
-                store.dispatch("message/error", msg);
+                msgStore.error(msg);
             } finally {
-                store.dispatch("setLoad", false);
+                loading.value = false;
             }
         };
 

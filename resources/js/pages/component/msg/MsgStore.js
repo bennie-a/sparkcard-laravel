@@ -6,7 +6,8 @@ export const MsgStore = defineStore('message', {
     state:() => ({
         visible:false,
         type:'success',
-        message:''
+        message:'',
+        errMsgs:[]
     }),
 
     actions: {
@@ -18,13 +19,17 @@ export const MsgStore = defineStore('message', {
 
         error(message) {
             this.type = 'error'
-            this.message = message
+            if (!Array.isArray(message)) {
+                this.errMsgs = [message]
+            } else {
+                this.errMsgs = message
+            }
             this.visible = true
         },
 
         warning(message) {
             this.type = 'warning'
-            this.message = message
+            this.errMsgs = [message]
             this.visible = true
         },
 
@@ -37,6 +42,7 @@ export const MsgStore = defineStore('message', {
         clear() {
             this.visible = false
             this.message = ''
+            this.errMsgs = []
         }
     }
 })
