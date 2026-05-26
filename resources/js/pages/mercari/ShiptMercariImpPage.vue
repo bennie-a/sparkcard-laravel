@@ -26,7 +26,6 @@
      */
     const post = async function() {
         isLoading.value = true;
-        piniaMsg.reset();
         await Promise.all(result.value.map(async (r) => {
             const formatShiptDate = shiptDate.value.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit",
             day: "2-digit"})
@@ -70,7 +69,6 @@
         hasResult.value = false;
         isLoading.value = true;
         result.value = [];
-        piniaMsg.reset();
         const formData = new FormData();
         formData.append('file', file);
 
@@ -94,11 +92,11 @@
 </script>
 
 <template>
-    <div id="upload_form" class="ui form grid segment">
-        <div class="seven wide column">
+    <v-form rounded class="form_sheet pa-4">
+        <div class="w-50">
             <FileUpload type="csv" @action="uploadFile"/>
         </div>
-    </div>
+    </v-form>
     <div class="mt-1 ui grid">
         <div class="ui form" v-if="hasResult">
                 <div class="two fields">
