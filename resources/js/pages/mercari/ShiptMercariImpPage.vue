@@ -5,7 +5,6 @@
     import Loading from "vue-loading-overlay";
     import axios from 'axios';
     import condition from "../component/tag/ConditionTag.vue";
-    import pglist from "../component/PgList.vue";
     import cardlayout from "../component/CardLayout.vue";
     import ModalButton from '../component/modal/ModalButton.vue';
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
@@ -20,12 +19,7 @@
     const error = reactive([]);
     const hasError = ref(false);
     const hasResult = ref(false);
-    const piniaMsg = piniaMsgStore();
     const shiptDate = ref(new Date());
-
-    onMounted(() => {
-        piniaMsg.reset();
-    });
 
     /**
      * インポート実行
@@ -100,15 +94,6 @@
 </script>
 
 <template>
-    <PiniaMsgForm></PiniaMsgForm>
-    <div class="ui negative message" v-if="hasError">
-        <div class="header">{{ error.value.detail }}</div>
-        <ul class="list">
-            <li v-for="row in error.value.rows" :key="row.row">
-                {{ row.row }}行目：{{ row.msg }}
-            </li>
-        </ul>
-    </div>
     <div id="upload_form" class="ui form grid segment">
         <div class="seven wide column">
             <FileUpload type="csv" @action="uploadFile"/>
@@ -183,7 +168,6 @@
             </table>
         </div>
         <div class="ui center aligned container">
-            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
         </div>
     </div>
     <loading

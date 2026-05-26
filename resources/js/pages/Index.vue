@@ -6,7 +6,6 @@
     import ModalButton from "./component/modal/ModalButton.vue";
     import foiltag from "./component/tag/FoilTag.vue";
     import ImageModal from "./component/modal/ImageModal.vue";
-    import scdatepicker from "./component/SCDatePicker.vue";
     import { AxiosTask } from "../component/AxiosTask";
     import vendorType from './component/VendorType.vue';
     import lang from './component/selection/Language.vue';
