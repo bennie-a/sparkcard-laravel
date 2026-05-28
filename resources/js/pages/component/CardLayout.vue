@@ -19,7 +19,7 @@ const showImage = (id) => {
 }
 </script>
 <template>
-        <h4 class="ui image header">
+        <!-- <h4 class="ui image header">
             <img :src="card.image_url" class="ui mini rounded image" @click="showImage(card.id)">
             <div class="content">
                 {{ card.name }}&#91;{{ lang }}&#93;
@@ -33,7 +33,9 @@ const showImage = (id) => {
                     <img v-bind:src="card.image_url" class="image" />
                 </div>
             </div>
-        </h4>
+        </h4> -->
+       <div class="text-title-small">{{ card.name }}&#91;{{ lang }}&#93;</div>
+        <div class="text-medium-emphasis">{{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}</div>
 </template>
 <style scoped>
 div.image img {

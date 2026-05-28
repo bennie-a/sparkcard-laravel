@@ -362,7 +362,7 @@
                 <v-row class="mt-3" gap="25">
                     <v-col cols="4">
                         <address id="buyer" class="pa-3 text-body-medium form_sheet">
-                            <span>〒{{ r.zip_code }}</span>
+                            <span>&#12306;{{ r.zip_code }}</span>
                             <p>{{ r.address }}</p>
                             <span class="text-title-medium font-weight-bold">{{ r.buyer_name }}様</span>
                         </address>
@@ -385,40 +385,33 @@
                         </div>
                     </v-col>
                 </v-row>
+                <v-table  class="mt-4 border-thin">
+                <thead>
+                    <tr class="bg-grey-lighten-3">
+                        <th width="10%" class="text-left">在庫ID</th>
+                        <th class="eight wide">カード情報</th>
+                        <th  width="10%" class="text-center">状態</th>
+                        <th  width="10%" class="text-center">枚数</th>
+                        <th width="10%" class="text-center">単価</th>
+                        <th width="10%" class="text-center">小計</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, idx) in r.items" :key="idx">
+                        <td  class="text-left">{{ item.stock.id }}</td>
+                        <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
+                        <td class="text-center"><condition :name="item.stock.condition"/></td>
+                        <td class="text-center">{{ item.shipment }}枚</td>
+                        <td class="text-center">&yen;{{ item.single_price }}</td>
+                        <td class="text-center">&yen;{{ item.total_price }}</td>
+                    </tr>
+                </tbody>
+                </v-table>
             </v-sheet>
         </article>
     </section>
     <div class="mt-2" v-if="hasResult">
         <div class="ui grid segment" v-for="(r, index) in result.value" :key="index" style="padding:1rem">
-            <div class="pl-0">
-                {{r.order_id}}
-            </div>
-            <div class="ui three column row">
-                <address id="buyer" class="column ui secondary segment">
-                    <p>〒{{ r.zip_code }}</p>
-                    <p >{{ r.address }}</p>
-                    <p class="name">{{ r.buyer_name }}様</p>
-                </address>
-                <div class="column">
-                    <dl id="price">
-                        <div class="list" v-if="r.coupon_discount_amount != 0">
-                            <dt>クーポン割引</dt>
-                            <dd>
-                                <span class="mdi mdi-minus"></span>
-                                ¥{{ r.coupon_discount_amount }}
-                            </dd>
-                        </div>
-                        <div class="list">
-                            <dt>送料</dt>
-                            <dd>¥{{ r.shipping_fee }}</dd>
-                        </div>
-                        <div class="list">
-                            <dt>合計金額</dt>
-                            <dd>¥{{ r.total_price }}</dd>
-                        </div>
-                    </dl>
-                </div>
-            </div>
             <table class="ui striped table">
                 <thead>
                     <tr>
