@@ -33,6 +33,7 @@
     "address": "東京都渋谷区道玄坂2-24-1",
     "shipping_fee": 185,
     "total_price": 1280,
+    "coupon_discount_amount": 0,
     "items": [
       {
         "stock": {
@@ -61,7 +62,6 @@
         "shipment": 3,
         "single_price": 250,
         "total_price": 1000,
-        "coupon_discount_amount": 0,
         "isRegistered": false
       },
       {
@@ -91,7 +91,6 @@
         "shipment": 1,
         "single_price": 280,
         "total_price": 280,
-        "coupon_discount_amount": 0,
         "isRegistered": false
       }
     ]
@@ -103,6 +102,7 @@
     "address": "大阪府大阪市北区梅田3-1-1",
     "shipping_fee": 230,
     "total_price": 2130,
+    "coupon_discount_amount": 50,
     "items": [
       {
         "stock": {
@@ -131,7 +131,6 @@
         "shipment": 2,
         "single_price": 350,
         "total_price": 1050,
-        "coupon_discount_amount": 50,
         "isRegistered": false
       },
       {
@@ -170,9 +169,10 @@
     "order_id": "order_C7vJdPw5Rq9XeK2MnLsA3B",
     "buyer_name": "中村 遥",
     "zip_code": "460-0008",
-    "address": "愛知県名古屋市中区栄3-16-1",
+    "address": "京都府京都市東山区三条通南裏二筋目白川筋西入二丁目南側南木之元町123-4",
     "shipping_fee": 120,
     "total_price": 760,
+    "coupon_discount_amount": 20,
     "items": [
       {
         "stock": {
@@ -201,7 +201,6 @@
         "shipment": 1,
         "single_price": 180,
         "total_price": 360,
-        "coupon_discount_amount": 0,
         "isRegistered": false
       },
       {
@@ -231,7 +230,6 @@
         "shipment": 1,
         "single_price": 200,
         "total_price": 200,
-        "coupon_discount_amount": 20,
         "isRegistered": false
       },
       {
@@ -261,7 +259,6 @@
         "shipment": 1,
         "single_price": 80,
         "total_price": 80,
-        "coupon_discount_amount": 0,
         "isRegistered": false
       }
     ]
@@ -362,32 +359,30 @@
         <article>
             <v-sheet class="pa-4 mt-4" border rounded v-for="r in currentList" :key="r.order_id">
                 <span class="text-body-small">{{ r.order_id }}</span>
-                <v-row class="mt-3">
-                    <v-col cols="5">
+                <v-row class="mt-3" gap="25">
+                    <v-col cols="4">
                         <address id="buyer" class="pa-3 text-body-medium form_sheet">
                             <span>〒{{ r.zip_code }}</span>
                             <p>{{ r.address }}</p>
                             <span class="text-title-medium font-weight-bold">{{ r.buyer_name }}様</span>
                         </address>
                     </v-col>
-                    <v-col>
-                        <dl id="price">
-                            <div class="list" v-if="r.coupon_discount_amount != 0">
-                                <dt>クーポン割引</dt>
-                                <dd>
-                                    <span class="mdi mdi-minus"></span>
-                                    ¥{{ r.coupon_discount_amount }}
-                                </dd>
-                            </div>
-                            <div class="list">
-                                <dt>送料</dt>
-                                <dd>¥{{ r.shipping_fee }}</dd>
-                            </div>
-                            <div class="list">
-                                <dt>合計金額</dt>
-                                <dd>¥{{ r.total_price }}</dd>
-                            </div>
-                        </dl>
+                    <v-col id="price" class="text-body-medium" cols="2">
+                        <div  class="d-flex justify-space-between mb-1">
+                            <span class="entry">送料</span>
+                            <span>&yen;{{ r.shipping_fee }}</span>
+                        </div>
+                        <div class="d-flex justify-space-between mb-1">
+                            <span class="entry">クーポン割引</span>
+                                <span>
+                                    &yen;{{ r.coupon_discount_amount }}
+                                </span>
+                        </div>
+                           <v-divider  :thickness="1" class="border-opacity-50 my-2"  variant="dashed"></v-divider>
+                        <div class="d-flex justify-space-between mb-1">
+                            <span>合計金額</span>
+                            <span>&yen;{{ r.total_price }}</span>
+                        </div>
                     </v-col>
                 </v-row>
             </v-sheet>
@@ -457,28 +452,8 @@
 </template>
 
 <style scoped>
-.ui.grid > table {
-    padding: 0;
-}
 
-#upload_form {
-    padding: 1rem;
-}
-
-#buyer > p {
-    line-height: 1rem;
-}
-
-#price .list {
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-#price .list dt {
-    text-align: right;
-    width: 30%;
-}
-
-#price .list dt::after {
+#price .entry::after {
     content: ":";
 }
 
