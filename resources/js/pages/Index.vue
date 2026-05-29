@@ -1,7 +1,7 @@
 <script setup>
     import { ref, reactive, computed, onMounted, watch } from "vue";
     import axios from "axios";
-    import loading from "vue-loading-overlay";
+    import Loading from "vue-loading-overlay";
     import MessageArea from "./component/msg/MessageArea.vue";;
     import ModalButton from "./component/modal/ModalButton.vue";
     import foiltag from "./component/tag/FoilTag.vue";
@@ -28,7 +28,7 @@
     const vendorNum = ref(1);
     const vendor = ref("");
     const currentList = reactive([]);
-    let result = reactive([]);
+    let result = ref([]);
     const resultCount = ref(0);
     const errMsgs = ref("");
     const {
@@ -98,7 +98,7 @@
 
     const regist = async () => {
         msgStore.clear();
-        loading.value = true;
+        isLoading.value = true;
 
         const card = result.value;
         const filtered = card.filter((c) => c.stock != null && c.stock > 0);
@@ -133,7 +133,7 @@
                 console.error(msg);
                 msgStore.error(msg);
             } finally {
-                loading.value = false;
+                isLoading.value = false;
             }
         };
 
@@ -256,7 +256,7 @@
             </div>
         </section>
     </article>
-    <loading
+    <Loading
      :active="isLoading"
      :can-cancel="false" :is-full-page="true" />
 </template>
