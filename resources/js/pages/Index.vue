@@ -211,9 +211,10 @@
                             <span  class="text-grey-darken-1">#{{card.id}}</span>
                             <span class="ml-2"><foiltag :is-foil="card.foil.is_foil" :foiltype="card.foil.name" /></span>
                         </div>
-                        <image-modal :url="card.image_url" />
+                        <image-modal :url="card.image_url" :isCover="true" />
                         <v-card-title  class="text-title-medium text-wrap mb-0 pb-0">
                             {{ card.name }}
+                            <div v-if="card.promotype.id != '1'" class="text-label-large">&#8810;{{card.promotype.name}}&#8811;</div>
                         </v-card-title>
                         <v-card-subtitle class="text-wrap">
                             {{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}

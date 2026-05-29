@@ -213,7 +213,7 @@
               "attr": "MM3"
             },
             "number": "24",
-            "image_url": "https://cards.scryfall.io/png/front/e/8/e8f5d7bb-0c9f-4d9a-9c55-6c0a9cbddf84.png",
+            "image_url": "https://cards.scryfall.io/large/front/0/6/061df0a2-1967-4ddd-84e3-3ecf3af98f6b.jpg?1593812878",
             "foil": {
               "is_foil": false,
               "name": ""

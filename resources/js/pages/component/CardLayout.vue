@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps } from 'vue';
 import foiltag from "../component/tag/FoilTag.vue";
+import ImageModal from "../component/modal/ImageModal.vue";
 
 const card = defineModel("card", {
                 type:Object,
@@ -34,8 +35,19 @@ const showImage = (id) => {
                 </div>
             </div>
         </h4> -->
-       <div class="text-title-small">{{ card.name }}&#91;{{ lang }}&#93;</div>
-        <div class="text-medium-emphasis">{{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}</div>
+        <v-row gap="10" class="align-center">
+            <v-col cols="1">
+                <ImageModal :url="card.image_url"  :height="40"/>
+            </v-col>
+            <v-col>
+                <div class="text-title-medium">
+                    {{ card.name }}&#91;{{ lang }}&#93;
+                    <span v-if="card.promotype.id != '1'" class="text-label-medium">&#8810;{{card.promotype.name}}&#8811;</span>
+                    <foiltag :isFoil="card.foil.is_foil" :foiltype="card.foil.name"/>
+                </div>
+                 <span class="text-medium-emphasis">{{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}</span>
+            </v-col>
+        </v-row>
 </template>
 <style scoped>
 div.image img {
