@@ -10,7 +10,7 @@
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import scdatepicker from "../component/SCDatePicker.vue";
     import ListPagination from "@/pages/component/pagination/ListPagination.vue";
-    // import { usePagenate } from "./component/pagination/UsePaginate";
+    import { usePagenate } from "@/pages/component/pagination/UsePaginate";
     // import {MsgStore} from "./component/msg/MsgStore";
 
     // const msgStore = MsgStore();
@@ -263,7 +263,221 @@
       }
     ]
   }
+  ,
+{
+  "order_id": "order_D2rTxQm8Wk5NpV9HsYcE4F",
+  "buyer_name": "山田 恒一",
+  "zip_code": "812-0012",
+  "address": "福岡県福岡市博多区博多駅中央街1-1",
+  "shipping_fee": 185,
+  "total_price": 1640,
+  "coupon_discount_amount": 100,
+  "items": [
+    {
+      "stock": {
+        "id": 7421,
+        "card": {
+          "name": "思案",
+          "exp": {
+            "name": "マジック2012",
+            "attr": "M12"
+          },
+          "number": "72",
+          "image_url": "https://cards.scryfall.io/large/front/d/1/d1a43cf7-7aa2-41be-8bca-4a54460b2fa9.jpg?1562660726",
+          "foil": {
+            "is_foil": false,
+            "name": ""
+          },
+          "promotype": {
+            "id": 1,
+            "name": ""
+          }
+        },
+        "condition": "NM",
+        "lang": "JP",
+        "quantity": 4
+      },
+      "shipment": 2,
+      "single_price": 180,
+      "total_price": 720,
+      "isRegistered": false
+    },
+    {
+      "stock": {
+        "id": 7422,
+        "card": {
+          "name": "定業",
+          "exp": {
+            "name": "マジック2011",
+            "attr": "M11"
+          },
+          "number": "70",
+          "image_url": "https://cards.scryfall.io/large/front/8/7/8784170b-8667-406c-9689-e6dcd36cf4e4.jpg?1562466830",
+          "foil": {
+            "is_foil": true,
+            "name": "Foil"
+          },
+          "promotype": {
+            "id": 1,
+            "name": ""
+          }
+        },
+        "condition": "EX+",
+        "lang": "EN",
+        "quantity": 1
+      },
+      "shipment": 1,
+      "single_price": 835,
+      "total_price": 835,
+      "isRegistered": true
+    }
+  ]
+},
+{
+  "order_id": "order_E8kLpVn3Xc6QrT1MwZdB5G",
+  "buyer_name": "小林 真由",
+  "zip_code": "980-0021",
+  "address": "宮城県仙台市青葉区中央1-10-10",
+  "shipping_fee": 120,
+  "total_price": 920,
+  "coupon_discount_amount": 0,
+  "items": [
+    {
+      "stock": {
+        "id": 8534,
+        "card": {
+          "name": "熊野と渇苛斬の対峙",
+          "exp": {
+            "name": "神河：輝ける世界",
+            "attr": "NEO"
+          },
+          "number": "152",
+          "image_url": "https://cards.scryfall.io/large/front/f/7/f7d02cb0-3d31-49c2-a95b-98f5b6e27c5c.jpg",
+          "foil": {
+            "is_foil": false,
+            "name": ""
+          },
+          "promotype": {
+            "id": 1,
+            "name": ""
+          }
+        },
+        "condition": "NM-",
+        "lang": "JP",
+        "quantity": 2
+      },
+      "shipment": 1,
+      "single_price": 240,
+      "total_price": 480,
+      "isRegistered": false
+    },
+    {
+      "stock": {
+        "id": 8535,
+        "card": {
+          "name": "ショック",
+          "exp": {
+            "name": "基本セット2021",
+            "attr": "M21"
+          },
+          "number": "159",
+          "image_url": "https://cards.scryfall.io/large/front/5/9/59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9.jpg?1641847379",
+          "foil": {
+            "is_foil": false,
+            "name": ""
+          },
+          "promotype": {
+            "id": 1,
+            "name": ""
+          }
+        },
+        "condition": "EX",
+        "lang": "EN",
+        "quantity": 4
+      },
+      "shipment": 2,
+      "single_price": 80,
+      "total_price": 320,
+      "isRegistered": false
+    }
+  ]
+},
+{
+  "order_id": "order_F5yMnKq1Zv8HtR4LpXsC7D",
+  "buyer_name": "井上 恒一",
+  "zip_code": "060-0005",
+  "address": "北海道札幌市中央区北五条西2-5",
+  "shipping_fee": 230,
+  "total_price": 3180,
+  "coupon_discount_amount": 200,
+  "items": [
+    {
+      "stock": {
+        "id": 9648,
+        "card": {
+          "name": "否定の力",
+          "exp": {
+            "name": "モダンホライゾン",
+            "attr": "MH1"
+          },
+          "number": "52",
+          "image_url": "https://cards.scryfall.io/large/front/6/4/64263968-0ebb-4cb7-8e4d-2c397b591457.jpg?1645877524",
+          "foil": {
+            "is_foil": false,
+            "name": ""
+          },
+          "promotype": {
+            "id": 1,
+            "name": ""
+          }
+        },
+        "condition": "EX+",
+        "lang": "JP",
+        "quantity": 1
+      },
+      "shipment": 1,
+      "single_price": 2480,
+      "total_price": 2480,
+      "isRegistered": true
+    },
+    {
+      "stock": {
+        "id": 9649,
+        "card": {
+          "name": "ミシュラのガラクタ",
+          "exp": {
+            "name": "ダブルマスターズ",
+            "attr": "2XM"
+          },
+          "number": "274",
+          "image_url": "https://cards.scryfall.io/large/front/4/5/45bbbf9b-8fee-4c32-a513-02dac6ac8a39.jpg?1669300401",
+          "foil": {
+            "is_foil": true,
+            "name": "Foil"
+          },
+          "promotype": {
+            "id": 1,
+            "name": ""
+          }
+        },
+        "condition": "NM",
+        "lang": "EN",
+        "quantity": 1
+      },
+      "shipment": 1,
+      "single_price": 670,
+      "total_price": 670,
+      "isRegistered": false
+    }
+  ]
+}
 ]);
+
+    const {
+        page, pageCount, paginatedList, resetPage
+    } = usePagenate(currentList, 4);
+
+
 
     /**
      * インポート実行
@@ -308,6 +522,7 @@
     }
 
     const uploadFile = async(file) => {
+        resetPage();
         hasError.value = false;
         error.value = [];
         hasResult.value = false;
@@ -357,7 +572,7 @@
                 </v-row>
         </v-form>
         <article>
-            <v-sheet class="pa-4 mt-4" border rounded v-for="r in currentList" :key="r.order_id">
+            <v-sheet class="pa-4 mt-4" border rounded v-for="r in paginatedList" :key="r.order_id">
                 <span class="text-body-small">{{ r.order_id }}</span>
                 <v-row class="mt-3" gap="25">
                     <v-col cols="4">
@@ -409,35 +624,8 @@
                 </v-table>
             </v-sheet>
         </article>
+        <ListPagination v-model="page" :length="pageCount"></ListPagination> <!-- ページネーションコンポーネント -->
     </section>
-    <div class="mt-2" v-if="hasResult">
-        <div class="ui grid segment" v-for="(r, index) in result.value" :key="index" style="padding:1rem">
-            <table class="ui striped table">
-                <thead>
-                    <tr>
-                        <th class="one wide center aligned">在庫ID</th>
-                        <th class="eight wide">カード情報</th>
-                        <th class="center aligned">状態</th>
-                        <th class="center aligned">枚数</th>
-                        <th class="center aligned">単価</th>
-                        <th class="center aligned">小計</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, idx) in r.items" :key="idx">
-                        <td class="center aligned">{{ item.stock.id }}</td>
-                        <td><cardlayout v-model:card="item.stock.card" v-model:lang="item.stock.lang"/></td>
-                        <td class="one wide center aligned"><condition :name="item.stock.condition"/></td>
-                        <td class="center aligned">{{ item.shipment }}枚</td>
-                        <td class="center aligned">¥{{ item.single_price }}</td>
-                        <td class="center aligned">¥{{ item.total_price }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="ui center aligned container">
-        </div>
-    </div>
     <loading
     :active="isLoading"
          :can-cancel="false" :is-full-page="true" />
