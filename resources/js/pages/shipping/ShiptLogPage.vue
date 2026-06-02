@@ -25,6 +25,7 @@ const {
 
 const fetch =  async () => {
     resetPage();
+    msgStore.clear();
     isLoading.value = true;
     result.value = [];
     resultCount.value = 0;

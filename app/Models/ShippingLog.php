@@ -43,7 +43,7 @@ class ShippingLog extends Model
                                                 ->where("slog.order_id", $orderId)->get();
     }
 
-    public static function fetch($details) {
+    public static function fetch(array $details) {
         $buyer = $details[SC::BUYER];
         $shiptDate = null;
         if (MtgJsonUtil::hasKey(SC::SHIPPING_DATE, $details)) {
@@ -58,8 +58,9 @@ class ShippingLog extends Model
         if ($shiptDate != null) {
             $query = $query->whereDate(SC::SHIPPING_DATE, $shiptDate);
         }
-        return $query->orderBy('shipping_date', 'desc')
+        $result = $query->orderBy('shipping_date', 'desc')
             ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->get();
+        return $result;
     }
 
     public function getShippingDateAttribute($value) {

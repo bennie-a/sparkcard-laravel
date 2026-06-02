@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Shipt;
 
+use App\Exceptions\api\NotFoundException;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
 use App\Exceptions\api\Shipt\ShiptNotionException;
 use App\Facades\CardBoard;
@@ -137,7 +138,11 @@ class ShiptLogService extends AbstractCsvService {
     }
 
     public function fetch(array $details) {
-        return ShippingLog::fetch($details);
+        $result = ShippingLog::fetch($details);
+        if ($result->isEmpty()) {
+            throw new NotFoundException();
+        }
+        return $result;
     }
 
     /**
