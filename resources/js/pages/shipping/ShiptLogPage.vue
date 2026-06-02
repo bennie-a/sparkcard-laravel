@@ -2,24 +2,32 @@
 import shop from "../component/tag/ShopTag.vue";
 import scdatepicker from "../component/SCDatePicker.vue";
 import { useRouter } from "vue-router";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted } from "vue";
 import axios from 'axios';
 import Loading from "vue-loading-overlay";
-import pglist from "../component/PgList.vue";
+import ListPagination from "@/pages/component/pagination/ListPagination.vue";
+import { usePagenate } from "@/pages/component/pagination/UsePaginate";
+import {MsgStore} from "@/pages/component/msg/MsgStore";
 
 const router = useRouter();
+
 const buyer = ref("");
-let result = reactive([]);
+const result = ref([]);
 const isLoading = ref(false);
 const today = new Date();
 const shippingStartDate = ref(new Date());
-const currentList = reactive([]);
 const resultCount = ref(0);
+const msgStore = MsgStore();
 
-const pglistRef = ref();
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePagenate(result, 10);
 
 const fetch =  async () => {
+    resetPage();
     isLoading.value = true;
+    result.value = [];
+    resultCount.value = 0;
     const query = {
                 params: {
                     "buyer_name": buyer.value,
@@ -32,7 +40,9 @@ const fetch =  async () => {
                                 resultCount.value = result.value.length;
                             })
                             .catch((e) => {
-                                console.error(e.statusCode);
+                                const detail = e.response.data.detail;
+                                console.log(e.response.data);
+                                msgStore.error(detail);
                             })
                             .finally(() => {
                                 isLoading.value = false;
@@ -75,7 +85,7 @@ const toDateString = (date) => {
                         <v-text-field v-model="buyer"  label="購入者名" clearable></v-text-field>
                     </v-col>
                     <v-col cols="3">
-                        <scdatepicker v-model="shippingStartDate" datelabel="発送日"></scdatepicker>
+                        <scdatepicker v-model:selectedDate="shippingStartDate" datelabel="発送日"></scdatepicker>
                     </v-col>
                     <v-col cols="2" class="text-right">
                         <v-btn
@@ -92,8 +102,8 @@ const toDateString = (date) => {
         <v-table class="mt-4 border-thin">
             <thead>
                 <tr class="bg-grey-lighten-3 text-bold">
-                    <th width="10%" class="text-center">発送日</th>
-                    <th width="10%">プラットフォーム</th>
+                    <th width="13%" class="text-center">発送日</th>
+                    <th width="15%">プラットフォーム</th>
                     <th>購入者情報</th>
                     <th width="10%" class="text-center">合計金額</th>
                     <th width="10%" class="text-center">商品数</th>
@@ -101,7 +111,7 @@ const toDateString = (date) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(r, index) in currentList.value" :key="index">
+                <tr v-for="(r, index) in paginatedList" :key="index">
                     <td class="text-center">{{ r.shipping_date }}</td>
                     <td>
                         <shop :orderId="r.order_id"/>
@@ -122,7 +132,7 @@ const toDateString = (date) => {
                 <tr>
                     <th colspan="10">
                         <div class="right aligned">
-                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
+                            <ListPagination v-model="page" :length="pageCount"/>
                         </div>
                     </th>
                 </tr>

@@ -6,6 +6,9 @@ export function usePagenate(items, itemPerPage = 12) {
 
     // 総ページ数を取得する。
     const pageCount = computed(() =>{
+        if (items.value.length == 0) {
+            return 0;
+        }
         return Math.ceil(items.value.length / itemPerPage);
     });
 
