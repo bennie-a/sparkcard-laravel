@@ -152,8 +152,8 @@ const routes = [
         path: "/shipping/",
         component:ShiptLogPage,
         meta:{
-            title:"出荷情報一覧",
-            description:"出荷情報を一覧表示します。",
+            title:"注文情報一覧",
+            description:"注文情報を一覧表示します。",
         },
     },
     {
@@ -166,7 +166,7 @@ const routes = [
             urls: [
                 {
                     url:"/shipping/",
-                    title:"出荷情報一覧"
+                    title:"注文情報一覧"
                 },
             ]
         }

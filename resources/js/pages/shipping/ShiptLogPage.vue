@@ -69,64 +69,52 @@ const toDateString = (date) => {
 }
 </script>
 <template>
-        <article class="mt-1 ui form segment">
-        <div class="two fields">
-            <div class="four wide field">
-                <label>購入者名</label>
-                <input v-model="buyer" type="text">
-            </div>
-            <div class="three wide field">
-                <label for="">発送日(開始)</label>
-                <div>
-                    <scdatepicker v-model="shippingStartDate"></scdatepicker>
-                </div>
-            </div>
-            <!-- <div class="three wide field">
-                <label for="">発送日(終了)</label>
-                <div>
-                    <scdatepicker :selectedDate="shippingEndDate" @update="handleEndDate"/>
-                </div>
-            </div> -->
-        </div>
-        <button
-            id="search"
-                class="ui button teal"
-                @click="fetch"
-            >
-            検索
-            </button>
-    </article>
-    <article class="mt-2" v-show="resultCount != 0">
-        <h2 class="ui medium dividing header">
+            <v-form class="rounded form_sheet pa-4">
+                <v-row gap="15">
+                    <v-col cols="3">
+                        <v-text-field v-model="buyer"  label="購入者名" clearable></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                        <scdatepicker v-model="shippingStartDate" datelabel="発送日"></scdatepicker>
+                    </v-col>
+                    <v-col cols="2" class="text-right">
+                        <v-btn
+                            id="search" color="teal-lighten-1" @click="fetch">
+                            検索する
+                            </v-btn>
+                    </v-col>
+                </v-row>
+            </v-form>
+    <article class="mt-10" v-show="resultCount > 0">
+        <h2  class="text-title-medium">
             件数：{{resultCount}}件
         </h2>
-        <table class="ui striped table">
+        <v-table class="mt-4 border-thin">
             <thead>
-                <tr>
-                    <th class="one wide">注文ID</th>
-                    <th class="two wide center aligned">販売ショップ</th>
-                    <th class="five wide">購入者名</th>
-                    <th class="">合計金額</th>
-                    <th class="">発送日</th>
-                    <th class="one wide">商品数</th>
-                    <th class="one wide"></th>
+                <tr class="bg-grey-lighten-3 text-bold">
+                    <th width="10%" class="text-center">発送日</th>
+                    <th width="10%">プラットフォーム</th>
+                    <th>購入者情報</th>
+                    <th width="10%" class="text-center">合計金額</th>
+                    <th width="10%" class="text-center">商品数</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(r, index) in currentList.value" :key="index">
-                    <td>{{r.order_id}}</td>
-                    <td class=" center aligned">
+                    <td class="text-center">{{ r.shipping_date }}</td>
+                    <td>
                         <shop :orderId="r.order_id"/>
                     </td>
-                    <td><h3 class="ui header">{{ r.name }}
-                        <span class="sub header">〒{{ r.zip_code }} {{ r.address }}</span>
-                    </h3>
+                    <td>
+                        <h3 class="mb-0 mt-0 text-title-medium">{{ r.name }}様
+                        </h3>
+                        <span class="text-medium-emphasis">〒{{ r.zip_code }} {{ r.address }}</span>
                     </td>
-                    <td>¥{{ r.total_price }}</td>
-                    <td :class="[isToday(r.shipping_date) ? 'positive': '', isToday(r.shipping_date)?'tobold':'']">{{ r.shipping_date }}</td>
-                    <td class="one wide center aligned">{{r.item_count}}点</td>
-                    <td class="center aligned selectable">
-                        <a @click="toDssPage(r.order_id)"><v-icon icon="mdi-chevron-double-right"></v-icon></a>
+                    <td class="text-center">&yen;{{ r.total_price }}</td>
+                    <td class="text-center">{{r.item_count}}点</td>
+                    <td class="text-right">
+                        <v-btn icon="mdi-chevron-double-right" color="teal-lighten-1" variant="text" @click="toDssPage(r.order_id)"></v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -139,7 +127,7 @@ const toDateString = (date) => {
                     </th>
                 </tr>
             </tfoot>
-        </table>
+        </v-table>
     </article>
     <loading
          :active="isLoading"

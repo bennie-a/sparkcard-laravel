@@ -102,7 +102,7 @@
     <section class="mt-10" v-if="resultCount > 0">
         <h2 class="text-title-medium"
         >
-           検索結果： {{ resultCount }}件
+           件数： {{ resultCount }}件
         </h2>
         <v-form class="form_sheet pt-6 pl-6">
                 <v-row>
@@ -151,7 +151,7 @@
                         <th  width="10%" class="text-center">状態</th>
                         <th  width="10%" class="text-center">枚数</th>
                         <th width="10%" class="text-center">単価</th>
-                        <th width="10%" class="text-center">小計</th>
+                            <th width="10%" class="text-center">小計</th>
                         <th class="text-center">登録済み</th>
                     </tr>
                 </thead>
