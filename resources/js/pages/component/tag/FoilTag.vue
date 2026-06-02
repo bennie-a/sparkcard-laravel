@@ -5,30 +5,15 @@
         {{ foiltype }}
         </v-chip>
 </template>
-<script>
-export default {
-    props: {
-        isFoil: { type: Boolean },
-        foiltype: { type: String, default: "Foil" },
-    },
-    computed: {
-        foilClass: function () {
-            return (name) => {
-                if (name == "Foil") {
-                    return "bg-yellow-darken-2";
-                }
-                return "bg-pink-darken-2";
-            };
-        },
-    },
+<script setup>
+defineProps({
+    isFoil: { type: Boolean },
+    foiltype: { type: String, default: "Foil" },
+});
+const foilClass = (name) => {
+    if (name == "Foil") {
+        return "bg-yellow-darken-2";
+    }
+    return "bg-pink-darken-2";
 };
 </script>
-<style>
-.topaz {
-    background-color: #e9bc00 !important;
-}
-.ruby {
-    background-color: #c70067 !important;
-    color: white !important;
-}
-</style>
