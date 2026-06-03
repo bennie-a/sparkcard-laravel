@@ -160,8 +160,11 @@ const routes = [
         path:"/shipping/detail/:order_id",
         name:'ShiptLogDss',
         component:ShiptLogDssPage,
+        beforeEnter:(to, from, next) => {
+            to.meta.title = to.params.order_id;
+            next();
+        },
         meta:{
-            title:"出荷詳細",
             description:"",
             urls: [
                 {

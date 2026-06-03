@@ -60,7 +60,7 @@
                 });
             }));
         isLoading.value = false;
-        piniaMsg.setSuccess('インポートしました。');
+        msgStore.success('インポートが完了しました。');
     };
 
     const uploadFile = async(file) => {
@@ -78,7 +78,6 @@
             }).then((response) => {
                 result.value = response.data;
                 resultCount.value = result.value.length;
-                msgStore.success('インポートが完了しました。');
             }).catch((e) => {
                 let error = e.response.data;
                 let errRows = error.rows.map(function(r) {
@@ -151,7 +150,7 @@
                         <th  width="10%" class="text-center">状態</th>
                         <th  width="10%" class="text-center">枚数</th>
                         <th width="10%" class="text-center">単価</th>
-                            <th width="10%" class="text-center">小計</th>
+                        <th width="10%" class="text-center">小計</th>
                         <th class="text-center">登録済み</th>
                     </tr>
                 </thead>

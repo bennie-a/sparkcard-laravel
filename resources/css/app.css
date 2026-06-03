@@ -23,6 +23,10 @@ body {
     font-size: 1.1rem;
 }
 
+.v-table.item_list th {
+    background-color: #EEEEEE;
+}
+
 address > p {
     margin: 0!important;
 }

@@ -55,10 +55,6 @@ onMounted(async() => {
                 <h2 class="ui medium header">販売ショップ</h2>
                 <shop :orderId="orderId"/>
             </div>
-            <div class="four wide column">
-                <h2 class="ui medium header">注文番号</h2>
-                <p>{{ detail.order_id }}</p>
-            </div>
             <div class="two wide column">
                 <h2 class="ui medium header">発送日</h2>
                 <p>{{ detail.shipping_date }}</p>
@@ -69,22 +65,28 @@ onMounted(async() => {
                         <p>{{detail.zip_code}}<br>{{ detail.address }}</p>
                         <p>{{ detail.buyer_name }}様</p>
                     </address>
-                    <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
-                        <span class="mdi mdi-clipboard"></span>コピー
-                    </button>
-                    <div v-if="isCopied" class="ui left pointing teal label">コピーしました</div>
+                    <v-tooltip  content-class="copied-tooltip" :open-on-hover="false" v-model="isCopied" >
+                        <template v-slot:activator="{ props }">
+                            <v-btn v-bind="props" color="teal-lighten-1" variant="outlined" prepend-icon="mdi-clipboard" @click="copyAddress">
+                                コピー
+                            </v-btn>
+                        </template>
+                        <span>コピーしました</span>
+                    </v-tooltip>
             </div>
         </div>
-        <h2 class="ui medium header">商品一覧</h2>
-        <table class="ui table stripe">
+    </article>
+    <article>
+        <h2 class="text-title-medium">商品一覧</h2>
+        <v-table  class="item_list mt-4 border-thin">
             <thead>
                 <tr>
-                    <th class="two wide">在庫ID</th>
-                    <th>カード</th>
-                    <th class="center aligned">状態</th>
-                    <th class="center aligned">枚数</th>
-                    <th class="center aligned">単価</th>
-                    <th class="center aligned">小計</th>
+                    <th>在庫ID</th>
+                    <th>カード情報</th>
+                    <th class="text-center">状態</th>
+                    <th class="text-center">枚数</th>
+                    <th class="text-center">単価</th>
+                    <th class="text-center">小計</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,15 +95,15 @@ onMounted(async() => {
                 <td>
                     <cardlayout v-model:card="detail.card[index]" v-model:lang="detail.card[index].lang"></cardlayout>
                 </td>
-                <td class="center aligned"><condition :name="i.condition"/></td>
-                <td class="center aligned">{{i.quantity}}枚</td>
-                <td class="center aligned">¥{{ i.single_price }}</td>
-                <td class="center aligned">¥{{i.subtotal_price}}</td>
+                <td class="text-center"><condition :name="i.condition"/></td>
+                <td class="text-center">{{i.quantity}}枚</td>
+                <td class="text-center">&yen;{{ i.single_price }}</td>
+                <td class="text-center">&yen;{{i.subtotal_price}}</td>
             </tr>
             </tbody>
-        </table>
-        <div class="text-center">
-            <button class="ui gray basic button" @click="toList">一覧に戻る</button>
+        </v-table>
+        <div class="text-center mt-6">
+            <v-btn variant="outlined" color="grey-darken-1" @click="toList">一覧に戻る</v-btn>
         </div>
         <loading
          :active="isLoading"
@@ -109,16 +111,7 @@ onMounted(async() => {
     </article>
 </template>
 <style>
-address {
-    font-style: normal;
-}
-address > p {
-    margin-bottom: 0.5em!important;
-}
-
-#copy:hover {
-    color: white!important;
-    background: #00B2AA!important;
-    border: 0!important;
+.copied-tooltip {
+  background-color: #26A69A!important;
 }
 </style>
