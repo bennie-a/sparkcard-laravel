@@ -151,7 +151,6 @@
                         <th  width="10%" class="text-center">枚数</th>
                         <th width="10%" class="text-center">単価</th>
                         <th width="10%" class="text-center">小計</th>
-                        <th class="text-center">登録済み</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -162,10 +161,6 @@
                         <td class="text-center">{{ item.shipment }}枚</td>
                         <td class="text-center">&yen;{{ item.single_price }}</td>
                         <td class="text-center">&yen;{{ item.total_price }}</td>
-                        <td class="text-center">
-                            <v-icon v-if="item.isRegistered" color="green">mdi-check-circle</v-icon>
-                            <v-icon v-else color="red">mdi-close-circle</v-icon>
-                        </td>
                     </tr>
                 </tbody>
                 </v-table>

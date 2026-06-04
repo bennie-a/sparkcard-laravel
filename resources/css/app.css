@@ -27,7 +27,7 @@ body {
     background-color: #EEEEEE;
 }
 
-address > p {
+address > p,span {
     margin: 0!important;
     font-style: normal;
 }

@@ -3,11 +3,13 @@ import shop from '../component/tag/ShopTag.vue';
 import Loading from "vue-loading-overlay";
 import {useRoute, useRouter} from "vue-router";
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import condition from "../component/tag/ConditionTag.vue";
 import imagemodal from '../component/modal/ImageModal.vue';
 import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
+import { usePagenate } from "@/pages/component/pagination/UsePaginate";
+    import ListPagination from "@/pages/component/pagination/ListPagination.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -17,17 +19,24 @@ const isCopied = ref(false);
 const orderId = route.params.order_id;
 
 const detail = ref({});
+const cardList = computed(() => detail.value.card ?? []);
+
 // 出荷情報一覧に戻る
 const toList = () => {
         router.push("/shipping");
 }
 
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePagenate(cardList, 10);
+
 // 詳細情報を取得する。
 const getDetail = async () => {
     isLoading.value = true;
     await axios.get("/api/shipping/"+ orderId).
-        then((response) =>{
-            detail.value = response.data;
+    then((response) =>{
+        detail.value = response.data;
+        resetPage();
         })
         .catch()
         .finally(()=> {
@@ -104,17 +113,24 @@ onMounted(async() => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(i, index) in detail.card" :key="index">
-                <td>{{ i.id }}</td>
+                <tr v-for="item in paginatedList" :key="item.id">
+                <td>{{ item.id }}</td>
                 <td>
-                    <cardlayout v-model:card="detail.card[index]" v-model:lang="detail.card[index].lang"></cardlayout>
+                    <cardlayout :card="item" :lang="item.lang"></cardlayout>
                 </td>
-                <td class="text-center"><condition :name="i.condition"/></td>
-                <td class="text-center">{{i.quantity}}枚</td>
-                <td class="text-center">&yen;{{ i.single_price }}</td>
-                <td class="text-center">&yen;{{i.subtotal_price}}</td>
+                <td class="text-center"><condition :name="item.condition"/></td>
+                <td class="text-center">{{item.quantity}}枚</td>
+                <td class="text-center">&yen;{{ item.single_price }}</td>
+                <td class="text-center">&yen;{{item.subtotal_price}}</td>
             </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" class="text-center">
+                        <ListPagination v-model="page" :length="pageCount"></ListPagination>
+                    </td>
+                </tr>
+            </tfoot>
         </v-table>
         <div class="text-center mt-6">
             <v-btn variant="outlined" color="grey-darken-1" @click="toList">一覧に戻る</v-btn>
