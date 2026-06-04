@@ -50,30 +50,44 @@ onMounted(async() => {
 
 <template>
     <article>
+        <v-row gap="25">
+            <v-col cols="4">
+                <v-card variant="flat" color="#f5f5f5" class="mx-auto pb-2">
+                    <v-card-text>
+                        <address>
+                            <p>{{detail.zip_code}}</p>
+                            <p>{{ detail.address }}</p>
+                            <p class="text-title-large">{{ detail.buyer_name }}様</p>
+                        </address>
+                    </v-card-text>
+                    <v-card-actions class="pl-4">
+                        <v-tooltip  content-class="copied-tooltip" :open-on-hover="false" v-model="isCopied" >
+                            <template v-slot:activator="{ props }">
+                                <v-btn size="small" v-bind="props" color="teal-lighten-1" variant="outlined" prepend-icon="mdi-clipboard" @click="copyAddress">
+                                        コピー
+                                </v-btn>
+                            </template>
+                            <span>コピーしました</span>
+                        </v-tooltip>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+            <v-col cols="4">
+                <dl>
+                    <div class="mb-4">
+                        <dt class="text-title-medium">販売ショップ</dt>
+                        <dd class="mt-1 ml-0">
+                            <shop :orderId="orderId"/>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-title-medium">発送日</dt>
+                        <dd class="mt-1 ml-0">{{ detail.shipping_date }}</dd>
+                    </div>
+                </dl>
+            </v-col>
+        </v-row>
         <div class="ui  grid">
-            <div class="two wide column">
-                <h2 class="ui medium header">販売ショップ</h2>
-                <shop :orderId="orderId"/>
-            </div>
-            <div class="two wide column">
-                <h2 class="ui medium header">発送日</h2>
-                <p>{{ detail.shipping_date }}</p>
-            </div>
-            <div class="four wide column">
-                    <h2 class="ui medium header">購入者情報</h2>
-                    <address>
-                        <p>{{detail.zip_code}}<br>{{ detail.address }}</p>
-                        <p>{{ detail.buyer_name }}様</p>
-                    </address>
-                    <v-tooltip  content-class="copied-tooltip" :open-on-hover="false" v-model="isCopied" >
-                        <template v-slot:activator="{ props }">
-                            <v-btn v-bind="props" color="teal-lighten-1" variant="outlined" prepend-icon="mdi-clipboard" @click="copyAddress">
-                                コピー
-                            </v-btn>
-                        </template>
-                        <span>コピーしました</span>
-                    </v-tooltip>
-            </div>
         </div>
     </article>
     <article>
@@ -114,4 +128,6 @@ onMounted(async() => {
 .copied-tooltip {
   background-color: #26A69A!important;
 }
+
+
 </style>
