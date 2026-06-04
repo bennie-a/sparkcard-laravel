@@ -82,7 +82,7 @@ onMounted(async() => {
                 </v-card>
             </v-col>
             <v-col cols="4">
-                <dl>
+                <dl class="mt-0 mb-0">
                     <div class="mb-4">
                         <dt class="text-title-medium">販売ショップ</dt>
                         <dd class="mt-1 ml-0">
@@ -99,7 +99,7 @@ onMounted(async() => {
         <div class="ui  grid">
         </div>
     </article>
-    <article>
+    <article class="mt-8">
         <h2 class="text-title-medium">商品一覧</h2>
         <v-table  class="item_list mt-4 border-thin">
             <thead>
