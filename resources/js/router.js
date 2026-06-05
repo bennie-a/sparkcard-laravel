@@ -166,12 +166,7 @@ const routes = [
         },
         meta:{
             description:"",
-            urls: [
-                {
-                    url:"/shipping/",
-                    title:"注文情報一覧"
-                },
-            ]
+            breads: ["注文情報一覧"]
         }
     },
     {

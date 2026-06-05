@@ -42,8 +42,28 @@ const main = ref(null)
         <v-navigation-drawer :width="300" class="bg-blue-darken-3">
             <SideMenu />
         </v-navigation-drawer>
-        <v-main class="mt-2 d-flex  justify-start" min-height="98vh">
+        <v-main class="mt-0 d-flex  justify-start" min-height="98vh">
         <v-container>
+            <v-breadcrumbs v-if="route.meta.breads" class="pl-0 mb-1">
+                <template
+                    v-for="(title, index) in route.meta.breads"
+                    :key="index"
+                >
+                    <v-breadcrumbs-item color="grey-darken-1">
+                    {{ title }}
+                    </v-breadcrumbs-item>
+
+                    <v-icon
+                    v-if="index < route.meta.breads.length"
+                    icon="mdi-chevron-right"
+                    size="small"
+                     color="grey-darken-1"
+                    />
+                </template>
+                <v-breadcrumbs-item color="grey-darken-1">
+                    {{ route.meta.title }}
+                </v-breadcrumbs-item>
+            </v-breadcrumbs>
             <h1 class="text-headline-medium">{{ route.meta.title }}</h1>
             <MessageArea></MessageArea>
             <v-sheet class="mt-6 pa-7" rounded>
