@@ -64,46 +64,38 @@ export default {
 </script>
 
 <template>
-    <message-area/>
-    <article class="mt-1 ui form segment">
-        <div class="two fields">
-            <div class="four wide field">
-                <label>カード名(一部)</label>
-                <input v-model="cardname" type="text">
-            </div>
-
-            <div class="three wide field">
-                <label for="">セット略称(ex:LRW)</label>
-                <div class="ui input">
-                    <input v-model="setname" type="text">
-                </div>
-            </div>
-            <div class="field">
-                <label style="visibility: hidden">検索ボタン</label>
-                <button
-                id="search"
-                :class="{ disabled: cardname == '' && setname == '' }"
-                    class="ui button teal ml-1"
-                    @click="search"
-                >
-                    検索する
-                </button>
-            </div>
-        </div>
+    <article>
+        <v-form rounded class="form_sheet pa-4">
+            <v-row gap="15">
+                <v-col cols="3">
+                    <v-text-field v-model="cardname"  label="カード名(一部)">
+                    </v-text-field>
+                </v-col>
+                <v-col cols="2">
+                    <v-text-field v-model="setname" label="セット略称">
+                    </v-text-field>
+                </v-col>
+                <v-col cols="2" class="text-right">
+                    <v-btn color="teal-lighten-1" @click="search">
+                        検索する
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-form>
     </article>
-    <article class="mt-2" v-if="stock.length != 0">
-        <h2 class="ui medium dividing header">
+    <article class="mt-10" v-if="stock.length != 0">
+        <h2 class="text-title-medium">
             件数：{{ stock.length }}件
         </h2>
-        <table class="ui striped table">
+        <v-table class="item_list mt-4 border-thin">
             <thead>
                 <tr>
-                    <th>在庫ID</th>
-                    <th class="six wide">カード</th>
-                    <th class="two wide center aligned">言語</th>
-                    <th class="two wide center aligned">状態</th>
-                    <th class="two wide center aligned">枚数</th>
-                    <th class="right aligned">最終更新日</th>
+                    <th width="10%">在庫ID</th>
+                    <th>カード情報</th>
+                    <th width="15%" class="text-center">色</th>
+                    <th width="10%" class="text-center">状態</th>
+                    <th width="10%" class="text-center">枚数</th>
+                    <th width="10%" >最終更新日</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,43 +105,27 @@ export default {
                 >
                     <td>{{ s.id }}</td>
                     <td>
-                            <h4 class="ui image header">
-                                <img
-                                :src="s.card.image_url"
-                                class="ui mini rounded image"
-                                @click="$refs.modal[index].showImage(s.id)"
-                            >
-                            <div class="content">
-                                {{ s.card.name}}
-                            <div v-if="s.card.promotype.id != '1'">&#8810;{{s.card.promotype.name}}&#8811;</div>
-                            <foiltag :isFoil="s.card.foil.is_foil" :foiltype="s.card.foil.name"/>
-                            <div class="sub header">{{ s.card.exp.name }}&#91;{{s.card.exp.attr}}&#93;&#35;{{ s.card.number }}</div>
-                        </div>
-                        <image-modal
-                        :url="s.card.image_url"
-                        :id="s.id"
-                        ref="modal"
-                        />
-                    </h4>
+                        <cardlayout :card="s.card" :lang="s.lang"></cardlayout>
                     </td>
-                    <td class="center aligned">{{ s.lang }}</td>
-                    <td class="center aligned">
+                    <td class="text-center">
+                        <v-chip label>{{ s.card.color }}</v-chip>
+                    </td>
+                    <td class="text-center">
                         <condition :name="s.condition"/>
                     </td>
-                    <td class="center aligned">{{ s.quantity }}</td>
-                    <td class="right aligned">{{ s.updated_at }}</td>
+                    <td class="text-center">{{ s.quantity }}枚</td>
+                    <td class="text-center">{{ s.updated_at }}</td>
                 </tr>
             </tbody>
             <tfoot class="full-width">
                 <tr>
-                    <th colspan="10">
+                    <td colspan="6">
                         <div class="right aligned">
-                            <pagination/>
                         </div>
-                    </th>
+                    </td>
                 </tr>
             </tfoot>
-        </table>
+        </v-table>
         <loading
             :active="isLoading"
             :can-cancel="false"

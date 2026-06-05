@@ -42,7 +42,7 @@ const main = ref(null)
         <v-navigation-drawer :width="300" class="bg-blue-darken-3">
             <SideMenu />
         </v-navigation-drawer>
-        <v-main class="mt-0 d-flex  justify-start" min-height="98vh">
+        <v-main class="mt-0 d-flex  justify-start" min-height="100vh">
         <v-container>
             <v-breadcrumbs v-if="route.meta.breads" class="pl-0 mb-1">
                 <template
