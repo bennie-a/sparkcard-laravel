@@ -105,13 +105,7 @@ const routes = [
         component: PostExPage,
         meta: {
             title: "エキスパンション登録",
-            description: "エキスパンションの登録・編集を行います。",
-            urls:[
-                {
-                    url:"/config/expansion",
-                    title:"エキスパンション一覧"
-                },
-            ]
+            breads: ["エキスパンション一覧"],
         },
         prop: true,
     },
@@ -165,7 +159,6 @@ const routes = [
             next();
         },
         meta:{
-            description:"",
             breads: ["注文情報一覧"]
         }
     },

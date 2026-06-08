@@ -1,26 +1,22 @@
 <template>
-    <section>
-        <message-area></message-area>
-        <div class="ui grid">
-            <div class="six wide left floated column mt-1 ui form">
-                <div class="field">
-                    <label for="">略称(一部でもOK)</label>
-                    <div class="ui action input">
-                        <input type="text" v-model="keyword" />
-                        <button class="ui teal button" @click="search">
-                            検索
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="six wide right floated column right aligned bottom aligned content"
-            >
-                <button class="ui teal basic button" @click="show">
-                    新しく登録する
-                </button>
-            </div>
-        </div>
+    <article>
+        <v-form rounded class="form_sheet pa-4">
+            <v-row>
+                <v-col cols="2">
+                    <v-text-field
+                        v-model="keyword"
+                        label="セット略称"
+                        clearable
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="2" class="">
+                    <v-btn color="teal-lighten-1" @click="search">検索する</v-btn>
+                </v-col>
+                <v-col cols="8" class="text-right">
+                    <v-btn @click="show" color="teal-lighten-1" variant="outlined">新しく登録する</v-btn>
+                </v-col>
+                </v-row>
+        </v-form>
         <div class="ui divider" v-if="$store.getters.card.length != 0"></div>
         <table
             class="ui table striped six column"
@@ -62,7 +58,7 @@
                 </tr>
             </tbody>
         </table>
-    </section>
+    </article>
     <now-loading></now-loading>
 </template>
 <script>
