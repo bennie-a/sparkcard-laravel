@@ -26,7 +26,7 @@ class CardInfoResource extends JsonResource
             GCon::NAME => $this->name,
             Con::EXP => [GCon::NAME => $this->exp_name, Con::ATTR => $this->exp_attr],
             Con::NUMBER => $this->number,
-            Con::COLOR => CardColor::tryFrom($this->color_id)->text(),
+            Con::COLOR => $this->color_id,
             Con::IMAGE_URL => $this->image_url,
         ];
         $resources = json_decode(json_encode($this->resource), true);

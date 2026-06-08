@@ -8,6 +8,7 @@ import Loading from "vue-loading-overlay";
 import { ref } from "vue";
 import { usePagenate } from "../component/pagination/UsePaginate";
 import { MsgStore } from "../component/msg/MsgStore.js";
+import ColorTag from "../component/tag/ColorTag.vue";
 
 const isLoading = ref(false);
 const cardname = ref("");
@@ -54,11 +55,11 @@ const search = async () => {
         <v-form rounded class="form_sheet pa-4">
             <v-row gap="15">
                 <v-col cols="3">
-                    <v-text-field v-model="cardname"  label="カード名(一部)">
+                    <v-text-field v-model="cardname"  label="カード名(一部)" clearable>
                     </v-text-field>
                 </v-col>
                 <v-col cols="2">
-                    <v-text-field v-model="setname" label="セット略称">
+                    <v-text-field v-model="setname" label="セット略称" clearable>
                     </v-text-field>
                 </v-col>
                 <v-col cols="2" class="text-right">
@@ -78,7 +79,7 @@ const search = async () => {
                 <tr>
                     <th width="10%">在庫ID</th>
                     <th>カード情報</th>
-                    <th width="15%" class="text-center">色</th>
+                    <th width="10%" class="text-center">色</th>
                     <th width="10%" class="text-center">状態</th>
                     <th width="10%" class="text-center">枚数</th>
                     <th width="10%" >最終更新日</th>
@@ -94,7 +95,7 @@ const search = async () => {
                         <CardLayout :card="s.card" :lang="s.lang"></CardLayout>
                     </td>
                     <td class="text-center">
-                        <v-chip label>{{ s.card.color }}</v-chip>
+                        <ColorTag :type="s.card.color" />
                     </td>
                     <td class="text-center">
                         <condition :name="s.condition"/>
