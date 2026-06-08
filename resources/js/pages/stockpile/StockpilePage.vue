@@ -23,6 +23,10 @@ const {
 const msgStore = MsgStore();
 const search = async () => {
     try {
+        if (cardname.value === "" && setname.value === "") {
+            msgStore.error("カード名かセット略称のどちらかを入力してください。");
+            return;
+        }
         isLoading.value = true;
         stockCount.value = 0;
         resetPage();
