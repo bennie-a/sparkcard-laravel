@@ -7,6 +7,7 @@ import CardLayout from "../component/CardLayout.vue";
 import Loading from "vue-loading-overlay";
 import { ref } from "vue";
 import { usePagenate } from "../component/pagination/UsePaginate";
+import { MsgStore } from "../component/msg/MsgStore.js";
 
 const isLoading = ref(false);
 const cardname = ref("");
@@ -14,92 +15,38 @@ const setname = ref("");
 const stock = ref([]);
 const stockCount = ref(0);
 
-    const {
-        page, pageCount, paginatedList, resetPage
-    } = usePagenate(stock, 10);
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePagenate(stock, 10);
 
+const msgStore = MsgStore();
 const search = async () => {
-    isLoading.value = true;
-    stockCount.value = 0;
-    resetPage();
-    const query = {
-        params: {
-            card_name: cardname.value,
-            set_name: setname.value,
-        },
-    };
-    await axios
-        .get("/api/stockpile", query)
-        .then((response) => {
-            console.log(response.data);
-            let data = response.data;
-            stock.value = data;
-            stockCount.value = stock.value.length;
-        })
-        .catch((e) => {
-            let data = e.response.data;
-            console.error(data);
-            this.$store.dispatch(
-                    "message/error",
-                    data.detail
-                );
-        })
-        .finally(() => {
-            isLoading.value = false;
+    try {
+        isLoading.value = true;
+        stockCount.value = 0;
+        resetPage();
+        msgStore.clear();
+        const response = await axios.get("/api/stockpile", {
+            params: {
+                card_name: cardname.value,
+                set_name: setname.value,
+            },
         });
+        stock.value = response.data;
+        stockCount.value = stock.value.length;
+
+    } catch (e) {
+        if (e.status === 404) {
+            let data = e.response.data;
+            msgStore.error(data.detail);
+            return;
+        }
+        console.error(e);
+        msgStore.error("検索中にエラーが発生しました。");
+    } finally {
+        isLoading.value = false;
     }
-// export default {
-//     components: {
-//         loading: Loading,
-//         pagination: ListPagination,
-//         foiltag: FoilTag,
-//         condition: ConditionTag,
-//         cardlayout:CardLayout,
-//         "image-modal":ImageModal
-//     },
-//     data() {
-//         return {
-//             cardname: "",
-//             setname: "",
-//             isLoading: true,
-//             stock: [],
-//         };
-//     },
-//     methods: {
-//         async search() {
-//             this.$store.dispatch("message/clear");
-//             this.$store.dispatch("clearCards");
-//             this.isLoading = true;
-//             console.log("start search stockpile");
-//             const query = {
-//                 params: {
-//                     card_name: this.cardname,
-//                     set_name: this.setname,
-//                 },
-//             };
-//             await axios
-//                 .get("/api/stockpile", query)
-//                 .then((response) => {
-//                     console.log(response.data);
-//                     let data = response.data;
-//                     this.stock = data;
-//                     this.$store.dispatch("setCard", this.stock);
-//                 })
-//                 .catch((e) => {
-//                     let data = e.response.data;
-//                     console.error(data);
-//                     this.$store.dispatch(
-//                             "message/error",
-//                             data.detail
-//                         );
-//                 })
-//                 .finally(() => {
-//                     this.isLoading = false;
-//                     console.log("end search stockpile");
-//                 });
-//         },
-//     },
-// };
+}
 </script>
 
 <template>
