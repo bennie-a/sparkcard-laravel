@@ -1,66 +1,105 @@
-<script>
-import MessageArea from "../component/msg/MessageArea.vue";
-import Loading from "vue-loading-overlay";
+<script setup>
 import axios from "axios";
 import ListPagination from "../component/pagination/ListPagination.vue";
-import FoilTag from "../component/tag/FoilTag.vue";
-import ConditionTag from "../component/tag/ConditionTag.vue";
+import condition from "../component/tag/ConditionTag.vue";
 import ImageModal from "../component/modal/ImageModal.vue";
 import CardLayout from "../component/CardLayout.vue";
+import Loading from "vue-loading-overlay";
+import { ref } from "vue";
+import { usePagenate } from "../component/pagination/UsePaginate";
 
-export default {
-    components: {
-        loading: Loading,
-        "message-area": MessageArea,
-        pagination: ListPagination,
-        foiltag: FoilTag,
-        condition: ConditionTag,
-        cardlayout:CardLayout,
-        "image-modal":ImageModal
-    },
-    data() {
-        return {
-            cardname: "",
-            setname: "",
-            isLoading: false,
-            stock: [],
-        };
-    },
-    methods: {
-        async search() {
-            this.$store.dispatch("message/clear");
-            this.$store.dispatch("clearCards");
-            this.isLoading = true;
-            console.log("start search stockpile");
-            const query = {
-                params: {
-                    card_name: this.cardname,
-                    set_name: this.setname,
-                },
-            };
-            await axios
-                .get("/api/stockpile", query)
-                .then((response) => {
-                    console.log(response.data);
-                    let data = response.data;
-                    this.stock = data;
-                    this.$store.dispatch("setCard", this.stock);
-                })
-                .catch((e) => {
-                    let data = e.response.data;
-                    console.error(data);
-                    this.$store.dispatch(
-                            "message/error",
-                            data.detail
-                        );
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                    console.log("end search stockpile");
-                });
+const isLoading = ref(false);
+const cardname = ref("");
+const setname = ref("");
+const stock = ref([]);
+const stockCount = ref(0);
+
+    const {
+        page, pageCount, paginatedList, resetPage
+    } = usePagenate(stock, 10);
+
+const search = async () => {
+    isLoading.value = true;
+    stockCount.value = 0;
+    resetPage();
+    const query = {
+        params: {
+            card_name: cardname.value,
+            set_name: setname.value,
         },
-    },
-};
+    };
+    await axios
+        .get("/api/stockpile", query)
+        .then((response) => {
+            console.log(response.data);
+            let data = response.data;
+            stock.value = data;
+            stockCount.value = stock.value.length;
+        })
+        .catch((e) => {
+            let data = e.response.data;
+            console.error(data);
+            this.$store.dispatch(
+                    "message/error",
+                    data.detail
+                );
+        })
+        .finally(() => {
+            isLoading.value = false;
+        });
+    }
+// export default {
+//     components: {
+//         loading: Loading,
+//         pagination: ListPagination,
+//         foiltag: FoilTag,
+//         condition: ConditionTag,
+//         cardlayout:CardLayout,
+//         "image-modal":ImageModal
+//     },
+//     data() {
+//         return {
+//             cardname: "",
+//             setname: "",
+//             isLoading: true,
+//             stock: [],
+//         };
+//     },
+//     methods: {
+//         async search() {
+//             this.$store.dispatch("message/clear");
+//             this.$store.dispatch("clearCards");
+//             this.isLoading = true;
+//             console.log("start search stockpile");
+//             const query = {
+//                 params: {
+//                     card_name: this.cardname,
+//                     set_name: this.setname,
+//                 },
+//             };
+//             await axios
+//                 .get("/api/stockpile", query)
+//                 .then((response) => {
+//                     console.log(response.data);
+//                     let data = response.data;
+//                     this.stock = data;
+//                     this.$store.dispatch("setCard", this.stock);
+//                 })
+//                 .catch((e) => {
+//                     let data = e.response.data;
+//                     console.error(data);
+//                     this.$store.dispatch(
+//                             "message/error",
+//                             data.detail
+//                         );
+//                 })
+//                 .finally(() => {
+//                     this.isLoading = false;
+//                     console.log("end search stockpile");
+//                 });
+//         },
+//     },
+// };
 </script>
 
 <template>
@@ -83,9 +122,9 @@ export default {
             </v-row>
         </v-form>
     </article>
-    <article class="mt-10" v-if="stock.length != 0">
+    <article class="mt-10" v-if="stockCount > 0">
         <h2 class="text-title-medium">
-            件数：{{ stock.length }}件
+            件数：{{ stockCount }}件
         </h2>
         <v-table class="item_list mt-4 border-thin">
             <thead>
@@ -100,12 +139,12 @@ export default {
             </thead>
             <tbody>
                 <tr
-                    v-for="(s, index) in $store.getters.sliceCard"
-                    :key="index"
+                    v-for="s in paginatedList"
+                    :key="s.id"
                 >
                     <td>{{ s.id }}</td>
                     <td>
-                        <cardlayout :card="s.card" :lang="s.lang"></cardlayout>
+                        <CardLayout :card="s.card" :lang="s.lang"></CardLayout>
                     </td>
                     <td class="text-center">
                         <v-chip label>{{ s.card.color }}</v-chip>
@@ -120,16 +159,13 @@ export default {
             <tfoot class="full-width">
                 <tr>
                     <td colspan="6">
-                        <div class="right aligned">
-                        </div>
+                       <ListPagination v-model="page" :length="pageCount"></ListPagination>
                     </td>
                 </tr>
             </tfoot>
         </v-table>
-        <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        />
     </article>
+    <Loading
+    :active="isLoading"
+    :can-cancel="false" :is-full-page="true" />
 </template>
