@@ -20,6 +20,7 @@ const search = async() => {
     try {
         isLoading.value = true;
         result.value = [];
+        resultCount.value = 0;
         const response = await axios.get("/api/database/exp", {
             params: { query: keyword.value }
         });
@@ -89,29 +90,32 @@ const search = async() => {
                 </v-row>
         </v-form>
     </article>
-    <article v-if="resultCount > 0">
-                <table class="ui table striped six column">
+    <article class="mt-10"  v-if="resultCount > 0">
+        <h2 class="text-title-medium">件数：{{ resultCount }}件</h2>
+        <v-table class="item_list mt-4 border-thin">
             <thead>
                 <tr>
+                    <th class="">ID</th>
                     <th class="">名称</th>
-                    <th class="">略称</th>
-                    <th>リリース日</th>
-                    <th class="one wide center aligned">カード件数</th>
-                    <th class="center aligned">カード登録</th>
+                    <th  width="8%" class="text-center">略称</th>
+                    <th width="10%" class="text-center">発売日</th>
+                    <th width="10%" class="text-center">カード件数</th>
+                    <th width="15%" class="text-center"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="ex in result" :key="ex.id">
+                    <td>{{ ex.notion_id }}</td>
                     <td>{{ ex.name }}</td>
-                    <td class="one wide">{{ ex.attr }}</td>
-                    <td class="one wide">{{ ex.release_date }}</td>
-                    <td v-if="ex.count != 0" class="one wide positive center aligned">
+                    <td  class="text-center">{{ ex.attr }}</td>
+                    <td  class="text-center">{{ ex.release_date }}</td>
+                    <td v-if="ex.count != 0"  class="text-center" :class="ex.count !== 0 ? 'bg-white' : 'bg-deep-orange-lighten-4'">
                         {{ ex.count }}件
                     </td>
-                    <td v-else class="negative center aligned">
-                        {{ ex.count }}件
-                    </td>
-                    <td class="two wide right aligned">
+                    <td class="text-right">
+                        <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text"></v-btn>
+                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text"></v-btn>
+
                         <!-- <div class="ui buttons">
                             <button
                                 class="ui button teal"
@@ -126,7 +130,7 @@ const search = async() => {
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </v-table>
     </article>
     <Loading
      :active="isLoading"
