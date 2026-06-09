@@ -1,3 +1,75 @@
+<script setup>
+import MessageArea from "../component/msg/MessageArea.vue";
+import Loading from "vue-loading-overlay";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+
+const router = useRouter();
+const isLoading = ref(false);
+const keyword = ref("");
+const result = ref([]);
+const resultCount = ref(0);
+
+// 登録画面に遷移する。
+const show = () => {
+    router.push("/config/expansion/post");
+}
+
+const search = async() => {
+    try {
+        isLoading.value = true;
+        result.value = [];
+        const response = await axios.get("/api/database/exp", {
+            params: { query: keyword.value }
+        });
+        result.value = response.data;
+        resultCount.value = result.value.length;
+    }catch(e) {
+        console.error(e);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+// export default {
+//     data() {
+//         return {
+//             expansions: null,
+//             keyword: null,
+//         };
+//     },
+//     mounted: async function () {
+//         this.$store.dispatch("message/clear");
+//         this.$store.dispatch("expansion/clear");
+//     },
+//     methods: {
+//         show: function () {
+//             this.$router.push("/config/expansion/post");
+//         },
+//         // カード登録画面に遷移する。
+//         toPostCardPage: function (setname, attr) {
+//             this.$router.push({
+//                 name: "PostCardInfo",
+//                 params: { setname: setname, attr: attr },
+//             });
+//         },
+//         // カードCSV登録画面に遷移する。
+//         toCsvCardPage:function(attr) {
+//             this.$router.push(
+//                 {
+//                     name:"CardInfoCsvPage",
+//                     params:{attr:attr}
+//                 }
+//             );
+//         },
+//     },
+//     components: {
+//         "now-loading": NowLoading,
+//         "message-area": MessageArea,
+//     },
+// };
+</script>
 <template>
     <article>
         <v-form rounded class="form_sheet pa-4">
@@ -6,22 +78,19 @@
                     <v-text-field
                         v-model="keyword"
                         label="セット略称"
-                        clearable
-                    ></v-text-field>
+                        append-inner-icon="mdi-magnify"
+                        @click:append-inner="search"
+                        clearable>
+                </v-text-field>
                 </v-col>
-                <v-col cols="2" class="">
-                    <v-btn color="teal-lighten-1" @click="search">検索する</v-btn>
-                </v-col>
-                <v-col cols="8" class="text-right">
+                <v-col cols="10" class="text-right">
                     <v-btn @click="show" color="teal-lighten-1" variant="outlined">新しく登録する</v-btn>
                 </v-col>
                 </v-row>
         </v-form>
-        <div class="ui divider" v-if="$store.getters.card.length != 0"></div>
-        <table
-            class="ui table striped six column"
-            v-if="this.$store.getters.card.length != 0"
-        >
+    </article>
+    <article v-if="resultCount > 0">
+                <table class="ui table striped six column">
             <thead>
                 <tr>
                     <th class="">名称</th>
@@ -32,7 +101,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="ex in this.$store.getters.card" :key="ex">
+                <tr v-for="ex in result" :key="ex.id">
                     <td>{{ ex.name }}</td>
                     <td class="one wide">{{ ex.attr }}</td>
                     <td class="one wide">{{ ex.release_date }}</td>
@@ -43,7 +112,7 @@
                         {{ ex.count }}件
                     </td>
                     <td class="two wide right aligned">
-                        <div class="ui buttons">
+                        <!-- <div class="ui buttons">
                             <button
                                 class="ui button teal"
                                 @click="toPostCardPage(ex.name, ex.attr)"
@@ -53,75 +122,13 @@
                             <div class="or"></div>
                             <button class="ui button teal" @click="toCsvCardPage(ex.attr)">
                                 <v-icon icon="mdi-file-document-outline"></v-icon>一括登録</button>
-                        </div>
+                        </div> -->
                     </td>
                 </tr>
             </tbody>
         </table>
     </article>
-    <now-loading></now-loading>
+    <Loading
+     :active="isLoading"
+     :can-cancel="false" :is-full-page="true" />
 </template>
-<script>
-import NowLoading from "../component/NowLoading.vue";
-import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/msg/MessageArea.vue";
-
-export default {
-    data() {
-        return {
-            expansions: null,
-            keyword: null,
-        };
-    },
-    mounted: async function () {
-        this.$store.dispatch("message/clear");
-        this.$store.dispatch("expansion/clear");
-    },
-    methods: {
-        show: function () {
-            this.$router.push("/config/expansion/post");
-        },
-        // カード登録画面に遷移する。
-        toPostCardPage: function (setname, attr) {
-            this.$router.push({
-                name: "PostCardInfo",
-                params: { setname: setname, attr: attr },
-            });
-        },
-        // カードCSV登録画面に遷移する。
-        toCsvCardPage:function(attr) {
-            this.$router.push(
-                {
-                    name:"CardInfoCsvPage",
-                    params:{attr:attr}
-                }
-            );
-        },
-        search: async function () {
-            this.$store.dispatch("clearCards");
-            this.$store.dispatch("setLoad", true);
-            const query = { params: { query: this.keyword } };
-            const success = function (response, store, query) {
-                store.dispatch("setCard", response.data);
-            };
-            const fail = function (e, store, query) {
-                const data = e.response.data;
-                store.dispatch("message/error", data.detail);
-            };
-            const task = new AxiosTask(this.$store);
-            await task.get("/database/exp", query, success, fail);
-
-            this.$store.dispatch("setLoad", false);
-        },
-    },
-    components: {
-        "now-loading": NowLoading,
-        "message-area": MessageArea,
-    },
-};
-</script>
-<style scoped>
-i {
-    font-size: 1.5rem;
-}
-</style>
