@@ -146,9 +146,9 @@ const routes = [
     {
         path: "/shipping/",
         component:ShiptLogPage,
+        name:'Shipt',
         meta:{
             title:"注文情報一覧",
-            description:"注文情報を一覧表示します。",
         },
     },
     {
@@ -160,7 +160,7 @@ const routes = [
             next();
         },
         meta:{
-            breads: ["注文情報一覧"]
+            parent:'Shipt'
         }
     },
     {

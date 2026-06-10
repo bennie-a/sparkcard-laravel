@@ -4,12 +4,14 @@ import Loading from "vue-loading-overlay";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { MsgStore } from "../component/msg/MsgStore.js";
 
 const router = useRouter();
 const isLoading = ref(false);
 const keyword = ref("");
 const result = ref([]);
 const resultCount = ref(0);
+const msgStore = MsgStore();
 
 // 登録画面に遷移する。
 const show = () => {
@@ -21,13 +23,15 @@ const search = async() => {
         isLoading.value = true;
         result.value = [];
         resultCount.value = 0;
+        msgStore.clear();
         const response = await axios.get("/api/database/exp", {
             params: { query: keyword.value }
         });
         result.value = response.data;
         resultCount.value = result.value.length;
     }catch(e) {
-        console.error(e);
+        let data = e.response.data;
+        msgStore.error(data.detail);
     } finally {
         isLoading.value = false;
     }
