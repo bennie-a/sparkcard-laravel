@@ -33,43 +33,21 @@ const search = async() => {
     }
 }
 
-// export default {
-//     data() {
-//         return {
-//             expansions: null,
-//             keyword: null,
-//         };
-//     },
-//     mounted: async function () {
-//         this.$store.dispatch("message/clear");
-//         this.$store.dispatch("expansion/clear");
-//     },
-//     methods: {
-//         show: function () {
-//             this.$router.push("/config/expansion/post");
-//         },
-//         // カード登録画面に遷移する。
-//         toPostCardPage: function (setname, attr) {
-//             this.$router.push({
-//                 name: "PostCardInfo",
-//                 params: { setname: setname, attr: attr },
-//             });
-//         },
-//         // カードCSV登録画面に遷移する。
-//         toCsvCardPage:function(attr) {
-//             this.$router.push(
-//                 {
-//                     name:"CardInfoCsvPage",
-//                     params:{attr:attr}
-//                 }
-//             );
-//         },
-//     },
-//     components: {
-//         "now-loading": NowLoading,
-//         "message-area": MessageArea,
-//     },
-// };
+// カード登録画面に遷移する。
+const toPostCardPage = (setname, attr) => {
+    router.push({
+        name: "PostCardInfo",
+        params: { setname: setname, attr: attr },
+    });
+}
+
+// カードCSV登録画面に遷移する。
+const toCsvCardPage = (attr) =>  {
+    router.push({
+        name:"CardInfoCsvPage",
+        params:{attr:attr}
+    });
+}
 </script>
 <template>
     <article>
@@ -95,7 +73,7 @@ const search = async() => {
         <v-table class="item_list mt-4 border-thin">
             <thead>
                 <tr>
-                    <th class="">ID</th>
+                    <th width="20%">ID</th>
                     <th class="">名称</th>
                     <th  width="8%" class="text-center">略称</th>
                     <th width="10%" class="text-center">発売日</th>
@@ -113,20 +91,8 @@ const search = async() => {
                         {{ ex.count }}件
                     </td>
                     <td class="text-right">
-                        <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text"></v-btn>
-                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text"></v-btn>
-
-                        <!-- <div class="ui buttons">
-                            <button
-                                class="ui button teal"
-                                @click="toPostCardPage(ex.name, ex.attr)"
-                            >
-                            <v-icon icon="mdi-plus-circle"></v-icon>1件登録
-                            </button>
-                            <div class="or"></div>
-                            <button class="ui button teal" @click="toCsvCardPage(ex.attr)">
-                                <v-icon icon="mdi-file-document-outline"></v-icon>一括登録</button>
-                        </div> -->
+                        <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text" @click="toPostCardPage(ex.name, ex.attr)"></v-btn>
+                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text" @click="toCsvCardPage(ex.attr)"></v-btn>
                     </td>
                 </tr>
             </tbody>
