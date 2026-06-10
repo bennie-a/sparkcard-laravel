@@ -12,10 +12,8 @@
         >
     </div>
     <card-list exp isNotion></card-list>
-    <now-loading></now-loading>
 </template>
 <script>
-import NowLoading from "../component/NowLoading.vue";
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/msg/MessageArea.vue";
 import SearchForm from "../component/SearchForm.vue";
@@ -24,7 +22,6 @@ import DownloadButton from "../component/DownloadButton.vue";
 
 export default {
     components: {
-        "now-loading": NowLoading,
         "card-list": CardList,
         "message-area": MessageArea,
         "search-form": SearchForm,
