@@ -94,18 +94,19 @@ const routes = [
     },
     {
         path: "/config/expansion",
+        name:'Ex',
         component: ExpansionPage,
         meta: {
             title: "エキスパンション一覧",
-            description: "エキスパンション一覧表示を行います。",
         },
     },
     {
         path: "/config/expansion/post",
+        name:'ExPost',
         component: PostExPage,
         meta: {
             title: "エキスパンション登録",
-            breads: ["エキスパンション一覧"],
+            parent:'Ex',
         },
         prop: true,
     },

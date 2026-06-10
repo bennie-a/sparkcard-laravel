@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import SideMenu from "../pages/component/SideMenu.vue"
 import Loading from "vue-loading-overlay"
 import "vue-loading-overlay/dist/css/index.css"
-
+import AppBreadcrumb from './AppBreadcrumb.vue'
 import { LoadingStore } from '@/stores/loading/Loading'
 import { storeToRefs } from "pinia";
 import MessageArea from '../pages/component/msg/MessageArea.vue'
@@ -64,6 +64,7 @@ const main = ref(null)
                     {{ route.meta.title }}
                 </v-breadcrumbs-item>
             </v-breadcrumbs>
+            <AppBreadcrumb></AppBreadcrumb>
             <h1 class="text-headline-medium">{{ route.meta.title }}</h1>
             <MessageArea></MessageArea>
             <v-sheet class="mt-6 pa-7" rounded>
