@@ -44,21 +44,14 @@ const search = async() => {
     }
 }
 
-// カード登録画面に遷移する。
-const toPostCardPage = (setname, attr) => {
+// 各カード登録画面に遷移する。
+const toCardPage = (name, ex) => {
     router.push({
-        name: "PostCardInfo",
-        query: {setname, attr },
+        name:name,
+        query: {'setname':ex.name, 'attr':ex.attr },
     });
 }
 
-// カードCSV登録画面に遷移する。
-const toCsvCardPage = (setname, attr) =>  {
-    router.push({
-        name:"CardInfoCsvPage",
-        query:{setname, attr}
-    });
-}
 </script>
 <template>
     <article>
@@ -102,8 +95,8 @@ const toCsvCardPage = (setname, attr) =>  {
                         {{ ex.count }}件
                     </td>
                     <td class="text-right">
-                        <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text" @click="toPostCardPage(ex.name, ex.attr)"></v-btn>
-                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text" @click="toCsvCardPage(ex.name, ex.attr)"></v-btn>
+                        <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text" @click="toCardPage('PostCardInfo', ex)"></v-btn>
+                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text" @click="toCardPage('CardInfoCsvPage', ex)"></v-btn>
                     </td>
                 </tr>
             </tbody>
