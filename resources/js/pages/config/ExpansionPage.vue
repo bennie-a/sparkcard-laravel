@@ -1,12 +1,13 @@
 <script setup>
 import MessageArea from "../component/msg/MessageArea.vue";
 import Loading from "vue-loading-overlay";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { MsgStore } from "../component/msg/MsgStore.js";
 
 const router = useRouter();
+const route = useRoute();
 const isLoading = ref(false);
 const keyword = ref("");
 const result = ref([]);
@@ -17,6 +18,10 @@ const msgStore = MsgStore();
 const show = () => {
     router.push("/config/expansion/post");
 }
+
+onMounted(() => {
+    console.log(route.query);
+});
 
 const search = async() => {
     try {
@@ -41,7 +46,7 @@ const search = async() => {
 const toPostCardPage = (setname, attr) => {
     router.push({
         name: "PostCardInfo",
-        params: { setname: setname, attr: attr },
+        query: {setname, attr },
     });
 }
 

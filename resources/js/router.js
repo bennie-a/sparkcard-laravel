@@ -108,7 +108,6 @@ const routes = [
             title: "エキスパンション登録",
             parent:'Ex',
         },
-        prop: true,
     },
     {
         path: "/config/cardinfo/csv/:attr",
@@ -116,31 +115,16 @@ const routes = [
         component: CardInfoBulkPage,
         meta: {
             title: "カード情報一括登録",
-            description:
-                "MTGJSONからDLしたファイルのカード情報をDBに登録します。",
-            urls:[
-                {
-                    url:"/config/expansion",
-                    title:"エキスパンション一覧"
-
-                }
-            ]
+            parent:'Ex',
         },
     },
     {
-        path: "/config/cardinfo/post/:setname/:attr",
+        path: "/config/cardinfo/post",
         name: "PostCardInfo",
         component: CardinfoPage,
         meta: {
             title: "カード情報マスタ登録",
-            description: "カード情報をDBに登録します。",
-            urls:[
-                {
-                    url:"/config/expansion",
-                    title:"エキスパンション一覧"
-
-                }
-            ]
+            parent:'Ex',
         },
     },
     {

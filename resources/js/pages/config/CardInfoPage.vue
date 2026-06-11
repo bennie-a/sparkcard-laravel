@@ -130,8 +130,8 @@ export default {
     },
     data() {
         return {
-            setname: this.$route.params.setname,
-            attr: this.$route.params.attr,
+            setname: this.$route.query.setname,
+            attr: this.$route.query.attr,
             name: "",
             en_name: "",
             isFoil: false,

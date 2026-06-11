@@ -12,7 +12,7 @@ const breadcrumbs = computed(() => {
     while(currentRoute) {
         items.unshift({
             title: currentRoute.meta.title,
-            to: currentRoute.path
+            to: {path:currentRoute.path, query:route.query}
         });
 
         const parentName = currentRoute.meta.parent;
@@ -31,6 +31,7 @@ const breadcrumbs = computed(() => {
     }
     return items;
 });
+
 </script>
 <template>
         <v-breadcrumbs class="pl-0 mb-1" v-if="breadcrumbs.length > 1">
@@ -41,7 +42,6 @@ const breadcrumbs = computed(() => {
                 <v-breadcrumbs-item v-if="r.title !== route.meta.title">
                     <v-btn variant="plain" color="teal-lighten-1" :to="r.to" class="pa-0">{{ r.title }}</v-btn>
                 </v-breadcrumbs-item>
-
                 <v-icon
                 icon="mdi-chevron-right"
                 size="small"
