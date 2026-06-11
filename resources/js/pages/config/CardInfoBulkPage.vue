@@ -1,7 +1,7 @@
 <template>
     <message-area></message-area>
-    <div v-if="setName != ''">
-    <label class="ui label">{{setName}}[{{setCode}}]
+    <div v-if="setname != ''">
+    <label class="ui label">{{setname}}[{{attr}}]
     </label>
     <article class="mt-1 ui grid segment">
         <div
@@ -121,8 +121,8 @@ export default {
     data() {
         return {
             filename: "ファイルを選択してください",
-            setCode: ref(this.$route.params.attr),
-            setName:"",
+            attr: ref(this.$route.query.attr),
+            setname:ref(this.$route.query.setname),
             isSkip: false,
             isLoading: false,
             isDraftOnly: false,
@@ -175,18 +175,18 @@ export default {
         },
     },
     mounted: async function () {
-        this.isLoading = true;
-        await axios.get('/api/database/exp/' + this.setCode, {})
-        .then((response) => {
-                                this.$store.dispatch("clearCards");
-                                this.setName = response.data.name;
-                            })
-                            .catch((e) => {
-                                console.error(e.statusCode);
-                            })
-                            .finally(() => {
-                                this.isLoading = false;
-                            });
+        // this.isLoading = true;
+        // await axios.get('/api/database/exp/' + this.setCode, {})
+        // .then((response) => {
+        //                         this.$store.dispatch("clearCards");
+        //                         this.setName = response.data.name;
+        //                     })
+        //                     .catch((e) => {
+        //                         console.error(e.statusCode);
+        //                     })
+        //                     .finally(() => {
+        //                         this.isLoading = false;
+        //                     });
     },
     methods: {
         upload: async function (file) {

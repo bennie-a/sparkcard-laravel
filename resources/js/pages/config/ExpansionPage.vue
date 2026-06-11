@@ -9,19 +9,21 @@ import { MsgStore } from "../component/msg/MsgStore.js";
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
-const keyword = ref("");
+const keyword = ref(route.query.attr);
 const result = ref([]);
 const resultCount = ref(0);
 const msgStore = MsgStore();
+
+onMounted(() => {
+    if (keyword.value) {
+        search();
+    }
+});
 
 // 登録画面に遷移する。
 const show = () => {
     router.push("/config/expansion/post");
 }
-
-onMounted(() => {
-    console.log(route.query);
-});
 
 const search = async() => {
     try {
@@ -51,10 +53,10 @@ const toPostCardPage = (setname, attr) => {
 }
 
 // カードCSV登録画面に遷移する。
-const toCsvCardPage = (attr) =>  {
+const toCsvCardPage = (setname, attr) =>  {
     router.push({
         name:"CardInfoCsvPage",
-        params:{attr:attr}
+        query:{setname, attr}
     });
 }
 </script>
@@ -101,7 +103,7 @@ const toCsvCardPage = (attr) =>  {
                     </td>
                     <td class="text-right">
                         <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text" @click="toPostCardPage(ex.name, ex.attr)"></v-btn>
-                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text" @click="toCsvCardPage(ex.attr)"></v-btn>
+                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text" @click="toCsvCardPage(ex.name, ex.attr)"></v-btn>
                     </td>
                 </tr>
             </tbody>

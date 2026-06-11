@@ -110,7 +110,7 @@ const routes = [
         },
     },
     {
-        path: "/config/cardinfo/csv/:attr",
+        path: "/config/cardinfo/csv/",
         name:"CardInfoCsvPage",
         component: CardInfoBulkPage,
         meta: {
