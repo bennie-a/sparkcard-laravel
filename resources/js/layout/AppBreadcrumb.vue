@@ -34,7 +34,7 @@ const breadcrumbs = computed(() => {
 
 </script>
 <template>
-        <v-breadcrumbs class="pl-0 mb-1" v-if="breadcrumbs.length > 1">
+        <v-breadcrumbs class="pl-0" v-if="breadcrumbs.length > 1">
             <template
                 v-for="r, in breadcrumbs"
                 :key="r.title"
@@ -46,9 +46,10 @@ const breadcrumbs = computed(() => {
                 icon="mdi-chevron-right"
                 size="small"
                  v-if="r.title !== route.meta.title"
+                  color="grey-darken-2"
                 />
             </template>
-            <v-breadcrumbs-item>
+            <v-breadcrumbs-item color="grey-darken-2">
                 {{ route.meta.title }}
             </v-breadcrumbs-item>
         </v-breadcrumbs>
