@@ -34,7 +34,7 @@ const breadcrumbs = computed(() => {
 
 </script>
 <template>
-        <v-breadcrumbs class="pl-0" v-if="breadcrumbs.length > 1">
+        <v-breadcrumbs class="pt-0 pl-0 pb-1" v-if="breadcrumbs.length > 1">
             <template
                 v-for="r, in breadcrumbs"
                 :key="r.title"
