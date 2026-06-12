@@ -123,7 +123,7 @@ const routes = [
         name: "PostCardInfo",
         component: CardinfoPage,
         meta: {
-            title: "カード情報マスタ登録",
+            title: "カード情報登録",
             parent:'Ex',
         },
     },
