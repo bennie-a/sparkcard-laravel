@@ -1,6 +1,5 @@
 <script setup>
 import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/msg/MessageArea.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import axios from "axios";
 import Loading from "vue-loading-overlay";
@@ -48,7 +47,7 @@ const search = async function () {
             color.value = data["color"];
             image_url.value = data["image_url"];
             foiltype.value = data["foiltype"];
-            promotype_id = data["promotype.id"]
+            promotype_id.value = data["promotype.id"]
         })
         .catch((e) => {
             msgStore.error(e.response.data.detail);
@@ -83,57 +82,7 @@ const toList = () => {
         query:{'attr':attr.value}
     });
 }
-// export default {
-//     components: {
-//         "message-area": MessageArea,
-//         ModalButton: ModalButton,
-//         loading: Loading,
-//         promo:PromoDropdown
-//     },
-//     data() {
-//         return {
-//             setname: this.$route.query.setname,
-//             attr: this.$route.query.attr,
-//             name: "",
-//             en_name: "",
-//             isFoil: false,
-//             promotype_id: 1,
-//             number: "",
-//             multiverse_id: "",
-//             color: "",
-//             imageurl: "",
-//             language: "ja",
-//             isLoading: false,
-//             foiltype:[]
-//         };
-//     },
-//     methods: {
-//         store: function () {
-//             const task = new AxiosTask(this.$store);
-//             let json = {
-//                 setCode: this.attr,
-//                 name: this.name,
-//                 isFoil: this.isFoil,
-//                 promotype: this.promotype,
-//                 multiverseId: this.multiverse_id,
-//                 en_name: this.en_name,
-//                 color: this.color,
-//                 number: this.number,
-//                 is_skip: false,
-//                 image_url: this.imageurl,
-//                 foiltype: ["通常版", "Foil"],
-//                 promotype_id:this.promotype_id,
-//             };
-//             const success = function (response, store) {
-//                 // this.back();
-//                 console.log(response.status);
-//                 store.dispatch("setSuccessMessage", `登録しました！`);
-//             };
-//             const fail = function () {};
-//             task.post("/database/card", json, success);
-//         },
-//     },
-// };
+
 </script>
 <template>
     <section>
