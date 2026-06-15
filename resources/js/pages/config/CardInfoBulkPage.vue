@@ -104,7 +104,7 @@ import ListPagination from "../component/pagination/ListPagination.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import { AxiosTask } from "../../component/AxiosTask";
 import FoilTag from "../component/tag/FoilTag.vue";
-import PromoDropdown from "../component/PromoDropdown.vue";
+import PromoDropdown from "../component/selection/PromoDropdown.vue";
 import {ref} from 'vue';
 
 import axios from "axios";

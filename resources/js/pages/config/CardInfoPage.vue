@@ -5,11 +5,10 @@ import MessageArea from "../component/msg/MessageArea.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import axios from "axios";
 import Loading from "vue-loading-overlay";
-import PromoDropdown from "../component/PromoDropdown.vue";
+import PromoDropdown from "../component/selection/PromoDropdown.vue";
 import ColorDropdown from "../component/selection/ColorDropdown.vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { ja } from "vuetify/locale";
 
 const route = useRoute();
 const color = ref("");
@@ -26,6 +25,7 @@ const en_name = ref("");
 const foiltype = ref([]);
 const multiverse_id = ref("");
 const image_url = ref("");
+const promotype_id = ref(1);
 
 const search = async function () {
     isLoading.value = true;
@@ -48,6 +48,7 @@ const search = async function () {
             color.value = data["color"];
             image_url.value = data["image_url"];
             foiltype.value = data["foiltype"];
+            promotype_id = data["promotype.id"]
         })
         .catch((e) => {
             console.log(e);
@@ -129,7 +130,7 @@ const search = async function () {
                 </v-col>
                 <v-col cols="3">
                     <v-text-field label="カード番号" v-model="number"
-                    prepend-inner-icon="mdi-numeric"> </v-text-field>
+                    prepend-inner-icon="mdi-numeric" type="number" min="1"> </v-text-field>
                 </v-col>
                 <v-col cols="2" class="text-right">
                     <v-btn @click="search" color="teal-lighten-1">検索する</v-btn>
@@ -154,7 +155,7 @@ const search = async function () {
                             <ColorDropdown v-model="color"></ColorDropdown>
                         </v-col>
                         <v-col>
-                            <PromoDropdown v-model:name="promotype_id" v-model:setcode="attr"></PromoDropdown>
+                            <PromoDropdown v-model:id="promotype_id" v-model:setcode="attr"></PromoDropdown>
                         </v-col>
                     </v-row>
                     <v-row>
@@ -164,9 +165,13 @@ const search = async function () {
                                 <v-chip v-for="f in foiltype" :key="f"  class="mr-4" label>{{f}}</v-chip>
                         </div>
                         </v-col>
-                        <v-col>
-                            <div class="text-title-medium">Multiverse ID</div>
-                           <div>{{ multiverse_id }}</div>
+                    </v-row>
+                    <v-row class="mt-10">
+                        <v-col class="text-center">
+                            <v-btn  variant="outlined" color="grey-darken-1" class="mr-4"><v-icon icon="mdi-chevron-left" start></v-icon>一覧画面に戻る</v-btn>
+                            <ModalButton @action="store">
+                            登録する
+                        </ModalButton>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -176,10 +181,6 @@ const search = async function () {
             </v-row>
         </article>
         <article class="text-center mt-6">
-            <ModalButton @action="store"
-            ><span class="mdi mdi-check-bold"></span>
-            登録する
-        </ModalButton>
         <loading
             :active="isLoading"
             :can-cancel="false"

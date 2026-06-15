@@ -1,9 +1,9 @@
 <script  setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import axios from "axios";
-const name = defineModel("name");
+const id = defineModel("id");
 const setcode = defineModel("setcode");
-const list = reactive([]);
+const list = ref([]);
 onMounted(async() => {
         // 特別版一覧を取得
         await axios
@@ -13,11 +13,11 @@ onMounted(async() => {
             })
             .catch((e) => {
                 console.error(e);
-            })    
+            })
 });
 </script>
 <template>
-<select v-model="name" class="mr-1 ui dropdown">
-    <option v-for="t in list.value" :key="t.id" :value="t.id">{{t.name }}</option>
-</select>
+    <v-select v-model="id" :items="list"
+     item-value="id" item-title="name" label="プロモタイプ">
+    </v-select>
 </template>
