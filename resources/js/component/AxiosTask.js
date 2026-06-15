@@ -1,8 +1,6 @@
 import axios from "axios";
+import { MsgStore } from "../pages/component/msg/MsgStore";
 export class AxiosTask {
-    constructor($store) {
-        this.store = $store;
-    }
 
     // GETメソッドでAPIを呼び出す。
     async get(url, query, success, fail) {
@@ -34,21 +32,24 @@ export class AxiosTask {
                 // this.store.dispatch(["message/error", "更新に失敗しました。"]);
             });
     }
-    // POSETメソッドでAPIを呼び出す
-    async post(url, json, success) {
+    // POSTメソッドでAPIを呼び出す
+    async post(url, json) {
+        const msgStore = MsgStore();
+        msgStore.clear();
+
         await axios
             .post(this.getApiUrl(url), json)
             .then((response) => {
-                success(response, this.store);
                 if (response.status == 401) {
                     console.log(response.data);
                 }
+                msgStore.success('登録しました。');
             })
             .catch((e) => {
                 if (e.response.status == 422) {
                     console.error(e.response.data);
                     const data = e.response.data;
-                    this.store.dispatch("message/error", data.message);
+                    msgStore.error(data.detail);
                     return;
                 }
             });

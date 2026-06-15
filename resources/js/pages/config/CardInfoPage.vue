@@ -1,4 +1,3 @@
-
 <script setup>
 import { AxiosTask } from "../../component/AxiosTask";
 import MessageArea from "../component/msg/MessageArea.vue";
@@ -8,9 +7,11 @@ import Loading from "vue-loading-overlay";
 import PromoDropdown from "../component/selection/PromoDropdown.vue";
 import ColorDropdown from "../component/selection/ColorDropdown.vue";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { MsgStore } from "../component/msg/MsgStore.js";
 
 const route = useRoute();
+const router = useRouter();
 const color = ref("");
 const setname = ref(route.query.setname);
 const attr = ref(route.query.attr);
@@ -18,10 +19,10 @@ const  language = ref("ja");
 
 const number = ref("");
 const isLoading = ref(false);
+const msgStore = MsgStore();
 
 const name = ref("");
 const en_name = ref("");
-
 const foiltype = ref([]);
 const multiverse_id = ref("");
 const image_url = ref("");
@@ -29,8 +30,7 @@ const promotype_id = ref(1);
 
 const search = async function () {
     isLoading.value = true;
-    // this.$store.dispatch("message/clear");
-    // this.$store.dispatch("clearMessage");
+    msgStore.clear();
     const query = {
         params: {
             setcode: attr.value,
@@ -51,20 +51,38 @@ const search = async function () {
             promotype_id = data["promotype.id"]
         })
         .catch((e) => {
-            console.log(e);
-            if (e.response.status != 200) {
-                console.error(e.response);
-                // this.$store.dispatch(
-                //     "message/error",
-                //     e.response.data.detail
-                // );
-            }
+            msgStore.error(e.response.data.detail);
         })
         .finally(() => {
             isLoading.value = false;
         });
 }
 
+const store = () => {
+    isLoading.value = true;
+    const task = new AxiosTask();
+    let json = {
+        setCode: attr.value,
+        name: name.value,
+        multiverseId: multiverse_id.value,
+        en_name: en_name.value,
+        color: color.value,
+        number: number.value,
+        is_skip: false,
+        image_url: image_url.value,
+        foiltype: foiltype.value,
+        promotype_id:promotype_id.value,
+    };
+    task.post("/database/card", json);
+    isLoading.value = false;
+}
+
+const toList = () => {
+    router.push({
+        name:'Ex',
+        query:{'attr':attr.value}
+    });
+}
 // export default {
 //     components: {
 //         "message-area": MessageArea,
@@ -168,7 +186,9 @@ const search = async function () {
                     </v-row>
                     <v-row class="mt-10">
                         <v-col class="text-center">
-                            <v-btn  variant="outlined" color="grey-darken-1" class="mr-4"><v-icon icon="mdi-chevron-left" start></v-icon>一覧画面に戻る</v-btn>
+                            <v-btn  variant="outlined" color="grey-darken-1" class="mr-4"  @click="toList">
+                                <v-icon icon="mdi-chevron-left" start></v-icon>一覧画面に戻る
+                            </v-btn>
                             <ModalButton @action="store">
                             登録する
                         </ModalButton>
@@ -187,16 +207,5 @@ const search = async function () {
             :is-full-page="true"
         ></loading>
         </article>
-    </section>
-    <section class="ui grid">
-        <div class="eight wide column">
-            <div class="ui form">
-            </div>
-        </div>
-        <div class="four wide column">
-            <img :src="imageurl" :alt="name" />
-        </div>
-    </section>
-    <section>
     </section>
 </template>

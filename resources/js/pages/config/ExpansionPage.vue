@@ -91,7 +91,7 @@ const toCardPage = (name, ex) => {
                     <td>{{ ex.name }}</td>
                     <td  class="text-center">{{ ex.attr }}</td>
                     <td  class="text-center">{{ ex.release_date }}</td>
-                    <td v-if="ex.count != 0"  class="text-center" :class="ex.count !== 0 ? 'bg-white' : 'bg-deep-orange-lighten-4'">
+                    <td class="text-center" :class="ex.count !== 0 ? 'bg-white' : 'bg-deep-orange-lighten-4'">
                         {{ ex.count }}件
                     </td>
                     <td class="text-right">
