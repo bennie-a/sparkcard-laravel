@@ -5,18 +5,15 @@ import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { MsgStore } from "../component/msg/MsgStore.js";
+ import { useForm, useField } from 'vee-validate';
+ import * as yup from 'yup';
 
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
-const keyword = ref(route.query.attr);
 const result = ref([]);
 const resultCount = ref(0);
 const msgStore = MsgStore();
-
-const state = reactive({
-    keyword:route.query.attr
-});
 
 onMounted(() => {
     if (keyword.value) {
@@ -24,29 +21,47 @@ onMounted(() => {
     }
 });
 
+const schema = yup.object({
+    keyword: yup.string().required('セット略称は必須です')
+});
+
+const { handleSubmit } = useForm({
+    validationSchema: schema,
+    initialValues: {
+        keyword:
+            typeof route.query.attr === 'string'
+                ? route.query.attr
+                : ''
+    }
+});
+
+const { value: keyword, errorMessage } = useField('keyword');
+
 // 登録画面に遷移する。
 const show = () => {
     router.push("/config/expansion/post");
 }
 
-const search = async() => {
-    try {
-        isLoading.value = true;
-        result.value = [];
-        resultCount.value = 0;
-        msgStore.clear();
-        const response = await axios.get("/api/database/exp", {
-            params: { query: keyword.value }
-        });
-        result.value = response.data;
-        resultCount.value = result.value.length;
-    }catch(e) {
-        let data = e.response.data;
-        msgStore.error(data.detail);
-    } finally {
-        isLoading.value = false;
+const search = handleSubmit(
+    async() => {
+        try {
+            isLoading.value = true;
+            result.value = [];
+            resultCount.value = 0;
+            msgStore.clear();
+            const response = await axios.get("/api/database/exp", {
+                params: { query: keyword.value }
+            });
+            result.value = response.data;
+            resultCount.value = result.value.length;
+        }catch(e) {
+            let data = e.response.data;
+            msgStore.error(data.detail);
+        } finally {
+            isLoading.value = false;
+        }
     }
-}
+);
 
 // 各カード登録画面に遷移する。
 const toCardPage = (name, ex) => {
@@ -62,10 +77,11 @@ const toCardPage = (name, ex) => {
             <v-row>
                 <v-col cols="3">
                     <v-text-field
-                        v-model="state.keyword"
+                        v-model="keyword"
                         placeholder="セット略称"
                         append-inner-icon="mdi-magnify"
                         @click:append-inner="search"
+                        :error-messages="errorMessage"
                         clearable>
                         <template v-slot:label>
                             セット略称<v-icon icon="mdi-asterisk" size="x-small" color="error"></v-icon>
