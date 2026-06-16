@@ -1,7 +1,7 @@
 <script setup>
 import MessageArea from "../component/msg/MessageArea.vue";
 import Loading from "vue-loading-overlay";
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { MsgStore } from "../component/msg/MsgStore.js";
@@ -13,6 +13,10 @@ const keyword = ref(route.query.attr);
 const result = ref([]);
 const resultCount = ref(0);
 const msgStore = MsgStore();
+
+const state = reactive({
+    keyword:route.query.attr
+});
 
 onMounted(() => {
     if (keyword.value) {
@@ -51,22 +55,24 @@ const toCardPage = (name, ex) => {
         query: {'setname':ex.name, 'attr':ex.attr },
     });
 }
-
 </script>
 <template>
     <article>
         <v-form rounded class="form_sheet pa-4">
             <v-row>
-                <v-col cols="2">
+                <v-col cols="3">
                     <v-text-field
-                        v-model="keyword"
-                        label="セット略称"
+                        v-model="state.keyword"
+                        placeholder="セット略称"
                         append-inner-icon="mdi-magnify"
                         @click:append-inner="search"
                         clearable>
-                </v-text-field>
+                        <template v-slot:label>
+                            セット略称<v-icon icon="mdi-asterisk" size="x-small" color="error"></v-icon>
+                        </template>
+                    </v-text-field>
                 </v-col>
-                <v-col cols="10" class="text-right">
+                <v-col cols="9" class="text-right">
                     <v-btn @click="show" color="teal-lighten-1" variant="outlined">新しく登録する</v-btn>
                 </v-col>
                 </v-row>
