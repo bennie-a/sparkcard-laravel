@@ -7,6 +7,7 @@ import axios from "axios";
 import { MsgStore } from "../component/msg/MsgStore.js";
  import { useForm, useField } from 'vee-validate';
  import * as yup from 'yup';
+ import yupRule from "../../../validation/yupRule.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -14,6 +15,7 @@ const isLoading = ref(false);
 const result = ref([]);
 const resultCount = ref(0);
 const msgStore = MsgStore();
+let label = 'セット略称';
 
 onMounted(() => {
     if (keyword.value) {
@@ -22,11 +24,7 @@ onMounted(() => {
 });
 
 const schema = yup.object({
-    keyword: yup.string().label('セット略称').required()
-    .matches(
-            /^[A-Za-z0-9]+$/,
-            '半角英数字のみで入力してください。'
-        )
+    keyword: yup.string().label(label).required().customAlpha()
 });
 
 const { handleSubmit } = useForm({
@@ -82,7 +80,7 @@ const toCardPage = (name, ex) => {
                 <v-col cols="3">
                     <v-text-field
                         v-model="keyword"
-                        placeholder="セット略称"
+                        :placeholder="label"
                         append-inner-icon="mdi-magnify"
                         @click:append-inner="search"
                         :error-messages="errorMessage"
