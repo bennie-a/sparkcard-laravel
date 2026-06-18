@@ -9,7 +9,6 @@ import { store } from "./store.js";
 // import Encoding from "encoding-japanese";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-// import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 import {createPinia} from 'pinia';
 import 'vuetify/styles'
@@ -19,6 +18,8 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import * as yup from 'yup';
+import { requiredMessage } from "../validation/messages.js";
 
 const app = createApp(App);
 
@@ -28,7 +29,6 @@ app.use(store);
 app.use(VuePapaParse);
 // app.use(Encoding);
 // app.use(Datepicker);
-// app.use(Loading);
 
 const vuetify = createVuetify({
   components:{
@@ -67,6 +67,12 @@ const vuetify = createVuetify({
     }
 });
 app.use(vuetify);
+
+yup.setLocale({
+    mixed:{
+        required:requiredMessage
+    }
+});
 
 const pinia = createPinia();
 app.use(pinia);

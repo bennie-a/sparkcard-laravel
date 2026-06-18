@@ -22,7 +22,7 @@ onMounted(() => {
 });
 
 const schema = yup.object({
-    keyword: yup.string().required('セット略称は必須です')
+    keyword: yup.string().label('セット略称').required()
     .matches(
             /^[A-Za-z0-9]+$/,
             '半角英数字のみで入力してください。'
