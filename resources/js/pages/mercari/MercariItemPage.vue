@@ -1,5 +1,4 @@
 <template>
-    <message-area></message-area>
     <v-form rounded class="form_sheet pa-4">
         <v-text-field label="セット略称" class="w-25"
             append-inner-icon="mdi-magnify"
@@ -16,9 +15,8 @@
             >登録・更新用CSVを作成する</download-button
         >
     </div>
-        {{ this.result }}
         <article class="mt-2" v-if="this.result.length > 0">
-        <h2 class="ui medium dividing header">件数：{{ this.result.length }}件</h2>
+        <h2 class="text-title-medium">件数：{{ this.result.length }}件</h2>
         <v-table  class="item_list mt-4 border-thin">
             <thead>
                 <tr>
@@ -105,11 +103,23 @@ export default {
         return {
             isPublic: true,
             result:[],
-            isLoading:false
+            isLoading:false,
+            selectedCard: [],
+            isAll: false,
+
             // contentMap: {},
         };
     },
     methods: {
+        allChecked: function () {
+            if (this.isAll) {
+                this.result.forEach((c) => {
+                    this.selectedCard.push(c.id);
+                });
+            } else {
+                this.selectedCard.splice(0);
+            }
+        },
         search:async function() {
             const msgStore = MsgStore();
             msgStore.clear();
