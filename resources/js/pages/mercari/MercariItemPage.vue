@@ -19,10 +19,10 @@
         {{ this.result }}
         <article class="mt-2" v-if="this.result.length > 0">
         <h2 class="ui medium dividing header">件数：{{ this.result.length }}件</h2>
-        <v-table class="ui table striped">
+        <v-table  class="item_list mt-4 border-thin">
             <thead>
                 <tr>
-                    <th class="one wide">
+                    <th width="5%">
                         <input
                             type="checkbox"
                             id="all"
@@ -30,15 +30,12 @@
                             @change="allChecked"
                         />
                     </th>
-                    <th class="six wide left aligned">カード情報</th>
-                    <th class="two wide center aligned">数量</th>
-                    <th class="two wide center aligned">
+                    <th width="45%">カード情報</th>
+                    <th width="8%" class="text-center">枚数</th>
+                    <th width="8%" class="text-center">
                         状態
                     </th>
-                    <th class="two wide center aligned">
-                        言語
-                    </th>
-                    <th class="left aligned">価格</th>
+                    <th width="8%" class="text-center">価格</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,33 +52,13 @@
                         <CardLayout :card="card" :lang="card.lang"></CardLayout>
                     </td>
 
-                    <td v-if="isNotion" class="center aligned">
-                        {{ card.stock }}
+                    <td class="text-center">
+                        {{ card.stock }}枚
                     </td>
-                    <td v-if="isNotion == false" class="center aligned">
-                        <div
-                            class="ui right labeled input one wide"
-                            :class="{
-                                disabled: !selectedCard.includes(card.id),
-                            }"
-                        >
-                            <input
-                                type="number"
-                                step="1"
-                                min="0"
-                                class="text-stock"
-                                v-model="card.stock"
-                            />
-                            <div class="ui basic label">枚</div>
-                        </div>
-                    </td>
-                    <td v-if="isNotion" class="center aligned">
+                    <td class="text-center">
                         <condition :name="card.condition"></condition>
                     </td>
-                    <td v-if="isNotion" class="center aligned">
-                        {{ card.lang }}
-                    </td>
-                    <td>{{ card.price }}円</td>
+                    <td class="text-center">&yen;{{ card.price }}</td>
                 </tr>
             </tbody>
             <tfoot
@@ -112,6 +89,7 @@ import { MsgStore } from "../component/msg/MsgStore.js";
 import NotionCardProvider from "../../composables/NotionCardProvider.js";
 import Loading from "vue-loading-overlay";
 import CardLayout from "../component/CardLayout.vue";
+import ConditionTag from "../component/tag/ConditionTag.vue";
 
 export default {
     components: {
@@ -120,7 +98,8 @@ export default {
         "search-form": SearchForm,
         "download-button": DownloadButton,
         "Loading":Loading,
-        "CardLayout":CardLayout
+        "CardLayout":CardLayout,
+        "condition":ConditionTag
     },
     data() {
         return {
