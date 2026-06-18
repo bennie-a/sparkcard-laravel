@@ -73,7 +73,7 @@ export default () => {
         contents: function (c, index) {
             let json = [
                 toSurfaceName(c),
-                toNoLabelName(c),
+                "",
                 "",
                 "",
                 "",

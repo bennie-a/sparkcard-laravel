@@ -10,10 +10,8 @@
             <input type="checkbox" name="public" v-model="isPublic" />
             <label>メルカリに公開する</label>
         </div>
-        <download-button filename="mercari_item"
-            ><i class="download icon"></i
-            >登録・更新用CSVを作成する</download-button
-        >
+        <download-button filename="mercari_item" v-model:isDisabled="isDisabled" v-model:card="selectedCard"
+            >登録・更新用CSVを作成する</download-button>
     </div>
         <article class="mt-2" v-if="this.result.length > 0">
         <h2 class="text-title-medium">件数：{{ this.result.length }}件</h2>
@@ -37,12 +35,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(card, index) in this.result" :key="index">
+                <tr v-for="(card, index) in this.paginatedList" :key="index">
                     <td>
                         <input
                             type="checkbox"
                             v-model="selectedCard"
-                            :value="card.id"
+                            :value="card"
                             @change="checked"
                         />
                     </td>
@@ -60,14 +58,10 @@
                 </tr>
             </tbody>
             <tfoot
-                class="full-width"
-                v-if="$store.getters.cardsLength != 0"
             >
                 <tr>
-                    <th colspan="10">
-                        <div class="right aligned">
-                            <pagination></pagination>
-                        </div>
+                    <th colspan="5">
+                       <ListPagination v-model="this.page" :length="this.pageCount"></ListPagination>
                     </th>
                 </tr>
             </tfoot>
@@ -88,6 +82,9 @@ import NotionCardProvider from "../../composables/NotionCardProvider.js";
 import Loading from "vue-loading-overlay";
 import CardLayout from "../component/CardLayout.vue";
 import ConditionTag from "../component/tag/ConditionTag.vue";
+import ListPagination from "../component/pagination/ListPagination.vue";
+import { usePagenate } from "../component/pagination/UsePaginate";
+import { ref } from "vue";
 
 export default {
     components: {
@@ -97,24 +94,41 @@ export default {
         "download-button": DownloadButton,
         "Loading":Loading,
         "CardLayout":CardLayout,
-        "condition":ConditionTag
+        "condition":ConditionTag,
+        "ListPagination":ListPagination
+    },
+    setup() {
+        const result = ref([]);
+
+        const {
+            page,
+            pageCount,
+            paginatedList,
+            resetPage
+        } = usePagenate(result, 10);
+
+        return {
+            result,
+            page,
+            pageCount,
+            paginatedList,
+            resetPage
+        };
     },
     data() {
         return {
             isPublic: true,
-            result:[],
             isLoading:false,
             selectedCard: [],
             isAll: false,
-
-            // contentMap: {},
+            isDisabled:this.selectedCard == 0,
         };
     },
     methods: {
         allChecked: function () {
             if (this.isAll) {
                 this.result.forEach((c) => {
-                    this.selectedCard.push(c.id);
+                    this.selectedCard.push(c);
                 });
             } else {
                 this.selectedCard.splice(0);
@@ -123,6 +137,7 @@ export default {
         search:async function() {
             const msgStore = MsgStore();
             msgStore.clear();
+            this.resetPage();
             this.isLoading = true;
             const provider = new NotionCardProvider();
             const query = {
@@ -134,7 +149,6 @@ export default {
             };
 
             this.result = await provider.searchByStatus(query);
-            console.log(this.result);
             this.isLoading = false;
         }
     },

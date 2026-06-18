@@ -1,55 +1,53 @@
 <template>
-    <button
-        class="ui button"
+    <v-btn
+        variant="flat"
+        color="teal-lighten-1"
         @click="download"
-        :class="[color, { disabled: isDisabled }]"
+        :disabled="isDisabled"
     >
+        <v-icon icon="mdi-download"></v-icon>
         <slot></slot>
-    </button>
-    <div id="complate" class="ui mini modal">
-        <div class="header">ダウンロードが完了しました。</div>
-        <button id="ok" class="ui teal fluid button" @click="ok">OK</button>
-    </div>
+    </v-btn>
+    <v-dialog v-model="dialog">
+        <v-card class="text-center mx-auto" width="400">
+            <v-card-title>
+                <v-icon icon="mdi-information"></v-icon>
+                ダウンロードが完了しました。
+            </v-card-title>
+            <v-card-actions class="d-flex justify-center">
+                <v-btn text="閉じる" @click="dialog = false"></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 <script>
 import { write } from "../../composables/CSVWriter";
 import Contentsfactory from "../../csv/ContentsFactory";
 
 export default {
-    props: {
-        color: { type: String, default: "teal" },
-        filename: { type: String, reqiured: true },
-        startnum:{type:Number, default:1}
+    data() {
+        return {
+            dialog:false
+        };
     },
-    computed: {
-        isDisabled: function () {
-            const checkbox = this.$store.getters["csvOption/selectedList"];
-            return checkbox.length == 0;
-        },
+    props: {
+        filename: { type: String, reqiured: true },
+        startnum:{type:Number, default:1},
+        isDisabled:{type:Boolean, default:false},
+        card:{type:Object, reqiured:true}
     },
     methods: {
         download: function () {
-            this.$store.dispatch("setLoad", true);
 
             let contents = Contentsfactory.get(this.filename);
             const header = contents.header;
-            const card = this.$store.getters.card;
-            const checkbox = this.$store.getters["csvOption/selectedList"];
-            const filterd = card.filter((c) => {
-                return checkbox.includes(c.id);
-            });
-            const jsonArray = filterd.map((c, index) => contents.contents(c, this.startnum + index));
-
+            const jsonArray = this.card.map((c, index) => contents.contents(c, this.startnum + index));
             const csv = this.$papa.unparse({
                 fields: header,
                 data: JSON.stringify(jsonArray),
             });
             write(csv, `${this.filename}.csv`);
-            this.$store.dispatch("setLoad", false);
-            $("#complate").modal("show");
-        },
-        ok: function () {
-            $("#complate").modal("hide");
+            this.dialog = true;
         },
     },
 };
