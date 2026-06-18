@@ -22,7 +22,7 @@ const showImage = (id) => {
             <v-col>
                 <div class="text-title-medium">
                     {{ card.name }}&#91;{{ lang }}&#93;
-                    <span v-if="card.promotype.id != '1'" class="text-label-medium">&#8810;{{card.promotype.name}}&#8811;</span>
+                    <span v-if="card.promotype && card.promotype.id != '1'" class="text-label-medium">&#8810;{{card.promotype.name}}&#8811;</span>
                     <foiltag :isFoil="card.foil.is_foil" :foiltype="card.foil.name"/>
                 </div>
                  <span class="text-medium-emphasis">{{ card.exp.name }}&#91;{{ card.exp.attr }}&#93;&#35;{{ card.number }}</span>

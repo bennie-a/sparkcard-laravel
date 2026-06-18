@@ -14,18 +14,20 @@
 </template>
 <script>
 import NotionCardProvider from "../../composables/NotionCardProvider";
-
+import { MsgStore } from "./msg/MsgStore";
 export default {
     props: ["limitprice", 'status'],
     data() {
         return {
             set_name: "",
+            result:[]
         };
     },
     methods: {
         async search() {
-            this.$store.dispatch("message/clear");
-            const provider = new NotionCardProvider(this.$store);
+            const msgStore = MsgStore();
+            msgStore.clear();
+            const provider = new NotionCardProvider();
             const query = {
                 params:{
                     price: this.limitprice,
@@ -34,7 +36,7 @@ export default {
                 }
             };
 
-            provider.searchByStatus(query);
+            this.result = provider.searchByStatus(query);
         },
     },
 };

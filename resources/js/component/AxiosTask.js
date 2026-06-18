@@ -7,13 +7,13 @@ export class AxiosTask {
         await axios
             .get(this.getApiUrl(url), query)
             .then((response) => {
-                success(response, this.store, query);
+                success(response, query);
             })
             .catch((e) => {
                 fail(e, this.store, query);
             })
             .finally(() => {
-                this.store.dispatch("setLoad", false);
+                // this.store.dispatch("setLoad", false);
             });
     }
     // PATCHメソッドでAPIを呼び出す
