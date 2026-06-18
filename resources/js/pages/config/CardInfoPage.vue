@@ -8,6 +8,9 @@ import ColorDropdown from "../component/selection/ColorDropdown.vue";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { MsgStore } from "../component/msg/MsgStore.js";
+import RequiredLabel from "../component/label/requiredLabel.vue";
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
 
 const route = useRoute();
 const router = useRouter();
@@ -16,7 +19,7 @@ const setname = ref(route.query.setname);
 const attr = ref(route.query.attr);
 const  language = ref("ja");
 
-const number = ref("");
+// const number = ref("");
 const isLoading = ref(false);
 const msgStore = MsgStore();
 
@@ -27,35 +30,52 @@ const multiverse_id = ref("");
 const image_url = ref("");
 const promotype_id = ref(1);
 
-const search = async function () {
-    isLoading.value = true;
-    msgStore.clear();
-    const query = {
-        params: {
-            setcode: attr.value,
-            number: number.value,
-            language: language.value,
-        },
-    };
-    await axios
-        .get("/api/scryfall", query)
-        .then((response) => {
-            let data = response.data;
-            name.value = data["name"];
-            en_name.value = data["en_name"];
-            multiverse_id.value = data["multiverseId"];
-            color.value = data["color"];
-            image_url.value = data["image_url"];
-            foiltype.value = data["foiltype"];
-            promotype_id.value = data["promotype.id"]
-        })
-        .catch((e) => {
-            msgStore.error(e.response.data.detail);
-        })
-        .finally(() => {
-            isLoading.value = false;
-        });
-}
+let numberLabel = 'カード番号';
+
+const schema = yup.object({
+    number:yup.string().label(numberLabel).required()
+});
+
+const {handleSubmit} = useForm({
+    validationSchema:schema
+});
+
+const {value:number, errorMessage:numMsg} = useField('number');
+const isDisplay = ref(false);
+const search = handleSubmit(
+    async function () {
+        isLoading.value = true;
+        msgStore.clear();
+        isDisplay.value = false;
+        const query = {
+            params: {
+                setcode: attr.value,
+                number: number.value,
+                language: language.value,
+            },
+        };
+        await axios
+            .get("/api/scryfall", query)
+            .then((response) => {
+                let data = response.data;
+                name.value = data["name"];
+                en_name.value = data["en_name"];
+                multiverse_id.value = data["multiverseId"];
+                color.value = data["color"];
+                image_url.value = data["image_url"];
+                foiltype.value = data["foiltype"];
+                promotype_id.value = data["promotype.id"];
+
+                isDisplay.value = true;
+            })
+            .catch((e) => {
+                msgStore.error(e.response.data.detail);
+            })
+            .finally(() => {
+                isLoading.value = false;
+            });
+        }
+    );
 
 const store = () => {
     isLoading.value = true;
@@ -96,8 +116,12 @@ const toList = () => {
                         </v-radio-group>
                 </v-col>
                 <v-col cols="3">
-                    <v-text-field label="カード番号" v-model="number"
-                    prepend-inner-icon="mdi-numeric" type="number" min="1"> </v-text-field>
+                    <v-text-field :placeholder="numberLabel" v-model="number" validate-on="input"
+                    prepend-inner-icon="mdi-numeric" type="number" min="1" :error-messages="numMsg">
+                        <template v-slot:label>
+                            <RequiredLabel :text="numberLabel" required></RequiredLabel>
+                        </template>
+                </v-text-field>
                 </v-col>
                 <v-col cols="2" class="text-right">
                     <v-btn @click="search" color="teal-lighten-1">検索する</v-btn>
@@ -105,7 +129,7 @@ const toList = () => {
             </v-row>
         </v-form>
     </section>
-    <section class="mt-8">
+    <section class="mt-8" v-if="isDisplay">
         <article>
             <v-row>
                 <v-col col="6">
@@ -135,8 +159,8 @@ const toList = () => {
                     </v-row>
                     <v-row class="mt-10">
                         <v-col class="text-center">
-                            <v-btn  variant="outlined" color="grey-darken-1" class="mr-4"  @click="toList">
-                                <v-icon icon="mdi-chevron-left" start></v-icon>一覧画面に戻る
+                            <v-btn  variant="outlined" color="grey-darken-1" class="mr-4" @click="toList">
+                                <v-icon icon="mdi-chevron-double-left" start></v-icon>一覧画面に戻る
                             </v-btn>
                             <ModalButton @action="store">
                             登録する
@@ -149,12 +173,12 @@ const toList = () => {
                 </v-col>
             </v-row>
         </article>
-        <article class="text-center mt-6">
+    </section>
+    <section>
         <loading
             :active="isLoading"
             :can-cancel="false"
             :is-full-page="true"
         ></loading>
-        </article>
     </section>
 </template>

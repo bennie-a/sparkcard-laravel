@@ -1,13 +1,13 @@
 <script setup>
-import MessageArea from "../component/msg/MessageArea.vue";
 import Loading from "vue-loading-overlay";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { MsgStore } from "../component/msg/MsgStore.js";
- import { useForm, useField } from 'vee-validate';
- import * as yup from 'yup';
- import yupRule from "../../../validation/yupRule.js";
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
+import yupRule from "../../../validation/yupRule.js";
+import RequiredLabel from "../component/label/requiredLabel.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -87,7 +87,7 @@ const toCardPage = (name, ex) => {
                         validate-on="input"
                         clearable>
                         <template v-slot:label>
-                            セット略称<v-icon icon="mdi-asterisk" size="x-small" color="error"></v-icon>
+                            <RequiredLabel :text="label" required></RequiredLabel>
                         </template>
                     </v-text-field>
                 </v-col>
