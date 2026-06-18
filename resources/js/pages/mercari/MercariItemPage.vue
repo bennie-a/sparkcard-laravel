@@ -4,16 +4,19 @@
             append-inner-icon="mdi-magnify"
             @click:append-inner="search"></v-text-field>
     </v-form>
-    <!-- <search-form limitprice="50" status="ショップ登録予定"></search-form> -->
-    <div class="mt-2" v-if="this.result.length != 0">
-        <div class="ui toggle checkbox mr-2">
-            <input type="checkbox" name="public" v-model="isPublic" />
-            <label>メルカリに公開する</label>
-        </div>
-        <download-button filename="mercari_item" v-model:isDisabled="isDisabled" v-model:card="selectedCard"
-            >登録・更新用CSVを作成する</download-button>
-    </div>
-        <article class="mt-2" v-if="this.result.length > 0">
+    <article class="mt-10" v-if="this.result.length > 0">
+        <v-row>
+            <v-col cols="3">
+                <v-radio-group v-model="filename" inline label="プラットフォーム">
+                    <v-radio label="BASE" value="base_item" color="teal-lighten-1"></v-radio>
+                    <v-radio label="メルカリ" value="mercari_item" color="teal-lighten-1"></v-radio>
+                </v-radio-group>
+            </v-col>
+            <v-col>
+                <download-button v-model:filename="filename" v-model:isDisabled="isDisabled" v-model:card="selectedCard"
+                    >登録用CSVを作成する</download-button>
+            </v-col>
+        </v-row>
         <h2 class="text-title-medium">件数：{{ this.result.length }}件</h2>
         <v-table  class="item_list mt-4 border-thin">
             <thead>
@@ -75,7 +78,6 @@
 import CardList from "../component/CardList.vue";
 import MessageArea from "../component/msg/MessageArea.vue";
 import SearchForm from "../component/SearchForm.vue";
-import CSVUpload from "../component/CSVUpload.vue";
 import DownloadButton from "../component/DownloadButton.vue";
 import { MsgStore } from "../component/msg/MsgStore.js";
 import NotionCardProvider from "../../composables/NotionCardProvider.js";
@@ -122,6 +124,7 @@ export default {
             selectedCard: [],
             isAll: false,
             isDisabled:this.selectedCard == 0,
+            filename:"base_item"
         };
     },
     methods: {
@@ -142,7 +145,7 @@ export default {
             const provider = new NotionCardProvider();
             const query = {
                 params:{
-                    price: 300,
+                    price: 30,
                     status:'ショップ登録予定',
                     set_name:this.set_name
                 }

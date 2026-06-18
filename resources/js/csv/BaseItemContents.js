@@ -36,7 +36,7 @@ export default () => {
                 index,
                 "",
                 toSurfaceName(c),
-                toNoLabelName(c)
+                ""
             ];
             return json;
         },

@@ -76,20 +76,10 @@ const routes = [
         },
     },
     {
-        path: "/base/newitem",
-        component: BaseItemCSV,
-        meta: {
-            title: "BASEショップ用CSVダウンロード",
-            description: "Notionの商品管理ボードからBASE用CSVを作成します。",
-        },
-    },
-    {
         path: "/mercari/newitem",
         component: Mercari,
         meta: {
-            title: "メルカリ用CSVダウンロード",
-            description:
-                "Notionの商品管理ボードからメルカリ用CSVを作成します。※300円未満の商品は除外します。",
+            title: "商品登録用CSVダウンロード",
         },
     },
     {

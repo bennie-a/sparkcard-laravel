@@ -48,12 +48,7 @@ const naviList = ref([
         icon: "mdi-file-download",
         menu:[
             {
-                name: "BASE用CSV",
-                link: "/base/newitem/",
-                icon: "mdi-file-delimited-outline"
-            },
-            {
-                name: "メルカリ用CSV",
+                name: "商品登録用CSV",
                 link: "/mercari/newitem/",
                 icon: "mdi-file-delimited-outline"
             }
