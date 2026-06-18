@@ -23,6 +23,10 @@ onMounted(() => {
 
 const schema = yup.object({
     keyword: yup.string().required('セット略称は必須です')
+    .matches(
+            /^[A-Za-z0-9]+$/,
+            '半角英数字のみで入力してください。'
+        )
 });
 
 const { handleSubmit } = useForm({
@@ -82,6 +86,7 @@ const toCardPage = (name, ex) => {
                         append-inner-icon="mdi-magnify"
                         @click:append-inner="search"
                         :error-messages="errorMessage"
+                        validate-on="input"
                         clearable>
                         <template v-slot:label>
                             セット略称<v-icon icon="mdi-asterisk" size="x-small" color="error"></v-icon>
