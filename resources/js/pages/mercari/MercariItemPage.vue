@@ -1,10 +1,10 @@
 <template>
     <v-form rounded class="form_sheet pa-4">
         <v-text-field label="セット略称" class="w-25"
-            append-inner-icon="mdi-magnify"
+            append-inner-icon="mdi-magnify" v-model="setname"
             @click:append-inner="search"></v-text-field>
     </v-form>
-    <article class="mt-10" v-if="this.result.length > 0">
+    <article class="mt-10" v-if="result.length !== 0">
         <v-row>
             <v-col cols="3">
                 <v-radio-group v-model="filename" inline label="プラットフォーム">
@@ -17,7 +17,7 @@
                     >登録用CSVを作成する</download-button>
             </v-col>
         </v-row>
-        <h2 class="text-title-medium">件数：{{ this.result.length }}件</h2>
+        <h2 class="text-title-medium">件数：{{ result.length }}件</h2>
         <v-table  class="item_list mt-4 border-thin">
             <thead>
                 <tr>
@@ -38,7 +38,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(card, index) in this.paginatedList" :key="index">
+                <tr v-for="(card, index) in paginatedList" :key="index">
                     <td>
                         <input
                             type="checkbox"
@@ -55,7 +55,7 @@
                         {{ card.stock }}枚
                     </td>
                     <td class="text-center">
-                        <condition :name="card.condition"></condition>
+                        <Condition :name="card.condition"></Condition>
                     </td>
                     <td class="text-center">&yen;{{ card.price }}</td>
                 </tr>
@@ -64,7 +64,7 @@
             >
                 <tr>
                     <th colspan="5">
-                       <ListPagination v-model="this.page" :length="this.pageCount"></ListPagination>
+                       <ListPagination v-model="page" :length="pageCount"></ListPagination>
                     </th>
                 </tr>
             </tfoot>
@@ -74,87 +74,60 @@
      :active="isLoading"
      :can-cancel="false" :is-full-page="true" />
 </template>
-<script>
-import CardList from "../component/CardList.vue";
-import MessageArea from "../component/msg/MessageArea.vue";
-import SearchForm from "../component/SearchForm.vue";
+<script setup>
 import DownloadButton from "../component/DownloadButton.vue";
 import { MsgStore } from "../component/msg/MsgStore.js";
 import NotionCardProvider from "../../composables/NotionCardProvider.js";
 import Loading from "vue-loading-overlay";
 import CardLayout from "../component/CardLayout.vue";
-import ConditionTag from "../component/tag/ConditionTag.vue";
+import Condition from "../component/tag/ConditionTag.vue";
 import ListPagination from "../component/pagination/ListPagination.vue";
 import { usePagenate } from "../component/pagination/UsePaginate";
 import { ref } from "vue";
+import { fa } from "vuetify/locale";
 
-export default {
-    components: {
-        "card-list": CardList,
-        "message-area": MessageArea,
-        "search-form": SearchForm,
-        "download-button": DownloadButton,
-        "Loading":Loading,
-        "CardLayout":CardLayout,
-        "condition":ConditionTag,
-        "ListPagination":ListPagination
-    },
-    setup() {
-        const result = ref([]);
+const setname = ref("");
+const result = ref([]);
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePagenate(result, 10);
+const filename = ref('base_item');
+const isLoading = ref(false);
 
-        const {
-            page,
-            pageCount,
-            paginatedList,
-            resetPage
-        } = usePagenate(result, 10);
-
-        return {
-            result,
-            page,
-            pageCount,
-            paginatedList,
-            resetPage
-        };
-    },
-    data() {
-        return {
-            isPublic: true,
-            isLoading:false,
-            selectedCard: [],
-            isAll: false,
-            isDisabled:this.selectedCard == 0,
-            filename:"base_item"
-        };
-    },
-    methods: {
-        allChecked: function () {
-            if (this.isAll) {
-                this.result.forEach((c) => {
-                    this.selectedCard.push(c);
-                });
-            } else {
-                this.selectedCard.splice(0);
+const selectedCard = ref([]);
+const isAll = ref(false);
+const isDisabled = ref(false);
+const search = async() => {
+    const msgStore = MsgStore();
+    msgStore.clear();
+    resetPage();
+    try {
+        isLoading.value = true;
+        const provider = new NotionCardProvider();
+        const query = {
+            params:{
+                price: 30,
+                status:'ショップ登録予定',
+                set_name:setname.value
             }
-        },
-        search:async function() {
-            const msgStore = MsgStore();
-            msgStore.clear();
-            this.resetPage();
-            this.isLoading = true;
-            const provider = new NotionCardProvider();
-            const query = {
-                params:{
-                    price: 30,
-                    status:'ショップ登録予定',
-                    set_name:this.set_name
-                }
-            };
+        };
 
-            this.result = await provider.searchByStatus(query);
-            this.isLoading = false;
-        }
-    },
+        result.value = await provider.searchByStatus(query);
 
-};
+    } catch(e) {
+        result.value = [];
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+const allChecked = () => {
+    if (isAll.value) {
+        result.value.forEach((c) => {
+            selectedCard.value.push(c);
+        });
+    } else {
+        selectedCard.value.splice(0);
+    }
+}
 </script>

@@ -16,8 +16,8 @@ use Illuminate\Http\Response;
  */
 class CardController extends Controller
 {
-    private $service;
-    
+    private CardBoardService $service;
+
 
     public function __construct(CardBoardService $service)
     {
@@ -29,7 +29,7 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(GetCardboardRequest $request)
-    {   
+    {
         logger()->info('Start Search Notion Card');
         $details = $request->getParams();
 
@@ -67,7 +67,6 @@ class CardController extends Controller
     {
         try {
             $details = $request->all();
-            logger()->debug($details);
 
             $this->service->update($id, $details);
             return response("更新完了 ID:".$id, Response::HTTP_OK);

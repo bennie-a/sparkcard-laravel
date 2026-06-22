@@ -1,5 +1,6 @@
 import { AxiosTask } from "../component/AxiosTask";
 import axios from "axios";
+import { MsgStore } from "../pages/component/msg/MsgStore";
 
 export default class NotionCardProvider {
     // constructor($store) {
@@ -7,15 +8,16 @@ export default class NotionCardProvider {
     // }
 
     async searchByStatus(query) {
+        const msgStore = MsgStore();
         try {
             console.log("Notion Card Search...");
             const task = new AxiosTask();
             const response = await axios.get("/api/notion/card", query);
+            console.log(response);
             return response.data;
         } catch(e) {
-            console.error(e.response.data);
-        }finally {
-
+            msgStore.error(e.response.data.detail);
+            throw e;
         }
         // const success = async function (response, query) {
         //     let results = response.data;
