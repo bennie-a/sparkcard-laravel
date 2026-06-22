@@ -1,6 +1,5 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/config/ExpansionPage.vue";
 import CardinfoPage from "./pages/config/CardInfoPage.vue";
