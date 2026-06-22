@@ -36,6 +36,7 @@ export default {
         isDisabled:{type:Boolean, default:false},
         card:{type:Object, reqiured:true}
     },
+
     methods: {
         download: function () {
 

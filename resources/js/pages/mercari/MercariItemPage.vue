@@ -96,7 +96,7 @@ const isLoading = ref(false);
 
 const selectedCard = ref([]);
 const isAll = ref(false);
-const isDisabled = ref(false);
+const isDisabled = ref(true);
 const search = async() => {
     const msgStore = MsgStore();
     msgStore.clear();
@@ -123,11 +123,17 @@ const search = async() => {
 
 const allChecked = () => {
     if (isAll.value) {
+        isDisabled.value = false;
         result.value.forEach((c) => {
             selectedCard.value.push(c);
         });
     } else {
         selectedCard.value.splice(0);
+        isDisabled.value = true;
     }
+}
+
+const checked = () => {
+    isDisabled.value = selectedCard.value.length === 0;
 }
 </script>
