@@ -11,7 +11,7 @@
     import {apiPutService} from "@/component/ApiPutService";
     import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
     import UseDateFormatter from '../../functions/UseDateFormatter.js';
-    import PiniaMsgForm from "../component/PiniaMsgForm.vue";
+    // import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 
 
     const router = useRouter();
@@ -19,7 +19,7 @@
     const isLoading = ref(false);
     const arrival_id = route.params.arrival_id;
 
-    const piniaMsg = piniaMsgStore();
+    // const piniaMsg = piniaMsgStore();
 
     const toDssPage = () => {
         router.push({
@@ -63,7 +63,7 @@
             query: query,
             onSuccess: (data) => {
                 arrDateConditionStore().arrivalDate = data.arrival_date;
-                piniaMsg.setSuccess("変更しました。");
+                // piniaMsg.setSuccess("変更しました。");
                 toDssPage();
             },
             onFinally: () => {
@@ -73,7 +73,6 @@
     };
 </script>
 <template>
-    <PiniaMsgForm></PiniaMsgForm>
     <article v-if="!isLoading">
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">

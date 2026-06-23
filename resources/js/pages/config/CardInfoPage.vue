@@ -8,7 +8,7 @@ import ColorDropdown from "../component/selection/ColorDropdown.vue";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { MsgStore } from "../component/msg/MsgStore.js";
-import RequiredLabel from "../component/label/requiredLabel.vue";
+import RequiredLabel from "../component/label/RequiredLabel.vue";
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
 
@@ -19,7 +19,6 @@ const setname = ref(route.query.setname);
 const attr = ref(route.query.attr);
 const  language = ref("ja");
 
-// const number = ref("");
 const isLoading = ref(false);
 const msgStore = MsgStore();
 
@@ -28,7 +27,7 @@ const en_name = ref("");
 const foiltype = ref([]);
 const multiverse_id = ref("");
 const image_url = ref("");
-const promotype_id = ref(1);
+const promotype_id = ref(null);
 
 let numberLabel = 'カード番号';
 
@@ -58,15 +57,16 @@ const search = handleSubmit(
             .get("/api/scryfall", query)
             .then((response) => {
                 let data = response.data;
+                console.log(data);
                 name.value = data["name"];
                 en_name.value = data["en_name"];
                 multiverse_id.value = data["multiverseId"];
                 color.value = data["color"];
                 image_url.value = data["image_url"];
                 foiltype.value = data["foiltype"];
-                promotype_id.value = data["promotype.id"];
 
                 isDisplay.value = true;
+
             })
             .catch((e) => {
                 msgStore.error(e.response.data.detail);
@@ -90,7 +90,6 @@ const store = () => {
         is_skip: false,
         image_url: image_url.value,
         foiltype: foiltype.value,
-        promotype_id:promotype_id.value,
     };
     task.post("/database/card", json);
     isLoading.value = false;

@@ -64,7 +64,7 @@ onMounted(async() => {
     const referrer_path = router.referrer.path;
     if (referrer_path.indexOf('/arrival/') !== 0 ) {
         console.log('pinia reset');
-        piniaMsgStore().reset();
+        // piniaMsgStore().reset();
         gcStore.reset();
         arrDateStore.reset();
     }
@@ -86,7 +86,6 @@ const toDssPage = (arrivalDate, vendor_id) => {
 }
 </script>
 <template>
-    <PiniaMsgForm></PiniaMsgForm>
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">

@@ -18,9 +18,9 @@ class PromotypeSeeder extends Seeder
     public function run()
     {
         DB::table('promotype')->truncate();
-        
+
         $exp_id = 'exp_id';
-        
+
         // 共通
         $com = Expansion::findBySetCode('COM');
         // WAR
@@ -34,12 +34,12 @@ class PromotypeSeeder extends Seeder
         // ELD
         $eld = Expansion::findBySetCode('ELD');
         // STX
-        $stx = Expansion::findBySetCode('STX');      
+        $stx = Expansion::findBySetCode('STX');
         // SCH(Store Championship)
         $sch = Expansion::findBySetCode('SCH');
         // WOE
         $woe = Expansion::findBySetCode('WOE');
-        
+
         // ONE
         $one = Expansion::findBySetCode('ONE');
         // MKM
@@ -57,7 +57,7 @@ class PromotypeSeeder extends Seeder
 
         $eoe = Expansion::findBySetCode('EOE');
         $items = [
-            ['attr' => 'draft', 'name' => '', $exp_id => $com->notion_id],
+            ['attr' => 'draft', 'name' => '通常版', $exp_id => $com->notion_id],
             ['attr' => 'showcase', 'name' => 'ショーケース', $exp_id => $com->notion_id],
             ['attr' => 'buyabox', 'name' => 'BOXプロモ特典', $exp_id => $com->notion_id],
             ['attr' => 'boosterfun', 'name' => 'ブースターファン', $exp_id => $com->notion_id],
@@ -109,7 +109,7 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'surreal_space', 'name'=> '「超常宇宙」ボーダーレス',  $exp_id => $eoe->notion_id],
             ['attr' => 'observation', 'name'=> '「観測窓」ボーダーレス',  $exp_id => $eoe->notion_id],
             ['attr' => 'stellar_sight', 'name'=> '「星景」土地',  $exp_id => $eoe->notion_id],
-        ]; 
+        ];
 
         foreach($items as $i ){
             Promotype::create($i);

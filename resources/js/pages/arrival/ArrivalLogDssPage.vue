@@ -13,7 +13,7 @@ import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
-import PiniaMsgForm from "../component/PiniaMsgForm.vue";
+// import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import { storeToRefs } from "pinia";
 
 const router = useRouter();
@@ -23,7 +23,7 @@ const arrDateStore = arrDateConditionStore();
 
 const {arrivalDate, vendorId} = storeToRefs(arrDateStore);
 
-const piniaMsg = piniaMsgStore();
+// const piniaMsg = piniaMsgStore();
 const currentList = reactive([]);
 const resultCount = ref(0);
 
