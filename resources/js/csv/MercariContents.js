@@ -4,6 +4,7 @@ import {
     toNoLabelName,
     toSurfaceName,
     details,
+    toLanguage
 } from "../composables/CardCollector";
 
 export default () => {
@@ -156,7 +157,7 @@ export default () => {
 ■商品内容
 商品名：「${c.name}${foil}」
 エキスパンション：${c.exp.name}(${c.exp.attr})
-言語：${c.lang}
+言語：${toLanguage(c.lang)}
 
 ■状態
 状態は【${c.condition}】です。${details(c.condition)}

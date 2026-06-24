@@ -14,7 +14,6 @@ import * as yup from 'yup';
 
 const route = useRoute();
 const router = useRouter();
-const color = ref("");
 const setname = ref(route.query.setname);
 const attr = ref(route.query.attr);
 const  language = ref("ja");
@@ -22,17 +21,14 @@ const  language = ref("ja");
 const isLoading = ref(false);
 const msgStore = MsgStore();
 
-const name = ref("");
-const en_name = ref("");
 const foiltype = ref([]);
 const multiverse_id = ref("");
 const image_url = ref("");
-const promotype_id = ref(null);
 
 let numberLabel = 'カード番号';
 
 const schema = yup.object({
-    number:yup.string().label(numberLabel).required()
+    number:yup.string().label(numberLabel).required(),
 });
 
 const {handleSubmit} = useForm({
@@ -40,6 +36,19 @@ const {handleSubmit} = useForm({
 });
 
 const {value:number, errorMessage:numMsg} = useField('number');
+
+const storeSchema = yup.object({
+    name:yup.string().label('カード名(JP)').required(),
+    en_name:yup.string().label('カード名(EN)').required(),
+    promotype_id:yup.number().label('プロモタイプ').required(),
+    color:yup.string().label('色').required(),
+});
+
+const {value:name} = useField('name');
+const {value:promotype_id} = useField('promotype_id');
+const {value:en_name} = useField('en_name');
+const {value:color} = useField('color');
+
 const isDisplay = ref(false);
 const search = handleSubmit(
     async function () {
@@ -57,7 +66,6 @@ const search = handleSubmit(
             .get("/api/scryfall", query)
             .then((response) => {
                 let data = response.data;
-                console.log(data);
                 name.value = data["name"];
                 en_name.value = data["en_name"];
                 multiverse_id.value = data["multiverseId"];
@@ -77,23 +85,31 @@ const search = handleSubmit(
         }
     );
 
-const store = () => {
-    isLoading.value = true;
-    const task = new AxiosTask();
-    let json = {
-        setCode: attr.value,
-        name: name.value,
-        multiverseId: multiverse_id.value,
-        en_name: en_name.value,
-        color: color.value,
-        number: number.value,
-        is_skip: false,
-        image_url: image_url.value,
-        foiltype: foiltype.value,
-    };
-    task.post("/database/card", json);
-    isLoading.value = false;
-}
+const store = async function() {
+    try {
+            isLoading.value = true;
+            const task = new AxiosTask();
+            msgStore.clear();
+            let json = {
+                setCode: attr.value,
+                name: name.value,
+                multiverseId: multiverse_id.value,
+                en_name: en_name.value,
+                color: color.value,
+                number: number.value,
+                is_skip: false,
+                image_url: image_url.value,
+                foiltype: foiltype.value,
+                promotype_id:promotype_id.value,
+            };
+            await storeSchema.validate(json);
+            await task.post("/database/card", json);
+        } catch(e) {
+            msgStore.error(e.message);
+        } finally {
+            isLoading.value = false;
+        }
+    }
 
 const toList = () => {
     router.push({
@@ -134,15 +150,23 @@ const toList = () => {
                 <v-col col="6">
                     <v-row>
                         <v-col>
-                            <v-text-field label="カード名(JP)" v-model="name"></v-text-field>
+                            <v-text-field placeholder="カード名(JP)" v-model="name">
+                                <template v-slot:label>
+                                    <RequiredLabel text="カード名(JP)" required></RequiredLabel>
+                                </template>
+                            </v-text-field>
                         </v-col>
                         <v-col>
-                            <v-text-field label="カード名(EN)" v-model="en_name"></v-text-field>
+                            <v-text-field label="カード名(EN)" v-model="en_name">
+                                <template v-slot:label>
+                                    <RequiredLabel text="カード名(EN)" required></RequiredLabel>
+                                </template>
+                            </v-text-field>
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="5">
-                            <ColorDropdown v-model="color"></ColorDropdown>
+                            <ColorDropdown v-model="color" required></ColorDropdown>
                         </v-col>
                         <v-col>
                             <PromoDropdown v-model:id="promotype_id" v-model:setcode="attr"></PromoDropdown>

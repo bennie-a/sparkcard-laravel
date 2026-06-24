@@ -7,7 +7,7 @@ import { MsgStore } from "../component/msg/MsgStore.js";
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
 import yupRule from "../../../validation/yupRule.js";
-import RequiredLabel from "../component/label/requiredLabel.vue";
+import RequiredLabel from "../component/label/RequiredLabel.vue";
 
 const router = useRouter();
 const route = useRoute();

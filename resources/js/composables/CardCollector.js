@@ -45,7 +45,7 @@ export const toPhotoName = (card) => {
     let expAttr = card.exp.attr;
     let photoname = number + "_" + expAttr;
 
-    if (card.isFoil) {
+    if (card.foil.is_foil) {
         photoname += "-foil";
     }
     return photoname;
@@ -70,3 +70,15 @@ export const details = (condition) => {
     };
     return templates[condition];
 };
+
+export const toLanguage = (mark) => {
+    let templates = {
+        "JP":"日本語",
+        "EN":"英語",
+        "CS":"簡体中国語",
+        "CT":"繫体中国語",
+        "IT":"イタリア語",
+        "RU":"ロシア語"
+    }
+    return templates[mark];
+}

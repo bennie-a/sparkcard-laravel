@@ -1,5 +1,13 @@
 <script setup>
+import RequiredLabel from '../label/RequiredLabel.vue';
+
 const selectedColor = defineModel({type:String, default:""});
+defineProps({
+    required: {
+        type: Boolean,
+        default: false
+  }
+});
 const colorItems = [
     {state:'白', item_value:'W', color:'yellow-lighten-1'},
     {state:'青', item_value:'U', color:'blue-lighten-1'},
@@ -20,6 +28,9 @@ const colorItems = [
     v-model="selectedColor"
     :items="colorItems"
     item-title="state" item-value="item_value" clearable>
+    <template v-slot:label v-if="required">
+        <RequiredLabel text="色" required></RequiredLabel>
+    </template>
 </v-select>
 
 </template>
