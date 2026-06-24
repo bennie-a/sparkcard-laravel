@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, shallowRef } from 'vue';
 import { useRouter } from "vue-router";
 import scdatepicker from "../component/SCDatePicker.vue";
 import vendortag from "../component/tag/VendorTag.vue"
@@ -16,11 +16,22 @@ import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 
 import { storeToRefs } from 'pinia';
 
+import { useDate } from 'vuetify';
+
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
 
 // 検索条件
 const {startDate, endDate, itemname} = storeToRefs(gcStore);
+
+const adapter = useDate();
+const today = adapter.date();
+
+function daysAgo(count) {
+    return adapter.addDays(today, -count);
+}
+
+const model = shallowRef([daysAgo(7), today]);
 
 // 検索結果
 let result = reactive([]);
@@ -86,6 +97,10 @@ const toDssPage = (arrivalDate, vendor_id) => {
 }
 </script>
 <template>
+    <v-locale-provider locale="ja">
+        <v-date-input v-model="model" multiple="range" label="入荷日" variant="outlined"></v-date-input>
+    </v-locale-provider>
+    {{ model }}
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">

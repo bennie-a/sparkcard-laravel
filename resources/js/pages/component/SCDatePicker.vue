@@ -22,7 +22,12 @@ const dateFormat = (date) => {
     />
 </template>
 <style>
-.dp__input {
-    padding-left: 2rem!important;
+.v-date-picker-month__day--selected .v-btn {
+  background-color: #26A69A !important;
+  color: white !important;
+}
+
+.v-date-picker-month__day--selected .v-btn__content {
+  color: white !important;
 }
 </style>

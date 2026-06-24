@@ -133,7 +133,7 @@ onMounted(async() => {
             </tfoot>
         </v-table>
         <div class="text-center mt-6">
-            <v-btn variant="outlined" color="grey-darken-1" @click="toList">一覧に戻る</v-btn>
+            <v-btn variant="outlined" color="grey-darken-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
         </div>
         <loading
          :active="isLoading"
