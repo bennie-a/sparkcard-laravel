@@ -65,6 +65,8 @@ const vuetify = createVuetify({
             locale: {
                 ja: 'ja-JP',
             },
+            variant:'outlined',
+            prependIcon:"",
         }
     },
     locale: {

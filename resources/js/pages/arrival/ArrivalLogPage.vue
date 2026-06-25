@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref, shallowRef } from 'vue';
 import { useRouter } from "vue-router";
-import scdatepicker from "../component/date/DateInput.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import Loading from "vue-loading-overlay";
 import axios from 'axios';
@@ -24,13 +23,6 @@ const arrDateStore = arrDateConditionStore();
 
 // 検索条件
 const {startDate, endDate, itemname} = storeToRefs(gcStore);
-
-const adapter = useDate();
-const today = adapter.date();
-
-function daysAgo(count) {
-    return adapter.addDays(today, -count);
-}
 
 const selectedDate = ref([]);
 
@@ -98,8 +90,6 @@ const toDssPage = (arrivalDate, vendor_id) => {
 }
 </script>
 <template>
-    <date-range-input :selectedDate="selectedDate" :duration="7"></date-range-input>
-    {{ selectedDate }}
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">
@@ -107,7 +97,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                 <input v-model="itemname" type="text">
             </div>
             <div class="six wide field">
-                <label for="">入荷日</label>
+                <date-range-input label="入荷日" days="7" v-model:selected-date="selectedDate"></date-range-input>
                 <!-- <div class="three fields">
                     <div class="seven wide field">
                         <scdatepicker v-model="startDate"></scdatepicker>

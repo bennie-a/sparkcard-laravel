@@ -8,8 +8,6 @@ defineProps({'datelabel': {type:String, required:true}});
     <v-date-input
     v-model="selectedDate"
     :label="datelabel"
-    variant="outlined"
-    prepend-icon=""
     prepend-inner-icon="mdi-calendar-today"
     />
 </template>
