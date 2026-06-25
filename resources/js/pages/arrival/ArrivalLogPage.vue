@@ -7,6 +7,7 @@ import Loading from "vue-loading-overlay";
 import axios from 'axios';
 import { useStore } from 'vuex';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
+import DateRangeInput from '../component/date/DateRangeInput.vue';
 
 import pglist from "../component/PgList.vue";
 import PiniaMsgForm from "../component/PiniaMsgForm.vue";
@@ -31,7 +32,7 @@ function daysAgo(count) {
     return adapter.addDays(today, -count);
 }
 
-const model = shallowRef([daysAgo(7), today]);
+const selectedDate = ref([]);
 
 // 検索結果
 let result = reactive([]);
@@ -97,10 +98,8 @@ const toDssPage = (arrivalDate, vendor_id) => {
 }
 </script>
 <template>
-    <v-locale-provider locale="ja">
-        <v-date-input v-model="model" multiple="range" label="入荷日" variant="outlined"></v-date-input>
-    </v-locale-provider>
-    {{ model }}
+    <date-range-input :selectedDate="selectedDate" :duration="7"></date-range-input>
+    {{ selectedDate }}
     <article class="mt-1 ui form segment">
         <div class="three fields">
             <div class="four wide field">
@@ -109,7 +108,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
             </div>
             <div class="six wide field">
                 <label for="">入荷日</label>
-                <div class="three fields">
+                <!-- <div class="three fields">
                     <div class="seven wide field">
                         <scdatepicker v-model="startDate"></scdatepicker>
                     </div>
@@ -119,7 +118,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                     <div class="seven wide field">
                         <scdatepicker v-model="endDate"></scdatepicker>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="field">
                 <label class="hidden">ボタン</label>
