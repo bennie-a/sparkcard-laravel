@@ -1,6 +1,6 @@
 <script setup>
 import shop from "../component/tag/ShopTag.vue";
-import scdatepicker from "../component/SCDatePicker.vue";
+import scdatepicker from "../component/date/DateInput.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from 'axios';

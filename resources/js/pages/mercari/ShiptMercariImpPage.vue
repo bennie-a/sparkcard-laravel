@@ -8,7 +8,7 @@
     import cardlayout from "../component/CardLayout.vue";
     import ModalButton from '../component/modal/ModalButton.vue';
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
-    import scdatepicker from "../component/SCDatePicker.vue";
+    import scdatepicker from "../component/date/DateInput.vue";
     import ListPagination from "@/pages/component/pagination/ListPagination.vue";
     import { usePagenate } from "@/pages/component/pagination/UsePaginate";
     import {MsgStore} from "@/pages/component/msg/MsgStore";

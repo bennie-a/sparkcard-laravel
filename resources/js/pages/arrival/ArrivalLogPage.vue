@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, reactive, ref, shallowRef } from 'vue';
 import { useRouter } from "vue-router";
-import scdatepicker from "../component/SCDatePicker.vue";
+import scdatepicker from "../component/date/DateInput.vue";
 import vendortag from "../component/tag/VendorTag.vue"
 import Loading from "vue-loading-overlay";
 import axios from 'axios';

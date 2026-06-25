@@ -10,7 +10,7 @@
     import vendorType from './component/VendorType.vue';
     import lang from './component/selection/Language.vue';
     import colorDropdown from "./component/selection/ColorDropdown.vue";
-    import datePicker from "./component/SCDatePicker.vue";
+    import datePicker from "./component/date/DateInput.vue";
     import ListPagination from "./component/pagination/ListPagination.vue";
     import { usePagenate } from "./component/pagination/UsePaginate";
     import {MsgStore} from "./component/msg/MsgStore";

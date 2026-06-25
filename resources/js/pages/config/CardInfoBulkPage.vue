@@ -26,7 +26,7 @@
             </select>
         </div>
         <div class="eight wide column">
-            <file-upload @action="upload" type="json"></file-upload>
+            <file-upload @action="upload" type="json" icon="mdi-code-json"></file-upload>
         </div>
     </article>
     <article class="mt-1" v-if="getCards.length != 0">
@@ -197,7 +197,7 @@ export default {
                     "Content-Type": "application/json",
                 },
             };
-            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color+"&setcode=" + this.setCode;
+            let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color+"&setcode=" + this.attr;
 
             await axios
                 .post("/api/upload/card" + query, file, config)
