@@ -17,6 +17,7 @@ import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 import { storeToRefs } from 'pinia';
 
 import { useDate } from 'vuetify';
+import RunButton from '../component/button/RunButton.vue';
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
@@ -36,6 +37,10 @@ const isLoading = ref(false);
 const router = useRouter();
 const {toString} = UseDateFormatter();
 const store = useStore();
+
+function aaa() {
+    console.log(1111);
+}
 
 // 入荷情報検索
 const fetch =  async () => {
@@ -90,14 +95,31 @@ const toDssPage = (arrivalDate, vendor_id) => {
 }
 </script>
 <template>
-    <article class="mt-1 ui form segment">
+    <article>
+            <v-form rounded class="form_sheet pa-4">
+                <v-row>
+                    <v-col cols="3">
+                        <v-text-field label="商品名(一部)"></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                        <date-range-input label="入荷日" days="7" v-model:selected-date="selectedDate"></date-range-input>
+                    </v-col>
+                    <v-col>
+                        <run-button text="検索する" @action="aaa"></run-button>
+                                        <button
+                    id="search" class="ui button teal" @click="aaa">
+                    検索
+                    </button>
+
+                    </v-col>
+                </v-row>
+            </v-form>
         <div class="three fields">
             <div class="four wide field">
                 <label>商品名(一部)</label>
                 <input v-model="itemname" type="text">
             </div>
             <div class="six wide field">
-                <date-range-input label="入荷日" days="7" v-model:selected-date="selectedDate"></date-range-input>
                 <!-- <div class="three fields">
                     <div class="seven wide field">
                         <scdatepicker v-model="startDate"></scdatepicker>
@@ -112,10 +134,6 @@ const toDssPage = (arrivalDate, vendor_id) => {
             </div>
             <div class="field">
                 <label class="hidden">ボタン</label>
-                <button
-                    id="search" class="ui button teal" @click="fetch">
-                    検索
-                    </button>
             </div>
         </div>
     </article>

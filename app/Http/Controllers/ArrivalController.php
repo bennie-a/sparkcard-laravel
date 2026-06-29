@@ -32,8 +32,8 @@ use App\Services\Constant\SearchConstant;
  */
 class ArrivalController extends Controller {
 
-    private $service;
-    public function __construct(ArrivalLogService $service) 
+    private ArrivalLogService $service;
+    public function __construct(ArrivalLogService $service)
     {
         $this->service = $service;
     }
@@ -116,7 +116,7 @@ class ArrivalController extends Controller {
      */
     public function update(ArrivalUpdateRequest $request, $id)
     {
-        $details = $request->only([Header::QUANTITY, ACon::ARRIVAL_DATE, 
+        $details = $request->only([Header::QUANTITY, ACon::ARRIVAL_DATE,
         SearchConstant::VENDOR_TYPE_ID, ACon::VENDOR, Header::COST]);
         $isExists = ArrivalLog::where(GlobalConstant::ID, $id)->exists();
         logger()->info("Start to Update id:{$id}, details:", $details);
@@ -133,7 +133,7 @@ class ArrivalController extends Controller {
      * 入荷情報を削除する。
      *
      * @param  int  $id 入荷ID
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

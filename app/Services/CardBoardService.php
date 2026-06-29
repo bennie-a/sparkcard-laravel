@@ -171,7 +171,7 @@ class CardBoardService {
                 $page->setId($duplicated->getId());
                 $this->updatePage($page);
             } else {
-                $promotype = !empty($info->promo_name) ? "≪{$info->promo_name}≫" : $info->promo_name;
+                $promotype = !empty($info->promotype_id) != 1 ? "≪{$info->promo_name}≫" : "";
                 $cardname = $info->name.$promotype;
                 $page->setTitle(JA::NAME, $cardname);
                 $page->setText(JA::EN_NAME, $info->en_name);

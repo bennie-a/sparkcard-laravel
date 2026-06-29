@@ -18,6 +18,7 @@ const colorItems = [
     {state:'無色', item_value:'L', color:'purple-lighten-1'},
     {state:'アーティファクト', item_value:'A', color:'blue-grey-lighten-1'},
     {state:'土地', item_value:'Land', color:'brown-lighten-1'},
+    {state:'トークン', item_value:'T', color:'indigo-lighten-1'},
     {state:'アートカード', item_value:'Art', color:'pink-lighten-1'},
 ];
 
