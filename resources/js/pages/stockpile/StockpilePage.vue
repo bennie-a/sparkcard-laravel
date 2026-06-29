@@ -9,6 +9,7 @@ import { ref } from "vue";
 import { usePagenate } from "../component/pagination/UsePaginate";
 import { MsgStore } from "../component/msg/MsgStore.js";
 import ColorTag from "../component/tag/ColorTag.vue";
+import RunButton from "../component/button/RunButton.vue";
 
 const isLoading = ref(false);
 const cardname = ref("");
@@ -67,9 +68,7 @@ const search = async () => {
                     </v-text-field>
                 </v-col>
                 <v-col cols="2" class="text-right">
-                    <v-btn color="teal-lighten-1" @click="search">
-                        検索する
-                    </v-btn>
+                    <run-button text="検索する" @action="search"></run-button>
                 </v-col>
             </v-row>
         </v-form>

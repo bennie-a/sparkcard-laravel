@@ -14,7 +14,7 @@
     import ListPagination from "./component/pagination/ListPagination.vue";
     import { usePagenate } from "./component/pagination/UsePaginate";
     import {MsgStore} from "./component/msg/MsgStore";
-
+    import RunButton from "./component/button/RunButton.vue";
     const msgStore = MsgStore();
 
     // リアクティブデータの定義
@@ -172,7 +172,7 @@
                 </v-btn-toggle>
             </v-col>
             <v-col cols="2" class="text-right">
-                <v-btn @click="search" color="teal-lighten-1">検索する</v-btn>
+                <run-button text="検索する" @action="search"></run-button>
             </v-col>
         </v-row>
     </v-form>

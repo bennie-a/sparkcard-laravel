@@ -38,10 +38,6 @@ const router = useRouter();
 const {toString} = UseDateFormatter();
 const store = useStore();
 
-function aaa() {
-    console.log(1111);
-}
-
 // 入荷情報検索
 const fetch =  async () => {
     isLoading.value = true;
@@ -105,7 +101,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                         <date-range-input label="入荷日" days="7" v-model:selected-date="selectedDate"></date-range-input>
                     </v-col>
                     <v-col>
-                        <run-button text="検索する" @action="aaa"></run-button>
+                        <run-button text="検索する" @action="fetch"></run-button>
                                         <button
                     id="search" class="ui button teal" @click="aaa">
                     検索

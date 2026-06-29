@@ -8,6 +8,7 @@ import Loading from "vue-loading-overlay";
 import ListPagination from "@/pages/component/pagination/ListPagination.vue";
 import { usePagenate } from "@/pages/component/pagination/UsePaginate";
 import {MsgStore} from "@/pages/component/msg/MsgStore";
+import RunButton from "../component/button/RunButton.vue";
 
 const router = useRouter();
 
@@ -89,10 +90,7 @@ const toDateString = (date) => {
                         <scdatepicker v-model:selectedDate="shippingStartDate" datelabel="発送日"></scdatepicker>
                     </v-col>
                     <v-col cols="2" class="text-right">
-                        <v-btn
-                            id="search" color="teal-lighten-1" @click="fetch">
-                            検索する
-                            </v-btn>
+                        <run-button text="検索する" @action="fetch"></run-button>
                     </v-col>
                 </v-row>
             </v-form>
