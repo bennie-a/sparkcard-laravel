@@ -18,6 +18,7 @@ import { storeToRefs } from 'pinia';
 
 import { useDate } from 'vuetify';
 import RunButton from '../component/button/RunButton.vue';
+import CardLayout from '../component/CardLayout.vue';
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
@@ -95,75 +96,45 @@ const toDssPage = (arrivalDate, vendor_id) => {
             <v-form rounded class="form_sheet pa-4">
                 <v-row>
                     <v-col cols="3">
-                        <v-text-field label="商品名(一部)"></v-text-field>
+                        <v-text-field label="商品名(一部)" v-model="itemname"></v-text-field>
                     </v-col>
                     <v-col cols="4">
                         <date-range-input label="入荷日" days="7" v-model:selected-date="selectedDate"></date-range-input>
                     </v-col>
                     <v-col>
                         <run-button text="検索する" @action="fetch"></run-button>
-                                        <button
-                    id="search" class="ui button teal" @click="aaa">
-                    検索
-                    </button>
-
                     </v-col>
                 </v-row>
             </v-form>
-        <div class="three fields">
-            <div class="four wide field">
-                <label>商品名(一部)</label>
-                <input v-model="itemname" type="text">
-            </div>
-            <div class="six wide field">
-                <!-- <div class="three fields">
-                    <div class="seven wide field">
-                        <scdatepicker v-model="startDate"></scdatepicker>
-                    </div>
-                    <div class="one wide field middle">
-                        <i class="bi bi-arrow-right"></i>
-                    </div>
-                    <div class="seven wide field">
-                        <scdatepicker v-model="endDate"></scdatepicker>
-                    </div>
-                </div> -->
-            </div>
-            <div class="field">
-                <label class="hidden">ボタン</label>
-            </div>
-        </div>
     </article>
-    <article class="mt-2" v-show="resultCount != 0">
-        <h3 class="ui devide">{{ resultCount }}件</h3>
-        <table class="ui striped table">
+    <article class="mt-10" v-show="resultCount != 0">
+        <h2 class="text-title-medium">件数：{{ resultCount }}件</h2>
+        <v-table class="item_list mt-4 border-thin">
             <thead>
                 <tr>
-                    <th class="two wide center aligned">入荷日</th>
-                    <th class="" colspan="2">取引先</th>
-                    <th class="">商品名</th>
-                    <th class="two wide center aligned">入荷数</th>
-                    <th class="two wide center aligned">原価合計</th>
+                    <th width="10%">入荷日</th>
+                    <th width="15%">取引先</th>
+                    <th>カード情報</th>
+                    <th width="10%" class="text-center">入荷数</th>
+                    <th width="10%" class="text-center">原価額</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(r, index) in currentList.value" :key="index">
                     <td class="center aligned">{{ r.arrival_date }}</td>
-                    <td colspan="2"><vendortag v-model="r.vendor"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
+                    <td><vendortag :vendor="r.vendor"></vendortag></td>
                     <td>
-                        <foiltag :isFoil="r.card.foil.is_foil" :foiltype="r.card.foil.name"></foiltag>
-                        【{{r.card.exp.attr}}】{{r.card.name}}[{{ r.card.lang }}]<span v-if="r.item_count !== 1">ほか</span>
+                        <card-layout :card="r.card" :lang="r.card.lang"></card-layout>
                     </td>
-                    <td class="center aligned">
+                    <td  class="text-center">
                         {{r.item_count}}点
                     </td>
-                    <td class=" center aligned">
-                        ¥{{ r.sum_cost }}
+                    <td  class="text-center">
+                        &yen;{{ r.sum_cost }}
                     </td>
-                    <td class="center aligned selectable">
-                        <a @click="toDssPage(r.arrival_date, r.vendor.id)">
-                        <v-icon icon="mdi-chevron-double-right"></v-icon>
-                        </a>
+                    <td class="text-right">
+                        <v-btn variant="text" icon="mdi-chevron-double-right" color="teal-lighten-1" @click="toDssPage(r.arrival_date, r.vendor.id)"></v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -176,7 +147,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                     </th>
                 </tr>
             </tfoot>
-        </table>
+        </v-table>
     </article>
     <loading
          :active="isLoading"
