@@ -8,17 +8,16 @@ import { useStore } from 'vuex';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import DateRangeInput from '../component/date/DateRangeInput.vue';
 
-import pglist from "../component/PgList.vue";
-import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 
 import { storeToRefs } from 'pinia';
 
-import { useDate } from 'vuetify';
 import RunButton from '../component/button/RunButton.vue';
 import CardLayout from '../component/CardLayout.vue';
+import { usePagenate } from '../component/pagination/UsePaginate';
+import ListPagination from '../component/pagination/ListPagination.vue';
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
@@ -29,15 +28,17 @@ const {startDate, endDate, itemname} = storeToRefs(gcStore);
 const selectedDate = ref([]);
 
 // 検索結果
-let result = reactive([]);
+const result = ref([]);
 const resultCount = ref(0);
-const currentList = reactive([]);
 const isLoading = ref(false);
-
 
 const router = useRouter();
 const {toString} = UseDateFormatter();
 const store = useStore();
+
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePagenate(result, 10);
 
 // 入荷情報検索
 const fetch =  async () => {
@@ -121,8 +122,8 @@ const toDssPage = (arrivalDate, vendor_id) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(r, index) in currentList.value" :key="index">
-                    <td class="center aligned">{{ r.arrival_date }}</td>
+                <tr v-for="(r, index) in paginatedList" :key="index">
+                    <td>{{ r.arrival_date }}</td>
                     <td><vendortag :vendor="r.vendor"></vendortag></td>
                     <td>
                         <card-layout :card="r.card" :lang="r.card.lang"></card-layout>
@@ -140,11 +141,9 @@ const toDssPage = (arrivalDate, vendor_id) => {
             </tbody>
             <tfoot class="full-width">
                 <tr>
-                    <th colspan="10">
-                        <div class="right aligned">
-                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
-                        </div>
-                    </th>
+                    <td colspan="6">
+                       <ListPagination v-model="page" :length="pageCount"></ListPagination>
+                    </td>
                 </tr>
             </tfoot>
         </v-table>
