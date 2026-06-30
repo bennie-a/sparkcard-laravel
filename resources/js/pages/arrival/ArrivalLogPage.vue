@@ -1,14 +1,12 @@
 <script setup>
-import { onMounted, reactive, ref, shallowRef } from 'vue';
+import { onMounted, ref, shallowRef } from 'vue';
 import { useRouter } from "vue-router";
 import vendortag from "../component/tag/VendorTag.vue"
 import Loading from "vue-loading-overlay";
 import axios from 'axios';
-import { useStore } from 'vuex';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import DateRangeInput from '../component/date/DateRangeInput.vue';
 
-import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 
@@ -18,6 +16,7 @@ import RunButton from '../component/button/RunButton.vue';
 import CardLayout from '../component/CardLayout.vue';
 import { usePagenate } from '../component/pagination/UsePaginate';
 import ListPagination from '../component/pagination/ListPagination.vue';
+import LinkIconButton from '../component/button/LinkIconButton.vue';
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
@@ -34,7 +33,6 @@ const isLoading = ref(false);
 
 const router = useRouter();
 const {toString} = UseDateFormatter();
-const store = useStore();
 
 const {
     page, pageCount, paginatedList, resetPage
@@ -45,6 +43,7 @@ const fetch =  async () => {
     isLoading.value = true;
     result.value = [];
     resultCount.value = 0;
+    resetPage();
     const query = {
                 params: {
                     "card_name": itemname.value,
@@ -59,7 +58,7 @@ const fetch =  async () => {
                             })
                             .catch((e) => {
                                 let data = e.response.data;
-                                store.dispatch("message/error", data.detail);
+                                // store.dispatch("message/error", data.detail);
                             })
                             .finally(() => {
                                 isLoading.value = false;
@@ -135,7 +134,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                         &yen;{{ r.sum_cost }}
                     </td>
                     <td class="text-right">
-                        <v-btn variant="text" icon="mdi-chevron-double-right" color="teal-lighten-1" @click="toDssPage(r.arrival_date, r.vendor.id)"></v-btn>
+                        <link-icon-button @action="toDssPage(r.arrival_date, r.vendor.id)"></link-icon-button>
                     </td>
                 </tr>
             </tbody>

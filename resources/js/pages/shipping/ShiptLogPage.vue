@@ -9,6 +9,7 @@ import ListPagination from "@/pages/component/pagination/ListPagination.vue";
 import { usePagenate } from "@/pages/component/pagination/UsePaginate";
 import {MsgStore} from "@/pages/component/msg/MsgStore";
 import RunButton from "../component/button/RunButton.vue";
+import LinkIconButton from "../component/button/LinkIconButton.vue";
 
 const router = useRouter();
 
@@ -68,11 +69,6 @@ const isToday = (date) => {
     return today === date;
 };
 
-// pglistから送られた1ページあたりの結果を取得する。
-const current = (data) => {
-    currentList.value = data.response;
-}
-
 const toDateString = (date) => {
     if (date != null) {
         return date.toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
@@ -123,7 +119,7 @@ const toDateString = (date) => {
                     <td class="text-center">&yen;{{ r.total_price }}</td>
                     <td class="text-center">{{r.item_count}}点</td>
                     <td class="text-right">
-                        <v-btn icon="mdi-chevron-double-right" color="teal-lighten-1" variant="text" @click="toDssPage(r.order_id)"></v-btn>
+                        <link-icon-button @action="toDssPage(r.order_id)"></link-icon-button>
                     </td>
                 </tr>
             </tbody>
