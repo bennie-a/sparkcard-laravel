@@ -99,7 +99,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                         <v-text-field label="商品名(一部)" v-model="itemname"></v-text-field>
                     </v-col>
                     <v-col cols="4">
-                        <date-range-input label="入荷日" days="7" v-model:selected-date="selectedDate"></date-range-input>
+                        <date-range-input label="入荷日" v-model:start="startDate" v-model:end="endDate"></date-range-input>
                     </v-col>
                     <v-col>
                         <run-button text="検索する" @action="fetch"></run-button>
