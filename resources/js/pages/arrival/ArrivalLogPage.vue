@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, shallowRef } from 'vue';
+import { onMounted, ref, shallowRef, watch } from 'vue';
 import { useRouter } from "vue-router";
 import vendortag from "../component/tag/VendorTag.vue"
 import Loading from "vue-loading-overlay";
@@ -76,11 +76,6 @@ onMounted(async() => {
     }
     await fetch();
 });
-
-const current = (data) => {
-    currentList.value = data.response;
-}
-
 
 // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendor_id) => {
