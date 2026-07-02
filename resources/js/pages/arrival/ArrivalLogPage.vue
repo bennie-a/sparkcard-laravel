@@ -110,9 +110,9 @@ const toDssPage = (arrivalDate, vendor_id) => {
                     <th width="10%">入荷日</th>
                     <th width="15%">取引先</th>
                     <th>カード情報</th>
-                    <th width="10%" class="text-center">入荷数</th>
-                    <th width="10%" class="text-center">原価額</th>
-                    <th class="one wide"></th>
+                    <th width="8%" class="text-center">入荷数</th>
+                    <th width="8%" class="text-center">原価額</th>
+                    <th width="7%"></th>
                 </tr>
             </thead>
             <tbody>
