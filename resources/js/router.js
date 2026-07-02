@@ -28,7 +28,6 @@ const routes = [
         meta: {
             layout: 'default',
             title: "在庫登録",
-            description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
         },
     },
     {
@@ -44,15 +43,12 @@ const routes = [
         path:arrivalDssLinks.url,
         name:'ArrivalLogDss',
         component:ArrivalLogDssPage,
-        beforeEnter:(to, from, next) => {
-            const arrDateStore = arrDateConditionStore();
-            arrivalDssLinks.title = arrDateStore.arrivalDate;
-            to.meta.title = arrDateStore.arrivalDate;
-            next();
-        },
         meta:{
-            title:'入荷情報詳細',
             parent:'ArrivalLog',
+            title:(route) => {
+                const arrDateStore = arrDateConditionStore();
+                return `入荷情報:${arrDateStore.arrivalDate}`;
+            },
             breadscrumb:(route) => {
                 const arrDateStore = arrDateConditionStore();
                 console.log('arrivalDssLinks.title', arrDateStore.arrivalDate);
@@ -70,6 +66,9 @@ const routes = [
         },
         meta:{
             parent:'ArrivalLogDss',
+            title:(route) => {
+                return `入荷情報編集(No.${route.params.arrival_id})`;
+            },
             breadscrumb:(route) => {
                 return `No.${route.params.arrival_id}`;
             },
@@ -81,7 +80,6 @@ const routes = [
         component: StockpilePage,
         meta: {
             title: "在庫情報検索",
-            description: "在庫情報を検索します。",
         },
     },
     {
@@ -143,14 +141,13 @@ const routes = [
         path:"/shipping/detail/:order_id",
         name:'ShiptLogDss',
         component:ShiptLogDssPage,
-        beforeEnter:(to, from, next) => {
-            to.meta.title = to.params.order_id;
-            next();
-        },
         meta:{
             parent:'Shipt',
             breadscrumb:(route) => {
                 return route.params.order_id;
+            },
+            title:(route) => {
+                return `注文情報:${route.params.order_id}`;
             },
         },
     },

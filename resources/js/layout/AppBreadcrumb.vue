@@ -40,21 +40,21 @@ const breadcrumbs = computed(() => {
 <template>
         <v-breadcrumbs class="pt-0 pl-0 pb-1" v-if="breadcrumbs.length > 1">
             <template
-                v-for="r, in breadcrumbs"
-                :key="r.title"
+                v-for="(r, index) in breadcrumbs"
+                :key="index"
             >
-                <v-breadcrumbs-item v-if="r.title !== route.meta.title">
+                <v-breadcrumbs-item v-if="index !== breadcrumbs.length - 1">
                     <v-btn variant="plain" color="teal-lighten-1" :to="r.to" class="pa-0">{{ r.title }}</v-btn>
                 </v-breadcrumbs-item>
+                <v-breadcrumbs-item v-else color="grey-darken-2">
+                    {{ r.title }}
+                </v-breadcrumbs-item>
                 <v-icon
-                icon="mdi-chevron-right"
-                size="small"
-                 v-if="r.title !== route.meta.title"
-                  color="grey-darken-2"
+                    icon="mdi-chevron-right"
+                    size="small"
+                    v-if="index !== breadcrumbs.length - 1"
+                    color="grey-darken-2"
                 />
             </template>
-            <v-breadcrumbs-item color="grey-darken-2">
-                {{ route.meta.title }}
-            </v-breadcrumbs-item>
         </v-breadcrumbs>
 </template>

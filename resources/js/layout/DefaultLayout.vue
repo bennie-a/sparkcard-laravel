@@ -5,11 +5,16 @@ import SideMenu from "../pages/component/SideMenu.vue"
 import AppBreadcrumb from './AppBreadcrumb.vue'
 import { storeToRefs } from "pinia";
 import MessageArea from '../pages/component/msg/MessageArea.vue'
+import {resolveMetaValue} from './RouteMetaHelper.js';
 
 // ----------------------
 // route
 // ----------------------
 const route = useRoute()
+const pageTitle = computed(() =>{
+    return resolveMetaValue(route.meta.title, route);
+});
+
 </script>
 <template>
     <v-layout>
@@ -29,7 +34,7 @@ const route = useRoute()
         <v-main class="mt-0 d-flex  justify-start" min-height="100vh">
         <v-container>
             <AppBreadcrumb></AppBreadcrumb>
-            <h1 class="text-headline-medium">{{ route.meta.title }}</h1>
+            <h1 class="text-headline-medium">{{ pageTitle }}</h1>
             <MessageArea></MessageArea>
             <v-sheet class="mt-6 pa-7" rounded>
                 <router-view />
