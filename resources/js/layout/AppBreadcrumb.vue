@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import {resolveMetaValue} from './RouteMetaHelper.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -10,8 +11,11 @@ const breadcrumbs = computed(() => {
     const items = [];
     let currentRoute = route;
     while(currentRoute) {
+        console.log(currentRoute.path, typeof currentRoute.meta.breadscrumb);
+        let title = resolveMetaValue(currentRoute.meta.breadscrumb, currentRoute);
+
         items.unshift({
-            title: currentRoute.meta.title,
+            title: title,
             to: {path:currentRoute.path, query:route.query}
         });
 

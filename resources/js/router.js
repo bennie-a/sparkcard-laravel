@@ -20,7 +20,7 @@ import ShiptLogBaseImpPage from "./pages/baseshop/ShiptBaseImpPage.vue";
 import { authGuard } from "./auth/auth-guard";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {url:"/arrival/date/", title:""};
+const arrivalDssLinks = {url:"/arrival/date/", title:"入荷情報詳細"};
 const routes = [
     {
         path: "/",
@@ -34,9 +34,10 @@ const routes = [
     {
         path:arrivalLinks.url,
         component:ArrivalLogPage,
+        name:'ArrivalLog',
         meta:{
             title:arrivalLinks.title,
-            description:"入荷情報を一覧表示します"
+            breadscrumb:arrivalLinks.title,
         },
     },
     {
@@ -50,7 +51,13 @@ const routes = [
             next();
         },
         meta:{
-            urls: [arrivalLinks]
+            title:'入荷情報詳細',
+            parent:'ArrivalLog',
+            breadscrumb:(route) => {
+                const arrDateStore = arrDateConditionStore();
+                console.log('arrivalDssLinks.title', arrDateStore.arrivalDate);
+                return arrDateStore.arrivalDate;
+            },
         },
     },
     {
@@ -62,7 +69,10 @@ const routes = [
             next();
         },
         meta:{
-            urls: [arrivalLinks, arrivalDssLinks]
+            parent:'ArrivalLogDss',
+            breadscrumb:(route) => {
+                return `No.${route.params.arrival_id}`;
+            },
         },
 
     },
@@ -87,6 +97,7 @@ const routes = [
         component: ExpansionPage,
         meta: {
             title: "エキスパンション一覧",
+            breadscrumb: "エキスパンション一覧"
         },
     },
     {
@@ -96,6 +107,7 @@ const routes = [
         meta: {
             title: "エキスパンション登録",
             parent:'Ex',
+            breadscrumb:"エキスパンション登録",
         },
     },
     {
@@ -105,6 +117,7 @@ const routes = [
         meta: {
             title: "カード情報一括登録",
             parent:'Ex',
+            breadscrumb:"カード情報一括登録"
         },
     },
     {
@@ -114,6 +127,7 @@ const routes = [
         meta: {
             title: "カード情報登録",
             parent:'Ex',
+            breadscrumb:"カード情報登録",
         },
     },
     {
@@ -122,6 +136,7 @@ const routes = [
         name:'Shipt',
         meta:{
             title:"注文情報一覧",
+            breadscrumb:"注文情報一覧",
         },
     },
     {
@@ -133,8 +148,11 @@ const routes = [
             next();
         },
         meta:{
-            parent:'Shipt'
-        }
+            parent:'Shipt',
+            breadscrumb:(route) => {
+                return route.params.order_id;
+            },
+        },
     },
     {
         path: "/mercari/shipt/import",
