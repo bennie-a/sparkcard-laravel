@@ -116,7 +116,6 @@ const deleteLog = async(arrival_id) => {
         <article class="mt-10">
             <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
                 <template #header>
-                    <tr>
                         <th width="8%" class="text-center">入荷ID</th>
                         <th width="8%" class="text-center">在庫ID</th>
                         <th>カード情報</th>
@@ -124,7 +123,6 @@ const deleteLog = async(arrival_id) => {
                         <th width="8%" class="text-center">枚数</th>
                         <th width="8%" class="text-center">原価</th>
                         <th width="16%"></th>
-                    </tr>
                 </template>
                 <template #row="{  item }">
                         <td class="text-center">{{item.id}}</td>

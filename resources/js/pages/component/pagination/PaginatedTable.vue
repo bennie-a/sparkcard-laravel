@@ -15,7 +15,9 @@
         <h2 class="text-title-medium">件数：{{ hitCount }}件( {{ page }}ページ目 / {{ pageCount }}ページ )</h2>
         <v-table class="item_list mt-4 border-thin">
             <thead>
-                <slot name="header"></slot>
+                <tr>
+                    <slot name="header"></slot>
+                </tr>
             </thead>
             <tbody>
                 <tr v-for="(item, index) in items" :key="index">
