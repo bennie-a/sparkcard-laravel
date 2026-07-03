@@ -51,7 +51,6 @@ const routes = [
             },
             breadscrumb:(route) => {
                 const arrDateStore = arrDateConditionStore();
-                console.log('arrivalDssLinks.title', arrDateStore.arrivalDate);
                 return arrDateStore.arrivalDate;
             },
         },

@@ -11,7 +11,6 @@ const breadcrumbs = computed(() => {
     const items = [];
     let currentRoute = route;
     while(currentRoute) {
-        console.log(currentRoute.path, typeof currentRoute.meta.breadscrumb);
         let title = resolveMetaValue(currentRoute.meta.breadscrumb, currentRoute);
 
         items.unshift({

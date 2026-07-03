@@ -5,14 +5,14 @@
     defineProps({
         items:{type:Array, required:true},
         pageCount:{type:Number, required:true},
+        hitCount:{type:Number, required:true}
     });
-    // const {
-    //     page, pageCount, paginatedList, resetPage
-    // } = usePaginate(items, pageCount);
 
+    const page = defineModel({type:Number, required:true});
 </script>
 <template>
-    <v-table class="item_list mt-4 border-thin">
+        <h2 class="text-title-medium">件数：{{ hitCount }}件( {{ page }}ページ目 / {{ pageCount }}ページ )</h2>
+        <v-table class="item_list mt-4 border-thin">
         <thead>
             <slot name="header"></slot>
         </thead>
@@ -21,12 +21,8 @@
                 <slot name="row" :item="item"/>
             </tr>
         </tbody>
-        <tfoot class="full-width">
-            <tr>
-                <td :colspan="items.length">
-                    <!-- <ListPagination v-model="page" :length="pageCount"></ListPagination> -->
-                </td>
-            </tr>
-        </tfoot>
-    </v-table>
+        </v-table>
+        <div class="text-center mt-1 mb-6">
+            <ListPagination v-model="page" :length="pageCount"></ListPagination>
+        </div>
 </template>

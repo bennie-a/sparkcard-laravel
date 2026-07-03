@@ -26,12 +26,15 @@ const arrDateStore = arrDateConditionStore();
 
 const {arrivalDate, vendorId} = storeToRefs(arrDateStore);
 
-// const piniaMsg = piniaMsgStore();
 const currentList = reactive([]);
 const resultCount = ref(0);
 
 const logs = ref([]);
 const isLoading = ref(false);
+
+    const {
+        page, pageCount, paginatedList, resetPage
+    } = usePaginate(logs, 10);
 
 const result = reactive([]);
 onMounted(async() =>{
@@ -40,6 +43,7 @@ onMounted(async() =>{
     });
 
 const fetch = async() => {
+    resetPage();
     await apiService.get(
         {
             url:"/arrival/",
@@ -89,10 +93,6 @@ const deleteLog = async(arrival_id) => {
     });
     }
 
- const current = (data) => {
-    currentList.value = data.response;
-}
-
 </script>
 <template>
     <section v-show="!isLoading"  v-if="result.value">
@@ -114,8 +114,7 @@ const deleteLog = async(arrival_id) => {
             </v-row>
         </article>
         <article class="mt-10">
-            <h2 class="text-title-medium">件数：{{ resultCount }}件</h2>
-            <PaginatedTable :items="logs" :page-count="10">
+            <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
                 <template #header>
                     <tr>
                         <th width="8%" class="text-center">入荷ID</th>
@@ -144,7 +143,7 @@ const deleteLog = async(arrival_id) => {
                         </td>
                 </template>
             </PaginatedTable>
-            <div class="text-center mt-6">
+            <div class="text-center">
                 <v-btn variant="outlined" color="teal-lighten-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
             </div>
         </article>
