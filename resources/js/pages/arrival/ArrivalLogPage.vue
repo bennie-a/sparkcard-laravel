@@ -15,10 +15,10 @@ import { storeToRefs } from 'pinia';
 import RunButton from '../component/button/RunButton.vue';
 import CardLayout from '../component/CardLayout.vue';
 import { usePaginate } from '../component/pagination/UsePaginate';
-import ListPagination from '../component/pagination/ListPagination.vue';
 import LinkIconButton from '../component/button/LinkIconButton.vue';
 
 import {MsgStore} from "../component/msg/MsgStore";
+import PaginatedTable from '../component/pagination/PaginatedTable.vue';
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
@@ -107,9 +107,8 @@ const toDssPage = (arrivalDate, vendor_id) => {
             </v-form>
     </article>
     <article class="mt-10" v-show="resultCount != 0">
-        <h2 class="text-title-medium">件数：{{ resultCount }}件</h2>
-        <v-table class="item_list mt-4 border-thin">
-            <thead>
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
+            <template #header>
                 <tr>
                     <th width="10%">入荷日</th>
                     <th width="15%">取引先</th>
@@ -118,33 +117,24 @@ const toDssPage = (arrivalDate, vendor_id) => {
                     <th width="8%" class="text-center">原価額</th>
                     <th width="7%"></th>
                 </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(r, index) in paginatedList" :key="index">
-                    <td>{{ r.arrival_date }}</td>
-                    <td><vendortag :vendor="r.vendor"></vendortag></td>
+            </template>
+                <template #row="{  item }">
+                    <td>{{ item.arrival_date }}</td>
+                    <td><vendortag :vendor="item.vendor"></vendortag></td>
                     <td>
-                        <card-layout :card="r.card" :lang="r.card.lang"></card-layout>
+                        <card-layout :card="item.card" :lang="item.card.lang"></card-layout>
                     </td>
                     <td  class="text-center">
-                        {{r.item_count}}点
+                        {{item.item_count}}点
                     </td>
                     <td  class="text-center">
-                        &yen;{{ r.sum_cost }}
+                        &yen;{{ item.sum_cost }}
                     </td>
                     <td class="text-right">
-                        <link-icon-button @action="toDssPage(r.arrival_date, r.vendor.id)"></link-icon-button>
+                        <link-icon-button @action="toDssPage(item.arrival_date, item.vendor.id)"></link-icon-button>
                     </td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <td colspan="6">
-                       <ListPagination v-model="page" :length="pageCount"></ListPagination>
-                    </td>
-                </tr>
-            </tfoot>
-        </v-table>
+                </template>
+        </PaginatedTable>
     </article>
     <loading
          :active="isLoading"
