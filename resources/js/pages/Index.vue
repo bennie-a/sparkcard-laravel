@@ -12,7 +12,7 @@
     import colorDropdown from "./component/selection/ColorDropdown.vue";
     import datePicker from "./component/date/DateInput.vue";
     import ListPagination from "./component/pagination/ListPagination.vue";
-    import { usePagenate } from "./component/pagination/UsePaginate";
+    import { usePaginate } from "./component/pagination/UsePaginate";
     import {MsgStore} from "./component/msg/MsgStore";
     import RunButton from "./component/button/RunButton.vue";
     const msgStore = MsgStore();
@@ -33,7 +33,7 @@
     const errMsgs = ref("");
     const {
         page, pageCount, paginatedList, resetPage
-    } = usePagenate(result, 12);
+    } = usePaginate(result, 12);
 
     const rules = {
         required: value => !!value || 'Field is required',

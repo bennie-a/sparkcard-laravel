@@ -8,7 +8,7 @@ import condition from "../component/tag/ConditionTag.vue";
 import imagemodal from '../component/modal/ImageModal.vue';
 import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
-import { usePagenate } from "@/pages/component/pagination/UsePaginate";
+import { usePaginate } from "@/pages/component/pagination/UsePaginate";
 import ListPagination from "@/pages/component/pagination/ListPagination.vue";
 
 const route = useRoute();

@@ -10,7 +10,7 @@
     import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import scdatepicker from "../component/date/DateInput.vue";
     import ListPagination from "@/pages/component/pagination/ListPagination.vue";
-    import { usePagenate } from "@/pages/component/pagination/UsePaginate";
+    import { usePaginate } from "@/pages/component/pagination/UsePaginate";
     import {MsgStore} from "@/pages/component/msg/MsgStore";
 
     const msgStore = MsgStore();
@@ -23,7 +23,7 @@
 
     const {
         page, pageCount, paginatedList, resetPage
-    } = usePagenate(result, 4);
+    } = usePaginate(result, 4);
 
     /**
      * インポート実行

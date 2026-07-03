@@ -82,7 +82,7 @@ import Loading from "vue-loading-overlay";
 import CardLayout from "../component/CardLayout.vue";
 import Condition from "../component/tag/ConditionTag.vue";
 import ListPagination from "../component/pagination/ListPagination.vue";
-import { usePagenate } from "../component/pagination/UsePaginate";
+import { usePaginate } from "../component/pagination/UsePaginate";
 import { ref } from "vue";
 import { fa } from "vuetify/locale";
 
@@ -90,7 +90,7 @@ const setname = ref("");
 const result = ref([]);
 const {
     page, pageCount, paginatedList, resetPage
-} = usePagenate(result, 10);
+} = usePaginate(result, 10);
 const filename = ref('base_item');
 const isLoading = ref(false);
 

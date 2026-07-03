@@ -14,7 +14,7 @@ import { storeToRefs } from 'pinia';
 
 import RunButton from '../component/button/RunButton.vue';
 import CardLayout from '../component/CardLayout.vue';
-import { usePagenate } from '../component/pagination/UsePaginate';
+import { usePaginate } from '../component/pagination/UsePaginate';
 import ListPagination from '../component/pagination/ListPagination.vue';
 import LinkIconButton from '../component/button/LinkIconButton.vue';
 
@@ -38,7 +38,7 @@ const {toString} = UseDateFormatter();
 
 const {
     page, pageCount, paginatedList, resetPage
-} = usePagenate(result, 10);
+} = usePaginate(result, 10);
 
 const msgStore = MsgStore();
 

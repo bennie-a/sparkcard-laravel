@@ -1,7 +1,7 @@
 // ページネーションのロジッククラス
 import { computed, ref } from "vue";
 
-export function usePagenate(items, itemPerPage = 12) {
+export function usePaginate(items, itemPerPage = 12) {
     const page = ref(1);
 
     // 総ページ数を取得する。

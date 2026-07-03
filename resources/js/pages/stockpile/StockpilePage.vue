@@ -6,7 +6,7 @@ import ImageModal from "../component/modal/ImageModal.vue";
 import CardLayout from "../component/CardLayout.vue";
 import Loading from "vue-loading-overlay";
 import { ref } from "vue";
-import { usePagenate } from "../component/pagination/UsePaginate";
+import { usePaginate } from "../component/pagination/UsePaginate";
 import { MsgStore } from "../component/msg/MsgStore.js";
 import ColorTag from "../component/tag/ColorTag.vue";
 import RunButton from "../component/button/RunButton.vue";
@@ -19,7 +19,7 @@ const stockCount = ref(0);
 
 const {
     page, pageCount, paginatedList, resetPage
-} = usePagenate(stock, 10);
+} = usePaginate(stock, 10);
 
 const msgStore = MsgStore();
 const search = async () => {

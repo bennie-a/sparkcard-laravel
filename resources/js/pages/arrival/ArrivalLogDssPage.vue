@@ -13,8 +13,11 @@ import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
 import pglist from "../component/PgList.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
-// import PiniaMsgForm from "../component/PiniaMsgForm.vue";
 import { storeToRefs } from "pinia";
+
+import { usePaginate } from '../component/pagination/UsePaginate';
+import ListPagination from '../component/pagination/ListPagination.vue';
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
 const router = useRouter();
 
@@ -27,7 +30,7 @@ const {arrivalDate, vendorId} = storeToRefs(arrDateStore);
 const currentList = reactive([]);
 const resultCount = ref(0);
 
-const logs = reactive([]);
+const logs = ref([]);
 const isLoading = ref(false);
 
 const result = reactive([]);
@@ -101,7 +104,7 @@ const deleteLog = async(arrival_id) => {
                 </v-col>
             </v-row>
             <v-row class="w-50" gap="10">
-                <v-col cols="4">取引先名</v-col>
+                <v-col cols="3">取引先名</v-col>
                 <v-col>
                     <span v-if="result.value.data.vendor.supplier == ''">&mdash;</span>
                     <span v-if="result.value.data.vendor.supplier != ''">
@@ -112,8 +115,8 @@ const deleteLog = async(arrival_id) => {
         </article>
         <article class="mt-10">
             <h2 class="text-title-medium">件数：{{ resultCount }}件</h2>
-            <v-table class="item_list border-thin">
-                <thead>
+            <PaginatedTable :items="logs" :page-count="10">
+                <template #header>
                     <tr>
                         <th width="8%" class="text-center">入荷ID</th>
                         <th width="8%" class="text-center">在庫ID</th>
@@ -123,35 +126,24 @@ const deleteLog = async(arrival_id) => {
                         <th width="8%" class="text-center">原価</th>
                         <th width="16%"></th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(log, index) in currentList.value" :key="index" v-memo="currentList.value">
-                        <td class="text-center">{{log.id}}</td>
-                        <td class="text-center">{{ log.stock_id }}</td>
+                </template>
+                <template #row="{  item }">
+                        <td class="text-center">{{item.id}}</td>
+                        <td class="text-center">{{ item.stock_id }}</td>
                         <td>
-                                <cardlayout v-model:card="log.card" v-model:lang="log.lang"></cardlayout>
+                                <cardlayout v-model:card="item.card" v-model:lang="item.lang"></cardlayout>
                         </td>
-                        <td class="text-center"><ConditionTag :name="log.condition"/></td>
-                        <td class="text-center">{{log.quantity}}枚</td>
-                        <td class="text-center">&yen;{{ log.cost }}</td>
+                        <td class="text-center"><ConditionTag :name="item.condition"/></td>
+                        <td class="text-center">{{item.quantity}}枚</td>
+                        <td class="text-center">&yen;{{ item.cost }}</td>
                         <td class="text-right selectable">
-                            <v-btn class="mr-4" icon="mdi-square-edit-outline" variant="text" color="teal-lighten-1" @click="toEditPage(log.id)"></v-btn>
-                            <ModalButton  :msg="`入荷ID[${log.id}]を削除しますか？`" @action="deleteLog(log.id)">
+                            <v-btn class="mr-4" icon="mdi-square-edit-outline" variant="text" color="teal-lighten-1" @click="toEditPage(item.id)"></v-btn>
+                            <ModalButton  :msg="`入荷ID[${item.id}]を削除しますか？`" @action="deleteLog(item.id)">
                                 <v-icon icon="mdi-trash-can-outline" size=""></v-icon>
                             </ModalButton>
                         </td>
-                    </tr>
-                </tbody>
-                <tfoot class="full-width">
-                    <tr>
-                        <td colspan="8">
-                            <div class="right aligned">
-                                <pglist ref="pglistRef" v-model:list="logs.value" @loadPage="current"></pglist>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </v-table>
+                </template>
+            </PaginatedTable>
             <div class="text-center mt-6">
                 <v-btn variant="outlined" color="teal-lighten-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
             </div>

@@ -6,7 +6,7 @@ import { ref, onMounted } from "vue";
 import axios from 'axios';
 import Loading from "vue-loading-overlay";
 import ListPagination from "@/pages/component/pagination/ListPagination.vue";
-import { usePagenate } from "@/pages/component/pagination/UsePaginate";
+import { usePaginate } from "@/pages/component/pagination/UsePaginate";
 import {MsgStore} from "@/pages/component/msg/MsgStore";
 import RunButton from "../component/button/RunButton.vue";
 import LinkIconButton from "../component/button/LinkIconButton.vue";
@@ -23,7 +23,7 @@ const msgStore = MsgStore();
 
 const {
     page, pageCount, paginatedList, resetPage
-} = usePagenate(result, 10);
+} = usePaginate(result, 10);
 
 const fetch =  async () => {
     resetPage();
