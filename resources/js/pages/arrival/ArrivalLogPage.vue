@@ -18,6 +18,8 @@ import { usePagenate } from '../component/pagination/UsePaginate';
 import ListPagination from '../component/pagination/ListPagination.vue';
 import LinkIconButton from '../component/button/LinkIconButton.vue';
 
+import {MsgStore} from "../component/msg/MsgStore";
+
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
 
@@ -38,11 +40,14 @@ const {
     page, pageCount, paginatedList, resetPage
 } = usePagenate(result, 10);
 
+const msgStore = MsgStore();
+
 // 入荷情報検索
 const fetch =  async () => {
     isLoading.value = true;
     result.value = [];
     resultCount.value = 0;
+    msgStore.clear();
     resetPage();
     const query = {
                 params: {
@@ -58,7 +63,7 @@ const fetch =  async () => {
                             })
                             .catch((e) => {
                                 let data = e.response.data;
-                                // store.dispatch("message/error", data.detail);
+                                msgStore.error(data.detail);
                             })
                             .finally(() => {
                                 isLoading.value = false;
@@ -70,7 +75,6 @@ onMounted(async() => {
     const referrer_path = router.referrer.path;
     if (referrer_path.indexOf('/arrival/') !== 0 ) {
         console.log('pinia reset');
-        // piniaMsgStore().reset();
         gcStore.reset();
         arrDateStore.reset();
     }
