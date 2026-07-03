@@ -106,7 +106,7 @@ const toDssPage = (arrivalDate, vendor_id) => {
                 </v-row>
             </v-form>
     </article>
-    <article class="mt-10" v-show="resultCount != 0">
+    <article class="mt-10">
         <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
             <template #header>
                 <tr>

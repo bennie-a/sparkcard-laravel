@@ -11,18 +11,20 @@
     const page = defineModel({type:Number, required:true});
 </script>
 <template>
+    <div v-if="hitCount > 0">
         <h2 class="text-title-medium">件数：{{ hitCount }}件( {{ page }}ページ目 / {{ pageCount }}ページ )</h2>
         <v-table class="item_list mt-4 border-thin">
-        <thead>
-            <slot name="header"></slot>
-        </thead>
-        <tbody>
-            <tr v-for="(item, index) in items" :key="index">
-                <slot name="row" :item="item"/>
-            </tr>
-        </tbody>
+            <thead>
+                <slot name="header"></slot>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                    <slot name="row" :item="item"/>
+                </tr>
+            </tbody>
         </v-table>
         <div class="text-center mt-1 mb-6">
             <ListPagination v-model="page" :length="pageCount"></ListPagination>
         </div>
+    </div>
 </template>
