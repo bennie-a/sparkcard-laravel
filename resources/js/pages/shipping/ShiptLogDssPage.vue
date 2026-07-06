@@ -10,6 +10,7 @@ import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
 import { usePaginate } from "@/pages/component/pagination/UsePaginate";
 import ListPagination from "@/pages/component/pagination/ListPagination.vue";
+import PaginatedTable from '../component/pagination/PaginatedTable.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -28,7 +29,7 @@ const toList = () => {
 
 const {
     page, pageCount, paginatedList, resetPage
-} = usePagenate(cardList, 10);
+} = usePaginate(cardList, 10);
 
 // 詳細情報を取得する。
 const getDetail = async () => {
@@ -100,20 +101,17 @@ onMounted(async() => {
         </div>
     </article>
     <article class="mt-8">
-        <h2 class="text-title-medium">商品一覧</h2>
-        <v-table  class="item_list mt-4 border-thin">
-            <thead>
-                <tr>
+        <h2 class="text-title-large">商品一覧</h2>
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="cardList.length">
+            <template #header>
                     <th>在庫ID</th>
                     <th>カード情報</th>
                     <th class="text-center">状態</th>
                     <th class="text-center">枚数</th>
                     <th class="text-center">単価</th>
                     <th class="text-center">小計</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in paginatedList" :key="item.id">
+            </template>
+            <template #row="{ item }">
                 <td>{{ item.id }}</td>
                 <td>
                     <cardlayout :card="item" :lang="item.lang"></cardlayout>
@@ -122,16 +120,8 @@ onMounted(async() => {
                 <td class="text-center">{{item.quantity}}枚</td>
                 <td class="text-center">&yen;{{ item.single_price }}</td>
                 <td class="text-center">&yen;{{item.subtotal_price}}</td>
-            </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="7" class="text-center">
-                        <ListPagination v-model="page" :length="pageCount"></ListPagination>
-                    </td>
-                </tr>
-            </tfoot>
-        </v-table>
+            </template>
+        </PaginatedTable>
         <div class="text-center mt-6">
             <v-btn variant="outlined" color="teal-lighten-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
         </div>

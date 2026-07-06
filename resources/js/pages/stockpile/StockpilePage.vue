@@ -10,6 +10,7 @@ import { usePaginate } from "../component/pagination/UsePaginate";
 import { MsgStore } from "../component/msg/MsgStore.js";
 import ColorTag from "../component/tag/ColorTag.vue";
 import RunButton from "../component/button/RunButton.vue";
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
 const isLoading = ref(false);
 const cardname = ref("");
@@ -73,48 +74,31 @@ const search = async () => {
             </v-row>
         </v-form>
     </article>
-    <article class="mt-10" v-if="stockCount > 0">
-        <h2 class="text-title-medium">
-            件数：{{ stockCount }}件
-        </h2>
-        <v-table class="item_list mt-4 border-thin">
-            <thead>
-                <tr>
-                    <th width="10%">在庫ID</th>
-                    <th>カード情報</th>
-                    <th width="10%" class="text-center">色</th>
-                    <th width="10%" class="text-center">状態</th>
-                    <th width="10%" class="text-center">枚数</th>
-                    <th width="10%" >最終更新日</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    v-for="s in paginatedList"
-                    :key="s.id"
-                >
-                    <td>{{ s.id }}</td>
-                    <td>
-                        <CardLayout :card="s.card" :lang="s.lang"></CardLayout>
-                    </td>
-                    <td class="text-center">
-                        <ColorTag :type="s.card.color" />
-                    </td>
-                    <td class="text-center">
-                        <condition :name="s.condition"/>
-                    </td>
-                    <td class="text-center">{{ s.quantity }}枚</td>
-                    <td class="text-center">{{ s.updated_at }}</td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <td colspan="6">
-                       <ListPagination v-model="page" :length="pageCount"></ListPagination>
-                    </td>
-                </tr>
-            </tfoot>
-        </v-table>
+    <article class="mt-10">
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="stockCount">
+            <template #header>
+                <th width="10%">在庫ID</th>
+                <th>カード情報</th>
+                <th width="10%" class="text-center">色</th>
+                <th width="10%" class="text-center">状態</th>
+                <th width="10%" class="text-center">枚数</th>
+                <th width="10%" >最終更新日</th>
+            </template>
+            <template #row="{  item }">
+                <td>{{item.id }}</td>
+                <td>
+                    <CardLayout :card="item.card" :lang="item.lang"></CardLayout>
+                </td>
+                <td class="text-center">
+                    <ColorTag :type="item.card.color" />
+                </td>
+                <td class="text-center">
+                    <condition :name="item.condition"/>
+                </td>
+                <td class="text-center">{{ item.quantity }}枚</td>
+                <td class="text-center">{{ item.updated_at }}</td>
+            </template>
+        </PaginatedTable>
     </article>
     <Loading
     :active="isLoading"

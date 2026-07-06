@@ -10,6 +10,7 @@ import { usePaginate } from "@/pages/component/pagination/UsePaginate";
 import {MsgStore} from "@/pages/component/msg/MsgStore";
 import RunButton from "../component/button/RunButton.vue";
 import LinkIconButton from "../component/button/LinkIconButton.vue";
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
 const router = useRouter();
 
@@ -77,62 +78,46 @@ const toDateString = (date) => {
 }
 </script>
 <template>
-            <v-form class="rounded form_sheet pa-4">
-                <v-row gap="15">
-                    <v-col cols="3">
-                        <v-text-field v-model="buyer"  label="購入者名" clearable></v-text-field>
-                    </v-col>
-                    <v-col cols="3">
-                        <scdatepicker v-model:selectedDate="shippingStartDate" datelabel="発送日"></scdatepicker>
-                    </v-col>
-                    <v-col cols="2" class="text-right">
-                        <run-button text="検索する" @action="fetch"></run-button>
-                    </v-col>
-                </v-row>
-            </v-form>
-    <article class="mt-10" v-show="resultCount > 0">
-        <h2  class="text-title-medium">
-            件数：{{resultCount}}件
-        </h2>
-        <v-table class="mt-4 border-thin">
-            <thead>
-                <tr class="bg-grey-lighten-3 text-bold">
+    <v-form class="rounded form_sheet pa-4">
+        <v-row gap="15">
+            <v-col cols="3">
+                <v-text-field v-model="buyer"  label="購入者名" clearable></v-text-field>
+            </v-col>
+            <v-col cols="3">
+                <scdatepicker v-model:selectedDate="shippingStartDate" datelabel="発送日"></scdatepicker>
+            </v-col>
+            <v-col cols="2" class="text-right">
+                <run-button text="検索する" @action="fetch"></run-button>
+            </v-col>
+        </v-row>
+    </v-form>
+    <article class="mt-10">
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
+            <template #header>
                     <th width="13%" class="text-center">発送日</th>
                     <th width="15%">プラットフォーム</th>
                     <th>購入者情報</th>
                     <th width="10%" class="text-center">合計金額</th>
                     <th width="10%" class="text-center">商品数</th>
                     <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(r, index) in paginatedList" :key="index">
-                    <td class="text-center">{{ r.shipping_date }}</td>
-                    <td>
-                        <shop :orderId="r.order_id"/>
-                    </td>
-                    <td>
-                        <h3 class="mb-0 mt-0 text-title-medium">{{ r.name }}様
-                        </h3>
-                        <span class="text-medium-emphasis">〒{{ r.zip_code }} {{ r.address }}</span>
-                    </td>
-                    <td class="text-center">&yen;{{ r.total_price }}</td>
-                    <td class="text-center">{{r.item_count}}点</td>
-                    <td class="text-right">
-                        <link-icon-button @action="toDssPage(r.order_id)"></link-icon-button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <th colspan="10">
-                        <div class="right aligned">
-                            <ListPagination v-model="page" :length="pageCount"/>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
-        </v-table>
+            </template>
+            <template #row="{ item }">
+                <td class="text-center">{{ item.shipping_date }}</td>
+                <td>
+                    <shop :orderId="item.order_id"/>
+                </td>
+                <td>
+                    <h3 class="mb-0 mt-0 text-title-medium">{{ item.name }}様
+                    </h3>
+                    <span class="text-medium-emphasis">〒{{ item.zip_code }} {{ item.address }}</span>
+                </td>
+                <td class="text-center">&yen;{{ item.total_price }}</td>
+                <td class="text-center">{{item.item_count}}点</td>
+                <td class="text-right">
+                    <link-icon-button @action="toDssPage(item.order_id)"></link-icon-button>
+                </td>
+            </template>
+        </PaginatedTable>
     </article>
     <loading
          :active="isLoading"

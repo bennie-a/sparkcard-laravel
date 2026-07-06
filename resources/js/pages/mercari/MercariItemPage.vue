@@ -17,58 +17,45 @@
                     >登録用CSVを作成する</download-button>
             </v-col>
         </v-row>
-        <h2 class="text-title-medium">件数：{{ result.length }}件</h2>
-        <v-table  class="item_list mt-4 border-thin">
-            <thead>
-                <tr>
-                    <th width="5%">
-                        <input
-                            type="checkbox"
-                            id="all"
-                            v-model="isAll"
-                            @change="allChecked"
-                        />
-                    </th>
-                    <th width="45%">カード情報</th>
-                    <th width="8%" class="text-center">枚数</th>
-                    <th width="8%" class="text-center">
-                        状態
-                    </th>
-                    <th width="8%" class="text-center">価格</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(card, index) in paginatedList" :key="index">
-                    <td>
-                        <input
-                            type="checkbox"
-                            v-model="selectedCard"
-                            :value="card"
-                            @change="checked"
-                        />
-                    </td>
-                    <td>
-                        <CardLayout :card="card" :lang="card.lang"></CardLayout>
-                    </td>
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="result.length">
+            <template #header>
+                <th width="5%">
+                    <input
+                        type="checkbox"
+                        id="all"
+                        v-model="isAll"
+                        @change="allChecked"
+                    />
+                </th>
+                <th width="45%">カード情報</th>
+                <th width="8%" class="text-center">枚数</th>
+                <th width="8%" class="text-center">
+                    状態
+                </th>
+                <th width="8%" class="text-center">価格</th>
+            </template>
+            <template #row="{ item }">
+                <td>
+                    <input
+                        type="checkbox"
+                        v-model="selectedCard"
+                        :value="item"
+                        @change="checked"
+                    />
+                </td>
+                <td>
+                    <CardLayout :card="item" :lang="item.lang"></CardLayout>
+                </td>
 
-                    <td class="text-center">
-                        {{ card.stock }}枚
-                    </td>
-                    <td class="text-center">
-                        <Condition :name="card.condition"></Condition>
-                    </td>
-                    <td class="text-center">&yen;{{ card.price }}</td>
-                </tr>
-            </tbody>
-            <tfoot
-            >
-                <tr>
-                    <th colspan="5">
-                       <ListPagination v-model="page" :length="pageCount"></ListPagination>
-                    </th>
-                </tr>
-            </tfoot>
-        </v-table>
+                <td class="text-center">
+                    {{ item.stock }}枚
+                </td>
+                <td class="text-center">
+                    <Condition :name="item.condition"></Condition>
+                </td>
+                <td class="text-center">&yen;{{ item.price }}</td>
+            </template>
+        </PaginatedTable>
     </article>
             <Loading
      :active="isLoading"
@@ -85,6 +72,7 @@ import ListPagination from "../component/pagination/ListPagination.vue";
 import { usePaginate } from "../component/pagination/UsePaginate";
 import { ref } from "vue";
 import { fa } from "vuetify/locale";
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
 const setname = ref("");
 const result = ref([]);
