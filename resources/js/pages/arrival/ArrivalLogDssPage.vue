@@ -11,7 +11,6 @@ import { apiDeleteService } from "@/component/ApiDeleteService";
 
 import {ref} from 'vue';
 import Loading from "vue-loading-overlay";
-import pglist from "../component/PgList.vue";
 import ModalButton from "../component/modal/ModalButton.vue";
 import { storeToRefs } from "pinia";
 
@@ -19,10 +18,12 @@ import { usePaginate } from '../component/pagination/UsePaginate';
 import ListPagination from '../component/pagination/ListPagination.vue';
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
+import {MsgStore} from "../component/msg/MsgStore";
 const router = useRouter();
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
+const msgStore = MsgStore();
 
 const {arrivalDate, vendorId} = storeToRefs(arrDateStore);
 
@@ -79,13 +80,12 @@ const toList = () => {
     // 入荷情報を1件削除する。
 const deleteLog = async(arrival_id) => {
     isLoading.value = true;
-    piniaMsg.reset();
+    msgStore.clear();
     await apiDeleteService.delete({
         url: "/arrival/",
          id:arrival_id,
         onSuccess: (response) => {
-            piniaMsg.setSuccess("削除しました。");
-            toList();
+            msgStore.success("削除しました。");
         },
         onFinally: () => {
             isLoading.value = false;
