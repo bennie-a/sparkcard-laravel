@@ -6,6 +6,8 @@ import AppBreadcrumb from './AppBreadcrumb.vue'
 import { storeToRefs } from "pinia";
 import MessageArea from '../pages/component/msg/MessageArea.vue'
 import {resolveMetaValue} from './RouteMetaHelper.js';
+import Loading from './Loading.vue';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
 // ----------------------
 // route
@@ -14,6 +16,8 @@ const route = useRoute()
 const pageTitle = computed(() =>{
     return resolveMetaValue(route.meta.title, route);
 });
+
+const loadStore = LoadStore();
 
 </script>
 <template>
@@ -39,6 +43,7 @@ const pageTitle = computed(() =>{
             <v-sheet class="mt-6 pa-7" rounded>
                 <router-view />
             </v-sheet>
+            <Loading v-model="loadStore.isLoading" />
         </v-container>
     </v-main>
     </v-layout>

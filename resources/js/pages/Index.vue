@@ -15,7 +15,10 @@
     import { usePaginate } from "./component/pagination/UsePaginate";
     import {MsgStore} from "./component/msg/MsgStore";
     import RunButton from "./component/button/RunButton.vue";
+    import {LoadStore} from "@/stores/loading/LoadStore.js";
+
     const msgStore = MsgStore();
+    const loadStore = LoadStore();
 
     // リアクティブデータの定義
     const selectedSet = ref("");
@@ -46,11 +49,6 @@
 
     const conditions = ['NM', 'NM-', 'EX+', 'EX', 'PLD'];
 
-    // Vuex Storeへのアクセス（例: 仮想的なuseStore）
-    import { useStore } from "vuex";
-    import { set } from "lodash";
-    const store = useStore();
-
     const isVendorDisabled = computed(() => {
     if (vendorNum.value !== 3) {
         vendor.value = "";
@@ -67,7 +65,7 @@
             return;
         }
 
-        isLoading.value = true;
+        loadStore.on();
         result.value = [];
         resultCount.value = 0;
 
@@ -92,13 +90,13 @@
                 console.log(data);
                 msgStore.error(data.detail);
             } finally {
-                isLoading.value = false;
+                loadStore.off();
             }
         };
 
     const regist = async () => {
         msgStore.clear();
-        isLoading.value = true;
+        loadStore.on();
 
         const card = result.value;
         const filtered = card.filter((c) => c.stock != null && c.stock > 0);
@@ -133,7 +131,7 @@
                 console.error(msg);
                 msgStore.error(msg);
             } finally {
-                isLoading.value = false;
+                loadStore.off();
             }
         };
 
@@ -257,7 +255,4 @@
             </div>
         </section>
     </article>
-    <Loading
-     :active="isLoading"
-     :can-cancel="false" :is-full-page="true" />
 </template>
