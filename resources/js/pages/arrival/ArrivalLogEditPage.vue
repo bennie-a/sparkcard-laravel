@@ -11,15 +11,16 @@
     import {apiPutService} from "@/component/ApiPutService";
     import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
     import UseDateFormatter from '../../functions/UseDateFormatter.js';
-    // import PiniaMsgForm from "../component/PiniaMsgForm.vue";
-
+    import { MsgStore } from "../component/msg/MsgStore.js";
+    import {LoadStore} from "@/stores/loading/LoadStore.js";
 
     const router = useRouter();
     const route = useRoute();
-    const isLoading = ref(false);
     const arrival_id = route.params.arrival_id;
 
-    // const piniaMsg = piniaMsgStore();
+    const msgStore = MsgStore();
+    const loadStore = LoadStore();
+    const arrivalDate = ref(new Date());
 
     const toDssPage = () => {
         router.push({
@@ -30,26 +31,27 @@
     const detail  = ref({card:{name:""}});
    // 初期表示
     onMounted(async() => {
-        piniaMsg.reset();
-        isLoading.value = true;
+        msgStore.clear();
+        loadStore.on();
         await apiService.get({
             url: `/arrival/${arrival_id}`,
             onSuccess: (data) => {
                 detail.value = data;
+                arrivalDate.value = new Date(data.arrival_date);
                 console.log(detail.value);
             },
             onError: (error) => {
                 console.error("Error fetching arrival details:", error);
             },
             onFinally: () => {
-                isLoading.value = false;
+                loadStore.off();
             }
         });
     });
 
     const {toString} = UseDateFormatter();
     const update = async() => {
-        piniaMsg.reset();
+        msgStore.clear();
         const updateDetail = detail.value;
         const query  = {
             arrival_date: toString(updateDetail.arrival_date),
@@ -57,7 +59,7 @@
             quantity: updateDetail.quantity,
             vendor_type_id: updateDetail.vendor.id,
             vendor: updateDetail.vendor.supplier};
-        isLoading.value = true;
+        loadStore.on();
         await apiPutService.put({
             url: `/arrival/${arrival_id}`,
             query: query,
@@ -67,13 +69,13 @@
                 toDssPage();
             },
             onFinally: () => {
-                isLoading.value = false;
+                loadStore.off();
             }
         });
     };
 </script>
 <template>
-    <article v-if="!isLoading">
+    <article v-if="!loadStore.isLoading">
     <div class="ui grid">
         <div class="mt-1 ui seven wide column form">
             <h2 class="ui medium header" v-if="detail.card.foil">
@@ -91,8 +93,7 @@
             <div class="ui divider"></div>
             <div class="three fields">
                 <div class="seven wide field">
-                    <label>入荷日</label>
-                    <scdatepicker v-model="detail.arrival_date"></scdatepicker>
+                    <scdatepicker v-model:selectedDate="arrivalDate" datelabel="入荷日"></scdatepicker>
                 </div>
                 <div class="four wide field">
                     <label>原価</label>
@@ -112,7 +113,6 @@
             </div>
             <div class="two fields">
                 <div class="six wide field">
-                    <label>入荷カテゴリ</label>
                     <div v-if="detail.vendor">
                         <vendorType v-model="detail.vendor.id"></vendorType>
                     </div>
@@ -138,10 +138,6 @@
         </div>
     </div>
     </article>
-
-        <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 

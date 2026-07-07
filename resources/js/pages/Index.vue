@@ -1,7 +1,6 @@
 <script setup>
     import { ref, reactive, computed, onMounted, watch } from "vue";
     import axios from "axios";
-    import Loading from "vue-loading-overlay";
     import MessageArea from "./component/msg/MessageArea.vue";;
     import ModalButton from "./component/modal/ModalButton.vue";
     import foiltag from "./component/tag/FoilTag.vue";
