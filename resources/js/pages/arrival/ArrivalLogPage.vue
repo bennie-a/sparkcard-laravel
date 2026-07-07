@@ -2,7 +2,6 @@
 import { onMounted, ref, shallowRef, watch } from 'vue';
 import { useRouter } from "vue-router";
 import vendortag from "../component/tag/VendorTag.vue"
-import Loading from "vue-loading-overlay";
 import axios from 'axios';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
 import DateRangeInput from '../component/date/DateRangeInput.vue';
@@ -19,7 +18,9 @@ import LinkIconButton from '../component/button/LinkIconButton.vue';
 
 import {MsgStore} from "../component/msg/MsgStore";
 import PaginatedTable from '../component/pagination/PaginatedTable.vue';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
+const loadStore = LoadStore();
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
 
@@ -44,7 +45,7 @@ const msgStore = MsgStore();
 
 // 入荷情報検索
 const fetch =  async () => {
-    isLoading.value = true;
+    loadStore.on();
     result.value = [];
     resultCount.value = 0;
     msgStore.clear();
@@ -56,19 +57,18 @@ const fetch =  async () => {
                     "end_date" : toString(endDate.value)
                 },
             };
-   await axios.get('/api/arrival/grouping', query)
-                            .then((response) => {
-                                result.value = response.data;
-                                resultCount.value = result.value.length;
-                            })
-                            .catch((e) => {
-                                let data = e.response.data;
-                                msgStore.error(data.detail);
-                            })
-                            .finally(() => {
-                                isLoading.value = false;
-                            });
-
+    await axios.get('/api/arrival/grouping', query)
+                .then((response) => {
+                    result.value = response.data;
+                    resultCount.value = result.value.length;
+                })
+                .catch((e) => {
+                    let data = e.response.data;
+                    msgStore.error(data.detail);
+                })
+                .finally(() => {
+                    loadStore.off();
+                });
 }
 
 onMounted(async() => {
@@ -134,9 +134,6 @@ const toDssPage = (arrivalDate, vendor_id) => {
                 </template>
         </PaginatedTable>
     </article>
-    <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 .middle {

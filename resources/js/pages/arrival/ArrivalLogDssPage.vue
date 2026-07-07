@@ -10,15 +10,15 @@ import {apiService} from "@/component/ApiGetService";
 import { apiDeleteService } from "@/component/ApiDeleteService";
 
 import {ref} from 'vue';
-import Loading from "vue-loading-overlay";
 import ModalButton from "../component/modal/ModalButton.vue";
 import { storeToRefs } from "pinia";
 
-import { usePaginate } from '../component/pagination/UsePaginate';
-import ListPagination from '../component/pagination/ListPagination.vue';
+import { usePaginate } from "../component/pagination/UsePaginate";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
 import {MsgStore} from "../component/msg/MsgStore";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
+
 const router = useRouter();
 
 const gcStore = groupConditionStore();
@@ -31,20 +31,20 @@ const currentList = reactive([]);
 const resultCount = ref(0);
 
 const logs = ref([]);
-const isLoading = ref(false);
+const loadStore = LoadStore();
 
-    const {
-        page, pageCount, paginatedList, resetPage
-    } = usePaginate(logs, 10);
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePaginate(logs, 10);
 
 const result = reactive([]);
 onMounted(async() =>{
-    isLoading.value = true;
     await fetch();
-    });
+});
 
 const fetch = async() => {
     resetPage();
+    loadStore.on();
     await apiService.get(
         {
             url:"/arrival/",
@@ -59,7 +59,7 @@ const fetch = async() => {
                 logs.value = result.value.logs;
             },
             onFinally:() => {
-                isLoading.value = false;
+                loadStore.off();
             }
         });
 }
@@ -79,7 +79,7 @@ const toList = () => {
 
     // 入荷情報を1件削除する。
 const deleteLog = async(arrival_id) => {
-    isLoading.value = true;
+    loadStore.on();
     msgStore.clear();
     await apiDeleteService.delete({
         url: "/arrival/",
@@ -88,14 +88,14 @@ const deleteLog = async(arrival_id) => {
             msgStore.success("削除しました。");
         },
         onFinally: () => {
-            isLoading.value = false;
+            loadStore.off();
         }
     });
     }
 
 </script>
 <template>
-    <section v-show="!isLoading"  v-if="result.value">
+    <section v-if="result.value">
         <article>
             <v-row class="w-50" gap="0">
                 <v-col cols="3">入荷先カテゴリ</v-col>
@@ -146,9 +146,6 @@ const deleteLog = async(arrival_id) => {
             </div>
         </article>
     </section>
-    <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 i.icon {

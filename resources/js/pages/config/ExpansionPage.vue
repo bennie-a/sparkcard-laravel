@@ -1,5 +1,4 @@
 <script setup>
-import Loading from "vue-loading-overlay";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
@@ -8,10 +7,11 @@ import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
 import yupRule from "../../../validation/yupRule.js";
 import RequiredLabel from "../component/label/RequiredLabel.vue";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
 const router = useRouter();
 const route = useRoute();
-const isLoading = ref(false);
+const loadStore = LoadStore();
 const result = ref([]);
 const resultCount = ref(0);
 const msgStore = MsgStore();
@@ -47,7 +47,7 @@ const show = () => {
 const search = handleSubmit(
     async() => {
         try {
-            isLoading.value = true;
+            loadStore.on();
             result.value = [];
             resultCount.value = 0;
             msgStore.clear();
@@ -60,7 +60,7 @@ const search = handleSubmit(
             let data = e.response.data;
             msgStore.error(data.detail);
         } finally {
-            isLoading.value = false;
+            loadStore.off();
         }
     }
 );
@@ -107,7 +107,7 @@ const toCardPage = (name, ex) => {
                     <th  width="8%" class="text-center">略称</th>
                     <th width="10%" class="text-center">発売日</th>
                     <th width="10%" class="text-center">カード件数</th>
-                    <th width="15%" class="text-center"></th>
+                    <th width="15%" class="text-center">カード登録</th>
                 </tr>
             </thead>
             <tbody>
@@ -127,7 +127,4 @@ const toCardPage = (name, ex) => {
             </tbody>
         </v-table>
     </article>
-    <Loading
-     :active="isLoading"
-     :can-cancel="false" :is-full-page="true" />
 </template>

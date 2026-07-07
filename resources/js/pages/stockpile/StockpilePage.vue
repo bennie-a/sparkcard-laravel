@@ -11,25 +11,26 @@ import { MsgStore } from "../component/msg/MsgStore.js";
 import ColorTag from "../component/tag/ColorTag.vue";
 import RunButton from "../component/button/RunButton.vue";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
-const isLoading = ref(false);
 const cardname = ref("");
 const setname = ref("");
 const stock = ref([]);
 const stockCount = ref(0);
-
 const {
     page, pageCount, paginatedList, resetPage
 } = usePaginate(stock, 10);
 
 const msgStore = MsgStore();
+const loadStore = LoadStore();
+
 const search = async () => {
     try {
         if (cardname.value === "" && setname.value === "") {
             msgStore.error("カード名かセット略称のどちらかを入力してください。");
             return;
         }
-        isLoading.value = true;
+        loadStore.on();
         stockCount.value = 0;
         resetPage();
         msgStore.clear();
@@ -51,7 +52,7 @@ const search = async () => {
         console.error(e);
         msgStore.error("検索中にエラーが発生しました。");
     } finally {
-        isLoading.value = false;
+        loadStore.off();
     }
 }
 </script>
@@ -100,7 +101,4 @@ const search = async () => {
             </template>
         </PaginatedTable>
     </article>
-    <Loading
-    :active="isLoading"
-    :can-cancel="false" :is-full-page="true" />
 </template>

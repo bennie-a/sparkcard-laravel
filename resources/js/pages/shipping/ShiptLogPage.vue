@@ -4,23 +4,23 @@ import scdatepicker from "../component/date/DateInput.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import axios from 'axios';
-import Loading from "vue-loading-overlay";
 import ListPagination from "@/pages/component/pagination/ListPagination.vue";
 import { usePaginate } from "@/pages/component/pagination/UsePaginate";
 import {MsgStore} from "@/pages/component/msg/MsgStore";
 import RunButton from "../component/button/RunButton.vue";
 import LinkIconButton from "../component/button/LinkIconButton.vue";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
 const router = useRouter();
 
 const buyer = ref("");
 const result = ref([]);
-const isLoading = ref(false);
 const today = new Date();
 const shippingStartDate = ref(new Date());
 const resultCount = ref(0);
 const msgStore = MsgStore();
+const loadStore = LoadStore();
 
 const {
     page, pageCount, paginatedList, resetPage
@@ -29,7 +29,7 @@ const {
 const fetch =  async () => {
     resetPage();
     msgStore.clear();
-    isLoading.value = true;
+    loadStore.on();
     result.value = [];
     resultCount.value = 0;
     const query = {
@@ -49,7 +49,7 @@ const fetch =  async () => {
                                 msgStore.error(detail);
                             })
                             .finally(() => {
-                                isLoading.value = false;
+                                loadStore.off();
                             });
 };
 
@@ -119,9 +119,6 @@ const toDateString = (date) => {
             </template>
         </PaginatedTable>
     </article>
-    <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 .tobold {

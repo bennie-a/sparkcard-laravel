@@ -27,7 +27,6 @@
     const name = ref("");
     const arrivalDate = ref(new Date);
     const cost = ref(28);
-    const isLoading = ref(false);
     const vendorNum = ref(1);
     const vendor = ref("");
     const currentList = reactive([]);

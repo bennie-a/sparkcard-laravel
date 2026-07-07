@@ -9,13 +9,13 @@ import imagemodal from '../component/modal/ImageModal.vue';
 import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
 import { usePaginate } from "@/pages/component/pagination/UsePaginate";
-import ListPagination from "@/pages/component/pagination/ListPagination.vue";
 import PaginatedTable from '../component/pagination/PaginatedTable.vue';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
+const loadStore = LoadStore();
 const route = useRoute();
 const router = useRouter();
 
-const isLoading = ref(false);
 const isCopied = ref(false);
 const orderId = route.params.order_id;
 
@@ -33,7 +33,7 @@ const {
 
 // 詳細情報を取得する。
 const getDetail = async () => {
-    isLoading.value = true;
+    loadStore.on();
     await axios.get("/api/shipping/"+ orderId).
     then((response) =>{
         detail.value = response.data;
@@ -41,7 +41,7 @@ const getDetail = async () => {
         })
         .catch()
         .finally(()=> {
-            isLoading.value = false;
+            loadStore.off();
         });
 }
 
@@ -125,9 +125,6 @@ onMounted(async() => {
         <div class="text-center mt-6">
             <v-btn variant="outlined" color="teal-lighten-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
         </div>
-        <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
     </article>
 </template>
 <style>
