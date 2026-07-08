@@ -2,7 +2,6 @@
 import { AxiosTask } from "../../component/AxiosTask";
 import ModalButton from "../component/modal/ModalButton.vue";
 import axios from "axios";
-import Loading from "vue-loading-overlay";
 import PromoDropdown from "../component/selection/PromoDropdown.vue";
 import ColorDropdown from "../component/selection/ColorDropdown.vue";
 import { ref } from "vue";
@@ -11,14 +10,15 @@ import { MsgStore } from "../component/msg/MsgStore.js";
 import RequiredLabel from "../component/label/RequiredLabel.vue";
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
+const loadStore = LoadStore();
 const route = useRoute();
 const router = useRouter();
 const setname = ref(route.query.setname);
 const attr = ref(route.query.attr);
 const  language = ref("ja");
 
-const isLoading = ref(false);
 const msgStore = MsgStore();
 
 const foiltype = ref([]);
@@ -52,7 +52,7 @@ const {value:color} = useField('color');
 const isDisplay = ref(false);
 const search = handleSubmit(
     async function () {
-        isLoading.value = true;
+        loadStore.on();
         msgStore.clear();
         isDisplay.value = false;
         const query = {
@@ -80,14 +80,14 @@ const search = handleSubmit(
                 msgStore.error(e.response.data.detail);
             })
             .finally(() => {
-                isLoading.value = false;
+                loadStore.off();
             });
         }
     );
 
 const store = async function() {
     try {
-            isLoading.value = true;
+            loadStore.on();
             const task = new AxiosTask();
             msgStore.clear();
             let json = {
@@ -107,7 +107,7 @@ const store = async function() {
         } catch(e) {
             msgStore.error(e.message);
         } finally {
-            isLoading.value = false;
+            loadStore.off();
         }
     }
 
@@ -196,12 +196,5 @@ const toList = () => {
                 </v-col>
             </v-row>
         </article>
-    </section>
-    <section>
-        <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        ></loading>
     </section>
 </template>

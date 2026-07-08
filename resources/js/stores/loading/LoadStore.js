@@ -10,6 +10,10 @@ export const LoadStore = defineStore('LoadStore',  {
         },
         off() {
             this.isLoading = false;
+        },
+        // ローディングが非アクティブかどうかを返す
+        isInActive() {
+            return !this.isLoading;
         }
     }
 })
