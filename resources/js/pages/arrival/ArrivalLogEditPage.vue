@@ -23,6 +23,8 @@
     const msgStore = MsgStore();
     const loadStore = LoadStore();
     const arrivalDate = ref(new Date());
+    const supplier = ref('');
+    const cost = ref(1);
 
     const toDssPage = () => {
         router.push({
@@ -40,6 +42,8 @@
             onSuccess: (data) => {
                 detail.value = data;
                 arrivalDate.value = new Date(data.arrival_date);
+                supplier.value = data.vendor.supplier;
+                cost.value = data.cost;
                 console.log(detail.value);
             },
             onError: (error) => {
@@ -59,22 +63,36 @@
         const updateDetail = detail.value;
         const query  = {
             arrival_date: toString(arrivalDate.value),
-            cost: updateDetail.cost,
+            cost: cost.value,
             quantity: updateDetail.quantity,
             vendor_type_id: updateDetail.vendor.id,
-            vendor: updateDetail.vendor.supplier};
+            vendor: supplier.value};
         await apiPutService.put({
             url: `/arrival/${arrival_id}`,
             query: query,
             onSuccess: (data) => {
                 arrDateConditionStore().arrivalDate = data.arrival_date;
-                msgStore.setSuccess("変更しました。");
-                toDssPage();
+                arrDateConditionStore().vendorId = data.vendor.id;
+                msgStore.success("変更しました。");
+                // toDssPage();
             },
             onFinally: () => {
                 loadStore.off();
             }
         });
+    };
+
+    const clearSupplier = (vendorId) => {
+        if (vendorId === 2) {
+            cost.value = 1;
+        } else {
+            cost.value = detail.value.cost;
+        }
+        if (vendorId !== 3) {
+            supplier.value = '';
+        } else {
+            supplier.value = detail.value.vendor.supplier;
+        }
     };
 </script>
 <template>
@@ -102,10 +120,10 @@
         <v-form class="form_sheet mt-6 pa-4">
             <v-row class="mt-2" v-if="detail.vendor">
                 <v-col cols="3">
-                    <vendorType v-model="detail.vendor.id"></vendorType>
+                    <vendorType v-model="detail.vendor.id" @action="clearSupplier"></vendorType>
                 </v-col>
                 <v-col cols="4">
-                    <v-text-field label="取引先" v-model="vendor" :disabled="detail.vendor.id !== 3" clearable></v-text-field>
+                    <v-text-field label="取引先" v-model="supplier" :disabled="detail.vendor.id !== 3" clearable></v-text-field>
                 </v-col>
                 <v-col cols="3">
                     <scdatepicker v-model:selectedDate="arrivalDate" datelabel="入荷日"></scdatepicker>
@@ -114,7 +132,7 @@
             <v-row>
                 <v-col cols="2">
                     <v-text-field
-                        v-model="detail.cost"
+                        v-model="cost"
                         type="number"
                         step="1"
                         min="1"
