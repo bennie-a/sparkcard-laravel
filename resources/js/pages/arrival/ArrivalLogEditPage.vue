@@ -54,21 +54,21 @@
 
     const {toString} = UseDateFormatter();
     const update = async() => {
+        loadStore.on();
         msgStore.clear();
         const updateDetail = detail.value;
         const query  = {
-            arrival_date: toString(updateDetail.arrival_date),
+            arrival_date: toString(arrivalDate.value),
             cost: updateDetail.cost,
             quantity: updateDetail.quantity,
             vendor_type_id: updateDetail.vendor.id,
             vendor: updateDetail.vendor.supplier};
-        loadStore.on();
         await apiPutService.put({
             url: `/arrival/${arrival_id}`,
             query: query,
             onSuccess: (data) => {
                 arrDateConditionStore().arrivalDate = data.arrival_date;
-                // piniaMsg.setSuccess("変更しました。");
+                msgStore.setSuccess("変更しました。");
                 toDssPage();
             },
             onFinally: () => {

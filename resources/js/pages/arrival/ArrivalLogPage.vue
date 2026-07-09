@@ -85,6 +85,9 @@ onMounted(async() => {
 const toDssPage = (arrivalDate, vendor_id) => {
     arrDateStore.arrivalDate = arrivalDate;
     arrDateStore.vendorId = vendor_id;
+    gcStore.itemname = itemname.value;
+    gcStore.startDate = startDate.value;
+    gcStore.endDate = endDate.value;
     router.push({
         name: "ArrivalLogDss"
     });
