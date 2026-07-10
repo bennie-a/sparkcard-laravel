@@ -1,5 +1,7 @@
 import axios from "axios";
 import { MsgStore } from "../pages/component/msg/MsgStore";
+import { LoadStore } from "../stores/loading/LoadStore";
+
 export class AxiosTask {
 
     // GETメソッドでAPIを呼び出す。
@@ -37,6 +39,9 @@ export class AxiosTask {
         const msgStore = MsgStore();
         msgStore.clear();
 
+        const loadStore = LoadStore();
+        loadStore.on();
+
         await axios
             .post(this.getApiUrl(url), json)
             .then((response) => {
@@ -52,6 +57,8 @@ export class AxiosTask {
                     msgStore.error(data.detail);
                     return;
                 }
+            }).finally(() => {
+                loadStore.off();
             });
     }
 

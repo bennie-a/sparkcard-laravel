@@ -21,8 +21,9 @@
         "その他",
     ];
 
-    const store = () => {
-        const task = new AxiosTask(this.$store);
+    const store = async () => {
+
+        const task = new AxiosTask();
                 let json = {
                     name: name.value,
                     attr: attr.value,
@@ -30,60 +31,9 @@
                     format: format.value,
                     release_date: releaseDate.value,
                 };
-                const success = function (response, store) {
-                    // this.back();
-                };
-                task.post("/database/exp", json, success);
-                this.$store.dispatch(
-                    "setSuccessMessage",
-                    `${this.name}を登録しました！`
-                );
+
+                await task.post("/database/exp", json);
     };
-// export default {
-//     data() {
-//         return {
-//             name: "",
-//             attr: "",
-//             block: "サンダー・ジャンクション",
-//             format: "スタンダード",
-//             release_date: null,
-//         };
-//     },
-//     methods: {
-//         release_format: function (date) {
-//             const day = date.getDate();
-//             const month = date.getMonth() + 1;
-//             const year = date.getFullYear();
-//             return `${year}/${month}/${day}`;
-//         },
-//         back: function () {
-//             this.$router.push("/config/expansion");
-//         },
-//         store: function () {
-//             const task = new AxiosTask(this.$store);
-//             let json = {
-//                 name: this.name,
-//                 attr: this.attr,
-//                 block: this.block,
-//                 format: this.format,
-//                 release_date: this.release_date,
-//             };
-//             const success = function (response, store) {
-//                 // this.back();
-//             };
-//             task.post("/database/exp", json, success);
-//             this.$store.dispatch(
-//                 "setSuccessMessage",
-//                 `${this.name}を登録しました！`
-//             );
-//         },
-//     },
-//     components: {
-//         "message-area": MessageArea,
-//         Datepicker: Datepicker,
-//         ModalButton: ModalButton,
-//     },
-// };
 </script>
 <template>
     <section>
