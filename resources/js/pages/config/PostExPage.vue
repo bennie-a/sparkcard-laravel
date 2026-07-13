@@ -4,12 +4,14 @@
     import ModalButton from "../component/modal/ModalButton.vue";
     import DateInput from "../component/date/DateInput.vue";
     import { ref } from "vue";
+    import UseDateFormatter from "../../functions/UseDateFormatter.js";
 
     const name = ref("");
     const attr = ref("");
     const releaseDate = ref(new Date());
     const format = ref("スタンダード");
     const block = ref("その他");
+    const {toString} = UseDateFormatter();
 
     const formatOptions = [
         "スタンダード",
@@ -22,14 +24,14 @@
     ];
 
     const store = async () => {
-
+        console.log(releaseDate);
         const task = new AxiosTask();
                 let json = {
                     name: name.value,
                     attr: attr.value,
                     block: block.value,
                     format: format.value,
-                    release_date: releaseDate.value,
+                    release_date: toString(releaseDate.value),
                 };
 
                 await task.post("/database/exp", json);
