@@ -11,13 +11,15 @@ import RunButton from "../component/button/RunButton.vue";
 import LinkIconButton from "../component/button/LinkIconButton.vue";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 import {LoadStore} from "@/stores/loading/LoadStore.js";
+import UseDateFormatter from "../../functions/UseDateFormatter.js";
 
 const router = useRouter();
+const {toString} = UseDateFormatter();
 
 const buyer = ref("");
 const result = ref([]);
 const today = new Date();
-const shippingStartDate = ref(new Date());
+const shippingStartDate = ref(toString(new Date()));
 const resultCount = ref(0);
 const msgStore = MsgStore();
 const loadStore = LoadStore();
@@ -35,7 +37,7 @@ const fetch =  async () => {
     const query = {
                 params: {
                     "buyer_name": buyer.value,
-                    "shipping_date": toDateString(shippingStartDate.value),
+                    "shipping_date": shippingStartDate.value,
                 },
             };
    await axios.get('/api/shipping/', query)
@@ -69,13 +71,6 @@ onMounted(async() => {
 const isToday = (date) => {
     return today === date;
 };
-
-const toDateString = (date) => {
-    if (date != null) {
-        return date.toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
-    }
-    return null;
-}
 </script>
 <template>
     <v-form class="rounded form_sheet pa-4">

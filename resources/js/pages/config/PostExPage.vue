@@ -25,11 +25,12 @@
 
     const {value:name, errorMessage:nameMsg} = useField('name');
     const {value:attr, errorMessage:attrMsg} = useField('attr');
-    const releaseDate = ref(new Date());
+    const {toString} = UseDateFormatter();
+
+    const releaseDate = ref(toString(new Date()));
     const format = ref("スタンダード")
     const block = ref("その他");
 
-    const {toString} = UseDateFormatter();
 
     const formatOptions = [
         "スタンダード",
@@ -51,10 +52,10 @@
                 attr: attr.value,
                 block: block.value,
                 format: format.value,
-                release_date: toString(releaseDate.value),
+                release_date: releaseDate.value,
             };
 
-            // await task.post("/database/exp", json);
+            await task.post("/database/exp", json);
 
         } catch(e) {
             msgStore.error(e.message);

@@ -15,6 +15,7 @@
     import {MsgStore} from "./component/msg/MsgStore";
     import RunButton from "./component/button/RunButton.vue";
     import {LoadStore} from "@/stores/loading/LoadStore.js";
+    import UseDateFormatter from "../functions/UseDateFormatter.js";
 
     const msgStore = MsgStore();
     const loadStore = LoadStore();
@@ -24,7 +25,8 @@
     const selectedColor = ref("");
     const isFoil = ref(false);
     const name = ref("");
-    const arrivalDate = ref(new Date);
+    const {toString} = UseDateFormatter();
+    const arrivalDate = ref(toString(new Date));
     const cost = ref(28);
     const vendorNum = ref(1);
     const vendor = ref("");

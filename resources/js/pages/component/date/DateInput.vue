@@ -1,12 +1,24 @@
 <script setup>
-import { ref} from "vue";
-const selectedDate = defineModel('selectedDate', {type:Date, required:true});
-defineProps({'datelabel': {type:String, required:true}});
+    import { computed, ref} from "vue";
+    import UseDateFormatter from "../../../functions/UseDateFormatter";
+
+    const model = defineModel('selectedDate', {type:String, required:true});
+    defineProps({'datelabel': {type:String, required:true}});
+
+    const {toString, toDate} = UseDateFormatter();
+    const formatDate = computed({
+        get() {
+            return model.value ? toDate(model.value) : null;
+        },
+        set(value) {
+            model.value = value ? toString(value) : '';
+        }
+    });
 
 </script>
 <template>
     <v-date-input
-    v-model="selectedDate"
+    v-model="formatDate"
     :label="datelabel"
     prepend-inner-icon="mdi-calendar-today"
     />
