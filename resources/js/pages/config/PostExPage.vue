@@ -12,7 +12,15 @@
 
     const schema = yup.object({
         name:yup.string().label('名称').required(),
-        attr:yup.string().label('略称').required(),
+        attr:yup.string().label('略称').required().customAlpha(),
+    });
+
+    const {handleSubmit} = useForm({
+        validationSchema:schema,
+        initialValues:{
+            name:'',
+            attr:''
+        }
     });
 
     const {value:name, errorMessage:nameMsg} = useField('name');
@@ -21,9 +29,6 @@
     const format = ref("スタンダード")
     const block = ref("その他");
 
-    const {handleSubmit} = useForm({
-        validationSchema:schema
-    });
     const {toString} = UseDateFormatter();
 
     const formatOptions = [
@@ -38,7 +43,7 @@
 
     const msgStore = MsgStore();
 
-    const store = async () => {
+    const store = handleSubmit(async () => {
         try {
             const task = new AxiosTask();
             let json = {
@@ -48,19 +53,18 @@
                 format: format.value,
                 release_date: toString(releaseDate.value),
             };
-            await schema.validate(json);
 
             // await task.post("/database/exp", json);
 
         } catch(e) {
             msgStore.error(e.message);
         }
-    };
+    });
 </script>
 <template>
     <section>
         <v-form class="form_sheet rounded pa-4 w-50 mx-auto">
-            <v-row class="text-center">
+            <v-row>
                 <v-col cols="8">
                     <v-text-field placeholder="名称" v-model="name" :error-messages="nameMsg">
                         <template v-slot:label>
