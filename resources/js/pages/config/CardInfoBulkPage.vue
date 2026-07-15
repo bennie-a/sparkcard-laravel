@@ -1,5 +1,4 @@
 <script setup>
-    import Loading from "vue-loading-overlay";
     import FileUpload from "../component/FileUpload.vue";
     import ListPagination from "../component/pagination/ListPagination.vue";
     import ModalButton from "../component/modal/ModalButton.vue";
@@ -10,9 +9,50 @@
 
     import {ref} from 'vue';
     import axios from "axios";
+    import {LoadStore} from "@/stores/loading/LoadStore.js";
+    import { useRoute } from "vue-router";
+    import {MsgStore} from "../../pages/component/msg/MsgStore";
 
     const isDraftOnly = ref(false);
     const color = ref("");
+    const loadStore = LoadStore();
+    const msgStore = MsgStore();
+    const route = useRoute();
+
+    const items = ref(null);
+    let attr = route.query.attr;
+
+
+    const upload = async(file) => {
+        loadStore.on();
+
+        try {
+            msgStore.clear();
+            items.value = null;
+
+            const query =
+                `?isDraft=${isDraftOnly.value}&color=${color.value}&setcode=${attr}`;
+
+            const response = await axios.post(
+                "/api/upload/card" + query,
+                file,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (response.status === 201) {
+                items.value = response.data;
+            }
+
+        } catch (e) {
+            msgStore.error(e.response.data.detail);
+        } finally {
+            loadStore.off();
+        }
+    }
 // // export default {
 // //     components: {
 // //         "file-upload": FileUpload,
@@ -40,90 +80,14 @@
 // //         getCards: function () {
 // //             return this.$store.getters.sliceCard;
 // //         },
-// //         colortext: function () {
-// //             return function (key) {
-// //                 const colors = {
-// //                     W: "白",
-// //                     B: "黒",
-// //                     U: "青",
-// //                     R: "赤",
-// //                     G: "緑",
-// //                     M: "多色",
-// //                     L: "無色",
-// //                     A: "アーティファクト",
-// //                     Land: "土地",
-// //                 };
-// //                 return colors[key];
-// //             };
-// //         },
 // //         join: function () {
 // //             return function (key) {
 // //                 return key.join("|");
 // //             };
 // //         },
-// //         colorlabel: function () {
-// //             return function (key) {
-// //                 const colors = {
-// //                     W: "",
-// //                     B: "black",
-// //                     U: "blue",
-// //                     R: "red",
-// //                     G: "green",
-// //                     M: "orange",
-// //                     L: "purple",
-// //                     A: "grey",
-// //                     Land: "brown",
-// //                 };
-// //                 return colors[key];
-// //             };
-// //         },
 // //     },
 
 // //     methods: {
-// //         upload: async function (file) {
-// //             this.isLoading = true;
-// //             this.filename = file.name;
-// //             const config = {
-// //                 headers: {
-// //                     "Content-Type": "application/json",
-// //                 },
-// //             };
-// //             let query = "?isDraft=" + this.isDraftOnly + "&color=" + this.color+"&setcode=" + this.attr;
-
-// //             await axios
-// //                 .post("/api/upload/card" + query, file, config)
-// //                 .then((response) => {
-// //                     if (response.status == 201) {
-// //                         let item = response.data;
-// //                         this.setCode = item.setCode;
-// //                         this.$store.dispatch("setCard", item.cards);
-// //                         this.checkedCard = item.cards.map(c => c.number);
-// //                     }
-// //                 })
-// //                 .catch((e) => {
-// //                     let status = e.response.status;
-// //                     if (status == 422) {
-// //                         const errors = e.response.data.errors;
-// //                         let msgs = "<ul>";
-// //                         for (let key in errors) {
-// //                             console.log(key);
-// //                             let array = errors[key];
-// //                             array.forEach((msg) => {
-// //                                 msgs += `<li>${msg}</li>`;
-// //                             });
-// //                         }
-// //                         msgs += "</ul>";
-// //                         this.$store.dispatch("message/errorhtml", msgs);
-// //                     } else {
-// //                         const msgs = e.response.data.detail;
-// //                         console.log(msgs);
-// //                         this.$store.dispatch("message/errorhtml", msgs);
-// //                     }
-// //                 })
-// //                 .finally(() => {
-// //                     this.isLoading = false;
-// //                 });
-// //         },
 // //         store: async function () {
 // //             this.isLoading = true;
 // //             this.$store.dispatch("message/clear");
@@ -177,15 +141,8 @@
             </v-col>
         </v-row>
     </v-form>
-    <article class="mt-1 ui grid segment">
-        <div
-        class="three wide column middle aligned content ui toggle checkbox"
-        >
-        </div>
-        <div class="three wide column field">
-        </div>
-        <div class="eight wide column">
-        </div>
+    <article v-if="items">
+        {{ items }}
     </article>
     <!-- <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
@@ -247,11 +204,6 @@
             </div>
         </div>
     </article> -->
-    <loading
-        :active="isLoading"
-        :can-cancel="false"
-        :is-full-page="true"
-    ></loading>
 </template>
 
 <style>
