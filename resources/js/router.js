@@ -112,8 +112,12 @@ const routes = [
         name:"CardInfoCsvPage",
         component: CardInfoBulkPage,
         meta: {
-            title: "カード情報一括登録",
             parent:'Ex',
+            title:(route) => {
+                let setname = route.query.setname;
+                let attr = route.query.attr;
+                return `カード情報一括登録:${setname}[${attr}]`;
+            },
             breadscrumb:"カード情報一括登録"
         },
     },

@@ -1,8 +1,6 @@
 <template>
     <message-area></message-area>
     <div v-if="setname != ''">
-    <label class="ui label">{{setname}}[{{attr}}]
-    </label>
     <article class="mt-1 ui grid segment">
         <div
             class="three wide column middle aligned content ui toggle checkbox"
