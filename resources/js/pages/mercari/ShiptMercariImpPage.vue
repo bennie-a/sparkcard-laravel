@@ -12,6 +12,8 @@
     import ListPagination from "@/pages/component/pagination/ListPagination.vue";
     import { usePaginate } from "@/pages/component/pagination/UsePaginate";
     import {MsgStore} from "@/pages/component/msg/MsgStore";
+    import UseDateFormatter from '../../functions/UseDateFormatter.js';
+
 
     const msgStore = MsgStore();
 
@@ -19,7 +21,8 @@
     const resultCount = ref(0);
     const isLoading = ref(false);
 
-    const shiptDate = ref(new Date());
+    const {toString} = UseDateFormatter();
+    const shiptDate = ref(toString(new Date()));
 
     const {
         page, pageCount, paginatedList, resetPage
@@ -31,12 +34,10 @@
     const post = async function() {
         isLoading.value = true;
         await Promise.all(result.value.map(async (r) => {
-            const formatShiptDate = shiptDate.value.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit",
-            day: "2-digit"})
             const json =
                 {
                     order_id: r.order_id,
-                    shipping_date: formatShiptDate,
+                    shipping_date: shiptDate.value,
                     buyer_name: r.buyer_name,
                     zip_code: r.zip_code,
                     address: r.address,

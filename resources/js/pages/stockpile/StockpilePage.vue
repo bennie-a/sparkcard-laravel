@@ -12,9 +12,10 @@ import ColorTag from "../component/tag/ColorTag.vue";
 import RunButton from "../component/button/RunButton.vue";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 import {LoadStore} from "@/stores/loading/LoadStore.js";
+import * as yup from 'yup';
+import { useField, useForm } from "vee-validate";
 
 const cardname = ref("");
-const setname = ref("");
 const stock = ref([]);
 const stockCount = ref(0);
 const {
@@ -24,37 +25,52 @@ const {
 const msgStore = MsgStore();
 const loadStore = LoadStore();
 
-const search = async () => {
-    try {
-        if (cardname.value === "" && setname.value === "") {
-            msgStore.error("カード名かセット略称のどちらかを入力してください。");
-            return;
-        }
-        loadStore.on();
-        stockCount.value = 0;
-        resetPage();
-        msgStore.clear();
-        const response = await axios.get("/api/stockpile", {
-            params: {
-                card_name: cardname.value,
-                set_name: setname.value,
-            },
-        });
-        stock.value = response.data;
-        stockCount.value = stock.value.length;
+const schema = yup.object({
+    setname:yup.string().label('セット略称').customAlpha()
+});
 
-    } catch (e) {
-        if (e.status === 404) {
-            let data = e.response.data;
-            msgStore.error(data.detail);
-            return;
-        }
-        console.error(e);
-        msgStore.error("検索中にエラーが発生しました。");
-    } finally {
-        loadStore.off();
+const {handleSubmit} = useForm({
+    validationSchema:schema,
+    initialValues:{
+        setname:''
     }
-}
+});
+
+const {value:setname, errorMessage:SetErr} = useField('setname');
+
+const search = handleSubmit(
+    async () => {
+        try {
+            if (cardname.value === "" && setname.value === "") {
+                msgStore.error("カード名かセット略称のどちらかを入力してください。");
+                return;
+            }
+            loadStore.on();
+            stockCount.value = 0;
+            resetPage();
+            msgStore.clear();
+            const response = await axios.get("/api/stockpile", {
+                params: {
+                    card_name: cardname.value,
+                    set_name: setname.value,
+                },
+            });
+            stock.value = response.data;
+            stockCount.value = stock.value.length;
+
+        } catch (e) {
+            if (e.status === 404) {
+                let data = e.response.data;
+                msgStore.error(data.detail);
+                return;
+            }
+            console.error(e);
+            msgStore.error("検索中にエラーが発生しました。");
+        } finally {
+            loadStore.off();
+        }
+    }
+);
 </script>
 
 <template>
@@ -66,7 +82,7 @@ const search = async () => {
                     </v-text-field>
                 </v-col>
                 <v-col cols="2">
-                    <v-text-field v-model="setname" label="セット略称" clearable>
+                    <v-text-field v-model="setname" label="セット略称" :error-messages="SetErr">
                     </v-text-field>
                 </v-col>
                 <v-col cols="2" class="text-right">
