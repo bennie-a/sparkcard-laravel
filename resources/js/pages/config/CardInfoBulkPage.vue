@@ -4,6 +4,8 @@
     import ModalButton from "../component/modal/ModalButton.vue";
     import { AxiosTask } from "../../component/AxiosTask";
     import FoilTag from "../component/tag/FoilTag.vue";
+    import ColorTag from "../component/tag/ColorTag.vue";
+    import SurfaceTag from "../component/tag/SurfaceTag.vue";
     import PromoDropdown from "../component/selection/PromoDropdown.vue";
     import ColorDropdown from "../component/selection/ColorDropdown.vue";
 
@@ -12,6 +14,8 @@
     import {LoadStore} from "@/stores/loading/LoadStore.js";
     import { useRoute } from "vue-router";
     import {MsgStore} from "../../pages/component/msg/MsgStore";
+    import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+    import { usePaginate } from "../component/pagination/UsePaginate";
 
     const isDraftOnly = ref(false);
     const color = ref("");
@@ -19,16 +23,21 @@
     const msgStore = MsgStore();
     const route = useRoute();
 
-    const items = ref(null);
+    const items = ref([]);
+    const itemCount = ref(0);
     let attr = route.query.attr;
 
+    const {
+        page, pageCount, paginatedList, resetPage
+    } = usePaginate(items, 10);
 
     const upload = async(file) => {
         loadStore.on();
-
         try {
+            resetPage();
+            itemCount.value = 0;
             msgStore.clear();
-            items.value = null;
+            items.value.length = 0;
 
             const query =
                 `?isDraft=${isDraftOnly.value}&color=${color.value}&setcode=${attr}`;
@@ -44,7 +53,8 @@
             );
 
             if (response.status === 201) {
-                items.value = response.data;
+                items.value = response.data.cards;
+                itemCount.value = items.value.length;
             }
 
         } catch (e) {
@@ -141,8 +151,35 @@
             </v-col>
         </v-row>
     </v-form>
-    <article v-if="items">
-        {{ items }}
+
+    <article class="mt-10">
+        <paginated-table v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="itemCount">
+            <template #header>
+                <th width="5%"></th>
+                <th width="5%" class="text-center">No.</th>
+                <th>カード名</th>
+                <th width="30%">特別版</th>
+                <th width="18%">仕上げ</th>
+                <th width="8%" class="text-center">色</th>
+            </template>
+            <template #row="{ item }">
+                <td></td>
+                <td class="text-center">{{ item.number }}</td>
+                <td class="pt-1">
+                    <span class="text-medium-emphasis">{{ item.en_name }}</span>
+                    <v-text-field v-model="item.name"></v-text-field>
+                </td>
+                <td class="pt-5">
+                    <PromoDropdown v-model:id="item.promotype_id" v-model:setcode="attr"></PromoDropdown>
+                </td>
+                <td>
+                    <v-chip v-for="f in item.foiltype" :key="f"  class="mr-4" label density="compact">{{f}}</v-chip>
+                </td>
+                <td class="text-center">
+                    <color-tag :type="item.color"></color-tag>
+                </td>
+            </template>
+        </paginated-table>
     </article>
     <!-- <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
