@@ -20,7 +20,7 @@
         <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="result.length">
             <template #header>
                 <th width="1%">
-                    <v-checkbox-btn color="teal-lighten-1" v-model="isAll"></v-checkbox-btn>
+                    <select-all-checkbox v-model:selected="selectedCard" v-model:result="result"></select-all-checkbox>
                 </th>
                 <th width="45%">カード情報</th>
                 <th width="8%" class="text-center">枚数</th>
@@ -60,6 +60,7 @@ import { usePaginate } from "../component/pagination/UsePaginate";
 import { computed, ref } from "vue";
 import { LoadStore } from "../../stores/loading/LoadStore.js";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+import SelectAllCheckbox from "../component/selection/SelectAllCheckbox.vue";
 
 const setname = ref("");
 const result = ref([]);
@@ -70,14 +71,6 @@ const filename = ref('base_item');
 const loadStore = LoadStore();
 
 const selectedCard = ref([]);
-const isAll = computed({
-    get() {
-        return result.value.length > 0 &&  selectedCard.value.length === result.value.length;
-    },
-    set(value) {
-        selectedCard.value = value ? [...result.value] : [];
-    }
-});
 const isDisabled = computed(() => selectedCard.value.length === 0);
 const search = async() => {
     const msgStore = MsgStore();
