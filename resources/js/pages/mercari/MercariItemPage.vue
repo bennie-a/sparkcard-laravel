@@ -20,7 +20,7 @@
         <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="result.length">
             <template #header>
                 <th width="1%">
-                    <v-checkbox-btn color="teal-lighten-1" v-model="isAll" @change="allChecked"></v-checkbox-btn>
+                    <v-checkbox-btn color="teal-lighten-1" v-model="isAll"></v-checkbox-btn>
                 </th>
                 <th width="45%">カード情報</th>
                 <th width="8%" class="text-center">枚数</th>
@@ -32,7 +32,7 @@
             <template #row="{ item }">
                 <td>
                     <v-checkbox-btn color="teal-lighten-1" v-model="selectedCard"
-                        :value="item" @change="checked" ></v-checkbox-btn>
+                        :value="item"></v-checkbox-btn>
                 </td>
                 <td>
                     <CardLayout :card="item" :lang="item.lang"></CardLayout>
@@ -57,7 +57,7 @@ import CardLayout from "../component/CardLayout.vue";
 import Condition from "../component/tag/ConditionTag.vue";
 import ListPagination from "../component/pagination/ListPagination.vue";
 import { usePaginate } from "../component/pagination/UsePaginate";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { LoadStore } from "../../stores/loading/LoadStore.js";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
@@ -70,8 +70,15 @@ const filename = ref('base_item');
 const loadStore = LoadStore();
 
 const selectedCard = ref([]);
-const isAll = ref(false);
-const isDisabled = ref(true);
+const isAll = computed({
+    get() {
+        return result.value.length > 0 &&  selectedCard.value.length === result.value.length;
+    },
+    set(value) {
+        selectedCard.value = value ? [...result.value] : [];
+    }
+});
+const isDisabled = computed(() => selectedCard.value.length === 0);
 const search = async() => {
     const msgStore = MsgStore();
     msgStore.clear();
@@ -94,21 +101,5 @@ const search = async() => {
     } finally {
         loadStore.off();
     }
-}
-
-const allChecked = () => {
-    if (isAll.value) {
-        isDisabled.value = false;
-        result.value.forEach((c) => {
-            selectedCard.value.push(c);
-        });
-    } else {
-        selectedCard.value.splice(0);
-        isDisabled.value = true;
-    }
-}
-
-const checked = () => {
-    isDisabled.value = selectedCard.value.length === 0;
 }
 </script>
