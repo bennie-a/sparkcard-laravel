@@ -5,7 +5,6 @@
     import { AxiosTask } from "../../component/AxiosTask";
     import FoilTag from "../component/tag/FoilTag.vue";
     import ColorTag from "../component/tag/ColorTag.vue";
-    import SurfaceTag from "../component/tag/SurfaceTag.vue";
     import PromoDropdown from "../component/selection/PromoDropdown.vue";
     import ColorDropdown from "../component/selection/ColorDropdown.vue";
 

@@ -19,13 +19,8 @@
         </v-row>
         <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="result.length">
             <template #header>
-                <th width="5%">
-                    <input
-                        type="checkbox"
-                        id="all"
-                        v-model="isAll"
-                        @change="allChecked"
-                    />
+                <th width="1%">
+                    <v-checkbox-btn color="teal-lighten-1" v-model="isAll" @change="allChecked"></v-checkbox-btn>
                 </th>
                 <th width="45%">カード情報</th>
                 <th width="8%" class="text-center">枚数</th>
@@ -36,12 +31,8 @@
             </template>
             <template #row="{ item }">
                 <td>
-                    <input
-                        type="checkbox"
-                        v-model="selectedCard"
-                        :value="item"
-                        @change="checked"
-                    />
+                    <v-checkbox-btn color="teal-lighten-1" v-model="selectedCard"
+                        :value="item" @change="checked" ></v-checkbox-btn>
                 </td>
                 <td>
                     <CardLayout :card="item" :lang="item.lang"></CardLayout>
