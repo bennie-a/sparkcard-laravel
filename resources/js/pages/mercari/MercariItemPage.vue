@@ -48,21 +48,17 @@
             </template>
         </PaginatedTable>
     </article>
-            <Loading
-     :active="isLoading"
-     :can-cancel="false" :is-full-page="true" />
 </template>
 <script setup>
 import DownloadButton from "../component/DownloadButton.vue";
 import { MsgStore } from "../component/msg/MsgStore.js";
 import NotionCardProvider from "../../composables/NotionCardProvider.js";
-import Loading from "vue-loading-overlay";
 import CardLayout from "../component/CardLayout.vue";
 import Condition from "../component/tag/ConditionTag.vue";
 import ListPagination from "../component/pagination/ListPagination.vue";
 import { usePaginate } from "../component/pagination/UsePaginate";
 import { ref } from "vue";
-import { fa } from "vuetify/locale";
+import { LoadStore } from "../../stores/loading/LoadStore.js";
 import PaginatedTable from "../component/pagination/PaginatedTable.vue";
 
 const setname = ref("");
@@ -71,7 +67,7 @@ const {
     page, pageCount, paginatedList, resetPage
 } = usePaginate(result, 10);
 const filename = ref('base_item');
-const isLoading = ref(false);
+const loadStore = LoadStore();
 
 const selectedCard = ref([]);
 const isAll = ref(false);
@@ -81,7 +77,7 @@ const search = async() => {
     msgStore.clear();
     resetPage();
     try {
-        isLoading.value = true;
+        loadStore.on();
         const provider = new NotionCardProvider();
         const query = {
             params:{
@@ -96,7 +92,7 @@ const search = async() => {
     } catch(e) {
         result.value = [];
     } finally {
-        isLoading.value = false;
+        loadStore.off();
     }
 }
 
