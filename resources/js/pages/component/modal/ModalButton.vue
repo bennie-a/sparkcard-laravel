@@ -2,6 +2,7 @@
     import { ref } from 'vue';
     const dialog = ref(false);
 
+    const disabled = defineModel({required:false, default:false});
     defineProps(
         {msg: { type: String, default: "登録してもよろしいですか?" }}
     );
@@ -14,7 +15,7 @@
    };
 </script>
 <template>
-    <v-btn color="teal-lighten-1" @click="dialog=true">
+    <v-btn color="teal-lighten-1" @click="dialog=true" :disabled="disabled">
         <slot></slot>
     </v-btn>
     <v-dialog width="auto" v-model="dialog">
