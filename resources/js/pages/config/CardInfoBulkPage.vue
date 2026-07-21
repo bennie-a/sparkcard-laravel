@@ -7,6 +7,7 @@
     import ColorTag from "../component/tag/ColorTag.vue";
     import PromoDropdown from "../component/selection/PromoDropdown.vue";
     import ColorDropdown from "../component/selection/ColorDropdown.vue";
+    import SelectAllCheckbox from "../component/selection/SelectAllCheckbox.vue";
 
     import {ref} from 'vue';
     import axios from "axios";
@@ -25,6 +26,8 @@
     const items = ref([]);
     const itemCount = ref(0);
     let attr = route.query.attr;
+
+    const selected = ref([]);
 
     const {
         page, pageCount, paginatedList, resetPage
@@ -154,7 +157,9 @@
     <article class="mt-10">
         <paginated-table v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="itemCount">
             <template #header>
-                <th width="5%"></th>
+                <th width="5%">
+                    <select-all-checkbox v-model:selected="selected" v-model:result="items"></select-all-checkbox>
+                </th>
                 <th width="5%" class="text-center">No.</th>
                 <th>カード名</th>
                 <th width="30%">特別版</th>
@@ -162,7 +167,10 @@
                 <th width="8%" class="text-center">色</th>
             </template>
             <template #row="{ item }">
-                <td></td>
+                <td>
+                    <v-checkbox-btn color="teal-lighten-1" v-model="selected"
+                        :value="item"></v-checkbox-btn>
+                </td>
                 <td class="text-center">{{ item.number }}</td>
                 <td class="pt-1">
                     <span class="text-medium-emphasis">{{ item.en_name }}</span>
@@ -179,6 +187,17 @@
                 </td>
             </template>
         </paginated-table>
+        <div class="text-center">
+                <!-- <div
+                    class="three wide column middle aligned content ui toggle checkbox"
+                >
+                    <input type="checkbox" id="isSkip" v-model="isSkip" />
+                    <label for="isSkip">更新をスキップ</label>
+                </div> -->
+                <div class="three wide column">
+                    <ModalButton @action="store">DBに登録する</ModalButton>
+                </div>
+            </div>
     </article>
     <!-- <article class="mt-1" v-if="getCards.length != 0">
         <div class="ui large form mt-2" v-if="$store.getters.isLoad == false">
