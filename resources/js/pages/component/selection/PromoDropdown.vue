@@ -1,25 +1,26 @@
 <script  setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import axios from "axios";
 import RequiredLabel from "../label/RequiredLabel.vue";
+import { usePromoList } from "../../../composables/UsePromoList.js";
 const id = defineModel("id");
 const setcode = defineModel("setcode");
-const list = ref([]);
-onMounted(async() => {
-        // 特別版一覧を取得
-        await axios
-            .get('/api/promo/' + '?setcode=' + setcode.value)
-            .then((response) => {
-                list.value = response.data;
-            })
-            .catch((e) => {
-                console.error(e);
-            })
-});
+
+const { list, load, loading } = usePromoList();
+
+watch(setcode, (value) => {
+    load(value);
+    }, {immediate:true}
+);
 </script>
 <template>
-    <v-select v-model="id" :items="list"
-     item-value="id" item-title="name" label="プロモタイプ">
+    <v-alert  v-if="id && !list.some(item => item.id === id)"
+  type="warning"
+  density="compact">
+    未登録プロモタイプ:No.{{id}}
+</v-alert>
+    <v-select v-model="id" :items="list" :loading="loading"
+     item-value="id" item-title="name" label="プロモタイプ" v-else>
         <template v-slot:label>
             <required-label text="プロモタイプ" required></required-label>
         </template>

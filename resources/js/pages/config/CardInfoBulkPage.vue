@@ -9,7 +9,7 @@
     import ColorDropdown from "../component/selection/ColorDropdown.vue";
     import SelectAllCheckbox from "../component/selection/SelectAllCheckbox.vue";
 
-    import {computed, ref} from 'vue';
+    import {computed, ref, watch} from 'vue';
     import axios from "axios";
     import {LoadStore} from "@/stores/loading/LoadStore.js";
     import { useRoute } from "vue-router";
@@ -34,7 +34,6 @@ import { filter } from "lodash";
     const selected = ref([]);
 
     const filterdItems = computed(() => {
-        resetPage();
         return items.value.filter((value) => {
             return value.color === tab.value;
         });
@@ -81,6 +80,15 @@ import { filter } from "lodash";
             loadStore.off();
         }
     }
+
+    const store = async() => {
+
+    }
+
+    // タブ切り替え時にページネーションをリセット。
+    watch(tab, () => {
+        resetPage();
+    });
 // // export default {
 // //     components: {
 // //         "file-upload": FileUpload,
