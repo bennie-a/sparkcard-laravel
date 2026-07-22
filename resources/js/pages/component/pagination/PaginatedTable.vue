@@ -25,7 +25,7 @@
                 </tr>
             </tbody>
         </v-table>
-        <div class="text-center mt-1 mb-6">
+        <div class="text-center mt-1">
             <ListPagination v-model="page" :length="pageCount"></ListPagination>
         </div>
     </div>
