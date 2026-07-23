@@ -56,6 +56,7 @@ class PromotypeSeeder extends Seeder
         $blb = Expansion::findBySetCode('BLB');
 
         $eoe = Expansion::findBySetCode('EOE');
+        $hob = Expansion::findBySetCode('HOB');
         $items = [
             ['attr' => 'draft', 'name' => '通常版', $exp_id => $com->notion_id],
             ['attr' => 'showcase', 'name' => 'ショーケース', $exp_id => $com->notion_id],
@@ -109,6 +110,9 @@ class PromotypeSeeder extends Seeder
             ['attr' => 'surreal_space', 'name'=> '「超常宇宙」ボーダーレス',  $exp_id => $eoe->notion_id],
             ['attr' => 'observation', 'name'=> '「観測窓」ボーダーレス',  $exp_id => $eoe->notion_id],
             ['attr' => 'stellar_sight', 'name'=> '「星景」土地',  $exp_id => $eoe->notion_id],
+            ['attr' => 'book_cover', 'name'=> 'ブックカバー・カード',  $exp_id => $hob->notion_id],
+            ['attr' => 'hob_strategy', 'name'=> '計略カード',  $exp_id => $hob->notion_id],
+            ['attr' => 'dragons_hoard', 'name'=> '「竜の財宝」フレーム',  $exp_id => $hob->notion_id],
         ];
 
         foreach($items as $i ){
