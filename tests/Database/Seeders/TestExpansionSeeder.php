@@ -47,6 +47,7 @@ class TestExpansionSeeder extends Seeder
         $items[] = ['attr' => 'EOE', 'name' => '久遠の終端'];
         $items[] = ['attr' => 'ECL', 'name' => 'ローウィンの昏明'];
         $items[] = ['attr' => 'AFIN', 'name' => 'FINAL FANTASY_アート・カード'];
+        $items[] = ['attr' => 'HOB', 'name' => 'ホビット'];
 
         Expansion::factory()->createMany($items);
     }
