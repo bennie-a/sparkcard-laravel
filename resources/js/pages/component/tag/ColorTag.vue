@@ -1,5 +1,5 @@
 <template>
-    <v-chip variant="flat" label density="compact" :color="ColorMaster.find(type).color + '-lighten-1'" >
+    <v-chip variant="flat" label density="compact" :color="ColorMaster.find(type).color " >
         <v-icon :icon="ColorMaster.find(type).icon" class="mr-1"></v-icon>
         <strong>{{ type }}</strong>
         </v-chip>

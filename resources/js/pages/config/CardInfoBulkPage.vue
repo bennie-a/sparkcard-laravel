@@ -47,7 +47,7 @@ import { filter } from "lodash";
         page, pageCount, paginatedList, resetPage
     } = usePaginate(filterdItems, 10);
 
-
+    const currentColor = computed(() => ColorMaster.find(tab.value).color);
     const upload = async(file) => {
         loadStore.on();
         try {
@@ -177,14 +177,14 @@ import { filter } from "lodash";
 
     <article class="mt-10" v-if="itemCount > 0">
         <v-sheet class="border-thin">
-        <v-tabs v-model="tab" color="teal-lighten-1">
+        <v-tabs v-model="tab">
           <v-tab
             v-for="item in ColorMaster.list"
             :prepend-icon="item.icon"
             :key="item.key"
             :text="item.key"
             :value="item.key"
-            :bg-color="item.color"
+            :selected-class="`bg-${item.color} text-white`"
           ></v-tab>
         </v-tabs>
       <v-divider class="mx-1"></v-divider>

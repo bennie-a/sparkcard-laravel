@@ -310,7 +310,16 @@ abstract class AbstractCard implements CardInfoInterface {
      * @return boolean
      */
     protected function hasPromotype() {
-        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->getJson());
+        if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->getJson())) {
+            return false;
+        }
+
+        $promotypes = $this->getJson()[self::PROMOTYPE];
+        if (count($promotypes) == 1 && $promotypes == ['universesbeyond']) {
+            return false;
+        }
+        return true;
+
     }
 
     protected function promotypeKey() : string {

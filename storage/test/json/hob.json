@@ -6,7 +6,7 @@
     "data": {
         "baseSetSize": 80,
         "cards":[
-            {
+                        {
                 "artist": "Zezhou Chen",
                 "artistIds": [
                     "810677e5-a502-4c03-b726-78cd808a75d4"
@@ -24,6 +24,8 @@
                     "W"
                 ],
                 "convertedManaCost": 2.0,
+                "edhrecRank": 31655,
+                "edhrecSaltiness": 0.0,
                 "finishes": [
                     "foil",
                     "nonfoil"
@@ -52,6 +54,9 @@
                 "printings": [
                     "HOB"
                 ],
+                "promoTypes": [
+                    "universesbeyond"
+                ],
                 "purchaseUrls": {
                     "cardKingdom": "https://mtgjson.com/links/ffbfc5b95c3b7b56",
                     "tcgplayer": "https://mtgjson.com/links/5a6be47346fc1dc3"
@@ -75,7 +80,7 @@
                     "5c73cd09-547a-5084-b081-e4938f7c92a4"
                 ]
             },
-                        {
+            {
                 "artist": "Denman Rooke",
                 "artistIds": [
                     "5eedbc4b-34a3-4ca5-b3f5-9ac2f6b6adf7"
