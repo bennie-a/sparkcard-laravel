@@ -54,7 +54,7 @@ import { filter } from "lodash";
             resetPage();
             itemCount.value = 0;
             msgStore.clear();
-            items.value.length = 0;
+            items.value = [];
 
             const query =
                 `?isDraft=${isDraftOnly.value}&color=${color.value}&setcode=${attr}`;
@@ -81,83 +81,25 @@ import { filter } from "lodash";
         }
     }
 
+    // 登録処理を行う。
     const store = async() => {
-
+        const task = new AxiosTask();
+            await Promise.all(
+                selected.value.map(async (card) => {
+                    if (card.name != "") {
+                        card["is_skip"] = true;
+                        await task.post("/database/card", card);
+                    }
+                })
+            ).catch(() => {
+                console.error("error");
+            });
     }
 
     // タブ切り替え時にページネーションをリセット。
     watch(tab, () => {
         resetPage();
     });
-// // export default {
-// //     components: {
-// //         "file-upload": FileUpload,
-// //         "loading":Loading,
-// //         pagination: ListPagination,
-// //         ModalButton: ModalButton,
-// //         foiltag: FoilTag,
-// //         promo:PromoDropdown
-// //     },
-// //     data() {
-// //         return {
-// //             isSkip: false,
-// //             isLoading: false,
-// //             isDraftOnly: false,
-// //             color: "",
-// //             promoItems:[],
-// //             name:ref("通常版"),
-// //             checkedCard:[]
-// //         };
-// //     },
-// //     computed: {
-// //         getCards: function () {
-// //             return this.$store.getters.sliceCard;
-// //         },
-// //         join: function () {
-// //             return function (key) {
-// //                 return key.join("|");
-// //             };
-// //         },
-// //     },
-
-// //     methods: {
-// //         store: async function () {
-// //             this.isLoading = true;
-// //             this.$store.dispatch("message/clear");
-// //             this.$store.dispatch("clearMessage");
-
-// //             if (this.checkedCard.length == 0) {
-// //                 this.isLoading = false;
-// //                 this.$store.dispatch("message/error", "登録するカードを選択してください。");
-// //                 return;
-// //             }
-
-// //             const task = new AxiosTask(this.$store);
-// //             const list = this.$store.getters.card;
-// //             await Promise.all(
-// //                 list.map(async (card) => {
-// //                     if (this.checkedCard.includes(card.number) == false) {
-// //                         return;
-// //                     }
-// //                     if (card.name != "") {
-// //                         const success = function (response, store) {};
-// //                         card["is_skip"] = this.isSkip;
-// //                         await task.post("/database/card", card, success);
-// //                     }
-// //                 })
-// //             ).catch(() => {
-// //                 console.error("error");
-// //             });
-// //             this.isLoading = false;
-// //             this.$store.dispatch(
-// //                 "setSuccessMessage",
-// //                 `${this.checkedCard.length}件登録が完了しました。`
-// //             );
-
-// //             console.log("store finished.");
-// //         },
-// //     },
-// };
 </script>
 <template>
     <v-form rounded class="form_sheet pa-4">
@@ -166,9 +108,6 @@ import { filter } from "lodash";
                 <v-switch v-model="isDraftOnly" label="通常版のみ表示" color="teal-lighten-1" true-icon="mdi-check"
             false-icon="mdi-close"></v-switch>
             </v-col>
-            <!-- <v-col cols="3" class="mr-5">
-                <color-dropdown v-model="color"></color-dropdown>
-            </v-col> -->
             <v-col cols="5">
                 <file-upload @action="upload" type="json" icon="mdi-code-json"></file-upload>
             </v-col>
@@ -198,24 +137,26 @@ import { filter } from "lodash";
                         </th>
                         <th width="5%" class="text-center">No.</th>
                         <th>カード名</th>
-                        <th width="30%">特別版</th>
-                        <th width="18%">仕上げ</th>
+                        <th width="30%">プロモタイプ</th>
+                        <th width="13%" class="text-center">登録済み</th>
                     </template>
                     <template #row="{ item }">
-                        <td>
+                        <td :class="{'bg-brown-lighten-5':item.isReg }">
                             <v-checkbox-btn color="teal-lighten-1" v-model="selected"
-                                :value="item"></v-checkbox-btn>
+                                :value="item" :indeterminate="item.isReg" :disabled="item.isReg"></v-checkbox-btn>
                         </td>
-                        <td class="text-center">{{ item.number }}</td>
-                        <td class="pt-1">
+                        <td class="text-center" :class="{'bg-brown-lighten-5':item.isReg }">{{ item.number }}</td>
+                        <td class="pt-1" :class="{'bg-brown-lighten-5':item.isReg }">
                             <span class="text-medium-emphasis">{{ item.en_name }}</span>
-                            <v-text-field v-model="item.name"></v-text-field>
+                            <v-text-field v-model="item.name" :disabled="item.isReg"></v-text-field>
                         </td>
-                        <td class="pt-5">
-                            <PromoDropdown v-model:id="item.promotype_id" v-model:setcode="attr"></PromoDropdown>
+                        <td :class="{'bg-brown-lighten-5':item.isReg }">
+                            <span class="text-body-large" v-if="item.isReg">{{ item.promotype.name }}</span>
+                            <PromoDropdown class="pt-6" v-model:id="item.promotype.id" v-model:setcode="attr" v-else></PromoDropdown>
                         </td>
-                        <td>
-                            <v-chip v-for="f in item.foiltype" :key="f"  class="mr-4" label density="compact">{{f}}</v-chip>
+                        <td class="text-center" :class="{'bg-brown-lighten-5':item.isReg }">
+                            <v-icon v-if="!item.isReg" icon="mdi-minus" color="grey-darken-1"></v-icon>
+                            <v-icon v-else  icon="mdi-circle-outline" color="grey-darken-1"></v-icon>
                         </td>
                     </template>
                 </paginated-table>
@@ -223,22 +164,9 @@ import { filter } from "lodash";
         </v-tabs-window>
         </v-sheet>
         <div class="text-center mt-6">
-            <!-- <div
-                class="three wide column middle aligned content ui toggle checkbox"
-            >
-                <input type="checkbox" id="isSkip" v-model="isSkip" />
-                <label for="isSkip">更新をスキップ</label>
-            </div> -->
             <div class="three wide column">
                 <ModalButton @action="store" v-model="disabled">DBに登録する</ModalButton>
             </div>
         </div>
     </article>
 </template>
-
-<style>
-.wall {
-    background-color: white;
-    padding: 1em;
-}
-</style>
