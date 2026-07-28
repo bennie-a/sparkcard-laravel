@@ -111,7 +111,7 @@ abstract class AbstractCard implements CardInfoInterface {
     public function promotype() {
 
         $booster = 'boosterfun';
-        $detector = SpCardDetectorFactory::create($this->getJson()["setCode"]);
+        $detector = SpCardDetectorFactory::create($this->setcode());
         if ($this->isTextless()) {
             return 'textless';
         }
