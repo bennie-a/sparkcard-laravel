@@ -17,7 +17,7 @@
     import PaginatedTable from "../component/pagination/PaginatedTable.vue";
     import { usePaginate } from "../component/pagination/UsePaginate";
     import { ColorMaster } from "../component/const/ColorMaster.js";
-import { filter } from "lodash";
+    import { filter } from "lodash";
 
     const isDraftOnly = ref(false);
     const color = ref("");
@@ -48,6 +48,16 @@ import { filter } from "lodash";
     } = usePaginate(filterdItems, 10);
 
     const currentColor = computed(() => ColorMaster.find(tab.value).color);
+    const dialog = ref(false);
+    const finCount = ref(0);
+    const percent = computed(() => {
+        if (finCount.value == 0) {
+            return 0;
+        }
+
+        return Math.round(finCount.value / selected.value.length * 100);
+    });
+
     const upload = async(file) => {
         loadStore.on();
         try {
@@ -81,19 +91,28 @@ import { filter } from "lodash";
         }
     }
 
+
     // 登録処理を行う。
     const store = async() => {
+        dialog.value = true;
+        finCount.value = 0;
         const task = new AxiosTask();
-            await Promise.all(
-                selected.value.map(async (card) => {
-                    if (card.name != "") {
-                        card["is_skip"] = true;
-                        await task.post("/database/card", card);
-                    }
-                })
-            ).catch(() => {
-                console.error("error");
-            });
+        await Promise.all(
+            selected.value.map(async (card) => {
+                if (card.name != "") {
+                    card["is_skip"] = true;
+                    card["promotype_id"] = card.promotype.id;
+                    await task.post("/database/card", card);
+                    finCount.value++;
+                }
+            }),
+            msgStore.success(`${selected.value.length}件登録しました。`)
+
+        ).catch(() => {
+            console.error("error");
+        }).finally(() => {
+            dialog.value = false;
+        });
     }
 
     // タブ切り替え時にページネーションをリセット。
@@ -113,7 +132,6 @@ import { filter } from "lodash";
             </v-col>
         </v-row>
     </v-form>
-
     <article class="mt-10" v-if="itemCount > 0">
         <v-sheet class="border-thin">
         <v-tabs v-model="tab">
@@ -169,4 +187,10 @@ import { filter } from "lodash";
             </div>
         </div>
     </article>
+    <v-dialog v-model="dialog" width="60%">
+        <v-sheet class="pa-10 pb-6 text-center">
+            <v-progress-linear :model-value="percent" height="15" color="blue-darken-4" rounded></v-progress-linear>
+             <div class="mt-5 text-title-large">{{percent}}%</div>
+        </v-sheet>
+    </v-dialog>
 </template>

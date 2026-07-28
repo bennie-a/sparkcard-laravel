@@ -33,7 +33,7 @@ class CardJsonFileService {
             $foiltype = $cardtype->foiltype();
             if ($this->isExclude($cardtype, $promoType, $isDraft, $colorFilter)) {
                 logger()->debug('skip card:', [GCon::NAME => $cardtype->jpname($enname),
-                                                                        Column::NUMBER => $cardtype->number(), Column::PROMOTYPE => $promoType]);
+                                                                        Column::NUMBER => $cardtype->number(), Column::PROMOTYPE => $promoType->name]);
                 continue;
             }
 

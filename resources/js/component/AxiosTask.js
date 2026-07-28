@@ -12,7 +12,7 @@ export class AxiosTask {
                 success(response, query);
             })
             .catch((e) => {
-                fail(e, this.store, query);
+                fail(e, query);
             })
             .finally(() => {
                 // this.store.dispatch("setLoad", false);
@@ -39,8 +39,8 @@ export class AxiosTask {
         const msgStore = MsgStore();
         msgStore.clear();
 
-        const loadStore = LoadStore();
-        loadStore.on();
+        // const loadStore = LoadStore();
+        // loadStore.on();
 
         await axios
             .post(this.getApiUrl(url), json)
@@ -51,14 +51,11 @@ export class AxiosTask {
                 msgStore.success('登録しました。');
             })
             .catch((e) => {
-                if (e.response.status == 422) {
-                    console.error(e.response.data);
-                    const data = e.response.data;
-                    msgStore.error(data.detail);
-                    return;
-                }
+                console.error(e.response.data);
+                const data = e.response.data;
+                msgStore.error(data.detail);
             }).finally(() => {
-                loadStore.off();
+                // loadStore.off();
             });
     }
 
