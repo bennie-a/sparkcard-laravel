@@ -1,10 +1,11 @@
 import axios from "axios";
-import {useStore} from 'vuex';
+import { MsgStore } from "../pages/component/msg/MsgStore";
 
 export const apiService = {
     // GETメソッドでAPIを呼び出す。
     get({url, query, onSuccess, onFinally}) {
-        const store = useStore();
+        const msgStore = MsgStore();
+        msgStore.clear();
         axios
             .get( "/api" + url, query)
             .then((response) => {
@@ -12,7 +13,7 @@ export const apiService = {
             })
             .catch((e) => {
                 let data = e.response.data;
-                store.dispatch("message/error", data.detail);
+                msgStore.error(data.detail);
             })
             .finally(() => {
                 onFinally();

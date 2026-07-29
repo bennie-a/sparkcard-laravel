@@ -38,9 +38,7 @@
         "vue-loading-overlay": "^6.0.6",
         "vue-papa-parse": "^3.1.0",
         "vue-router": "^4.5.0",
-        "vuedraggable": "^4.1.0",
         "vuetify": "^4.0.6",
-        "vuex": "^4.1.0",
         "yup": "^1.7.1"
     },
     "type": "module"

@@ -10,7 +10,6 @@ import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
 import ShiptLogImpPage from "./pages/mercari/ShiptMercariImpPage.vue";
 import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import{ store} from './store';
 import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";

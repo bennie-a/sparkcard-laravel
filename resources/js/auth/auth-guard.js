@@ -1,4 +1,3 @@
-import{ store} from '@/store';
 import {baseConnected } from "@/stores/auth/baseConnected";
 import {LoadStore} from "@/stores/loading/LoadStore.js";
 import axios from 'axios';

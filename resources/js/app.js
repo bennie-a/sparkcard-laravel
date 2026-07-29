@@ -2,8 +2,6 @@ import { createApp } from "vue/dist/vue.esm-bundler";
 import App from "./component/App.vue";
 import router from "./router";
 import VuePapaParse from "vue-papa-parse";
-import { store } from "./store.js";
-// import Encoding from "encoding-japanese";
 import "vue-loading-overlay/dist/css/index.css";
 import {createPinia} from 'pinia';
 import 'vuetify/styles'
@@ -20,9 +18,7 @@ const app = createApp(App);
 
 // ルータをインストール
 app.use(router);
-app.use(store);
 app.use(VuePapaParse);
-// app.use(Encoding);
 const vuetify = createVuetify({
   components:{
     ...components,
