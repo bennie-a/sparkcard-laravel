@@ -190,7 +190,9 @@
     <v-dialog v-model="dialog" width="60%">
         <v-sheet class="pa-10 pb-6 text-center">
             <v-progress-linear :model-value="percent" height="15" color="blue-darken-4" rounded></v-progress-linear>
-             <div class="mt-5 text-title-large">{{percent}}%</div>
+             <div class="mt-5 text-title-large">
+                {{percent}}&#37;
+            </div>
         </v-sheet>
     </v-dialog>
 </template>

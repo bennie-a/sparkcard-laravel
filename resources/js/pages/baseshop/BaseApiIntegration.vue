@@ -51,47 +51,36 @@ const connect = async() => {
 <template>
     <div class="ui middle center aligned grid">
         <div class="six wide column">
-            <h1 class="ui header">
-                <v-icon icon="mdi-link-variant"></v-icon>
-                <div class="content">BASE APIと連携する
-                    <div class="sub header">BASE APIと連携するために認可コードを設定します。</div>
-                </div>
-            </h1>
             <div class="ui negative message" v-if="error">
                 <div class="header">
                     {{ error }}
                 </div>
             </div>
-            <section>
-                <h3 class="mt-2 ui top attached header aligned left">
-                    認可コードの取得方法
-                    <div class="sub header">連携前に認可サーバーから認可コードを取得してください。(別画面に表示されます。)</div>
-                    </h3>
-                <div class="ui attached segment center aligned">
-                    <button  class="ui red button" @click="toAuthServer"><span class="mdi mdi-open-in-new"></span> 認可サーバーを表示する</button>
-
-                </div>
-            </section>
-            <section class="mt-2">
-                <div class="ui segment">
-                    <div class="ui seven column form">
-                        <div class="field required">
-                            <label>認可コード</label>
-                            <input type="text" name="auth-code" v-model="code">
-                        </div>
-
-                        <div class="ui center aligned">
-                        <button class="ui teal button" @click="connect">
-                            <span class="mdi mdi-link-variant"></span>
-                            連携する
-                        </button>
-                        </div>
+            <section class="w-75 mx-auto">
+                <h1 class="text-headline-medium">
+                    BASE APIと連携する
+                    <div class="text-title-medium text-grey-darken-1 font-weight-regular">
+                        BASE APIと連携するために認可コードを設定します。
                     </div>
-                </div>
-              </section>
-            <section class="ui center aligned mt-3">
-                <router-link to="/"><v-icon icon="mdi-arrow-left"></v-icon> トップページに戻る</router-link>
-          </section>
+                </h1>
+                <v-card  rounded>
+                    <v-card-item class="bg-grey-lighten-3">
+                        <v-card-title>認可コードの取得方法</v-card-title>
+                        <v-card-subtitle>連携前に認可サーバーから認可コードを取得してください。(別画面に表示されます。)</v-card-subtitle>
+                    </v-card-item>
+                    <v-card-actions class="pa-5 w-50 mx-auto">
+                        <v-btn color="red-darken-2" @click="toAuthServer" variant="flat" prepend-icon="mdi-open-in-new" block> 認可サーバーを表示する</v-btn>
+                    </v-card-actions>
+                </v-card>
+                <v-card  rounded class="mt-10 pt-5 pb-5">
+                    <v-card-text class="mb-0 w-75 mx-auto">
+                        <v-text-field v-model="code" label="認可コード"></v-text-field>
+                    </v-card-text>
+                    <v-card-actions class="w-25 mx-auto">
+                        <v-btn color="teal-lighten-1" @click="connect" variant="flat" prepend-icon="mdi-link-variant" block>連携する</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </section>
         </div>
     </div>
         <loading
