@@ -11,7 +11,6 @@
     import ModalButton from "../component/modal/ModalButton.vue";
     import {apiPutService} from "@/component/ApiPutService";
     import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
-    import UseDateFormatter from '../../functions/UseDateFormatter.js';
     import { MsgStore } from "../component/msg/MsgStore.js";
     import {LoadStore} from "@/stores/loading/LoadStore.js";
     import CardLayout from '../component/CardLayout.vue';
@@ -22,7 +21,6 @@
 
     const msgStore = MsgStore();
     const loadStore = LoadStore();
-    const arrivalDate = ref(new Date());
     const supplier = ref('');
     const cost = ref(1);
 
@@ -41,7 +39,6 @@
             url: `/arrival/${arrival_id}`,
             onSuccess: (data) => {
                 detail.value = data;
-                arrivalDate.value = new Date(data.arrival_date);
                 supplier.value = data.vendor.supplier;
                 cost.value = data.cost;
                 console.log(detail.value);
@@ -56,13 +53,12 @@
         });
     });
 
-    const {toString} = UseDateFormatter();
     const update = async() => {
         loadStore.on();
         msgStore.clear();
         const updateDetail = detail.value;
         const query  = {
-            arrival_date: toString(arrivalDate.value),
+            arrival_date: updateDetail.arrival_date,
             cost: cost.value,
             quantity: updateDetail.quantity,
             vendor_type_id: updateDetail.vendor.id,
@@ -74,7 +70,6 @@
                 arrDateConditionStore().arrivalDate = data.arrival_date;
                 arrDateConditionStore().vendorId = data.vendor.id;
                 msgStore.success("変更しました。");
-                // toDssPage();
             },
             onFinally: () => {
                 loadStore.off();
@@ -126,7 +121,7 @@
                     <v-text-field label="取引先" v-model="supplier" :disabled="detail.vendor.id !== 3" clearable></v-text-field>
                 </v-col>
                 <v-col cols="3">
-                    <scdatepicker v-model:selectedDate="arrivalDate" datelabel="入荷日"></scdatepicker>
+                    <scdatepicker v-model:selectedDate="detail.arrival_date" datelabel="入荷日"></scdatepicker>
                 </v-col>
             </v-row>
             <v-row>
