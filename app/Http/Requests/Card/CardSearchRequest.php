@@ -33,6 +33,24 @@ class CardSearchRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        if ($this->missing(GCon::NAME)) {
+            $this->merge([
+                GCon::NAME => "",
+            ]);
+        }
+
+        if ($this->missing(Con::SET)) {
+            $this->merge([
+                Con::SET => "",
+            ]);
+        }
+
+        if ($this->missing(Con::COLOR)) {
+            $this->merge([
+                Con::COLOR => "",
+            ]);
+        }
+
         $this->merge([
             Con::IS_FOIL => filter_var($this->isFoil, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
         ]);

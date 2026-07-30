@@ -111,15 +111,21 @@ abstract class AbstractCard implements CardInfoInterface {
     public function promotype() {
 
         $booster = 'boosterfun';
+        $detector = SpCardDetectorFactory::create($this->setcode());
         if ($this->isTextless()) {
             return 'textless';
         }
         if ($this->isFullArt()) {
             return 'fullart';
         }
+        if ($this->isAlternative()) {
+            return $detector->borderless($this);
+        }
+
         if (!$this->hasPromotype()) {
             return 'draft';
         }
+
         $filterd = function($f) {
             $excluded = ['confettifoil'];
             return !in_array($f, $excluded);
@@ -131,7 +137,6 @@ abstract class AbstractCard implements CardInfoInterface {
 
         // boosterfunの場合はframe_effectsを取得する。
         $frame = $this->frameEffects();
-        $detector = SpCardDetectorFactory::create($this->getJson()["setCode"]);
         if ($frame != $booster) {
             $frame = $detector->showcase($frame, $this);
             return $frame;
@@ -295,8 +300,26 @@ abstract class AbstractCard implements CardInfoInterface {
         return $frameEffects === Con::FULLART;
     }
 
+    protected function isAlternative() {
+        return MtgJsonUtil::hasKey("isAlternative", $this->getJson());
+    }
+
+    /**
+     * カードが特別版かどうか判別する。
+     *
+     * @return boolean
+     */
     protected function hasPromotype() {
-        return MtgJsonUtil::hasKey(self::PROMOTYPE, $this->getJson());
+        if (!MtgJsonUtil::hasKey(self::PROMOTYPE, $this->getJson())) {
+            return false;
+        }
+
+        $promotypes = $this->getJson()[self::PROMOTYPE];
+        if (count($promotypes) == 1 && $promotypes == ['universesbeyond']) {
+            return false;
+        }
+        return true;
+
     }
 
     protected function promotypeKey() : string {

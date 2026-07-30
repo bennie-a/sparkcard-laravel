@@ -91,8 +91,16 @@ class CardInfo extends Model
         return self::findSingleQuery($setcode, $name, $isFoil)->first();
     }
 
-    public static function isExist($setcode, $name, $isFoil):bool {
-        $query = self::findSingleQuery($setcode, $name, $isFoil);
+    /**
+     * セット略称とカード番号が一致するレコードが存在するか検証する。
+     *
+     * @param string $setcode セット略称
+     * @param string $number カード番号
+     * @return boolean
+     */
+    public static function isExist(string $setcode, string $number):bool {
+        $conditions = ['expansion.attr' => $setcode, 'card_info.number' => $number];
+        $query = CardInfo::where($conditions)->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id');
         return $query->exists();
     }
 

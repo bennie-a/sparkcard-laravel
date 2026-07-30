@@ -25,4 +25,11 @@ export default defineConfig({
             host: "localhost",
         },
     },
+
+        // Vitest設定
+        test: {
+            globals: true,
+            environment: "jsdom",
+            setupFiles: ["resources/js/tests/setup.js"],
+        },
 });

@@ -48,7 +48,6 @@ class ShiptLogController extends Controller
     public function index(ShiptLogRequest $request) {
         $detail = $request->only([ShiptCon::BUYER, ShiptCon::SHIPPING_DATE]);
         $result = $this->service->fetch($detail);
-        logger()->debug($request);
         logger()->info($result);
         return response()->json($result, Response::HTTP_OK);
     }

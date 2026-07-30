@@ -21,7 +21,7 @@ class PromoService {
         if (empty($promo)) {
                 throw new NoPromoTypeException($cardtype->number(), $promoValue);
         }
-        return $promo->id;
+        return $promo;
     }
 
     /**

@@ -11,7 +11,6 @@ trait PostApiAssertions {
     /**
      * ファイルアップロードが成功した場合のテストケース
      *
-     * @param string $endpoint
      * @param string $query
      * @param array $data
      * @return Response

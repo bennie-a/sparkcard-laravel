@@ -23,7 +23,7 @@ use function Spatie\Ignition\ErrorPage\report;
  */
 class ExpDBController extends Controller
 {
-    private $service;
+    private ExpansionService $service;
     public function __construct (ExpansionService $service) {
         $this->service = $service;
     }
@@ -31,7 +31,7 @@ class ExpDBController extends Controller
     /**
      * 略称と部分一致するエキスパンション名を最大5件取得する。
      *
-     * @return エキスパンション情報(ID,名称,略称,BASE_ID,リリース日)
+     * @return array
      */
     public function index(Request $request) {
         $query = $request->input("query");

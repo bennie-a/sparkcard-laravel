@@ -7,6 +7,8 @@ use App\Services\Specific\DftCardDetector;
 use App\Services\Specific\DskSpCardDetector;
 use App\Services\Specific\EoeSpCardDetector;
 use App\Services\Specific\Mh3SpCardDetector;
+use App\Services\Specific\MshSpCardDetector;
+use App\Services\Specific\Rel2026\HobSpCardDetector;
 use App\Services\Specific\TdmSpCardDetector;
 use App\Services\Specific\WoeSpCardDetector;
 
@@ -18,13 +20,15 @@ class SpCardDetectorFactory {
      */
     public static function create(string $setCode) {
         $class = match($setCode){
-            
+
             "DSK" => DskSpCardDetector::class,
             "MH3" => Mh3SpCardDetector::class,
             "WOE" => WoeSpCardDetector::class,
             "DFT" => DftCardDetector::class,
             "TDM" => TdmSpCardDetector::class,
             "EOE" => EoeSpCardDetector::class,
+            "MSH" => MshSpCardDetector::class,
+            "HOB" => HobSpCardDetector::class,
             default => DefaultSpCardDetector::class
         };
         return new $class;

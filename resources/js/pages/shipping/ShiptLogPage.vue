@@ -1,29 +1,43 @@
 <script setup>
 import shop from "../component/tag/ShopTag.vue";
-import scdatepicker from "../component/SCDatePicker.vue";
+import scdatepicker from "../component/date/DateInput.vue";
 import { useRouter } from "vue-router";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted } from "vue";
 import axios from 'axios';
-import Loading from "vue-loading-overlay";
-import pglist from "../component/PgList.vue";
+import ListPagination from "@/pages/component/pagination/ListPagination.vue";
+import { usePaginate } from "@/pages/component/pagination/UsePaginate";
+import {MsgStore} from "@/pages/component/msg/MsgStore";
+import RunButton from "../component/button/RunButton.vue";
+import LinkIconButton from "../component/button/LinkIconButton.vue";
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
+import UseDateFormatter from "../../functions/UseDateFormatter.js";
 
 const router = useRouter();
-const buyer = ref("");
-let result = reactive([]);
-const isLoading = ref(false);
-const today = new Date();
-const shippingStartDate = ref(new Date());
-const currentList = reactive([]);
-const resultCount = ref(0);
+const {toString} = UseDateFormatter();
 
-const pglistRef = ref();
+const buyer = ref("");
+const result = ref([]);
+const today = new Date();
+const shippingStartDate = ref(toString(new Date()));
+const resultCount = ref(0);
+const msgStore = MsgStore();
+const loadStore = LoadStore();
+
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePaginate(result, 10);
 
 const fetch =  async () => {
-    isLoading.value = true;
+    resetPage();
+    msgStore.clear();
+    loadStore.on();
+    result.value = [];
+    resultCount.value = 0;
     const query = {
                 params: {
                     "buyer_name": buyer.value,
-                    "shipping_date": toDateString(shippingStartDate.value),
+                    "shipping_date": shippingStartDate.value,
                 },
             };
    await axios.get('/api/shipping/', query)
@@ -32,10 +46,12 @@ const fetch =  async () => {
                                 resultCount.value = result.value.length;
                             })
                             .catch((e) => {
-                                console.error(e.statusCode);
+                                const detail = e.response.data.detail;
+                                console.log(e.response.data);
+                                msgStore.error(detail);
                             })
                             .finally(() => {
-                                isLoading.value = false;
+                                loadStore.off();
                             });
 };
 
@@ -55,95 +71,49 @@ onMounted(async() => {
 const isToday = (date) => {
     return today === date;
 };
-
-// pglistから送られた1ページあたりの結果を取得する。
-const current = (data) => {
-    currentList.value = data.response;
-}
-
-const toDateString = (date) => {
-    if (date != null) {
-        return date.toLocaleDateString("ja-JP", {year:"numeric", month:"2-digit",day:"2-digit" });
-    }
-    return null;
-}
 </script>
 <template>
-        <article class="mt-1 ui form segment">
-        <div class="two fields">
-            <div class="four wide field">
-                <label>購入者名</label>
-                <input v-model="buyer" type="text">
-            </div>
-            <div class="three wide field">
-                <label for="">発送日(開始)</label>
-                <div>
-                    <scdatepicker v-model="shippingStartDate"></scdatepicker>
-                </div>
-            </div>
-            <!-- <div class="three wide field">
-                <label for="">発送日(終了)</label>
-                <div>
-                    <scdatepicker :selectedDate="shippingEndDate" @update="handleEndDate"/>
-                </div>
-            </div> -->
-        </div>
-        <button
-            id="search"
-                class="ui button teal"
-                @click="fetch"
-            >
-            検索
-            </button>
-    </article>
-    <article class="mt-2" v-show="resultCount != 0">
-        <h2 class="ui medium dividing header">
-            件数：{{resultCount}}件
-        </h2>
-        <table class="ui striped table">
-            <thead>
-                <tr>
-                    <th class="one wide">注文ID</th>
-                    <th class="two wide center aligned">販売ショップ</th>
-                    <th class="five wide">購入者名</th>
-                    <th class="">合計金額</th>
-                    <th class="">発送日</th>
-                    <th class="one wide">商品数</th>
-                    <th class="one wide"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(r, index) in currentList.value" :key="index">
-                    <td>{{r.order_id}}</td>
-                    <td class=" center aligned">
-                        <shop :orderId="r.order_id"/>
-                    </td>
-                    <td><h3 class="ui header">{{ r.name }}
-                        <span class="sub header">〒{{ r.zip_code }} {{ r.address }}</span>
+    <v-form class="rounded form_sheet pa-4">
+        <v-row gap="15">
+            <v-col cols="3">
+                <v-text-field v-model="buyer"  label="購入者名" clearable></v-text-field>
+            </v-col>
+            <v-col cols="3">
+                <scdatepicker v-model:selectedDate="shippingStartDate" datelabel="発送日"></scdatepicker>
+            </v-col>
+            <v-col cols="2" class="text-right">
+                <run-button text="検索する" @action="fetch"></run-button>
+            </v-col>
+        </v-row>
+    </v-form>
+    <article class="mt-10">
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
+            <template #header>
+                    <th width="13%" class="text-center">発送日</th>
+                    <th width="15%">プラットフォーム</th>
+                    <th>購入者情報</th>
+                    <th width="10%" class="text-center">合計金額</th>
+                    <th width="10%" class="text-center">商品数</th>
+                    <th></th>
+            </template>
+            <template #row="{ item }">
+                <td class="text-center">{{ item.shipping_date }}</td>
+                <td>
+                    <shop :orderId="item.order_id"/>
+                </td>
+                <td>
+                    <h3 class="mb-0 mt-0 text-title-medium">{{ item.name }}様
                     </h3>
-                    </td>
-                    <td>¥{{ r.total_price }}</td>
-                    <td :class="[isToday(r.shipping_date) ? 'positive': '', isToday(r.shipping_date)?'tobold':'']">{{ r.shipping_date }}</td>
-                    <td class="one wide center aligned">{{r.item_count}}点</td>
-                    <td class="center aligned selectable">
-                        <a @click="toDssPage(r.order_id)"><v-icon icon="mdi-chevron-double-right"></v-icon></a>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <th colspan="10">
-                        <div class="right aligned">
-                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
+                    <span class="text-medium-emphasis">〒{{ item.zip_code }} {{ item.address }}</span>
+                </td>
+                <td class="text-center">&yen;{{ item.total_price }}</td>
+                <td class="text-center">{{item.item_count}}点</td>
+                <td class="text-right">
+                    <link-icon-button @action="toDssPage(item.order_id)"></link-icon-button>
+                </td>
+            </template>
+        </PaginatedTable>
     </article>
-    <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 .tobold {

@@ -1,59 +1,35 @@
 <template>
-    <div :key="filekey">
-        <input
-          id="embedpollfileinput"
-          type="file"
-          class="inputfile"
-          @change="onFileChange"
-        />
-        <label for="embedpollfileinput" class="ui teal basic button uploadbutton">
-          <span class="mdi mdi-file"></span>
-          選択する
-        </label>
-        <label class="ml-2">{{filename}}</label>
-    </div>
+    <v-file-input
+        :label="'ファイルを選択してください'"
+        :accept="'.' + props.type"
+        variant="outlined"
+        density="compact"
+        :prepend-icon="props.icon"
+        @change="onFileChange"
+        clearable
+    />
 </template>
-
-<style scoped>
-.inputfile {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-}
-</style>
-
 <script setup>
-import { useStore } from "vuex"
 import { defineProps, defineEmits, ref } from "vue"
+import { MsgStore } from '@/pages/component/msg/MsgStore';
 
-const store = useStore()
 const filekey = ref(0);
 
 const props = defineProps({
   type: { type: String, default: "csv" },
+  icon: { type: String, default: "mdi-file-delimited-outline" },
 })
 
 const emit = defineEmits(["action"])
-const filename = ref("ファイルを選択してください");
+const msgStore = MsgStore();
 
 // ファイルアップロードイベント
 const onFileChange = (e) => {
-  store.dispatch("message/clear")
+  msgStore.clear();
   filekey.value = Date.now();
   const file = e.target.files[0]
   if (!file) return
-  filename.value = file.name;
-  const fileType = file.name.split(".").pop()
-  if (fileType !== props.type) {
-    store.dispatch("message/error", `ファイルは${props.type}ファイルを選択してください。`)
-    filename.value = "ファイルを選択してください";
-    return
-  }
 
   emit("action", file)
-  store.dispatch("setLoad", false)
 }
 </script>

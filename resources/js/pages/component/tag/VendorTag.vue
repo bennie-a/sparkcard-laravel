@@ -1,7 +1,5 @@
 <script setup>
-import { computed, onMounted } from "vue";
-
-const vendor = defineModel({required:true});
+defineProps({vendor:{type:Object, required:true}});
 
 const colorkind  = {
                                     1:"purple",
@@ -10,10 +8,7 @@ const colorkind  = {
                                     4:"grey",
                                     5:"brown"
                                 };
-const color = computed(() => {
-    return colorkind[vendor.value.id];
-});
 </script>
 <template>
-    <label class="ui label basic" :class="color">{{vendor.name}}</label><span class="ml-half"></span>
+    <v-chip label :color="colorkind[vendor.id] + '-lighten-1'" variant="flat" density="compact">{{vendor.name}}</v-chip>
 </template>

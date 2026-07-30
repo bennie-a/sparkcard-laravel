@@ -1,44 +1,55 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, ref, shallowRef, watch } from 'vue';
 import { useRouter } from "vue-router";
-import scdatepicker from "../component/SCDatePicker.vue";
 import vendortag from "../component/tag/VendorTag.vue"
-import Loading from "vue-loading-overlay";
 import axios from 'axios';
-import { useStore } from 'vuex';
 import UseDateFormatter from '../../functions/UseDateFormatter.js';
+import DateRangeInput from '../component/date/DateRangeInput.vue';
 
-import pglist from "../component/PgList.vue";
-import PiniaMsgForm from "../component/PiniaMsgForm.vue";
-import foiltag from "../component/tag/FoilTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
 
-import { piniaMsgStore } from '@/stores/global/PiniaMsg.js';
 import { storeToRefs } from 'pinia';
 
+import RunButton from '../component/button/RunButton.vue';
+import CardLayout from '../component/CardLayout.vue';
+import { usePaginate } from '../component/pagination/UsePaginate';
+import LinkIconButton from '../component/button/LinkIconButton.vue';
+
+import {MsgStore} from "../component/msg/MsgStore";
+import PaginatedTable from '../component/pagination/PaginatedTable.vue';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
+
+const loadStore = LoadStore();
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
 
 // 検索条件
 const {startDate, endDate, itemname} = storeToRefs(gcStore);
 
-// 検索結果
-let result = reactive([]);
-const resultCount = ref(0);
-const currentList = reactive([]);
-const isLoading = ref(false);
+const selectedDate = ref([]);
 
+// 検索結果
+const result = ref([]);
+const resultCount = ref(0);
+const isLoading = ref(false);
 
 const router = useRouter();
 const {toString} = UseDateFormatter();
-const store = useStore();
+
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePaginate(result, 10);
+
+const msgStore = MsgStore();
 
 // 入荷情報検索
 const fetch =  async () => {
-    isLoading.value = true;
+    loadStore.on();
     result.value = [];
     resultCount.value = 0;
+    msgStore.clear();
+    resetPage();
     const query = {
                 params: {
                     "card_name": itemname.value,
@@ -46,125 +57,86 @@ const fetch =  async () => {
                     "end_date" : toString(endDate.value)
                 },
             };
-   await axios.get('/api/arrival/grouping', query)
-                            .then((response) => {
-                                result.value = response.data;
-                                resultCount.value = result.value.length;
-                            })
-                            .catch((e) => {
-                                let data = e.response.data;
-                                store.dispatch("message/error", data.detail);
-                            })
-                            .finally(() => {
-                                isLoading.value = false;
-                            });
-
+    await axios.get('/api/arrival/grouping', query)
+                .then((response) => {
+                    result.value = response.data;
+                    resultCount.value = result.value.length;
+                })
+                .catch((e) => {
+                    let data = e.response.data;
+                    msgStore.error(data.detail);
+                })
+                .finally(() => {
+                    loadStore.off();
+                });
 }
 
 onMounted(async() => {
     const referrer_path = router.referrer.path;
     if (referrer_path.indexOf('/arrival/') !== 0 ) {
         console.log('pinia reset');
-        piniaMsgStore().reset();
         gcStore.reset();
         arrDateStore.reset();
     }
     await fetch();
 });
 
-const current = (data) => {
-    currentList.value = data.response;
-}
-
-
 // 詳細画面を表示する。
 const toDssPage = (arrivalDate, vendor_id) => {
     arrDateStore.arrivalDate = arrivalDate;
     arrDateStore.vendorId = vendor_id;
+    gcStore.itemname = itemname.value;
+    gcStore.startDate = startDate.value;
+    gcStore.endDate = endDate.value;
     router.push({
         name: "ArrivalLogDss"
     });
 }
 </script>
 <template>
-    <PiniaMsgForm></PiniaMsgForm>
-    <article class="mt-1 ui form segment">
-        <div class="three fields">
-            <div class="four wide field">
-                <label>商品名(一部)</label>
-                <input v-model="itemname" type="text">
-            </div>
-            <div class="six wide field">
-                <label for="">入荷日</label>
-                <div class="three fields">
-                    <div class="seven wide field">
-                        <scdatepicker v-model="startDate"></scdatepicker>
-                    </div>
-                    <div class="one wide field middle">
-                        <i class="bi bi-arrow-right"></i>
-                    </div>
-                    <div class="seven wide field">
-                        <scdatepicker v-model="endDate"></scdatepicker>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <label class="hidden">ボタン</label>
-                <button
-                    id="search" class="ui button teal" @click="fetch">
-                    検索
-                    </button>
-            </div>
-        </div>
+    <article>
+            <v-form rounded class="form_sheet pa-4">
+                <v-row>
+                    <v-col cols="3">
+                        <v-text-field label="商品名(一部)" v-model="itemname"></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                        <date-range-input label="入荷日" v-model:start="startDate" v-model:end="endDate"></date-range-input>
+                    </v-col>
+                    <v-col>
+                        <run-button text="検索する" @action="fetch"></run-button>
+                    </v-col>
+                </v-row>
+            </v-form>
     </article>
-    <article class="mt-2" v-show="resultCount != 0">
-        <h3 class="ui devide">{{ resultCount }}件</h3>
-        <table class="ui striped table">
-            <thead>
-                <tr>
-                    <th class="two wide center aligned">入荷日</th>
-                    <th class="" colspan="2">取引先</th>
-                    <th class="">商品名</th>
-                    <th class="two wide center aligned">入荷数</th>
-                    <th class="two wide center aligned">原価合計</th>
-                    <th class="one wide"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(r, index) in currentList.value" :key="index">
-                    <td class="center aligned">{{ r.arrival_date }}</td>
-                    <td colspan="2"><vendortag v-model="r.vendor"></vendortag><span class="ml-half">{{ r.vendor.supplier }}</span></td>
+    <article class="mt-10">
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
+            <template #header>
+                    <th width="10%">入荷日</th>
+                    <th width="15%">取引先</th>
+                    <th>カード情報</th>
+                    <th width="8%" class="text-center">入荷数</th>
+                    <th width="8%" class="text-center">原価額</th>
+                    <th width="7%"></th>
+            </template>
+                <template #row="{  item }">
+                    <td>{{ item.arrival_date }}</td>
+                    <td><vendortag :vendor="item.vendor"></vendortag></td>
                     <td>
-                        <foiltag :isFoil="r.card.foil.is_foil" :foiltype="r.card.foil.name"></foiltag>
-                        【{{r.card.exp.attr}}】{{r.card.name}}[{{ r.card.lang }}]<span v-if="r.item_count !== 1">ほか</span>
+                        <card-layout :card="item.card" :lang="item.card.lang"></card-layout>
                     </td>
-                    <td class="center aligned">
-                        {{r.item_count}}点
+                    <td  class="text-center">
+                        {{item.item_count}}点
                     </td>
-                    <td class=" center aligned">
-                        ¥{{ r.sum_cost }}
+                    <td  class="text-center">
+                        &yen;{{ item.sum_cost }}
                     </td>
-                    <td class="center aligned selectable">
-                        <a @click="toDssPage(r.arrival_date, r.vendor.id)">
-                        <v-icon icon="mdi-chevron-double-right"></v-icon>
-                        </a>
+                    <td class="text-right">
+                        <link-icon-button @action="toDssPage(item.arrival_date, item.vendor.id)"></link-icon-button>
                     </td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <th colspan="10">
-                        <div class="right aligned">
-                            <pglist ref="pglistRef" v-model:list="result.value" @loadPage="current"></pglist>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
+                </template>
+        </PaginatedTable>
     </article>
-    <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
 </template>
 <style scoped>
 .middle {

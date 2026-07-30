@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Exceptions\api\BadRequestException;
 use App\Exceptions\NotFoundException;
 use App\Factory\CardInfoFactory;
+use App\Models\CardInfo;
 use App\Models\Promotype;
 use App\Services\Constant\CardConstant as Column;
 use App\Services\Constant\GlobalConstant as GCon;
@@ -11,7 +12,7 @@ use app\Services\json\AbstractCard;
 use BadExpException;
 
 class CardJsonFileService {
-    public function build(string $inputSetCode, $json, bool $isDraft, string $colorFilter) {
+    public function build(string $inputSetCode, array $json, bool $isDraft, string $colorFilter) {
         $cards = $json["cards"];
         $setcode = $json["code"];
 
@@ -32,14 +33,16 @@ class CardJsonFileService {
             $foiltype = $cardtype->foiltype();
             if ($this->isExclude($cardtype, $promoType, $isDraft, $colorFilter)) {
                 logger()->debug('skip card:', [GCon::NAME => $cardtype->jpname($enname),
-                                                                        Column::NUMBER => $cardtype->number(), Column::PROMOTYPE => $promoType]);
+                                                                        Column::NUMBER => $cardtype->number(), Column::PROMOTYPE => $promoType->name]);
                 continue;
             }
 
             $newCard = ['setCode'=> $setcode, GCon::NAME => $cardtype->jpname($enname), "en_name" => $enname,
             'scryfallId' => $cardtype->scryfallId(),
             'color' => $cardtype->color(), Column::NUMBER => $cardtype->number(),
-             Column::PROMO_ID => $promoType, Column::FOIL_TYPE => $foiltype];
+             Column::PROMOTYPE => [GCon::ID=> $promoType->id, GCon::NAME => $promoType->name],
+              Column::FOIL_TYPE => $foiltype,
+             'isReg' => CardInfo::isExist($setcode, $cardtype->number())];
 
              if ($cardtype->multiverseId() != 0) {
                 $newCard[Column::MULTIVERSEID] = $cardtype->multiverseId();
@@ -47,7 +50,7 @@ class CardJsonFileService {
             logger()->debug(get_class($cardtype).':'.$newCard['name']);
 
             array_push($cardInfo, $newCard);
-            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::PROMO_ID => $newCard[Column::PROMO_ID]]);
+            logger()->info('get card:',['name' => $newCard['name'], Column::NUMBER => $newCard[ Column::NUMBER], Column::PROMOTYPE => $newCard[GCon::NAME]]);
         }
         $array = ["setCode"=> $setcode, "cards" => $cardInfo];
         return $array;

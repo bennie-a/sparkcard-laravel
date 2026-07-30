@@ -1,24 +1,19 @@
 <template>
-    <div class="blank-layout">
-        <header>
-            <div class="ui pointing">
-                <div class="header navbar-brand">
-                    <router-link to="/" class="navbar-brand"
-                        ><i class="bi bi-gem"></i> SPARKCARD</router-link
-                    >
-                </div>
-            </div>
-        </header>
-        <main id="main" ref="main" class="mt-2 twelve wide column">
-            <router-view />
-        </main>
-    </div>
+    <v-app>
+        <v-app-bar>
+            <v-app-bar-title>
+                <router-link to="/">
+                     <span class="mdi mdi-diamond-stone"></span> SPARKCARD
+                </router-link>
+            </v-app-bar-title>
+        </v-app-bar>
+        <v-main class="bg-grey-lighten-4">
+            <v-container class="mx-auto">
+                <router-view />
+                <section class="text-center mt-10">
+                    <v-btn variant="plain" prepend-icon="mdi-arrow-left" to="/" color="teal-lighten-1">トップページに戻る</v-btn>
+                </section>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
-<script>
-</script>
-<style scoped>
-.blank-layout {
-  min-height: 100vh;
-  background-color: whitesmoke;
-}
-</style>

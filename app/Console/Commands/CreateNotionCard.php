@@ -2,16 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Enum\CardLanguage;
 use App\Facades\CardBoard;
-use App\Facades\CardInfoServ;
-use App\Files\Item\BaseCsvWriter;
-use App\Files\Item\MercariCsvWriter;
 use App\Models\CardInfo;
 use Illuminate\Console\Command;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader;
-use GuzzleHttp\Psr7\Header;
 
 /**
  * セット略称を条件に各カードのNotionカードを一括作成するコマンドクラス
@@ -71,7 +66,7 @@ class CreateNotionCard extends Command
             }
             $details[StockpileHeader::CARD_ID] = $r->id;
             CardBoard::store($details);
-            $promotype = !empty($r->promo_name) ? "≪{$r->promo_name}≫" : $r->promo_name;
+            $promotype = $r->promo_name != '通常版' ? "≪{$r->promo_name}≫" : '';
             $createList[] = $r->name.$promotype;
             $createCount++;
             $bar->advance();

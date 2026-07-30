@@ -1,6 +1,5 @@
 // ページコンポーネントをインポートする
 import Index from "./pages/Index.vue";
-import BaseItemCSV from "./pages/baseshop/BaseItemPage.vue";
 import Mercari from "./pages/mercari/MercariItemPage.vue";
 import ExpansionPage from "./pages/config/ExpansionPage.vue";
 import CardinfoPage from "./pages/config/CardInfoPage.vue";
@@ -11,48 +10,48 @@ import ShiptLogDssPage from "./pages/shipping/ShiptLogDssPage.vue";
 import ShiptLogImpPage from "./pages/mercari/ShiptMercariImpPage.vue";
 import ArrivalLogPage from "./pages/arrival/ArrivalLogPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import{ store} from './store';
 import ArrivalLogDssPage from "./pages/arrival/ArrivalLogDssPage.vue";
 import ArrivalLogEditPage from "./pages/arrival/ArrivalLogEditPage.vue";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
-import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import CardInfoBulkPage from "./pages/config/CardInfoBulkPage.vue";
 import BaseApiIntegration from "./pages/baseshop/BaseApiIntegration.vue";
 import ShiptLogBaseImpPage from "./pages/baseshop/ShiptBaseImpPage.vue";
 import { authGuard } from "./auth/auth-guard";
 
 const arrivalLinks = {url:"/arrival/",    title:"入荷情報一覧"};
-const arrivalDssLinks = {url:"/arrival/date/", title:""};
+const arrivalDssLinks = {url:"/arrival/date/", title:"入荷情報詳細"};
 const routes = [
     {
         path: "/",
         component: Index,
         meta: {
             layout: 'default',
-            title: "入荷登録",
-            description: "DBとNotionの販売管理ボードに在庫カードを登録します。",
+            title: "在庫登録",
         },
     },
     {
         path:arrivalLinks.url,
         component:ArrivalLogPage,
+        name:'ArrivalLog',
         meta:{
             title:arrivalLinks.title,
-            description:"入荷情報を一覧表示します"
+            breadscrumb:arrivalLinks.title,
         },
     },
     {
         path:arrivalDssLinks.url,
         name:'ArrivalLogDss',
         component:ArrivalLogDssPage,
-        beforeEnter:(to, from, next) => {
-            const arrDateStore = arrDateConditionStore();
-            arrivalDssLinks.title = arrDateStore.arrivalDate;
-            to.meta.title = arrDateStore.arrivalDate;
-            next();
-        },
         meta:{
-            urls: [arrivalLinks]
+            parent:'ArrivalLog',
+            title:(route) => {
+                const arrDateStore = arrDateConditionStore();
+                return `入荷情報:${arrDateStore.arrivalDate}`;
+            },
+            breadscrumb:(route) => {
+                const arrDateStore = arrDateConditionStore();
+                return arrDateStore.arrivalDate;
+            },
         },
     },
     {
@@ -64,7 +63,13 @@ const routes = [
             next();
         },
         meta:{
-            urls: [arrivalLinks, arrivalDssLinks]
+            parent:'ArrivalLogDss',
+            title:(route) => {
+                return `入荷情報編集(No.${route.params.arrival_id})`;
+            },
+            breadscrumb:(route) => {
+                return `No.${route.params.arrival_id}`;
+            },
         },
 
     },
@@ -73,88 +78,65 @@ const routes = [
         component: StockpilePage,
         meta: {
             title: "在庫情報検索",
-            description: "在庫情報を検索します。",
-        },
-    },
-    {
-        path: "/base/newitem",
-        component: BaseItemCSV,
-        meta: {
-            title: "BASEショップ用CSVダウンロード",
-            description: "Notionの商品管理ボードからBASE用CSVを作成します。",
         },
     },
     {
         path: "/mercari/newitem",
         component: Mercari,
         meta: {
-            title: "メルカリ用CSVダウンロード",
-            description:
-                "Notionの商品管理ボードからメルカリ用CSVを作成します。※300円未満の商品は除外します。",
+            title: "商品登録用CSVダウンロード",
         },
     },
     {
         path: "/config/expansion",
+        name:'Ex',
         component: ExpansionPage,
         meta: {
             title: "エキスパンション一覧",
-            description: "エキスパンション一覧表示を行います。",
+            breadscrumb: "エキスパンション一覧"
         },
     },
     {
         path: "/config/expansion/post",
+        name:'ExPost',
         component: PostExPage,
         meta: {
             title: "エキスパンション登録",
-            description: "エキスパンションの登録・編集を行います。",
-            urls:[
-                {
-                    url:"/config/expansion",
-                    title:"エキスパンション一覧"
-                },
-            ]
+            parent:'Ex',
+            breadscrumb:"エキスパンション登録",
         },
-        prop: true,
     },
     {
-        path: "/config/cardinfo/csv/:attr",
+        path: "/config/cardinfo/csv/",
         name:"CardInfoCsvPage",
         component: CardInfoBulkPage,
         meta: {
-            title: "カード情報一括登録",
-            description:
-                "MTGJSONからDLしたファイルのカード情報をDBに登録します。",
-            urls:[
-                {
-                    url:"/config/expansion",
-                    title:"エキスパンション一覧"
-
-                }
-            ]
+            parent:'Ex',
+            title:(route) => {
+                let setname = route.query.setname;
+                let attr = route.query.attr;
+                return `カード情報一括登録:${setname}[${attr}]`;
+            },
+            breadscrumb:"カード情報一括登録"
         },
     },
     {
-        path: "/config/cardinfo/post/:setname/:attr",
+        path: "/config/cardinfo/post",
         name: "PostCardInfo",
         component: CardinfoPage,
         meta: {
-            title: "カード情報マスタ登録",
-            description: "カード情報をDBに登録します。",
-            urls:[
-                {
-                    url:"/config/expansion",
-                    title:"エキスパンション一覧"
-
-                }
-            ]
+            title: "カード情報登録",
+            parent:'Ex',
+            breadscrumb:"カード情報登録",
         },
     },
     {
         path: "/shipping/",
         component:ShiptLogPage,
+        name:'Shipt',
         meta:{
-            title:"出荷情報一覧",
-            description:"出荷情報を一覧表示します。",
+            title:"注文情報一覧",
+            breadscrumb:"注文情報一覧",
         },
     },
     {
@@ -162,15 +144,14 @@ const routes = [
         name:'ShiptLogDss',
         component:ShiptLogDssPage,
         meta:{
-            title:"出荷詳細",
-            description:"",
-            urls: [
-                {
-                    url:"/shipping/",
-                    title:"出荷情報一覧"
-                },
-            ]
-        }
+            parent:'Shipt',
+            breadscrumb:(route) => {
+                return route.params.order_id;
+            },
+            title:(route) => {
+                return `注文情報:${route.params.order_id}`;
+            },
+        },
     },
     {
         path: "/mercari/shipt/import",
