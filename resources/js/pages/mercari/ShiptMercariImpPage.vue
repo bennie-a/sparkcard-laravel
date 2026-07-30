@@ -7,7 +7,6 @@
     import condition from "../component/tag/ConditionTag.vue";
     import cardlayout from "../component/CardLayout.vue";
     import ModalButton from '../component/modal/ModalButton.vue';
-    import PiniaMsgForm from '../component/PiniaMsgForm.vue';
     import scdatepicker from "../component/date/DateInput.vue";
     import ListPagination from "@/pages/component/pagination/ListPagination.vue";
     import { usePaginate } from "@/pages/component/pagination/UsePaginate";

@@ -5,13 +5,28 @@ import { mount } from '@vue/test-utils';
 import { onMounted, ref } from 'vue';
 import Loading from "vue-loading-overlay";
 import axios from 'axios';
+import RequiredLabel from '../component/label/RequiredLabel.vue';
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
 
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
 const authUrl = ref("");
-const code = ref("");
 const error = ref("");
+
+let codeLabel = '認可コード';
+const schema = yup.object({
+    code:yup.string().label(codeLabel).required().customAlpha(),
+});
+
+const {handleSubmit} = useForm({
+    validationSchema:schema,
+    initialValues:{code:''}
+});
+
+const {value:code, errorMessage:errMsg} = useField('code');
+
 
 const toAuthServer = async() => {
     isLoading.value = true;
@@ -27,26 +42,29 @@ const toAuthServer = async() => {
             isLoading.value = false;
         });
 };
-const connect = async() => {
-    isLoading.value = true;
-    const query = {
-        code: code.value
-    };
+const connect = handleSubmit(
+    async() => {
+            isLoading.value = true;
+            const query = {
+                code: code.value
+            };
 
-    await axios.post('/api/base/oauth/callback', query)
-        .then((response) => {
-            console.log(response.data);
-            const baseStore = baseConnected();
-            baseStore.connect();
-            router.push(route.query.redirect);
-        })
-        .catch((e) => {
-            error.value = e.response.data.detail;
-        })
-        .finally(() => {
-            isLoading.value = false;
-        });
-};
+            await axios.post('/api/base/oauth/callback', query)
+                .then((response) => {
+                    console.log(response.data);
+                    const baseStore = baseConnected();
+                    baseStore.connect();
+                    router.push(route.query.redirect);
+                })
+                .catch((e) => {
+                    error.value = e.response.data.detail;
+                })
+                .finally(() => {
+                    isLoading.value = false;
+                });
+        }
+);
+
 </script>
 <template>
     <div class="ui middle center aligned grid">
@@ -74,7 +92,11 @@ const connect = async() => {
                 </v-card>
                 <v-card  rounded class="mt-10 pt-5 pb-5">
                     <v-card-text class="mb-0 w-75 mx-auto">
-                        <v-text-field v-model="code" label="認可コード"></v-text-field>
+                        <v-text-field :placeholder="codeLabel" v-model="code" :error-messages="errMsg">
+                            <template v-slot:label>
+                                <RequiredLabel :text="codeLabel" required></RequiredLabel>
+                            </template>
+                        </v-text-field>
                     </v-card-text>
                     <v-card-actions class="w-25 mx-auto">
                         <v-btn color="teal-lighten-1" @click="connect" variant="flat" prepend-icon="mdi-link-variant" block>連携する</v-btn>

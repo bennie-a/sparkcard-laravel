@@ -7,7 +7,7 @@
                 </router-link>
             </v-app-bar-title>
         </v-app-bar>
-        <v-main>
+        <v-main class="bg-grey-lighten-4">
             <v-container class="mx-auto">
                 <router-view />
                 <section class="text-center mt-10">
