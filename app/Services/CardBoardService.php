@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Enum\CardLanguage;
 use App\Enum\ShiptMethod;
+use App\Exceptions\api\NotFoundException;
 use App\Factory\NotionPageFactory;
 use App\Models\CardInfo;
 use App\Models\Expansion;
@@ -22,7 +23,7 @@ use FiveamCode\LaravelNotionApi\NotionFacade;
  * Notionの販売管理ボードに関するServiceクラス
  */
 class CardBoardService {
-    
+
     private $repo;
     public function __construct() {
         $this->repo = new CardBoardRepository();
@@ -79,8 +80,7 @@ class CardBoardService {
     private function toNotionCardList(Collection $pages) {
         $resultList = array();
         if (count($pages) == 0) {
-            $error = ['status' => 204, 'message'=>'件数は0件です。'];
-            return $error;
+            throw new NotFoundException();
         }
         foreach($pages as $page) {
             $array = $page->toArray();
@@ -155,7 +155,7 @@ class CardBoardService {
         $page = $this->repo->findBySparkcardId($sparkcardId);
         return !empty($page);
     }
-    
+
     // 入力値をNotionに登録する。
     public function store(array $details) {
         try {
@@ -171,7 +171,7 @@ class CardBoardService {
                 $page->setId($duplicated->getId());
                 $this->updatePage($page);
             } else {
-                $promotype = !empty($info->promo_name) ? "≪{$info->promo_name}≫" : $info->promo_name;
+                $promotype = !empty($info->promotype_id) != 1 ? "≪{$info->promo_name}≫" : "";
                 $cardname = $info->name.$promotype;
                 $page->setTitle(JA::NAME, $cardname);
                 $page->setText(JA::EN_NAME, $info->en_name);
@@ -268,7 +268,7 @@ class CardBoardService {
         }
     }
 
-    
+
     /**
      * 注文番号に該当する販売カードを取得する。
      *

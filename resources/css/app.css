@@ -14,13 +14,27 @@ body {
     font-family: "Noto Sans JP", sans-serif !important;
 }
 
-/* ヘッダー */
-.ui.menu .item {
-    padding-block: 0.8rem !important;
+.v-application {
+    font-family: "Noto Sans JP", sans-serif !important;
 }
 
-.navbar-brand {
-    font-size: 1.8rem;
+.v-btn {
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.v-table.item_list th {
+    background-color: #EEEEEE;
+}
+
+address > p,address > span {
+    margin: 0!important;
+    font-style: normal;
+}
+
+/* ヘッダー */
+.v-app-bar-title {
+    font-size: 1.6rem;
     font-family: "Exo 2", sans-serif;
     background-image: linear-gradient(to top right, #1e50a2 0%, #d43f8d 100%);
     -webkit-background-clip: text;
@@ -28,15 +42,14 @@ body {
     -webkit-text-fill-color: transparent;
     vertical-align: top;
     font-weight: 400;
-    padding-left: 0.5rem;
-}
-.ui .header {
-    font-family: "Noto Sans JP", sans-serif !important;
-    padding-block: 0.8rem;
 }
 
-#main>.ui.header {
-    color:var(--gray) !important;
+a:-webkit-any-link  {
+    text-decoration: none!important;
+}
+
+.form_sheet {
+    background-color: #f5f5f5;
 }
 
 .ui.form .field>label {
@@ -44,51 +57,9 @@ body {
     font-weight: 500 !important;
 }
 /* 余白 */
-.mt-1 {
-    margin-top: 1rem !important;
-}
-
-.mt-2 {
-    margin-top: 2rem !important;
-}
-
-.mt-3 {
-    margin-top: 3rem !important;
-}
-
-.mr-half {
-    margin-right: 0.5rem;
-}
-
-.mr-1 {
-    margin-right: 1rem;
-}
-
-.mr-2 {
-    margin-right: 2rem;
-}
-.ml-1 {
-    margin-left: 1rem !important;
-}
-
-.ml-half {
-    margin-left: 0.5rem !important;
-}
-
-.mb-1 {
-    margin-bottom: 1rem !important;
-}
-
 
 .text-center {
     text-align: center;
-}
-
-.pl-0 {
-    padding-left: 0 !important;
-}
-.pl-2 {
-    padding-left: 2em !important;
 }
 
 .ui.table tbody tr td.selectable {

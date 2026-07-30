@@ -1,17 +1,19 @@
-import{ store} from '@/store';
 import {baseConnected } from "@/stores/auth/baseConnected";
-import {LoadingStore} from '@/stores/loading/Loading';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 import axios from 'axios';
 import { storeToRefs } from 'pinia';
+import {MsgStore} from "@/pages/component/msg/MsgStore";
 
 // 認証に関するスクリプト
 export const authGuard = (router) => {
 
     router.beforeEach(async(to, from, next) => {
-            const loading  = LoadingStore();
+            const loading  = LoadStore();
+            const msgStore = MsgStore();
             router['referrer'] = from;
 
-            loading.start();
+            msgStore.clear();
+            loading.on();
             // BASE API認証
             const requiresBase = to.meta?.requiresBase ?? false;
             const baseStore = baseConnected();
@@ -45,8 +47,8 @@ export const authGuard = (router) => {
             });
 
     router.afterEach(() => {
-        const loading  = LoadingStore();
-        loading.stop();
+        const loading  = LoadStore();
+        loading.off();
     });
 
 };

@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
  */
 class ExpansionController extends Controller
 {
-    private $service;
+    private ExpansionService $service;
 
     public function __construct(ExpansionService $service)
     {

@@ -1,7 +1,7 @@
 <template>
-    <div class="ui horizonal label" :class="colorClass(this.name)">
-        {{ this.name }}
-    </div>
+    <v-chip label density="compact" variant="flat" :color="colorClass(this.name)">
+        <strong>{{ this.name }}</strong>
+    </v-chip>
 </template>
 <script>
 export default {
@@ -17,10 +17,9 @@ export default {
                     EX: "brown",
                     PLD: "red",
                 };
-                return colors[name];
+                return colors[name] + "-darken-1";
             };
         },
     },
 };
 </script>
-<style scoped></style>

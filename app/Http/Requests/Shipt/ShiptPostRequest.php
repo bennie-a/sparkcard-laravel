@@ -39,7 +39,7 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::ITEMS => ['required','array', 'min:1'],
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:stockpile,id'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => ['required','integer','min:1'],
-            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => ['required', 'integer', 'min:50'],
+            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => ['required', 'integer', 'min:1'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => ['required', 'integer','min:1'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => 'required|boolean',
         ];

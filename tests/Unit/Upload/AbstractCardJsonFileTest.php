@@ -83,7 +83,7 @@ abstract class AbstractCardJsonFileTest extends TestCase{
      *
      * @param string $number カード番号
      * @param array $result アップロード結果
-     * @return void
+     * @return array
      */
     protected function filteringCard(string $number, array $result) {
         $filterd = array_filter($result, function($a) use($number){

@@ -3,6 +3,11 @@ import { onBeforeMount, reactive } from "vue";
 import axios from "axios";
 const vendorType = defineModel({type:Number, default:1});
 const vendorTypeList = reactive([]);
+const emit = defineEmits(['action']);
+
+const selected = (newValue) => {
+    emit('action', newValue);
+}
 onBeforeMount(async() => {
         // 入荷先カテゴリを取得
         await axios
@@ -12,11 +17,12 @@ onBeforeMount(async() => {
             })
             .catch((e) => {
                 console.error(e);
-            })    
+            })
 });
+
+
 </script>
 <template>
-<select v-model="vendorType" class="mr-1 ui dropdown">
-    <option v-for="t in vendorTypeList.value" :key="t.id" :value="t.id">{{t.name }}</option>
-</select>
+<v-select v-model="vendorType" :items="vendorTypeList.value" @update:modelValue="selected($event)"
+    item-title="name" item-value="id" label="入荷先カテゴリ"></v-select>
 </template>

@@ -3,35 +3,45 @@ import shop from '../component/tag/ShopTag.vue';
 import Loading from "vue-loading-overlay";
 import {useRoute, useRouter} from "vue-router";
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import condition from "../component/tag/ConditionTag.vue";
-import imagemodal from '../component/ImageModal.vue';
+import imagemodal from '../component/modal/ImageModal.vue';
 import foiltag from '../component/tag/FoilTag.vue';
 import cardlayout from '../component/CardLayout.vue';
+import { usePaginate } from "@/pages/component/pagination/UsePaginate";
+import PaginatedTable from '../component/pagination/PaginatedTable.vue';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
+const loadStore = LoadStore();
 const route = useRoute();
 const router = useRouter();
 
-const isLoading = ref(false);
 const isCopied = ref(false);
 const orderId = route.params.order_id;
 
 const detail = ref({});
+const cardList = computed(() => detail.value.card ?? []);
+
 // 出荷情報一覧に戻る
 const toList = () => {
         router.push("/shipping");
 }
 
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePaginate(cardList, 10);
+
 // 詳細情報を取得する。
 const getDetail = async () => {
-    isLoading.value = true;
+    loadStore.on();
     await axios.get("/api/shipping/"+ orderId).
-        then((response) =>{
-            detail.value = response.data;
+    then((response) =>{
+        detail.value = response.data;
+        resetPage();
         })
         .catch()
         .finally(()=> {
-            isLoading.value = false;
+            loadStore.off();
         });
 }
 
@@ -50,75 +60,77 @@ onMounted(async() => {
 
 <template>
     <article>
+        <v-row gap="25">
+            <v-col cols="4">
+                <v-card variant="flat" color="#f5f5f5" class="mx-auto pb-2">
+                    <v-card-text>
+                        <address>
+                            <p>{{detail.zip_code}}</p>
+                            <p>{{ detail.address }}</p>
+                            <p class="text-title-large">{{ detail.buyer_name }}様</p>
+                        </address>
+                    </v-card-text>
+                    <v-card-actions class="pl-4">
+                        <v-tooltip  content-class="copied-tooltip" :open-on-hover="false" v-model="isCopied" >
+                            <template v-slot:activator="{ props }">
+                                <v-btn size="small" v-bind="props" color="teal-lighten-1" variant="outlined" prepend-icon="mdi-clipboard" @click="copyAddress">
+                                        コピー
+                                </v-btn>
+                            </template>
+                            <span>コピーしました</span>
+                        </v-tooltip>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+            <v-col cols="4">
+                <dl class="mt-0 mb-0">
+                    <div class="mb-4">
+                        <dt class="text-title-medium">販売ショップ</dt>
+                        <dd class="mt-1 ml-0">
+                            <shop :orderId="orderId"/>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-title-medium">発送日</dt>
+                        <dd class="mt-1 ml-0">{{ detail.shipping_date }}</dd>
+                    </div>
+                </dl>
+            </v-col>
+        </v-row>
         <div class="ui  grid">
-            <div class="two wide column">
-                <h2 class="ui medium header">販売ショップ</h2>
-                <shop :orderId="orderId"/>
-            </div>
-            <div class="four wide column">
-                <h2 class="ui medium header">注文番号</h2>
-                <p>{{ detail.order_id }}</p>
-            </div>
-            <div class="two wide column">
-                <h2 class="ui medium header">発送日</h2>
-                <p>{{ detail.shipping_date }}</p>
-            </div>
-            <div class="four wide column">
-                    <h2 class="ui medium header">購入者情報</h2>
-                    <address>
-                        <p>{{detail.zip_code}}<br>{{ detail.address }}</p>
-                        <p>{{ detail.buyer_name }}様</p>
-                    </address>
-                    <button class="ui teal basic tiny button" id="copy" @click="copyAddress">
-                        <span class="mdi mdi-clipboard"></span>コピー
-                    </button>
-                    <div v-if="isCopied" class="ui left pointing teal label">コピーしました</div>
-            </div>
         </div>
-        <h2 class="ui medium header">商品一覧</h2>
-        <table class="ui table stripe">
-            <thead>
-                <tr>
-                    <th class="two wide">在庫ID</th>
-                    <th>カード</th>
-                    <th class="center aligned">状態</th>
-                    <th class="center aligned">枚数</th>
-                    <th class="center aligned">単価</th>
-                    <th class="center aligned">小計</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(i, index) in detail.card" :key="index">
-                <td>{{ i.id }}</td>
+    </article>
+    <article class="mt-8">
+        <h2 class="text-title-large">商品一覧</h2>
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="cardList.length">
+            <template #header>
+                    <th>在庫ID</th>
+                    <th>カード情報</th>
+                    <th class="text-center">状態</th>
+                    <th class="text-center">枚数</th>
+                    <th class="text-center">単価</th>
+                    <th class="text-center">小計</th>
+            </template>
+            <template #row="{ item }">
+                <td>{{ item.id }}</td>
                 <td>
-                    <cardlayout v-model:card="detail.card[index]" v-model:lang="detail.card[index].lang"></cardlayout>
+                    <cardlayout :card="item" :lang="item.lang"></cardlayout>
                 </td>
-                <td class="center aligned"><condition :name="i.condition"/></td>
-                <td class="center aligned">{{i.quantity}}枚</td>
-                <td class="center aligned">¥{{ i.single_price }}</td>
-                <td class="center aligned">¥{{i.subtotal_price}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="text-center">
-            <button class="ui gray basic button" @click="toList">一覧に戻る</button>
+                <td class="text-center"><condition :name="item.condition"/></td>
+                <td class="text-center">{{item.quantity}}枚</td>
+                <td class="text-center">&yen;{{ item.single_price }}</td>
+                <td class="text-center">&yen;{{item.subtotal_price}}</td>
+            </template>
+        </PaginatedTable>
+        <div class="text-center mt-6">
+            <v-btn variant="outlined" color="teal-lighten-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
         </div>
-        <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
     </article>
 </template>
 <style>
-address {
-    font-style: normal;
-}
-address > p {
-    margin-bottom: 0.5em!important;
+.copied-tooltip {
+  background-color: #26A69A!important;
 }
 
-#copy:hover {
-    color: white!important;
-    background: #00B2AA!important;
-    border: 0!important;
-}
+
 </style>

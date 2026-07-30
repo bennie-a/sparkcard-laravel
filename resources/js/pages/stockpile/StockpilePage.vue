@@ -1,159 +1,120 @@
-<script>
-import MessageArea from "../component/MessageArea.vue";
-import Loading from "vue-loading-overlay";
+<script setup>
 import axios from "axios";
-import ListPagination from "../component/ListPagination.vue";
-import FoilTag from "../component/tag/FoilTag.vue";
-import ConditionTag from "../component/tag/ConditionTag.vue";
-import ImageModal from "../component/ImageModal.vue";
+import ListPagination from "../component/pagination/ListPagination.vue";
+import condition from "../component/tag/ConditionTag.vue";
+import ImageModal from "../component/modal/ImageModal.vue";
 import CardLayout from "../component/CardLayout.vue";
+import Loading from "vue-loading-overlay";
+import { ref } from "vue";
+import { usePaginate } from "../component/pagination/UsePaginate";
+import { MsgStore } from "../component/msg/MsgStore.js";
+import ColorTag from "../component/tag/ColorTag.vue";
+import RunButton from "../component/button/RunButton.vue";
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
+import * as yup from 'yup';
+import { useField, useForm } from "vee-validate";
 
-export default {
-    components: {
-        loading: Loading,
-        "message-area": MessageArea,
-        pagination: ListPagination,
-        foiltag: FoilTag,
-        condition: ConditionTag,
-        cardlayout:CardLayout,
-        "image-modal":ImageModal
-    },
-    data() {
-        return {
-            cardname: "",
-            setname: "",
-            isLoading: false,
-            stock: [],
-        };
-    },
-    methods: {
-        async search() {
-            this.$store.dispatch("message/clear");
-            this.$store.dispatch("clearCards");
-            this.isLoading = true;
-            console.log("start search stockpile");
-            const query = {
+const cardname = ref("");
+const stock = ref([]);
+const stockCount = ref(0);
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePaginate(stock, 10);
+
+const msgStore = MsgStore();
+const loadStore = LoadStore();
+
+const schema = yup.object({
+    setname:yup.string().label('セット略称').customAlpha()
+});
+
+const {handleSubmit} = useForm({
+    validationSchema:schema,
+    initialValues:{
+        setname:''
+    }
+});
+
+const {value:setname, errorMessage:SetErr} = useField('setname');
+
+const search = handleSubmit(
+    async () => {
+        try {
+            if (cardname.value === "" && setname.value === "") {
+                msgStore.error("カード名かセット略称のどちらかを入力してください。");
+                return;
+            }
+            loadStore.on();
+            stockCount.value = 0;
+            resetPage();
+            msgStore.clear();
+            const response = await axios.get("/api/stockpile", {
                 params: {
-                    card_name: this.cardname,
-                    set_name: this.setname,
+                    card_name: cardname.value,
+                    set_name: setname.value,
                 },
-            };
-            await axios
-                .get("/api/stockpile", query)
-                .then((response) => {
-                    console.log(response.data);
-                    let data = response.data;
-                    this.stock = data;
-                    this.$store.dispatch("setCard", this.stock);
-                })
-                .catch((e) => {
-                    let data = e.response.data;
-                    console.error(data);
-                    this.$store.dispatch(
-                            "message/error",
-                            data.detail
-                        );
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                    console.log("end search stockpile");
-                });
-        },
-    },
-};
+            });
+            stock.value = response.data;
+            stockCount.value = stock.value.length;
+
+        } catch (e) {
+            if (e.status === 404) {
+                let data = e.response.data;
+                msgStore.error(data.detail);
+                return;
+            }
+            console.error(e);
+            msgStore.error("検索中にエラーが発生しました。");
+        } finally {
+            loadStore.off();
+        }
+    }
+);
 </script>
 
 <template>
-    <message-area/>
-    <article class="mt-1 ui form segment">
-        <div class="two fields">
-            <div class="four wide field">
-                <label>カード名(一部)</label>
-                <input v-model="cardname" type="text">
-            </div>
-
-            <div class="three wide field">
-                <label for="">セット略称(ex:LRW)</label>
-                <div class="ui input">
-                    <input v-model="setname" type="text">
-                </div>
-            </div>
-            <div class="field">
-                <label style="visibility: hidden">検索ボタン</label>
-                <button
-                id="search"
-                :class="{ disabled: cardname == '' && setname == '' }"
-                    class="ui button teal ml-1"
-                    @click="search"
-                >
-                    検索する
-                </button>
-            </div>
-        </div>
+    <article>
+        <v-form rounded class="form_sheet pa-4">
+            <v-row gap="15">
+                <v-col cols="3">
+                    <v-text-field v-model="cardname"  label="カード名(一部)" clearable>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="2">
+                    <v-text-field v-model="setname" label="セット略称" :error-messages="SetErr">
+                    </v-text-field>
+                </v-col>
+                <v-col cols="2" class="text-right">
+                    <run-button text="検索する" @action="search"></run-button>
+                </v-col>
+            </v-row>
+        </v-form>
     </article>
-    <article class="mt-2" v-if="stock.length != 0">
-        <h2 class="ui medium dividing header">
-            件数：{{ stock.length }}件
-        </h2>
-        <table class="ui striped table">
-            <thead>
-                <tr>
-                    <th>在庫ID</th>
-                    <th class="six wide">カード</th>
-                    <th class="two wide center aligned">言語</th>
-                    <th class="two wide center aligned">状態</th>
-                    <th class="two wide center aligned">枚数</th>
-                    <th class="right aligned">最終更新日</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    v-for="(s, index) in $store.getters.sliceCard"
-                    :key="index"
-                >
-                    <td>{{ s.id }}</td>
-                    <td>
-                            <h4 class="ui image header">
-                                <img
-                                :src="s.card.image_url"
-                                class="ui mini rounded image"
-                                @click="$refs.modal[index].showImage(s.id)"
-                            >
-                            <div class="content">
-                                {{ s.card.name}}
-                            <div v-if="s.card.promotype.id != '1'">&#8810;{{s.card.promotype.name}}&#8811;</div>
-                            <foiltag :isFoil="s.card.foil.is_foil" :foiltype="s.card.foil.name"/>
-                            <div class="sub header">{{ s.card.exp.name }}&#91;{{s.card.exp.attr}}&#93;&#35;{{ s.card.number }}</div>
-                        </div>
-                        <image-modal
-                        :url="s.card.image_url"
-                        :id="s.id"
-                        ref="modal"
-                        />
-                    </h4>
-                    </td>
-                    <td class="center aligned">{{ s.lang }}</td>
-                    <td class="center aligned">
-                        <condition :name="s.condition"/>
-                    </td>
-                    <td class="center aligned">{{ s.quantity }}</td>
-                    <td class="right aligned">{{ s.updated_at }}</td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <th colspan="10">
-                        <div class="right aligned">
-                            <pagination/>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
-        <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        />
+    <article class="mt-10">
+        <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="stockCount">
+            <template #header>
+                <th width="10%">在庫ID</th>
+                <th>カード情報</th>
+                <th width="10%" class="text-center">色</th>
+                <th width="10%" class="text-center">状態</th>
+                <th width="10%" class="text-center">枚数</th>
+                <th width="10%" >最終更新日</th>
+            </template>
+            <template #row="{  item }">
+                <td>{{item.id }}</td>
+                <td>
+                    <CardLayout :card="item.card" :lang="item.lang"></CardLayout>
+                </td>
+                <td class="text-center">
+                    <ColorTag :type="item.card.color" />
+                </td>
+                <td class="text-center">
+                    <condition :name="item.condition"/>
+                </td>
+                <td class="text-center">{{ item.quantity }}枚</td>
+                <td class="text-center">{{ item.updated_at }}</td>
+            </template>
+        </PaginatedTable>
     </article>
 </template>

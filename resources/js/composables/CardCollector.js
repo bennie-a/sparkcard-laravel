@@ -1,17 +1,17 @@
 let langFuncs = {
-    日本語: (name, enname) => {
+    JP: (name, enname) => {
         return name + "[JP]";
     },
-    英語: (name, enname) => {
+    EN: (name, enname) => {
         return name + "/" + enname + "[EN]";
     },
-    繁体中国語: (name, enname) => {
+    CT: (name, enname) => {
         return name + "[CT]";
     },
-    簡体中国語: (name, enname) => {
+    CS: (name, enname) => {
         return name + "[CS]";
     },
-    イタリア語: (name, enname) => {
+    IT: (name, enname) => {
         return `${name}[IT] `;
     },
 };
@@ -23,7 +23,7 @@ export const toItemName = (card) => {
     }
     // エキスパンション略称
     let attr = `【${card.exp.attr}】`;
-    let foil = card.isFoil ? "【Foil】" : "";
+    let foil = card.foil.is_foil ? "【Foil】" : "";
     let name =
         langFuncs[card.lang](card.name, card.enname) + "[" + card.color + "]";
     return attr + foil + name;
@@ -41,11 +41,11 @@ export const toNoLabelName = (card) => {
 };
 
 export const toPhotoName = (card) => {
-    let number = card.index;
+    let number = card.number;
     let expAttr = card.exp.attr;
     let photoname = number + "_" + expAttr;
 
-    if (card.isFoil) {
+    if (card.foil.is_foil) {
         photoname += "-foil";
     }
     return photoname;
@@ -70,3 +70,15 @@ export const details = (condition) => {
     };
     return templates[condition];
 };
+
+export const toLanguage = (mark) => {
+    let templates = {
+        "JP":"日本語",
+        "EN":"英語",
+        "CS":"簡体中国語",
+        "CT":"繫体中国語",
+        "IT":"イタリア語",
+        "RU":"ロシア語"
+    }
+    return templates[mark];
+}

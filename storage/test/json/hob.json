@@ -1,0 +1,1163 @@
+{
+    "meta": {
+        "date": "2026-07-20",
+        "version": "5.3.0+20260720"
+    },
+    "data": {
+        "baseSetSize": 80,
+        "cards":[
+                        {
+                "artist": "Zezhou Chen",
+                "artistIds": [
+                    "810677e5-a502-4c03-b726-78cd808a75d4"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 31655,
+                "edhrecSaltiness": 0.0,
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "cardKingdomId": "330389",
+                    "mtgjsonV4Id": "22a16b8a-0ff7-5cb9-b4d9-5a0034bd2839",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "0bda1b62-47fc-42c2-a841-ccad8ea0db48",
+                    "scryfallIllustrationId": "cbed36eb-3ed4-48f2-9f14-ce51a8b23138",
+                    "scryfallOracleId": "169a4a77-12ff-4997-9550-bdcd456aa2f7",
+                    "tcgplayerProductId": "707057"
+                },
+                "keywords": [
+                    "Kicker"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {},
+                "manaCost": "{1}{W}",
+                "manaValue": 2.0,
+                "name": "The Eagles Are Coming!",
+                "number": "12",
+                "printings": [
+                    "HOB"
+                ],
+                "promoTypes": [
+                    "universesbeyond"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/ffbfc5b95c3b7b56",
+                    "tcgplayer": "https://mtgjson.com/links/5a6be47346fc1dc3"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "HOB",
+                "skuIds": {
+                    "foil": "9f3350b3-4ee9-531a-8d39-6038c94173e5",
+                    "nonfoil": "0a89946c-cf30-5211-9562-f14401c19797"
+                },
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Kicker {2}{W}{W} (You may pay an additional {2}{W}{W} as you cast this spell.)\nChoose target creature you own. If this spell was kicked, instead choose any number of target creatures you own. Return each chosen creature to your hand. At the beginning of the next upkeep, create a 4/4 white Bird Soldier creature token with flying for each creature returned to your hand this way.",
+                "type": "Instant",
+                "types": [
+                    "Instant"
+                ],
+                "uuid": "c0e116b1-3544-52a1-ac35-a6644fd8b2d7",
+                "variations": [
+                    "5c73cd09-547a-5084-b081-e4938f7c92a4"
+                ]
+            },
+            {
+                "artist": "Denman Rooke",
+                "artistIds": [
+                    "5eedbc4b-34a3-4ca5-b3f5-9ac2f6b6adf7"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [
+                    "W"
+                ],
+                "convertedManaCost": 2.0,
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "cardKingdomId": "330424",
+                    "mtgjsonV4Id": "dcd07bf5-9799-5443-9e1b-ebe1b6620141",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "62a7ff97-b940-4745-9e2e-3258fb51b846",
+                    "scryfallIllustrationId": "bd713465-0d3e-422d-9fdc-61da71db2b51",
+                    "scryfallOracleId": "169a4a77-12ff-4997-9550-bdcd456aa2f7",
+                    "tcgplayerProductId": "707058"
+                },
+                "isAlternative": true,
+                "keywords": [
+                    "Kicker"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "legalities": {},
+                "manaCost": "{1}{W}",
+                "manaValue": 2.0,
+                "name": "The Eagles Are Coming!",
+                "number": "205",
+                "printings": [
+                    "HOB"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/27ac7369eceac728",
+                    "tcgplayer": "https://mtgjson.com/links/dae32a53d067d86a"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "HOB",
+                "skuIds": {
+                    "foil": "bf578bf8-06a1-554b-a435-41b6ca5121d3",
+                    "nonfoil": "c085664c-fa16-51e3-b8ea-7d48777a08b7"
+                },
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Kicker {2}{W}{W} (You may pay an additional {2}{W}{W} as you cast this spell.)\nChoose target creature you own. If this spell was kicked, instead choose any number of target creatures you own. Return each chosen creature to your hand. At the beginning of the next upkeep, create a 4/4 white Bird Soldier creature token with flying for each creature returned to your hand this way.",
+                "type": "Instant",
+                "types": [
+                    "Instant"
+                ],
+                "uuid": "5c73cd09-547a-5084-b081-e4938f7c92a4",
+                "variations": [
+                    "c0e116b1-3544-52a1-ac35-a6644fd8b2d7"
+                ]
+            },
+            {
+                "artist": "Tyler Jacobson",
+                "artistIds": [
+                    "522af130-8db4-4b4b-950c-6e2b246339cf"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "B"
+                ],
+                "colors": [
+                    "B"
+                ],
+                "convertedManaCost": 2.0,
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "cardKingdomId": "330438",
+                    "mtgjsonV4Id": "d916ef21-d1c8-53d7-8883-2a58f18460d3",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "0c13e282-bbfb-4601-94ff-803874634371",
+                    "scryfallIllustrationId": "c669717a-f75a-4703-a613-8fb635f62d13",
+                    "scryfallOracleId": "514b451b-814d-45fb-a2ba-8fe6f0bdad60",
+                    "tcgplayerProductId": "707049"
+                },
+                "isAlternative": true,
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false,
+                    "pauper_commander": false,
+                    "predh": false
+                },
+                "legalities": {},
+                "manaCost": "{1}{B}",
+                "manaValue": 2.0,
+                "name": "Gollum, Riddle Master",
+                "number": "241",
+                "power": "3",
+                "printings": [
+                    "HOB"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/9e514a6bb845051f",
+                    "tcgplayer": "https://mtgjson.com/links/80e8bfcf6b043c81"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "HOB",
+                "skuIds": {
+                    "foil": "7b52f0c8-6ec3-5be1-b298-63ffedc06090",
+                    "nonfoil": "82f2cc97-83c1-53a2-8586-1d7248b80d5b"
+                },
+                "subtypes": [
+                    "Halfling",
+                    "Horror"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "As Gollum enters, choose odd or even. (Zero is even.)\nWhenever an opponent casts a spell with mana value of the chosen quality, choose one that hasn't been chosen —\n• Put a +1/+1 counter on Gollum.\n• Each opponent loses 2 life and you gain 2 life.\n• Draw a card.",
+                "toughness": "1",
+                "type": "Legendary Creature — Halfling Horror",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "f5e4b13c-538d-5e11-be0f-c24e3363f736",
+                "variations": [
+                    "9b89ae95-1765-5657-8db4-b09ee9347dcf",
+                    "f2e34573-4dd3-5541-b961-2c7b13fa8a03"
+                ]
+            },
+            {
+                "artist": "Dibujante Nocturno",
+                "artistIds": [
+                    "ed4f7e1b-4139-4e17-a671-442ce49eb775"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "R"
+                ],
+                "colors": [
+                    "R"
+                ],
+                "convertedManaCost": 4.0,
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "cardKingdomId": "330432",
+                    "mtgjsonV4Id": "87b8f564-878c-561d-9472-6bc5750a13f9",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "738d50ff-1bff-4841-93de-ccf521b2542f",
+                    "scryfallIllustrationId": "012df798-c3f1-49bf-a6be-8dccadf127d7",
+                    "scryfallOracleId": "c9634afc-4a5b-4cf6-b63d-0ff9909dd5a7",
+                    "tcgplayerProductId": "707043"
+                },
+                "isAlternative": true,
+                "language": "English",
+                "layout": "normal",
+                "legalities": {},
+                "manaCost": "{2}{R}{R}",
+                "manaValue": 4.0,
+                "name": "Desolation of Smaug",
+                "number": "226",
+                "printings": [
+                    "HOB"
+                ],
+                "producedMana": [
+                    "B",
+                    "G",
+                    "R",
+                    "U",
+                    "W"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/3ab80ab5e9983acd",
+                    "tcgplayer": "https://mtgjson.com/links/3e20051b5667664b"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "HOB",
+                "skuIds": {
+                    "foil": "98eb5781-ae11-51d7-91cb-ac2adbf8ee6a",
+                    "nonfoil": "8a4dd21c-9bb3-5629-b7ff-340caa253b84"
+                },
+                "subtypes": [],
+                "supertypes": [],
+                "text": "Desolation of Smaug deals 3 damage to each non-Dragon creature.\nAdd four mana in any combination of colors. Spend this mana only to cast Dragon spells.",
+                "type": "Sorcery",
+                "types": [
+                    "Sorcery"
+                ],
+                "uuid": "cea11ce0-5e64-559b-b1c6-8961b1525424",
+                "variations": [
+                    "759f6a6b-8523-5e85-aa62-4aa5f81c5f27",
+                    "910c95cb-cae1-5af4-9379-450c042b8596"
+                ]
+            },
+                        {
+                "artist": "Francisco Badilla",
+                "artistIds": [
+                    "d876f06d-e6a6-4b0d-abe3-e7c9900ebf0c"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "W"
+                ],
+                "colors": [],
+                "convertedManaCost": 5.0,
+                "edhrecRank": 24261,
+                "edhrecSaltiness": 0.0,
+                "faceConvertedManaCost": 5.0,
+                "faceManaValue": 5.0,
+                "faceName": "The Arkenstone",
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "cardKingdomFoilId": "330269",
+                    "cardKingdomId": "330256",
+                    "mtgjsonV4Id": "2ce66008-05cd-566e-9df1-0f85e5e87c35",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "ba3ff39b-b591-4434-8d41-4826d0809ca7",
+                    "scryfallIllustrationId": "0aeb6190-9f15-4800-9b19-e2e5ecdd72a4",
+                    "scryfallOracleId": "09f09d0a-6054-4545-b81e-0295773cc5f0",
+                    "tcgplayerProductId": "693042"
+                },
+                "isAlternative": true,
+                "language": "English",
+                "layout": "adventure",
+                "legalities": {},
+                "manaCost": "{5}",
+                "manaValue": 5.0,
+                "name": "The Arkenstone // Seek the Heart",
+                "number": "234",
+                "otherFaceIds": [
+                    "3db7a3a8-1a5c-5803-97cb-32b4894af125"
+                ],
+                "printings": [
+                    "HOB"
+                ],
+                "promoTypes": [
+                    "universesbeyond"
+                ],
+                "purchaseUrls": {
+                    "cardKingdom": "https://mtgjson.com/links/be67c9e5fa198c3d",
+                    "cardKingdomFoil": "https://mtgjson.com/links/1c251da412f7832c",
+                    "tcgplayer": "https://mtgjson.com/links/9904a39e56da2dc9"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "HOB",
+                "side": "a",
+                "skuIds": {
+                    "foil": "e02cf46e-d23e-5104-90d7-e56dd6f80f5b",
+                    "nonfoil": "891a5167-a606-56d2-933f-854b1ac1b048"
+                },
+                "subtypes": [],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Creatures you control get +1/+1.\nAt the beginning of your end step, draw a card.",
+                "type": "Legendary Artifact",
+                "types": [
+                    "Artifact"
+                ],
+                "uuid": "bfb9874c-4a2f-5c46-9937-bcd30f3eb9a2",
+                "variations": [
+                    "7d4bccca-6ef5-5608-a75c-c80a4cf46c8b",
+                    "881ff59e-fd24-5c1f-8078-e857dede0bb1",
+                    "ab69ea75-28b5-5ebb-97e8-79452c91c523",
+                    "ff94b9fe-f281-5476-b6d0-90736adf9836"
+                ]
+            },
+                        {
+                "artist": "Cory Godbey",
+                "artistIds": [
+                    "a1c815ce-ffac-4fd6-93fd-7fd5a317cd17"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "U"
+                ],
+                "colors": [
+                    "U"
+                ],
+                "convertedManaCost": 2.0,
+                "edhrecRank": 26062,
+                "edhrecSaltiness": 0.0,
+                "faceConvertedManaCost": 2.0,
+                "faceManaValue": 2.0,
+                "faceName": "Bilbo, Luckwearer",
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "cardKingdomFoilId": "330429",
+                    "mtgjsonV4Id": "2dd58f50-d99e-5c65-840b-3d9a7a92ee1f",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "79892a5d-80df-4ee1-b482-30e57aaabf21",
+                    "scryfallIllustrationId": "b4627822-8baf-425c-8415-2ad6aef863db",
+                    "scryfallOracleId": "a73d9109-36e0-40ea-ab06-5c5f7eb4ac54",
+                    "tcgplayerProductId": "707034"
+                },
+                "isAlternative": true,
+                "language": "English",
+                "layout": "adventure",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false,
+                    "pauper_commander": true,
+                    "predh": false
+                },
+                "legalities": {},
+                "manaCost": "{1}{U}",
+                "manaValue": 2.0,
+                "name": "Bilbo, Luckwearer // Burglar's Plot",
+                "number": "254",
+                "otherFaceIds": [
+                    "08ec0d7c-9190-5eca-8b93-0c1d448a48ad"
+                ],
+                "power": "1",
+                "printings": [
+                    "HOB",
+                    "PW26"
+                ],
+                "purchaseUrls": {
+                    "cardKingdomFoil": "https://mtgjson.com/links/8d15b20047187ba5",
+                    "tcgplayer": "https://mtgjson.com/links/0bfddaed0623ed75"
+                },
+                "rarity": "uncommon",
+                "setCode": "HOB",
+                "side": "a",
+                "skuIds": {
+                    "foil": "46d88c7e-3619-5612-b0ec-5120134c3611",
+                    "nonfoil": "0fc3b293-46d1-55c4-b06e-20ed2a7988a3"
+                },
+                "subtypes": [
+                    "Halfling",
+                    "Rogue"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "Bilbo can't be blocked.\nWhenever Bilbo deals combat damage to a player, draw a card, then discard a card.",
+                "toughness": "1",
+                "type": "Legendary Creature — Halfling Rogue",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "f78786fe-cbfc-561e-abc0-bd431f967f62",
+                "variations": [
+                    "46807564-907b-5b0d-b00e-e9b8e00d2ab5",
+                    "f6245272-50e4-5e95-88a9-7e4e7e12808d"
+                ]
+            }
+        ],
+        "code": "HOB",
+        "decks": [
+            {
+                "code": "HOB",
+                "commander": [],
+                "displayCommander": [],
+                "mainBoard": [
+                    {
+                        "count": 2,
+                        "uuid": "c5db3128-91c0-598a-a2b9-07f236999136"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "c5db3128-91c0-598a-a2b9-07f236999136"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "d66d0178-65d5-566a-a2cb-9579911fd932"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "d66d0178-65d5-566a-a2cb-9579911fd932"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "def87f32-1c08-5bda-9661-48268a1fa4af"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "def87f32-1c08-5bda-9661-48268a1fa4af"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "20cd0b90-d094-5d5b-b6f7-63c582d26a7e"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "20cd0b90-d094-5d5b-b6f7-63c582d26a7e"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "58ede794-5b49-5d9a-93f2-ce99ef2c9723"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "58ede794-5b49-5d9a-93f2-ce99ef2c9723"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "0ff66df3-9092-58ca-b179-913f8cbca5d3"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "0ff66df3-9092-58ca-b179-913f8cbca5d3"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "568e67a5-b05e-56b5-b66f-0e1818e28a44"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "568e67a5-b05e-56b5-b66f-0e1818e28a44"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "e22ac803-e078-540b-bb38-5b5cdee01f2e"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "e22ac803-e078-540b-bb38-5b5cdee01f2e"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "62633e05-4b93-5d1d-b997-af74b764ae3b"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "62633e05-4b93-5d1d-b997-af74b764ae3b"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "34797056-4b61-59c0-ac2a-8046111318a8"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "dab62f88-e102-5c16-91bd-dd6cdf782a35"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "6cbdba29-1d43-541a-9d99-c86f9f560210"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "95bab782-a15d-5bd1-8460-2b8fe8a8210c"
+                    }
+                ],
+                "name": "The Hobbit Bundle Land Pack",
+                "planes": [],
+                "releaseDate": "2026-01-23",
+                "schemes": [],
+                "sealedProductUuids": [
+                    "ac894328-92e0-52fc-b0e1-c2362c666b3e",
+                    "26bd45e8-3996-5051-a92f-d2c84a763c32"
+                ],
+                "sideBoard": [],
+                "source": "https://magic.wizards.com/en/news/feature/collecting-the-hobbit",
+                "sourceSetCodes": [
+                    "HOB"
+                ],
+                "tokens": [],
+                "type": "Bundle Land Pack"
+            }
+        ],
+        "isFoilOnly": false,
+        "isOnlineOnly": false,
+        "isPartialPreview": true,
+        "keyruneCode": "HOB",
+        "languages": [
+            "English"
+        ],
+        "mtgoCode": "HOB",
+        "name": "The Hobbit",
+        "releaseDate": "2026-08-14",
+        "sealedProduct": [
+            {
+                "cardCount": 1,
+                "category": "bundle",
+                "contents": {
+                    "deck": [
+                        {
+                            "name": "The Hobbit Bundle Land Pack",
+                            "set": "hob"
+                        }
+                    ],
+                    "other": [
+                        {
+                            "name": "Spindown die"
+                        },
+                        {
+                            "name": "Card storage box"
+                        }
+                    ],
+                    "pack": [
+                        {
+                            "code": "bundle-promo",
+                            "set": "hob"
+                        }
+                    ],
+                    "sealed": [
+                        {
+                            "count": 9,
+                            "name": "The Hobbit Play Booster Pack",
+                            "set": "hob",
+                            "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330102",
+                    "cardtraderId": "389303",
+                    "mcmId": "885553",
+                    "miniaturemarketId": "019df9af6606732093ca0a7f2150e65b",
+                    "scgId": "SLD-MTG-BUN-HOB-EN",
+                    "tcgplayerProductId": "692966"
+                },
+                "name": "The Hobbit Bundle",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/f1224fc1d0908f4f"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "default",
+                "uuid": "ac894328-92e0-52fc-b0e1-c2362c666b3e"
+            },
+            {
+                "category": "bundle_case",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 6,
+                            "name": "The Hobbit Bundle",
+                            "set": "hob",
+                            "uuid": "ac894328-92e0-52fc-b0e1-c2362c666b3e"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "tcgplayerProductId": "692967"
+                },
+                "name": "The Hobbit Bundle Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/0c414be426bffa5b"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "default",
+                "uuid": "69e472dc-b0cf-5f9d-be5d-63eae86f3d40"
+            },
+            {
+                "category": "booster_box",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 12,
+                            "name": "The Hobbit Collector Booster Pack",
+                            "set": "hob",
+                            "uuid": "8fb173c2-250c-5919-8431-cc24685d10d3"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330104",
+                    "cardtraderId": "389301",
+                    "mcmId": "885552",
+                    "miniaturemarketId": "019df9af4e3e70d18bff08b624cfd32f",
+                    "scgId": "SLD-MTG-BBX-HOBCOLLECTOR-EN",
+                    "tcgplayerProductId": "692963"
+                },
+                "name": "The Hobbit Collector Booster Box",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/3afcb9c2b5a23613"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "collector",
+                "uuid": "9f730c77-137a-5c4d-905d-8e9ab96a1739"
+            },
+            {
+                "category": "booster_case",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 6,
+                            "name": "The Hobbit Collector Booster Box",
+                            "set": "hob",
+                            "uuid": "9f730c77-137a-5c4d-905d-8e9ab96a1739"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "tcgplayerProductId": "692964"
+                },
+                "name": "The Hobbit Collector Booster Box Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/5cdd83c94dd6d947"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "collector",
+                "uuid": "c252d520-3061-526e-bee6-26f65db802c9"
+            },
+            {
+                "category": "booster_case",
+                "identifiers": {
+                    "tcgplayerProductId": "692965"
+                },
+                "name": "The Hobbit Collector Booster Box Master Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/25f8db8a02e5fdb4"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "collector",
+                "uuid": "f7135d48-ff10-5819-afbc-8945592a8a45"
+            },
+            {
+                "cardCount": 15,
+                "category": "booster_pack",
+                "contents": {
+                    "pack": [
+                        {
+                            "code": "collector",
+                            "set": "hob"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330105",
+                    "cardtraderId": "389311",
+                    "mcmId": "885550",
+                    "scgId": "SLD-MTG-PCK-HOBCOLLECTOR-EN",
+                    "tcgplayerProductId": "692962"
+                },
+                "name": "The Hobbit Collector Booster Pack",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/2bf9cf649bb93dd5"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "collector",
+                "uuid": "8fb173c2-250c-5919-8431-cc24685d10d3"
+            },
+            {
+                "category": "limited_aid_tool",
+                "identifiers": {
+                    "cardKingdomId": "330103",
+                    "cardtraderId": "389306",
+                    "mcmId": "885555",
+                    "scgId": "SLD-MTG-DFT-HOB-EN",
+                    "tcgplayerProductId": "692975"
+                },
+                "name": "The Hobbit Draft Night",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/ae58702decfc0b23"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "draft_set",
+                "uuid": "2e548fa4-96d9-51d8-b001-b1639450dabe"
+            },
+            {
+                "category": "limited_aid_case",
+                "identifiers": {
+                    "tcgplayerProductId": "692976"
+                },
+                "name": "The Hobbit Draft Night Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/f0651d15fad111c3"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "draft_set",
+                "uuid": "7f0464af-f8c6-5350-9a31-f1658bb68802"
+            },
+            {
+                "cardCount": 1,
+                "category": "bundle",
+                "contents": {
+                    "deck": [
+                        {
+                            "name": "The Hobbit Bundle Land Pack",
+                            "set": "hob"
+                        }
+                    ],
+                    "other": [
+                        {
+                            "name": "Spindown die"
+                        },
+                        {
+                            "name": "Card storage box"
+                        }
+                    ],
+                    "pack": [
+                        {
+                            "code": "bundle-promo",
+                            "set": "hob"
+                        }
+                    ],
+                    "sealed": [
+                        {
+                            "count": 9,
+                            "name": "The Hobbit Play Booster Pack",
+                            "set": "hob",
+                            "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+                        },
+                        {
+                            "count": 1,
+                            "name": "The Hobbit Collector Booster Pack",
+                            "set": "hob",
+                            "uuid": "8fb173c2-250c-5919-8431-cc24685d10d3"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardtraderId": "389304",
+                    "mcmId": "885554",
+                    "scgId": "SLD-MTG-BUN-HOBGIFT-EN",
+                    "tcgplayerProductId": "692971"
+                },
+                "name": "The Hobbit Gift Bundle",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/7e229e01fc9ee642"
+                },
+                "releaseDate": "2026-09-04",
+                "setCode": "HOB",
+                "subtype": "gift_bundle",
+                "uuid": "26bd45e8-3996-5051-a92f-d2c84a763c32"
+            },
+            {
+                "category": "bundle_case",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 6,
+                            "name": "The Hobbit Gift Bundle",
+                            "set": "hob",
+                            "uuid": "26bd45e8-3996-5051-a92f-d2c84a763c32"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "mcmId": "885554",
+                    "tcgplayerProductId": "692972"
+                },
+                "name": "The Hobbit Gift Bundle Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/bc029fd138e68738"
+                },
+                "releaseDate": "2026-09-04",
+                "setCode": "HOB",
+                "subtype": "gift_bundle",
+                "uuid": "6705bce9-9ad3-5038-a823-22cd618ab5f1"
+            },
+            {
+                "category": "booster_box",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 30,
+                            "name": "The Hobbit Play Booster Pack",
+                            "set": "hob",
+                            "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330106",
+                    "cardtraderId": "389300",
+                    "mcmId": "885551",
+                    "miniaturemarketId": "019df9af2f9f717d92591d4e05baf58c",
+                    "scgId": "SLD-MTG-BBX-HOBPLAY-EN",
+                    "tcgplayerProductId": "692960"
+                },
+                "name": "The Hobbit Play Booster Box",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/a17d559ec3e07f4c"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "play",
+                "uuid": "28d49eb7-16ae-5ed9-8f37-efff67fd54c1"
+            },
+            {
+                "category": "booster_case",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 6,
+                            "name": "The Hobbit Play Booster Box",
+                            "set": "hob",
+                            "uuid": "28d49eb7-16ae-5ed9-8f37-efff67fd54c1"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "scgId": "SLD-MTG-BBX-HOBPLAYCASE-EN",
+                    "tcgplayerProductId": "692961"
+                },
+                "name": "The Hobbit Play Booster Box Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/e1159dd2a162cf1f"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "play",
+                "uuid": "b57609aa-65ff-5699-aecd-ecb54e81b3eb"
+            },
+            {
+                "cardCount": 14,
+                "category": "booster_pack",
+                "contents": {
+                    "pack": [
+                        {
+                            "code": "play",
+                            "set": "hob"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330107",
+                    "cardtraderId": "389310",
+                    "mcmId": "885549",
+                    "miniaturemarketId": "019df9af40ac73d1969e6100717333b8",
+                    "scgId": "SLD-MTG-PCK-HOBPLAY-EN",
+                    "tcgplayerProductId": "692959"
+                },
+                "name": "The Hobbit Play Booster Pack",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/37b9dd95d9ca1b9f"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "play",
+                "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+            },
+            {
+                "category": "limited_aid_case",
+                "contents": {
+                    "sealed": [
+                        {
+                            "count": 15,
+                            "name": "The Hobbit Prerelease Pack",
+                            "set": "hob",
+                            "uuid": "feeebce1-365f-5297-b6d5-179fd80e3286"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "tcgplayerProductId": "692974"
+                },
+                "name": "The Hobbit Prerelease Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/10abd7f310bf8cac"
+                },
+                "releaseDate": "2026-08-07",
+                "setCode": "HOB",
+                "subtype": "prerelease_kit",
+                "uuid": "cf5585ca-7a1e-5d47-97b7-a017f0db2bfb"
+            },
+            {
+                "cardCount": 1,
+                "category": "limited_aid_tool",
+                "contents": {
+                    "other": [
+                        {
+                            "name": "Deck box"
+                        },
+                        {
+                            "name": "Spindown die"
+                        }
+                    ],
+                    "pack": [
+                        {
+                            "code": "prerelease",
+                            "set": "hob"
+                        }
+                    ],
+                    "sealed": [
+                        {
+                            "count": 6,
+                            "name": "The Hobbit Play Booster Pack",
+                            "set": "hob",
+                            "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardtraderId": "389305",
+                    "mcmId": "885556",
+                    "scgId": "SLD-MTG-PRE-HOB-EN",
+                    "tcgplayerProductId": "692973"
+                },
+                "name": "The Hobbit Prerelease Pack",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/11d13110b656bccd"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "prerelease_kit",
+                "uuid": "feeebce1-365f-5297-b6d5-179fd80e3286"
+            },
+            {
+                "category": "box_set",
+                "identifiers": {
+                    "cardtraderId": "389309",
+                    "mcmId": "885559",
+                    "tcgplayerProductId": "692970"
+                },
+                "name": "The Hobbit Scene Box Case",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/77c9cd3a3ee5af2d"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "other",
+                "uuid": "80074b6f-8c3a-545d-b720-790a1f69aa07"
+            },
+            {
+                "cardCount": 6,
+                "category": "box_set",
+                "contents": {
+                    "other": [
+                        {
+                            "name": "6 borderless scene cards"
+                        }
+                    ],
+                    "sealed": [
+                        {
+                            "count": 3,
+                            "name": "The Hobbit Play Booster Pack",
+                            "set": "hob",
+                            "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330108",
+                    "cardtraderId": "389307",
+                    "mcmId": "885557",
+                    "miniaturemarketId": "019df9af86297390868617f201e01fd8",
+                    "scgId": "SLD-MTG-BXS-HOBSCENE-CRACK",
+                    "tcgplayerProductId": "692968"
+                },
+                "name": "The Hobbit Scene Box Crack the Plates",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/d2c5d133e5da02c4"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "other",
+                "uuid": "37505164-dd72-5df9-bee2-ce640b077694"
+            },
+            {
+                "cardCount": 6,
+                "category": "box_set",
+                "contents": {
+                    "other": [
+                        {
+                            "name": "6 borderless scene cards"
+                        }
+                    ],
+                    "sealed": [
+                        {
+                            "count": 3,
+                            "name": "The Hobbit Play Booster Pack",
+                            "set": "hob",
+                            "uuid": "cc3d4b38-33da-5bf3-84f7-70df313f9997"
+                        }
+                    ]
+                },
+                "identifiers": {
+                    "cardKingdomId": "330109",
+                    "cardtraderId": "389308",
+                    "mcmId": "885558",
+                    "miniaturemarketId": "019df9af92b57350983fd06d9462298b",
+                    "scgId": "SLD-MTG-BXS-HOBSCENE-TREASURES",
+                    "tcgplayerProductId": "692969"
+                },
+                "name": "The Hobbit Scene Box Treasures of Smaug",
+                "purchaseUrls": {
+                    "tcgplayer": "https://mtgjson.com/links/ac78106a40eee34b"
+                },
+                "releaseDate": "2026-08-14",
+                "setCode": "HOB",
+                "subtype": "other",
+                "uuid": "4a51d316-794d-5bfd-b16c-3d7c4ac80ed1"
+            }
+        ],
+        "tcgplayerGroupId": 24683,
+        "tokenSetCode": "THOB",
+        "totalSetSize": 80,
+        "translations": {
+            "Chinese Simplified": null,
+            "Chinese Traditional": null,
+            "French": null,
+            "German": null,
+            "Italian": null,
+            "Japanese": null,
+            "Korean": null,
+            "Portuguese (Brazil)": null,
+            "Russian": null,
+            "Spanish": null
+        },
+        "type": "expansion"
+    }
+}

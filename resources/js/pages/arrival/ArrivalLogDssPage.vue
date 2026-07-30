@@ -5,39 +5,46 @@ import vendortag from "../component/tag/VendorTag.vue"
 import ConditionTag from "../component/tag/ConditionTag.vue";
 import {groupConditionStore} from "@/stores/arrival/GroupCondition";
 import {arrDateConditionStore} from "@/stores/arrival/arrDateCondition";
-import { piniaMsgStore } from "@/stores/global/PiniaMsg";
 import { onMounted, reactive } from "vue";
 import {apiService} from "@/component/ApiGetService";
 import { apiDeleteService } from "@/component/ApiDeleteService";
 
 import {ref} from 'vue';
-import Loading from "vue-loading-overlay";
-import pglist from "../component/PgList.vue";
-import ModalButton from "../component/ModalButton.vue";
-import PiniaMsgForm from "../component/PiniaMsgForm.vue";
+import ModalButton from "../component/modal/ModalButton.vue";
 import { storeToRefs } from "pinia";
+
+import { usePaginate } from "../component/pagination/UsePaginate";
+import PaginatedTable from "../component/pagination/PaginatedTable.vue";
+
+import {MsgStore} from "../component/msg/MsgStore";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
 
 const router = useRouter();
 
 const gcStore = groupConditionStore();
 const arrDateStore = arrDateConditionStore();
+const msgStore = MsgStore();
 
 const {arrivalDate, vendorId} = storeToRefs(arrDateStore);
 
-const piniaMsg = piniaMsgStore();
 const currentList = reactive([]);
 const resultCount = ref(0);
 
-const logs = reactive([]);
-const isLoading = ref(false);
+const logs = ref([]);
+const loadStore = LoadStore();
+
+const {
+    page, pageCount, paginatedList, resetPage
+} = usePaginate(logs, 10);
 
 const result = reactive([]);
 onMounted(async() =>{
-    isLoading.value = true;
     await fetch();
-    });
+});
 
 const fetch = async() => {
+    resetPage();
+    loadStore.on();
     await apiService.get(
         {
             url:"/arrival/",
@@ -52,7 +59,7 @@ const fetch = async() => {
                 logs.value = result.value.logs;
             },
             onFinally:() => {
-                isLoading.value = false;
+                loadStore.off();
             }
         });
 }
@@ -72,101 +79,73 @@ const toList = () => {
 
     // 入荷情報を1件削除する。
 const deleteLog = async(arrival_id) => {
-    isLoading.value = true;
-    piniaMsg.reset();
+    loadStore.on();
+    msgStore.clear();
     await apiDeleteService.delete({
         url: "/arrival/",
          id:arrival_id,
         onSuccess: (response) => {
-            piniaMsg.setSuccess("削除しました。");
-            toList();
+            msgStore.success("削除しました。");
         },
         onFinally: () => {
-            isLoading.value = false;
+            loadStore.off();
         }
     });
     }
 
- const current = (data) => {
-    currentList.value = data.response;
-}
-
 </script>
 <template>
-    <article v-show="!isLoading">
-        <PiniaMsgForm></PiniaMsgForm>
-        <h2 class="ui header">入荷情報</h2>
-        <table class="ui collapsing definition table" v-if="result.value">
-            <tr>
-                <td>入荷先カテゴリ</td>
-                <td>
-                    <vendortag v-model="result.value.data.vendor"></vendortag>
-                </td>
-            </tr>
-            <tr>
-                <td>取引先名</td>
-                <td class="center aligned">
+    <section v-if="result.value">
+        <article>
+            <v-row class="w-50" gap="0">
+                <v-col cols="3">入荷先カテゴリ</v-col>
+                <v-col>
+                    <vendortag :vendor="result.value.data.vendor"></vendortag>
+                </v-col>
+            </v-row>
+            <v-row class="w-50" gap="10">
+                <v-col cols="3">取引先名</v-col>
+                <v-col>
                     <span v-if="result.value.data.vendor.supplier == ''">&mdash;</span>
                     <span v-if="result.value.data.vendor.supplier != ''">
                         {{ result.value.data.vendor.supplier }}
                     </span>
-                </td>
-            </tr>
-        </table>
-    </article>
-    <article class="mt-3" v-show="!isLoading">
-        <h2 class="ui header">商品一覧</h2>
-        <h3 class="ui devide">{{ resultCount }}件</h3>
-        <table class="ui striped table">
-            <thead>
-                <tr>
-                    <th class="one wide center aligned">入荷ID</th>
-                    <th class="one wide center aligned">在庫ID</th>
-                    <th class="">商品名</th>
-                    <th class="center aligned">状態</th>
-                    <th class="center aligned">枚数</th>
-                    <th class="center aligned">原価</th>
-                    <th class="one wide"></th>
-                    <th class="one wide"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(log, index) in currentList.value" :key="index" v-memo="currentList.value">
-                    <td class="center aligned">{{log.id}}</td>
-                    <td>{{ log.stock_id }}</td>
-                    <td>
-                            <cardlayout v-model:card="log.card" v-model:lang="log.lang"></cardlayout>
-                    </td>
-                    <td class="center aligned"><ConditionTag :name="log.condition"/></td>
-                    <td class="center aligned">{{log.quantity}}枚</td>
-                    <td class="center aligned"><i class="bi bi-currency-yen"></i>{{ log.cost }}</td>
-                    <td class="center aligned selectable">
-                        <a @click="toEditPage(log.id)"><v-icon icon="mdi-square-edit-outline" size="large"></v-icon></a>
-                    </td>
-                    <td class="center aligned">
-                        <ModalButton  :msg="`入荷ID[${log.id}]を削除しますか？`" @action="deleteLog(log.id)">
-                            <v-icon icon="mdi-trash-can-outline" size=""></v-icon>
-                        </ModalButton>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot class="full-width">
-                <tr>
-                    <th colspan="7">
-                        <div class="right aligned">
-                            <pglist ref="pglistRef" v-model:list="logs.value" @loadPage="current"></pglist>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
-        <div class="text-center">
-            <button class="ui gray basic button" @click="toList">一覧に戻る</button>
-        </div>
-    </article>
-    <loading
-         :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
+                </v-col>
+            </v-row>
+        </article>
+        <article class="mt-10">
+            <PaginatedTable v-model="page" :items="paginatedList" :page-count="pageCount" :hit-count="resultCount">
+                <template #header>
+                        <th width="8%" class="text-center">入荷ID</th>
+                        <th width="8%" class="text-center">在庫ID</th>
+                        <th>カード情報</th>
+                        <th width="8%" class="text-center">状態</th>
+                        <th width="8%" class="text-center">枚数</th>
+                        <th width="8%" class="text-center">原価</th>
+                        <th width="16%"></th>
+                </template>
+                <template #row="{  item }">
+                        <td class="text-center">{{item.id}}</td>
+                        <td class="text-center">{{ item.stock_id }}</td>
+                        <td>
+                                <cardlayout v-model:card="item.card" v-model:lang="item.lang"></cardlayout>
+                        </td>
+                        <td class="text-center"><ConditionTag :name="item.condition"/></td>
+                        <td class="text-center">{{item.quantity}}枚</td>
+                        <td class="text-center">&yen;{{ item.cost }}</td>
+                        <td class="text-right selectable">
+                            <v-btn class="mr-4" icon="mdi-square-edit-outline" variant="text" color="teal-lighten-1" @click="toEditPage(item.id)"></v-btn>
+                            <ModalButton  :msg="`入荷ID[${item.id}]を削除しますか？`" @action="deleteLog(item.id)">
+                                <v-icon icon="mdi-trash-can-outline" size=""></v-icon>
+                            </ModalButton>
+                        </td>
+                </template>
+            </PaginatedTable>
+            <div class="text-center">
+                <v-btn variant="outlined" color="teal-lighten-1" @click="toList"><v-icon icon="mdi-chevron-double-left" start></v-icon>一覧に戻る</v-btn>
+            </div>
+        </article>
+    </section>
 </template>
 <style scoped>
 i.icon {

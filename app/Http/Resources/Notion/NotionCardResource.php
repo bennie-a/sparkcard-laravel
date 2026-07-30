@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Notion;
 
+use App\Enum\CardLanguage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class NotionCardResource extends JsonResource
@@ -20,16 +21,16 @@ class NotionCardResource extends JsonResource
         $set = $this->getExpansion();
         return [
                 'id'=>$this->getId(),
-                'index' => $this->getIndex(),
                 'barcode' => $this->getBarcode(),
                 'name' => $this->getName(),
                 'enname' => $this->getEnname(),
+                'number' => $this->getIndex(),
                 'color'=>$this->getColor(),
                 'price' => $this->getPrice(),
                 'stock' => $this->getStock(),
-                'image' => $this->getImageUrl(),
-                'isFoil' => $this->isFoil(),
-                'lang' => $this->getLang(),
+                'image_url' => $this->getImageUrl(),
+                'foil' => ['is_foil' => $this->isFoil(),'name' => $this->isFoil() ? 'Foil' : ''],
+                'lang' => CardLanguage::reverse($this->getLang()),
                 'condition' => $this->getCondition(),
                 'exp' => ['name' => $set['name'], 'attr' => $set['attr']],
                 'desc' => $this->getDesc()

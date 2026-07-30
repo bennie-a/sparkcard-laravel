@@ -1,35 +1,19 @@
 <template>
-    <label
-        class="ui horizontal label"
-        v-if="isFoil"
-        :class="foilClass(foiltype)"
-        ><i class="star icon"></i>{{ foiltype }}</label
-    >
+    <v-chip density="compact" size="small" label variant="flat"
+        v-if="isFoil" :color="foilClass(foiltype)">
+        <v-icon icon="mdi-creation" class="mr-1"></v-icon>
+        {{ foiltype }}
+        </v-chip>
 </template>
-<script>
-export default {
-    props: {
-        isFoil: { type: Boolean },
-        foiltype: { type: String, default: "Foil" },
-    },
-    computed: {
-        foilClass: function () {
-            return (name) => {
-                if (name == "Foil") {
-                    return "topaz";
-                }
-                return "ruby";
-            };
-        },
-    },
+<script setup>
+defineProps({
+    isFoil: { type: Boolean },
+    foiltype: { type: String, default: "Foil" },
+});
+const foilClass = (name) => {
+    if (name == "Foil") {
+        return "purple-darken-2";
+    }
+    return "pink-darken-2";
 };
 </script>
-<style>
-.topaz {
-    background-color: #e9bc00 !important;
-}
-.ruby {
-    background-color: #c70067 !important;
-    color: white !important;
-}
-</style>

@@ -1,219 +1,200 @@
+<script setup>
+import { AxiosTask } from "../../component/AxiosTask";
+import ModalButton from "../component/modal/ModalButton.vue";
+import axios from "axios";
+import PromoDropdown from "../component/selection/PromoDropdown.vue";
+import ColorDropdown from "../component/selection/ColorDropdown.vue";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { MsgStore } from "../component/msg/MsgStore.js";
+import RequiredLabel from "../component/label/RequiredLabel.vue";
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
+import {LoadStore} from "@/stores/loading/LoadStore.js";
+
+const loadStore = LoadStore();
+const route = useRoute();
+const router = useRouter();
+const setname = ref(route.query.setname);
+const attr = ref(route.query.attr);
+const  language = ref("ja");
+
+const msgStore = MsgStore();
+
+const foiltype = ref([]);
+const multiverse_id = ref("");
+const image_url = ref("");
+
+let numberLabel = 'カード番号';
+
+const schema = yup.object({
+    number:yup.string().label(numberLabel).required(),
+});
+
+const {handleSubmit} = useForm({
+    validationSchema:schema
+});
+
+const {value:number, errorMessage:numMsg} = useField('number');
+
+const storeSchema = yup.object({
+    name:yup.string().label('カード名(JP)').required(),
+    en_name:yup.string().label('カード名(EN)').required(),
+    promotype_id:yup.number().label('プロモタイプ').required(),
+    color:yup.string().label('色').required(),
+});
+
+const {value:name} = useField('name');
+const {value:promotype_id} = useField('promotype_id');
+const {value:en_name} = useField('en_name');
+const {value:color} = useField('color');
+
+const isDisplay = ref(false);
+const search = handleSubmit(
+    async function () {
+        loadStore.on();
+        msgStore.clear();
+        isDisplay.value = false;
+        const query = {
+            params: {
+                setcode: attr.value,
+                number: number.value,
+                language: language.value,
+            },
+        };
+        await axios
+            .get("/api/scryfall", query)
+            .then((response) => {
+                let data = response.data;
+                name.value = data["name"];
+                en_name.value = data["en_name"];
+                multiverse_id.value = data["multiverseId"];
+                color.value = data["color"];
+                image_url.value = data["image_url"];
+                foiltype.value = data["foiltype"];
+
+                isDisplay.value = true;
+
+            })
+            .catch((e) => {
+                msgStore.error(e.response.data.detail);
+            })
+            .finally(() => {
+                loadStore.off();
+            });
+        }
+    );
+
+const store = async function() {
+    try {
+            loadStore.on();
+            const task = new AxiosTask();
+            msgStore.clear();
+            let json = {
+                setCode: attr.value,
+                name: name.value,
+                multiverseId: multiverse_id.value,
+                en_name: en_name.value,
+                color: color.value,
+                number: number.value,
+                is_skip: false,
+                image_url: image_url.value,
+                foiltype: foiltype.value,
+                promotype_id:promotype_id.value,
+            };
+            await storeSchema.validate(json);
+            await task.post("/database/card", json);
+        } catch(e) {
+            msgStore.error(e.message);
+        } finally {
+            loadStore.off();
+        }
+    }
+
+const toList = () => {
+    router.push({
+        name:'Ex',
+        query:{'attr':attr.value}
+    });
+}
+
+</script>
 <template>
-    <message-area></message-area>
-    <div class="mt-1 ui form segment">
-        <div class="two fields">
-            <div class="three wide field">
-                <label for="">セット名</label>
-                {{ setname }}({{ attr }})
-            </div>
-            <div class="three wide field">
-                <label for="">言語</label>
-                <div class="inline fields">
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input
-                                id="ja"
-                                type="radio"
-                                name="frequency"
-                                v-model="language"
-                                value="ja"
-                            />
-                            <label for="ja">日本語</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input
-                                type="radio"
-                                name="frequency"
-                                v-model="language"
-                                value="en"
-                                id="en"
-                            />
-                            <label for="en">英語</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="three wide field">
-                <label for="number">カード番号</label>
-                <div class="ui action input">
-                    <input
-                        type="text"
-                        v-model="number"
-                        class="two wide columns"
-                    />
-                    <button class="ui button" @click="search">
-                        <v-icon icon="mdi-magnify" size=""></v-icon>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section class="ui grid">
-        <div class="eight wide column">
-            <div class="ui form">
-                <div class="two fields">
-                    <div class="require eight wide field">
-                        <label for="cardName">カード名</label>
-                        <input type="text" id="cardName" v-model="name" />
-                    </div>
-                    <div class="require eight wide field">
-                        <label for="enName">英名</label>
-                        <input type="text" id="cardName" v-model="en_name" />
-                    </div>
-                </div>
-                <div class="three fields">
-                    <div class="eight wide field">
-                        <label for="color">色</label>
-                        <select v-model="color" class="ui dropdown">
-                            <option value="W">白</option>
-                            <option value="U">青</option>
-                            <option value="R">赤</option>
-                            <option value="B">黒</option>
-                            <option value="G">緑</option>
-                            <option value="M">多色</option>
-                            <option value="A">アーティファクト</option>
-                            <option value="L">無色</option>
-                            <option value="Land">土地</option>
-                            <option value="T">トークン</option>
-                            <option value="Art">アート・カード</option>
-                        </select>
-                    </div>
-                    <div class="eight wide field">
-                        <label for="promotype">プロモタイプ</label>
-                        <promo v-model:name="promotype_id" v-model:setcode="attr"></promo>
-                    </div>
-                </div>
-                <div class="two fields">
-                    <div class="six wide field">
-                        <label for="">仕上げ</label>
-                        <span>{{ foiltype }}</span>
-                    </div>
-                    <div class="four wide field">
-                        <label for="multiverse_id">Multiverse ID</label>
-                        <span>{{ multiverse_id }}</span>
-                    </div>
-                </div>
-                <ModalButton @action="store"
-                    ><span class="mdi mdi-check-bold"></span>
-                    登録する
-                </ModalButton>
-            </div>
-        </div>
-        <div class="four wide column">
-            <img :src="imageurl" :alt="name" />
-        </div>
-    </section>
     <section>
-        <loading
-            :active="isLoading"
-            :can-cancel="false"
-            :is-full-page="true"
-        ></loading>
+        <v-chip label class="font-weight-bold">{{ setname }}[{{ attr }}]</v-chip>
+        <v-form rounded class="pa-4 form_sheet w-75">
+                <v-row gap="10">
+                <v-col cols="3">
+                    <v-radio-group v-model="language" inline>
+                        <v-radio label="日本語" value="ja" color="teal-lighten-1"></v-radio>
+                        <v-radio label="英語" value="en" color="teal-lighten-1"></v-radio>
+                        </v-radio-group>
+                </v-col>
+                <v-col cols="3">
+                    <v-text-field :placeholder="numberLabel" v-model="number" validate-on="input"
+                    prepend-inner-icon="mdi-numeric" type="number" min="1" :error-messages="numMsg">
+                        <template v-slot:label>
+                            <RequiredLabel :text="numberLabel" required></RequiredLabel>
+                        </template>
+                </v-text-field>
+                </v-col>
+                <v-col cols="2" class="text-right">
+                    <v-btn @click="search" color="teal-lighten-1">検索する</v-btn>
+                </v-col>
+            </v-row>
+        </v-form>
+    </section>
+    <section class="mt-8" v-if="isDisplay">
+        <article>
+            <v-row>
+                <v-col col="6">
+                    <v-row>
+                        <v-col>
+                            <v-text-field placeholder="カード名(JP)" v-model="name">
+                                <template v-slot:label>
+                                    <RequiredLabel text="カード名(JP)" required></RequiredLabel>
+                                </template>
+                            </v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-text-field label="カード名(EN)" v-model="en_name">
+                                <template v-slot:label>
+                                    <RequiredLabel text="カード名(EN)" required></RequiredLabel>
+                                </template>
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="5">
+                            <ColorDropdown v-model="color" required></ColorDropdown>
+                        </v-col>
+                        <v-col>
+                            <PromoDropdown v-model:id="promotype_id" v-model:setcode="attr"></PromoDropdown>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="4">
+                            <div class="text-title-medium">仕上げ</div>
+                           <div v-if="foiltype.length != 0">
+                                <v-chip v-for="f in foiltype" :key="f"  class="mr-4" label>{{f}}</v-chip>
+                        </div>
+                        </v-col>
+                    </v-row>
+                    <v-row class="mt-10">
+                        <v-col class="text-center">
+                            <v-btn  variant="outlined" color="grey-darken-1" class="mr-4" @click="toList">
+                                <v-icon icon="mdi-chevron-double-left" start></v-icon>一覧画面に戻る
+                            </v-btn>
+                            <ModalButton @action="store">
+                            登録する
+                        </ModalButton>
+                        </v-col>
+                    </v-row>
+                </v-col>
+                <v-col>
+                    <v-img :src="image_url" class="w-50"></v-img>
+                </v-col>
+            </v-row>
+        </article>
     </section>
 </template>
-<script>
-import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/MessageArea.vue";
-import ModalButton from "../component/ModalButton.vue";
-import axios from "axios";
-import Loading from "vue-loading-overlay";
-import PromoDropdown from "../component/PromoDropdown.vue";
-
-export default {
-    components: {
-        "message-area": MessageArea,
-        ModalButton: ModalButton,
-        loading: Loading,
-        promo:PromoDropdown
-    },
-    data() {
-        return {
-            setname: this.$route.params.setname,
-            attr: this.$route.params.attr,
-            name: "",
-            en_name: "",
-            isFoil: false,
-            promotype_id: 1,
-            number: "",
-            multiverse_id: "",
-            color: "",
-            imageurl: "",
-            language: "ja",
-            isLoading: false,
-            foiltype:[]
-        };
-    },
-    methods: {
-        search: async function () {
-            this.isLoading = true;
-            this.$store.dispatch("message/clear");
-            this.$store.dispatch("clearMessage");
-            const task = new AxiosTask(this.$store);
-            const query = {
-                params: {
-                    setcode: this.attr,
-                    number: this.number,
-                    language: this.language,
-                },
-            };
-            await axios
-                .get("/api/scryfall", query)
-                .then((response) => {
-                    let data = response.data;
-                    this.name = data["name"];
-                    this.en_name = data["en_name"];
-                    this.multiverse_id = data["multiverseId"];
-                    this.color = data["color"];
-                    this.imageurl = data["image_url"];
-                    this.foiltype = data["foiltype"];
-                })
-                .catch((e) => {
-                    console.log(e);
-                    if (e.response.status != 200) {
-                        this.$store.dispatch(
-                            "message/error",
-                            e.response.data.detail
-                        );
-                    }
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                });
-        },
-        store: function () {
-            const task = new AxiosTask(this.$store);
-            let json = {
-                setCode: this.attr,
-                name: this.name,
-                isFoil: this.isFoil,
-                promotype: this.promotype,
-                multiverseId: this.multiverse_id,
-                en_name: this.en_name,
-                color: this.color,
-                number: this.number,
-                is_skip: false,
-                image_url: this.imageurl,
-                foiltype: ["通常版", "Foil"],
-                promotype_id:this.promotype_id,
-            };
-            const success = function (response, store) {
-                // this.back();
-                console.log(response.status);
-                store.dispatch("setSuccessMessage", `登録しました！`);
-            };
-            const fail = function () {};
-            task.post("/database/card", json, success);
-        },
-    },
-};
-</script>
-<style scoped>
-img {
-    width: 100%;
-}
-label {
-    cursor: hand;
-}
-</style>

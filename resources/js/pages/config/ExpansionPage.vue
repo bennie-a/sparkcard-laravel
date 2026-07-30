@@ -1,131 +1,130 @@
+<script setup>
+import { onMounted, reactive, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import axios from "axios";
+import { MsgStore } from "../component/msg/MsgStore.js";
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
+import yupRule from "../../../validation/yupRule.js";
+import RequiredLabel from "../component/label/RequiredLabel.vue";
+import {LoadStore} from "@/stores/loading/LoadStore.js";
+
+const router = useRouter();
+const route = useRoute();
+const loadStore = LoadStore();
+const result = ref([]);
+const resultCount = ref(0);
+const msgStore = MsgStore();
+let label = 'セット略称';
+
+onMounted(() => {
+    if (keyword.value) {
+        search();
+    }
+});
+
+const schema = yup.object({
+    keyword: yup.string().label(label).required().customAlpha()
+});
+
+const { handleSubmit } = useForm({
+    validationSchema: schema,
+    initialValues: {
+        keyword:
+            typeof route.query.attr === 'string'
+                ? route.query.attr
+                : ''
+    }
+});
+
+const { value: keyword, errorMessage } = useField('keyword');
+
+// 登録画面に遷移する。
+const show = () => {
+    router.push("/config/expansion/post");
+}
+
+const search = handleSubmit(
+    async() => {
+        try {
+            loadStore.on();
+            result.value = [];
+            resultCount.value = 0;
+            msgStore.clear();
+            const response = await axios.get("/api/database/exp", {
+                params: { query: keyword.value }
+            });
+            result.value = response.data;
+            resultCount.value = result.value.length;
+        }catch(e) {
+            let data = e.response.data;
+            msgStore.error(data.detail);
+        } finally {
+            loadStore.off();
+        }
+    }
+);
+
+// 各カード登録画面に遷移する。
+const toCardPage = (name, ex) => {
+    router.push({
+        name:name,
+        query: {'setname':ex.name, 'attr':ex.attr },
+    });
+}
+</script>
 <template>
-    <section>
-        <message-area></message-area>
-        <div class="ui grid">
-            <div class="six wide left floated column mt-1 ui form">
-                <div class="field">
-                    <label for="">略称(一部でもOK)</label>
-                    <div class="ui action input">
-                        <input type="text" v-model="keyword" />
-                        <button class="ui teal button" @click="search">
-                            検索
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="six wide right floated column right aligned bottom aligned content"
-            >
-                <button class="ui teal basic button" @click="show">
-                    新しく登録する
-                </button>
-            </div>
-        </div>
-        <div class="ui divider" v-if="$store.getters.card.length != 0"></div>
-        <table
-            class="ui table striped six column"
-            v-if="this.$store.getters.card.length != 0"
-        >
+    <article>
+        <v-form rounded class="form_sheet pa-4">
+            <v-row>
+                <v-col cols="3">
+                    <v-text-field
+                        v-model="keyword"
+                        :placeholder="label"
+                        append-inner-icon="mdi-magnify"
+                        @click:append-inner="search"
+                        :error-messages="errorMessage"
+                        validate-on="input"
+                        clearable>
+                        <template v-slot:label>
+                            <RequiredLabel :text="label" required></RequiredLabel>
+                        </template>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="9" class="text-right">
+                    <v-btn @click="show" color="teal-lighten-1" variant="outlined">新しく登録する</v-btn>
+                </v-col>
+                </v-row>
+        </v-form>
+    </article>
+    <article class="mt-10"  v-if="resultCount > 0">
+        <h2 class="text-title-medium">件数：{{ resultCount }}件</h2>
+        <v-table class="item_list mt-4 border-thin">
             <thead>
                 <tr>
+                    <th width="20%">ID</th>
                     <th class="">名称</th>
-                    <th class="">略称</th>
-                    <th>リリース日</th>
-                    <th class="one wide center aligned">カード件数</th>
-                    <th class="center aligned">カード登録</th>
+                    <th  width="8%" class="text-center">略称</th>
+                    <th width="10%" class="text-center">発売日</th>
+                    <th width="10%" class="text-center">カード件数</th>
+                    <th width="15%" class="text-center">カード登録</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="ex in this.$store.getters.card" :key="ex">
+                <tr v-for="ex in result" :key="ex.id">
+                    <td>{{ ex.notion_id }}</td>
                     <td>{{ ex.name }}</td>
-                    <td class="one wide">{{ ex.attr }}</td>
-                    <td class="one wide">{{ ex.release_date }}</td>
-                    <td v-if="ex.count != 0" class="one wide positive center aligned">
+                    <td  class="text-center">{{ ex.attr }}</td>
+                    <td  class="text-center">{{ ex.release_date }}</td>
+                    <td class="text-center" :class="ex.count !== 0 ? 'bg-white' : 'bg-deep-orange-lighten-4'">
                         {{ ex.count }}件
                     </td>
-                    <td v-else class="negative center aligned">
-                        {{ ex.count }}件
-                    </td>
-                    <td class="two wide right aligned">
-                        <div class="ui buttons">
-                            <button
-                                class="ui button teal"
-                                @click="toPostCardPage(ex.name, ex.attr)"
-                            >
-                            <v-icon icon="mdi-plus-circle"></v-icon>1件登録
-                            </button>
-                            <div class="or"></div>
-                            <button class="ui button teal" @click="toCsvCardPage(ex.attr)">
-                                <v-icon icon="mdi-file-document-outline"></v-icon>一括登録</button>
-                        </div>
+                    <td class="text-right">
+                        <v-btn icon="mdi-plus-circle" color="teal-lighten-1" class="mr-3" variant="text" @click="toCardPage('PostCardInfo', ex)"></v-btn>
+                        <v-btn icon="mdi-file-document-outline" color="teal-lighten-1" variant="text" @click="toCardPage('CardInfoCsvPage', ex)"></v-btn>
                     </td>
                 </tr>
             </tbody>
-        </table>
-    </section>
-    <now-loading></now-loading>
+        </v-table>
+    </article>
 </template>
-<script>
-import NowLoading from "../component/NowLoading.vue";
-import { AxiosTask } from "../../component/AxiosTask";
-import MessageArea from "../component/MessageArea.vue";
-
-export default {
-    data() {
-        return {
-            expansions: null,
-            keyword: null,
-        };
-    },
-    mounted: async function () {
-        this.$store.dispatch("message/clear");
-        this.$store.dispatch("expansion/clear");
-    },
-    methods: {
-        show: function () {
-            this.$router.push("/config/expansion/post");
-        },
-        // カード登録画面に遷移する。
-        toPostCardPage: function (setname, attr) {
-            this.$router.push({
-                name: "PostCardInfo",
-                params: { setname: setname, attr: attr },
-            });
-        },
-        // カードCSV登録画面に遷移する。
-        toCsvCardPage:function(attr) {
-            this.$router.push(
-                {
-                    name:"CardInfoCsvPage",
-                    params:{attr:attr}
-                }
-            );
-        },
-        search: async function () {
-            this.$store.dispatch("clearCards");
-            this.$store.dispatch("setLoad", true);
-            const query = { params: { query: this.keyword } };
-            const success = function (response, store, query) {
-                store.dispatch("setCard", response.data);
-            };
-            const fail = function (e, store, query) {
-                const data = e.response.data;
-                store.dispatch("message/error", data.detail);
-            };
-            const task = new AxiosTask(this.$store);
-            await task.get("/database/exp", query, success, fail);
-
-            this.$store.dispatch("setLoad", false);
-        },
-    },
-    components: {
-        "now-loading": NowLoading,
-        "message-area": MessageArea,
-    },
-};
-</script>
-<style scoped>
-i {
-    font-size: 1.5rem;
-}
-</style>
