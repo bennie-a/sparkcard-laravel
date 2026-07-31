@@ -18,6 +18,7 @@
     import { usePaginate } from "../component/pagination/UsePaginate";
     import { ColorMaster } from "../component/const/ColorMaster.js";
     import { filter } from "lodash";
+    import ProgressBar from "../component/modal/ProgressBar.vue";
 
     const isDraftOnly = ref(false);
     const color = ref("");
@@ -50,13 +51,6 @@
     const currentColor = computed(() => ColorMaster.find(tab.value).color);
     const dialog = ref(false);
     const finCount = ref(0);
-    const percent = computed(() => {
-        if (finCount.value == 0) {
-            return 0;
-        }
-
-        return Math.round(finCount.value / selected.value.length * 100);
-    });
 
     const upload = async(file) => {
         loadStore.on();
@@ -187,12 +181,5 @@
             </div>
         </div>
     </article>
-    <v-dialog v-model="dialog" width="60%">
-        <v-sheet class="pa-10 pb-6 text-center">
-            <v-progress-linear :model-value="percent" height="15" color="blue-darken-4" rounded></v-progress-linear>
-             <div class="mt-5 text-title-large">
-                {{percent}}&#37;
-            </div>
-        </v-sheet>
-    </v-dialog>
+    <progress-bar v-model:visible="dialog" :total="selected.length" :completed="finCount"></progress-bar>
 </template>

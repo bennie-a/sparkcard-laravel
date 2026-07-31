@@ -16,9 +16,13 @@
     import RunButton from "./component/button/RunButton.vue";
     import {LoadStore} from "@/stores/loading/LoadStore.js";
     import UseDateFormatter from "../functions/UseDateFormatter.js";
+    import ProgressBar from "./component/modal/ProgressBar.vue";
 
     const msgStore = MsgStore();
     const loadStore = LoadStore();
+    const isProgress = ref(false);
+    const filtered = ref(30);
+    const completed = ref(20);
 
     // リアクティブデータの定義
     const selectedSet = ref("");
@@ -255,4 +259,5 @@
             </div>
         </section>
     </article>
+    <progress-bar v-model:visible="isProgress" :total="filtered" :completed="completed"></progress-bar>
 </template>
