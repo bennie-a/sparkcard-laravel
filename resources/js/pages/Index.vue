@@ -20,7 +20,6 @@
 
     const msgStore = MsgStore();
     const loadStore = LoadStore();
-    const isProgress = ref(false);
     const filtered = ref(30);
     const completed = ref(20);
 
@@ -259,5 +258,4 @@
             </div>
         </section>
     </article>
-    <progress-bar v-model:visible="isProgress" :total="filtered" :completed="completed"></progress-bar>
 </template>

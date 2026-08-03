@@ -2,7 +2,6 @@
 
     import { onMounted, reactive, ref } from 'vue';
     import FileUpload from "../component/FileUpload.vue";
-    import Loading from "vue-loading-overlay";
     import axios from 'axios';
     import condition from "../component/tag/ConditionTag.vue";
     import cardlayout from "../component/CardLayout.vue";
@@ -12,13 +11,15 @@
     import { usePaginate } from "@/pages/component/pagination/UsePaginate";
     import {MsgStore} from "@/pages/component/msg/MsgStore";
     import UseDateFormatter from '../../functions/UseDateFormatter.js';
-
+    import ProgressBar from '../component/modal/ProgressBar.vue';
+    import { LoadStore } from '../../stores/loading/LoadStore.js';
 
     const msgStore = MsgStore();
+    const loadStore = LoadStore();
 
     const result = reactive([]);
     const resultCount = ref(0);
-    const isLoading = ref(false);
+    const isProgress = ref(false);
 
     const {toString} = UseDateFormatter();
     const shiptDate = ref(toString(new Date()));
@@ -27,11 +28,14 @@
         page, pageCount, paginatedList, resetPage
     } = usePaginate(result, 4);
 
+    const completed = ref(0);
+
     /**
      * インポート実行
      */
     const post = async function() {
-        isLoading.value = true;
+        isProgress.value = true;
+        completed.value = 0;
         await Promise.all(result.value.map(async (r) => {
             const json =
                 {
@@ -55,18 +59,19 @@
             await axios.post('/api/shipping', json)
                 .then((response) => {
                     console.log('Imported:', response.data);
+                    completed.value++;
                 }).catch((e) => {
                     console.log('Import Error:', e.response.data);
                 });
             }));
-        isLoading.value = false;
+        isProgress.value = false;
         msgStore.success('インポートが完了しました。');
     };
 
     const uploadFile = async(file) => {
         resetPage();
         msgStore.clear();
-        isLoading.value = true;
+        loadStore.on();
         result.value = [];
         const formData = new FormData();
         formData.append('file', file);
@@ -86,7 +91,7 @@
                 console.log('Error:', error);
                 msgStore.error(errRows);
             }).finally(() => {
-                isLoading.value = false;
+                loadStore.off();
             });
     };
 
@@ -168,8 +173,5 @@
         </article>
         <ListPagination v-model="page" :length="pageCount"></ListPagination> <!-- ページネーションコンポーネント -->
     </section>
-    <loading
-    :active="isLoading"
-         :can-cancel="false" :is-full-page="true" />
-
+    <progress-bar v-model:visible="isProgress" :completed="completed" :total="resultCount"></progress-bar>
 </template>
