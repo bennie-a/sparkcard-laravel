@@ -29,7 +29,13 @@ class CardJsonFileService {
             }
 
             $enname = $c['name'];
-            $promoType = \App\Facades\Promo::find($cardtype);
+            $isReg = CardInfo::isExist($setcode, $cardtype->number());
+            $promoType = null;
+            if ($isReg) {
+                $promoType = \App\Facades\Promo::findByCardInfo($setcode, $cardtype->number());
+            } else {
+                $promoType = \App\Facades\Promo::find($cardtype);
+            }
             $foiltype = $cardtype->foiltype();
             if ($this->isExclude($cardtype, $promoType, $isDraft, $colorFilter)) {
                 logger()->debug('skip card:', [GCon::NAME => $cardtype->jpname($enname),
@@ -37,12 +43,13 @@ class CardJsonFileService {
                 continue;
             }
 
+
             $newCard = ['setCode'=> $setcode, GCon::NAME => $cardtype->jpname($enname), "en_name" => $enname,
             'scryfallId' => $cardtype->scryfallId(),
             'color' => $cardtype->color(), Column::NUMBER => $cardtype->number(),
              Column::PROMOTYPE => [GCon::ID=> $promoType->id, GCon::NAME => $promoType->name],
               Column::FOIL_TYPE => $foiltype,
-             'isReg' => CardInfo::isExist($setcode, $cardtype->number())];
+             'isReg' => $isReg];
 
              if ($cardtype->multiverseId() != 0) {
                 $newCard[Column::MULTIVERSEID] = $cardtype->multiverseId();

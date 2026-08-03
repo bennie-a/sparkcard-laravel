@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Exceptions\api\NoExpException;
 use App\Exceptions\api\NoPromoTypeException;
+use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
 use App\Services\Constant\StockpileHeader;
@@ -38,5 +39,16 @@ class PromoService {
         }
         $result = Promotype::findBySetCode($setcode);
         return $result;
+    }
+
+    /**
+     * カード情報に紐づくプロモタイプを取得する。
+     * @param string $setcode
+     * @param string $number
+     * @return array
+     */
+    public function findByCardInfo(string $setcode, string $number) {
+        $info = CardInfo::findCardByNumber($setcode, $number);
+        return Promotype::find($info->promotype_id);
     }
 }

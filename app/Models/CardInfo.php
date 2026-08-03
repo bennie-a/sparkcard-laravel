@@ -81,10 +81,17 @@ class CardInfo extends Model
         return $info;
     }
 
-    public static function findCardByAttr($attr, $name) {
+    public static function findCardByAttr(string $attr, string $name) {
         $condition = ['expansion.attr' => $attr, 'card_info.name' => $name];
         $list = self::fetchByCondition($condition);
         return $list[0];
+    }
+
+    public static function findCardByNumber(string $setcode, string $number) {
+        $conditions = ['expansion.attr' => $setcode, 'card_info.number' => $number];
+        $query = CardInfo::where($conditions)->join('expansion', 'expansion.notion_id', '=', 'card_info.exp_id');
+        $card = $query->first();
+        return $card;
     }
 
     public static function findSingleCard($setcode, $name, $isFoil) {
