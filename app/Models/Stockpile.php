@@ -25,8 +25,13 @@ class Stockpile extends Model
 
     protected $fillable = ['id', 'card_id', 'language',  'condition', 'quantity', 'base_id', 'updated_at'];
 
+    public function orderitems()
+    {
+        return $this->hasMany(OrderItem::class, 'stock_id');
+    }
+
     public function cardinfo() {
-        return $this->belongsTo(CardInfo::class, StockpileHeader::CARD_ID, GlobalConstant::ID);
+        return $this->belongsTo(CardInfo::class, StockpileHeader::CARD_ID);
     }
 
     /**

@@ -21,11 +21,16 @@ use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\StockpileHeader;
 use DateTime;
+use ShiptLogRepository;
 
 /**
  * 出荷ログ機能のサービスクラス
  */
 class ShiptLogService extends AbstractCsvService {
+
+    public function __construct(private ShiptLogRepository $repo) {
+
+    }
 
     /**
      * 出荷ログ用のCSV読み込みクラスを取得する。
@@ -152,24 +157,26 @@ class ShiptLogService extends AbstractCsvService {
      * @return array
      */
     public function show(string $orderId) {
-        $list = ShippingLog::fetchByOrderId($orderId);
-        $items = $list->map(function($slog) {
-                return ["id" => $slog["stock_id"],  GC::NAME => $slog["cardname"], Con::EXP => [GC::NAME => $slog[SC::SETNAME], Con::ATTR => $slog['exp_attr']],
-                             SC::CONDITION => $slog[SC::CONDITION], SC::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
-                            SC::LANG => $slog[SC::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL],
-                            SC::FOIL => ['is_foil' => $slog['isFoil'], GC::NAME => $slog['foilname']],
-                            'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
-                            Con::PROMOTYPE => [GC::ID => $slog->promotype_id, GC::NAME => $slog->promo_name
-                ]];
-        });
-        // $items = array_map(function($log) {
-        // }, $list);
-        $slog = $list[0];
-        $info = [SC::ORDER_ID => $slog->order_id, SC::BUYER => $slog[SC::BUYER],
-                        SC::SHIPPING_DATE => $slog->shipping_date,  SC::ZIPCODE => '〒'.$slog->zip,
-                        SC::ADDRESS => $slog->address, GC::CARD => $items->toArray()];
-        return $info;
+        return $this->repo->findByOrderId($orderId);
+        // $list = ShippingLog::fetchByOrderId($orderId);
+        // $items = $list->map(function($slog) {
+        //         return ["id" => $slog["stock_id"],  GC::NAME => $slog["cardname"], Con::EXP => [GC::NAME => $slog[SC::SETNAME], Con::ATTR => $slog['exp_attr']],
+        //                      SC::CONDITION => $slog[SC::CONDITION], SC::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
+        //                     SC::LANG => $slog[SC::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL],
+        //                     SC::FOIL => ['is_foil' => $slog['isFoil'], GC::NAME => $slog['foilname']],
+        //                     'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
+        //                     Con::PROMOTYPE => [GC::ID => $slog->promotype_id, GC::NAME => $slog->promo_name
+        //         ]];
+        // });
+        // // $items = array_map(function($log) {
+        // // }, $list);
+        // $slog = $list[0];
+        // $info = [SC::ORDER_ID => $slog->order_id, SC::BUYER => $slog[SC::BUYER],
+        //                 SC::SHIPPING_DATE => $slog->shipping_date,  SC::ZIPCODE => '〒'.$slog->zip,
+        //                 SC::ADDRESS => $slog->address, GC::CARD => $items->toArray()];
+        // return $info;
         // $log = ShippingLog::find($id);
+
     }
 
     /**

@@ -12,6 +12,14 @@ use Tests\TestCase;
 #[CoversTestClass(ShiptLogController::class)]
 class ShiptDetailTest extends TestCase
 {
+    public function setup():void {
+        parent::setup();
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
+    }
+
     /**
      * A basic feature test example.
      */
