@@ -13,7 +13,7 @@ class ShiptConstant extends StockpileHeader {
     public const BUYER = 'buyer_name';
     public const PRODUCT_NAME = "product_name";
     public const PRODUCT_PRICE = "product_price";
-    public const SHIPPING_DATE = "shipping_date";
+    public const SHIPPING_DATE = "shipt_date";
     public const PRODUCT_ID = "original_product_id";
     public const POSTAL_CODE = "shipping_postal_code";
     public const STATE = "shipping_state";

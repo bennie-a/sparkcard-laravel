@@ -24,17 +24,21 @@ return new class extends Migration
             $table->integer('item_count');
             $table->integer('items_subtotal');
             $table->integer('coupon_discount')->default(0);
-            $table->integer('shipt_fee')->default(0);
+            $table->unsignedInteger('shipt_fee_id');
             $table->integer('grand_total');
 
             $table->date('shipt_date');
 
             $table->timestamps();
 
+
             $table->unique(
                 ['platform', 'platform_order_id'],
                 'orders_platform_order_id_unique'
             );
+            $table->foreign('shipt_fee_id', 'orders_shipt_fee_id_fkey')
+                ->references('id')
+                ->on('shipping');
         });
     }
 

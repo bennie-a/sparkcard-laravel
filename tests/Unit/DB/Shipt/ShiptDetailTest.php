@@ -2,8 +2,11 @@
 
 namespace Tests\Unit\DB\Shipt;
 use App\Http\Controllers\ShiptLogController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\Shipt\TestOrderSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
 /**
@@ -18,6 +21,7 @@ class ShiptDetailTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $this->seed(TestCardInfoSeeder::class);
         $this->seed(TestStockpileSeeder::class);
+        $this->seed(TestOrderSeeder::class);
     }
 
     /**
