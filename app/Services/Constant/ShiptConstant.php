@@ -26,9 +26,16 @@ class ShiptConstant extends StockpileHeader {
     public const FEE = "shipping_fee";
     public const ITEMS = "items";
     public const SHIPMENT = 'shipment';
+
+    /** @deprecated 6.1.0 */
     public const SINGLE_PRICE = 'single_price';
+
     public const TOTAL_PRICE = 'total_price';
     public const BUYER_INFO = 'buyer_info';
     public const STOCK_ID = 'stock_id';
     public const IS_REGISTERED = 'isRegistered';
+    public const ITEM_COUNT = 'item_count';
+    public const ITEMS_SUBTOTAL = 'items_subtotal';
+    public const UNIT_PRICE = 'unit_price';
+    public const SUBTOTAL = 'subtotal';
 }

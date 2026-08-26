@@ -30,7 +30,7 @@ class OrdersFactory extends Factory
             'platform_order_id' => $this->createOrderId($platform),
             SCon::ZIPCODE => $this->faker->postcode1.'-'.$this->faker->postcode2,
             SCon::ADDRESS => $this->faker->prefecture.$this->faker->city.$this->faker->streetAddress.$this->faker->secondaryAddress,
-            'item_count' => $this->faker->numberBetween(1, 10),
+            SCon::ITEM_COUNT => $this->faker->numberBetween(1, 10),
             'items_subtotal' => $itemSubtotal,
             'coupon_discount' => $coupon,
             'grand_total' => $itemSubtotal - $coupon,
