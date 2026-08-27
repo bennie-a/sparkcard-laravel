@@ -60,7 +60,7 @@ class ShiptLogController extends Controller
      */
     public function show(int $id) {
         $info = $this->service->show($id);
-        return response()->json($info, Response::HTTP_OK);
+        return response()->json(new OrderResource($info), Response::HTTP_OK);
     }
 
     /**
@@ -76,7 +76,7 @@ class ShiptLogController extends Controller
             throw new CsvInvalidRowException($this->service->getError());
         }
 
-        return response(OrderResource::collection($records), Response::HTTP_CREATED);
+        return response(CsvOrderResource::collection($records), Response::HTTP_CREATED);
     }
 
 }

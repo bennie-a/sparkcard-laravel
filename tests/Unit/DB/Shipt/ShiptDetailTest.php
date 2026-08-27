@@ -3,7 +3,8 @@
 namespace Tests\Unit\DB\Shipt;
 use App\Http\Controllers\ShiptLogController;
 use App\Models\Shipt\Orders;
-use App\Services\Shipt\ShiptLogService;
+use Illuminate\Http\Response;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestDox;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\Shipt\TestOrderSeeder;
@@ -11,6 +12,7 @@ use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
+use App\Services\Constant\GlobalConstant as GC;
 
 #[TestDox('注文情報詳細機能に関するテスト')]
 #[CoversTestClass(ShiptLogController::class)]
@@ -33,15 +35,13 @@ class ShiptDetailTest extends TestCase
         $order = Orders::inRandomOrder()->first();
         $this->assertNotNull($order);
 
-        $service = $this->app->make(ShiptLogService::class);
-        $info = $service->show($order->id);
-        $this->assertNotNull($info);
-        $this->assertNotNull($info->orderitems);
-        $this->assertNotNull($info->previous());
-        $this->assertNotNull($info->next());
-        // $response = $this->get('/');
-
-        // $response->assertStatus(200);
+        $response = $this->get('/api/shipping/'.$order->id);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson(function(AssertableJson $json) use ($order) {
+            $json->where(
+                GC::ID,$order->id
+            )->etc();
+        });
     }
 
     // 通常版
