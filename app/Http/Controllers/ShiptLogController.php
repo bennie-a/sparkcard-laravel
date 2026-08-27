@@ -53,13 +53,13 @@ class ShiptLogController extends Controller
     }
 
     /**
-     * 出荷IDに該当する出荷情報を1件取得する。
+     * 注文情報IDに該当する出荷情報を1件取得する。
      *
-     * @param string $orderId 注文番号
+     * @param int $id 注文情報ID
      * @return Response
      */
-    public function show(string $orderId) {
-        $info = $this->service->show($orderId);
+    public function show(int $id) {
+        $info = $this->service->show($id);
         return response()->json($info, Response::HTTP_OK);
     }
 

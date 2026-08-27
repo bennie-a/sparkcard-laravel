@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\DB\Shipt;
 use App\Http\Controllers\ShiptLogController;
+use App\Models\Shipt\Orders;
+use App\Services\Shipt\ShiptLogService;
+use PHPUnit\Framework\Attributes\TestDox;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\Shipt\TestOrderSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
@@ -9,9 +12,7 @@ use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
-/**
- * 注文情報詳細機能に関するテスト
- */
+#[TestDox('注文情報詳細機能に関するテスト')]
 #[CoversTestClass(ShiptLogController::class)]
 class ShiptDetailTest extends TestCase
 {
@@ -27,10 +28,32 @@ class ShiptDetailTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
+    public function test_通常版(): void
     {
-        $response = $this->get('/');
+        $order = Orders::inRandomOrder()->first();
+        $this->assertNotNull($order);
 
-        $response->assertStatus(200);
+        $service = $this->app->make(ShiptLogService::class);
+        $info = $service->show($order->id);
+        $this->assertNotNull($info);
+        $this->assertNotNull($info->orderitems);
+        $this->assertNotNull($info->previous());
+        $this->assertNotNull($info->next());
+        // $response = $this->get('/');
+
+        // $response->assertStatus(200);
     }
+
+    // 通常版
+    // Non-foil版
+    // Foil版
+    // Promo版
+    // 送料_ミニレター
+    // 送料_クリックポスト
+    // 送料_簡易書留
+    // 最初のレコードを表示⇒prev_idが0
+    // 最後のレコードを表示⇒next_idが0
+
+    // エラー_注文情報が存在しない
+    // IDが数字以外
 }

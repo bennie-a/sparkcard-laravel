@@ -23,4 +23,22 @@ class Orders extends Model
     {
         return $this->belongsTo(Shipping::class, 'shipt_fee_id');
     }
+
+    /**
+     * 一つ前のレコードを取得する。
+     *
+     * @return Orders|null
+     */
+    public function previous() {
+        return $this->where('id', '<', $this->id)->orderBy('id', 'desc')->first();
+    }
+
+    /**
+     * 一つ後のレコードを取得する。
+     *
+     * @return Orders|null
+     */
+    public function next() {
+        return $this->where('id', '>', $this->id)->orderBy('id', 'asc')->first();
+    }
 }

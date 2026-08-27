@@ -7,7 +7,9 @@ use App\Exceptions\api\Shipt\ShiptNotionException;
 use App\Facades\CardBoard;
 use App\Files\Reader\ShiptLogCsvReader;
 use App\Models\ShippingLog;
+use App\Models\Shipt\Orders;
 use App\Models\Stockpile;
+use App\Repositories\Api\Shipt\ShiptLogRepository;
 use App\Services\AbstractCsvService;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Date;
@@ -21,7 +23,6 @@ use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\StockpileHeader;
 use DateTime;
-use ShiptLogRepository;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -153,11 +154,11 @@ class ShiptLogService extends AbstractCsvService {
     /**
      * 出荷IDに該当する出荷情報を取得する。
      *
-     * @param string $orderId
-     * @return array
+     * @param int $id
+     * @return Orders
      */
-    public function show(string $orderId) {
-        return $this->repo->findByOrderId($orderId);
+    public function show(int $id) {
+        return $this->repo->find($id);
         // $list = ShippingLog::fetchByOrderId($orderId);
         // $items = $list->map(function($slog) {
         //         return ["id" => $slog["stock_id"],  GC::NAME => $slog["cardname"], Con::EXP => [GC::NAME => $slog[SC::SETNAME], Con::ATTR => $slog['exp_attr']],
@@ -182,7 +183,7 @@ class ShiptLogService extends AbstractCsvService {
     /**
      * 出荷枚数と在庫数のチェックを行う。
      *
-     * @param Stockpile $stock
+     * @param int $stockId
      * @param integer $shipment
      * @throws ShipmentOrderException
      */

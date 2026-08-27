@@ -9,14 +9,14 @@ use App\Models\Shipt\Orders;
 class ShiptLogRepository
 {
     /**
-     * 注文番号から注文情報を取得する。
+     * 注文情報IDから注文情報を取得する。
      *
-     * @param string $orderId
+     * @param int $id 注文情報ID
      * @return Orders|null
      */
-    public function findByOrderId(string $orderId)
+    public function find(int $id)
     {
-        return Orders::query()->where('order_id', $orderId)->
+        return Orders::query()->where('id', $id)->
                                                     with([
                                                         'orderItems.stockpile',
                                                         'orderItems.stockpile.cardinfo',
