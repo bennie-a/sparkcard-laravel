@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources\Shipt;
 
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Services\Constant\ShiptConstant as SC;
 class OrderResource extends JsonResource
 {
     /**
@@ -15,16 +16,20 @@ class OrderResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'platform' => $this->platform,
-            'platform_order_id' => $this->platform_order_id,
-            // 'buyer' => $order->buyer(),
-            // 'postal_code' => $order->postal_code(),
-            // 'shipping_date' => $order->shipt_date,
+            GlobalConstant::ID => $this->id,
+            SC::PLATFORM => $this->platform,
+            SC::PLATFORM_ORDER_ID => $this->platform_order_id,
+            SC::ZIPCODE => $this->zip_code,
+            SC::ADDRESS => $this->address,
+            SC::BUYER => $this->buyer_name,
+            SC::SHIPPING_DATE => $this->shipt_date,
+            SC::ITEM_COUNT => $this->item_count,
+            SC::ITEM_SUBTOTAL => $this->item_subtotal,
+            SC::DISCOUNT_AMOUNT => $this->coupon_discount,
+            SC::GRAND_TOTAL => $this->grand_total,
             // 'orderitems' => OrderItemResource::collection($this->whenLoaded('orderitems')),
-            'prev_id' => $this->previous()?->id ?? 0,
-            'next_id' => $this->next()?->id ?? 0,
+            SC::PREV_ID => $this->previous()?->id ?? 0,
+            SC::NEXT_ID => $this->next()?->id ?? 0,
         ];
-        // return parent::toArray($request);
     }
 }

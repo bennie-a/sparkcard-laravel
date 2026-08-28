@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Models\Shipt;
+
+use App\Services\Constant\GlobalConstant;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,5 +43,9 @@ class Orders extends Model
      */
     public function next() {
         return $this->where('id', '>', $this->id)->orderBy('id', 'asc')->first();
+    }
+
+    public function getShiptDateAttribute(string $value) {
+        return CarbonImmutable::parse($value)->format(GlobalConstant::DATE_FORMAT);
     }
 }

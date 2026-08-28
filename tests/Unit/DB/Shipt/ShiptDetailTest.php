@@ -3,6 +3,7 @@
 namespace Tests\Unit\DB\Shipt;
 use App\Http\Controllers\ShiptLogController;
 use App\Models\Shipt\Orders;
+use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Response;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -12,7 +13,9 @@ use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
-use App\Services\Constant\GlobalConstant as GC;
+use App\Services\Constant\ShiptConstant as SC;
+use Carbon\CarbonImmutable;
+use Tests\Util\TestDateUtil;
 
 #[TestDox('注文情報詳細機能に関するテスト')]
 #[CoversTestClass(ShiptLogController::class)]
@@ -27,20 +30,37 @@ class ShiptDetailTest extends TestCase
         $this->seed(TestOrderSeeder::class);
     }
 
-    /**
-     * A basic feature test example.
-     */
-    public function test_通常版(): void
+    #[TestDox('顧客情報と金額情報を検証する。')]
+    public function test_顧客情報と金額情報(): void
     {
-        $order = Orders::inRandomOrder()->first();
-        $this->assertNotNull($order);
+        $order = Orders::inRandomOrder()->skip(1)->first();
+        $this->assertNotNull($order, '期待値側の注文情報がありません');
 
         $response = $this->get('/api/shipping/'.$order->id);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson(function(AssertableJson $json) use ($order) {
-            $json->where(
-                GC::ID,$order->id
-            )->etc();
+            $json->whereAll([
+                GlobalConstant::ID => $order->id,
+                SC::PLATFORM => $order->platform,
+                SC::PLATFORM_ORDER_ID => $order->platform_order_id,
+                SC::ZIPCODE => $order->zip_code,
+                SC::ADDRESS => $order->address,
+                SC::BUYER => $order->buyer_name,
+                SC::SHIPPING_DATE => $order->shipt_date,
+                SC::ITEM_COUNT => $order->item_count,
+                SC::ITEM_SUBTOTAL => $order->item_subtotal,
+                SC::GRAND_TOTAL => $order->grand_total,
+                SC::PREV_ID => $order->previous()?->id,
+                SC::NEXT_ID => $order->next()?->id
+            ])->etc();
+
+            // 発送日の形式チェック
+            $json->whereType(SC::SHIPPING_DATE, 'string')
+                ->where(SC::SHIPPING_DATE, function ($value) {
+                    // yyyy/MM/dd にマッチする正規表現
+                    return preg_match('/^\d{4}\/\d{2}\/\d{2}$/', $value) === 1;
+                })
+                ->etc();
         });
     }
 

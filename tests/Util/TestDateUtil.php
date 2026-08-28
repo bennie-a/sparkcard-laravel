@@ -105,4 +105,14 @@ class TestDateUtil {
     public static function formatDateTime(string $day):string {
         return CarbonImmutable::parse($day)->format(GlobalConstant::DATE_TIME_FORMAT);
     }
+
+    /**
+     * 日付をyyyy/MM/dd形式に変換する。
+     *
+     * @param string $day
+     * @return string
+     */
+    public static function formatISO8601(string $day):string {
+        return CarbonImmutable::parse($day)->format(GlobalConstant::DATE_FORMAT);
+    }
 }
