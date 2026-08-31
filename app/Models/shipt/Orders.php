@@ -2,6 +2,8 @@
 
 namespace App\Models\Shipt;
 
+use App\Models\Shipping;
+use App\Models\Shipt\OrderItem;
 use App\Services\Constant\GlobalConstant;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,16 +17,16 @@ class Orders extends Model
     protected $table = 'orders';
 
     protected $fillable = ['id', 'platform', 'platform_order_id',  'buyer_name', 'zip_code', 'address', 'item_count',
-                                            'items_subtotal ', 'coupon_discount', 'shipt_fee_id', 'grand_total', 'shipt_date'];
+                                            'items_subtotal', 'coupon_discount', 'shipt_fee_id', 'grand_total', 'shipt_date'];
 
     public function orderitems()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
     }
 
-    public function shipt_fee()
+    public function shipping()
     {
-        return $this->belongsTo(Shipping::class, 'shipt_fee_id');
+        return $this->belongsTo(Shipping::class, 'shipt_fee_id', GlobalConstant::ID);
     }
 
     /**

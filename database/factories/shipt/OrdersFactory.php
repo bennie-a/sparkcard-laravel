@@ -34,9 +34,57 @@ class OrdersFactory extends Factory
             'items_subtotal' => $itemSubtotal,
             'coupon_discount' => $coupon,
             'grand_total' => $itemSubtotal - $coupon,
-            'shipt_fee_id' => $this->fetchShiptFeeId($itemSubtotal),
+            SCon::FEE_ID => $this->fetchShiptFeeId($itemSubtotal),
             SCon::SHIPPING_DATE => $this->faker->dateTimeBetween('-5 days', 'now'),
         ];
+    }
+
+     /**
+     * 1500円未満
+     */
+    public function under1500(): static
+    {
+        return $this->state(function (array $attributes) {
+            $itemSubtotal = $this->faker->numberBetween(50, 1499);
+
+            return [
+                SCon::ITEM_SUBTOTAL => $itemSubtotal,
+                SCon::GRAND_TOTAL => $itemSubtotal - $attributes['coupon_discount'],
+                SCon::FEE_ID => $this->fetchShiptFeeId($itemSubtotal),
+            ];
+        });
+    }
+
+    /**
+     * 1500円以上、10000円未満
+     */
+    public function from1500To9999(): static
+    {
+        return $this->state(function (array $attributes) {
+            $itemSubtotal = $this->faker->numberBetween(1500, 9999);
+
+            return [
+                SCon::ITEM_SUBTOTAL => $itemSubtotal,
+                SCon::GRAND_TOTAL => $itemSubtotal - $attributes['coupon_discount'],
+                SCon::FEE_ID => $this->fetchShiptFeeId($itemSubtotal),
+            ];
+        });
+    }
+
+    /**
+     * 10000円以上
+     */
+    public function over10000(): static
+    {
+        return $this->state(function (array $attributes) {
+            $itemSubtotal = $this->faker->numberBetween(10000, 30000);
+
+            return [
+                SCon::ITEM_SUBTOTAL => $itemSubtotal,
+                SCon::GRAND_TOTAL => $itemSubtotal - $attributes['coupon_discount'],
+                SCon::FEE_ID => $this->fetchShiptFeeId($itemSubtotal),
+            ];
+        });
     }
 
     /**

@@ -18,6 +18,7 @@ class ShiptLogRepository
     {
         return Orders::query()->where('id', $id)->
                                                     with([
+                                                        'shipping',
                                                         'orderItems.stockpile',
                                                         'orderItems.stockpile.cardinfo',
                                                         'orderItems.stockpile.cardinfo.expansion',

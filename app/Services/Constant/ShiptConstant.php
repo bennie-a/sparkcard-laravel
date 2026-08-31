@@ -23,7 +23,7 @@ class ShiptConstant extends StockpileHeader {
     public const ZIPCODE = "zip_code";
     public const ADDRESS = "address";
     public const DISCOUNT_AMOUNT = "coupon_discount_amount";
-    public const FEE = "shipping_fee";
+    public const FEE = "shipt_fee";
     public const ITEMS = "items";
     public const SHIPMENT = 'shipment';
 
@@ -35,7 +35,7 @@ class ShiptConstant extends StockpileHeader {
     public const STOCK_ID = 'stock_id';
     public const IS_REGISTERED = 'isRegistered';
     public const ITEM_COUNT = 'item_count';
-    public const ITEM_SUBTOTAL = 'item_subtotal';
+    public const ITEM_SUBTOTAL = 'items_subtotal';
     public const GRAND_TOTAL = 'grand_total';
     public const UNIT_PRICE = 'unit_price';
     public const SUBTOTAL = 'subtotal';
@@ -43,4 +43,6 @@ class ShiptConstant extends StockpileHeader {
     public const PLATFORM_ORDER_ID = 'platform_order_id';
     public const PREV_ID = 'prev_id';
     public const NEXT_ID = 'next_id';
+    public const PRICE = 'price';
+    public const FEE_ID = 'shipt_fee_id';
 }

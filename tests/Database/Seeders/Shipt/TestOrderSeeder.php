@@ -13,11 +13,26 @@ class TestOrderSeeder extends Seeder
 {
     public function run()
     {
-        Orders::factory()->count(10)->create()
+        Orders::factory()->under1500()->count(5)->create()
             ->each(function (Orders $order) {
                 OrderItem::factory()->count($order->item_count)->create([
                     SCon::ORDER_ID => $order->id,
                 ]);
         });
+
+        Orders::factory()->from1500To9999()->count(5)->create()
+            ->each(function (Orders $order) {
+                OrderItem::factory()->count($order->item_count)->create([
+                    SCon::ORDER_ID => $order->id,
+                ]);
+        });
+
+        Orders::factory()->over10000()->count(5)->create()
+            ->each(function (Orders $order) {
+                OrderItem::factory()->count($order->item_count)->create([
+                    SCon::ORDER_ID => $order->id,
+                ]);
+        });
+
     }
 }

@@ -42,7 +42,7 @@ class ShiptDetailTest extends TestCase
                 SC::ADDRESS => $order->address,
                 SC::BUYER => $order->buyer_name,
                 SC::ITEM_COUNT => $order->item_count,
-                SC::ITEM_SUBTOTAL => $order->item_subtotal,
+                SC::ITEM_SUBTOTAL => $order->items_subtotal,
                 SC::GRAND_TOTAL => $order->grand_total,
         ];
         $this->verifyDetailInfo($order, $condition);
@@ -63,6 +63,16 @@ class ShiptDetailTest extends TestCase
                 })
                 ->etc();
         });
+    }
+
+    #[Test]
+    #[TestDox('送料の表示について検証する。')]
+    public function 送料() {
+        $order = Orders::where('shipt_fee_id', 1)->inRandomOrder()->first();
+        $condition = [
+            SC::FEE.'.'.GlobalConstant::ID => 1
+        ];
+        $this->verifyDetailInfo($order, $condition);
     }
 
     // 通常版
