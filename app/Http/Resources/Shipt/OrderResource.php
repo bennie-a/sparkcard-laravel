@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Shipt;
 
+use App\Http\Resources\Items\ItemResource;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -34,6 +35,7 @@ class OrderResource extends JsonResource
             // 'orderitems' => OrderItemResource::collection($this->whenLoaded('orderitems')),
             SC::PREV_ID => $this->previous()?->id ?? 0,
             SC::NEXT_ID => $this->next()?->id ?? 0,
+            SC::ITEMS => ItemResource::collection($this->orderitems)
         ];
     }
 }

@@ -99,12 +99,26 @@ class ShiptDetailTest extends TestCase
         ];
         $this->verifyDetailInfo($order, $condition);
     }
+
+    #[Test]
+    #[TestDox('在庫情報_状態')]
+    public function 在庫情報_状態() {
+        $orders = Orders::whereNot('item_count', '=', 1)->inRandomOrder()->first();
+        $response = $this->show($orders->id);
+        // $response->assertJson(function (AssertableJson $json) use ($orders) {
+        //     $json->has(SC::ITEMS, $orders->item_count, function (AssertableJson $item) {
+        //         $item->has(GlobalConstant::ID)
+        //             ->etc();
+        //     });
+        // });
+    }
+
+    // 在庫情報_状態
+    // 在庫情報_言語
     // 通常版
     // Non-foil版
     // Foil版
     // Promo版
-    // 最初のレコードを表示⇒prev_idが0
-    // 最後のレコードを表示⇒next_idが0
 
     // エラー_注文情報が存在しない
     // IDが数字以外
