@@ -30,7 +30,7 @@ class OrderResource extends JsonResource
             SC::ITEM_SUBTOTAL => $this->items_subtotal,
             SC::DISCOUNT_AMOUNT => $this->coupon_discount,
             SC::GRAND_TOTAL => $this->grand_total,
-            SC::FEE => [GlobalConstant::ID =>$fee->id, GlobalConstant::NAME => $fee->name, ShiptConstant::PRICE => $fee->price],
+            SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, ShiptConstant::PRICE => $fee->price],
             // 'orderitems' => OrderItemResource::collection($this->whenLoaded('orderitems')),
             SC::PREV_ID => $this->previous()?->id ?? 0,
             SC::NEXT_ID => $this->next()?->id ?? 0,

@@ -45,4 +45,5 @@ class ShiptConstant extends StockpileHeader {
     public const NEXT_ID = 'next_id';
     public const PRICE = 'price';
     public const FEE_ID = 'shipt_fee_id';
+    public const METHOD = 'method';
 }

@@ -1,7 +1,10 @@
 <?php
 
 namespace Tests\Unit\DB\Shipt;
+
+use App\Enum\ShiptMethod;
 use App\Http\Controllers\ShiptLogController;
+use App\Models\Shipping;
 use App\Models\Shipt\Orders;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -15,6 +18,7 @@ use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 
 #[TestDox('注文情報詳細機能に関するテスト')]
 #[CoversTestClass(ShiptLogController::class)]
@@ -67,21 +71,38 @@ class ShiptDetailTest extends TestCase
 
     #[Test]
     #[TestDox('送料の表示について検証する。')]
-    public function 送料() {
-        $order = Orders::where('shipt_fee_id', 1)->inRandomOrder()->first();
+    #[TestWith([ShiptMethod::MINI], 'ミニレター')]
+    #[TestWith([ShiptMethod::CLICK], 'クリックポスト')]
+    #[TestWith([ShiptMethod::REGISTER_MAIL], '簡易書留')]
+    public function 送料(ShiptMethod $method) {
+        $fee = Shipping::findByMethod($method->value);
+        $order = Orders::where(SC::FEE_ID, $fee->id)->inRandomOrder()->first();
         $condition = [
-            SC::FEE.'.'.GlobalConstant::ID => 1
+            SC::FEE.'.'.GlobalConstant::ID => $fee->id,
+            SC::FEE.'.'.SC::METHOD => $fee->name,
+            SC::FEE.'.'.SC::PRICE => $fee->price,
         ];
         $this->verifyDetailInfo($order, $condition);
     }
 
+    #[Test]
+    #[TestDox('前後の注文情報IDが取得できているか検証する。')]
+    #[TestWith([1, 0, 2], '最初のレコード')]
+    #[TestWith([7, 6, 8], '真ん中のレコード')]
+    #[TestWith([15, 14, 0], '最後のレコード')]
+    public function 隣接した注文情報ID(int $orderId, int $expectedPreviousId, int $expectedNextId) {
+        $order = Orders::find($orderId);
+        $condition = [
+            GlobalConstant::ID => $order->id,
+            SC::PREV_ID => $expectedPreviousId,
+            SC::NEXT_ID => $expectedNextId,
+        ];
+        $this->verifyDetailInfo($order, $condition);
+    }
     // 通常版
     // Non-foil版
     // Foil版
     // Promo版
-    // 送料_ミニレター
-    // 送料_クリックポスト
-    // 送料_簡易書留
     // 最初のレコードを表示⇒prev_idが0
     // 最後のレコードを表示⇒next_idが0
 
