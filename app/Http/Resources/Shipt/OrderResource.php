@@ -35,7 +35,7 @@ class OrderResource extends JsonResource
             // 'orderitems' => OrderItemResource::collection($this->whenLoaded('orderitems')),
             SC::PREV_ID => $this->previous()?->id ?? 0,
             SC::NEXT_ID => $this->next()?->id ?? 0,
-            SC::ITEMS => ItemResource::collection($this->orderitems)
+            SC::ITEMS => [GlobalConstant::ID => $this->item_count],
         ];
     }
 }

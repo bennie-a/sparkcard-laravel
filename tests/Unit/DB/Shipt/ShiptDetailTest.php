@@ -105,12 +105,9 @@ class ShiptDetailTest extends TestCase
     public function 在庫情報_状態() {
         $orders = Orders::whereNot('item_count', '=', 1)->inRandomOrder()->first();
         $response = $this->show($orders->id);
-        // $response->assertJson(function (AssertableJson $json) use ($orders) {
-        //     $json->has(SC::ITEMS, $orders->item_count, function (AssertableJson $item) {
-        //         $item->has(GlobalConstant::ID)
-        //             ->etc();
-        //     });
-        // });
+        $response->assertJson(function (AssertableJson $json) use ($orders) {
+            $json->has(SC::ITEMS, 1)->etc();
+        });
     }
 
     // 在庫情報_状態
