@@ -2,17 +2,19 @@
 
 namespace App\Http\Resources\Shipt;
 
-use App\Http\Resources\Items\ItemResource;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ShiptConstant;
 
+/**
+ * 注文情報をJSON形式で整形するResourceクラス
+ * @since 6.1.0
+ */
 class OrderResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
@@ -32,10 +34,10 @@ class OrderResource extends JsonResource
             SC::DISCOUNT_AMOUNT => $this->coupon_discount,
             SC::GRAND_TOTAL => $this->grand_total,
             SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, ShiptConstant::PRICE => $fee->price],
-            // 'orderitems' => OrderItemResource::collection($this->whenLoaded('orderitems')),
             SC::PREV_ID => $this->previous()?->id ?? 0,
             SC::NEXT_ID => $this->next()?->id ?? 0,
-            SC::ITEMS => [GlobalConstant::ID => $this->item_count],
+            // SC::ITEMS => [[GlobalConstant::ID => 1], [GlobalConstant::ID => 2], [GlobalConstant::ID => 3]],
+            SC::ITEMS => OrderItemResource::collection($this->orderitems),
         ];
     }
 }

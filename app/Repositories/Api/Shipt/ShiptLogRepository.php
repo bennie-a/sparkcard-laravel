@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Repositories\Api\Shipt;
+
+use App\Enum\SortOrder;
 use App\Models\Shipt\Orders;
 
 /**
@@ -19,6 +21,7 @@ class ShiptLogRepository
         return Orders::query()->where('id', $id)->
                                                     with([
                                                         'shipping',
+                                                        'orderItems' => fn($query) => $query->orderBy('id', SortOrder::ASC->value),
                                                         'orderItems.stockpile',
                                                         'orderItems.stockpile.cardinfo',
                                                         'orderItems.stockpile.cardinfo.expansion',

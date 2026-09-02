@@ -16,6 +16,7 @@ use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Constant\StockpileHeader;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -103,10 +104,24 @@ class ShiptDetailTest extends TestCase
     #[Test]
     #[TestDox('在庫情報_状態')]
     public function 在庫情報_状態() {
-        $orders = Orders::whereNot('item_count', '=', 1)->inRandomOrder()->first();
+        $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)->inRandomOrder()->first();
         $response = $this->show($orders->id);
         $response->assertJson(function (AssertableJson $json) use ($orders) {
-            $json->has(SC::ITEMS, 1)->etc();
+            $json->has(SC::ITEMS, $orders->item_count)->etc();
+            $index = 0;
+            $orderItems = $orders->orderitems;
+            $json->has(SC::ITEMS, fn(AssertableJson $json) =>
+            $json->each(function (AssertableJson $item) use ($orderItems, $index) {
+                $expected = $orderItems[$index];
+                $item->
+                    whereAll([
+                        // SC::SHIPMENT => $expected->shipment,
+                        SC::UNIT_PRICE => $expected->unit_price,
+                        // SC::SUBTOTAL => $expected->subtotal,
+                    ])->etc();
+                    $index++;
+                })
+            );
         });
     }
 
@@ -131,7 +146,7 @@ class ShiptDetailTest extends TestCase
         $this->assertNotNull($order, '期待値側の注文情報がありません');
         $response = $this->show($order->id);
         $response->assertJson(function(AssertableJson $json) use ($order, $condition) {
-            $json->whereAll($condition)->etc();
+            return $json->whereAll($condition)->etc();
         });
     }
 
