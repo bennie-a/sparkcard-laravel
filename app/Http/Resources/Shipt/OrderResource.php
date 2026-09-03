@@ -36,7 +36,6 @@ class OrderResource extends JsonResource
             SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, ShiptConstant::PRICE => $fee->price],
             SC::PREV_ID => $this->previous()?->id ?? 0,
             SC::NEXT_ID => $this->next()?->id ?? 0,
-            // SC::ITEMS => [[GlobalConstant::ID => 1], [GlobalConstant::ID => 2], [GlobalConstant::ID => 3]],
             SC::ITEMS => OrderItemResource::collection($this->orderitems),
         ];
     }

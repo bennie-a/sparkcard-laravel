@@ -3,6 +3,7 @@
 namespace Tests\Unit\DB\Shipt;
 
 use App\Enum\ShiptMethod;
+use App\Enum\SortOrder;
 use App\Http\Controllers\ShiptLogController;
 use App\Models\Shipping;
 use App\Models\Shipt\Orders;
@@ -102,26 +103,25 @@ class ShiptDetailTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('在庫情報_状態')]
-    public function 在庫情報_状態() {
-        $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)->inRandomOrder()->first();
+    #[TestDox('注文詳細のID、枚数、単価、小計の情報を検証する。')]
+    public function 注文詳細_商品情報以外() {
+        $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)
+                            ->with([
+                            'orderitems' => function ($query) {
+                                $query->orderBy(GlobalConstant::ID, SortOrder::ASC->value);
+                            }
+                        ])->inRandomOrder()->first();
         $response = $this->show($orders->id);
         $response->assertJson(function (AssertableJson $json) use ($orders) {
             $json->has(SC::ITEMS, $orders->item_count)->etc();
-            $index = 0;
-            $orderItems = $orders->orderitems;
-            $json->has(SC::ITEMS, fn(AssertableJson $json) =>
-            $json->each(function (AssertableJson $item) use ($orderItems, $index) {
-                $expected = $orderItems[$index];
-                $item->
-                    whereAll([
-                        // SC::SHIPMENT => $expected->shipment,
-                        SC::UNIT_PRICE => $expected->unit_price,
-                        // SC::SUBTOTAL => $expected->subtotal,
-                    ])->etc();
-                    $index++;
-                })
-            );
+            foreach ($orders->orderitems as $index => $expected) {
+                $json->whereAll([
+                    SC::ITEMS.'.'.$index.'.'.GlobalConstant::ID => $expected->id,
+                    SC::ITEMS.'.'.$index.'.'.SC::SHIPMENT => $expected->quantity,
+                    SC::ITEMS.'.'.$index.'.'.SC::UNIT_PRICE => $expected->unit_price,
+                    SC::ITEMS.'.'.$index.'.'.SC::SUBTOTAL => $expected->subtotal,
+                ])->etc();
+            }
         });
     }
 
