@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Shipt;
 
+use App\Http\Resources\Items\ItemResource;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class OrderItemResource extends JsonResource
             SC::SHIPMENT => $this->quantity,
             SC::UNIT_PRICE => $this->unit_price,
             SC::SUBTOTAL => $this->subtotal,
-
+            SC::STOCK => ItemResource::make($this->stockpile),
         ];
     }
 }

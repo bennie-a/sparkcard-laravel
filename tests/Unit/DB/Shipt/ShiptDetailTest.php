@@ -103,8 +103,8 @@ class ShiptDetailTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('注文詳細のID、枚数、単価、小計の情報を検証する。')]
-    public function 注文詳細_商品情報以外() {
+    #[TestDox('注文明細のID、枚数、単価、小計の情報を検証する。')]
+    public function 注文明細_商品情報以外() {
         $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)
                             ->with([
                             'orderitems' => function ($query) {
@@ -124,6 +124,34 @@ class ShiptDetailTest extends TestCase
             }
         });
     }
+
+    #[Test]
+    #[TestDox('注文明細の商品情報について検証する。')]
+    public function 注文明細_商品情報() {
+        $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)
+                            ->with([
+                            'orderitems' => function ($query) {
+                                $query->orderBy(GlobalConstant::ID, SortOrder::ASC->value);
+                            }
+                        ])->inRandomOrder()->first();
+        $response = $this->show($orders->id);
+        $response->assertJson(function (AssertableJson $json) use ($orders) {
+            $json->has(SC::ITEMS, $orders->item_count)->etc();
+            foreach ($orders->orderitems as $index => $expected) {
+                $key = SC::ITEMS.'.'.$index.'.'.SC::STOCK;
+                $json->has($key)->etc();
+
+                $stock = $expected->stockpile;
+                $json->dump()->whereAll([
+                    $key.'.'.GlobalConstant::ID => $stock->id,
+                    $key.'.'.StockpileHeader::LANG => $stock->language,
+                    $key.'.'.StockpileHeader::CONDITION => $stock->condition,
+                    $key.'.'.StockpileHeader::QUANTITY => $stock->quantity,
+                ])->etc();
+            }
+        });
+    }
+
 
     // 在庫情報_状態
     // 在庫情報_言語
@@ -161,5 +189,4 @@ class ShiptDetailTest extends TestCase
         $response->assertOk();
         return $response;
     }
-
 }
