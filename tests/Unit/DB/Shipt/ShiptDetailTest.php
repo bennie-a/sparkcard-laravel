@@ -2,11 +2,14 @@
 
 namespace Tests\Unit\DB\Shipt;
 
+use App\Enum\CardCondition;
+use App\Enum\CardLanguage;
 use App\Enum\ShiptMethod;
 use App\Enum\SortOrder;
 use App\Http\Controllers\ShiptLogController;
 use App\Models\Shipping;
 use App\Models\Shipt\Orders;
+use App\Models\Stockpile;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -126,16 +129,34 @@ class ShiptDetailTest extends TestCase
     }
 
     #[Test]
+    #[TestWith([CardLanguage::JP, CardCondition::UNDEFINED], '言語_日本語')]
+    #[TestWith([CardLanguage::EN, CardCondition::UNDEFINED], '言語_英語')]
+    #[TestWith([CardLanguage::CT, CardCondition::UNDEFINED], '言語_繁体中国語')]
+    #[TestWith([CardLanguage::CS, CardCondition::UNDEFINED], '言語_簡体中国語')]
+    #[TestWith([CardLanguage::IT, CardCondition::UNDEFINED], '言語_イタリア語')]
+    #[TestWith([CardLanguage::UNDEFINED, CardCondition::NM], '状態_NM')]
+    #[TestWith([CardLanguage::UNDEFINED, CardCondition::NM_MINUS], '状態_NM-')]
+    #[TestWith([CardLanguage::UNDEFINED, CardCondition::EX_PLUS], '状態_EX+')]
+    #[TestWith([CardLanguage::UNDEFINED, CardCondition::EX], '状態_EX')]
+    #[TestWith([CardLanguage::UNDEFINED, CardCondition::PLD], '状態_PLD')]
     #[TestDox('注文明細の商品情報について検証する。')]
-    public function 注文明細_商品情報() {
-        $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)
-                            ->with([
+    public function 注文明細_商品情報(CardLanguage $lang, CardCondition $condition) {
+        $orders = Orders::with([
+                                'orderitems.stockpile' => function ($query) use ($lang, $condition) {
+                                        $query->when($lang !== CardLanguage::UNDEFINED, function($query) use ($lang) {
+                                            return $query->where(StockpileHeader::LANGUAGE, $lang->value);
+                                        })
+                                        ->when($condition !== CardCondition::UNDEFINED, function($query) use ($condition) {
+                                            return $query->where(StockpileHeader::CONDITION, $condition->value);
+                                        });
+                                    },
                             'orderitems' => function ($query) {
                                 $query->orderBy(GlobalConstant::ID, SortOrder::ASC->value);
                             }
                         ])->inRandomOrder()->first();
         $this->assertJsonWhereAll($orders, SC::ITEMS, SC::STOCK, function ($item) {
-            $stock = $item->stockpile;
+            $stock = Stockpile::findById($item->stock_id);
+            $this->assertNotNull($stock, '在庫情報が存在しません。注文明細ID: '.$item->id);
             return [
                 GlobalConstant::ID => $stock->id,
                 StockpileHeader::LANG => $stock->language,
@@ -184,7 +205,7 @@ class ShiptDetailTest extends TestCase
 
                 $json->has($key)->etc();
 
-                $json->whereAll(
+                $json->dump()->whereAll(
                     collect($conditions($item))
                         ->mapWithKeys(fn ($value, $field) => [
                             $key.'.'.$field => $value,

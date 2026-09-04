@@ -2,12 +2,14 @@
 
 namespace Tests\Database\Seeders;
 
+use App\Enum\CardLanguage;
 use App\Facades\ExService;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Stockpile;
 use Illuminate\Database\Seeder;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\ShiptConstant;
 use App\Services\Constant\StockpileHeader as Header;
 
 class TestStockpileSeeder extends Seeder
@@ -51,6 +53,9 @@ class TestStockpileSeeder extends Seeder
         Stockpile::create(['card_id' => $norn->id, 'condition' => 'NM-',
                                             'quantity' => fake()->numberBetween(0, 10), 'language' => 'EN']);
 
-
+        Stockpile::factory()->create(['language' => CardLanguage::CT->value]);
+        Stockpile::factory()->create([ShiptConstant::CONDITION => 'EX+']);
+        Stockpile::factory()->create([ShiptConstant::CONDITION => 'EX']);
+        Stockpile::factory()->create([ShiptConstant::CONDITION => 'PLD']);
     }
 }
