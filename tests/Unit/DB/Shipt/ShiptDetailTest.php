@@ -134,24 +134,16 @@ class ShiptDetailTest extends TestCase
                                 $query->orderBy(GlobalConstant::ID, SortOrder::ASC->value);
                             }
                         ])->inRandomOrder()->first();
-        $response = $this->show($orders->id);
-        $response->assertJson(function (AssertableJson $json) use ($orders) {
-            $json->has(SC::ITEMS, $orders->item_count)->etc();
-            foreach ($orders->orderitems as $index => $expected) {
-                $key = SC::ITEMS.'.'.$index.'.'.SC::STOCK;
-                $json->has($key)->etc();
-
-                $stock = $expected->stockpile;
-                $json->dump()->whereAll([
-                    $key.'.'.GlobalConstant::ID => $stock->id,
-                    $key.'.'.StockpileHeader::LANG => $stock->language,
-                    $key.'.'.StockpileHeader::CONDITION => $stock->condition,
-                    $key.'.'.StockpileHeader::QUANTITY => $stock->quantity,
-                ])->etc();
-            }
+        $this->assertJsonWhereAll($orders, SC::ITEMS, SC::STOCK, function ($item) {
+            $stock = $item->stockpile;
+            return [
+                GlobalConstant::ID => $stock->id,
+                StockpileHeader::LANG => $stock->language,
+                StockpileHeader::CONDITION => $stock->condition,
+                StockpileHeader::QUANTITY => $stock->quantity,
+            ];
         });
     }
-
 
     // 在庫情報_状態
     // 在庫情報_言語
@@ -175,6 +167,31 @@ class ShiptDetailTest extends TestCase
         $response = $this->show($order->id);
         $response->assertJson(function(AssertableJson $json) use ($order, $condition) {
             return $json->whereAll($condition)->etc();
+        });
+    }
+
+    private function assertJsonWhereAll(Orders $order, string $collectionKey, string $targetKey,
+                                                                                                                                                        callable $conditions): void {
+        $this->assertNotNull($order, '期待値側の注文情報がありません');
+        $response = $this->show($order->id);
+        $items = $order->orderitems;
+        $response->assertJson(function (AssertableJson $json) use (
+            $collectionKey, $items, $targetKey, $conditions) {
+            $json->has($collectionKey, $items->count())->etc();
+
+            foreach ($items as $index => $item) {
+                $key = $collectionKey.'.'.$index.'.'.$targetKey;
+
+                $json->has($key)->etc();
+
+                $json->whereAll(
+                    collect($conditions($item))
+                        ->mapWithKeys(fn ($value, $field) => [
+                            $key.'.'.$field => $value,
+                        ])
+                        ->all()
+                )->etc();
+            }
         });
     }
 
