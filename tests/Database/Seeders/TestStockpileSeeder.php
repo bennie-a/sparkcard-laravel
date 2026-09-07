@@ -53,7 +53,9 @@ class TestStockpileSeeder extends Seeder
         Stockpile::create(['card_id' => $norn->id, 'condition' => 'NM-',
                                             'quantity' => fake()->numberBetween(0, 10), 'language' => 'EN']);
 
+        Stockpile::factory()->create(['language' => CardLanguage::CS->value]);
         Stockpile::factory()->create(['language' => CardLanguage::CT->value]);
+        Stockpile::factory()->create(['language' => CardLanguage::IT->value]);
         Stockpile::factory()->create([ShiptConstant::CONDITION => 'EX+']);
         Stockpile::factory()->create([ShiptConstant::CONDITION => 'EX']);
         Stockpile::factory()->create([ShiptConstant::CONDITION => 'PLD']);

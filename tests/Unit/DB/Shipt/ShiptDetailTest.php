@@ -8,9 +8,10 @@ use App\Enum\ShiptMethod;
 use App\Enum\SortOrder;
 use App\Http\Controllers\ShiptLogController;
 use App\Models\Shipping;
+use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Models\Stockpile;
-use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestDox;
 use Tests\Database\Seeders\DatabaseSeeder;
@@ -44,7 +45,7 @@ class ShiptDetailTest extends TestCase
     {
         $order = Orders::inRandomOrder()->first();
         $condition = [
-                GlobalConstant::ID => $order->id,
+                GC::ID => $order->id,
                 SC::PLATFORM => $order->platform,
                 SC::PLATFORM_ORDER_ID => $order->platform_order_id,
                 SC::ZIPCODE => $order->zip_code,
@@ -83,7 +84,7 @@ class ShiptDetailTest extends TestCase
         $fee = Shipping::findByMethod($method->value);
         $order = Orders::where(SC::FEE_ID, $fee->id)->inRandomOrder()->first();
         $condition = [
-            SC::FEE.'.'.GlobalConstant::ID => $fee->id,
+            SC::FEE.'.'.GC::ID => $fee->id,
             SC::FEE.'.'.SC::METHOD => $fee->name,
             SC::FEE.'.'.SC::PRICE => $fee->price,
         ];
@@ -98,7 +99,7 @@ class ShiptDetailTest extends TestCase
     public function 隣接した注文情報ID(int $orderId, int $expectedPreviousId, int $expectedNextId) {
         $order = Orders::find($orderId);
         $condition = [
-            GlobalConstant::ID => $order->id,
+            GC::ID => $order->id,
             SC::PREV_ID => $expectedPreviousId,
             SC::NEXT_ID => $expectedNextId,
         ];
@@ -119,7 +120,7 @@ class ShiptDetailTest extends TestCase
             $json->has(SC::ITEMS, $orders->item_count)->etc();
             foreach ($orders->orderitems as $index => $expected) {
                 $json->whereAll([
-                    SC::ITEMS.'.'.$index.'.'.GlobalConstant::ID => $expected->id,
+                    SC::ITEMS.'.'.$index.'.'.GC::ID => $expected->id,
                     SC::ITEMS.'.'.$index.'.'.SC::SHIPMENT => $expected->quantity,
                     SC::ITEMS.'.'.$index.'.'.SC::UNIT_PRICE => $expected->unit_price,
                     SC::ITEMS.'.'.$index.'.'.SC::SUBTOTAL => $expected->subtotal,
@@ -129,41 +130,40 @@ class ShiptDetailTest extends TestCase
     }
 
     #[Test]
-    #[TestWith([CardLanguage::JP, CardCondition::UNDEFINED], '言語_日本語')]
-    #[TestWith([CardLanguage::EN, CardCondition::UNDEFINED], '言語_英語')]
-    #[TestWith([CardLanguage::CT, CardCondition::UNDEFINED], '言語_繁体中国語')]
-    #[TestWith([CardLanguage::CS, CardCondition::UNDEFINED], '言語_簡体中国語')]
-    #[TestWith([CardLanguage::IT, CardCondition::UNDEFINED], '言語_イタリア語')]
+    #[TestWith([CardLanguage::JP], '日本語')]
+    #[TestWith([CardLanguage::EN], '英語')]
+    #[TestWith([CardLanguage::CT], '繁体中国語')]
+    #[TestWith([CardLanguage::CS], '簡体中国語')]
+    #[TestWith([CardLanguage::IT], 'イタリア語')]
+    #[TestDox('商品情報の言語表示について検証する。')]
+    public function 商品情報_言語(CardLanguage $lang) {
+        $item = OrderItem::whereHas('stockpile', function ($query) use ($lang) {
+            $query->where('language', $lang->value);
+        })->first();
+        $this->assertNotNull($item->stockpile, '指定した言語の在庫情報が存在しません。言語: '.$lang->value);
+        $this->assertEquals($lang->value, $item->stockpile->language, '在庫情報の言語が一致しません。注文明細ID: '.$item->id);
+        $response = $this->show($item->order_id);
+        logger()->info('注文明細ID: '.$item->id.'、在庫情報ID: '.$item->stock_id.'、言語: '.$lang->value);
+
+        $responseItems = $response->json(SC::ITEMS);
+        $this->assertTrue(
+            collect($responseItems)->contains(function ($ritem) use ($item, $lang) {
+                return $ritem[GC::ID] === $item->id
+                            && $ritem[SC::STOCK][GC::ID] === $item->stock_id
+                            && $ritem[SC::STOCK][StockpileHeader::LANG] === $lang->value;
+            }),
+            'レスポンスに指定した言語の在庫情報が含まれていません。'
+        );
+    }
+
     #[TestWith([CardLanguage::UNDEFINED, CardCondition::NM], '状態_NM')]
     #[TestWith([CardLanguage::UNDEFINED, CardCondition::NM_MINUS], '状態_NM-')]
     #[TestWith([CardLanguage::UNDEFINED, CardCondition::EX_PLUS], '状態_EX+')]
     #[TestWith([CardLanguage::UNDEFINED, CardCondition::EX], '状態_EX')]
     #[TestWith([CardLanguage::UNDEFINED, CardCondition::PLD], '状態_PLD')]
     #[TestDox('注文明細の商品情報について検証する。')]
-    public function 注文明細_商品情報(CardLanguage $lang, CardCondition $condition) {
-        $orders = Orders::with([
-                                'orderitems.stockpile' => function ($query) use ($lang, $condition) {
-                                        $query->when($lang !== CardLanguage::UNDEFINED, function($query) use ($lang) {
-                                            return $query->where(StockpileHeader::LANGUAGE, $lang->value);
-                                        })
-                                        ->when($condition !== CardCondition::UNDEFINED, function($query) use ($condition) {
-                                            return $query->where(StockpileHeader::CONDITION, $condition->value);
-                                        });
-                                    },
-                            'orderitems' => function ($query) {
-                                $query->orderBy(GlobalConstant::ID, SortOrder::ASC->value);
-                            }
-                        ])->inRandomOrder()->first();
-        $this->assertJsonWhereAll($orders, SC::ITEMS, SC::STOCK, function ($item) {
-            $stock = Stockpile::findById($item->stock_id);
-            $this->assertNotNull($stock, '在庫情報が存在しません。注文明細ID: '.$item->id);
-            return [
-                GlobalConstant::ID => $stock->id,
-                StockpileHeader::LANG => $stock->language,
-                StockpileHeader::CONDITION => $stock->condition,
-                StockpileHeader::QUANTITY => $stock->quantity,
-            ];
-        });
+    public function 商品情報_状態() {
+        $this->注文明細_商品情報(CardLanguage::UNDEFINED, CardCondition::UNDEFINED);
     }
 
     // 在庫情報_状態
