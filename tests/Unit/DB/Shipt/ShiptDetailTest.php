@@ -156,18 +156,33 @@ class ShiptDetailTest extends TestCase
         );
     }
 
-    #[TestWith([CardLanguage::UNDEFINED, CardCondition::NM], '状態_NM')]
-    #[TestWith([CardLanguage::UNDEFINED, CardCondition::NM_MINUS], '状態_NM-')]
-    #[TestWith([CardLanguage::UNDEFINED, CardCondition::EX_PLUS], '状態_EX+')]
-    #[TestWith([CardLanguage::UNDEFINED, CardCondition::EX], '状態_EX')]
-    #[TestWith([CardLanguage::UNDEFINED, CardCondition::PLD], '状態_PLD')]
-    #[TestDox('注文明細の商品情報について検証する。')]
-    public function 商品情報_状態() {
-        $this->注文明細_商品情報(CardLanguage::UNDEFINED, CardCondition::UNDEFINED);
+    #[Test]
+    #[TestWith([CardCondition::NM], 'NM')]
+    #[TestWith([CardCondition::NM_MINUS], 'NM-')]
+    #[TestWith([CardCondition::EX_PLUS], 'EX+')]
+    #[TestWith([CardCondition::EX], 'EX')]
+    #[TestWith([CardCondition::PLD], 'PLD')]
+    #[TestDox('商品情報の状態について検証する。')]
+    public function 商品情報_状態(CardCondition $cond) {
+        $item = OrderItem::whereHas('stockpile', function ($query) use ($cond) {
+            $query->where('condition', $cond->value);
+        })->first();
+        $this->assertNotNull($item->stockpile, '指定した状態の在庫情報が存在しません。状態: '.$cond->value);
+        $this->assertEquals($cond->value, $item->stockpile->condition, '在庫情報の状態が一致しません。注文明細ID: '.$item->id);
+        $response = $this->show($item->order_id);
+        logger()->info('注文明細ID: '.$item->id.'、在庫情報ID: '.$item->stock_id.'、状態: '.$cond->value);
+
+        $responseItems = $response->json(SC::ITEMS);
+        $this->assertTrue(
+            collect($responseItems)->contains(function ($ritem) use ($item, $cond) {
+                return $ritem[GC::ID] === $item->id
+                            && $ritem[SC::STOCK][GC::ID] === $item->stock_id
+                            && $ritem[SC::STOCK][StockpileHeader::CONDITION] === $cond->value;
+            }),
+            'レスポンスに指定した状態の在庫情報が含まれていません。'
+        );
     }
 
-    // 在庫情報_状態
-    // 在庫情報_言語
     // 通常版
     // Non-foil版
     // Foil版
