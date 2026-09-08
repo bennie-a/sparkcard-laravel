@@ -21,6 +21,7 @@ use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\StockpileHeader;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Test;
@@ -183,10 +184,97 @@ class ShiptDetailTest extends TestCase
         );
     }
 
-    // 通常版
-    // Non-foil版
-    // Foil版
-    // Promo版
+
+    #[Test]
+    #[TestDox('商品情報内のカード情報について検証する。')]
+    public function カード情報() {
+        $item = OrderItem::inRandomOrder()->first();
+
+        $this->assertNotNull($item->stockpile, '指定した状態の在庫情報が存在しません。');
+        $this->assertNotNull($item->stockpile->cardinfo, 'カード情報が存在しません。注文明細ID: '.$item->id);
+        $response = $this->show($item->order_id);
+        $responseItems = $response->json(SC::ITEMS);
+        $this->assertTrue(
+            collect($responseItems)->contains(function ($ritem) use ($item) {
+                $card = $item->stockpile->cardinfo;
+                $actual = $ritem[SC::STOCK][CC::CARD];
+                return $ritem[GC::ID] === $item->id
+                            && $actual[GC::ID] === $card->id
+                            && $actual[GC::NAME] === $card->name
+                            && $actual[CC::EXP][GC::NAME] === $card->expansion->name
+                            && $actual[CC::EXP][CC::ATTR] === $card->expansion->attr
+                            && $actual[CC::NUMBER] === $card->number
+                            && $actual[CC::IMAGE_URL] === $card->image_url;
+            }),
+            '指定したカード情報がレスポンスに含まれていません。'
+        );
+    }
+
+    #[Test]
+    #[TestWith([1], '通常版')]
+    #[TestWith([2], 'Foil版')]
+    #[TestWith([99], '特殊Foil版')]
+    #[TestDox('カード情報のfoil要素の表示について検証する')]
+    public function カード情報_foiltype(int $foiltype_id) {
+        $item = null;
+        if ($foiltype_id === 99) {
+            $item = OrderItem::whereHas('stockpile.cardinfo', function ($query) {
+                $query->whereNotIn(CC::FOIL_ID, [1, 2]);
+            })->first();
+        } else {
+            $item = OrderItem::whereHas('stockpile.cardinfo', function ($query) use($foiltype_id) {
+                $query->where(CC::FOIL_ID, $foiltype_id);
+            })->first();
+            $this->assertEquals($foiltype_id, $item->stockpile->cardinfo->foiltype->id, '在庫情報のfoiltype_idが一致しません。注文明細ID: '.$item->id);
+        }
+
+        $this->assertNotNull($item->stockpile, '指定した状態の在庫情報が存在しません。');
+
+        $response = $this->show($item->order_id);
+        $responseItems = $response->json(SC::ITEMS);
+        $this->assertTrue(
+            collect($responseItems)->contains(function ($ritem) use ($item) {
+                $card = $item->stockpile->cardinfo;
+                $actual = $ritem[SC::STOCK][CC::CARD][CC::FOIL];
+                return $ritem[GC::ID] === $item->id
+                            && $actual['is_foil'] === $card->isFoil
+                            && $actual[GC::NAME] === $card->foiltype->name;
+            }),
+            '指定したfoiltypeのカード情報がレスポンスに含まれていません。'
+        );
+    }
+
+    #[Test]
+    #[TestWith([false], '通常版')]
+    #[TestWith([true], '特別版')]
+    #[TestDox('カード情報のpromotype要素の表示について検証する')]
+    public function カード情報_promotype(bool $isPromo) {
+        $item = null;
+        if ($isPromo) {
+            $item = OrderItem::whereHas('stockpile.cardinfo', function ($query) {
+                $query->whereNot(CC::PROMO_ID, 1);
+            })->first();
+        } else {
+            $item = OrderItem::whereHas('stockpile.cardinfo', function ($query) {
+                $query->where(CC::PROMO_ID, 1);
+            })->first();
+        }
+
+        $this->assertNotNull($item->stockpile, '指定した状態の在庫情報が存在しません。');
+        $this->assertNotNull($item->stockpile->cardinfo, 'カード情報が存在しません。注文明細ID: '.$item->id);
+        $response = $this->show($item->order_id);
+        $responseItems = $response->json(SC::ITEMS);
+        $this->assertTrue(
+            collect($responseItems)->contains(function ($ritem) use ($item) {
+                $card = $item->stockpile->cardinfo;
+                $actual = $ritem[SC::STOCK][CC::CARD][CC::PROMOTYPE];
+                return $ritem[GC::ID] === $item->id
+                            && $actual[GC::ID] === $card->promotype_id
+                            && $actual[GC::NAME] === $card->promotype->name;
+            }),
+            '指定したpromotypeのカード情報がレスポンスに含まれていません。'
+        );
+    }
 
     // エラー_注文情報が存在しない
     // IDが数字以外
@@ -203,31 +291,6 @@ class ShiptDetailTest extends TestCase
         $response = $this->show($order->id);
         $response->assertJson(function(AssertableJson $json) use ($order, $condition) {
             return $json->whereAll($condition)->etc();
-        });
-    }
-
-    private function assertJsonWhereAll(Orders $order, string $collectionKey, string $targetKey,
-                                                                                                                                                        callable $conditions): void {
-        $this->assertNotNull($order, '期待値側の注文情報がありません');
-        $response = $this->show($order->id);
-        $items = $order->orderitems;
-        $response->assertJson(function (AssertableJson $json) use (
-            $collectionKey, $items, $targetKey, $conditions) {
-            $json->has($collectionKey, $items->count())->etc();
-
-            foreach ($items as $index => $item) {
-                $key = $collectionKey.'.'.$index.'.'.$targetKey;
-
-                $json->has($key)->etc();
-
-                $json->dump()->whereAll(
-                    collect($conditions($item))
-                        ->mapWithKeys(fn ($value, $field) => [
-                            $key.'.'.$field => $value,
-                        ])
-                        ->all()
-                )->etc();
-            }
         });
     }
 
