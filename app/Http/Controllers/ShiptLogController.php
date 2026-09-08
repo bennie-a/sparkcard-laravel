@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Shipt\ShiptPostRequest;
 use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
+use App\Http\Requests\ShowApiRequest;
 use App\Http\Resources\Shipt\OrderResource;
 use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Http\Request;
@@ -55,10 +56,11 @@ class ShiptLogController extends Controller
     /**
      * 注文情報IDに該当する出荷情報を1件取得する。
      *
-     * @param int $id 注文情報ID
+     * @param ShowApiRequest $request
      * @return Response
+     *
      */
-    public function show(int $id) {
+    public function show(ShowApiRequest $request, int $id) {
         $info = $this->service->show($id);
         return response()->json(new OrderResource($info), Response::HTTP_OK);
     }

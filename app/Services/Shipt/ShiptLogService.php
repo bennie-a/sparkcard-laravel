@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Shipt;
 
+use App\Exceptions\api\NoContentException;
 use App\Exceptions\api\NotFoundException;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
 use App\Exceptions\api\Shipt\ShiptNotionException;
@@ -158,7 +159,11 @@ class ShiptLogService extends AbstractCsvService {
      * @return Orders
      */
     public function show(int $id) {
-        return $this->repo->find($id);
+        $order = $this->repo->find($id);
+        if (empty($order)) {
+            throw new NoContentException();
+        }
+        return $order;
         // $list = ShippingLog::fetchByOrderId($orderId);
         // $items = $list->map(function($slog) {
         //         return ["id" => $slog["stock_id"],  GC::NAME => $slog["cardname"], Con::EXP => [GC::NAME => $slog[SC::SETNAME], Con::ATTR => $slog['exp_attr']],

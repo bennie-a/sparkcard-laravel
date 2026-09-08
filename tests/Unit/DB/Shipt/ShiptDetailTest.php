@@ -113,7 +113,7 @@ class ShiptDetailTest extends TestCase
         $orders = Orders::whereNot(SC::ITEM_COUNT, '=', 1)
                             ->with([
                             'orderitems' => function ($query) {
-                                $query->orderBy(GlobalConstant::ID, SortOrder::ASC->value);
+                                $query->orderBy(GC::ID, SortOrder::ASC->value);
                             }
                         ])->inRandomOrder()->first();
         $response = $this->show($orders->id);
@@ -276,9 +276,33 @@ class ShiptDetailTest extends TestCase
         );
     }
 
-    // エラー_注文情報が存在しない
+    #[Test]
+    #[TestDox('注文情報が存在しない場合、404エラーが返ることを検証する。')]
+    public function 注文情報が存在しない() {
+        $response = $this->get('/api/shipping/99999');
+        $response->assertNotFound();
+        $response->assertJson(function (AssertableJson $json) {
+            $json->whereAll([
+                'title' => '情報なし',
+                'status' => 404,
+                'detail' => '指定した情報がありません。'])
+                ->etc();
+        });
+    }
     // IDが数字以外
-
+    #[Test]
+    #[TestDox('注文情報IDが数字以外の場合、400エラーが返ることを検証する。')]
+    public function 注文情報IDが数字以外() {
+        $response = $this->get('/api/shipping/abc');
+        $response->assertBadRequest();
+        $response->assertJson(function (AssertableJson $json) {
+        $json->whereAll([
+                'title' => 'Validation Error',
+                'status' => 400,
+                'detail' => 'IDは数字で入力してください。'])
+                ->etc();
+        });
+    }
     /**
      * 詳細情報を取得する。
      *
