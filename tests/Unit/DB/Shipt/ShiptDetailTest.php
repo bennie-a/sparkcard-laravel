@@ -66,9 +66,9 @@ class ShiptDetailTest extends TestCase
         $response = $this->show($order->id);
         $response->assertJson(function(AssertableJson $json) use ($order) {
             // 発送日の形式チェック
-            $json->whereType(SC::SHIPPING_DATE, 'string')
-                ->where(SC::SHIPPING_DATE, $order->shipt_date)
-                ->where(SC::SHIPPING_DATE, function ($value) {
+            $json->whereType(SC::SHIPT_DATE, 'string')
+                ->where(SC::SHIPT_DATE, $order->shipt_date)
+                ->where(SC::SHIPT_DATE, function ($value) {
                     // yyyy/MM/dd にマッチする正規表現
                     return preg_match('/^\d{4}\/\d{2}\/\d{2}$/', $value) === 1;
                 })

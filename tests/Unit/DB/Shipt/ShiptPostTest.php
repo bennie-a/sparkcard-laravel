@@ -56,7 +56,7 @@ class ShiptPostTest extends TestCase
     #[TestDox('発送日がどの日付でも登録できることを検証する')]
     public function ok_shippingDate(string $date): void{
         $request = ShiptLogTestHelper::createStoreRequest();
-        $request[SC::SHIPPING_DATE] = ShiptLogTestHelper::getShiptDate($date);
+        $request['shipping_date'] = ShiptLogTestHelper::getShiptDate($date);
         $this->ok($request);
     }
 
@@ -86,6 +86,7 @@ class ShiptPostTest extends TestCase
             SC::ORDER_ID => $request[SC::ORDER_ID],
             SC::NAME => $request[SC::BUYER],
             SC::STOCK_ID => $request[SC::ITEMS][0][GC::ID],
+            StockpileHeader::QUANTITY => $request[SC::ITEMS][0][SC::SHIPMENT],
         ]);
     }
 
@@ -122,8 +123,8 @@ class ShiptPostTest extends TestCase
 
         $orderId = $request[SC::ORDER_ID];
 
-        if (empty($request[SC::SHIPPING_DATE])) {
-            $request[SC::SHIPPING_DATE] = TestDateUtil::formatToday();
+        if (empty($request['shipping_date'])) {
+            $request['shipping_date'] = TestDateUtil::formatToday();
         }
 
         foreach ($request[SC::ITEMS] as $item) {
@@ -135,7 +136,7 @@ class ShiptPostTest extends TestCase
                 GC::NAME => $request[SC::BUYER],
                 SC::ZIPCODE => $request[SC::ZIPCODE],
                 SC::ADDRESS => $request[SC::ADDRESS],
-                SC::SHIPPING_DATE => $request[SC::SHIPPING_DATE],
+                'shipping_date' => $request['shipping_date'],
                 SC::STOCK_ID => $item[GC::ID],
                 StockpileHeader::QUANTITY => $item[SC::SHIPMENT],
                 SC::SINGLE_PRICE => $item[SC::SINGLE_PRICE],

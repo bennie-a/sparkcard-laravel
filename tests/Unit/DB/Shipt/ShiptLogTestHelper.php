@@ -46,7 +46,7 @@ class ShiptLogTestHelper
         $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
                                                                 $buyerInfo[SC::ADDRESS_1].' '.$buyerInfo[SC::ADDRESS_2];
         $buyerInfo[SC::ZIPCODE] = $buyerInfo[SC::POSTAL_CODE];
-        $buyerInfo[SC::SHIPPING_DATE] = TestDateUtil::formatToday();
+        $buyerInfo['shipping_date'] = TestDateUtil::formatToday();
         unset($buyerInfo[SC::STATE]);
         unset($buyerInfo[SC::CITY]);
         unset($buyerInfo[SC::ADDRESS_1]);

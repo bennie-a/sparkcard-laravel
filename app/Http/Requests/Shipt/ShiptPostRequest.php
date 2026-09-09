@@ -33,7 +33,7 @@ class ShiptPostRequest extends FormRequest
         return [
             ShiptCon::ORDER_ID => ['required', new Halfsize()],
             ShiptCon::BUYER => 'required',
-            ShiptCon::SHIPPING_DATE => ['required', DateFormatRule::slashRules()],
+            'shipping_date' => ['required', DateFormatRule::slashRules()],
             ShiptCon::ZIPCODE => ['required', PostalCodeRule::rules()],
             ShiptCon::ADDRESS => 'required|string',
             ShiptCon::ITEMS => ['required','array', 'min:1'],
@@ -48,7 +48,7 @@ class ShiptPostRequest extends FormRequest
     public function passedValidation()
     {
         $info = $this->only([ShiptCon::ORDER_ID, ShiptCon::BUYER, ShiptCon::ZIPCODE,
-                                         ShiptCon::ADDRESS, ShiptCon::SHIPPING_DATE, ShiptCon::ITEMS]);
+                                         ShiptCon::ADDRESS, 'shipping_date', ShiptCon::ITEMS]);
         $this->merge([
             GlobalConstant::DATA => $info,
         ]);

@@ -329,7 +329,7 @@ class ShiptParseTest extends TestCase
                 ]
             ]);
 
-            $response->assertJsonMissingPath('*.'.SC::SHIPPING_DATE, '存在しない商品名');
+            $response->assertJsonMissingPath('*.'.'shipping_date');
 
             return $response;
     }

@@ -35,7 +35,7 @@ class OrdersFactory extends Factory
             'coupon_discount' => $coupon,
             'grand_total' => $itemSubtotal - $coupon,
             SCon::FEE_ID => $this->fetchShiptFeeId($itemSubtotal),
-            SCon::SHIPPING_DATE => $this->faker->dateTimeBetween('-5 days', 'now'),
+            SCon::SHIPT_DATE => $this->faker->dateTimeBetween('-5 days', 'now'),
         ];
     }
 

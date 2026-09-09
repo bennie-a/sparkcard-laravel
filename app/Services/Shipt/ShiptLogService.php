@@ -68,7 +68,7 @@ class ShiptLogService extends AbstractCsvService {
                     $stock = Stockpile::find($stockId);
                     $log = [SC::ORDER_ID => $row->order_id(), SC::NAME => $row->buyer(), SC::ZIPCODE => $row->postal_code(),
                                 SC::ADDRESS => $row->address(), SC::STOCK_ID => $stockId, SC::QUANTITY => $shipment,
-                                SC::SHIPPING_DATE => $row->shipping_date(), SC::SINGLE_PRICE => $item[SC::SINGLE_PRICE],
+                                'shipping_date' => $row->shipping_date(), SC::SINGLE_PRICE => $item[SC::SINGLE_PRICE],
                                 SC::TOTAL_PRICE => $item[SC::TOTAL_PRICE] ];
                     ShippingLog::create($log);
 
@@ -164,25 +164,6 @@ class ShiptLogService extends AbstractCsvService {
             throw new NoContentException();
         }
         return $order;
-        // $list = ShippingLog::fetchByOrderId($orderId);
-        // $items = $list->map(function($slog) {
-        //         return ["id" => $slog["stock_id"],  GC::NAME => $slog["cardname"], Con::EXP => [GC::NAME => $slog[SC::SETNAME], Con::ATTR => $slog['exp_attr']],
-        //                      SC::CONDITION => $slog[SC::CONDITION], SC::QUANTITY => $slog->quantity,Con::NUMBER => $slog[Con::NUMBER],
-        //                     SC::LANG => $slog[SC::LANG], Con::IMAGE_URL => $slog[Con::IMAGE_URL],
-        //                     SC::FOIL => ['is_foil' => $slog['isFoil'], GC::NAME => $slog['foilname']],
-        //                     'single_price' =>$slog->single_price, 'subtotal_price' => $slog->total_price,
-        //                     Con::PROMOTYPE => [GC::ID => $slog->promotype_id, GC::NAME => $slog->promo_name
-        //         ]];
-        // });
-        // // $items = array_map(function($log) {
-        // // }, $list);
-        // $slog = $list[0];
-        // $info = [SC::ORDER_ID => $slog->order_id, SC::BUYER => $slog[SC::BUYER],
-        //                 SC::SHIPPING_DATE => $slog->shipping_date,  SC::ZIPCODE => '〒'.$slog->zip,
-        //                 SC::ADDRESS => $slog->address, GC::CARD => $items->toArray()];
-        // return $info;
-        // $log = ShippingLog::find($id);
-
     }
 
     /**

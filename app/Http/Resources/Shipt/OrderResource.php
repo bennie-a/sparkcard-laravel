@@ -28,7 +28,7 @@ class OrderResource extends JsonResource
             SC::ZIPCODE => $this->zip_code,
             SC::ADDRESS => $this->address,
             SC::BUYER => $this->buyer_name,
-            SC::SHIPPING_DATE => $this->shipt_date,
+            SC::SHIPT_DATE => $this->shipt_date,
             SC::ITEM_COUNT => $this->item_count,
             SC::ITEM_SUBTOTAL => $this->items_subtotal,
             SC::DISCOUNT_AMOUNT => $this->coupon_discount,
