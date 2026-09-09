@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Shipt;
 
 use App\Enum\ShiptMethod;
+use App\Enum\ShopPlatform;
 use App\Http\Resources\CardInfoResource;
 use App\Http\Resources\Items\ItemResource;
 use App\Http\Resources\Stockpile\StockpileResource;
@@ -11,59 +12,83 @@ use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\ShiptConstant as SC;
+use Override;
 
 /**
  * CSVファイルの内容から1件分の注文情報をまとめるResourceクラス。
  * @since 5.1.0
  */
-class CsvOrderResource extends JsonResource
+class CsvOrderResource extends OrderResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    // /**
+    //  * Transform the resource into an array.
+    //  *
+    //  * @return array<string, mixed>
+    //  */
+    // public function toArray(Request $request): array
+    // {
+    //     $row = $this[GlobalConstant::DATA];
+    //     $shiptData = $this[SC::ITEMS];
+    //     // 商品価格の合計
+    //     $productPrice = $this->collection($shiptData)->sum(function($item) {
+    //         return $item[SC::PRODUCT_PRICE];
+    //     });
+
+    //     // クーポン割引額の合計
+    //     $coupon = $this->collection($shiptData)->sum(function($item) {
+    //         return $item[SC::DISCOUNT_AMOUNT];
+    //     });
+
+    //     // 商品価格の合計 - クーポン割引額の合計
+    //     $totalPrice = $this->calcTotalPrice($productPrice, $coupon);
+    //     // 送料
+    //     $shiptFee = ShiptMethod::findByPrice($productPrice)->price;
+
+    //     $shiptFeePerItems = round($shiptFee / count($shiptData));
+    //     foreach ($shiptData as &$s) {
+    //         $stock = $s[SC::STOCK];
+    //         $subTotalPrice = $this->calcSubTotalPrice($s, $shiptFeePerItems);
+    //         $items[] = [
+    //             SC::STOCK => new ItemResource($stock),
+    //             SC::SHIPMENT => $s[SC::SHIPMENT],
+    //             SC::TOTAL_PRICE => $subTotalPrice,
+    //             SC::SINGLE_PRICE => $this->calcSinglePrice($subTotalPrice, $s[SC::SHIPMENT]),
+    //             SC::IS_REGISTERED => $s[SC::IS_REGISTERED],
+    //         ];
+    //     }
+    //     return [
+    //         SC::ORDER_ID => $this[SC::ORDER_ID],
+    //         SC::BUYER => $row->buyer(),
+    //         SC::ZIPCODE => $row->postal_code(),
+    //         SC::ADDRESS => $row->address(),
+    //         SC::FEE => $shiptFee,
+    //         SC::TOTAL_PRICE => $totalPrice,
+    //         SC::DISCOUNT_AMOUNT => $coupon,
+    //         SC::ITEMS => $items,
+    //     ];
+    // }
+
+    protected function id():int
+    {
+        return -1;
+    }
+
+    #[Override]
+    protected function platform(): string
+    {
+        return ShopPlatform::MERCARI->value;
+    }
+
+    #[Override]
+    protected function orderId():string {
+        return  $this[SC::ORDER_ID];
+    }
+
+    #[Override]
+    protected function zipcode():string
     {
         $row = $this[GlobalConstant::DATA];
-        $shiptData = $this[SC::ITEMS];
-        // 商品価格の合計
-        $productPrice = $this->collection($shiptData)->sum(function($item) {
-            return $item[SC::PRODUCT_PRICE];
-        });
-
-        // クーポン割引額の合計
-        $coupon = $this->collection($shiptData)->sum(function($item) {
-            return $item[SC::DISCOUNT_AMOUNT];
-        });
-
-        // 商品価格の合計 - クーポン割引額の合計
-        $totalPrice = $this->calcTotalPrice($productPrice, $coupon);
-        // 送料
-        $shiptFee = ShiptMethod::findByPrice($productPrice)->price;
-
-        $shiptFeePerItems = round($shiptFee / count($shiptData));
-        foreach ($shiptData as &$s) {
-            $stock = $s[SC::STOCK];
-            $subTotalPrice = $this->calcSubTotalPrice($s, $shiptFeePerItems);
-            $items[] = [
-                SC::STOCK => new ItemResource($stock),
-                SC::SHIPMENT => $s[SC::SHIPMENT],
-                SC::TOTAL_PRICE => $subTotalPrice,
-                SC::SINGLE_PRICE => $this->calcSinglePrice($subTotalPrice, $s[SC::SHIPMENT]),
-                SC::IS_REGISTERED => $s[SC::IS_REGISTERED],
-            ];
-        }
-        return [
-            SC::ORDER_ID => $this[SC::ORDER_ID],
-            SC::BUYER => $row->buyer(),
-            SC::ZIPCODE => $row->postal_code(),
-            SC::ADDRESS => $row->address(),
-            SC::FEE => $shiptFee,
-            SC::TOTAL_PRICE => $totalPrice,
-            SC::DISCOUNT_AMOUNT => $coupon,
-            SC::ITEMS => $items,
-        ];
+        return $row->postal_code();
     }
 
     /**
