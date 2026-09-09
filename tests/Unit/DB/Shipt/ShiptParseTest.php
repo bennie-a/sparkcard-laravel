@@ -38,6 +38,7 @@ use Tests\Util\TestDateUtil;
  * 出荷情報解析機能のテストケース
  */
 #[CoversClass(ShiptLogController::class)]
+#[TestDox('出荷情報解析機能のテスト')]
 class ShiptParseTest extends TestCase
 {
     use ApiErrorAssertions;
@@ -250,17 +251,18 @@ class ShiptParseTest extends TestCase
         $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
         if ($isRegistered) {
             $item = $buyerInfos[0][SC::ITEMS][0];
-            ShippingLog::create([
+            $record = [
                 SC::ORDER_ID => $buyerInfos[0][SC::ORDER_ID],
                 GC::NAME => $buyerInfos[0][SC::BUYER],
                 SC::ZIPCODE => $buyerInfos[0][SC::POSTAL_CODE],
                 SC::ADDRESS => $buyerInfos[0][SC::STATE].$buyerInfos[0][SC::CITY].$buyerInfos[0][SC::ADDRESS_1].' '.$buyerInfos[0][SC::ADDRESS_2],
-                SC::SHIPPING_DATE => TestDateUtil::formatToday(),
+                'shipping_date' => TestDateUtil::formatToday(),
                 SC::STOCK_ID => (int)$item[GC::ID],
                 StockpileHeader::QUANTITY => (int)$item[StockpileHeader::QUANTITY],
                 SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
                 SC::TOTAL_PRICE => (int)$item[SC::PRODUCT_PRICE],
-            ]);
+            ];
+            ShippingLog::create($record);
         }
         $response = $this->uploadOk($buyerInfos);
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::IS_REGISTERED, $isRegistered);
