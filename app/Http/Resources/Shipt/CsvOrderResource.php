@@ -8,6 +8,7 @@ use App\Http\Resources\CardInfoResource;
 use App\Http\Resources\Items\ItemResource;
 use App\Http\Resources\Stockpile\StockpileResource;
 use App\Libs\CarbonFormatUtil;
+use App\Models\Shipping;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -116,6 +117,51 @@ class CsvOrderResource extends OrderResource
     {
         $items = $this[SC::ITEMS];
         return count($items);
+    }
+
+    #[Override]
+    protected function itemsSubtotal():int
+    {
+        $items = $this[SC::ITEMS];
+        $productPrice = $this->collection($items)->sum(function($item) {
+            return $item[SC::PRODUCT_PRICE];
+        });
+        return $productPrice;
+    }
+
+    #[Override]
+    protected function couponDiscount():int
+    {
+        $items = $this[SC::ITEMS];
+        $coupon = $this->collection($items)->sum(function($item) {
+            return $item[SC::DISCOUNT_AMOUNT];
+        });
+        return $coupon;
+    }
+
+    #[Override]
+    protected function grandTotal():int
+    {
+        return $this->itemsSubtotal() - $this->couponDiscount();
+    }
+
+    #[Override]
+    protected function prevId():int
+    {
+        return -1;
+    }
+
+    #[Override]
+    protected function nextId():int
+    {
+        return -1;
+    }
+
+    #[Override]
+    protected function fee():Shipping
+    {
+        $shiptFee = ShiptMethod::findByPrice($this->itemsSubtotal());
+        return $shiptFee;
     }
 
 

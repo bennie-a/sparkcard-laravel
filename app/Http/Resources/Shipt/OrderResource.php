@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Shipt;
 
+use App\Models\Shipping;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,7 +21,7 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // $fee = $this->shipping;
+        $fee = $this->fee();
         return [
             GlobalConstant::ID => $this->when($this->id() != -1, $this->id()),
             SC::PLATFORM => $this->platform(),
@@ -30,12 +31,12 @@ class OrderResource extends JsonResource
             SC::BUYER => $this->buyer(),
             SC::SHIPT_DATE => $this->when(!empty($this->shiptDate()), $this->shiptDate()),
             SC::ITEM_COUNT => $this->itemCount(),
-            // SC::ITEM_SUBTOTAL => $this->items_subtotal,
-            // SC::DISCOUNT_AMOUNT => $this->coupon_discount,
-            // SC::GRAND_TOTAL => $this->grand_total,
-            // SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, ShiptConstant::PRICE => $fee->price],
-            // SC::PREV_ID => $this->previous()?->id ?? 0,
-            // SC::NEXT_ID => $this->next()?->id ?? 0,
+            SC::ITEM_SUBTOTAL => $this->itemsSubtotal(),
+            SC::DISCOUNT_AMOUNT => $this->couponDiscount(),
+            SC::GRAND_TOTAL => $this->grandTotal(),
+            SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, SC::PRICE => $fee->price],
+            SC::PREV_ID => $this->when($this->prevId() != -1, $this->prevId()),
+            SC::NEXT_ID => $this->when($this->nextId() != -1, $this->nextId())
             // SC::ITEMS => OrderItemResource::collection($this->orderitems),
         ];
     }
@@ -112,7 +113,7 @@ class OrderResource extends JsonResource
     /**
      * 商品数を返す。
      *
-     * @return string
+     * @return int
      */
     protected function itemCount():int
     {
@@ -122,8 +123,58 @@ class OrderResource extends JsonResource
     /**
      * 商品の合計金額（割引前）を返す。
      */
-    protected function itemSubtotal():int
+    protected function itemsSubtotal():int
     {
         return $this->items_subtotal;
     }
+
+    /**
+     * クーポン割引合計額を返す。
+     *
+     * @return integer
+     */
+    protected function couponDiscount():int
+    {
+        return $this->coupon_discount;
+    }
+
+    /**
+     * 最終請求金額を返す。
+     * @return  integer
+     */
+    protected function grandTotal():int
+    {
+        return $this->grand_total;
+    }
+
+    /**
+     * 1つ前の注文情報IDを返す。
+     *
+     * @return integer
+     */
+    protected function prevId():int
+    {
+        return $this->previous()?->id ?? 0;
+    }
+
+        /**
+     * 1つ後の注文情報IDを返す。
+     *
+     * @return integer
+     */
+    protected function nextId():int
+    {
+        return $this->next()?->id ?? 0;
+    }
+
+    /**
+     * 送料に関するレコードを返す。
+     *
+     * @return Shipping
+     */
+    protected function fee():Shipping
+    {
+        return $this->fee;
+    }
+
 }
