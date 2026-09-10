@@ -26,10 +26,10 @@ class OrderResource extends JsonResource
             SC::PLATFORM => $this->platform(),
             SC::PLATFORM_ORDER_ID => $this->orderId(),
             SC::ZIPCODE => $this->zipcode(),
-            // SC::ADDRESS => $this->address,
-            // SC::BUYER => $this->buyer_name,
-            // SC::SHIPT_DATE => $this->shipt_date,
-            // SC::ITEM_COUNT => $this->item_count,
+            SC::ADDRESS => $this->address(),
+            SC::BUYER => $this->buyer(),
+            SC::SHIPT_DATE => $this->when(!empty($this->shiptDate()), $this->shiptDate()),
+            SC::ITEM_COUNT => $this->itemCount(),
             // SC::ITEM_SUBTOTAL => $this->items_subtotal,
             // SC::DISCOUNT_AMOUNT => $this->coupon_discount,
             // SC::GRAND_TOTAL => $this->grand_total,
@@ -39,7 +39,6 @@ class OrderResource extends JsonResource
             // SC::ITEMS => OrderItemResource::collection($this->orderitems),
         ];
     }
-
 
     /**
      * 注文情報IDを取得する。
@@ -78,5 +77,53 @@ class OrderResource extends JsonResource
     protected function zipcode():string
     {
         return $this->zip_code;
+    }
+
+    /**
+     * 住所を返す。
+     *
+     * @return string
+     */
+    protected function address():string
+    {
+        return $this->address;
+    }
+
+    /**
+     * 購入者名を返す。
+     *
+     * @return string
+     */
+    protected function buyer():string
+    {
+        return $this->buyer_name;
+    }
+
+    /**
+     * 発送日を返す。
+     *
+     * @return string
+     */
+    protected function shiptDate():string
+    {
+        return $this->shipt_date;
+    }
+
+    /**
+     * 商品数を返す。
+     *
+     * @return string
+     */
+    protected function itemCount():int
+    {
+        return $this->item_count;
+    }
+
+    /**
+     * 商品の合計金額（割引前）を返す。
+     */
+    protected function itemSubtotal():int
+    {
+        return $this->items_subtotal;
     }
 }

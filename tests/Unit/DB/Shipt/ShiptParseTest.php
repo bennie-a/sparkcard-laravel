@@ -81,13 +81,13 @@ class ShiptParseTest extends TestCase
                 $json->whereAll([
                     "{$i}.". SC::PLATFORM => ShopPlatform::MERCARI->value,
                     "{$i}.". SC::PLATFORM_ORDER_ID => $buyer[SC::ORDER_ID],
-                    // "{$i}.". SC::BUYER => $buyer[SC::BUYER],
+                    "{$i}.". SC::BUYER => $buyer[SC::BUYER],
                     "{$i}.". SC::ZIPCODE => $buyer[SC::POSTAL_CODE],
-                    // "{$i}.". SC::ADDRESS =>
-                    //     $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
-                    // "{$i}.". SC::ITEMS => fn($items) => count($items) == count($buyer[SC::ITEMS]),
-                ]);
-                $json->missing(GC::ID)->etc();
+                    "{$i}.". SC::ADDRESS =>
+                        $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
+                    "{$i}.". SC::ITEM_COUNT => count($buyer[SC::ITEMS]),
+                    ]);
+                $json->missingAll([GC::ID, SC::SHIPT_DATE])->etc();
             });
         }
     }

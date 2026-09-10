@@ -91,6 +91,34 @@ class CsvOrderResource extends OrderResource
         return $row->postal_code();
     }
 
+    #[Override]
+    protected function address():string
+    {
+        $row = $this[GlobalConstant::DATA];
+        return $row->address();
+    }
+
+    #[Override]
+    protected function buyer():string
+    {
+        $row = $this[GlobalConstant::DATA];
+        return  $row->buyer();
+    }
+
+    #[Override]
+    protected function shiptDate():string
+    {
+        return '';
+    }
+
+    #[Override]
+    protected function itemCount():int
+    {
+        $items = $this[SC::ITEMS];
+        return count($items);
+    }
+
+
     /**
      * 支払い金額を算出する。
      *
