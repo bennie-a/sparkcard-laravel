@@ -25,11 +25,31 @@ class OrderItemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            GlobalConstant::ID => $this->id,
-            SC::SHIPMENT => $this->quantity,
-            SC::UNIT_PRICE => $this->unit_price,
-            SC::SUBTOTAL => $this->subtotal,
-            SC::STOCK => ItemResource::make($this->stockpile),
+            GlobalConstant::ID => $this->when($this->id() != -1, $this->id()),
+            SC::SHIPMENT => $this->shipment(),
+            // SC::UNIT_PRICE => $this->unit_price,
+            // SC::SUBTOTAL => $this->subtotal,
+            // SC::STOCK => ItemResource::make($this->stockpile),
         ];
+    }
+
+    /**
+     * 商品情報IDを返す。
+     *
+     * @return integer
+     */
+    protected function id():int
+    {
+        return $this->id;
+    }
+
+    /**
+     * 注文枚数を返す。
+     *
+     * @return integer
+     */
+    protected function shipment():int
+    {
+        return $this->quantity;
     }
 }

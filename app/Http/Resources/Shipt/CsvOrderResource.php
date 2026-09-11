@@ -13,6 +13,7 @@ use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\ShiptConstant as SC;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Override;
 
 /**
@@ -162,6 +163,12 @@ class CsvOrderResource extends OrderResource
     {
         $shiptFee = ShiptMethod::findByPrice($this->itemsSubtotal());
         return $shiptFee;
+    }
+
+    #[Override]
+    protected function orderItems():AnonymousResourceCollection
+    {
+        return CsvOrderItemResource::collection($this[SC::ITEMS]);
     }
 
 

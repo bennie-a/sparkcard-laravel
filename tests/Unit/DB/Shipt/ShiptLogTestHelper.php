@@ -97,8 +97,8 @@ class ShiptLogTestHelper
     /**
      * 商品情報を1件作成する。
      *
-     * @param integer $foiltypeId
-     * @param integer $promotypeId
+     * @param bool $isFoil
+     * @param bool $isPromo
      * @return array
      */
     public static  function createItemInfo(bool $isFoil, bool $isPromo, int $quantity = 1):array {

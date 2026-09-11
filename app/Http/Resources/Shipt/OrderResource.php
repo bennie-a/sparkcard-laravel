@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ShiptConstant;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * 注文情報をJSON形式で整形するResourceクラス
@@ -36,8 +37,8 @@ class OrderResource extends JsonResource
             SC::GRAND_TOTAL => $this->grandTotal(),
             SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, SC::PRICE => $fee->price],
             SC::PREV_ID => $this->when($this->prevId() != -1, $this->prevId()),
-            SC::NEXT_ID => $this->when($this->nextId() != -1, $this->nextId())
-            // SC::ITEMS => OrderItemResource::collection($this->orderitems),
+            SC::NEXT_ID => $this->when($this->nextId() != -1, $this->nextId()),
+            SC::ITEMS => $this->orderItems()
         ];
     }
 
@@ -177,4 +178,13 @@ class OrderResource extends JsonResource
         return $this->fee;
     }
 
+    /**
+     * 商品情報を返す。
+     *
+     * @return AnonymousResourceCollection
+     */
+    protected function orderItems():AnonymousResourceCollection
+    {
+        return OrderItemResource::collection($this->orderitems);
+    }
 }

@@ -14,6 +14,7 @@ use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ErrorConstant as EC;
+use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -215,6 +216,27 @@ class ShiptParseTest extends TestCase
         // }
     }
 
+    #[Test]
+    #[TestDox('枚数と単価、小計について検証する。')]
+    public function 商品情報() {
+        $buyerInfo = ShiptLogTestHelper::createBuyerInfo(2, false, false);
+        $response = $this->uploadOk([$buyerInfo]);
+        $response->assertJson(function(AssertableJson $json) {
+            $json->each(function(AssertableJson $aBuyer) {
+                $key = SC::ITEMS.'.*.';
+                $aBuyer
+                    ->has(SC::ITEMS, 2)
+                    ->has(SC::ITEMS, function (AssertableJson $items) {
+                        $items->each(function (AssertableJson $item) {
+                            $item->whereType(SC::SHIPMENT, 'integer');
+                    });
+                })->etc();
+            });
+            // $json->has($key.'.*.'.SC::SHIPMENT);
+            // $json->missing($key.'.'.GlobalConstant::ID);
+        });
+    }
+
     #[TestDox('在庫情報が正しく表示されているか確認する')]
     #[TestWith([false, false], '通常版')]
     #[TestWith([true, false], '通常版のFoilカード')]
@@ -300,46 +322,47 @@ class ShiptParseTest extends TestCase
         $response = $this->upload($content);
         $response->assertJsonStructure([
             '*' => [
-                SC::PLATFORM
-                // SC::ORDER_ID,
-                // SC::BUYER,
-                // SC::ZIPCODE,
-                // SC::ADDRESS,
-                // SC::TOTAL_PRICE,
-                // SC::DISCOUNT_AMOUNT,
-                // SC::FEE,
-                // SC::ITEMS => [
-                //     '*' => [
-                //         SC::STOCK => [
-                //             GC::ID,
-                //             CC::CARD => [
-                //                 GC::NAME,
-                //                 CC::EXP => [
-                //                     GC::NAME,
-                //                     CC::ATTR
-                //                 ],
-                //                 CC::NUMBER,
-                //                 CC::IMAGE_URL,
-                //                 CC::COLOR,
-                //                 CC::FOIL => [
-                //                     GC::ID,
-                //                     GC::NAME
-                //                 ],
-                //                 CC::PROMOTYPE => [
-                //                     GC::ID,
-                //                     GC::NAME
-                //                 ]
-                //             ],
-                //             StockpileHeader::CONDITION,
-                //             StockpileHeader::LANG,
-                //             StockpileHeader::QUANTITY
-                //         ],
-                //         SC::SHIPMENT,
-                //         SC::TOTAL_PRICE,
-                //         SC::SINGLE_PRICE,
-                //         SC::IS_REGISTERED
-                //         ]
-                //     ]
+                SC::PLATFORM,
+                SC::PLATFORM_ORDER_ID,
+                SC::BUYER,
+                SC::ZIPCODE,
+                SC::ADDRESS,
+                SC::ITEM_SUBTOTAL,
+                SC::ITEM_COUNT,
+                SC::DISCOUNT_AMOUNT,
+                SC::FEE,
+                SC::ITEMS => [
+                    '*' => [
+                        // SC::STOCK => [
+                        //     GC::ID,
+                        //     CC::CARD => [
+                        //         GC::NAME,
+                        //         CC::EXP => [
+                        //             GC::NAME,
+                        //             CC::ATTR
+                        //         ],
+                        //         CC::NUMBER,
+                        //         CC::IMAGE_URL,
+                        //         CC::COLOR,
+                        //         CC::FOIL => [
+                        //             GC::ID,
+                        //             GC::NAME
+                        //         ],
+                        //         CC::PROMOTYPE => [
+                        //             GC::ID,
+                        //             GC::NAME
+                        //         ]
+                        //     ],
+                        //     StockpileHeader::CONDITION,
+                        //     StockpileHeader::LANG,
+                        //     StockpileHeader::QUANTITY
+                        // ],
+                        SC::SHIPMENT,
+                        // SC::TOTAL_PRICE,
+                        // SC::SINGLE_PRICE,
+                        // SC::IS_REGISTERED
+                        ]
+                    ]
                 ]
             ]);
 
