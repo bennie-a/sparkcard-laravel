@@ -14,8 +14,7 @@ use App\Services\Constant\CardConstant as CC;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ErrorConstant as EC;
-use App\Services\Constant\GlobalConstant;
-use App\Services\Constant\StockpileHeader;
+use App\Services\Constant\StockpileHeader as SH;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -221,14 +220,16 @@ class ShiptParseTest extends TestCase
     public function 商品情報() {
         $buyerInfo = ShiptLogTestHelper::createBuyerInfo(2, false, false);
         $response = $this->uploadOk([$buyerInfo]);
-        $response->assertJson(function(AssertableJson $json) {
-            $json->each(function(AssertableJson $aBuyer) {
-                $key = SC::ITEMS.'.*.';
+        $response->assertJson(function(AssertableJson $json) use ($buyerInfo) {
+            $json->each(function(AssertableJson $aBuyer) use ($buyerInfo) {
+                $expectedItems = $buyerInfo[SC::ITEMS];
                 $aBuyer
-                    ->has(SC::ITEMS, 2)
-                    ->has(SC::ITEMS, function (AssertableJson $items) {
-                        $items->each(function (AssertableJson $item) {
-                            $item->whereType(SC::SHIPMENT, 'integer');
+                ->has(SC::ITEMS, 2)
+                ->has(SC::ITEMS, function (AssertableJson $items) use (&$expectedItems) {
+                        $items->each(function (AssertableJson $item) use(&$expectedItems){
+                            $ex = array_shift($expectedItems);
+                            $item->whereType(SC::SHIPMENT, 'integer')
+                                        ->where(SC::SHIPMENT, $ex[SH::QUANTITY]);
                     });
                 })->etc();
             });
