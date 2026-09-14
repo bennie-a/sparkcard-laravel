@@ -25,5 +25,15 @@ class CsvOrderItemResource extends OrderItemResource {
         return $this[SC::SHIPMENT];
     }
 
+    #[Override]
+    protected function subtotal():int
+    {
+        return $this[SC::PRODUCT_PRICE];
+    }
 
+    #[Override]
+    protected function unitPrice():int
+    {
+        return (int)round($this->subtotal() / $this->shipment());
+    }
 }

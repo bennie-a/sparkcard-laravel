@@ -228,8 +228,17 @@ class ShiptParseTest extends TestCase
                 ->has(SC::ITEMS, function (AssertableJson $items) use (&$expectedItems) {
                         $items->each(function (AssertableJson $item) use(&$expectedItems){
                             $ex = array_shift($expectedItems);
-                            $item->whereType(SC::SHIPMENT, 'integer')
-                                        ->where(SC::SHIPMENT, $ex[SH::QUANTITY]);
+                            $item->missing(GC::ID);
+                            $item->whereAllType([
+                                            SC::SHIPMENT => 'integer',
+                                            SC::SUBTOTAL => 'integer',
+                                            SC::UNIT_PRICE => 'integer',
+                                            ])
+                                        ->whereAll([
+                                            SC::SHIPMENT => $ex[SH::QUANTITY],
+                                            SC::SUBTOTAL => $ex[SC::PRODUCT_PRICE],
+                                            SC::UNIT_PRICE =>(int)round($ex[SC::PRODUCT_PRICE] / $ex[SH::QUANTITY])
+                                        ]);
                     });
                 })->etc();
             });
@@ -359,6 +368,8 @@ class ShiptParseTest extends TestCase
                         //     StockpileHeader::QUANTITY
                         // ],
                         SC::SHIPMENT,
+                        SC::SUBTOTAL,
+                        SC::UNIT_PRICE,
                         // SC::TOTAL_PRICE,
                         // SC::SINGLE_PRICE,
                         // SC::IS_REGISTERED

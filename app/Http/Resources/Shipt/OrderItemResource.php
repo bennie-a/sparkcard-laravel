@@ -27,8 +27,8 @@ class OrderItemResource extends JsonResource
         return [
             GlobalConstant::ID => $this->when($this->id() != -1, $this->id()),
             SC::SHIPMENT => $this->shipment(),
-            // SC::UNIT_PRICE => $this->unit_price,
-            // SC::SUBTOTAL => $this->subtotal,
+            SC::UNIT_PRICE => $this->unitPrice(),
+            SC::SUBTOTAL => $this->subtotal(),
             // SC::STOCK => ItemResource::make($this->stockpile),
         ];
     }
@@ -51,5 +51,25 @@ class OrderItemResource extends JsonResource
     protected function shipment():int
     {
         return $this->quantity;
+    }
+
+    /**
+     * 小計を返す。
+     *
+     * @return integer
+     */
+    protected function subtotal():int
+    {
+        return $this->subtotal;
+    }
+
+    /**
+     * 単価を返す。
+     *
+     * @return integer
+     */
+    protected function unitPrice():int
+    {
+        return $this->unit_price;
     }
 }
