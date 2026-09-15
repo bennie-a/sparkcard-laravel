@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Shipt;
 
+use App\Enum\ShiptMethod;
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\api\NotFoundException;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
@@ -107,6 +108,7 @@ class ShiptLogService extends AbstractCsvService {
                     $orders[$orderId] = [
                         SC::ORDER_ID => $orderId,
                         GC::DATA => $row,
+                        SC::ITEM_SUBTOTAL => 0
                     ];
                 }
                 // 出荷商品情報チェック
@@ -121,11 +123,19 @@ class ShiptLogService extends AbstractCsvService {
                     SC::DISCOUNT_AMOUNT => $row->discount(),
                     SC::IS_REGISTERED => ShippingLog::isExists($orderId, $row->buyer(), $stockId),
                 ];
-            } catch (ShipmentOrderException $e) {
-                $this->addError($row->number(), $e->getMsg());
-                continue;
+                // 合計金額を加算する。
+                $orders[$orderId][SC::ITEM_SUBTOTAL] += $row->product_price();
+                } catch (ShipmentOrderException $e) {
+                    $this->addError($row->number(), $e->getMsg());
+                    continue;
+                }
             }
+        // 送料を計算する。
+        foreach($orders as $orderId => &$order) {
+            $shiptFee = ShiptMethod::findByPrice($order[SC::ITEM_SUBTOTAL]);
+            $order[SC::FEE] = $shiptFee;
         }
+        unset($order);
         return array_values($orders);
     }
 
