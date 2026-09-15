@@ -236,7 +236,7 @@ class ShiptParseTest extends TestCase
                                             SC::SHIPMENT => $ex[SH::QUANTITY],
                                             SC::SUBTOTAL => (int)$exItemTotal,
                                             SC::UNIT_PRICE =>(int)round($exItemTotal / $ex[SH::QUANTITY])
-                                        ]);
+                                        ])->etc();
                     });
                 })->etc();
             });
@@ -275,9 +275,9 @@ class ShiptParseTest extends TestCase
                     $base.".".CC::CARD.".".CC::FOIL.".".GC::NAME => $foil->name,
                     $base.".".CC::CARD.".".CC::PROMOTYPE.".".GC::ID => $promo->id,
                     $base.".".CC::CARD.".".CC::PROMOTYPE.".".GC::NAME => $promo->name,
-                    $base.".".StockpileHeader::LANG => $stock->language,
-                    $base.".".StockpileHeader::CONDITION => $stock->condition,
-                    $base.".".StockpileHeader::QUANTITY => $stock->quantity,
+                    $base.".".SH::LANG => $stock->language,
+                    $base.".".SH::CONDITION => $stock->condition,
+                    $base.".".SH::QUANTITY => $stock->quantity,
                 ];
 
                 $json->whereAll($expected);
@@ -339,36 +339,35 @@ class ShiptParseTest extends TestCase
                 SC::FEE,
                 SC::ITEMS => [
                     '*' => [
-                        // SC::STOCK => [
-                        //     GC::ID,
-                        //     CC::CARD => [
-                        //         GC::NAME,
-                        //         CC::EXP => [
-                        //             GC::NAME,
-                        //             CC::ATTR
-                        //         ],
-                        //         CC::NUMBER,
-                        //         CC::IMAGE_URL,
-                        //         CC::COLOR,
-                        //         CC::FOIL => [
-                        //             GC::ID,
-                        //             GC::NAME
-                        //         ],
-                        //         CC::PROMOTYPE => [
-                        //             GC::ID,
-                        //             GC::NAME
-                        //         ]
-                        //     ],
-                        //     StockpileHeader::CONDITION,
-                        //     StockpileHeader::LANG,
-                        //     StockpileHeader::QUANTITY
-                        // ],
+                        SC::STOCK => [
+                            GC::ID,
+                            CC::CARD => [
+                                GC::NAME,
+                                CC::EXP => [
+                                    GC::NAME,
+                                    CC::ATTR
+                                ],
+                                CC::NUMBER,
+                                CC::IMAGE_URL,
+                                CC::COLOR,
+                                CC::FOIL => [
+                                    GC::ID,
+                                    GC::NAME
+                                ],
+                                CC::PROMOTYPE => [
+                                    GC::ID,
+                                    GC::NAME
+                                ]
+                            ],
+                            SH::CONDITION,
+                            SH::LANG,
+                            SH::QUANTITY
+                        ],
+                        SC::STOCK,
                         SC::SHIPMENT,
                         SC::SUBTOTAL,
                         SC::UNIT_PRICE,
-                        // SC::TOTAL_PRICE,
-                        // SC::SINGLE_PRICE,
-                        // SC::IS_REGISTERED
+                        SC::IS_REGISTERED
                         ]
                     ]
                 ]

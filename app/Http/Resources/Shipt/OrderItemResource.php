@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Shipt;
 
 use App\Http\Resources\Items\ItemResource;
+use App\Models\Stockpile;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class OrderItemResource extends JsonResource
             SC::SHIPMENT => $this->shipment(),
             SC::UNIT_PRICE => $this->unitPrice(),
             SC::SUBTOTAL => $this->subtotal(),
-            // SC::STOCK => ItemResource::make($this->stockpile),
+            SC::STOCK => ItemResource::make($this->stockpile()),
         ];
     }
 
@@ -71,5 +72,15 @@ class OrderItemResource extends JsonResource
     protected function unitPrice():int
     {
         return $this->unit_price;
+    }
+
+    /**
+     * 在庫情報を返す。
+     *
+     * @return Stockpile
+     */
+    protected function stockpile():Stockpile
+    {
+        return $this->stockpile;
     }
 }
