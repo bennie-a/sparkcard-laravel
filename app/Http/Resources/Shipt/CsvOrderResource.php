@@ -123,7 +123,11 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function itemsSubtotal():int
     {
-        return $this[SC::ITEM_SUBTOTAL];
+        $items = $this[SC::ITEMS];
+        $productPrice = $this->collection($items)->sum(function($item) {
+            return $item[SC::PRODUCT_PRICE];
+        });
+        return $productPrice;
     }
 
     #[Override]
@@ -157,13 +161,23 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function fee():Shipping
     {
-        return $this[SC::FEE];
+        $shiptFee = ShiptMethod::findByPrice($this->itemsSubtotal());
+        return $shiptFee;
     }
 
     #[Override]
     protected function orderItems():AnonymousResourceCollection
     {
-        return CsvOrderItemResource::collection($this[SC::ITEMS]);
+        $itemCount = $this->itemCount();
+        $fee = $this->fee();
+        $feePerItem = $itemCount > 0 ? round($fee->price / $itemCount) : 0;
+
+        $items = array_map(function($item) use ($feePerItem) {
+            $item[SC::PRODUCT_PRICE] -= $feePerItem;
+            return $item;
+        }, $this[SC::ITEMS]);
+
+        return CsvOrderItemResource::collection($items);
     }
 
 

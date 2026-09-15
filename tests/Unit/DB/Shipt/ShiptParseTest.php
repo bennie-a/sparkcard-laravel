@@ -175,14 +175,10 @@ class ShiptParseTest extends TestCase
     public function testTotalPriceCalc(int $discount, int $itemCount): void {
         $buyerInfos = [ShiptLogTestHelper::createBuyerInfo($itemCount, false, false, 1)];
         foreach ($buyerInfos[0][SC::ITEMS] as &$item) {
-            // $item[StockpileHeader::QUANTITY] = $quantity;
             $item[SC::DISCOUNT_AMOUNT] = $discount;
         }
         $response = $this->uploadOk($buyerInfos);
-
         $items = current($buyerInfos)[SC::ITEMS];
-        // $shiptFee = ShiptMethod::findByPrice($exTotalPrice)->price;
-
         $response->assertJson(function(AssertableJson $json) use ($items){
             $json->hasAll([
                 '0.'.SC::ITEM_SUBTOTAL,
@@ -190,9 +186,7 @@ class ShiptParseTest extends TestCase
                 '0.'.SC::GRAND_TOTAL
                 ])->etc();
 
-            $exSubtotal = array_reduce($items, function($carry, $item) {
-                return $carry + $item[SC::PRODUCT_PRICE];
-            }, 0);
+            $exSubtotal = $this->calcExSubtotal($items);
 
             $exDiscount = array_reduce($items, function($carry, $item) {
                 return $carry + $item[SC::DISCOUNT_AMOUNT];
@@ -226,8 +220,12 @@ class ShiptParseTest extends TestCase
                 $aBuyer
                 ->has(SC::ITEMS, 2)
                 ->has(SC::ITEMS, function (AssertableJson $items) use (&$expectedItems) {
-                        $items->each(function (AssertableJson $item) use(&$expectedItems){
+                        $exSubtotal = $this->calcExSubtotal($expectedItems);
+                        $shiptFee = ShiptMethod::findByPrice($exSubtotal);
+                        $feePerItem = round($shiptFee->price / 2);
+                        $items->each(function (AssertableJson $item) use(&$expectedItems, &$feePerItem){
                             $ex = array_shift($expectedItems);
+                            $exItemTotal = $ex[SC::PRODUCT_PRICE] - $feePerItem;
                             $item->missing(GC::ID);
                             $item->whereAllType([
                                             SC::SHIPMENT => 'integer',
@@ -236,14 +234,12 @@ class ShiptParseTest extends TestCase
                                             ])
                                         ->whereAll([
                                             SC::SHIPMENT => $ex[SH::QUANTITY],
-                                            SC::SUBTOTAL => $ex[SC::PRODUCT_PRICE],
-                                            SC::UNIT_PRICE =>(int)round($ex[SC::PRODUCT_PRICE] / $ex[SH::QUANTITY])
+                                            SC::SUBTOTAL => (int)$exItemTotal,
+                                            SC::UNIT_PRICE =>(int)round($exItemTotal / $ex[SH::QUANTITY])
                                         ]);
                     });
                 })->etc();
             });
-            // $json->has($key.'.*.'.SC::SHIPMENT);
-            // $json->missing($key.'.'.GlobalConstant::ID);
         });
     }
 
@@ -512,6 +508,14 @@ class ShiptParseTest extends TestCase
         $status = CustomResponse::HTTP_CSV_VALIDATION;
         $response = $this->upload($content, $status);
         $this->assertRowError($response, $status, '郵便番号は「123-4567」の形式で入力してください。');
+    }
+
+    private function calcExSubtotal(array $items):int
+    {
+        $exSubtotal = array_reduce($items, function($carry, $item) {
+            return $carry + $item[SC::PRODUCT_PRICE];
+        }, 0);
+        return $exSubtotal;
     }
 
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
