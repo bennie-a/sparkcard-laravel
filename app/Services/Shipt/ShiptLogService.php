@@ -1,7 +1,6 @@
 <?php
 namespace App\Services\Shipt;
 
-use App\Enum\ShiptMethod;
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\api\NotFoundException;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
@@ -19,10 +18,8 @@ use FiveamCode\LaravelNotionApi\Entities\Properties\Number;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Select;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 use Illuminate\Http\Response as HttpResponse;
-use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
-use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\StockpileHeader;
 use DateTime;
 
@@ -112,7 +109,10 @@ class ShiptLogService extends AbstractCsvService {
                 }
                 // 出荷商品情報チェック
                 $stockId = (int)$r[SC::PRODUCT_ID];
-                $this->checkShipment($stockId, $row->shipment());
+                $isRegistered = $this->repo->existsItem($orderId, $stockId);
+                if (!$isRegistered) {
+                    $this->checkShipment($stockId, $row->shipment());
+                }
                 $stock = Stockpile::find($stockId);
 
                 $orders[$orderId][SC::ITEMS][] = [
@@ -120,7 +120,7 @@ class ShiptLogService extends AbstractCsvService {
                     SC::SHIPMENT => $row->shipment(),
                     SC::PRODUCT_PRICE => $row->product_price(),
                     SC::DISCOUNT_AMOUNT => $row->discount(),
-                    SC::IS_REGISTERED => ShippingLog::isExists($orderId, $row->buyer(), $stockId),
+                    SC::IS_REGISTERED => $isRegistered,
                 ];
                 } catch (ShipmentOrderException $e) {
                     $this->addError($row->number(), $e->getMsg());

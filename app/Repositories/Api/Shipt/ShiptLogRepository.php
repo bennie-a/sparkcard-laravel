@@ -3,7 +3,9 @@
 namespace App\Repositories\Api\Shipt;
 
 use App\Enum\SortOrder;
+use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
+use App\Services\Constant\ShiptConstant as SC;
 
 /**
  * 注文情報に関するRepositoryクラス
@@ -28,5 +30,21 @@ class ShiptLogRepository
                                                         'orderItems.stockpile.cardinfo.promotype',
                                                         'orderItems.stockpile.cardinfo.foiltype',
                                                     ])->first();
+    }
+
+    /**
+     * 注文情報と紐づいた商品情報が存在するか検証する。
+     *
+     * @param string $orderId
+     * @param integer $stockId
+     * @return bool
+     */
+    public function existsItem(string $orderId, int $stockId):bool
+    {
+        $exists = OrderItem::with('orders', function ($query) use ($orderId){
+                                $query->where(SC::PLATFORM_ORDER_ID, $orderId);
+                            })->where(SC::STOCK_ID, $stockId)->exists();
+
+        return $exists;
     }
 }

@@ -7,7 +7,7 @@ use App\Enum\ShopPlatform;
 use App\Http\Controllers\ShiptLogController;
 use App\Http\Response\CustomResponse;
 use App\Models\Shipping;
-use App\Models\ShippingLog;
+use App\Models\Shipt\Orders;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
 use App\Services\Constant\CardConstant as CC;
@@ -20,7 +20,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
-use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,6 +27,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
 use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\Shipt\TestOrderSeeder;
 use Tests\Database\Seeders\TestCardInfoSeeder;
 use Tests\Database\Seeders\TestStockpileSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
@@ -105,7 +105,7 @@ class ShiptParseTest extends TestCase
             // セット販売の商品名に変更
             $item[SC::PRODUCT_NAME] = ShiptLogTestHelper::product_name($stock, $isSet);
             logger()->info($item[SC::PRODUCT_NAME]);
-            $item[StockpileHeader::QUANTITY] = $isSet ? 1:$shipment;
+            $item[SH::QUANTITY] = $isSet ? 1:$shipment;
             return $item;
         }, $buyerInfos[0][SC::ITEMS]);
 
@@ -197,16 +197,6 @@ class ShiptParseTest extends TestCase
                 '0.'.SC::GRAND_TOTAL => $exSubtotal - $exDiscount
             ])->etc();
         });
-        // $response->assertJsonPath('0.'.SC::DISCOUNT_AMOUNT, $exDiscount);
-
-        // $shiptFeePerItems = (int)round($shiptFee / $itemCount);
-        // // 商品ごとの合計金額と単価が正しいか確認
-        // for ($i=0; $i < $itemCount; $i++) {
-        //     $exSubtotal = $items[$i][SC::PRODUCT_PRICE] - $items[$i][SC::DISCOUNT_AMOUNT] - $shiptFeePerItems;
-        //     $exSingle = (int)round($exSubtotal / $quantity);
-        //     $response->assertJsonPath("0.".SC::ITEMS.".{$i}.".SC::TOTAL_PRICE, $exSubtotal);
-        //     $response->assertJsonPath("0.".SC::ITEMS.".{$i}.".SC::SINGLE_PRICE, $exSingle);
-        // }
     }
 
     #[Test]
@@ -291,20 +281,17 @@ class ShiptParseTest extends TestCase
     public function testIsRegistered(bool $isRegistered) {
         $buyerInfos = [ShiptLogTestHelper::createTodayOrderInfos()];
         if ($isRegistered) {
-            $item = $buyerInfos[0][SC::ITEMS][0];
-            $record = [
-                SC::ORDER_ID => $buyerInfos[0][SC::ORDER_ID],
-                GC::NAME => $buyerInfos[0][SC::BUYER],
-                SC::ZIPCODE => $buyerInfos[0][SC::POSTAL_CODE],
-                SC::ADDRESS => $buyerInfos[0][SC::STATE].$buyerInfos[0][SC::CITY].$buyerInfos[0][SC::ADDRESS_1].' '.$buyerInfos[0][SC::ADDRESS_2],
-                'shipping_date' => TestDateUtil::formatToday(),
-                SC::STOCK_ID => (int)$item[GC::ID],
-                StockpileHeader::QUANTITY => (int)$item[StockpileHeader::QUANTITY],
-                SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
-                SC::TOTAL_PRICE => (int)$item[SC::PRODUCT_PRICE],
-            ];
-            ShippingLog::create($record);
+            $this->seed(TestOrderSeeder::class);
+            $order = Orders::inRandomOrder()->first();
+            $buyerInfos[0][SC::ORDER_ID] = $order->platform_order_id;
+            $buyerInfos[0][SC::BUYER] = $order->buyer_name;
+
+            $orderitem = $order->orderitems->first();
+            $buyerInfos[0][SC::ITEMS][0][GC::ID] = $orderitem->stock_id;
+            $buyerInfos[0][SC::ITEMS][0][ SH::QUANTITY] = $orderitem->quantity;
         }
+
+
         $response = $this->uploadOk($buyerInfos);
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::IS_REGISTERED, $isRegistered);
     }
