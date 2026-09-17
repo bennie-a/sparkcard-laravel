@@ -1,0 +1,367 @@
+{
+    "meta": {
+        "date": "2026-09-15",
+        "version": "5.3.0+20260915"
+    },
+    "data": {
+        "baseSetSize": 80,
+        "cards":[
+            {
+                "artist": "Cristi Balanescu",
+                "artistIds": [
+                    "c09ede88-a1b5-4a18-9895-dc8a965d28a5"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [],
+                "colors": [],
+                "convertedManaCost": 10.0,
+                "edhrecRank": 26384,
+                "edhrecSaltiness": 0.0,
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameEffects": [
+                    "legendary"
+                ],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "mcmId": "908418",
+                    "mtgjsonV4Id": "f8df0349-000b-5cd1-a512-c4939af81950",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "c3ff8dd3-88a8-49dc-a59b-e2748680623c",
+                    "scryfallIllustrationId": "fb7ded10-a9bf-4600-9770-c942f67ae0fe",
+                    "scryfallOracleId": "4421ab7d-6d9b-4edd-b5a0-53a8ed84da6f",
+                    "tcgplayerProductId": "716715"
+                },
+                "keywords": [
+                    "Flying",
+                    "Trample",
+                    "Ward"
+                ],
+                "language": "English",
+                "layout": "normal",
+                "leadershipSkills": {
+                    "brawl": false,
+                    "commander": true,
+                    "oathbreaker": false,
+                    "pauper_commander": false,
+                    "predh": false
+                },
+                "legalities": {},
+                "manaCost": "{10}",
+                "manaValue": 10.0,
+                "name": "Emrakul, the Exigent Doom",
+                "number": "1",
+                "power": "12",
+                "printings": [
+                    "FRA"
+                ],
+                "producedMana": [
+                    "C"
+                ],
+                "purchaseUrls": {
+                    "cardmarket": "https://mtgjson.com/links/7af61a2d60f21e96",
+                    "cardmarketFoil": "https://mtgjson.com/links/2e5e8590e5880c76",
+                    "tcgplayer": "https://mtgjson.com/links/0d083638324ca8b0"
+                },
+                "rarity": "mythic",
+                "securityStamp": "oval",
+                "setCode": "FRA",
+                "skuIds": {
+                    "foil": "e8e95843-b419-54ff-88c1-b6847360ffc2",
+                    "nonfoil": "64f4598c-bea7-552b-8a12-194299b91498"
+                },
+                "subtypes": [
+                    "Eldrazi"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ],
+                "text": "When you cast this spell, untap all lands you control.\nFlying, trample\nWard—Sacrifice three permanents.\n{3}, Exile this card from your hand: Target land gains \"{T}: Add {C}{C}\" until this card is cast from exile. You may cast this card for as long as it remains exiled.",
+                "toughness": "12",
+                "type": "Legendary Creature — Eldrazi",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "98144bab-0002-58e6-a809-93c937e71d8f",
+                "variations": [
+                    "02a7efdc-5936-5579-ab7c-5d66387aded5",
+                    "93fa71cd-aca2-5774-bf0e-a1ad34dd38a4",
+                    "9eaa6846-67f5-50d0-bd0e-b6b7192d763f",
+                    "e05d035b-2a9d-54ba-be3b-355f8fa5376a"
+                ]
+            }
+
+
+
+        ],
+        "code": "FRA",
+        "decks": [
+            {
+                "code": "FRA",
+                "commander": [],
+                "displayCommander": [],
+                "mainBoard": [
+                    {
+                        "count": 2,
+                        "uuid": "c5db3128-91c0-598a-a2b9-07f236999136"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "c5db3128-91c0-598a-a2b9-07f236999136"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "d66d0178-65d5-566a-a2cb-9579911fd932"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "d66d0178-65d5-566a-a2cb-9579911fd932"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "def87f32-1c08-5bda-9661-48268a1fa4af"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "def87f32-1c08-5bda-9661-48268a1fa4af"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "20cd0b90-d094-5d5b-b6f7-63c582d26a7e"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "20cd0b90-d094-5d5b-b6f7-63c582d26a7e"
+                    },
+                    {
+                        "count": 2,
+                        "uuid": "58ede794-5b49-5d9a-93f2-ce99ef2c9723"
+                    },
+                    {
+                        "count": 2,
+                        "isFoil": true,
+                        "uuid": "58ede794-5b49-5d9a-93f2-ce99ef2c9723"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "0ff66df3-9092-58ca-b179-913f8cbca5d3"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "0ff66df3-9092-58ca-b179-913f8cbca5d3"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "568e67a5-b05e-56b5-b66f-0e1818e28a44"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "568e67a5-b05e-56b5-b66f-0e1818e28a44"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "e22ac803-e078-540b-bb38-5b5cdee01f2e"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "e22ac803-e078-540b-bb38-5b5cdee01f2e"
+                    },
+                    {
+                        "count": 1,
+                        "uuid": "62633e05-4b93-5d1d-b997-af74b764ae3b"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "62633e05-4b93-5d1d-b997-af74b764ae3b"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "34797056-4b61-59c0-ac2a-8046111318a8"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "dab62f88-e102-5c16-91bd-dd6cdf782a35"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "6cbdba29-1d43-541a-9d99-c86f9f560210"
+                    },
+                    {
+                        "count": 1,
+                        "isFoil": true,
+                        "uuid": "95bab782-a15d-5bd1-8460-2b8fe8a8210c"
+                    }
+                ],
+                "name": "The Hobbit Bundle Land Pack",
+                "planes": [],
+                "releaseDate": "2026-01-23",
+                "schemes": [],
+                "sealedProductUuids": [
+                    "ac894328-92e0-52fc-b0e1-c2362c666b3e",
+                    "26bd45e8-3996-5051-a92f-d2c84a763c32"
+                ],
+                "sideBoard": [],
+                "source": "https://magic.wizards.com/en/news/feature/collecting-the-hobbit",
+                "sourceSetCodes": [
+                    "HOB"
+                ],
+                "tokens": [],
+                "type": "Bundle Land Pack"
+            }
+        ],
+        "isFoilOnly": false,
+        "isOnlineOnly": false,
+        "isPartialPreview": true,
+        "keyruneCode": "FRA",
+        "languages": [
+            "English"
+        ],
+        "mtgoCode": "FRA",
+        "name": "Reality Fracture",
+        "releaseDate": "2026-10-02",
+
+        "tcgplayerGroupId": 24683,
+        "tokenSetCode": "TFRA",
+        "tokens": [
+            {
+                "artist": "Daniel Cotter",
+                "artistIds": [
+                    "a9a608b3-d531-4acd-9fa9-80a7b0ed974b"
+                ],
+                "availability": [
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "U"
+                ],
+                "colors": [
+                    "U"
+                ],
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "mtgjsonV4Id": "71e42cf7-0307-5cdd-8dfd-2f9bea6fbea7",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "7bda0b63-fd0f-495d-9eb0-20057571c0ee",
+                    "scryfallIllustrationId": "5e66cf74-99ff-4596-b381-28dd42c05a2a",
+                    "scryfallOracleId": "58a1e3c9-a718-4413-b14e-d8d6257567bf"
+                },
+                "language": "English",
+                "layout": "token",
+                "name": "Illusion",
+                "number": "4",
+                "power": "1",
+                "relatedCards": {
+                    "reverseRelated": [
+                        "The Theorist, Jace Beleren"
+                    ]
+                },
+                "setCode": "FRA",
+                "skuIds": {
+                    "foil": "97b4c579-baf6-565a-b56a-44291a7f0fc8",
+                    "nonfoil": "c6aa829f-2d50-59f4-be09-f393f11a6eca"
+                },
+                "subtypes": [
+                    "Illusion"
+                ],
+                "supertypes": [],
+                "toughness": "1",
+                "type": "Token Creature — Illusion",
+                "types": [
+                    "Token",
+                    "Creature"
+                ],
+                "uuid": "3ffa938a-a3fa-5abb-b52d-3e325cd043e2"
+            },
+            {
+                "artist": "Manuel Castañón",
+                "artistIds": [
+                    "35f11eeb-36ff-4059-bb70-d1274f5bd858"
+                ],
+                "availability": [
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "U"
+                ],
+                "colors": [
+                    "U"
+                ],
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "mtgjsonV4Id": "d2a9b3d2-351e-5ac6-b339-1a4c029e082c",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "8d1e424f-6407-4f8c-bed2-eaf148237c81",
+                    "scryfallIllustrationId": "863fcbde-eb32-4cdb-8cb9-75dae67f3efb",
+                    "scryfallOracleId": "a6a09b69-dd86-4fda-8971-b77a2a4abddb"
+                },
+                "keywords": [
+                    "Surveil"
+                ],
+                "language": "English",
+                "layout": "token",
+                "loyalty": "0",
+                "name": "Jace",
+                "number": "5",
+                "setCode": "FRA",
+                "skuIds": {
+                    "foil": "9670c6c1-10ff-5c66-80d9-46e280ac5230",
+                    "nonfoil": "01f6c084-d5ea-5992-964a-f1af90bd6d38"
+                },
+                "subtypes": [
+                    "Jace"
+                ],
+                "supertypes": [],
+                "text": "[−1]: Surveil 1. (Look at the top card of your library. You may put that card into your graveyard.)\n[−3]: Draw a card.",
+                "type": "Token Planeswalker — Jace",
+                "types": [
+                    "Token",
+                    "Planeswalker"
+                ],
+                "uuid": "635f825d-d6fb-59ac-a807-af08713a3794"
+            }
+        ],
+        "totalSetSize": 80,
+        "translations": {
+            "Chinese Simplified": null,
+            "Chinese Traditional": null,
+            "French": null,
+            "German": null,
+            "Italian": null,
+            "Japanese": null,
+            "Korean": null,
+            "Portuguese (Brazil)": null,
+            "Russian": null,
+            "Spanish": null
+        },
+        "type": "expansion"
+    }
+}

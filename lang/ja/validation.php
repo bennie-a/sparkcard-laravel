@@ -211,7 +211,6 @@ return [
         Ccon::PROMO_ID => 'プロモタイプID',
         SC::BUYER => '購入者名',
         StockpileHeader::CONDITION => '状態',
-        StockpileHeader::QUANTITY => '枚数',
         GlobalConstant::FILE => 'ファイル',
         SC::POSTAL_CODE => '郵便番号',
         SC::ORDER_ID => '注文番号',

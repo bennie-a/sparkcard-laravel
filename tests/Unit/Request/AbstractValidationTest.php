@@ -20,7 +20,7 @@ abstract class AbstractValidationTest extends TestCase
             if ($validator->fails()) {
                 logger()->error($validator->errors());
             }
-            $this->assertTrue($isPassed, 'バリデーション失敗');        
+            $this->assertTrue($isPassed, 'バリデーション失敗');
     }
 
     /**
@@ -36,7 +36,6 @@ abstract class AbstractValidationTest extends TestCase
 
         foreach($msgs as $key => $m) {
             $actual = $validator->messages()->get($key);
-            logger()->debug($actual);
             $this->assertNotEmpty($actual, 'メッセージの有無');
             $this->assertEquals($m, current($actual), 'メッセージの合致');
         };
@@ -49,7 +48,7 @@ abstract class AbstractValidationTest extends TestCase
      * @return ValidationValidator
      */
     protected function validate(array $data) {
-        
+
         $request = $this->createRequest();
         $rules = $request->rules();
         $validator = Validator::make($data, $rules, $request->messages(), $request->attributes());

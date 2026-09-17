@@ -12,6 +12,8 @@ use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNotSame;
 use App\Services\Constant\CardConstant as Con;
+use App\Services\Constant\GlobalConstant as GC;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -43,7 +45,8 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
         assertNotNull($actualcard[self::NAME], 'カード名');
         assertEquals($number, $actualcard[Con::NUMBER], 'カード番号');
         assertEquals($exScryId, $actualcard[Con::SCRYFALLID], Con::SCRYFALLID);
-        assertEquals(1, $actualcard[Con::PROMO_ID], 'プロモタイプID');
+        assertEquals(1, $actualcard[Con::PROMOTYPE][GC::ID], 'プロモタイプID');
+        assertEquals('通常版', $actualcard[Con::PROMOTYPE][GC::NAME], 'プロモタイプ名');
     }
 
     /**
@@ -53,9 +56,9 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
      */
     public static function dataprovider() {
         return [
-            // '日本語表記あり' =>['WAR', [Con::NUMBER => '272', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027']],
-            // '日本語表記あり_multiverseIdなし' => ['MIR', [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84']],
-            // '日本語表記なし' =>['BRO',  [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c']],
+            '日本語表記あり' =>['WAR', [Con::NUMBER => '272', 'multiverseId' => 463894, 'scryfallId' => 'c4d35a34-01b7-41e1-8491-a6589175d027']],
+            '日本語表記あり_multiverseIdなし' => ['MIR', [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84']],
+            '日本語表記なし' =>['BRO',  [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c']],
             '両面カード' => ['MH3' ,[Con::NUMBER => '242', Con::MULTIVERSEID => 0,  Con::SCRYFALLID => '2a717b98-cdac-416d-bf6c-f6b6638e65d1']],
         ];
     }
@@ -75,9 +78,9 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
     }
 
     /**
-     * カードタイプ別のテストデータ
+     * 土地カードのテストデータ
      *
-     * @return void
+     * @return array
      */
     public static function landProvider() {
         return [

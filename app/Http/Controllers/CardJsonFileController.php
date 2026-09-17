@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CardJsonFileController extends Controller
 {
-    private $service;
+    private CardJsonFileService $service;
     public function __construct(CardJsonFileService $service)
     {
         ini_set("max_execution_time",240); // タイムアウトを240秒にセット
@@ -36,7 +36,7 @@ class CardJsonFileController extends Controller
         if (\App\Facades\ExService::isExistByAttr($setcode) == false) {
             throw new BadRequestException('messages.setcode-notFound');
         }
-        
+
         $color = $request->color;
         logger()->debug('色フィルター', [$color]);
         $isDraft = $request->isDraft;
