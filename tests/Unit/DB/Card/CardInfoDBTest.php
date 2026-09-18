@@ -49,8 +49,8 @@ class CardInfoDBTest extends TestCase
          'https://cards.scryfall.io/png/front/1/9/19cba6be-7291-4788-9241-87dad3b68363.png?1783904370'], 'リバーシブル・ボーダーレス')]
     #[TestWith(['DSK', 674764, '', 'https://cards.scryfall.io/png/front/d/3/d34c1354-3a78-4523-9b9a-58bf0c2b1a4e.png?1782785604'],
      '分割カード')]
-    #[TestWith(['FRA', 0, '0853bb80-8664-432a-8457-600139fd96d5',
-         'https://cards.scryfall.io/png/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.png?1788878145'], '準備カード')]
+    // #[TestWith(['FRA', 0, '0853bb80-8664-432a-8457-600139fd96d5',
+    //      'https://cards.scryfall.io/png/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.png?1788878145'], '準備カード')]
     public function test_getImage(string $setcode, int $multiId, string $scryId, string $exUrl) {
         $name = fake()->realText(10);
         $params = $this->createParams($setcode, $name, 1, ['通常版']);

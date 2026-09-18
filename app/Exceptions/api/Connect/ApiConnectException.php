@@ -1,5 +1,7 @@
 <?php
+namespace App\Exceptions\api\Connect;
 
+use App\Exceptions\ApiException;
 use Illuminate\Http\Response;
 
 /**

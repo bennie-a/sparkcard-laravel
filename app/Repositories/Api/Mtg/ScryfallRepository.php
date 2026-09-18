@@ -1,8 +1,8 @@
 <?php
 namespace App\Repositories\Api\Mtg;
 
-use ApiConnectException;
 use App\Enum\ExternalApi;
+use App\Exceptions\api\Connect\ApiConnectException;
 use App\Exceptions\api\NoContentException;
 use App\Factory\GuzzleClientFactory;
 use App\Libs\MtgJsonUtil;

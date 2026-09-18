@@ -5,7 +5,7 @@ use App\Repositories\Api\Mtg\ScryfallRepository;
 use App\Enum\CardColor;
 use App\Exceptions\api\NotFoundException;
 use App\Factory\CardInfoFactory;
-use App\Services\Constant\CardConstant;
+use App\Services\Constant\CardConstant as Con;
 use App\Services\json\Scryfall\ScryfallArtCard;
 use App\Services\json\Scryfall\ScryfallCard;
 use App\Services\json\Scryfall\ScryfallTransformCard;
@@ -48,27 +48,71 @@ class ScryfallService {
      */
     public function getImageUrl($details)
     {
-        if (MtgJsonUtil::hasKey(CardConstant::IMAGE_URL, $details)) {
-            return $details[CardConstant::IMAGE_URL];
+        $imageUrl = MtgJsonUtil::getIfExists(Con::IMAGE_URL, $details);
+        if (!empty($imageUrl)) {
+            return $imageUrl;
         }
-        $multiverseId = MtgJsonUtil::getIfExists(CardConstant::MULTIVERSEID, $details);
-        $json = [];
-        if (!empty($multiverseId)) {
-            $json = $this->repo->getCardByMultiverseId($multiverseId);
-        } else if (MtgJsonUtil::hasKey('scryfallId',$details) && !empty($details['scryfallId'])) {
-            $scryfallId = $details['scryfallId'];
-            $json = $this->repo->getCardByScryFallId($scryfallId);
-        } else {
+
+        $card = $this->findScryfallCard($details);
+        return $card->imageurl()['png'];
+    }
+
+    /**
+     * Scryfall形式のカードカードオブジェクトを取得する。
+     *
+     * @param array $details
+     * @return ScryfallCard | null
+     */
+    private function findScryfallCard(array $details)
+    {
+        $json = $this->findCardJson($details);
+
+        if (empty($json)) {
             return null;
         }
-        $layout = $json['layout'];
-        $card = null;
-        if ($layout == 'transform' || $layout == 'reversible_card') {
-            $card = new ScryfallTransformCard($json);
-        } else {
-            $card = new ScryfallCard($json);
+
+        return $this->createScryfallCard($json);
+    }
+
+    /**
+     * Scryfall.comからJSONデータを取得する。
+     *
+     * @param array $details
+     * @return array
+     */
+    private function findCardJson(array $details):array
+    {
+        $multiverseId = MtgJsonUtil::getIfExists(Con::MULTIVERSEID, $details);
+
+        if (!empty($multiverseId)) {
+            return $this->repo->getCardByMultiverseId($multiverseId);
         }
-        return $card->imageurl()['png'];
+
+        $scryfallId = MtgJsonUtil::getIfExists(
+            'scryfallId',
+            $details
+        );
+
+        if (!empty($scryfallId)) {
+            return $this->repo->getCardByScryFallId($scryfallId);
+        }
+
+        return [];
+    }
+
+    /**
+     * Scryfallオブジェクトを生成する。
+     *
+     * @param array $json
+     * @return ScryfallCard
+     */
+    private function createScryfallCard(array $json):ScryfallCard
+    {
+        if (in_array($json['layout'], ['transform', 'reversible_card'], true)) {
+            return new ScryfallTransformCard($json);
+        }
+
+        return new ScryfallCard($json);
     }
 
     /**
@@ -102,27 +146,5 @@ class ScryfallService {
 
         return $card;
     }
-
-    /**
-     * @deprecated(version: '5.2.2', reason: 'toArrayメソッドはScryfallResourceクラスに移動しました。')
-     */
-    private function toArray(array $contents) {
-        $card = new ScryfallCard($contents);
-        $color = CardColor::findColor($card->colors(), $card->types());
-        $promotype = \App\Facades\Promo::find($card);
-        logger()->info('プロモタイプ', [$promotype]);
-        return ['name' => $card->name(),
-                    'multiverse_id' => $card->multiverseId(),
-                    'en_name' => $card->enname(),
-                    'color' => $color->value,
-                    'promotype'=>$promotype,
-                    'imageurl' => $card->imageurl(),
-                    'number' => $card->number(),
-                    'setcode' => $card->setcode(),
-                    'reprint' => $card->reprint(),
-                    'foiltype' => $card->foiltype()
-            ];
-    }
-
 }
 ?>
