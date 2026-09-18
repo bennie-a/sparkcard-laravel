@@ -63,17 +63,11 @@ class ScryfallCard extends AbstractCard {
         return [$this->cardtype()];
     }
 
-
     public function isFullArt() {
         return \boolval($this->getJson()[('full_art')]);
     }
 
     public function imageurl() {
-        if (MtgJsonUtil::hasKey('card_faces', $this->getJson()) && $this->getJson()['layout'] !== 'split') {
-            $cardFaces = $this->getJson()['card_faces'];
-            $imageuris = $cardFaces[0]['image_uris'];
-            return $imageuris;
-        }
         $imageuris =  $this->getJson()['image_uris'];
         return $imageuris;
     }

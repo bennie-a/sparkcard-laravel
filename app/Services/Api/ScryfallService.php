@@ -5,6 +5,7 @@ use App\Repositories\Api\Mtg\ScryfallRepository;
 use App\Enum\CardColor;
 use App\Exceptions\api\NotFoundException;
 use App\Factory\CardInfoFactory;
+use App\Factory\ScryfallCardFactory;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\json\Scryfall\ScryfallArtCard;
 use App\Services\json\Scryfall\ScryfallCard;
@@ -16,7 +17,7 @@ use Illuminate\Http\Response;
  */
 class ScryfallService {
 
-    private $repo;
+    private ScryfallRepository $repo;
     public function __construct() {
         $this->repo = new ScryfallRepository();
     }
@@ -52,26 +53,9 @@ class ScryfallService {
         if (!empty($imageUrl)) {
             return $imageUrl;
         }
-
-        $card = $this->findScryfallCard($details);
-        return $card->imageurl()['png'];
-    }
-
-    /**
-     * Scryfall形式のカードカードオブジェクトを取得する。
-     *
-     * @param array $details
-     * @return ScryfallCard | null
-     */
-    private function findScryfallCard(array $details)
-    {
         $json = $this->findCardJson($details);
-
-        if (empty($json)) {
-            return null;
-        }
-
-        return $this->createScryfallCard($json);
+        $card = ScryfallCardFactory::create($json);
+        return $card->png();
     }
 
     /**
@@ -101,21 +85,6 @@ class ScryfallService {
     }
 
     /**
-     * Scryfallオブジェクトを生成する。
-     *
-     * @param array $json
-     * @return ScryfallCard
-     */
-    private function createScryfallCard(array $json):ScryfallCard
-    {
-        if (in_array($json['layout'], ['transform', 'reversible_card'], true)) {
-            return new ScryfallTransformCard($json);
-        }
-
-        return new ScryfallCard($json);
-    }
-
-    /**
      * @deprecated(version:5.2.2)
      *
      * @param string $setcode
@@ -137,14 +106,7 @@ class ScryfallService {
      */
     public function getCardInfoByNumber(array $details) {
         $json = $this->repo->getCardInfoByNumber($details);
-        $card = null;
-        if ($json['layout'] == 'art_series') {
-            $card = new ScryfallArtCard($json);
-        } else {
-            $card = new ScryfallCard($json);
-        }
-
-        return $card;
+        return ScryfallCardFactory::create($json);
     }
 }
 ?>
