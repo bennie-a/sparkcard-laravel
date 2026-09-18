@@ -43,11 +43,10 @@ class ShiptLogRequestTest extends TestCase
         foreach($msgs as $key => $m) {
             $actual = $validator->messages()->get($key);
             $this->assertNotEmpty($actual, 'メッセージの有無');
-            logger()->debug($actual);
             $this->assertEquals($m, $actual[0], 'メッセージの合致');
         };
     }
-    
+
     /**
      * バリデーションチェックを実行する。
      *
@@ -55,10 +54,10 @@ class ShiptLogRequestTest extends TestCase
      * @return ValidationValidator
      */
     private function validate(array $data) {
-        
+
         $request = new ShiptLogRequest();
         $rules = $request->rules();
-    
+
         $validator = Validator::make($data, $rules, $request->messages(), $request->attributes());
         return $validator;
     }

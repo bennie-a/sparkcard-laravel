@@ -17,6 +17,7 @@ class ScryfallCardFactory {
         switch ($json['layout'] ?? null) {
             case 'transform':
             case 'reversible_card':
+            case 'modal_dfc':
                 return new ScryfallTransformCard($json);
             case 'art_series':
                 return new ScryfallArtCard($json);
