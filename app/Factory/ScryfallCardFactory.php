@@ -3,8 +3,6 @@ namespace App\Factory;
 
 use App\Services\json\Scryfall\ScryfallArtCard;
 use App\Services\json\Scryfall\ScryfallCard;
-use App\Services\json\Scryfall\ScryfallPrepareCard;
-use App\Services\json\Scryfall\ScryfallSplitCard;
 use App\Services\json\Scryfall\ScryfallTransformCard;
 
 /**
