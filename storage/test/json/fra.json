@@ -97,10 +97,92 @@
                     "9eaa6846-67f5-50d0-bd0e-b6b7192d763f",
                     "e05d035b-2a9d-54ba-be3b-355f8fa5376a"
                 ]
+            },
+            {
+                "artist": "Justyna Dura",
+                "artistIds": [
+                    "d2340aef-8ca9-4e0d-864c-6a4e8d5e350a"
+                ],
+                "availability": [
+                    "arena",
+                    "mtgo",
+                    "paper"
+                ],
+                "borderColor": "black",
+                "colorIdentity": [
+                    "U"
+                ],
+                "colors": [
+                    "U"
+                ],
+                "convertedManaCost": 1.0,
+                "edhrecRank": 30056,
+                "edhrecSaltiness": 0.0,
+                "faceConvertedManaCost": 1.0,
+                "faceManaValue": 1.0,
+                "faceName": "Diviner of Victory",
+                "finishes": [
+                    "foil",
+                    "nonfoil"
+                ],
+                "foreignData": [],
+                "frameVersion": "2015",
+                "identifiers": {
+                    "mcmId": "907290",
+                    "mtgjsonV4Id": "093fd35d-9575-5a39-b516-c78507e4ee50",
+                    "scryfallCardBackId": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+                    "scryfallId": "0853bb80-8664-432a-8457-600139fd96d5",
+                    "scryfallIllustrationId": "22885fd8-c40e-4953-9d67-a483adb05925",
+                    "scryfallOracleId": "e7b78acd-5288-4528-97a8-a5b43de90bf5",
+                    "tcgplayerProductId": "715900"
+                },
+                "keywords": [
+                    "Prepared",
+                    "Surveil"
+                ],
+                "language": "English",
+                "layout": "prepare",
+                "legalities": {},
+                "manaCost": "{U}",
+                "manaValue": 1.0,
+                "name": "Diviner of Victory // Unwind History",
+                "number": "28",
+                "otherFaceIds": [
+                    "49a41f2b-ccb7-58c6-8595-1bf0ca972dc2"
+                ],
+                "power": "1",
+                "printings": [
+                    "FRA"
+                ],
+                "purchaseUrls": {
+                    "cardmarket": "https://mtgjson.com/links/bc09b4e6e6ff714b",
+                    "cardmarketFoil": "https://mtgjson.com/links/83a2fecc3ac7f977",
+                    "tcgplayer": "https://mtgjson.com/links/b644cfdad7c026ea"
+                },
+                "rarity": "rare",
+                "securityStamp": "oval",
+                "setCode": "FRA",
+                "side": "a",
+                "skuIds": {
+                    "foil": "161d9673-05ac-5026-a415-be095406c9fe",
+                    "nonfoil": "348c9feb-715e-5b67-9f44-62d33b3dbf92"
+                },
+                "subtypes": [
+                    "Dwarf",
+                    "Wizard"
+                ],
+                "supertypes": [],
+                "text": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\nWhenever you scry or surveil, this creature gets +1/+1 until end of turn.",
+                "toughness": "1",
+                "type": "Creature — Dwarf Wizard",
+                "types": [
+                    "Creature"
+                ],
+                "uuid": "27b3a5bc-4cc9-5f15-adfc-367e346a5830",
+                "variations": [
+                    "7ab2c890-2126-5c92-baad-fc865f1c2022"
+                ]
             }
-
-
-
         ],
         "code": "FRA",
         "decks": [

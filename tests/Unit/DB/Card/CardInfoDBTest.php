@@ -38,47 +38,37 @@ class CardInfoDBTest extends TestCase
         $this->seed(TestCardInfoSeeder::class);
     }
 
-/**
- * 画像URL取得に関する検証テスト
- *
- * @param string $name
- * @param string $color
- * @param integer $number
- * @param integer $multiId
- * @param string $scryId
- * @return void
- */
-    #[DataProvider('imageprovider')]
-    #[TestDox('画像URLの取得に関する検証')]
-    public function test_getImage(string $setcode, int $multiId, string $scryId) {
+    #[TestDox('片面カードの画像URLが取得できているか検証する。')]
+    #[TestWith(['WAR', 462248, '', 'https://cards.scryfall.io/png/front/d/3/d35f6ec2-7b39-458a-8600-c948c438252a.png?1782922433'], 'multiverseIdあり')]
+    #[TestWith(['WAR', 0, '', ''], 'image_urlあり_multiverseIdとscryfallIdなし')]
+    #[TestWith(['WAR', 0, '106e75ca-42a2-435c-8446-34763bbed5da',
+        'https://cards.scryfall.io/png/front/1/0/106e75ca-42a2-435c-8446-34763bbed5da.png?1782922335'], 'scryfallIdあり')]
+    #[TestWith(['NEO', 0, '8ae8fd65-4e02-4033-8712-3d15eee4a09c',
+         'https://cards.scryfall.io/png/front/8/a/8ae8fd65-4e02-4033-8712-3d15eee4a09c.png?1782862991'], '両面カード')]
+    #[TestWith(['ECL', 0, '19cba6be-7291-4788-9241-87dad3b68363',
+         'https://cards.scryfall.io/png/front/1/9/19cba6be-7291-4788-9241-87dad3b68363.png?1783904370'], 'リバーシブル・ボーダーレス')]
+    #[TestWith(['DSK', 674764, '', 'https://cards.scryfall.io/png/front/d/3/d34c1354-3a78-4523-9b9a-58bf0c2b1a4e.png?1782785604'],
+     '分割カード')]
+    #[TestWith(['FRA', 0, '0853bb80-8664-432a-8457-600139fd96d5',
+         'https://cards.scryfall.io/png/front/0/8/0853bb80-8664-432a-8457-600139fd96d5.png?1788878145'], '準備カード')]
+    public function test_getImage(string $setcode, int $multiId, string $scryId, string $exUrl) {
         $name = fake()->realText(10);
         $params = $this->createParams($setcode, $name, 1, ['通常版']);
         $params[Con::MULTIVERSEID] = $multiId;
-        if ($multiId > 0 && $scryId !== '') {
+        if ($multiId > 0 || $scryId !== '') {
             unset($params[Con::IMAGE_URL]);
         }
         if(!empty($scryId)) {
             $params[Con::SCRYFALLID] = $scryId;
         }
-        $this->post_execute($params, 201);
-
-        $info = CardInfo::getCardinfo(
-            Expansion::findBySetCode($setcode)->notion_id,
-            $params[Con::NUMBER],
-            Foiltype::findByAttr(Con::NON_FOIL)->id
-        );
-        $this->assertNotNull($info, 'カード情報の取得');
-        $this->assertNotNull($info->image_url, '画像URLの取得');
-    }
-
-    public static function imageprovider() {
-        return[
-            'multiverseIdあり' => ['WAR', 462492, ''],
-            'scryfallIdあり' => ['WAR', 0, '44f182dc-ae39-447a-9979-afd56bed6794'],
-            'image_urlあり_multiverseIdとscryfallIdなし' => ['WAR', 0, ''],
-            '両面カード' => ['NEO', 551715, ''],
-            'リバーシブル・ボーダーレス' => ['ECL', 0, '19cba6be-7291-4788-9241-87dad3b68363'],
-        ];
+        $this->post_execute($params, Response::HTTP_CREATED);
+        $exp = Expansion::findBySetCode($setcode);
+        $this->assertDatabaseHas(CardInfo::class, [
+            Con::EXP_ID => $exp->notion_id,
+            Con::NUMBER => $params[Con::NUMBER],
+            Con::FOIL_ID =>   Foiltype::findByAttr(Con::NON_FOIL)->id,
+            Con::IMAGE_URL => empty($exUrl) ? $params[Con::IMAGE_URL] : $exUrl
+        ]);
     }
 
     /**

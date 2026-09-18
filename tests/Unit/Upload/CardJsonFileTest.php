@@ -60,6 +60,7 @@ class CardJsonFileTest extends AbstractCardJsonFileTest
             '日本語表記あり_multiverseIdなし' => ['MIR', [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '4644694d-52e6-4d00-8cad-748899eeea84']],
             '日本語表記なし' =>['BRO',  [Con::NUMBER => '1', 'multiverseId' => 0, 'scryfallId' => '38a62bb2-bc33-44d4-9a7e-92c9ea7d3c2c']],
             '両面カード' => ['MH3' ,[Con::NUMBER => '242', Con::MULTIVERSEID => 0,  Con::SCRYFALLID => '2a717b98-cdac-416d-bf6c-f6b6638e65d1']],
+            '準備カード' => ['FRA' ,[Con::NUMBER => '28', Con::MULTIVERSEID => 0,  Con::SCRYFALLID => '0853bb80-8664-432a-8457-600139fd96d5']],
         ];
     }
 

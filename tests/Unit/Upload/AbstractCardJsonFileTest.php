@@ -40,10 +40,9 @@ abstract class AbstractCardJsonFileTest extends TestCase{
                 'code' => $jsondata['code']
             ]
         ];
+        $data['data']['cards'] = $jsondata['cards'];
         if (MtgJsonUtil::hasKey('tokens', $jsondata)) {
             $data['data']['tokens'] = $jsondata['tokens'];
-        } else {
-            $data['data']['cards'] = $jsondata['cards'];
         }
         $query = sprintf('?setcode=%s&isDraft=%s&color=%s', $setcode, $isDraft, $color);
         $response = $this->upload_OK($query, $data);
