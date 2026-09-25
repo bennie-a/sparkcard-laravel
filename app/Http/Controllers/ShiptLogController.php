@@ -9,6 +9,7 @@ use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
 use App\Http\Requests\ShowApiRequest;
 use App\Http\Resources\Shipt\CsvOrderResource;
+use App\Http\Resources\Shipt\FetchOrderResource;
 use App\Http\Resources\Shipt\OrderResource;
 use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Http\Request;
@@ -50,8 +51,7 @@ class ShiptLogController extends Controller
     public function index(ShiptLogRequest $request) {
         $detail = $request->only([ShiptCon::BUYER, ShiptCon::SHIPT_DATE]);
         $result = $this->service->fetch($detail);
-        logger()->info($result);
-        return response()->json($result, Response::HTTP_OK);
+        return response(FetchOrderResource::collection($result), Response::HTTP_OK);
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * 注文情報に関するRepositoryクラス
@@ -49,26 +50,16 @@ class ShiptLogRepository
         return $exists;
     }
 
-    public function fetch(array $details)
+    /**
+     * 検索条件に合致する注文情報を取得する。
+     *
+     * @param array $details
+     * @return Collection
+     */
+    public function fetch(array $details):Collection
     {
-        // $buyer = $details[SC::BUYER];
-        // $shiptDate = null;
-        // if (MtgJsonUtil::hasKey(SC::SHIPPING_DATE, $details)) {
-        //     $shiptDate = $details[SC::SHIPPING_DATE];
-        // }
-        // $query = ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
-        // selectRaw('count(order_id) as item_count, sum(total_price) as total_price');
-        // if ($buyer != null) {
-        //     $pat = '%' . addcslashes($buyer, '%_\\') . '%';
-        //     $query = $query->where('name', 'LIKE', $pat);
-        // }
-        // if ($shiptDate != null) {
-        //     $query = $query->whereDate(SC::SHIPPING_DATE, $shiptDate);
-        // }
-        // $result = $query->orderBy('shipping_date', 'desc')
-        //     ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->get();
-
         return Orders::query()->where(SC::SHIPT_DATE, $details[SC::SHIPT_DATE])
-                                                                            ->orderBy(GC::ID, SortOrder::ASC->value)->get();
+                                                ->with(['shipping'])
+                                                ->orderBy(GC::ID, SortOrder::ASC->value)->get();
     }
 }
