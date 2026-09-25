@@ -7,7 +7,6 @@ use App\Services\Constant\GlobalConstant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Constant\ShiptConstant as SC;
-use App\Services\Constant\ShiptConstant;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
@@ -38,7 +37,7 @@ class OrderResource extends JsonResource
             SC::FEE => [GlobalConstant::ID =>$fee->id, SC::METHOD => $fee->name, SC::PRICE => $fee->price],
             SC::PREV_ID => $this->when($this->prevId() != -1, $this->prevId()),
             SC::NEXT_ID => $this->when($this->nextId() != -1, $this->nextId()),
-            SC::ITEMS => $this->orderItems()
+            SC::ITEMS => $this->when($this->hasItems(), $this->orderItems())
         ];
     }
 
@@ -175,7 +174,17 @@ class OrderResource extends JsonResource
      */
     protected function fee():Shipping
     {
-        return $this->fee;
+        return $this->shipping;
+    }
+
+    /**
+     * trueならitems要素を出力する。
+     *
+     * @return boolean
+     */
+    public function hasItems():bool
+    {
+        return true;
     }
 
     /**
