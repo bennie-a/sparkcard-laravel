@@ -14,11 +14,12 @@ use App\Services\Constant\SearchConstant as SCon;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\StockpileHeader as Header;
 use App\Services\Constant\GlobalConstant as GCon;
+use Illuminate\Testing\TestResponse;
 
 /**
  * 'GET'メソッドのAPIに関する検証クラス
  */
-trait GetApiAssertions 
+trait GetApiAssertions
 {
     protected function assert_OK(array $condition) {
         $response = $this->execute($condition);
@@ -39,14 +40,14 @@ trait GetApiAssertions
      * メソッドを'GET'で指定してAPIを実行する。
      *
      * @param array $condition
-     * @return Response
+     * @return TestResponse
      */
     private function execute(array $condition) {
         $response = $this->json('GET', $this->getEndPoint(), $condition);
         return $response;
     }
 
-    
+
     /**
      * カード情報について検証する。
      *
@@ -66,7 +67,7 @@ trait GetApiAssertions
         $this->assertEquals($exp_expansion->attr, $act_expansion[Con::ATTR], 'セット略称');
         $this->assertEquals($exp_expansion->name, $act_expansion[Con::NAME], 'セット名');
     }
-    
+
     /**
      * 取引先カテゴリIDが買取の場合を検証する。
      *
@@ -85,7 +86,7 @@ trait GetApiAssertions
      * 取引先カテゴリが「買取」以外の場合を検証する。
      *
      * @return callable
-     * 
+     *
      */
     protected function verifyOtherVendor() {
         return function($vendor) {
@@ -129,7 +130,7 @@ trait GetApiAssertions
             $this->assertEquals($foiltype->name, $foils[Con::NAME]);
         };
     }
-    
+
     /**
      * card要素のpromotypeについて検証する。。
      *

@@ -5,6 +5,7 @@ namespace App\Repositories\Api\Shipt;
 use App\Enum\SortOrder;
 use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
+use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 
 /**
@@ -46,5 +47,28 @@ class ShiptLogRepository
                             })->where(SC::STOCK_ID, $stockId)->exists();
 
         return $exists;
+    }
+
+    public function fetch(array $details)
+    {
+        // $buyer = $details[SC::BUYER];
+        // $shiptDate = null;
+        // if (MtgJsonUtil::hasKey(SC::SHIPPING_DATE, $details)) {
+        //     $shiptDate = $details[SC::SHIPPING_DATE];
+        // }
+        // $query = ShippingLog::select('order_id', 'name', 'zip_code', 'address', 'shipping_date')->
+        // selectRaw('count(order_id) as item_count, sum(total_price) as total_price');
+        // if ($buyer != null) {
+        //     $pat = '%' . addcslashes($buyer, '%_\\') . '%';
+        //     $query = $query->where('name', 'LIKE', $pat);
+        // }
+        // if ($shiptDate != null) {
+        //     $query = $query->whereDate(SC::SHIPPING_DATE, $shiptDate);
+        // }
+        // $result = $query->orderBy('shipping_date', 'desc')
+        //     ->groupby('order_id', 'name', 'zip_code', 'address', 'shipping_date')->get();
+
+        return Orders::query()->where(SC::SHIPT_DATE, $details[SC::SHIPT_DATE])
+                                                                            ->orderBy(GC::ID, SortOrder::ASC->value)->get();
     }
 }

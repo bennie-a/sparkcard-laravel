@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\ShiptConstant as SC;
 use Carbon\Carbon;
+use Deprecated;
 
 /**
  * shippinng_logテーブルのModelクラス
@@ -43,6 +44,7 @@ class ShippingLog extends Model
                                                 ->where("slog.order_id", $orderId)->get();
     }
 
+    #[Deprecated('ShiptLogRepositoryクラスに移動。', '6.1.0')]
     public static function fetch(array $details) {
         $buyer = $details[SC::BUYER];
         $shiptDate = null;

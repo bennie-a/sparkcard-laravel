@@ -22,6 +22,7 @@ use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * 出荷ログ機能のサービスクラス
@@ -145,8 +146,15 @@ class ShiptLogService extends AbstractCsvService {
         return new ShiptRow($index, $row);
     }
 
-    public function fetch(array $details) {
-        $result = ShippingLog::fetch($details);
+    /**
+     * 指定した条件に合う注文情報を取得する。
+     *
+     * @param array $details
+     * @return Collection
+     */
+    public function fetch(array $details):Collection
+    {
+        $result = $this->repo->fetch($details);
         if ($result->isEmpty()) {
             throw new NotFoundException();
         }

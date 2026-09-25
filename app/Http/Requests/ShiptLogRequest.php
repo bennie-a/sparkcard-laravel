@@ -28,7 +28,7 @@ class ShiptLogRequest extends FormRequest
     {
         return [
             SC::BUYER => 'nullable',
-            SC::SHIPPING_DATE => 'date',
+            SC::SHIPT_DATE => 'date',
         ];
     }
 }

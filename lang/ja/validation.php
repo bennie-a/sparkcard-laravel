@@ -217,11 +217,11 @@ return [
         SC::STATE => '都道府県名',
         SC::CITY => '市区町村名',
         SC::ADDRESS_1 => 'その他住所1',
-        'shipping_date' => '発送日',
+        SC::SHIPT_DATE => '発送日',
     ],
 
     'values' => [
-        'shipping_date' => [
+        SC::SHIPT_DATE => [
             'today' => '今日'
         ],
         Acon::ARRIVAL_DATE => [

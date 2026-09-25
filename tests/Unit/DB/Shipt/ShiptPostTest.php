@@ -23,10 +23,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Util\TestDateUtil;
 
-/**
- * 出荷情報登録のテストクラス
- *
- */
+#[TestDox('注文情報登録機能のテスト')]
 #[CoversClass(ShiptLogController::class)]
 class ShiptPostTest extends TestCase
 {
