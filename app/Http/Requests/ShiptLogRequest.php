@@ -27,8 +27,18 @@ class ShiptLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            SC::BUYER => 'nullable',
-            SC::SHIPT_DATE => 'date',
+            SC::BUYER => ['required_without:shipt_date', 'nullable'],
+            SC::SHIPT_DATE => ['nullable', 'date'],
+        ];
+    }
+
+    /**
+     * エラーメッセージのカスタマイズ
+     */
+    public function messages(): array
+    {
+        return [
+            'buyer_name.required_without' => ':attribute、または:valuesのどちらかを入力してください。',
         ];
     }
 }

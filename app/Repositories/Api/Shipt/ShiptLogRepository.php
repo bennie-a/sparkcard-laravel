@@ -58,8 +58,13 @@ class ShiptLogRepository
      */
     public function fetch(array $details):Collection
     {
-        return Orders::query()->where(SC::SHIPT_DATE, $details[SC::SHIPT_DATE])
-                                                ->with(['shipping'])
-                                                ->orderBy(GC::ID, SortOrder::ASC->value)->get();
+        return Orders::query()->
+                    when(isset($details[SC::BUYER]), function($query) use($details) {
+                        return $query->where(SC::BUYER, $details[SC::BUYER]);
+                    })
+                    ->when(isset($details[SC::SHIPT_DATE]), function($query) use($details) {
+                        return $query->where(SC::SHIPT_DATE, $details[SC::SHIPT_DATE]);
+                    })
+                    ->orderBy(GC::ID, SortOrder::ASC->value)->get();
     }
 }

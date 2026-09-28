@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Unit\Request\Shipt;
 use App\Http\Requests\Shipt\ShiptPostRequest;
-use App\Http\Requests\Shipt\ShiptStoreRequest;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Http\FormRequest;
 use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
@@ -12,9 +11,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Util\TestDateUtil;
 
-/**
- * ShiptPostRequestクラスをテストするクラス
- */
+#[TestDox('ShiptPostRequestクラスをテストするクラス')]
 #[CoversClass(ShiptPostRequest::class)]
 class ShiptPostRequestTest extends AbstractValidationTest {
 
