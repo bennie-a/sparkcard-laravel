@@ -37,25 +37,24 @@ class ShiptSearchTest extends TestCase
     #[TestDox('日付を指定した検索を検証する')]
     public function ok()
     {
-        $date = TestDateUtil::formatYesterday();
-        $response = $this->assert_OK([SC::SHIPT_DATE => $date]);
-
+        $order = Orders::inRandomOrder()->first();
+        $date = $order->shipt_date;
         $exOrders = Orders::where(SC::SHIPT_DATE, $date)
                                                 ->orderBy(GC::ID, SortOrder::ASC->value)->get();
+        $response = $this->assert_OK([SC::SHIPT_DATE => $date]);
         $response->assertJsonCount($exOrders->count());
         for($i = 0; $i < $exOrders->count(); $i++) {
             $ex = $exOrders[$i];
-            // 購入者情報の確認
+            // 検索結果の確認
             $response->assertJson(function(AssertableJson $json) use($i, $ex) {
                 $json->whereAll([
-                    "{$i}.". GC::ID => $ex->id
-                    // "{$i}.". SC::PLATFORM => ShopPlatform::MERCARI->value,
-                    // "{$i}.". SC::PLATFORM_ORDER_ID => $buyer[SC::ORDER_ID],
-                    // "{$i}.". SC::BUYER => $ex,
-                    // "{$i}.". SC::ZIPCODE => 
-                    // "{$i}.". SC::ADDRESS =>
-                    //     $buyer[SC::STATE].$buyer[SC::CITY].$buyer[SC::ADDRESS_1].' '.$buyer[SC::ADDRESS_2],
-                    // "{$i}.". SC::ITEM_COUNT => count($buyer[SC::ITEMS]),
+                    "{$i}.". GC::ID => $ex->id,
+                    "{$i}.". SC::PLATFORM => $ex->platform,
+                    "{$i}.". SC::PLATFORM_ORDER_ID => $ex->platform_order_id,
+                    "{$i}.". SC::BUYER => $ex->buyer_name,
+                    "{$i}.". SC::ZIPCODE => $ex->zip_code,
+                    "{$i}.". SC::ADDRESS => $ex->address,
+                    "{$i}.". SC::ITEM_COUNT => $ex->item_count
                     ])->etc();
                 $json->missingAll([SC::PREV_ID, SC::NEXT_ID, SC::ITEMS])->etc();
             });
