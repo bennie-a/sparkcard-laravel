@@ -218,6 +218,7 @@ return [
         SC::CITY => '市区町村名',
         SC::ADDRESS_1 => 'その他住所1',
         SC::SHIPT_DATE => '発送日',
+        SC::PLATFORM => 'プラットフォーム'
     ],
 
     'values' => [

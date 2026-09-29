@@ -46,7 +46,11 @@ class ShiptLogTestHelper
         $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
                                                                 $buyerInfo[SC::ADDRESS_1].' '.$buyerInfo[SC::ADDRESS_2];
         $buyerInfo[SC::ZIPCODE] = $buyerInfo[SC::POSTAL_CODE];
-        $buyerInfo['shipping_date'] = TestDateUtil::formatToday();
+        $buyerInfo[SC::SHIPT_DATE] = TestDateUtil::formatToday();
+        $buyerInfo[SC::PLATFORM] = fake()->randomElement([ShopPlatform::MERCARI->value, ShopPlatform::BASE->value]);
+        $buyerInfo[SC::ITEM_SUBTOTAL] = rand(1, 20000);
+        $buyerInfo[SC::DISCOUNT_AMOUNT] = rand(0, 400);
+        $buyerInfo[SC::GRAND_TOTAL] = $buyerInfo[SC::ITEM_SUBTOTAL] - $buyerInfo[SC::DISCOUNT_AMOUNT];
         unset($buyerInfo[SC::STATE]);
         unset($buyerInfo[SC::CITY]);
         unset($buyerInfo[SC::ADDRESS_1]);
@@ -233,17 +237,21 @@ class ShiptLogTestHelper
      */
     public static function attribute(string $key):string {
         return match($key) {
+            SC::PLATFORM => 'プラットフォーム',
             SC::ORDER_ID => '注文番号',
             SC::BUYER => '購入者名',
             SC::ZIPCODE => '郵便番号',
             SC::ADDRESS => '住所',
+            SC::ITEM_SUBTOTAL => '合計金額',
+            SC::DISCOUNT_AMOUNT => 'クーポン割引額',
+            SC::GRAND_TOTAL => '最終請求金額',
             SC::ITEMS => '商品情報',
             GlobalConstant::ID => '在庫ID',
             SC::SHIPMENT => '出荷枚数',
             SC::TOTAL_PRICE => '支払い金額',
             SC::SINGLE_PRICE => '1枚あたりの単価',
             SC::IS_REGISTERED => '登録済みフラグ',
-            SC::SHIPPING_DATE => '発送日',
+            SC::SHIPT_DATE => '発送日',
             default => $key,
         };
     }

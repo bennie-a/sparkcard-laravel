@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Shipt;
 
-use App\Libs\CarbonFormatUtil;
 use App\Rules\DateFormatRule;
 use App\Rules\Halfsize;
+use App\Rules\PlatformRule;
 use App\Rules\PostalCodeRule;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\ShiptConstant as ShiptCon;
@@ -31,11 +31,15 @@ class ShiptPostRequest extends FormRequest
     public function rules(): array
     {
         return [
+            ShiptCon::PLATFORM => ['required', PlatformRule::rule()],
             ShiptCon::ORDER_ID => ['required', new Halfsize()],
             ShiptCon::BUYER => 'required',
-            'shipping_date' => ['required', DateFormatRule::slashRules()],
+            ShiptCon::SHIPT_DATE => ['required', DateFormatRule::slashRules()],
             ShiptCon::ZIPCODE => ['required', PostalCodeRule::rules()],
             ShiptCon::ADDRESS => 'required|string',
+            ShiptCon::ITEM_SUBTOTAL => ['required', 'integer', 'min:1'],
+            ShiptCon::DISCOUNT_AMOUNT => ['required', 'integer', 'min:0'],
+            ShiptCon::GRAND_TOTAL => ['required', 'integer', 'min:1'],
             ShiptCon::ITEMS => ['required','array', 'min:1'],
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:stockpile,id'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => ['required','integer','min:1'],
@@ -59,12 +63,22 @@ class ShiptPostRequest extends FormRequest
         return [
             ShiptCon::ADDRESS => '住所',
             ShiptCon::ZIPCODE => '郵便番号',
+            ShiptCon::ITEM_SUBTOTAL => '合計金額',
+            ShiptCon::DISCOUNT_AMOUNT => 'クーポン割引額',
+            ShiptCon::GRAND_TOTAL => '最終請求金額',
             ShiptCon::ITEMS => '商品情報',
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => '在庫ID',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => '出荷枚数',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => '1枚あたりの単価',
             ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => '支払い金額',
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => '登録済みフラグ',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            "platform.in" =>"プラットフォームは'mercari'もしくは'base'を入力してください。",
         ];
     }
 }

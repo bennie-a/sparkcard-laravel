@@ -1,5 +1,7 @@
 <?php
 namespace Tests\Unit\Request\Shipt;
+
+use App\Enum\ShopPlatform;
 use App\Http\Requests\Shipt\ShiptPostRequest;
 use App\Services\Constant\GlobalConstant;
 use Illuminate\Foundation\Http\FormRequest;
@@ -19,17 +21,24 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestDox('全項目を入力した正常テスト')]
     public function ok(): void {
         $request = ShiptLogTestHelper::createStoreRequest();
-        $request[SC::SHIPPING_DATE] = TestDateUtil::formatToday();
         $this->ok_pattern($request);
     }
 
     #[Test]
-    #[TestWith([SC::ORDER_ID], '注文番号')]
+    #[TestWith([ShopPlatform::MERCARI], 'メルカリ')]
+    #[TestWith([ShopPlatform::BASE], 'BASE')]
+    #[TestDox('プラットフォームの入力値に関する正常テスト')]
+    public function ok_platform(ShopPlatform $shop): void {
+        $request = ShiptLogTestHelper::createStoreRequest();
+        $request[SC::PLATFORM] = $shop->value;
+        $this->ok_pattern($request);
+    }
+
+    #[Test]
     #[TestWith([SC::BUYER], '購入者名')]
-    #[TestWith([SC::ZIPCODE], '郵便番号')]
     #[TestWith([SC::ADDRESS], '住所')]
     #[TestWith([SC::ITEMS], '商品情報')]
-    #[TestWith([SC::SHIPPING_DATE], '発送日')]
+    #[TestWith([SC::SHIPT_DATE], '発送日')]
     #[TestDox('購入者情報の必須項目が未設定の場合のエラーチェック')]
     public function ng_buyer_info_key_lacked(string $key) {
         $request = ShiptLogTestHelper::createStoreRequest();
@@ -49,6 +58,14 @@ class ShiptPostRequestTest extends AbstractValidationTest {
         $request = ShiptLogTestHelper::createStoreRequest();
         unset($request[SC::ITEMS][0][$key]);
         $this->ng_item_info($key, $request, 'は必ず入力してください。');
+    }
+
+    #[Test]
+    #[TestWith(['', 'は必ず入力してください。'], '未入力')]
+    #[TestWith(['yahoo', "は'mercari'もしくは'base'を入力してください。"], '指定外のプラットフォーム')]
+    #[TestDox('プラットフォームに関するエラーチェック')]
+    public function ng_platform(string $value, string $msg): void {
+        $this->ng_buyer_info(SC::PLATFORM, $value, $msg);
     }
 
     #[Test]
@@ -78,17 +95,37 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     }
 
     #[Test]
-    #[TestWith(['', 'は必ず入力してください。'], '未入力')]
-    #[TestDox('住所に関するエラーチェック')]
-    public function ng_address(string $value, string $msg): void {
-        $this->ng_buyer_info(SC::ADDRESS, $value, $msg);
+    #[TestWith(['aa', 'はY/m/d形式の日付で入力してください。'], '日付形式ではない')]
+    #[TestDox('発送日に関するエラーチェック')]
+    public function ng_shipt_date(string $value, string $msg): void {
+        $this->ng_buyer_info(SC::SHIPT_DATE, $value, $msg);
     }
 
     #[Test]
-    #[TestWith(['aa', 'はY/m/d形式の日付で入力してください。'], '日付形式ではない')]
-    #[TestDox('発送日に関するエラーチェック')]
-    public function ng_shipping_date(string $value, string $msg): void {
-        $this->ng_buyer_info(SC::SHIPPING_DATE, $value, $msg);
+    #[TestWith(['', 'は必ず入力してください。'], '未入力')]
+    #[TestWith(['a', 'は数字で入力してください。'], '数字ではない')]
+    #[TestWith(['0', 'は1以上の数字を入力してください。'], '0を入力')]
+    #[TestDox('合計金額に関するエラーチェック')]
+    public function ng_items_subtotal(string $value, string $msg): void {
+        $this->ng_buyer_info(SC::ITEM_SUBTOTAL, $value, $msg);
+    }
+
+    #[Test]
+    #[TestWith(['', 'は必ず入力してください。'], '未入力')]
+    #[TestWith(['a', 'は数字で入力してください。'], '数字ではない')]
+    #[TestWith(['-1', 'は0以上の数字を入力してください。'], '0未満の数字')]
+    #[TestDox('クーポン割引額に関するエラーチェック')]
+    public function ng_coupon_discount(string $value, string $msg): void {
+        $this->ng_buyer_info(SC::DISCOUNT_AMOUNT, $value, $msg);
+    }
+
+    #[Test]
+    #[TestWith(['', 'は必ず入力してください。'], '未入力')]
+    #[TestWith(['a', 'は数字で入力してください。'], '数字ではない')]
+    #[TestWith(['0', 'は1以上の数字を入力してください。'], '0を入力')]
+    #[TestDox('最終請求金額に関するエラーチェック')]
+    public function ng_grand_total(string $value, string $msg): void {
+        $this->ng_buyer_info(SC::GRAND_TOTAL, $value, $msg);
     }
 
     #[Test]
