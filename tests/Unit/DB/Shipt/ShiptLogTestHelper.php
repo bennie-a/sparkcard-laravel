@@ -2,6 +2,7 @@
 namespace Tests\Unit\DB\Shipt;
 
 use App\Enum\CsvFlowType;
+use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Exceptions\api\NotFoundException;
 use App\Models\CsvHeader;
@@ -51,6 +52,11 @@ class ShiptLogTestHelper
         $buyerInfo[SC::ITEM_SUBTOTAL] = rand(1, 20000);
         $buyerInfo[SC::DISCOUNT_AMOUNT] = rand(0, 400);
         $buyerInfo[SC::GRAND_TOTAL] = $buyerInfo[SC::ITEM_SUBTOTAL] - $buyerInfo[SC::DISCOUNT_AMOUNT];
+
+        $fee = ShiptMethod::findByPrice($buyerInfo[SC::ITEM_SUBTOTAL]);
+        $buyerInfo[SC::FEE] = [GC::ID => $fee->id];
+
+
         unset($buyerInfo[SC::STATE]);
         unset($buyerInfo[SC::CITY]);
         unset($buyerInfo[SC::ADDRESS_1]);
@@ -252,6 +258,8 @@ class ShiptLogTestHelper
             SC::SINGLE_PRICE => '1枚あたりの単価',
             SC::IS_REGISTERED => '登録済みフラグ',
             SC::SHIPT_DATE => '発送日',
+            SC::FEE => '送料',
+            SC::FEE.'.'.GlobalConstant::ID => '送料ID',
             default => $key,
         };
     }

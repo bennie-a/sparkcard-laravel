@@ -23,6 +23,11 @@ class ShiptPostRequest extends FormRequest
         return true;
     }
 
+   protected function prepareForValidation()
+   {
+            dd($this->all());
+   }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -41,6 +46,8 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::DISCOUNT_AMOUNT => ['required', 'integer', 'min:0'],
             ShiptCon::GRAND_TOTAL => ['required', 'integer', 'min:1'],
             ShiptCon::ITEMS => ['required','array', 'min:1'],
+            ShiptCon::FEE => ['required', 'array', 'size:1'],
+            ShiptCon::FEE.'.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:shipping,id'],
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:stockpile,id'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => ['required','integer','min:1'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => ['required', 'integer', 'min:1'],
@@ -67,6 +74,8 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::DISCOUNT_AMOUNT => 'クーポン割引額',
             ShiptCon::GRAND_TOTAL => '最終請求金額',
             ShiptCon::ITEMS => '商品情報',
+            ShiptCon::FEE => '送料',
+            ShiptCon::FEE.'.'.GlobalConstant::ID => '送料ID',
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => '在庫ID',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => '出荷枚数',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => '1枚あたりの単価',
@@ -79,6 +88,10 @@ class ShiptPostRequest extends FormRequest
     {
         return [
             "platform.in" =>"プラットフォームは'mercari'もしくは'base'を入力してください。",
+            // 'shipt_fee.id.required' => 'IDは必須です。',
+        'shipt_fee.id.integer' => 'IDは整数で入力してください。',
+        'shipt_fee.id.min' => 'IDは1以上で入力してください。',
+        'shipt_fee.id.exists' => '指定されたIDは存在しません。',
         ];
     }
 }

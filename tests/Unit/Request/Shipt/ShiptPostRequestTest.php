@@ -11,11 +11,22 @@ use App\Services\Constant\ShiptConstant as SC;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
-use Tests\Util\TestDateUtil;
+use Tests\Database\Seeders\DatabaseSeeder;
+use Tests\Database\Seeders\TestCardInfoSeeder;
+use Tests\Database\Seeders\TestStockpileSeeder;
+use Tests\Database\Seeders\TruncateAllTables;
 
 #[TestDox('ShiptPostRequestクラスをテストするクラス')]
 #[CoversClass(ShiptPostRequest::class)]
 class ShiptPostRequestTest extends AbstractValidationTest {
+
+    public function setup():void {
+        parent::setup();
+        $this->seed(TruncateAllTables::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestCardInfoSeeder::class);
+        $this->seed(TestStockpileSeeder::class);
+    }
 
     #[Test]
     #[TestDox('全項目を入力した正常テスト')]
@@ -39,6 +50,7 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestWith([SC::ADDRESS], '住所')]
     #[TestWith([SC::ITEMS], '商品情報')]
     #[TestWith([SC::SHIPT_DATE], '発送日')]
+    #[TestWith([SC::FEE], '送料')]
     #[TestDox('購入者情報の必須項目が未設定の場合のエラーチェック')]
     public function ng_buyer_info_key_lacked(string $key) {
         $request = ShiptLogTestHelper::createStoreRequest();
@@ -129,6 +141,35 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     }
 
     #[Test]
+    #[TestWith([[], 'は必ず入力してください。'], '空の配列')]
+    #[TestWith([[[GlobalConstant::ID => 1], [GlobalConstant::ID => 2]],
+      '内の要素数は1個のみにしてください。'], '配列の要素が2つある')]
+    #[TestDox('送料ブロックに関するエラーチェック')]
+    public function ng_fee(array $value, string $msg) {
+        $request = ShiptLogTestHelper::createStoreRequest();
+        $request[SC::FEE] = $value;
+        $attr = ShiptLogTestHelper::attribute(SC::FEE);
+        $this->ng_pattern($request, [SC::FEE => $attr.$msg]);
+    }
+
+    #[Test]
+    #[TestWith([[], 'は必ず入力してください。'], '空の配列')]
+    #[TestWith([[[GlobalConstant::ID => 1], [GlobalConstant::ID => 2]],
+                    SC::FEE, '内の要素数は1個のみにしてください。'], '配列の要素が2つある')]
+    #[TestWith([[[GlobalConstant::ID => 'a']],
+                    'shipt_fee.id', 'は数字で入力してください。'], '送料IDが文字列')]
+    #[TestWith([[[GlobalConstant::ID => 99]],
+                    'shipt_fee.id', 'がDBに存在しません。'], '存在しない送料ID')]
+    #[TestDox('送料IDに関するエラーチェック')]
+    public function ng_fee_id(array $value, string $msg) {
+        $request = ShiptLogTestHelper::createStoreRequest();
+        $request[SC::FEE] = $value;
+        // $attr = ShiptLogTestHelper::attribute($key);
+        // $this->ng_pattern($request, [$key => $attr.$msg]);
+    }
+
+
+    #[Test]
     #[TestDox('商品情報に空の配列が入った場合のエラーチェック')]
     public function ng_items_empty() {
         $request = ShiptLogTestHelper::createStoreRequest();
@@ -187,7 +228,7 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     }
 
     private function ng_buyer_info(string $key, string $value, string $msg): void {
-            $request = ShiptLogTestHelper::createStoreRequest();
+        $request = ShiptLogTestHelper::createStoreRequest();
         $request[$key] = $value;
         $attr = ShiptLogTestHelper::attribute($key);
         $this->ng_pattern($request, [$key => $attr.$msg]);

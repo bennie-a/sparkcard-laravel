@@ -134,7 +134,7 @@ return [
     'required_without_all' => ':attribute / :valuesのどれかを入力してください。',
     'same' => 'The :attribute and :other must match.',
     'size' => [
-        'array' => 'The :attribute must contain :size items.',
+        'array' => ':attribute内の要素数は:size個のみにしてください。',
         'file' => 'The :attribute must be :size kilobytes.',
         'numeric' => 'The :attribute must be :size.',
         'string' => 'The :attribute must be :size characters.',
