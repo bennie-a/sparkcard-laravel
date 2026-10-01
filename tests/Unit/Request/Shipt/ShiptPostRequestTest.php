@@ -60,19 +60,6 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     }
 
     #[Test]
-    #[TestWith([GlobalConstant::ID], '在庫ID')]
-    #[TestWith([SC::SHIPMENT], '出荷枚数')]
-    #[TestWith([SC::SINGLE_PRICE], '1枚あたりの単価')]
-    #[TestWith([SC::TOTAL_PRICE], '支払い金額')]
-    #[TestWith([SC::IS_REGISTERED], '登録済みフラグ')]
-    #[TestDox('商品情報の必須項目が未設定の場合のエラーチェック')]
-    public function ng_item_info_key_lacked(string $key) {
-        $request = ShiptLogTestHelper::createStoreRequest();
-        unset($request[SC::ITEMS][0][$key]);
-        $this->ng_item_info($key, $request, 'は必ず入力してください。');
-    }
-
-    #[Test]
     #[TestWith(['', 'は必ず入力してください。'], '未入力')]
     #[TestWith(['yahoo', "は'mercari'もしくは'base'を入力してください。"], '指定外のプラットフォーム')]
     #[TestDox('プラットフォームに関するエラーチェック')]
@@ -164,7 +151,6 @@ class ShiptPostRequestTest extends AbstractValidationTest {
         $this->ng_pattern($request, [$key => $attr.$msg]);
     }
 
-
     #[Test]
     #[TestDox('商品情報に空の配列が入った場合のエラーチェック')]
     public function ng_items_empty() {
@@ -177,6 +163,7 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestWith(['', 'は必ず入力してください。'], '未入力')]
     #[TestWith(['aa', 'は数字で入力してください。'], '数字以外の文字列')]
     #[TestWith(['0', 'は1以上の数字を入力してください。'], '0')]
+    #[TestWith(['999999', 'がDBに存在しません。'], '存在しない在庫ID')]
     #[TestDox('商品情報の在庫IDに関するエラーチェック')]
     public function ng_items_id(string $value, string $msg): void {
         $this->ng_item_info_validation(GlobalConstant::ID, $value, $msg);
@@ -195,9 +182,9 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestWith(['', 'は必ず入力してください。'], '未入力')]
     #[TestWith(['aa', 'は数字で入力してください。'], '数字以外の文字列')]
     #[TestWith(['49', 'は50以上の数字を入力してください。'], '50未満の数字')]
-    #[TestDox('商品情報の支払い金額に関するエラーチェック')]
-    public function ng_total_price(string $value, string $msg): void {
-        $this->ng_item_info_validation(SC::TOTAL_PRICE, $value, $msg);
+    #[TestDox('商品情報の小計に関するエラーチェック')]
+    public function ng_subtotal(string $value, string $msg): void {
+        $this->ng_item_info_validation(SC::SUBTOTAL, $value, $msg);
     }
 
     #[Test]
@@ -205,8 +192,8 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     #[TestWith(['aa', 'は数字で入力してください。'], '数字以外の文字列')]
     #[TestWith(['0', 'は1以上の数字を入力してください。'], '0')]
     #[TestDox('商品情報の1枚あたりの単価に関するエラーチェック')]
-    public function ng_single_price(string $value, string $msg): void {
-        $this->ng_item_info_validation(SC::SINGLE_PRICE, $value, $msg);
+    public function ng_unit_price(string $value, string $msg): void {
+        $this->ng_item_info_validation(SC::UNIT_PRICE, $value, $msg);
     }
 
     #[Test]

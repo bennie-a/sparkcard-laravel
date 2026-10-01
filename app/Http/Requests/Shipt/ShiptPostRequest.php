@@ -9,6 +9,8 @@ use App\Rules\PostalCodeRule;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\ShiptConstant as ShiptCon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
+use Override;
 
 /**
  * 出荷情報登録に関するRequestクラス
@@ -45,10 +47,30 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::FEE.'.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:shipping,id'],
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:stockpile,id'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => ['required','integer','min:1'],
-            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => ['required', 'integer', 'min:1'],
-            ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => ['required', 'integer','min:1'],
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SUBTOTAL => ['required', 'integer', 'min:50'],
+            ShiptCon::ITEMS.'.*.'.ShiptCon::UNIT_PRICE => ['required', 'integer','min:1'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => 'required|boolean',
         ];
+    }
+
+    /**
+     * itemブロック内に、isRegisteredフラグが
+     * 1つでも'false'である要素があるか検証する。
+     *
+     * @param Validator $validator
+     * @return void
+     */
+    public function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            $items = $this->input(ShiptCon::ITEMS);
+            $unregisteredItems = array_filter($items, function ($item) {
+                return isset($item[ShiptCon::IS_REGISTERED]) && $item[ShiptCon::IS_REGISTERED] === false;
+            });
+            if (empty($unregisteredItems)) {
+                $validator->errors()->add(ShiptCon::ITEMS, __('validation.custom.items.all-registered'));
+            }
+        });
     }
 
     public function passedValidation()
@@ -73,8 +95,8 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::FEE.'.'.GlobalConstant::ID => '送料ID',
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => '在庫ID',
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => '出荷枚数',
-            ShiptCon::ITEMS.'.*.'.ShiptCon::SINGLE_PRICE => '1枚あたりの単価',
-            ShiptCon::ITEMS.'.*.'.ShiptCon::TOTAL_PRICE => '支払い金額',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::UNIT_PRICE => '1枚あたりの単価',
+            ShiptCon::ITEMS.'.*.'.ShiptCon::SUBTOTAL => '小計',
             ShiptCon::ITEMS.'.*.'.ShiptCon::IS_REGISTERED => '登録済みフラグ',
         ];
     }

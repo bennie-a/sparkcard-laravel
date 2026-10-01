@@ -52,7 +52,6 @@ abstract class AbstractValidationTest extends TestCase
         $request = $this->createRequest();
         $rules = $request->rules();
         $validator = Validator::make($data, $rules, $request->messages(), $request->attributes());
-        // $request->withValidator($validator);
         return $validator;
     }
 

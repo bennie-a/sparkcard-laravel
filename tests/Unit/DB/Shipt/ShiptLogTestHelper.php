@@ -67,8 +67,8 @@ class ShiptLogTestHelper
             return [
                 GC::ID => $item[GC::ID],
                 SC::SHIPMENT => $item[StockpileHeader::QUANTITY],
-                SC::TOTAL_PRICE =>$item[SC::PRODUCT_PRICE],
-                SC::SINGLE_PRICE => fake()->numberBetween(50, 200),
+                SC::UNIT_PRICE => $item[SC::PRODUCT_PRICE],
+                SC::SUBTOTAL => fake()->numberBetween(50, 200),
                 SC::IS_REGISTERED => false,
             ];
         }, $buyerInfo[SC::ITEMS]);
@@ -254,8 +254,8 @@ class ShiptLogTestHelper
             SC::ITEMS => '商品情報',
             GlobalConstant::ID => '在庫ID',
             SC::SHIPMENT => '出荷枚数',
-            SC::TOTAL_PRICE => '支払い金額',
-            SC::SINGLE_PRICE => '1枚あたりの単価',
+            SC::SUBTOTAL => '小計',
+            SC::UNIT_PRICE => '1枚あたりの単価',
             SC::IS_REGISTERED => '登録済みフラグ',
             SC::SHIPT_DATE => '発送日',
             SC::FEE => '送料',

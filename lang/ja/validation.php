@@ -182,6 +182,7 @@ return [
         ],
     ],
     SC::ITEMS => [
+        'all-registered' => [EC::TITLE => '未登録商品なし', EC::DETAIL => '注文情報が全て登録されています。'],
         'no-info' => [EC::TITLE => '在庫情報なし', EC::DETAIL => '該当する在庫情報がありません'],
         'no-notion' => [EC::TITLE => 'Notionカードなし', EC::DETAIL => '注文番号に該当するNotionカードがありません'],
         'zero_quantity' => [EC::TITLE => '在庫枚数なし', EC::DETAIL => '在庫枚数がありません'],

@@ -30,6 +30,7 @@ class ShiptConstant extends StockpileHeader {
     /** @deprecated 6.1.0 */
     public const SINGLE_PRICE = 'single_price';
 
+    /** @deprecated 6.1.0 */
     public const TOTAL_PRICE = 'total_price';
     public const BUYER_INFO = 'buyer_info';
     public const STOCK_ID = 'stock_id';

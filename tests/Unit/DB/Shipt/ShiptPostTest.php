@@ -27,7 +27,6 @@ use Tests\Util\TestDateUtil;
 #[CoversClass(ShiptLogController::class)]
 class ShiptPostTest extends TestCase
 {
-
     public function setup():void {
         parent::setup();
         $this->seed(TruncateAllTables::class);
@@ -71,6 +70,8 @@ class ShiptPostTest extends TestCase
         }
         $this->ok($request);
     }
+
+    // TODO:出荷商品が全て登録済みの場合はエラーが出るテストを追加する。
 
     #[Test]
     #[TestDox('登録済みフラグがtrueの商品情報が登録されないことを検証する')]

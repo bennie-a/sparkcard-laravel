@@ -9,12 +9,13 @@ use App\Services\Constant\SearchConstant;
 use App\Traits\Rules\QtyRules;
 use App\Traits\Rules\SupplierRules;
 use App\Traits\VendorTypeIdRules;
+use Illuminate\Validation\Validator;
 
 class ArrivalUpdateRequest extends FormRequest
 {
     use QtyRules;
     use SupplierRules;
-    
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -46,7 +47,7 @@ class ArrivalUpdateRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
+    public function withValidator(Validator $validator)
     {
     $validator->after(function ($validator) {
             $vendorTypeId = $this->input(SearchConstant::VENDOR_TYPE_ID);
