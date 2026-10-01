@@ -153,19 +153,15 @@ class ShiptPostRequestTest extends AbstractValidationTest {
     }
 
     #[Test]
-    #[TestWith([[], 'は必ず入力してください。'], '空の配列')]
-    #[TestWith([[[GlobalConstant::ID => 1], [GlobalConstant::ID => 2]],
-                    SC::FEE, '内の要素数は1個のみにしてください。'], '配列の要素が2つある')]
-    #[TestWith([[[GlobalConstant::ID => 'a']],
-                    'shipt_fee.id', 'は数字で入力してください。'], '送料IDが文字列')]
-    #[TestWith([[[GlobalConstant::ID => 99]],
-                    'shipt_fee.id', 'がDBに存在しません。'], '存在しない送料ID')]
+    #[TestWith(['a', 'は数字で入力してください。'], '送料IDが文字列')]
+    #[TestWith(['99', 'がDBに存在しません。'], '存在しない送料ID')]
     #[TestDox('送料IDに関するエラーチェック')]
-    public function ng_fee_id(array $value, string $msg) {
+    public function ng_fee_id(string $value, string $msg) {
         $request = ShiptLogTestHelper::createStoreRequest();
-        $request[SC::FEE] = $value;
-        // $attr = ShiptLogTestHelper::attribute($key);
-        // $this->ng_pattern($request, [$key => $attr.$msg]);
+        $request[SC::FEE][GlobalConstant::ID] = $value;
+        $key = SC::FEE .'.'. GlobalConstant::ID;
+        $attr = ShiptLogTestHelper::attribute($key);
+        $this->ng_pattern($request, [$key => $attr.$msg]);
     }
 
 

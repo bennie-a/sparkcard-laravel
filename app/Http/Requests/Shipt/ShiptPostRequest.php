@@ -23,11 +23,6 @@ class ShiptPostRequest extends FormRequest
         return true;
     }
 
-   protected function prepareForValidation()
-   {
-            dd($this->all());
-   }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -87,11 +82,7 @@ class ShiptPostRequest extends FormRequest
     public function messages()
     {
         return [
-            "platform.in" =>"プラットフォームは'mercari'もしくは'base'を入力してください。",
-            // 'shipt_fee.id.required' => 'IDは必須です。',
-        'shipt_fee.id.integer' => 'IDは整数で入力してください。',
-        'shipt_fee.id.min' => 'IDは1以上で入力してください。',
-        'shipt_fee.id.exists' => '指定されたIDは存在しません。',
+            "platform.in" =>"プラットフォームは'mercari'もしくは'base'を入力してください。"
         ];
     }
 }
