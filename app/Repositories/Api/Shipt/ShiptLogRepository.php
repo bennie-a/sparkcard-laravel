@@ -2,11 +2,13 @@
 
 namespace App\Repositories\Api\Shipt;
 
+use App\Enum\ShopPlatform;
 use App\Enum\SortOrder;
 use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Shipt\ShiptStoreRow;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -66,5 +68,36 @@ class ShiptLogRepository
                         return $query->where(SC::SHIPT_DATE, $details[SC::SHIPT_DATE]);
                     })
                     ->orderBy(GC::ID, SortOrder::ASC->value)->get();
+    }
+
+    /**
+     * ordersテーブルにプラットフォームと注文番号が合致したレコード
+     * が存在するか検証する。
+     *
+     * @param ShopPlatform $platform
+     * @param string $orderId
+     * @return Orders|null
+     */
+    public function findByOrderId(ShopPlatform $platform, string $orderId):Orders|null
+    {
+        return Orders::query()->where(SC::PLATFORM, $platform->value)
+                            ->where(SC::PLATFORM_ORDER_ID, $orderId)
+                            ->first();
+    }
+
+    public function createOrder(ShiptStoreRow $row):Orders
+    {
+        return Orders::create([
+            SC::PLATFORM => $row->platform()->value,
+            SC::PLATFORM_ORDER_ID => $row->order_id(),
+            SC::BUYER => $row->buyer(),
+            SC::ZIPCODE => $row->postal_code(),
+            SC::ADDRESS => $row->address(),
+            SC::SHIPT_DATE => $row->shipping_date(),
+            SC::ITEM_SUBTOTAL => $row->item_subtotal(),
+            SC::DISCOUNT_AMOUNT => $row->discount_amount(),
+            SC::GRAND_TOTAL => $row->grand_total(),
+            'shipt_fee_id' => $row->fee(),
+        ]);
     }
 }

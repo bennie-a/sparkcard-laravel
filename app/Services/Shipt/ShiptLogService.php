@@ -43,15 +43,20 @@ class ShiptLogService extends AbstractCsvService {
     }
 
     /**
-     * @see AbstractSmsService::store
      * @param ShiptStoreRow $row
      * @return ShippingLog
     */
-    public function store($row):ShippingLog {
+    public function store(ShiptStoreRow $row):ShippingLog {
         $orderId = $row->order_id();
         // Notionカードの存在チェック
         $this->hasNotionCard($orderId);
 
+        $order = $this->repo->findByOrderId($row->platform(), $orderId);
+        if ($order) {
+            // ordersテーブルに登録
+        }
+
+        // order_itemテーブルの登録
         $items = $row->items();
         if (!empty($items)) {
             foreach ($items as $item) {

@@ -1,5 +1,7 @@
 <?php
 namespace App\Services\Shipt;
+
+use App\Enum\ShopPlatform;
 use App\Services\Shipt\ShiptRow;
 use App\Services\Constant\ShiptConstant as SC;
 
@@ -18,6 +20,10 @@ class ShiptStoreRow extends ShiptRow
      */
     public function number():int {
         return -1;
+    }
+
+    public function platform():ShopPlatform {
+        return $this->row[SC::PLATFORM];
     }
 
     public function postal_code() {

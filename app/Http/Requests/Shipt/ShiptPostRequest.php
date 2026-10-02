@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Shipt;
 
+use App\Enum\ShopPlatform;
 use App\Rules\DateFormatRule;
 use App\Rules\Halfsize;
 use App\Rules\PlatformRule;
@@ -76,8 +77,10 @@ class ShiptPostRequest extends FormRequest
 
     public function passedValidation()
     {
+        $platform = $this->input(ShiptCon::PLATFORM);
         $info = $this->only([ShiptCon::ORDER_ID, ShiptCon::BUYER, ShiptCon::ZIPCODE,
                                          ShiptCon::ADDRESS, ShiptCon::SHIPT_DATE, ShiptCon::ITEMS]);
+        $info[ShiptCon::PLATFORM] = ShopPlatform::from($platform);
         $this->merge([
             GlobalConstant::DATA => $info,
         ]);

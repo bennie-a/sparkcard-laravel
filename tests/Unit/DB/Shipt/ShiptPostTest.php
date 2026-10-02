@@ -73,7 +73,6 @@ class ShiptPostTest extends TestCase
         $this->ok($request);
     }
 
-    // TODO:出荷商品が全て登録済みの場合はエラーが出るテストを追加する。
     #[Test]
     #[TestDox('出荷商品が全て登録済みの場合はエラーが出ることを検証する')]
     public function ng_allRegistered() {

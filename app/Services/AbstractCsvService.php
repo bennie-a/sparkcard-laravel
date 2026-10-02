@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Services\Constant\ErrorConstant as EC;
+use App\Services\Shipt\ShiptRow;
 
 /**
  * CSVファイル読み込みに関する抽象クラス
@@ -14,25 +15,25 @@ abstract class AbstractCsvService {
 
     private $error = [];
 
-    /**
-     * CSVファイルの内容をDBに登録する。
-     *
-     * @param string $path ファイルパス
-     * @return void
-     */
-    public function import(string $path) {
-        $records = $this->read($path);
-        // DB登録
-        $callback = function($row) {
-            $this->store($row);
-        };
-        $details =
-        $this->execute($records, $callback);
-        $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success),
-                            'failed_rows' => count($this->error), 'failed_details' => $this->error,
-                            'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
-        return $result;
-    }
+    // /**
+    //  * CSVファイルの内容をDBに登録する。
+    //  *
+    //  * @param string $path ファイルパス
+    //  * @return void
+    //  */
+    // public function import(string $path) {
+    //     $records = $this->read($path);
+    //     // DB登録
+    //     $callback = function($row) {
+    //         $this->store($row);
+    //     };
+    //     $details =
+    //     $this->execute($records, $callback);
+    //     $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success),
+    //                         'failed_rows' => count($this->error), 'failed_details' => $this->error,
+    //                         'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
+    //     return $result;
+    // }
 
     /**
      * CSVデータに対して処理を実行する。
@@ -89,7 +90,7 @@ abstract class AbstractCsvService {
         return !empty($this->error);
     }
 
-    public abstract function store($row);
+    // public abstract function store(ShiptRow $row);
 
     /**
      * CSVファイル1行分のオブジェクトを作成する。
