@@ -4,8 +4,10 @@ namespace Tests\Unit\DB\Shipt;
 
 use App\Http\Controllers\ShiptLogController;
 use App\Models\ShippingLog;
+use App\Models\Shipt\Orders;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
+use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -72,6 +74,31 @@ class ShiptPostTest extends TestCase
     }
 
     // TODO:出荷商品が全て登録済みの場合はエラーが出るテストを追加する。
+    #[Test]
+    #[TestDox('出荷商品が全て登録済みの場合はエラーが出ることを検証する')]
+    public function ng_allRegistered() {
+        $request = ShiptLogTestHelper::createStoreRequest(2);
+        foreach ($request[SC::ITEMS] as $key => $item) {
+            $request[SC::ITEMS][$key][SC::IS_REGISTERED] = true;
+        }
+        $response = $this->post('api/shipping', $request);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $orderId = $request[SC::ORDER_ID];
+
+        $this->assertDatabaseMissing(Orders::class, [
+            SC::PLATFORM => $request[SC::PLATFORM],
+            SC::PLATFORM_ORDER_ID => $orderId,
+        ]);
+        $response->assertJson(function (AssertableJson $json) use ($orderId) {
+            $json->hasAll([EC::TITLE, EC::DETAIL, EC::REQUEST, GC::STATUS]);
+            $json->whereAll([
+                GC::STATUS => Response::HTTP_BAD_REQUEST,
+                EC::TITLE =>'Validation Error',
+                EC::DETAIL => "{$orderId}：注文情報が全て登録されています。",
+                EC::REQUEST => 'api/shipping'
+            ]);
+        });
+    }
 
     #[Test]
     #[TestDox('登録済みフラグがtrueの商品情報が登録されないことを検証する')]

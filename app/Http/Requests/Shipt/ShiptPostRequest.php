@@ -68,7 +68,8 @@ class ShiptPostRequest extends FormRequest
                 return isset($item[ShiptCon::IS_REGISTERED]) && $item[ShiptCon::IS_REGISTERED] === false;
             });
             if (empty($unregisteredItems)) {
-                $validator->errors()->add(ShiptCon::ITEMS, __('validation.custom.items.all-registered'));
+                $orderId = $this->input(ShiptCon::ORDER_ID);
+                $validator->errors()->add(ShiptCon::ITEMS, __('validation.isRegistered.all-registered', ['order_id' => $orderId]));
             }
         });
     }
@@ -76,7 +77,7 @@ class ShiptPostRequest extends FormRequest
     public function passedValidation()
     {
         $info = $this->only([ShiptCon::ORDER_ID, ShiptCon::BUYER, ShiptCon::ZIPCODE,
-                                         ShiptCon::ADDRESS, 'shipping_date', ShiptCon::ITEMS]);
+                                         ShiptCon::ADDRESS, ShiptCon::SHIPT_DATE, ShiptCon::ITEMS]);
         $this->merge([
             GlobalConstant::DATA => $info,
         ]);

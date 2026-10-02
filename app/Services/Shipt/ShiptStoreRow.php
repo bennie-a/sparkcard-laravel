@@ -52,7 +52,7 @@ class ShiptStoreRow extends ShiptRow
      * @return string
      */
     public function shipping_date():string {
-        return $this->row['shipping_date'];
+        return $this->row[SC::SHIPT_DATE];
     }
 
     /**
