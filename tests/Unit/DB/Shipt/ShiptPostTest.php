@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\DB\Shipt;
 
+use App\Enum\SortOrder;
 use App\Http\Controllers\ShiptLogController;
 use App\Models\ShippingLog;
+use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Models\Stockpile;
 use App\Services\CardBoardService;
@@ -22,6 +24,7 @@ use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\StockpileHeader;
 use FiveamCode\LaravelNotionApi\Entities\Page;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\Util\TestDateUtil;
 
@@ -127,55 +130,52 @@ class ShiptPostTest extends TestCase
         $beforeStockpile = $this->getStockpile($request);
 
         $response = $this->post('api/shipping', $request);
-        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertCreated();
         // JSONレスポンスの検証
-        $response->assertJson(function (AssertableJson $json) use ($orderId) {
-            $json->hasAll([SC::ORDER_ID, GC::CREATE_AT]);
-
-            $lastLog = ShippingLog::fetchLatestLog($orderId);
+        $lastLog = Orders::query()->orderBy(GC::ID, SortOrder::DESC->value)->first();
+        $response->assertJson(function (AssertableJson $json) use ($lastLog) {
             $expected = TestDateUtil::formatDateTime($lastLog->created_at);
-            $json->whereAll([SC::ORDER_ID => $orderId, GC::CREATE_AT => $expected]);
+            $json->hasAll([GC::ID, GC::CREATE_AT])->
+                               whereAll([GC::ID => $lastLog->id, GC::CREATE_AT => $expected]);
         });
 
-        $count = ShippingLog::where(SC::ORDER_ID, $orderId)->count();
+        $this->assertDatabaseHas(Orders::class, [
+                GC::ID => $lastLog->id,
+                SC::PLATFORM => $request[SC::PLATFORM],
+                SC::PLATFORM_ORDER_ID => $orderId,
+                SC::BUYER => $request[SC::BUYER],
+                SC::ZIPCODE => $request[SC::ZIPCODE],
+                SC::ADDRESS => $request[SC::ADDRESS],
+                SC::ITEM_SUBTOTAL => $request[SC::ITEM_SUBTOTAL],
+                'coupon_discount' => $request[SC::DISCOUNT_AMOUNT],
+                SC::GRAND_TOTAL => $request[SC::GRAND_TOTAL],
+                SC::FEE_ID => $request[SC::FEE][GC::ID],
+                SC::ITEM_COUNT => $request[SC::ITEM_COUNT],
+                SC::SHIPT_DATE => $request[SC::SHIPT_DATE],
+        ]);
 
-        $registeredItems = array_filter($request[SC::ITEMS], function($item) {
-            return $item[SC::IS_REGISTERED] == false;
-            });
-        $itemCount = count($registeredItems);
-        $this->assertEquals($itemCount, $count, "出荷情報の登録件数を検証する。");
-
-        $orderId = $request[SC::ORDER_ID];
-
-        if (empty($request['shipping_date'])) {
-            $request['shipping_date'] = TestDateUtil::formatToday();
-        }
+        $this->assertDatabaseCount(OrderItem::class, $request[SC::ITEM_COUNT]);
 
         foreach ($request[SC::ITEMS] as $item) {
             if ($item[SC::IS_REGISTERED]) {
                 continue;
             }
-            $this->assertDatabaseHas(ShippingLog::class, [
-                SC::ORDER_ID => $orderId,
-                GC::NAME => $request[SC::BUYER],
-                SC::ZIPCODE => $request[SC::ZIPCODE],
-                SC::ADDRESS => $request[SC::ADDRESS],
-                'shipping_date' => $request['shipping_date'],
+            $this->assertDatabaseHas(OrderItem::class, [
+                SC::ORDER_ID => $lastLog->id,
                 SC::STOCK_ID => $item[GC::ID],
                 StockpileHeader::QUANTITY => $item[SC::SHIPMENT],
-                SC::SINGLE_PRICE => $item[SC::SINGLE_PRICE],
-                SC::TOTAL_PRICE => $item[SC::TOTAL_PRICE],
+                SC::UNIT_PRICE => $item[SC::UNIT_PRICE],
+                SC::SUBTOTAL => $item[SC::SUBTOTAL]
             ]);
 
-            $expected = array_filter($beforeStockpile, function($before) use ($item) {
-                if ($before[GC::ID] === $item[GC::ID]) {
-                    return $before;
-                }
-            });
-            $exp = \current($expected);
             $this->assertDatabaseHas(Stockpile::class, [
                 GC::ID => $item[GC::ID],
-                StockpileHeader::QUANTITY => $exp[StockpileHeader::QUANTITY] - $item[SC::SHIPMENT],
+                StockpileHeader::QUANTITY => array_reduce($beforeStockpile, function ($carry, $before) use ($item) {
+                    if ($before[GC::ID] === $item[GC::ID]) {
+                        return $before[StockpileHeader::QUANTITY] - $item[SC::SHIPMENT];
+                    }
+                    return $carry;
+                }, 0)
             ]);
         }
         return $response;

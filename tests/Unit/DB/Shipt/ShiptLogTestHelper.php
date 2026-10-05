@@ -74,6 +74,7 @@ class ShiptLogTestHelper
         }, $buyerInfo[SC::ITEMS]);
 
         $buyerInfo[SC::ITEMS] = $items;
+        $buyerInfo[SC::ITEM_COUNT] = count($items);
         return $buyerInfo;
     }
 

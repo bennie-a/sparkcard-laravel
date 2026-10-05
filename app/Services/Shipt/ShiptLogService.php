@@ -7,6 +7,7 @@ use App\Exceptions\api\Shipt\ShipmentOrderException;
 use App\Exceptions\api\Shipt\ShiptNotionException;
 use App\Facades\CardBoard;
 use App\Files\Reader\ShiptLogCsvReader;
+use App\Libs\CarbonFormatUtil;
 use App\Models\ShippingLog;
 use App\Models\Shipt\Orders;
 use App\Models\Stockpile;
@@ -43,54 +44,38 @@ class ShiptLogService extends AbstractCsvService {
     }
 
     /**
+     * 注文情報を1件登録する。
      * @param ShiptStoreRow $row
-     * @return ShippingLog
+     * @return array
     */
-    public function store(ShiptStoreRow $row):ShippingLog {
+    public function store(ShiptStoreRow $row):array {
         $orderId = $row->order_id();
         // Notionカードの存在チェック
         $this->hasNotionCard($orderId);
 
         $order = $this->repo->findByOrderId($row->platform(), $orderId);
-        if ($order) {
-            // ordersテーブルに登録
+        if (!$order) {
+            $order = $this->repo->createOrder($row);
         }
 
         // order_itemテーブルの登録
         $items = $row->items();
-        if (!empty($items)) {
-            foreach ($items as $item) {
-                $stockId = (int)$item[GC::ID];
-                // DB登録済みフラグがtrueの場合はスキップ
-                if ($item[SC::IS_REGISTERED]) {
-                    logger()->warning("既に登録されています。注文ID:{$row->order_id()}, 氏名:{$row->buyer()}, 在庫ID:{$stockId}");
-                    continue;
-                }
-                $shipment = (int)$item[SC::SHIPMENT];
-                try {
-                    $this->checkShipment($stockId, $shipment);
-                    $stock = Stockpile::find($stockId);
-                    $log = [SC::ORDER_ID => $row->order_id(), SC::NAME => $row->buyer(), SC::ZIPCODE => $row->postal_code(),
-                                SC::ADDRESS => $row->address(), SC::STOCK_ID => $stockId, SC::QUANTITY => $shipment,
-                                'shipping_date' => $row->shipping_date(), SC::SINGLE_PRICE => $item[SC::SINGLE_PRICE],
-                                SC::TOTAL_PRICE => $item[SC::TOTAL_PRICE] ];
-                    ShippingLog::create($log);
-
-                    $stock->quantity = $stock->quantity - $shipment;
-                    $stock->update();
-                } catch (ShipmentOrderException $e) {
-                    logger()->warning("出荷処理をスキップします。".$e->getMsg());
-                    $this->addError($row->number(), $e->getMsg());
-                    continue;
-                }
+        foreach ($items as $item) {
+            $stockId = (int)$item[GC::ID];
+            // DB登録済みフラグがtrueの場合はスキップ
+            if ($item[SC::IS_REGISTERED]) {
+                logger()->warning("既に登録されています。注文ID:{$row->order_id()}, 氏名:{$row->buyer()}, 在庫ID:{$stockId}");
+                continue;
             }
+
+            $this->repo->createOrderItem($order->id, $item);
         }
 
         $notionCard = CardBoard::findByOrderId($row->order_id());
         $this->updateNotion($notionCard[0], $row);
 
-        $lastLog = ShippingLog::fetchLatestLog($orderId);
-        return $lastLog;
+        $lastLog = $this->repo->fetchLatestLog();
+        return [GC::ID => $lastLog->id, GC::CREATE_AT => CarbonFormatUtil::format($lastLog->created_at)];
     }
 
     /**

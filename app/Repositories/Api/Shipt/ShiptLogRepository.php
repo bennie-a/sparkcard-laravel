@@ -6,6 +6,7 @@ use App\Enum\ShopPlatform;
 use App\Enum\SortOrder;
 use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
+use App\Models\Stockpile;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Shipt\ShiptStoreRow;
@@ -85,6 +86,12 @@ class ShiptLogRepository
                             ->first();
     }
 
+    /**
+     * 購入者情報を1件登録する。
+     *
+     * @param ShiptStoreRow $row
+     * @return Orders
+     */
     public function createOrder(ShiptStoreRow $row):Orders
     {
         return Orders::create([
@@ -95,9 +102,41 @@ class ShiptLogRepository
             SC::ADDRESS => $row->address(),
             SC::SHIPT_DATE => $row->shipping_date(),
             SC::ITEM_SUBTOTAL => $row->item_subtotal(),
-            SC::DISCOUNT_AMOUNT => $row->discount_amount(),
+            'coupon_discount' => $row->discount_amount(),
             SC::GRAND_TOTAL => $row->grand_total(),
-            'shipt_fee_id' => $row->fee(),
+            SC::FEE_ID => $row->feeId(),
+            SC::ITEM_COUNT => $row->item_count(),
         ]);
+    }
+
+    /**
+     * 最新のレコードを取得する。
+     */
+    public function fetchLatestLog():Orders|null
+    {
+        return Orders::query()->orderBy(GC::ID, SortOrder::DESC->value)->first();
+    }
+
+    /**
+     * order_itemテーブルに商品情報を1件登録し、
+     * stockpileテーブルの在庫数を更新する。
+     *
+     * @param int $orderId
+     * @param array $item
+     * @return void
+     */
+    public function createOrderItem(int $orderId, array $item):void
+    {
+        OrderItem::create([
+                                                SC::ORDER_ID => $orderId,
+                                                SC::STOCK_ID => $item[GC::ID],
+                                                SC::QUANTITY => $item[SC::SHIPMENT],
+                                                SC::UNIT_PRICE => $item[SC::UNIT_PRICE],
+                                                SC::SUBTOTAL => $item[SC::SUBTOTAL],
+                                                ]);
+
+        $stock = Stockpile::find($item[GC::ID]);
+        $stock->quantity = $stock->quantity - $item[SC::SHIPMENT];
+        $stock->update();
     }
 }

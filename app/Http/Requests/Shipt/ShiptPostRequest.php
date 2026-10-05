@@ -45,6 +45,7 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::GRAND_TOTAL => ['required', 'integer', 'min:1'],
             ShiptCon::ITEMS => ['required','array', 'min:1'],
             ShiptCon::FEE => ['required', 'array', 'size:1'],
+            ShiptCon::ITEM_COUNT => ['required', 'integer', 'min:1'],
             ShiptCon::FEE.'.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:shipping,id'],
             ShiptCon::ITEMS.'.*.'.GlobalConstant::ID => ['required', 'integer','min:1', 'exists:stockpile,id'],
             ShiptCon::ITEMS.'.*.'.ShiptCon::SHIPMENT => ['required','integer','min:1'],
@@ -79,7 +80,8 @@ class ShiptPostRequest extends FormRequest
     {
         $platform = $this->input(ShiptCon::PLATFORM);
         $info = $this->only([ShiptCon::ORDER_ID, ShiptCon::BUYER, ShiptCon::ZIPCODE,
-                                         ShiptCon::ADDRESS, ShiptCon::SHIPT_DATE, ShiptCon::ITEMS]);
+                                         ShiptCon::ADDRESS, ShiptCon::SHIPT_DATE, ShiptCon::ITEMS, ShiptCon::ITEM_COUNT,
+                                         ShiptCon::ITEM_SUBTOTAL, ShiptCon::DISCOUNT_AMOUNT, ShiptCon::GRAND_TOTAL, ShiptCon::FEE]);
         $info[ShiptCon::PLATFORM] = ShopPlatform::from($platform);
         $this->merge([
             GlobalConstant::DATA => $info,
@@ -93,6 +95,8 @@ class ShiptPostRequest extends FormRequest
             ShiptCon::ZIPCODE => '郵便番号',
             ShiptCon::ITEM_SUBTOTAL => '合計金額',
             ShiptCon::DISCOUNT_AMOUNT => 'クーポン割引額',
+            ShiptCon::ITEM_COUNT => '商品数',
+            ShiptCon::PLATFORM => 'プラットフォーム',
             ShiptCon::GRAND_TOTAL => '最終請求金額',
             ShiptCon::ITEMS => '商品情報',
             ShiptCon::FEE => '送料',
