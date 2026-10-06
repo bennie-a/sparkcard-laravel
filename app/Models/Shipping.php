@@ -15,7 +15,7 @@ class Shipping extends Model
     use HasFactory;
     protected $table = 'shipping';
 
-    protected $fillable = [GC::ID, 'notion_id', GC::NAME, Con::PRICE];
+    protected $fillable = [GC::ID, 'notion_id', GC::NAME, Con::PRICE, 'deleted'];
 
     public static function findByNotionId(string $notionId) {
         $item = self::where('notion_id', $notionId)->first();
