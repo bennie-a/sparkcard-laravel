@@ -110,6 +110,23 @@ class ShiptLogRepository
     }
 
     /**
+     * 注文情報を更新する。
+     *
+     * @param Orders $order
+     * @param ShiptStoreRow $row
+     * @return void
+     */
+    public function updateOrder(Orders $order, ShiptStoreRow $row):void
+    {
+        $order->update([
+            SC::ITEM_SUBTOTAL => $row->item_subtotal(),
+            'coupon_discount' => $row->discount_amount(),
+            SC::GRAND_TOTAL => $row->grand_total(),
+            SC::ITEM_COUNT => $order->item_count + $row->unregistered_item_count(),
+        ]);
+    }
+
+    /**
      * 最新のレコードを取得する。
      */
     public function fetchLatestLog():Orders|null

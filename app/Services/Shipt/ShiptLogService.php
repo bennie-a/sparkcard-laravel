@@ -56,6 +56,8 @@ class ShiptLogService extends AbstractCsvService {
         $order = $this->repo->findByOrderId($row->platform(), $orderId);
         if (!$order) {
             $order = $this->repo->createOrder($row);
+        } else {
+            $this->repo->updateOrder($order, $row);
         }
 
         // order_itemテーブルの登録

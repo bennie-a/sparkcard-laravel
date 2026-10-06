@@ -128,4 +128,15 @@ class ShiptStoreRow extends ShiptRow
     public function item_count():int {
         return $this->row[SC::ITEM_COUNT];
     }
+
+    /**
+     * 未登録の商品種類数を取得する。
+     * @return integer
+     */
+    public function unregistered_item_count():int {
+        $unregistered = array_filter($this->items(), function($item) {
+            return !$item[SC::IS_REGISTERED];
+        });
+        return count($unregistered);
+    }
 }
