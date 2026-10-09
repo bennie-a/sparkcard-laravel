@@ -3,8 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\CardInfo;
-use App\Services\Constant\CardConstant;
-use App\Services\Constant\GlobalConstant;
+use App\Models\Expansion;
+use App\Services\Constant\CardConstant as CC;
+use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,16 +24,19 @@ class CardInfoFactory extends Factory
     {
         return [
             'barcode' => $this->random(16),
-            GlobalConstant::NAME => $this->faker->realText(10),
-            CardConstant::EN_NAME => fake()->unique()->sentence(3),
-            CardConstant::NUMBER => fake()->unique()->randomNumber(3),
-            CardConstant::IMAGE_URL => fake()->url(),
-            'color_id' => fake()->randomElement(['W', 'U', 'B', 'R', 'G', 'M', 'A']),
-            CardConstant::PROMO_ID => 1
+            GC::NAME => $this->faker->realText(10),
+            CC::EN_NAME => fake()->unique()->sentence(3),
+            CC::NUMBER => fake()->unique()->randomNumber(3),
+            CC::IMAGE_URL => fake()->url(),
+            'color_id' => fake()->randomElement(['W', 'U', 'B', 'R', 'G', 'M', 'A', 'L', 'Land', 'T']),
+            CC::PROMO_ID => 1,
+            CC::IS_FOIL => false,
+            CC::FOIL_ID => 1,
+            CC::EXP_ID => Expansion::inRandomOrder()->first()->notion_id ?? Expansion::factory()->createOne()->notion_id
         ];
     }
 
-    private function random($size) {
+    private function random(int $size) {
         return substr(str_shuffle("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789"), 0, $size);
     }
 }

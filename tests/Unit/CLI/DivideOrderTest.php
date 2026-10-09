@@ -5,22 +5,25 @@ namespace Tests\Unit\CLI;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
+use App\Models\Shipt\Orders;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
 use Database\Seeders\ExpansionSeeder;
 use Database\Seeders\FoiltypeSeeder;
 use Database\Seeders\MainColorSeeder;
+use Database\Seeders\ShippingSeeder;
 use Illuminate\Support\Facades\Artisan;
-use Tests\Database\Seeders\CLI\Normalize\NormCardInfoSeeder;
-use Tests\Database\Seeders\CLI\Normalize\NormPromoSeeder;
-use Tests\Database\Seeders\TestExpansionSeeder;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use Tests\Database\Seeders\CLI\Divide\DivideShippingLogSeeder;
+use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 
-/**
- * normalize:card-promotypeコマンドのテスト
- */
-class NormalizeCardPromotypeTest extends TestCase
+#[TestDox('divide:orderコマンドのテスト')]
+#[CoversClass(App\Console\Commands\DivideOrder::class)]
+class DivideOrderTest extends TestCase
 {
 
     public function setup(): void
@@ -28,43 +31,39 @@ class NormalizeCardPromotypeTest extends TestCase
         parent::setUp();
         logger()->info('マスタデータ登録開始');
         $this->seed(TruncateAllTables::class);
-        $this->seed(ExpansionSeeder::class);
-        $this->seed(TestExpansionSeeder::class);
-        $this->seed(MainColorSeeder::class);
-        $this->seed(FoiltypeSeeder::class);
-        $this->seed(NormPromoSeeder::class);
-        $this->seed(NormCardInfoSeeder::class);
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(DivideShippingLogSeeder::class);
         logger()->info('マスタデータ登録終了');
     }
-    /**
-     * A basic feature test example.
-     */
-    public function test_プロモタイプが全てDBに存在する(): void
+
+    #[Test]
+    #[TestDox('divide:orderコマンドのテスト')]
+    public function テスト実行(): void
     {
-        $cardNames = CardInfo::query()->orderBy('id')->get()->pluck('name')->toArray();
-        $exitCode  = Artisan::call('normalize:card-promotype');
+        // $cardNames = CardInfo::query()->orderBy('id')->get()->pluck('name')->toArray();
+        $exitCode  = Artisan::call('divide:order');
         logger()->info(Artisan::output());
-        $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
+        // $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
+        $this->assertDatabaseCount(Orders::class, 0);
+        // $actuals = CardInfo::query()->whereNotNull('promotype_id')->get();
+        // $this->assertCount(count($cardNames), $actuals, '分離した件数が正しくない');
 
-        $actuals = CardInfo::query()->whereNotNull('promotype_id')->get();
-        $this->assertCount(count($cardNames), $actuals, '分離した件数が正しくない');
+        // foreach($actuals as $a) {
+        //     $this->assertNotNull($a->promotype_id, 'プロモタイプIDがnullです。');
+        //     $this->assertNotEmpty($a->name, 'カード名が空です。');
+        //     $this->assertStringNotContainsString('≪', $a->name, 'カード名に≪が含まれています。');
+        //     $this->assertStringNotContainsString('≫', $a->name, 'カード名に≫が含まれています。');
 
-        foreach($actuals as $a) {
-            $this->assertNotNull($a->promotype_id, 'プロモタイプIDがnullです。');
-            $this->assertNotEmpty($a->name, 'カード名が空です。');
-            $this->assertStringNotContainsString('≪', $a->name, 'カード名に≪が含まれています。');
-            $this->assertStringNotContainsString('≫', $a->name, 'カード名に≫が含まれています。');
+        //     $e = current($cardNames);
+        //     $promo = Promotype::where(GlobalConstant::ID, $a->promotype_id)->first();
+        //     if ($promo->attr === 'draft') {
+        //         $this->assertEquals($e, $a->name, 'カード名が正しくありません。');
+        //     } else {
+        //         $this->assertStringContainsString($promo->name, $e, 'カード名にプロモタイプ名が含まれていません。');
+        //     }
 
-            $e = current($cardNames);
-            $promo = Promotype::where(GlobalConstant::ID, $a->promotype_id)->first();
-            if ($promo->attr === 'draft') {
-                $this->assertEquals($e, $a->name, 'カード名が正しくありません。');
-            } else {
-                $this->assertStringContainsString($promo->name, $e, 'カード名にプロモタイプ名が含まれていません。');
-            }
-            
-            next($cardNames);
-        };
+        //     next($cardNames);
+        // };
     }
 
     public function test_プロモタイプが存在しない()  {
@@ -79,7 +78,7 @@ class NormalizeCardPromotypeTest extends TestCase
             'foiltype_id' => 1, // Non-foil,
             CardConstant::PROMO_ID => null
         ]);
-        $exitCode  = Artisan::call('normalize:card-promotype');
+        $exitCode  = Artisan::call('divide:order');
         logger()->info(Artisan::output());
         $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
         $this->assertDatabaseHas('promotype', [

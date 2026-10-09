@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Expansion;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Services\Constant\GlobalConstant as GC;
+use App\Services\Constant\CardConstant as CC;
 use Illuminate\Support\Str;
 
 /**
@@ -21,7 +23,8 @@ class ExpansionFactory extends Factory
     {
         return [
             'notion_id' => Str::uuid(),
-            'base_id' => mt_rand(0, 999999),
+            GC::NAME => fake()->unique()->realText(10),
+            CC::ATTR => Str::upper(fake()->lexify('???')),
             'release_date' => fake()->date()
         ];
     }
