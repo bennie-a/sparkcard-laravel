@@ -2,6 +2,7 @@
 
 namespace Tests\Database\Seeders\CLI\Divide;
 
+use App\Enum\ShopPlatform;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
@@ -9,6 +10,8 @@ use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\StockpileHeader;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 /**
@@ -24,12 +27,18 @@ class DivideShippingLogSeeder extends Seeder
      */
     public function run()
     {
-        CardInfo::factory(20)->create();
-        Stockpile::factory(20)->create();
-        ShippingLog::factory(20)->create();
+        CardInfo::factory(40)->create()->each(function (CardInfo $card) {
+            Stockpile::factory()->create([
+                StockpileHeader::CARD_ID => $card->id,
+            ]);
+        });
+
+        $before2024 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'));
+        ShippingLog::factory()->under1500(ShopPlatform::MERCARI, $before2024, 300)->create();
+        ShippingLog::factory()->under1500(ShopPlatform::MERCARI, $before2024, 1499)->create();
     }
 
-    // 各条件を満たしたデータを2件ずつ作成する。
+    // 各条件を満たしたデータを1件ずつ作成する。
     // 灯争大戦ブースターパック[JP]
     // BASE用レコード
     // メルカリShops用レコード

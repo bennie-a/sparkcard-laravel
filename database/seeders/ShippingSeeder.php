@@ -16,6 +16,11 @@ class ShippingSeeder extends Seeder
     public function run()
     {
         Shipping::create([
+            'notion_id' => 'e7db5d1cf759498fb66bac08644885da',
+            'name' => 'ミニレター',
+            'price' => 63,
+            'deleted' => true]);
+        Shipping::create([
             'notion_id' => '118795084f9b806f9885c55677cd345d',
             'name' => 'ミニレター',
             'price' => 85,

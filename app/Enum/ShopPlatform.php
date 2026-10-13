@@ -9,4 +9,5 @@ enum ShopPlatform: string
 {
     case MERCARI = 'mercari';
     case BASE = 'base';
+    case DIRECT = 'direct';
 }
