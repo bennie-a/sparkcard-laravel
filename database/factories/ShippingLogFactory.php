@@ -46,28 +46,46 @@ class ShippingLogFactory extends Factory
     /**
      * 1500円未満
      */
-    public function createMercariRecord(Carbon $shiptDate, int $subtotal): static
+    public function createRecord(ShopPlatform $platform, Carbon $shiptDate, int $subtotal): static
     {
-        return $this->state(function (array $attributes) use ($shiptDate, $subtotal) {
-            if ($subtotal < 300) {
-                throw new \InvalidArgumentException('subtotal must be greater than 300');
-            }
+        return $this->state(function (array $attributes) use ($platform, $shiptDate, $subtotal) {
             $fee = 0;
-            if ($subtotal >= 300 && $subtotal < 1500) {
-                $fee = $this->fetchMiniletter($shiptDate);
-            } else if ($subtotal >= 1500 && $subtotal < 10000) {
-                $fee = $this->fetchClickPost($shiptDate);
-            } else if ($subtotal >= 10000) {
-                $fee = $this->fetchRegisterMail();
+            if ($platform === ShopPlatform::MERCARI) {
+                $fee = $this->getMercariFee($shiptDate, $subtotal);
+            } else if($platform === ShopPlatform::BASE) {
+                $fee = $this->getBaseFee($shiptDate, $subtotal);
             }
             $totalPrice = $subtotal - $fee;
             return [
                 'total_price' => $totalPrice,
-                'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                'order_id' => $this->generateOrderId($platform),
                 'single_price' => round($totalPrice / $attributes[StockpileHeader::QUANTITY]),
             ];
         });
     }
+
+    private function getMercariFee(Carbon $shiptDate, int $subtotal) {
+        $fee = 0;
+        if ($subtotal >= 300 && $subtotal < 1500) {
+            $fee = $this->fetchMiniletter($shiptDate);
+        } else if ($subtotal >= 1500 && $subtotal < 10000) {
+            $fee = $this->fetchClickPost($shiptDate);
+        } else if ($subtotal >= 10000) {
+            $fee = $this->fetchRegisterMail();
+        }
+        return $fee;
+    }
+
+    private function getBaseFee(Carbon $shiptDate, int $subtotal) {
+        $fee = 0;
+        if ($subtotal >= 185 && $subtotal < 4999) {
+            $fee = $this->fetchMiniletter($shiptDate);
+        } else {
+            $fee = $this->fetchClickPost($shiptDate);
+        }
+        return $fee;
+    }
+
 
     /**
      * プラットフォームに応じて注文番号をランダムに生成する。

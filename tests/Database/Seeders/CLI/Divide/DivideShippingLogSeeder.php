@@ -33,12 +33,36 @@ class DivideShippingLogSeeder extends Seeder
             ]);
         });
 
-        $before2024 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'));
-        ShippingLog::factory()->createMercariRecord($before2024, 300)->create();
-        ShippingLog::factory()->createMercariRecord($before2024, 1499)->create();
-        ShippingLog::factory()->createMercariRecord($before2024, 1500)->create();
-        ShippingLog::factory()->createMercariRecord($before2024, 9999)->create();
-        ShippingLog::factory()->createMercariRecord($before2024, 10000)->create();
+        $before240930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'));
+        $after241001 = Carbon::parse(fake()->dateTimeBetween('2024-10-01', 'now'));
+        $before260930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2026-09-30'));
+        $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', 'now'));
+
+        foreach ([$before240930, $after241001] as $date) {
+            foreach([300, 1499] as $p) {
+                ShippingLog::factory()->createRecord(ShopPlatform::MERCARI, $date, $p)->create();
+            }
+        }
+
+        foreach ([$before260930, $after261001] as $date) {
+            foreach([1500, 9999] as $p) {
+                ShippingLog::factory()->createRecord(ShopPlatform::MERCARI, $date, $p)->create();
+            }
+        }
+        ShippingLog::factory()->createRecord(ShopPlatform::MERCARI, $before240930, 10000)->create();
+
+        foreach ([$before240930, $after241001] as $date) {
+            foreach([185, 4999] as $p) {
+                ShippingLog::factory()->createRecord(ShopPlatform::BASE, $date, $p)->create();
+            }
+        }
+
+        foreach ([$before260930, $after261001] as $date) {
+            foreach([5000, 10000] as $p) {
+                ShippingLog::factory()->createRecord(ShopPlatform::BASE, $date, $p)->create();
+            }
+        }
+
     }
 
     // 各条件を満たしたデータを1件ずつ作成する。
@@ -47,15 +71,6 @@ class DivideShippingLogSeeder extends Seeder
     // メルカリShops用レコード
     // 直接取引用レコード
     // らくらくメルカリ便
-    // 簡易書留
     // 1購入者複数商品注文
-    // 発送日が2024/9/30以前で、メルカリShops経由でのミニレター注文
-    // 発送日が2024/9/30以前で、BASEショップ経由でのミニレター注文
-    // 発送日が2024/10/1以降で、メルカリShops経由でのミニレター注文
-    // 発送日が2024/10/1以降で、BASEショップ経由でのミニレター注文
-    // 発送日が2026/9/30以前で、メルカリShops経由でのクリックポスト注文
-    // 発送日が2026/9/30以前で、BASEショップ経由でのクリックポスト注文
-    // 発送日が2026/10/1以降で、メルカリShops経由でのクリックポスト注文
-    // 発送日が2026/10/1以降で、BASEショップ経由でのクリックポスト注文
     // 直接取引
 }
