@@ -38,27 +38,32 @@ class ShippingLogFactory extends Factory
             'single_price' => $this->faker->numberBetween(1, 300),
             'total_price' => $this->faker->numberBetween(1, 600),
             'order_id' => $this->faker->unique()->numberBetween(1, 100),
-            StockpileHeader::QUANTITY => fake()->numberBetween(0, 10),
+            StockpileHeader::QUANTITY => fake()->numberBetween(1, 10),
             'stock_id' => Stockpile::inRandomOrder()->first()->id
         ];
     }
 
-         /**
+    /**
      * 1500円未満
      */
-    public function under1500(ShopPlatform $platform, Carbon $shiptDate, int $subtotal = 0): static
+    public function createMercariRecord(Carbon $shiptDate, int $subtotal): static
     {
-        return $this->state(function (array $attributes) use ($platform, $shiptDate, $subtotal) {
-            $max = 1499;
-            if ($platform === ShopPlatform::BASE) {
-                $max = 4999;
+        return $this->state(function (array $attributes) use ($shiptDate, $subtotal) {
+            if ($subtotal < 300) {
+                throw new \InvalidArgumentException('subtotal must be greater than 300');
             }
-            $itemSubtotal = $subtotal > 0 ? $subtotal : $this->faker->numberBetween(113, $max);
-            $fee = $this->fetchMiniletter($shiptDate);
-            $totalPrice = $itemSubtotal - $fee;
+            $fee = 0;
+            if ($subtotal >= 300 && $subtotal < 1500) {
+                $fee = $this->fetchMiniletter($shiptDate);
+            } else if ($subtotal >= 1500 && $subtotal < 10000) {
+                $fee = $this->fetchClickPost($shiptDate);
+            } else if ($subtotal >= 10000) {
+                $fee = $this->fetchRegisterMail();
+            }
+            $totalPrice = $subtotal - $fee;
             return [
                 'total_price' => $totalPrice,
-                'order_id' => $this->generateOrderId($platform),
+                'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
                 'single_price' => round($totalPrice / $attributes[StockpileHeader::QUANTITY]),
             ];
         });
@@ -90,8 +95,43 @@ class ShippingLogFactory extends Factory
     {
         $initialDate = Carbon::parse('2024-09-30');
         $isBefore = $shiptDate->lte($initialDate);
-        $shipping = Shipping::where(GCon::NAME, ShiptMethod::MINI->value)
-                                ->where('deleted', $isBefore)->first();
+        return $this->fetchShiptPrice($isBefore, ShiptMethod::MINI);
+    }
+
+    /**
+     * クリックポストの価格を取得する。
+     *
+     * @param Carbon $shiptDate
+     * @return integer
+     */
+    private function fetchClickPost(Carbon $shiptDate): int
+    {
+        $initialDate = Carbon::parse('2026-09-30');
+        $isBefore = $shiptDate->lte($initialDate);
+        return $this->fetchShiptPrice($isBefore, ShiptMethod::CLICK);
+    }
+
+    /**
+     * 簡易書留の価格を取得する。
+     *
+     * @return integer
+     */
+    private function fetchRegisterMail(): int
+    {
+        return $this->fetchShiptPrice(false, ShiptMethod::REGISTER_MAIL);
+    }
+
+    /**
+     * 送料を取得する。
+     *
+     * @param boolean $deleted
+     * @param ShiptMethod $method
+     * @return integer
+     */
+    private function fetchShiptPrice(bool $deleted, ShiptMethod $method): int
+    {
+        $shipping = Shipping::where(GCon::NAME, $method->value)
+                                ->where('deleted', $deleted)->first();
         return $shipping->price ?? 0;
     }
 }

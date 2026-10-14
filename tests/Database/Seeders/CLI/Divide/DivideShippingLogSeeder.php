@@ -34,8 +34,11 @@ class DivideShippingLogSeeder extends Seeder
         });
 
         $before2024 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'));
-        ShippingLog::factory()->under1500(ShopPlatform::MERCARI, $before2024, 300)->create();
-        ShippingLog::factory()->under1500(ShopPlatform::MERCARI, $before2024, 1499)->create();
+        ShippingLog::factory()->createMercariRecord($before2024, 300)->create();
+        ShippingLog::factory()->createMercariRecord($before2024, 1499)->create();
+        ShippingLog::factory()->createMercariRecord($before2024, 1500)->create();
+        ShippingLog::factory()->createMercariRecord($before2024, 9999)->create();
+        ShippingLog::factory()->createMercariRecord($before2024, 10000)->create();
     }
 
     // 各条件を満たしたデータを1件ずつ作成する。
