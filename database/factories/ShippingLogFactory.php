@@ -46,20 +46,26 @@ class ShippingLogFactory extends Factory
     /**
      * 1500円未満
      */
-    public function createRecord(ShopPlatform $platform, Carbon $shiptDate, int $subtotal): static
+    public function createRecord(ShopPlatform $platform, Carbon $shiptDate,
+                                                                        int $subtotal, string $orderId, int $count, array $buyerInfo): static
     {
-        return $this->state(function (array $attributes) use ($platform, $shiptDate, $subtotal) {
+        return $this->state(function (array $attributes) use ($orderId, $platform, $shiptDate, $subtotal, $count, $buyerInfo) {
             $fee = 0;
             if ($platform === ShopPlatform::MERCARI) {
                 $fee = $this->getMercariFee($shiptDate, $subtotal);
             } else if($platform === ShopPlatform::BASE) {
                 $fee = $this->getBaseFee($shiptDate, $subtotal);
             }
-            $totalPrice = $subtotal - $fee;
+            $totalPrice = $subtotal - round($fee / $count);
             return [
                 'total_price' => $totalPrice,
-                'order_id' => $this->generateOrderId($platform),
+                'order_id' => $orderId,
                 'single_price' => round($totalPrice / $attributes[StockpileHeader::QUANTITY]),
+                GCon::NAME => $buyerInfo[SCon::BUYER],
+                'zip_code' => $buyerInfo[SCon::POSTAL_CODE],
+                'address' => $buyerInfo[SCon::STATE].$buyerInfo[SCon::CITY].
+                                        $buyerInfo[SCon::ADDRESS_1].$buyerInfo[SCon::ADDRESS_2],
+                'shipping_date' => $shiptDate,
             ];
         });
     }
@@ -84,23 +90,6 @@ class ShippingLogFactory extends Factory
             $fee = $this->fetchClickPost($shiptDate);
         }
         return $fee;
-    }
-
-
-    /**
-     * プラットフォームに応じて注文番号をランダムに生成する。
-     *
-     * @return string
-     */
-    private function generateOrderId(ShopPlatform $platform): string
-    {
-        if ($platform === ShopPlatform::MERCARI) {
-            return 'order_'.Str::random(22);
-        }
-        if ($platform === ShopPlatform::DIRECT) {
-            return 'd2c_'.Str::random(22);
-        }
-        return Str::upper(Str::random(16));
     }
 
     /**
