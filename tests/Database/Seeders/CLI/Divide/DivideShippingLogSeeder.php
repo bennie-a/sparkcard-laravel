@@ -2,10 +2,12 @@
 
 namespace Tests\Database\Seeders\CLI\Divide;
 
+use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
+use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\Constant\CardConstant;
@@ -39,31 +41,36 @@ class DivideShippingLogSeeder extends Seeder
         $before260930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2026-09-30'));
         $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', 'now'));
         // メルカリ経由ミニレター発送
-        $this->createMiniRecord(ShopPlatform::MERCARI, [300, 1499]);
+        $this->createUnder1500Record(ShopPlatform::MERCARI, [300, 1499]);
         // BASE経由ミニレター発送
-        $this->createMiniRecord(ShopPlatform::BASE, [200, 4999] );
+        $this->createUnder1500Record(ShopPlatform::BASE, [200, 4999] );
 
-        // // メルカリ経由クリックポスト発送
-        $this->createClickRecord(ShopPlatform::MERCARI, [1500, 9999]);
-        // // メルカリ経由簡易書留発送
-        $this->createClickRecord(ShopPlatform::MERCARI, [10000]);
-        // // BASE経由クリックポスト発送
-        $this->createClickRecord(ShopPlatform::BASE, [5000, 10000]);
+        // メルカリ経由クリックポスト発送
+        $this->createOver1500Record(ShopPlatform::MERCARI, [1500, 9999]);
+        // BASE経由クリックポスト発送
+        $this->createOver1500Record(ShopPlatform::BASE, [5000, 10000]);
 
-        // // 直接取引
-        $this->createClickRecord(ShopPlatform::DIRECT, [5000]);
+        // メルカリ経由簡易書留発送
+        $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000);
+        // 直接取引
+        $this->createOver1500Record(ShopPlatform::DIRECT, [5000]);
     }
 
-    private function createMiniRecord(ShopPlatform $platform, array $prices) {
+    private function createUnder1500Record(ShopPlatform $platform, array $prices) {
         $before240930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'));
         $after241001 = Carbon::parse(fake()->dateTimeBetween('2024-10-01', 'now'));
         $this->generateRandomRecord($platform, [$before240930, $after241001], $prices);
     }
 
-    private function createClickRecord(ShopPlatform $platform, array $prices) {
+    private function createOver1500Record(ShopPlatform $platform, array $prices) {
         $before260930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2026-09-30'));
         $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', 'now'));
         $this->generateRandomRecord($platform, [$before260930, $after261001], $prices);
+    }
+
+    private function createRegisterMailRecord(ShopPlatform $platform, int $price) {
+        $shiptDate = Carbon::parse(fake()->dateTimeBetween('now'));
+        $this->generateRandomRecord($platform, [$shiptDate], [$price], 300);
     }
 
     /**
@@ -75,15 +82,21 @@ class DivideShippingLogSeeder extends Seeder
      * @param array $prices
      * @return void
      */
-    private function generateRandomRecord(ShopPlatform $platform, array $initialDate, array $prices) {
+    private function generateRandomRecord(ShopPlatform $platform, array $initialDate, array $prices, int $minPrice = 100) {
         foreach ($initialDate as $date) {
             foreach($prices as $p) {
                 $orderId = $this->generateOrderId($platform);
                 $itemCount = fake()->numberBetween(1, 2);
-                $splitPrices = $this->splitNumberRandomly($p, $itemCount);
+                $splitPrices = $this->splitNumberRandomly($p, $itemCount, $minPrice);
                 $buyerInfo = ShiptLogTestHelper::createBuyerInfoOnly();
+                $fee = 0;
+                if ($platform === ShopPlatform::MERCARI) {
+                    $fee = $this->getMercariFee($date, $p);
+                } else if ($platform === ShopPlatform::BASE) {
+                    $fee = $this->getBaseFee($date, $p);
+                }
                 foreach($splitPrices as $sp) {
-                    ShippingLog::factory()->createRecord($platform, $date, $sp, $orderId, $itemCount, $buyerInfo)->create();
+                    ShippingLog::factory()->createRecord($fee, $date, $sp, $orderId, $itemCount, $buyerInfo)->create();
                 }
             }
         }
@@ -91,10 +104,7 @@ class DivideShippingLogSeeder extends Seeder
 
     // 各条件を満たしたデータを1件ずつ作成する。
     // 灯争大戦ブースターパック[JP]
-    // 直接取引用レコード
     // らくらくメルカリ便
-    // 1購入者複数商品注文
-    // 直接取引
 
     /**
      * プラットフォームに応じて注文番号をランダムに生成する。
@@ -155,5 +165,77 @@ class DivideShippingLogSeeder extends Seeder
         // 3. 配列をシャッフルして、特定の位置だけ金額が高くなる偏りを防ぐ
         shuffle($prices);
         return $prices;
+    }
+
+    private function getMercariFee(Carbon $shiptDate, int $subtotal) {
+        $fee = 0;
+        if ($subtotal >= 300 && $subtotal < 1500) {
+            $fee = $this->fetchMiniletter($shiptDate);
+        } else if ($subtotal >= 1500 && $subtotal < 10000) {
+            $fee = $this->fetchClickPost($shiptDate);
+        } else if ($subtotal >= 10000) {
+            $fee = $this->fetchRegisterMail();
+        }
+        return $fee;
+    }
+
+    private function getBaseFee(Carbon $shiptDate, int $subtotal) {
+        $fee = 0;
+        if ($subtotal >= 185 && $subtotal < 4999) {
+            $fee = $this->fetchMiniletter($shiptDate);
+        } else {
+            $fee = $this->fetchClickPost($shiptDate);
+        }
+        return $fee;
+    }
+
+    /**
+     * ミニレターの価格を取得する。
+     *
+     * @param Carbon $shiptDate
+     * @return integer
+     */
+    private function fetchMiniletter(Carbon $shiptDate): int
+    {
+        $initialDate = Carbon::parse('2024-09-30');
+        $isBefore = $shiptDate->lte($initialDate);
+        return $this->fetchShiptPrice($isBefore, ShiptMethod::MINI);
+    }
+
+    /**
+     * クリックポストの価格を取得する。
+     *
+     * @param Carbon $shiptDate
+     * @return integer
+     */
+    private function fetchClickPost(Carbon $shiptDate): int
+    {
+        $initialDate = Carbon::parse('2026-09-30');
+        $isBefore = $shiptDate->lte($initialDate);
+        return $this->fetchShiptPrice($isBefore, ShiptMethod::CLICK);
+    }
+
+    /**
+     * 簡易書留の価格を取得する。
+     *
+     * @return integer
+     */
+    private function fetchRegisterMail(): int
+    {
+        return $this->fetchShiptPrice(false, ShiptMethod::REGISTER_MAIL);
+    }
+
+    /**
+     * 送料を取得する。
+     *
+     * @param boolean $deleted
+     * @param ShiptMethod $method
+     * @return integer
+     */
+    private function fetchShiptPrice(bool $deleted, ShiptMethod $method): int
+    {
+        $shipping = Shipping::where(GlobalConstant::NAME, $method->value)
+                                ->where('deleted', $deleted)->first();
+        return $shipping->price ?? 0;
     }
 }
