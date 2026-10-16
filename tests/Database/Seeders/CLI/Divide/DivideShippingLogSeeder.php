@@ -2,17 +2,18 @@
 
 namespace Tests\Database\Seeders\CLI\Divide;
 
+use App\Enum\CardLanguage;
 use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Models\CardInfo;
 use App\Models\Expansion;
-use App\Models\Promotype;
 use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Stockpile;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
+use App\Services\Constant\ShiptConstant as SC;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -38,8 +39,6 @@ class DivideShippingLogSeeder extends Seeder
             ]);
         });
 
-        $before260930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2026-09-30'));
-        $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', 'now'));
         // メルカリ経由ミニレター発送
         $this->createUnder1500Record(ShopPlatform::MERCARI, [300, 1499]);
         // BASE経由ミニレター発送
@@ -54,6 +53,38 @@ class DivideShippingLogSeeder extends Seeder
         $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000);
         // 直接取引
         $this->createOver1500Record(ShopPlatform::DIRECT, [5000]);
+
+        // らくらくメルカリ便
+        ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                                                SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望']);
+
+        // 灯争大戦ブースターパック[JP]
+        $war = Expansion::findBySetCode('WAR');
+        $pack = CardInfo::factory()->create([CardConstant::EXP_ID => $war->notion_id,
+                                    GlobalConstant::NAME => '灯争大戦ブースターパック', CardConstant::PROMO_ID => 1]);
+        $packStock = Stockpile::factory()->create([
+            StockpileHeader::CARD_ID => $pack->id,
+            StockpileHeader::LANGUAGE => CardLanguage::JP->value,
+            StockpileHeader::CONDITION => 'NM'
+        ]);
+
+         $shiptInfo = [
+                    [
+                        'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                        SC::STOCK_ID => $packStock->id,
+                        StockpileHeader::QUANTITY => 1,
+                        'single_price' => 795,
+                        'total_price' => 795
+                    ],
+                    [
+                        'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                        SC::STOCK_ID => $packStock->id,
+                        StockpileHeader::QUANTITY => 30,
+                        'single_price' => 799,
+                        'total_price' => 23995
+                    ]
+                ];
+                ShippingLog::factory()->createMany($shiptInfo);
     }
 
     private function createUnder1500Record(ShopPlatform $platform, array $prices) {
@@ -101,10 +132,6 @@ class DivideShippingLogSeeder extends Seeder
             }
         }
     }
-
-    // 各条件を満たしたデータを1件ずつ作成する。
-    // 灯争大戦ブースターパック[JP]
-    // らくらくメルカリ便
 
     /**
      * プラットフォームに応じて注文番号をランダムに生成する。

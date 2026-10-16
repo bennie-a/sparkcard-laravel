@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\ShiptConstant as SC;
 use Carbon\Carbon;
 use Deprecated;
+use Illuminate\Support\Collection;
 
 /**
  * shippinng_logテーブルのModelクラス
