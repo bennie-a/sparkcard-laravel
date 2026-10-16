@@ -2,13 +2,19 @@
 
 namespace App\Console\Commands;
 
+use App\Enum\ShopPlatform;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
+use App\Models\ShippingLog;
+use App\Models\Shipt\OrderItem;
+use App\Models\Shipt\Orders;
+use App\Repositories\Api\Shipt\ShiptLogRepository;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Shipt\ShiptStoreRow;
 
 /**
  * shipping_logテーブルの内容をordersテーブルとorder_itemテーブルに
@@ -35,14 +41,46 @@ class DivideOrder extends Command
      */
     public function handle()
     {
+        OrderItem::truncate();
+        Orders::truncate();
         $this->info('注文情報の分割を開始します。');
-        // $defaultPromotype = Promotype::findCardByAttr('draft');
+        $shiptInfo = ShippingLog::all();
+        $this->info("shipping_logテーブルの総件数: {$shiptInfo->count()}");
 
-        // $total = Db::table('card_info')->whereNull(CardConstant::PROMO_ID)->count();
-        // $this->info("カード情報の総数: {$total}");
-
-        // $bar = $this->output->createProgressBar($total);
-        // $bar->start();
+        $repo = new ShiptLogRepository();
+        $bar = $this->output->createProgressBar($shiptInfo->count());
+        $bar->start();
+        foreach($shiptInfo as $s)
+        {
+            $info = ShippingLog::where('order_id', $s->order_id)->get();
+            $platform = ShopPlatform::MERCARI;
+            if ($repo->findByOrderId($platform, $s->order_id)) {
+                continue;
+            }
+            $this->info("注文番号({$s->order_id})の登録を開始します。");
+            $this->info("注文番号({$s->order_id})の商品数: {$info->count()}");
+            $row = [
+                SC::PLATFORM => $platform,
+                SC::ORDER_ID => $s->order_id,
+                SC::BUYER => $s->name,
+                SC::ZIPCODE => $s->zip_code,
+                SC::ADDRESS => $s->address,
+                SC::SHIPT_DATE => $s->shipping_date,
+                SC::ITEM_SUBTOTAL => $s->total_price,
+                SC::GRAND_TOTAL => $s->total_price,
+                SC::DISCOUNT_AMOUNT => 0,
+                SC::FEE => [GCon::ID => 1],
+                SC::ITEM_COUNT => $info->count()
+            ];
+            $shiptRow = new ShiptStoreRow($row);
+            $repo->createOrder($shiptRow);
+            $this->info("注文番号({$s->order_id})の登録が完了しました。");
+            $bar->advance();
+        }
+        $bar->finish();
+        $this->newLine(2);
+        $ordersCount = Orders::query()->count();
+        $this->info("✅ 登録成功件数: {$ordersCount}");
 
         // $updatedCount = 0;
         // $skippedCount = 0;

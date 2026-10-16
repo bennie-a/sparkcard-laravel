@@ -8,10 +8,6 @@ use App\Models\Promotype;
 use App\Models\Shipt\Orders;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
-use Database\Seeders\ExpansionSeeder;
-use Database\Seeders\FoiltypeSeeder;
-use Database\Seeders\MainColorSeeder;
-use Database\Seeders\ShippingSeeder;
 use Illuminate\Support\Facades\Artisan;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -44,7 +40,8 @@ class DivideOrderTest extends TestCase
         $exitCode  = Artisan::call('divide:order');
         logger()->info(Artisan::output());
         // $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
-        $this->assertDatabaseCount(Orders::class, 0);
+        $all = Orders::all();
+        $this->assertNotSame($all->count(), 0);
         // $actuals = CardInfo::query()->whereNotNull('promotype_id')->get();
         // $this->assertCount(count($cardNames), $actuals, '分離した件数が正しくない');
 
