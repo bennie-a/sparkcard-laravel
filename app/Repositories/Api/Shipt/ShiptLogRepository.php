@@ -120,7 +120,7 @@ class ShiptLogRepository
     {
         $order->update([
             SC::ITEM_SUBTOTAL => $row->item_subtotal(),
-            'coupon_discount' => $row->discount_amount(),
+            SC::COUPON_DISCOUNT => $row->discount_amount(),
             SC::GRAND_TOTAL => $row->grand_total(),
             SC::ITEM_COUNT => $order->item_count + $row->unregistered_item_count(),
         ]);

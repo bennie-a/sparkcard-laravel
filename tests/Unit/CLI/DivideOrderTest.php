@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\CLI;
 
+use App\Enum\ShopPlatform;
+use App\Enum\SortOrder;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
@@ -18,6 +20,8 @@ use Tests\Database\Seeders\CLI\Divide\DivideShippingLogSeeder;
 use Tests\Database\Seeders\DatabaseSeeder;
 use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
+use App\Services\Constant\ShiptConstant as SC;
+use PHPUnit\Framework\Attributes\TestWith;
 
 #[TestDox('divide:orderコマンドのテスト')]
 #[CoversClass(App\Console\Commands\DivideOrder::class)]
@@ -35,87 +39,55 @@ class DivideOrderTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('divide:orderコマンドのテスト')]
-    public function テスト実行(): void
+    #[TestDox('購入者情報を検証するテスト')]
+    public function buyerInfo(): void
     {
-        // $cardNames = CardInfo::query()->orderBy('id')->get()->pluck('name')->toArray();
-        $exitCode  = Artisan::call('divide:order');
-        logger()->info(Artisan::output());
-        $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
+        $this->execute();
         $orders = Orders::all();
-        $expected = ShippingLog::pluck('order_id');
-        $this->assertCount($expected->unique()->count(), $orders, 'ordersテーブルへの登録件数');
+        $log = ShippingLog::orderBy('shipping_date', SortOrder::ASC->value)->get();
+        $uniqueLog = $log->unique('order_id');
+        $this->assertCount($uniqueLog->count(), $orders, 'ordersテーブルへの登録件数');
+        foreach($uniqueLog as $u) {
+            $this->assertDatabaseHas(Orders::class, [
+                SC::PLATFORM_ORDER_ID => $u->order_id,
+                SC::ZIPCODE => $u->zip_code,
+                SC::ADDRESS => $u->address,
+                SC::BUYER => $u->name,
+                SC::COUPON_DISCOUNT => 0,
+                SC::SHIPT_DATE => $u->shipping_date
+            ]);
+        }
 
         $items = OrderItem::all();
-        $this->assertCount($expected->count(), $items, 'order_itemテーブルの登録件数');
-        // $actuals = CardInfo::query()->whereNotNull('promotype_id')->get();
-        // $this->assertCount(count($cardNames), $actuals, '分離した件数が正しくない');
-
-        // foreach($actuals as $a) {
-        //     $this->assertNotNull($a->promotype_id, 'プロモタイプIDがnullです。');
-        //     $this->assertNotEmpty($a->name, 'カード名が空です。');
-        //     $this->assertStringNotContainsString('≪', $a->name, 'カード名に≪が含まれています。');
-        //     $this->assertStringNotContainsString('≫', $a->name, 'カード名に≫が含まれています。');
-
-        //     $e = current($cardNames);
-        //     $promo = Promotype::where(GlobalConstant::ID, $a->promotype_id)->first();
-        //     if ($promo->attr === 'draft') {
-        //         $this->assertEquals($e, $a->name, 'カード名が正しくありません。');
-        //     } else {
-        //         $this->assertStringContainsString($promo->name, $e, 'カード名にプロモタイプ名が含まれていません。');
-        //     }
-
-        //     next($cardNames);
-        // };
+        $this->assertCount($log->count(), $items, 'order_itemテーブルの登録件数');
     }
 
-    public function test_プロモタイプが存在しない()  {
-        $expectedName = fake()->unique()->realText(10);
-        $promoName = '存在しないプロモ';
-        $newname =  $expectedName. '≪'.$promoName.'≫';
-        $neo = Expansion::findBySetCode('NEO');
-        CardInfo::factory()->createOne([
-            GlobalConstant::NAME => $newname,
-            CardConstant::EXP_ID => $neo->notion_id,
-            CardConstant::IS_FOIL => false,
-            'foiltype_id' => 1, // Non-foil,
-            CardConstant::PROMO_ID => null
-        ]);
+    #[Test]
+    #[TestDox('注文情報のプラットフォームを検証するテスト')]
+    #[TestWith([ShopPlatform::MERCARI, 'order_'], 'メルカリShops')]
+    #[TestWith([ShopPlatform::DIRECT, 'd2c_'], '直接取引')]
+    #[TestWith([ShopPlatform::BASE, ''], 'BASEショップ')]
+    public function platform(ShopPlatform $platform, string $prefix) {
+        $this->execute();
+        $query = null;
+        if ($platform === ShopPlatform::BASE) {
+            $query = ShippingLog::where('order_id', 'not like', 'order_%')->where('order_id', 'not like', 'd2c_%');
+        } else {
+            $query = ShippingLog::whereLike('order_id', "{$prefix}_%");
+        }
+        $log = $query->orderBy('shipping_date', SortOrder::ASC->value)->get();
+        $uniqueLog = $log->unique('order_id');
+        foreach($uniqueLog as $u) {
+            $this->assertDatabaseHas(Orders::class, [
+                SC::PLATFORM => $platform->value,
+                SC::PLATFORM_ORDER_ID => $u->order_id,
+            ]);
+        }
+    }
+
+    private function execute() {
         $exitCode  = Artisan::call('divide:order');
         logger()->info(Artisan::output());
         $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
-        $this->assertDatabaseHas('promotype', [
-            GlobalConstant::NAME => $promoName
-        ]);
-        $actual = Promotype::findCardByName($promoName);
-        $this->assertDatabaseHas('card_info', [
-            GlobalConstant::NAME => $expectedName,
-            CardConstant::PROMO_ID => $actual->id
-        ]);
-    }
-
-    public function test_トークン() {
-        $expectedName = fake()->unique()->realText(10);
-        $promoName = 'トークンタイプ';
-        $newname =  $expectedName. '≪'.$promoName.'≫';
-        $neo = Expansion::findBySetCode('MKM');
-        CardInfo::factory()->createOne([
-            GlobalConstant::NAME => $newname,
-            CardConstant::EXP_ID => $neo->notion_id,
-            CardConstant::IS_FOIL => false,
-            'foiltype_id' => 1, // Non-foil,
-            'color_id' => 'T',
-            CardConstant::PROMO_ID => null
-        ]);
-        $exitCode  = Artisan::call('normalize:card-promotype');
-        logger()->info(Artisan::output());
-        $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
-        $this->assertDatabaseHas('card_info', [
-            GlobalConstant::NAME => $newname,
-            CardConstant::PROMO_ID => 1
-        ]);
-        $this->assertDatabaseMissing('promotype', [
-            GlobalConstant::NAME => $promoName
-        ]);
     }
 }

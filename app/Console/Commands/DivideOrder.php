@@ -57,7 +57,7 @@ class DivideOrder extends Command
         ->chunk(100, function ($shipts) use ($bar, $repo){
             foreach($shipts as $s) {
                 $info = ShippingLog::where('order_id', $s->order_id)->get();
-                $platform = ShopPlatform::MERCARI;
+                $platform = $this->platform($s->order_id);
                 $orders = $repo->findByOrderId($platform, $s->order_id);
                 if (!isset($orders)) {
                     $this->info("注文番号({$s->order_id})の登録を開始します。");
@@ -153,5 +153,14 @@ class DivideOrder extends Command
 
         $this->info('注文情報の分割が完了しました。');
         return self::SUCCESS;
+    }
+
+    private function platform(string $orderId):ShopPlatform {
+        if (strpos($orderId, 'order_') === 0) {
+            return ShopPlatform::MERCARI;
+        } else if (strpos($orderId, 'd2c_') === 0) {
+            return ShopPlatform::DIRECT;
+        }
+        return ShopPlatform::BASE;
     }
 }
