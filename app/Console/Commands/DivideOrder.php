@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enum\ShopPlatform;
+use App\Enum\SortOrder;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
@@ -15,6 +16,7 @@ use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Console\Command;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Shipt\ShiptStoreRow;
+use Illuminate\Support\Facades\DB;
 
 /**
  * shipping_logテーブルの内容をordersテーブルとorder_itemテーブルに
@@ -50,33 +52,35 @@ class DivideOrder extends Command
         $repo = new ShiptLogRepository();
         $bar = $this->output->createProgressBar($shiptInfo->count());
         $bar->start();
-        foreach($shiptInfo as $s)
-        {
-            $info = ShippingLog::where('order_id', $s->order_id)->get();
-            $platform = ShopPlatform::MERCARI;
-            if ($repo->findByOrderId($platform, $s->order_id)) {
-                continue;
+
+        DB::table('shipping_log')->orderBy('shipping_date', SortOrder::ASC->value)
+        ->chunk(100, function ($shipts) use ($bar, $repo){
+            foreach($shipts as $s) {
+                $info = ShippingLog::where('order_id', $s->order_id)->get();
+                $platform = ShopPlatform::MERCARI;
+                if (!$repo->findByOrderId($platform, $s->order_id)) {
+                    $this->info("注文番号({$s->order_id})の登録を開始します。");
+                    $this->info("注文番号({$s->order_id})の商品数: {$info->count()}");
+                    $row = [
+                        SC::PLATFORM => $platform,
+                        SC::ORDER_ID => $s->order_id,
+                        SC::BUYER => $s->name,
+                        SC::ZIPCODE => $s->zip_code,
+                        SC::ADDRESS => $s->address,
+                        SC::SHIPT_DATE => $s->shipping_date,
+                        SC::ITEM_SUBTOTAL => $s->total_price,
+                        SC::GRAND_TOTAL => $s->total_price,
+                        SC::DISCOUNT_AMOUNT => 0,
+                        SC::FEE => [GCon::ID => 1],
+                        SC::ITEM_COUNT => $info->count()
+                    ];
+                    $shiptRow = new ShiptStoreRow($row);
+                    $repo->createOrder($shiptRow);
+                    $this->info("注文番号({$s->order_id})の登録が完了しました。");
+                    $bar->advance();
+                }
             }
-            $this->info("注文番号({$s->order_id})の登録を開始します。");
-            $this->info("注文番号({$s->order_id})の商品数: {$info->count()}");
-            $row = [
-                SC::PLATFORM => $platform,
-                SC::ORDER_ID => $s->order_id,
-                SC::BUYER => $s->name,
-                SC::ZIPCODE => $s->zip_code,
-                SC::ADDRESS => $s->address,
-                SC::SHIPT_DATE => $s->shipping_date,
-                SC::ITEM_SUBTOTAL => $s->total_price,
-                SC::GRAND_TOTAL => $s->total_price,
-                SC::DISCOUNT_AMOUNT => 0,
-                SC::FEE => [GCon::ID => 1],
-                SC::ITEM_COUNT => $info->count()
-            ];
-            $shiptRow = new ShiptStoreRow($row);
-            $repo->createOrder($shiptRow);
-            $this->info("注文番号({$s->order_id})の登録が完了しました。");
-            $bar->advance();
-        }
+        });
         $bar->finish();
         $this->newLine(2);
         $ordersCount = Orders::query()->count();
@@ -138,5 +142,6 @@ class DivideOrder extends Command
 
 
         $this->info('注文情報の分割が完了しました。');
+        return self::SUCCESS;
     }
 }
