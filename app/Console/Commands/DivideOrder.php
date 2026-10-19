@@ -58,7 +58,8 @@ class DivideOrder extends Command
             foreach($shipts as $s) {
                 $info = ShippingLog::where('order_id', $s->order_id)->get();
                 $platform = ShopPlatform::MERCARI;
-                if (!$repo->findByOrderId($platform, $s->order_id)) {
+                $orders = $repo->findByOrderId($platform, $s->order_id);
+                if (!isset($orders)) {
                     $this->info("注文番号({$s->order_id})の登録を開始します。");
                     $this->info("注文番号({$s->order_id})の商品数: {$info->count()}");
                     $row = [
@@ -75,10 +76,19 @@ class DivideOrder extends Command
                         SC::ITEM_COUNT => $info->count()
                     ];
                     $shiptRow = new ShiptStoreRow($row);
-                    $repo->createOrder($shiptRow);
-                    $this->info("注文番号({$s->order_id})の登録が完了しました。");
-                    $bar->advance();
+                    $orders = $repo->createOrder($shiptRow);
                 }
+
+                $item = [
+                                    SC::ORDER_ID => $s->order_id,
+                                    GCon::ID => $s->stock_id,
+                                    SC::SHIPMENT => $s->quantity,
+                                    SC::UNIT_PRICE => $s->single_price,
+                                    SC::SUBTOTAL => $s->total_price,
+                ];
+                $repo->createOrderItem($orders->id, $item);
+                $this->info("注文番号({$s->order_id})の登録が完了しました。");
+                $bar->advance();
             }
         });
         $bar->finish();

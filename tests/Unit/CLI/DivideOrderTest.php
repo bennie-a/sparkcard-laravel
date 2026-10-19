@@ -6,6 +6,7 @@ use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
 use App\Models\ShippingLog;
+use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant;
@@ -41,9 +42,12 @@ class DivideOrderTest extends TestCase
         $exitCode  = Artisan::call('divide:order');
         logger()->info(Artisan::output());
         $this->assertEquals(0, $exitCode, 'コマンドの実行に失敗しました。');
-        $all = Orders::all();
+        $orders = Orders::all();
         $expected = ShippingLog::pluck('order_id');
-        $this->assertCount($expected->unique()->count(), $all, 'ordersテーブルへの登録件数');
+        $this->assertCount($expected->unique()->count(), $orders, 'ordersテーブルへの登録件数');
+
+        $items = OrderItem::all();
+        $this->assertCount($expected->count(), $items, 'order_itemテーブルの登録件数');
         // $actuals = CardInfo::query()->whereNotNull('promotype_id')->get();
         // $this->assertCount(count($cardNames), $actuals, '分離した件数が正しくない');
 
