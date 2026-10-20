@@ -28,6 +28,6 @@ class Shipping extends Model
      * @return Shipping
      */
     public static function findByMethod(string $method) {
-        return self::where(GC::NAME, $method)->first();
+        return self::where(GC::NAME, $method)->where('deleted', false)->first();
     }
 }

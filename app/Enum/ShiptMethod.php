@@ -10,6 +10,7 @@ enum ShiptMethod: string {
     case MINI = 'ミニレター';
     case CLICK = 'クリックポスト';
     case REGISTER_MAIL = '簡易書留';
+    case RAKURAKU = 'らくらくメルカリ便';
 
     /**
      * 金額に応じて発送方法をDBから取得する。
@@ -18,9 +19,9 @@ enum ShiptMethod: string {
      * @return Shipping
      */
     public static function findByPrice(int $price) {
-        $method =  self::MINI; 
+        $method =  self::MINI;
         if ($price >= 1500 && $price < 9999) {
-            $method = self::CLICK;
+            $method = self::RAKURAKU;
         } else if ($price >= 10000) {
             $method = self::REGISTER_MAIL;
         }
