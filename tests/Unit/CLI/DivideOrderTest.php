@@ -39,7 +39,7 @@ class DivideOrderTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('購入者情報を検証するテスト')]
+    #[TestDox('購入者情報を検証する。')]
     public function buyerInfo(): void
     {
         $this->execute();
@@ -63,7 +63,7 @@ class DivideOrderTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('注文情報のプラットフォームを検証するテスト')]
+    #[TestDox('注文情報のプラットフォームを検証する。')]
     #[TestWith([ShopPlatform::MERCARI, 'order_'], 'メルカリShops')]
     #[TestWith([ShopPlatform::DIRECT, 'd2c_'], '直接取引')]
     #[TestWith([ShopPlatform::BASE, ''], 'BASEショップ')]

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\Constant\CardConstant as Con;
 use App\Services\Constant\GlobalConstant as GC;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * 発送方法テーブルのModelクラス
  */
@@ -34,5 +36,10 @@ class Shipping extends Model
 
     public function orders() {
         return $this->hasMany(Orders::class, 'shipt_fee_id');
+    }
+
+    public function scopeActive(Builder $query):Builder
+    {
+        return $query->where('deleted', false);
     }
 }

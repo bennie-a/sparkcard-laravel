@@ -14,13 +14,15 @@ enum ShiptMethod: string {
     case CLICK = 'クリックポスト';
     case REGISTER_MAIL = '簡易書留';
     case RAKURAKU = 'らくらくメルカリ便';
-    case DIRECT = '直接取引';
+    case DIRECT = '手渡し';
+    case UNDEFINED = '不明';
 
     /**
      * 金額に応じて発送方法をDBから取得する。
      *
      * @param integer $price
      * @return Shipping
+     * @deprecated 6.1.0
      */
     public static function findByPrice(int $price) {
         $method =  self::MINI;
