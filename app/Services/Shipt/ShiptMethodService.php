@@ -29,15 +29,15 @@ class ShiptMethodService {
      */
     public function determine(ShopPlatform $platform, int $total, string $shiptDate):array
     {
-        $method = ShiptMethod::UNDEFINED;
+        $method = ShiptMethod::MINI;
         $sdate = new Carbon($shiptDate);
         if ($platform === ShopPlatform::DIRECT) {
             $method = ShiptMethod::DIRECT;
         }
 
-        if ($method === ShiptMethod::UNDEFINED) {
-            throw new NFShiptMethodException();
-        }
+        // if ($method === ShiptMethod::UNDEFINED) {
+        //     throw new NFShiptMethodException();
+        // }
 
         $shipping = $this->repo->findByMethod($method, false);
         return [GC::ID => $shipping->id, SC::METHOD => $method, SC::PRICE => $shipping->price];

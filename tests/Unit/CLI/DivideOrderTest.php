@@ -2,16 +2,18 @@
 
 namespace Tests\Unit\CLI;
 
+use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Enum\SortOrder;
 use App\Models\CardInfo;
 use App\Models\Expansion;
 use App\Models\Promotype;
+use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Services\Constant\CardConstant;
-use App\Services\Constant\GlobalConstant;
+use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Support\Facades\Artisan;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -83,6 +85,22 @@ class DivideOrderTest extends TestCase
                 SC::PLATFORM_ORDER_ID => $u->order_id,
             ]);
         }
+    }
+
+    #[Test]
+    #[TestDox('注文情報の送料に関する判定について検証する。')]
+    #[TestWith([ShopPlatform::DIRECT, ShiptMethod::DIRECT, false], '手渡し')]
+    public function shiptFee(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted) {
+        $this->execute();
+        $expected = Shipping::when($isDeleted, function($query) {
+            return $query->inactive();
+        }, function($query) {
+            return $query->active();
+        })->where(GC::NAME, $method->value)->sole();
+        $this->assertDatabaseHas(Orders::class, [
+            SC::PLATFORM => $platform->value,
+            SC::FEE_ID => $expected->id,
+        ]);
     }
 
     private function execute() {

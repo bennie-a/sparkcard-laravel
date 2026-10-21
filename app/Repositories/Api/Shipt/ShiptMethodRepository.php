@@ -3,6 +3,7 @@ namespace App\Repositories\Api\Shipt;
 
 use App\Enum\ShiptMethod;
 use App\Models\Shipping;
+use App\Services\Constant\GlobalConstant as GC;
 
 /**
  * 発送方法に関するRepositoryクラス
@@ -16,9 +17,9 @@ class ShiptMethodRepository
      * @param bool $isDeleted 削除フラグ
      * @return Shipping
      */
-    public function findByMethod(ShiptMethod $method, bool $isDeleted):Shipping
+    public function findByMethod(ShiptMethod $method, bool $isDeleted):Shipping | null
     {
-        return Shipping::where($method->value)->where('deleted', $isDeleted)->sole();
+        return Shipping::where(GC::NAME, $method->value)->where('deleted', $isDeleted)->sole();
     }
 
 }

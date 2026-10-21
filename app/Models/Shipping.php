@@ -42,4 +42,10 @@ class Shipping extends Model
     {
         return $query->where('deleted', false);
     }
+
+    public function scopeInactive(Builder $query):Builder
+    {
+        return $query->where('deleted', true);
+
+    }
 }

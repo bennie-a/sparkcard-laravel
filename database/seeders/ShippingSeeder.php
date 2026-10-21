@@ -55,5 +55,10 @@ class ShippingSeeder extends Seeder
             'name' => 'ゆうパケットポストmini',
             'price' => 220,
             'deleted' => false]);
+        Shipping::create([
+            'notion_id' => '3f3795084f9b800882bbebc6de57bf1c',
+            'name' => '手渡し',
+            'price' => 0,
+            'deleted' => false]);
     }
 }

@@ -15,6 +15,7 @@ use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Console\Command;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Shipt\ShiptMethodService;
 use App\Services\Shipt\ShiptStoreRow;
 use Illuminate\Support\Facades\DB;
 
@@ -41,7 +42,7 @@ class DivideOrder extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(ShiptMethodService $service)
     {
         OrderItem::truncate();
         Orders::truncate();
@@ -54,14 +55,15 @@ class DivideOrder extends Command
         $bar->start();
 
         DB::table('shipping_log')->orderBy('shipping_date', SortOrder::ASC->value)
-        ->chunk(100, function ($shipts) use ($bar, $repo){
+        ->chunk(100, function ($shipts) use ($bar, $repo, $service){
             foreach($shipts as $s) {
                 $info = ShippingLog::where('order_id', $s->order_id)->get();
-                $platform = $this->platform($s->order_id);
+                $platform = ShopPlatform::determine($s->order_id);
                 $orders = $repo->findByOrderId($platform, $s->order_id);
                 if (!isset($orders)) {
                     $this->info("注文番号({$s->order_id})の登録を開始します。");
                     $this->info("注文番号({$s->order_id})の商品数: {$info->count()}");
+                    $feeMethod = $service->determine($platform, $s->total_price, $s->shipping_date);
                     $row = [
                         SC::PLATFORM => $platform,
                         SC::ORDER_ID => $s->order_id,
@@ -72,7 +74,7 @@ class DivideOrder extends Command
                         SC::ITEM_SUBTOTAL => $s->total_price,
                         SC::GRAND_TOTAL => $s->total_price,
                         SC::DISCOUNT_AMOUNT => 0,
-                        SC::FEE => [GCon::ID => 1],
+                        SC::FEE => [GCon::ID => $feeMethod[GCon::ID]],
                         SC::ITEM_COUNT => $info->count()
                     ];
                     $shiptRow = new ShiptStoreRow($row);
@@ -153,14 +155,5 @@ class DivideOrder extends Command
 
         $this->info('注文情報の分割が完了しました。');
         return self::SUCCESS;
-    }
-
-    private function platform(string $orderId):ShopPlatform {
-        if (strpos($orderId, 'order_') === 0) {
-            return ShopPlatform::MERCARI;
-        } else if (strpos($orderId, 'd2c_') === 0) {
-            return ShopPlatform::DIRECT;
-        }
-        return ShopPlatform::BASE;
     }
 }
