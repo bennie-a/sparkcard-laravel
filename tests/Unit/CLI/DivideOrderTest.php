@@ -24,6 +24,7 @@ use Tests\Database\Seeders\TruncateAllTables;
 use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
 use PHPUnit\Framework\Attributes\TestWith;
+use Illuminate\Database\Eloquent\Builder;
 
 #[TestDox('divide:orderコマンドのテスト')]
 #[CoversClass(App\Console\Commands\DivideOrder::class)]
@@ -66,19 +67,13 @@ class DivideOrderTest extends TestCase
 
     #[Test]
     #[TestDox('注文情報のプラットフォームを検証する。')]
-    #[TestWith([ShopPlatform::MERCARI, 'order_'], 'メルカリShops')]
-    #[TestWith([ShopPlatform::DIRECT, 'd2c_'], '直接取引')]
-    #[TestWith([ShopPlatform::BASE, ''], 'BASEショップ')]
-    public function platform(ShopPlatform $platform, string $prefix) {
+    #[TestWith([ShopPlatform::MERCARI], 'メルカリShops')]
+    #[TestWith([ShopPlatform::DIRECT], '直接取引')]
+    #[TestWith([ShopPlatform::BASE], 'BASEショップ')]
+    public function platform(ShopPlatform $platform) {
         $this->execute();
-        $query = null;
-        if ($platform === ShopPlatform::BASE) {
-            $query = ShippingLog::where('order_id', 'not like', 'order_%')->where('order_id', 'not like', 'd2c_%');
-        } else {
-            $query = ShippingLog::whereLike('order_id', "{$prefix}_%");
-        }
-        $log = $query->orderBy('shipping_date', SortOrder::ASC->value)->get();
-        $uniqueLog = $log->unique('order_id');
+        $query = $this->fetchByShopQuery($platform);
+        $uniqueLog = $this->fetchExRecord($query);
         foreach($uniqueLog as $u) {
             $this->assertDatabaseHas(Orders::class, [
                 SC::PLATFORM => $platform->value,
@@ -88,21 +83,54 @@ class DivideOrderTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('注文情報の送料に関する判定について検証する。')]
-    #[TestWith([ShopPlatform::DIRECT, ShiptMethod::DIRECT, false], '手渡し')]
-    public function shiptFee(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted) {
+    #[TestDox('配送方法が「手渡し」に関する判定について検証する。')]
+    public function fee_direct() {
         $this->execute();
-        $expected = Shipping::when($isDeleted, function($query) {
+        $expected = $this->shipping(ShiptMethod::DIRECT, false);
+        $query = $this->fetchByShopQuery(ShopPlatform::DIRECT);
+        $uniqueLog = $this->fetchExRecord($query);
+
+        foreach($uniqueLog as $u) {
+            $this->assertDatabaseHas(Orders::class, [
+                SC::PLATFORM => ShopPlatform::DIRECT->value,
+                SC::PLATFORM_ORDER_ID => $u->order_id,
+                SC::FEE_ID => $expected->id,
+            ]);
+        }
+
+    }
+
+    private function shipping(ShiptMethod $method, bool $isDeleted) {
+        $shipping = Shipping::when($isDeleted, function($query) {
             return $query->inactive();
         }, function($query) {
             return $query->active();
         })->where(GC::NAME, $method->value)->sole();
-        $this->assertDatabaseHas(Orders::class, [
-            SC::PLATFORM => $platform->value,
-            SC::FEE_ID => $expected->id,
-        ]);
+
+        return $shipping;
     }
 
+    private function fetchByShopQuery(ShopPlatform $platform)
+    {
+        if ($platform === ShopPlatform::BASE) {
+            $query = ShippingLog::where('order_id', 'not like', 'order_%')->where('order_id', 'not like', 'd2c_%');
+        } else {
+            $query = ShippingLog::whereLike('order_id', "{$platform->orderPrefix()}_%");
+        }
+        return $query;
+    }
+
+    private function fetchExRecord(Builder $query) {
+        $log = $query->orderBy('shipping_date', SortOrder::ASC->value)->get();
+        $uniqueLog = $log->unique('order_id');
+        return $uniqueLog;
+    }
+
+    /**
+     * divide:orderコマンドを実行する。
+     *
+     * @return void
+     */
     private function execute() {
         $exitCode  = Artisan::call('divide:order');
         logger()->info(Artisan::output());
