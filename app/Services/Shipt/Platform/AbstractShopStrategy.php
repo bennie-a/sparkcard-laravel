@@ -1,4 +1,7 @@
 <?php
+namespace App\Services\Shipt\Platform;
+use App\Models\CardInfo;
+use Carbon\Carbon;
 
 /**
  * ショップ別配送方法の判別に関する基盤クラス
@@ -7,7 +10,7 @@
 abstract class AbstractShopStrategy {
 
     public function isMiniletter(int $price, Carbon $shiptDate) {
-        return $price <= $this->miniThreshold();
+        return $price >= 50 &&$price <= $this->miniThreshold();
     }
 
     protected function miniThreshold() {
@@ -18,15 +21,19 @@ abstract class AbstractShopStrategy {
         return false;
     }
 
-    public function isRakuRaku(int $price, Carbon $shiptDate) {
+    public function isRakuRaku(int $price, string $zipcode) {
         return false;
     }
 
-    public function isRegisteredMail(int $price, Carbon $shiptDate) {
+    public function isRegisteredMail(int $price) {
         return false;
     }
 
-    public function isDirect(int $price) {
+    /**
+     * 「手渡し」かどうか判定するクラス
+     * @return bool
+     */
+    public function isDirect():bool {
         return false;
     }
 
@@ -34,7 +41,7 @@ abstract class AbstractShopStrategy {
 
     }
 
-    protected function isBoosterPack() {
+    protected function isBoosterPack(CardInfo $info) {
 
     }
 }

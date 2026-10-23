@@ -27,6 +27,7 @@ class ShippingLog extends Model
      * 注文番号に該当する出荷情報を取得する。
      *
      * @param string $orderId
+     * @deprecated 6.1.0
      * @return Collection
      */
     public static function fetchByOrderId(string $orderId) {
@@ -109,6 +110,11 @@ class ShippingLog extends Model
      */
     public static function fetchLatestLog(string $orderId):ShippingLog {
         return ShippingLog::where(SC::ORDER_ID, $orderId)->latest()->first();
+    }
+
+    public function stockpile()
+    {
+        return $this->belongsTo(Stockpile::class, 'stock_id');
     }
 }
 

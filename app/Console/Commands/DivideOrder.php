@@ -57,13 +57,17 @@ class DivideOrder extends Command
         DB::table('shipping_log')->orderBy('shipping_date', SortOrder::ASC->value)
         ->chunk(100, function ($shipts) use ($bar, $repo, $service){
             foreach($shipts as $s) {
-                $info = ShippingLog::where('order_id', $s->order_id)->get();
+                $items = ShippingLog::query()->where('order_id', $s->order_id)->with(
+                                                                                ['stockpile', 'stockpile.cardinfo'])->get();
                 $platform = ShopPlatform::determine($s->order_id);
                 $orders = $repo->findByOrderId($platform, $s->order_id);
                 if (!isset($orders)) {
                     $this->info("注文番号({$s->order_id})の登録を開始します。");
-                    $this->info("注文番号({$s->order_id})の商品数: {$info->count()}");
-                    $feeMethod = $service->determine($platform, $s->total_price, $s->shipping_date);
+                    $this->info("注文番号({$s->order_id})の商品数: {$items->count()}");
+                    $subtotal = $items->sum('total_price');
+                    $this->info("注文番号({$s->order_id})の合計金額: ¥{$subtotal}");
+
+                    $feeMethod = $service->determine($platform, $items, $subtotal);
                     $row = [
                         SC::PLATFORM => $platform,
                         SC::ORDER_ID => $s->order_id,
@@ -75,7 +79,7 @@ class DivideOrder extends Command
                         SC::GRAND_TOTAL => $s->total_price,
                         SC::DISCOUNT_AMOUNT => 0,
                         SC::FEE => [GCon::ID => $feeMethod[GCon::ID]],
-                        SC::ITEM_COUNT => $info->count()
+                        SC::ITEM_COUNT => $items->count()
                     ];
                     $shiptRow = new ShiptStoreRow($row);
                     $orders = $repo->createOrder($shiptRow);
