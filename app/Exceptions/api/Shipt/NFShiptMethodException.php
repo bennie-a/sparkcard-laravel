@@ -8,6 +8,11 @@ use Illuminate\Http\Response;
  */
 class NFShiptMethodException extends ApiException
 {
+    public function __construct(string $orderNo)
+    {
+        $this->orderNo = $orderNo;
+    }
+
     public function getTitle(): string
     {
         return '配送方法なし';
@@ -20,6 +25,6 @@ class NFShiptMethodException extends ApiException
 
     public function getDetail(): string
     {
-        return '該当する配送方法が見つかりません。';
+        return "{$this->orderNo}:該当する配送方法が見つかりません。";
     }
 }
