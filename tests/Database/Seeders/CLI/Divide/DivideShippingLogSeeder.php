@@ -56,7 +56,7 @@ class DivideShippingLogSeeder extends Seeder
 
         // らくらくメルカリ便
         ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-                                                SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望']);
+                                                SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望', 'total_price' => 2000]);
 
         // 灯争大戦ブースターパック[JP]
         $war = Expansion::findBySetCode('WAR');

@@ -85,19 +85,38 @@ class DivideOrderTest extends TestCase
     #[Test]
     #[TestDox('配送方法が「手渡し」に関する判定について検証する。')]
     public function fee_direct() {
-        $this->execute();
-        $expected = $this->shipping(ShiptMethod::DIRECT, false);
         $query = $this->fetchByShopQuery(ShopPlatform::DIRECT);
+        $this->verifyFee(ShopPlatform::DIRECT, ShiptMethod::DIRECT, false, $query);
+    }
+
+    #[Test]
+    #[TestDox('らくらくメルカリ便について検証する')]
+    public function fee_rakuraku() {
+        $query = $this->fetchByShopQuery(ShopPlatform::MERCARI)->where(SC::ZIPCODE, '100-0000');
+        $this->verifyFee(ShopPlatform::MERCARI, ShiptMethod::RAKURAKU, false, $query);
+    }
+
+    /**
+     * 配送方法について検証する。
+     *
+     * @param ShopPlatform $platform
+     * @param ShiptMethod $method
+     * @param boolean $isDeleted
+     * @param Builder $query
+     * @return void
+     */
+    private function verifyFee(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Builder $query) {
+        $this->execute();
+        $expected = $this->shipping($method, $isDeleted);
         $uniqueLog = $this->fetchExRecord($query);
 
         foreach($uniqueLog as $u) {
             $this->assertDatabaseHas(Orders::class, [
-                SC::PLATFORM => ShopPlatform::DIRECT->value,
+                SC::PLATFORM => $platform->value,
                 SC::PLATFORM_ORDER_ID => $u->order_id,
                 SC::FEE_ID => $expected->id,
             ]);
         }
-
     }
 
     private function shipping(ShiptMethod $method, bool $isDeleted) {

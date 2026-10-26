@@ -39,28 +39,19 @@ class ShiptMethodService {
         $sdate = new Carbon($first->shipping_date);
         $strategy = $this->getStrategy($platform);
         $isDeleted = false;
+
         if ($strategy->isDirect()) {
             $method = ShiptMethod::DIRECT;
-        }
-
-        if ($strategy->isRakuRaku($first->zip_code)) {
+        } else if ($strategy->isRakuRaku($first->zip_code)) {
             $method = ShiptMethod::RAKURAKU;
-        }
-
-        if ($strategy->isRegisteredMail($subtotal)) {
+        } else if ($strategy->isRegisteredMail($subtotal)) {
             $method = ShiptMethod::REGISTER_MAIL;
-        }
-
-        if ($strategy->isNekopost($subtotal, $sdate)) {
+        } else if ($strategy->isNekopost($subtotal, $sdate)) {
             $method = ShiptMethod::NEKOPOST;
-        }
-
-        if ($strategy->isMiniletter($subtotal, $orderItems, $sdate)) {
+        } else if ($strategy->isMiniletter($subtotal, $orderItems, $sdate)) {
             $method = ShiptMethod::MINI;
             $isDeleted = $strategy->isBeforeOrOn20241001($sdate);
-        }
-
-        if ($strategy->isClickpost($subtotal, $orderItems, $sdate)) {
+        } else if ($strategy->isClickpost($subtotal, $orderItems, $sdate)) {
             $method = ShiptMethod::CLICK;
             $isDeleted = $strategy->isBeforeOrOn20261001($sdate);
         }
