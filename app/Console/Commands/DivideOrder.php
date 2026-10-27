@@ -70,7 +70,7 @@ class DivideOrder extends Command
                         $subtotal = $items->sum('total_price');
                         $this->info("注文番号({$s->order_id})の合計金額: ¥{$subtotal}");
 
-                        $feeMethod = $service->determine($platform, $items, $subtotal);
+                        [$feeId, $feeMethod, $feePrice] = $service->determine($platform, $items, $subtotal);
                         $row = [
                             SC::PLATFORM => $platform,
                             SC::ORDER_ID => $s->order_id,
@@ -81,7 +81,7 @@ class DivideOrder extends Command
                             SC::ITEM_SUBTOTAL => $s->total_price,
                             SC::GRAND_TOTAL => $s->total_price,
                             SC::DISCOUNT_AMOUNT => 0,
-                            SC::FEE => [GCon::ID => $feeMethod[GCon::ID]],
+                            SC::FEE => [GCon::ID => $feeId],
                             SC::ITEM_COUNT => $items->count()
                         ];
                         $shiptRow = new ShiptStoreRow($row);
