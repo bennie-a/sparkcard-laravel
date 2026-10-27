@@ -38,7 +38,20 @@ abstract class AbstractShopStrategy {
         if ($this->isBoosterPack($orderItems)) {
             return true;
         }
-        return $price >= $this->getClickpostMinPrice() && $price <= $this->calcClickPostMaxPrice($shiptDate);
+        return $price >= $this->calcClickPostMinPrice($shiptDate)
+                                            && $price <= $this->calcClickPostMaxPrice($shiptDate);
+    }
+
+        /**
+     * クリックポストで送れる最高価格を計算する。
+     *
+     * @param Carbon $shiptDate
+     * @return integer
+     */
+    protected function calcClickPostMinPrice(Carbon $shiptDate):int
+    {
+        $fee = $this->isBeforeOrOn20261001($shiptDate) ? 185 : 240;
+        return $this->getClickpostMinPrice() - $fee;
     }
 
     /**

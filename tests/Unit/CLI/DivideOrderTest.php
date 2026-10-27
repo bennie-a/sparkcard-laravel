@@ -25,6 +25,8 @@ use Tests\TestCase;
 use App\Services\Constant\ShiptConstant as SC;
 use PHPUnit\Framework\Attributes\TestWith;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 #[TestDox('divide:orderコマンドのテスト')]
 #[CoversClass(App\Console\Commands\DivideOrder::class)]
@@ -96,6 +98,24 @@ class DivideOrderTest extends TestCase
         $this->verifyFee(ShopPlatform::MERCARI, ShiptMethod::RAKURAKU, false, $query);
     }
 
+    #[Test]
+    #[TestDox('簡易書留について検証する。')]
+    public function fee_registerMail() {
+        $query = $this->fetchByShopQuery(ShopPlatform::MERCARI);
+        $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'))
+            ->groupBy('order_id')->havingRaw('SUM(total_price) >= ?', [10000])->get();
+        $this->verifyFeeRecord(ShopPlatform::MERCARI, ShiptMethod::REGISTER_MAIL, false, $result);
+    }
+
+    #[Test]
+    #[TestDox('クリックポストについて検証する。')]
+    public function fee_clickpost() {
+        $query = $this->fetchByShopQuery(ShopPlatform::MERCARI)->whereDate('shipping_date', '<', '2026-10-01');
+        $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'))
+            ->groupBy('order_id')->havingRaw('SUM(total_price) >= ?', [1500 - 185])->havingRaw('SUM(total_price) <= ?', [9999 - 185])->get();
+        $this->verifyFeeRecord(ShopPlatform::MERCARI, ShiptMethod::CLICK, true, $result);
+    }
+
     /**
      * 配送方法について検証する。
      *
@@ -107,9 +127,13 @@ class DivideOrderTest extends TestCase
      */
     private function verifyFee(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Builder $query) {
         $this->execute();
-        $expected = $this->shipping($method, $isDeleted);
         $uniqueLog = $this->fetchExRecord($query);
+        $this->verifyFeeRecord($platform, $method, $isDeleted, $uniqueLog);
+    }
 
+    private function verifyFeeRecord(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Collection $uniqueLog) {
+        $this->execute();
+        $expected = $this->shipping($method, $isDeleted);
         foreach($uniqueLog as $u) {
             $this->assertDatabaseHas(Orders::class, [
                 SC::PLATFORM => $platform->value,
@@ -117,6 +141,7 @@ class DivideOrderTest extends TestCase
                 SC::FEE_ID => $expected->id,
             ]);
         }
+
     }
 
     private function shipping(ShiptMethod $method, bool $isDeleted) {
