@@ -39,58 +39,69 @@ class DivideShippingLogSeeder extends Seeder
             ]);
         });
 
-        // メルカリ経由ミニレター発送
-        $this->createUnder1500Record(ShopPlatform::MERCARI, [300, 1499]);
-        // BASE経由ミニレター発送
-        $this->createUnder1500Record(ShopPlatform::BASE, [200, 4999] );
+        // メルカリ経由¥300の商品が1件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::MERCARI, 300, 1);
+        // メルカリ経由¥300の商品が2件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::MERCARI, 300, 2);
+        // メルカリ経由¥1499の商品が1件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::MERCARI, 1499, 1);
+        // メルカリ経由¥1499の商品が2件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::MERCARI, 1499, 2);
 
-        // メルカリ経由クリックポスト発送
-        $this->createOver1500Record(ShopPlatform::MERCARI, [1500, 9999]);
-        // BASE経由クリックポスト発送
-        $this->createOver1500Record(ShopPlatform::BASE, [5000, 10000]);
+        // BASE経由¥113の商品が1件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::BASE, 135, 1 );
+        // BASE経由¥4999の商品が1件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::BASE, 4999, 1 );
+        // BASE経由¥4999の商品が2件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::BASE, 4999, 2 );
 
-        // メルカリ経由簡易書留発送
-        $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000);
-        // 直接取引
-        $this->createOver1500Record(ShopPlatform::DIRECT, [5000]);
+        // // メルカリ経由クリックポスト発送
+        // $this->createOver1500Record(ShopPlatform::MERCARI, [1500, 9999]);
+        // // BASE経由クリックポスト発送
+        // $this->createOver1500Record(ShopPlatform::BASE, [5000, 10000]);
+
+        // // メルカリ経由簡易書留発送
+        // $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000);
+        // // 直接取引
+        // $this->createOver1500Record(ShopPlatform::DIRECT, [5000]);
 
         // らくらくメルカリ便
-        ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-                                                SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望', 'total_price' => 2000]);
+        // ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+        //                                         SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望', 'total_price' => 2000]);
 
         // 灯争大戦ブースターパック[JP]
-        $war = Expansion::findBySetCode('WAR');
-        $pack = CardInfo::factory()->create([CardConstant::EXP_ID => $war->notion_id,
-                                    GlobalConstant::NAME => '灯争大戦ブースターパック', CardConstant::PROMO_ID => 1]);
-        $packStock = Stockpile::factory()->create([
-            StockpileHeader::CARD_ID => $pack->id,
-            StockpileHeader::LANGUAGE => CardLanguage::JP->value,
-            StockpileHeader::CONDITION => 'NM'
-        ]);
+    //     $war = Expansion::findBySetCode('WAR');
+    //     $pack = CardInfo::factory()->create([CardConstant::EXP_ID => $war->notion_id,
+    //                                 GlobalConstant::NAME => '灯争大戦ブースターパック', CardConstant::PROMO_ID => 1]);
+    //     $packStock = Stockpile::factory()->create([
+    //         StockpileHeader::CARD_ID => $pack->id,
+    //         StockpileHeader::LANGUAGE => CardLanguage::JP->value,
+    //         StockpileHeader::CONDITION => 'NM'
+    //     ]);
 
-         $shiptInfo = [
-                    [
-                        'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-                        SC::STOCK_ID => $packStock->id,
-                        StockpileHeader::QUANTITY => 1,
-                        'single_price' => 795,
-                        'total_price' => 795
-                    ],
-                    [
-                        'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-                        SC::STOCK_ID => $packStock->id,
-                        StockpileHeader::QUANTITY => 30,
-                        'single_price' => 799,
-                        'total_price' => 23995
-                    ]
-                ];
-                ShippingLog::factory()->createMany($shiptInfo);
+    //      $shiptInfo = [
+    //                 [
+    //                     'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+    //                     SC::STOCK_ID => $packStock->id,
+    //                     StockpileHeader::QUANTITY => 1,
+    //                     'single_price' => 795,
+    //                     'total_price' => 795
+    //                 ],
+    //                 [
+    //                     'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+    //                     SC::STOCK_ID => $packStock->id,
+    //                     StockpileHeader::QUANTITY => 30,
+    //                     'single_price' => 799,
+    //                     'total_price' => 23995
+    //                 ]
+    //             ];
+    //             ShippingLog::factory()->createMany($shiptInfo);
     }
 
-    private function createUnder1500Record(ShopPlatform $platform, array $prices) {
+    private function createUnder1500Record(ShopPlatform $platform, int $price, int $itemCount) {
         $before240930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'));
         $after241001 = Carbon::parse(fake()->dateTimeBetween('2024-10-01', 'now'));
-        $this->generateRandomRecord($platform, [$before240930, $after241001], $prices);
+        $this->generateShiptRecord($platform, [$before240930, $after241001], $price, $itemCount);
     }
 
     private function createOver1500Record(ShopPlatform $platform, array $prices) {
@@ -117,7 +128,7 @@ class DivideShippingLogSeeder extends Seeder
         foreach ($initialDate as $date) {
             foreach($prices as $p) {
                 $orderId = $this->generateOrderId($platform);
-                $itemCount = fake()->numberBetween(1, 2);
+                $itemCount = 2;
                 $splitPrices = $this->splitNumberRandomly($p, $itemCount, $minPrice);
                 $buyerInfo = ShiptLogTestHelper::createBuyerInfoOnly();
                 $fee = 0;
@@ -129,6 +140,33 @@ class DivideShippingLogSeeder extends Seeder
                 foreach($splitPrices as $sp) {
                     ShippingLog::factory()->createRecord($fee, $date, $sp, $orderId, $itemCount, $buyerInfo)->create();
                 }
+            }
+        }
+    }
+
+        /**
+     * 指定した金額をランダムで割り振って、注文番号と購入者情報
+     * が同じレコードを登録する。
+     *
+     * @param ShopPlatform $platform
+     * @param array $initialDate 起点日
+     * @param int $price
+     * @param int $itemCount
+     * @return void
+     */
+    private function generateShiptRecord(ShopPlatform $platform, array $initialDate, int $price, int $itemCount) {
+        foreach ($initialDate as $date) {
+            $orderId = $this->generateOrderId($platform);
+            $splitPrices = $itemCount == 1 ? [$price] : $this->splitNumberRandomly($price, $itemCount, 100);
+            $buyerInfo = ShiptLogTestHelper::createBuyerInfoOnly();
+            $fee = 0;
+            if ($platform === ShopPlatform::MERCARI) {
+                $fee = $this->getMercariFee($date, $price);
+            } else if ($platform === ShopPlatform::BASE) {
+                $fee = $this->getBaseFee($date, $price);
+            }
+            foreach($splitPrices as $sp) {
+                ShippingLog::factory()->createRecord($fee, $date, $sp, $orderId, $itemCount, $buyerInfo)->create();
             }
         }
     }
@@ -208,7 +246,7 @@ class DivideShippingLogSeeder extends Seeder
 
     private function getBaseFee(Carbon $shiptDate, int $subtotal) {
         $fee = 0;
-        if ($subtotal >= 185 && $subtotal < 4999) {
+        if ($subtotal >= 135 && $subtotal < 4999) {
             $fee = $this->fetchMiniletter($shiptDate);
         } else {
             $fee = $this->fetchClickPost($shiptDate);

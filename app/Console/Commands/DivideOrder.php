@@ -56,7 +56,6 @@ class DivideOrder extends Command
         $bar->start();
 
         try {
-
             DB::table('shipping_log')->orderBy('shipping_date', SortOrder::ASC->value)
             ->chunk(100, function ($shipts) use ($bar, $repo, $service){
                 foreach($shipts as $s) {
@@ -71,6 +70,7 @@ class DivideOrder extends Command
                         $this->info("注文番号({$s->order_id})の合計金額: ¥{$subtotal}");
 
                         [$feeId, $feeMethod, $feePrice] = $service->determine($platform, $items, $subtotal);
+                        $this->info("注文番号({$s->order_id})の送料：{$feeMethod->value}(¥$feePrice)");
                         $row = [
                             SC::PLATFORM => $platform,
                             SC::ORDER_ID => $s->order_id,
@@ -95,10 +95,10 @@ class DivideOrder extends Command
                                         SC::UNIT_PRICE => $s->single_price,
                                         SC::SUBTOTAL => $s->total_price,
                     ];
+                    $this->info("注文番号({$s->order_id})、在庫ID({$s->stock_id})の登録が完了しました。");
                     $repo->createOrderItem($orders->id, $item);
-                    $this->info("注文番号({$s->order_id})の登録が完了しました。");
                     $bar->advance();
-                }
+                    }
             });
             $bar->finish();
             $this->newLine(2);

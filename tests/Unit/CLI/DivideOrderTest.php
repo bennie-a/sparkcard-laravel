@@ -116,6 +116,26 @@ class DivideOrderTest extends TestCase
         $this->verifyFeeRecord(ShopPlatform::MERCARI, ShiptMethod::CLICK, true, $result);
     }
 
+    #[Test]
+    #[TestDox('ミニレターについて検証する。')]
+    #[TestWith([ShopPlatform::MERCARI, 1, true, 63], '発送日が2024/10/1より前で、メルカリ経由で商品数が1件')]
+    #[TestWith([ShopPlatform::MERCARI, 2, true, 63], '発送日が2024/10/1より前で、メルカリ経由で商品数が2件')]
+    #[TestWith([ShopPlatform::MERCARI, 1, false, 85], '発送日が2024/10/1以降で、メルカリ経由で商品数が1件')]
+    #[TestWith([ShopPlatform::MERCARI, 2, false, 85], '発送日が2024/10/1以降で、メルカリ経由で商品数が2件')]
+    #[TestWith([ShopPlatform::BASE, 1, true, 63], '発送日が2024/10/1より前で、BASE経由で商品数が1件')]
+    #[TestWith([ShopPlatform::BASE, 2, true, 63], '発送日が2024/10/1より前で、BASE経由で商品数が2件')]
+    #[TestWith([ShopPlatform::BASE, 1, false, 85], '発送日が2024/10/1以降で、BASE経由で商品数が1件')]
+    #[TestWith([ShopPlatform::BASE, 2, false, 85], '発送日が2024/10/1以降で、BASE経由で商品数が2件')]
+    public function fee_miniletter(ShopPlatform $platform, int $count, bool $isBefore, int $fee) {
+        $symbol = $isBefore ? '<' : '>=';
+        $maxPrice = $platform === ShopPlatform::MERCARI ? 1499 : 4999;
+        $query = $this->fetchByShopQuery($platform)->whereDate('shipping_date', $symbol, '2024-10-01');
+        $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'), DB::raw('COUNT(order_id) as order_count'))
+            ->groupBy('order_id')->havingRaw('SUM(total_price) >= ?', [135 - $fee])
+                                ->havingRaw('SUM(total_price) <= ?', [$maxPrice - $fee])->havingRaw("COUNT(order_id) = {$count}")->get();
+        $this->verifyFeeRecord($platform, ShiptMethod::MINI, $isBefore, $result);
+    }
+
     /**
      * 配送方法について検証する。
      *
@@ -135,6 +155,7 @@ class DivideOrderTest extends TestCase
         $this->execute();
         $expected = $this->shipping($method, $isDeleted);
         foreach($uniqueLog as $u) {
+            logger()->info("期待値側のID：{$u->order_id}");
             $this->assertDatabaseHas(Orders::class, [
                 SC::PLATFORM => $platform->value,
                 SC::PLATFORM_ORDER_ID => $u->order_id,
