@@ -35,7 +35,7 @@ class MercariStrategy extends AbstractShopStrategy
 
     #[Override]
     public function isRegisteredMail(int $price) {
-        return $price >= 10000;
+        return $price >= 10000 - 460;
     }
 
     #[Override]

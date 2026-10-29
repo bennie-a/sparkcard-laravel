@@ -49,21 +49,39 @@ class DivideShippingLogSeeder extends Seeder
         $this->createUnder1500Record(ShopPlatform::MERCARI, 1499, 2);
 
         // BASE経由¥113の商品が1件➞ミニレター
-        $this->createUnder1500Record(ShopPlatform::BASE, 135, 1 );
+        $this->generateShiptRecord(ShopPlatform::BASE,
+                    [Carbon::parse(fake()->dateTimeBetween('-3 years', '2024-09-30'))], 113, 1);
+                    // BASE経由¥135の商品が1件➞ミニレター
+        $this->generateShiptRecord(ShopPlatform::BASE,
+                    [Carbon::parse(fake()->dateTimeBetween('2024-10-01', 'now'))], 135, 1);
         // BASE経由¥4999の商品が1件➞ミニレター
         $this->createUnder1500Record(ShopPlatform::BASE, 4999, 1 );
         // BASE経由¥4999の商品が2件➞ミニレター
         $this->createUnder1500Record(ShopPlatform::BASE, 4999, 2 );
 
-        // // メルカリ経由クリックポスト発送
-        // $this->createOver1500Record(ShopPlatform::MERCARI, [1500, 9999]);
+        // メルカリ経由¥1500の商品が1件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::MERCARI, 1500, 1);
+        // メルカリ経由¥1500の商品が2件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::MERCARI, 1500, 2);
+        // メルカリ経由¥9999の商品が1件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::MERCARI, 9999, 1);
+        // メルカリ経由¥9999の商品が2件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::MERCARI, 9999, 2);
+        // BASE経由¥5000の商品が1件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::BASE, 5000, 1);
+        // メルカリ経由¥5000の商品が2件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::BASE, 5000, 2);
+        // BASE経由¥10000の商品が1件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::BASE, 10000, 1);
+        // メルカリ経由¥10000の商品が2件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::BASE, 10000, 2);
         // // BASE経由クリックポスト発送
         // $this->createOver1500Record(ShopPlatform::BASE, [5000, 10000]);
 
-        // // メルカリ経由簡易書留発送
-        // $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000);
-        // // 直接取引
-        // $this->createOver1500Record(ShopPlatform::DIRECT, [5000]);
+        // メルカリ経由簡易書留発送
+        $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000, 1);
+        // 直接取引
+        $this->createOver1500Record(ShopPlatform::DIRECT, 5000, 2);
 
         // らくらくメルカリ便
         // ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
@@ -104,15 +122,15 @@ class DivideShippingLogSeeder extends Seeder
         $this->generateShiptRecord($platform, [$before240930, $after241001], $price, $itemCount);
     }
 
-    private function createOver1500Record(ShopPlatform $platform, array $prices) {
+    private function createOver1500Record(ShopPlatform $platform, int $price, int $itemCount) {
         $before260930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2026-09-30'));
         $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', 'now'));
-        $this->generateRandomRecord($platform, [$before260930, $after261001], $prices);
+        $this->generateShiptRecord($platform, [$before260930, $after261001], $price, $itemCount);
     }
 
-    private function createRegisterMailRecord(ShopPlatform $platform, int $price) {
+    private function createRegisterMailRecord(ShopPlatform $platform, int $price, int $itemCount) {
         $shiptDate = Carbon::parse(fake()->dateTimeBetween('now'));
-        $this->generateRandomRecord($platform, [$shiptDate], [$price], 300);
+        $this->generateShiptRecord($platform, [$shiptDate], $price, $itemCount);
     }
 
     /**
@@ -246,7 +264,7 @@ class DivideShippingLogSeeder extends Seeder
 
     private function getBaseFee(Carbon $shiptDate, int $subtotal) {
         $fee = 0;
-        if ($subtotal >= 135 && $subtotal < 4999) {
+        if ($subtotal >= 113 && $subtotal <= 4999) {
             $fee = $this->fetchMiniletter($shiptDate);
         } else {
             $fee = $this->fetchClickPost($shiptDate);

@@ -103,7 +103,7 @@ class DivideOrderTest extends TestCase
     public function fee_registerMail() {
         $query = $this->fetchByShopQuery(ShopPlatform::MERCARI);
         $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'))
-            ->groupBy('order_id')->havingRaw('SUM(total_price) >= ?', [10000])->get();
+            ->groupBy('order_id')->havingRaw('SUM(total_price) = ?', [10000 - 460])->get();
         $this->verifyFeeRecord(ShopPlatform::MERCARI, ShiptMethod::REGISTER_MAIL, false, $result);
     }
 
@@ -117,22 +117,48 @@ class DivideOrderTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('ミニレターについて検証する。')]
-    #[TestWith([ShopPlatform::MERCARI, 1, true, 63], '発送日が2024/10/1より前で、メルカリ経由で商品数が1件')]
-    #[TestWith([ShopPlatform::MERCARI, 2, true, 63], '発送日が2024/10/1より前で、メルカリ経由で商品数が2件')]
-    #[TestWith([ShopPlatform::MERCARI, 1, false, 85], '発送日が2024/10/1以降で、メルカリ経由で商品数が1件')]
-    #[TestWith([ShopPlatform::MERCARI, 2, false, 85], '発送日が2024/10/1以降で、メルカリ経由で商品数が2件')]
-    #[TestWith([ShopPlatform::BASE, 1, true, 63], '発送日が2024/10/1より前で、BASE経由で商品数が1件')]
-    #[TestWith([ShopPlatform::BASE, 2, true, 63], '発送日が2024/10/1より前で、BASE経由で商品数が2件')]
-    #[TestWith([ShopPlatform::BASE, 1, false, 85], '発送日が2024/10/1以降で、BASE経由で商品数が1件')]
-    #[TestWith([ShopPlatform::BASE, 2, false, 85], '発送日が2024/10/1以降で、BASE経由で商品数が2件')]
-    public function fee_miniletter(ShopPlatform $platform, int $count, bool $isBefore, int $fee) {
+    #[TestDox('メルカリ経由のミニレターについて検証する。')]
+    #[TestWith([1, true, 300], '発送日が2024/10/1より前で、価格¥300、商品数1件')]
+    #[TestWith([2, true, 299], '発送日が2024/10/1より前で、価格¥300、商品数2件')]
+    #[TestWith([1, true, 1499], '発送日が2024/10/1より前で、価格¥1499、商品数1件')]
+    #[TestWith([2, true, 1498], '発送日が2024/10/1より前で、価格¥1499、商品数2件')]
+    #[TestWith([1, false, 300], '発送日が2024/10/1以降で、価格¥300、商品数1件')]
+    #[TestWith([2, false, 299], '発送日が2024/10/1以降で、価格¥300、商品数2件')]
+    #[TestWith([1, false, 1499], '発送日が2024/10/1以降で、価格¥1499、商品数1件')]
+    #[TestWith([2, false, 1498], '発送日が2024/10/1以降で、価格¥1499、商品数2件')]
+    public function fee_miniletter_mercari( int $count, bool $isBefore, int $total) {
+        $this->verifyMiniletter(ShopPlatform::MERCARI, $count, $isBefore, $total);
+    }
+
+    #[Test]
+    #[TestDox('BASE経由のミニレターについて検証する。')]
+    #[TestWith([1, true, 113], '発送日が2024/10/1より前で、価格¥113、商品数1件')]
+    #[TestWith([1, true, 4999], '発送日が2024/10/1より前で、価格¥4999、商品数1件')]
+    #[TestWith([2, true, 4998], '発送日が2024/10/1より前で、価格¥4999、商品数2件')]
+    #[TestWith([1, false, 135], '発送日が2024/10/1以降で、価格¥135、商品数1件')]
+    #[TestWith([1, false, 4999], '発送日が2024/10/1以降で、価格¥4999、商品数1件')]
+    #[TestWith([2, false, 4998], '発送日が2024/10/1以降で、価格¥4999、商品数2件')]
+    public function fee_miniletter_base( int $count, bool $isBefore, int $total) {
+        $this->verifyMiniletter(ShopPlatform::BASE, $count, $isBefore, $total);
+    }
+
+
+    /**
+     * ミニレターについて検証する。
+     *
+     * @param ShopPlatform $platform
+     * @param integer $count
+     * @param boolean $isBefore
+     * @param integer $total
+     * @return void
+     */
+    private function verifyMiniletter(ShopPlatform $platform, int $count, bool $isBefore, int $total) {
         $symbol = $isBefore ? '<' : '>=';
-        $maxPrice = $platform === ShopPlatform::MERCARI ? 1499 : 4999;
+        $fee = $isBefore ? 63 : 85;
+        $exPrice = $total - $fee;
         $query = $this->fetchByShopQuery($platform)->whereDate('shipping_date', $symbol, '2024-10-01');
         $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'), DB::raw('COUNT(order_id) as order_count'))
-            ->groupBy('order_id')->havingRaw('SUM(total_price) >= ?', [135 - $fee])
-                                ->havingRaw('SUM(total_price) <= ?', [$maxPrice - $fee])->havingRaw("COUNT(order_id) = {$count}")->get();
+            ->groupBy('order_id')->havingRaw("SUM(total_price) = {$exPrice}")->havingRaw("COUNT(order_id) = {$count}")->get();
         $this->verifyFeeRecord($platform, ShiptMethod::MINI, $isBefore, $result);
     }
 
@@ -154,6 +180,7 @@ class DivideOrderTest extends TestCase
     private function verifyFeeRecord(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Collection $uniqueLog) {
         $this->execute();
         $expected = $this->shipping($method, $isDeleted);
+        $this->assertNotEmpty($uniqueLog, '期待値側が0件');
         foreach($uniqueLog as $u) {
             logger()->info("期待値側のID：{$u->order_id}");
             $this->assertDatabaseHas(Orders::class, [
