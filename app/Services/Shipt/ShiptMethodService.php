@@ -62,11 +62,11 @@ class ShiptMethodService {
         if ($strategy->isNekopost($subtotal, $sdate)) {
             return [ShiptMethod::NEKOPOST, false];
         }
-        if ($strategy->isMiniletter($subtotal, $orderItems, $sdate)) {
-            return [ShiptMethod::MINI, $strategy->isBeforeOrOn20241001($sdate)];
-        }
         if ($strategy->isClickpost($subtotal, $orderItems, $sdate)) {
             return [ShiptMethod::CLICK, $strategy->isBeforeOrOn20261001($sdate)];
+        }
+        if ($strategy->isMiniletter($subtotal, $orderItems, $sdate)) {
+            return [ShiptMethod::MINI, $strategy->isBeforeOrOn20241001($sdate)];
         }
 
         return [ShiptMethod::UNDEFINED, false];

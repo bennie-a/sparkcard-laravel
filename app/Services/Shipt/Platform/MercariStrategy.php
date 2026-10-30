@@ -19,7 +19,7 @@ class MercariStrategy extends AbstractShopStrategy
     #[Override]
     protected function getClickpostMinPrice():int
     {
-        return 1500;
+        return 1499;
     }
 
     #[Override]
@@ -35,13 +35,13 @@ class MercariStrategy extends AbstractShopStrategy
 
     #[Override]
     public function isRegisteredMail(int $price) {
-        return $price >= 10000 - 460;
+        return $price >= 11000 - 460;
     }
 
     #[Override]
     public function isNekopost(int $price, Carbon $shiptDate) {
         $date2026 = Carbon::parse('2026-10-21');
-        if ($date2026->lt($date2026)) {
+        if ($shiptDate->lt($date2026)) {
             return false;
         }
         return $price >= $this->getClickpostMinPrice() && $price <= $this->getClickpostMaxPrice();

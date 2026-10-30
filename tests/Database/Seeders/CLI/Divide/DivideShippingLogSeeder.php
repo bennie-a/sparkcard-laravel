@@ -79,7 +79,7 @@ class DivideShippingLogSeeder extends Seeder
         // $this->createOver1500Record(ShopPlatform::BASE, [5000, 10000]);
 
         // メルカリ経由簡易書留発送
-        $this->createRegisterMailRecord(ShopPlatform::MERCARI, 10000, 1);
+        $this->createRegisterMailRecord(ShopPlatform::MERCARI, 11000, 1);
         // 直接取引
         $this->createOver1500Record(ShopPlatform::DIRECT, 5000, 2);
 
@@ -124,7 +124,7 @@ class DivideShippingLogSeeder extends Seeder
 
     private function createOver1500Record(ShopPlatform $platform, int $price, int $itemCount) {
         $before260930 = Carbon::parse(fake()->dateTimeBetween('-3 years', '2026-09-30'));
-        $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', 'now'));
+        $after261001 = Carbon::parse(fake()->dateTimeBetween('2026-10-01', '2026-10-20'));
         $this->generateShiptRecord($platform, [$before260930, $after261001], $price, $itemCount);
     }
 

@@ -33,6 +33,10 @@ use Illuminate\Support\Facades\DB;
 class DivideOrderTest extends TestCase
 {
 
+    private $cal2024 = '2024-10-01';
+
+    private $cal2026 = '2026-10-01';
+
     public function setup(): void
     {
         parent::setUp();
@@ -103,17 +107,22 @@ class DivideOrderTest extends TestCase
     public function fee_registerMail() {
         $query = $this->fetchByShopQuery(ShopPlatform::MERCARI);
         $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'))
-            ->groupBy('order_id')->havingRaw('SUM(total_price) = ?', [10000 - 460])->get();
+            ->groupBy('order_id')->havingRaw('SUM(total_price) = ?', [11000 - 460])->get();
         $this->verifyFeeRecord(ShopPlatform::MERCARI, ShiptMethod::REGISTER_MAIL, false, $result);
     }
 
     #[Test]
-    #[TestDox('クリックポストについて検証する。')]
-    public function fee_clickpost() {
-        $query = $this->fetchByShopQuery(ShopPlatform::MERCARI)->whereDate('shipping_date', '<', '2026-10-01');
-        $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'))
-            ->groupBy('order_id')->havingRaw('SUM(total_price) >= ?', [1500 - 185])->havingRaw('SUM(total_price) <= ?', [9999 - 185])->get();
-        $this->verifyFeeRecord(ShopPlatform::MERCARI, ShiptMethod::CLICK, true, $result);
+    #[TestDox('メルカリ経由のクリックポストについて検証する。')]
+    #[TestWith([1, true, 1500], '発送日が2026/10/1より前で、価格¥1500、商品数1件')]
+    #[TestWith([2, true, 1499], '発送日が2026/10/1より前で、価格¥1500、商品数2件')]
+    #[TestWith([1, true, 9999], '発送日が2026/10/1より前で、価格¥9999、商品数1件')]
+    #[TestWith([2, true, 9998], '発送日が2026/10/1より前で、価格¥9999、商品数2件')]
+    #[TestWith([1, false, 1500], '発送日が2026/10/1以降で、価格¥1500、商品数1件')]
+    #[TestWith([2, false, 1500], '発送日が2026/10/1以降で、価格¥1500、商品数2件')]
+    #[TestWith([1, false, 9999], '発送日が2026/10/1以降で、価格¥9999、商品数1件')]
+    #[TestWith([2, false, 9999], '発送日が2026/10/1以降で、価格¥9999、商品数2件')]
+    public function fee_clickpost(int $count, bool $isBefore, int $total) {
+        $this->verifyPostOffice(ShopPlatform::MERCARI, ShiptMethod::CLICK, $count, $isBefore, $total, $this->cal2026);
     }
 
     #[Test]
@@ -126,8 +135,8 @@ class DivideOrderTest extends TestCase
     #[TestWith([2, false, 299], '発送日が2024/10/1以降で、価格¥300、商品数2件')]
     #[TestWith([1, false, 1499], '発送日が2024/10/1以降で、価格¥1499、商品数1件')]
     #[TestWith([2, false, 1498], '発送日が2024/10/1以降で、価格¥1499、商品数2件')]
-    public function fee_miniletter_mercari( int $count, bool $isBefore, int $total) {
-        $this->verifyMiniletter(ShopPlatform::MERCARI, $count, $isBefore, $total);
+    public function fee_miniletter_mercari(int $count, bool $isBefore, int $total) {
+        $this->verifyPostOffice(ShopPlatform::MERCARI, ShiptMethod::MINI, $count, $isBefore, $total, $this->cal2024);
     }
 
     #[Test]
@@ -139,27 +148,34 @@ class DivideOrderTest extends TestCase
     #[TestWith([1, false, 4999], '発送日が2024/10/1以降で、価格¥4999、商品数1件')]
     #[TestWith([2, false, 4998], '発送日が2024/10/1以降で、価格¥4999、商品数2件')]
     public function fee_miniletter_base( int $count, bool $isBefore, int $total) {
-        $this->verifyMiniletter(ShopPlatform::BASE, $count, $isBefore, $total);
+        $this->verifyPostOffice(ShopPlatform::BASE, ShiptMethod::MINI, $count, $isBefore, $total, $this->cal2024);
     }
 
 
     /**
-     * ミニレターについて検証する。
+     * ミニレターとクリックポストについて検証する。
      *
      * @param ShopPlatform $platform
+     * @param ShiptMethod $method
      * @param integer $count
      * @param boolean $isBefore
      * @param integer $total
+     * @param string $initDate
      * @return void
      */
-    private function verifyMiniletter(ShopPlatform $platform, int $count, bool $isBefore, int $total) {
+    private function verifyPostOffice(ShopPlatform $platform, ShiptMethod $method, int $count, bool $isBefore, int $total, string $initDate) {
         $symbol = $isBefore ? '<' : '>=';
-        $fee = $isBefore ? 63 : 85;
+        $fee = 0;
+        if ($method === ShiptMethod::MINI) {
+            $fee = $isBefore ? 63 : 85;
+        } else {
+            $fee = $isBefore ? 185 : 240;
+        }
         $exPrice = $total - $fee;
-        $query = $this->fetchByShopQuery($platform)->whereDate('shipping_date', $symbol, '2024-10-01');
+        $query = $this->fetchByShopQuery($platform)->whereDate('shipping_date', $symbol, $initDate);
         $result = $query->select('order_id', DB::raw('SUM(total_price) as total_price'), DB::raw('COUNT(order_id) as order_count'))
             ->groupBy('order_id')->havingRaw("SUM(total_price) = {$exPrice}")->havingRaw("COUNT(order_id) = {$count}")->get();
-        $this->verifyFeeRecord($platform, ShiptMethod::MINI, $isBefore, $result);
+        $this->verifyFeeRecord($platform, $method, $isBefore, $result);
     }
 
     /**
@@ -180,7 +196,7 @@ class DivideOrderTest extends TestCase
     private function verifyFeeRecord(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Collection $uniqueLog) {
         $this->execute();
         $expected = $this->shipping($method, $isDeleted);
-        $this->assertNotEmpty($uniqueLog, '期待値側が0件');
+        $this->assertCount(1, $uniqueLog, '期待値側が0件');
         foreach($uniqueLog as $u) {
             logger()->info("期待値側のID：{$u->order_id}");
             $this->assertDatabaseHas(Orders::class, [
@@ -189,7 +205,6 @@ class DivideOrderTest extends TestCase
                 SC::FEE_ID => $expected->id,
             ]);
         }
-
     }
 
     private function shipping(ShiptMethod $method, bool $isDeleted) {
