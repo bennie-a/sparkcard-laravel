@@ -126,6 +126,22 @@ class DivideOrderTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('灯争大戦ブースターパックの送料について検証する。')]
+    #[TestWith([ShopPlatform::MERCARI, 795], 'メルカリ経由で合計価格が¥795')]
+    #[TestWith([ShopPlatform::BASE, 795], 'BASE経由で合計価格が¥795')]
+    #[TestWith([ShopPlatform::MERCARI, 23995], 'メルカリ経由で合計価格が¥23995')]
+    #[TestWith([ShopPlatform::BASE, 23995], 'BASE経由で合計価格が¥23995')]
+    public function fee_boosterPack(ShopPlatform $shopPlatform, int $total) {
+        $query = $this->fetchByShopQuery($shopPlatform);
+        $result = $query->whereHas('stockpile', function($q) {
+            $q->whereHas('cardinfo', function($cq) {
+                $cq->where(GC::NAME, '灯争大戦ブースターパック');
+            });
+        })->where('total_price', $total)->get();
+        $this->verifyFeeRecord($shopPlatform, ShiptMethod::CLICK, true, $result);
+    }
+
+    #[Test]
     #[TestDox('メルカリ経由のミニレターについて検証する。')]
     #[TestWith([1, true, 300], '発送日が2024/10/1より前で、価格¥300、商品数1件')]
     #[TestWith([2, true, 299], '発送日が2024/10/1より前で、価格¥300、商品数2件')]

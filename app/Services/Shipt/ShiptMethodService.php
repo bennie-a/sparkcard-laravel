@@ -56,7 +56,7 @@ class ShiptMethodService {
         if ($strategy->isRakuRaku($first->zip_code)) {
             return [ShiptMethod::RAKURAKU, false];
         }
-        if ($strategy->isRegisteredMail($subtotal)) {
+        if ($strategy->isRegisteredMail($subtotal, $orderItems)) {
             return [ShiptMethod::REGISTER_MAIL, false];
         }
         if ($strategy->isNekopost($subtotal, $sdate)) {

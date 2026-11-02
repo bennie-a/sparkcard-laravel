@@ -102,7 +102,14 @@ abstract class AbstractShopStrategy {
      * @param integer $price
      * @return boolean
      */
-    public function isRegisteredMail(int $price) {
+    public function isRegisteredMail(int $price, Collection $orderItems) {
+        if ($this->isBoosterPack($orderItems)) {
+            return false;
+        }
+        return $this->findRegiMailCondition($price);
+    }
+
+    protected function findRegiMailCondition(int $price):bool {
         return false;
     }
 

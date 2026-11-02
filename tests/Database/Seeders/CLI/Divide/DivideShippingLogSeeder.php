@@ -88,32 +88,50 @@ class DivideShippingLogSeeder extends Seeder
         //                                         SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望', 'total_price' => 2000]);
 
         // 灯争大戦ブースターパック[JP]
-    //     $war = Expansion::findBySetCode('WAR');
-    //     $pack = CardInfo::factory()->create([CardConstant::EXP_ID => $war->notion_id,
-    //                                 GlobalConstant::NAME => '灯争大戦ブースターパック', CardConstant::PROMO_ID => 1]);
-    //     $packStock = Stockpile::factory()->create([
-    //         StockpileHeader::CARD_ID => $pack->id,
-    //         StockpileHeader::LANGUAGE => CardLanguage::JP->value,
-    //         StockpileHeader::CONDITION => 'NM'
-    //     ]);
+        $war = Expansion::findBySetCode('WAR');
+        $pack = CardInfo::factory()->create([CardConstant::EXP_ID => $war->notion_id,
+                                    GlobalConstant::NAME => '灯争大戦ブースターパック', CardConstant::PROMO_ID => 1]);
+        $packStock = Stockpile::factory()->create([
+            StockpileHeader::CARD_ID => $pack->id,
+            StockpileHeader::LANGUAGE => CardLanguage::JP->value,
+            StockpileHeader::CONDITION => 'NM'
+        ]);
 
-    //      $shiptInfo = [
-    //                 [
-    //                     'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-    //                     SC::STOCK_ID => $packStock->id,
-    //                     StockpileHeader::QUANTITY => 1,
-    //                     'single_price' => 795,
-    //                     'total_price' => 795
-    //                 ],
-    //                 [
-    //                     'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-    //                     SC::STOCK_ID => $packStock->id,
-    //                     StockpileHeader::QUANTITY => 30,
-    //                     'single_price' => 799,
-    //                     'total_price' => 23995
-    //                 ]
-    //             ];
-    //             ShippingLog::factory()->createMany($shiptInfo);
+         $shiptInfo = [
+                    [
+                        'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                        SC::STOCK_ID => $packStock->id,
+                        StockpileHeader::QUANTITY => 1,
+                        'single_price' => 795,
+                        'total_price' => 795,
+                        'shipping_date' => Carbon::parse(fake()->dateTimeBetween('2023-12-16', '2024-01-20'))
+                    ],
+                    [
+                        'order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                        SC::STOCK_ID => $packStock->id,
+                        StockpileHeader::QUANTITY => 30,
+                        'single_price' => 799,
+                        'total_price' => 23995,
+                        'shipping_date' => Carbon::parse(fake()->dateTimeBetween('2023-12-16', '2024-01-20'))
+                    ],
+                    [
+                        'order_id' => $this->generateOrderId(ShopPlatform::BASE),
+                        SC::STOCK_ID => $packStock->id,
+                        StockpileHeader::QUANTITY => 1,
+                        'single_price' => 795,
+                        'total_price' => 795,
+                        'shipping_date' => Carbon::parse(fake()->dateTimeBetween('2023-12-16', '2024-01-20'))
+                    ],
+                    [
+                        'order_id' => $this->generateOrderId(ShopPlatform::BASE),
+                        SC::STOCK_ID => $packStock->id,
+                        StockpileHeader::QUANTITY => 30,
+                        'single_price' => 799,
+                        'total_price' => 23995,
+                        'shipping_date' => Carbon::parse(fake()->dateTimeBetween('2023-12-16', '2024-01-20'))
+                    ],
+                ];
+                ShippingLog::factory()->createMany($shiptInfo);
     }
 
     private function createUnder1500Record(ShopPlatform $platform, int $price, int $itemCount) {
