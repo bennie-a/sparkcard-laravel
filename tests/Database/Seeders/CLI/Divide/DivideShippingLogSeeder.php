@@ -69,23 +69,22 @@ class DivideShippingLogSeeder extends Seeder
         $this->createOver1500Record(ShopPlatform::MERCARI, 9999, 2);
         // BASE経由¥5000の商品が1件➞クリックポスト
         $this->createOver1500Record(ShopPlatform::BASE, 5000, 1);
-        // メルカリ経由¥5000の商品が2件➞クリックポスト
+        // BASE経由¥5000の商品が2件➞クリックポスト
         $this->createOver1500Record(ShopPlatform::BASE, 5000, 2);
         // BASE経由¥10000の商品が1件➞クリックポスト
         $this->createOver1500Record(ShopPlatform::BASE, 10000, 1);
         // メルカリ経由¥10000の商品が2件➞クリックポスト
         $this->createOver1500Record(ShopPlatform::BASE, 10000, 2);
-        // // BASE経由クリックポスト発送
-        // $this->createOver1500Record(ShopPlatform::BASE, [5000, 10000]);
 
         // メルカリ経由簡易書留発送
         $this->createRegisterMailRecord(ShopPlatform::MERCARI, 11000, 1);
         // 直接取引
-        $this->createOver1500Record(ShopPlatform::DIRECT, 5000, 2);
+        $this->generateShiptRecord(ShopPlatform::DIRECT,
+                         [Carbon::parse(fake()->dateTimeBetween('2024-10-01', 'now'))], 5000, 1);
 
         // らくらくメルカリ便
-        // ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
-        //                                         SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望', 'total_price' => 2000]);
+        ShippingLog::factory()->create(['order_id' => $this->generateOrderId(ShopPlatform::MERCARI),
+                                                SC::ZIPCODE => '100-0000', SC::ADDRESS => '匿名希望', 'total_price' => 2000]);
 
         // 灯争大戦ブースターパック[JP]
         $war = Expansion::findBySetCode('WAR');

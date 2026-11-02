@@ -121,9 +121,23 @@ class DivideOrderTest extends TestCase
     #[TestWith([2, false, 1500], '発送日が2026/10/1以降で、価格¥1500、商品数2件')]
     #[TestWith([1, false, 9999], '発送日が2026/10/1以降で、価格¥9999、商品数1件')]
     #[TestWith([2, false, 9999], '発送日が2026/10/1以降で、価格¥9999、商品数2件')]
-    public function fee_clickpost(int $count, bool $isBefore, int $total) {
+    public function fee_clickpost_mercari(int $count, bool $isBefore, int $total) {
         $this->verifyPostOffice(ShopPlatform::MERCARI, ShiptMethod::CLICK, $count, $isBefore, $total, $this->cal2026);
     }
+
+    #[Test]
+    #[TestDox('BASE経由のクリックポストについて検証する。')]
+    #[TestWith([1, true, 5000], '発送日が2026/10/1より前で、価格¥5000、商品数1件')]
+    #[TestWith([2, true, 4999], '発送日が2026/10/1より前で、価格¥5000、商品数2件')]
+    #[TestWith([1, true, 10000], '発送日が2026/10/1より前で、価格¥10000、商品数1件')]
+    #[TestWith([1, false, 5000], '発送日が2026/10/1以降で、価格¥5000、商品数1件')]
+    #[TestWith([2, false, 5000], '発送日が2026/10/1以降で、価格¥5000、商品数2件')]
+    #[TestWith([1, false, 10000], '発送日が2026/10/1以降で、価格¥10000、商品数1件')]
+    #[TestWith([2, false, 10000], '発送日が2026/10/1以降で、価格¥10000、商品数2件')]
+    public function fee_clickpost_base(int $count, bool $isBefore, int $total) {
+        $this->verifyPostOffice(ShopPlatform::BASE, ShiptMethod::CLICK, $count, $isBefore, $total, $this->cal2026);
+    }
+
 
     #[Test]
     #[TestDox('灯争大戦ブースターパックの送料について検証する。')]
