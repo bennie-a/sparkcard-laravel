@@ -99,7 +99,14 @@ class DivideOrderTest extends TestCase
     #[TestDox('らくらくメルカリ便について検証する')]
     public function fee_rakuraku() {
         $query = $this->fetchByShopQuery(ShopPlatform::MERCARI)->where(SC::ZIPCODE, '100-0000');
-        $this->verifyFee(ShopPlatform::MERCARI, ShiptMethod::RAKURAKU, false, $query);
+        $log = $this->verifyFee(ShopPlatform::MERCARI, ShiptMethod::RAKURAKU, false, $query);
+
+        foreach($log as $l) {
+            $this->assertDatabaseHas(Orders::class, [
+                SC::ZIPCODE => '100-0000',
+                SC::ADDRESS => '匿名希望',
+            ]);
+        }
     }
 
     #[Test]
@@ -215,12 +222,13 @@ class DivideOrderTest extends TestCase
      * @param ShiptMethod $method
      * @param boolean $isDeleted
      * @param Builder $query
-     * @return void
+     * @return Collection
      */
     private function verifyFee(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Builder $query) {
         $this->execute();
         $uniqueLog = $this->fetchExRecord($query);
         $this->verifyFeeRecord($platform, $method, $isDeleted, $uniqueLog);
+        return $uniqueLog;
     }
 
     private function verifyFeeRecord(ShopPlatform $platform, ShiptMethod $method, bool $isDeleted, Collection $uniqueLog) {

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Enum\SortOrder;
 use App\Exceptions\api\Shipt\NFShiptMethodException;
@@ -75,8 +76,8 @@ class DivideOrder extends Command
                             SC::PLATFORM => $platform,
                             SC::ORDER_ID => $s->order_id,
                             SC::BUYER => $s->name,
-                            SC::ZIPCODE => $s->zip_code,
-                            SC::ADDRESS => $s->address,
+                            SC::ZIPCODE => $this->isRakuraku($feeMethod) ? '100-0000' : $s->zip_code,
+                            SC::ADDRESS => $this->isRakuraku($feeMethod) ? '匿名希望' : $s->address,
                             SC::SHIPT_DATE => $s->shipping_date,
                             SC::ITEM_SUBTOTAL => $s->total_price,
                             SC::GRAND_TOTAL => $s->total_price,
@@ -168,5 +169,11 @@ class DivideOrder extends Command
 
         $this->info('注文情報の分割が完了しました。');
         return self::SUCCESS;
+    }
+
+    private function isRakuraku(ShiptMethod $method): bool
+    {
+        return $method === ShiptMethod::RAKURAKU;
+
     }
 }
