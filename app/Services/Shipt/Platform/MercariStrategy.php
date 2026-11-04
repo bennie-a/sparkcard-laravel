@@ -13,7 +13,7 @@ class MercariStrategy extends AbstractShopStrategy
     #[Override]
     protected function miniThreshold():int
     {
-        return 1300;
+        return 1498;
     }
 
     #[Override]

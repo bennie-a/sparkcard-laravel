@@ -120,12 +120,12 @@ class DivideOrderTest extends TestCase
 
     #[Test]
     #[TestDox('メルカリ経由のクリックポストについて検証する。')]
-    #[TestWith([1, true, 1500], '発送日が2026/10/1より前で、価格¥1500、商品数1件')]
-    #[TestWith([2, true, 1499], '発送日が2026/10/1より前で、価格¥1500、商品数2件')]
+    #[TestWith([1, true, 1499], '発送日が2026/10/1より前で、価格¥1499、商品数1件')]
+    #[TestWith([2, true, 1499], '発送日が2026/10/1より前で、価格¥1499、商品数2件')]
     #[TestWith([1, true, 9999], '発送日が2026/10/1より前で、価格¥9999、商品数1件')]
     #[TestWith([2, true, 9998], '発送日が2026/10/1より前で、価格¥9999、商品数2件')]
-    #[TestWith([1, false, 1500], '発送日が2026/10/1以降で、価格¥1500、商品数1件')]
-    #[TestWith([2, false, 1500], '発送日が2026/10/1以降で、価格¥1500、商品数2件')]
+    #[TestWith([1, false, 1499], '発送日が2026/10/1以降で、価格¥1499、商品数1件')]
+    #[TestWith([2, false, 1499], '発送日が2026/10/1以降で、価格¥1499、商品数2件')]
     #[TestWith([1, false, 9999], '発送日が2026/10/1以降で、価格¥9999、商品数1件')]
     #[TestWith([2, false, 9999], '発送日が2026/10/1以降で、価格¥9999、商品数2件')]
     public function fee_clickpost_mercari(int $count, bool $isBefore, int $total) {
@@ -166,12 +166,12 @@ class DivideOrderTest extends TestCase
     #[TestDox('メルカリ経由のミニレターについて検証する。')]
     #[TestWith([1, true, 300], '発送日が2024/10/1より前で、価格¥300、商品数1件')]
     #[TestWith([2, true, 299], '発送日が2024/10/1より前で、価格¥300、商品数2件')]
-    #[TestWith([1, true, 1499], '発送日が2024/10/1より前で、価格¥1499、商品数1件')]
-    #[TestWith([2, true, 1498], '発送日が2024/10/1より前で、価格¥1499、商品数2件')]
+    #[TestWith([1, true, 1498], '発送日が2024/10/1より前で、価格¥1498、商品数1件')]
+    #[TestWith([2, true, 1497], '発送日が2024/10/1より前で、価格¥1498、商品数2件')]
     #[TestWith([1, false, 300], '発送日が2024/10/1以降で、価格¥300、商品数1件')]
     #[TestWith([2, false, 299], '発送日が2024/10/1以降で、価格¥300、商品数2件')]
-    #[TestWith([1, false, 1499], '発送日が2024/10/1以降で、価格¥1499、商品数1件')]
-    #[TestWith([2, false, 1498], '発送日が2024/10/1以降で、価格¥1499、商品数2件')]
+    #[TestWith([1, false, 1498], '発送日が2024/10/1以降で、価格¥1498、商品数1件')]
+    #[TestWith([2, false, 1497], '発送日が2024/10/1以降で、価格¥1498、商品数2件')]
     public function fee_miniletter_mercari(int $count, bool $isBefore, int $total) {
         $this->verifyPostOffice(ShopPlatform::MERCARI, ShiptMethod::MINI, $count, $isBefore, $total, $this->cal2024);
     }
@@ -235,12 +235,18 @@ class DivideOrderTest extends TestCase
         $this->execute();
         $expected = $this->shipping($method, $isDeleted);
         $this->assertCount(1, $uniqueLog, '期待値側が0件');
+
         foreach($uniqueLog as $u) {
             logger()->info("期待値側のID：{$u->order_id}");
+            $totalPrice = ShippingLog::select(DB::raw('SUM(total_price) as total_price'))->where('order_id', $u->order_id)->sole();
+            $grandTotal = $totalPrice->total_price + $expected->price;
+
             $this->assertDatabaseHas(Orders::class, [
                 SC::PLATFORM => $platform->value,
                 SC::PLATFORM_ORDER_ID => $u->order_id,
                 SC::FEE_ID => $expected->id,
+                // SC::ITEM_SUBTOTAL => $grandTotal,
+                // SC::GRAND_TOTAL => $grandTotal,
             ]);
         }
     }

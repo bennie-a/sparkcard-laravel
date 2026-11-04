@@ -71,7 +71,10 @@ class DivideOrder extends Command
                         $this->info("注文番号({$s->order_id})の合計金額: ¥{$subtotal}");
 
                         [$feeId, $feeMethod, $feePrice] = $service->determine($platform, $items, $subtotal);
+                        $this->info("注文番号({$s->order_id})の発送日：$s->shipping_date");
                         $this->info("注文番号({$s->order_id})の送料：{$feeMethod->value}(¥$feePrice)");
+
+                        $grandTotal = $subtotal + $feePrice;
                         $row = [
                             SC::PLATFORM => $platform,
                             SC::ORDER_ID => $s->order_id,
@@ -79,8 +82,8 @@ class DivideOrder extends Command
                             SC::ZIPCODE => $this->isRakuraku($feeMethod) ? '100-0000' : $s->zip_code,
                             SC::ADDRESS => $this->isRakuraku($feeMethod) ? '匿名希望' : $s->address,
                             SC::SHIPT_DATE => $s->shipping_date,
-                            SC::ITEM_SUBTOTAL => $s->total_price,
-                            SC::GRAND_TOTAL => $s->total_price,
+                            SC::ITEM_SUBTOTAL => $grandTotal,
+                            SC::GRAND_TOTAL => $grandTotal,
                             SC::DISCOUNT_AMOUNT => 0,
                             SC::FEE => [GCon::ID => $feeId],
                             SC::ITEM_COUNT => $items->count()

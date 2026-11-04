@@ -43,10 +43,10 @@ class DivideShippingLogSeeder extends Seeder
         $this->createUnder1500Record(ShopPlatform::MERCARI, 300, 1);
         // メルカリ経由¥300の商品が2件➞ミニレター
         $this->createUnder1500Record(ShopPlatform::MERCARI, 300, 2);
-        // メルカリ経由¥1499の商品が1件➞ミニレター
-        $this->createUnder1500Record(ShopPlatform::MERCARI, 1499, 1);
-        // メルカリ経由¥1499の商品が2件➞ミニレター
-        $this->createUnder1500Record(ShopPlatform::MERCARI, 1499, 2);
+        // メルカリ経由¥1498の商品が1件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::MERCARI, 1498, 1);
+        // メルカリ経由¥1498の商品が2件➞ミニレター
+        $this->createUnder1500Record(ShopPlatform::MERCARI, 1498, 2);
 
         // BASE経由¥113の商品が1件➞ミニレター
         $this->generateShiptRecord(ShopPlatform::BASE,
@@ -59,10 +59,10 @@ class DivideShippingLogSeeder extends Seeder
         // BASE経由¥4999の商品が2件➞ミニレター
         $this->createUnder1500Record(ShopPlatform::BASE, 4999, 2 );
 
-        // メルカリ経由¥1500の商品が1件➞クリックポスト
-        $this->createOver1500Record(ShopPlatform::MERCARI, 1500, 1);
-        // メルカリ経由¥1500の商品が2件➞クリックポスト
-        $this->createOver1500Record(ShopPlatform::MERCARI, 1500, 2);
+        // メルカリ経由¥1499の商品が1件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::MERCARI, 1499, 1);
+        // メルカリ経由¥1499の商品が2件➞クリックポスト
+        $this->createOver1500Record(ShopPlatform::MERCARI, 1499, 2);
         // メルカリ経由¥9999の商品が1件➞クリックポスト
         $this->createOver1500Record(ShopPlatform::MERCARI, 9999, 1);
         // メルカリ経由¥9999の商品が2件➞クリックポスト
@@ -269,9 +269,9 @@ class DivideShippingLogSeeder extends Seeder
 
     private function getMercariFee(Carbon $shiptDate, int $subtotal) {
         $fee = 0;
-        if ($subtotal >= 300 && $subtotal < 1500) {
+        if ($subtotal >= 300 && $subtotal < 1499) {
             $fee = $this->fetchMiniletter($shiptDate);
-        } else if ($subtotal >= 1500 && $subtotal < 10000) {
+        } else if ($subtotal >= 1499 && $subtotal < 10000) {
             $fee = $this->fetchClickPost($shiptDate);
         } else if ($subtotal >= 10000) {
             $fee = $this->fetchRegisterMail();

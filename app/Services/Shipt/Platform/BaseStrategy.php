@@ -11,13 +11,13 @@ class BaseStrategy extends AbstractShopStrategy
     #[Override]
     protected function miniThreshold():int
     {
-        return 4800;
+        return 4999;
     }
 
         #[Override]
     protected function getClickpostMinPrice():int
     {
-        return 4999;
+        return 5000;
     }
 
     #[Override]
