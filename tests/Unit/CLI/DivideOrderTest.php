@@ -12,6 +12,7 @@ use App\Models\Shipping;
 use App\Models\ShippingLog;
 use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
+use App\Repositories\Api\Shipt\ShiptLogRepository;
 use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GC;
 use Illuminate\Support\Facades\Artisan;
@@ -56,6 +57,12 @@ class DivideOrderTest extends TestCase
         $log = ShippingLog::orderBy('shipping_date', SortOrder::ASC->value)->get();
         $uniqueLog = $log->unique('order_id');
         $this->assertCount($uniqueLog->count(), $orders, 'ordersテーブルへの登録件数');
+
+        $repo = new ShiptLogRepository();
+
+        $items = OrderItem::all();
+        $this->assertCount($log->count(), $items, 'order_itemテーブルの登録件数');
+
         foreach($uniqueLog as $u) {
             $this->assertDatabaseHas(Orders::class, [
                 SC::PLATFORM_ORDER_ID => $u->order_id,
@@ -65,10 +72,23 @@ class DivideOrderTest extends TestCase
                 SC::COUPON_DISCOUNT => 0,
                 SC::SHIPT_DATE => $u->shipping_date
             ]);
-        }
 
-        $items = OrderItem::all();
-        $this->assertCount($log->count(), $items, 'order_itemテーブルの登録件数');
+
+            $shop = ShopPlatform::determine($u->order_id);
+            $order = $repo->findByOrderId($shop, $u->order_id);
+
+            $log->filter(function($l) use($u) {
+                return $l->order_id === $u->order_id;
+            })->each(function($l) use($order) {
+                $this->assertDatabaseHas(OrderItem::class, [
+                    SC::ORDER_ID => $order->id,
+                    SC::STOCK_ID => $l->stock_id,
+                    SC::QUANTITY => $l->quantity,
+                    SC::UNIT_PRICE => $l->single_price,
+                    SC::SUBTOTAL => $l->total_price,
+                ]);
+            });
+        }
     }
 
     #[Test]
