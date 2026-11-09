@@ -6,14 +6,10 @@ use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Enum\SortOrder;
 use App\Exceptions\api\Shipt\NFShiptMethodException;
-use App\Models\CardInfo;
-use App\Models\Expansion;
-use App\Models\Promotype;
 use App\Models\ShippingLog;
 use App\Models\Shipt\OrderItem;
 use App\Models\Shipt\Orders;
 use App\Repositories\Api\Shipt\ShiptLogRepository;
-use App\Services\Constant\CardConstant;
 use App\Services\Constant\GlobalConstant as GCon;
 use Illuminate\Console\Command;
 use App\Services\Constant\ShiptConstant as SC;
@@ -114,64 +110,6 @@ class DivideOrder extends Command
             $bar->finish();
             return self::FAILURE;
         }
-
-        // $updatedCount = 0;
-        // $skippedCount = 0;
-        // $skippedList = [];
-
-
-        // DB::table('card_info')->whereNull(CardConstant::PROMO_ID)
-        // ->orderBy(GCon::ID)
-        // ->chunk(100, function ($cards) use ($bar, $defaultPromotype, &$updatedCount, &$skippedCount, &$skippedList) {
-        //     foreach ($cards as $card) {
-        //         $name = $card->name;
-        //         $cardName = $name;
-        //         $promotypeName = null;
-
-        //         if ($card->color_id === 'T') {
-        //             $promotype = $defaultPromotype;
-        //         } else if (preg_match('/(.+?)≪(.+?)≫$/u', $name, $matches)) {
-        //             // プロモタイプの抽出
-        //             $cardName = trim($matches[1]);
-        //             $promotypeName = trim($matches[2]);
-
-        //             $promotype = Promotype::findCardByName($promotypeName);
-        //             if (!$promotype) {
-        //                 $attr = base_convert(mt_rand(pow(36, 8 - 1), pow(36,8) - 1), 10, 36);
-        //                 $item = [CardConstant::ATTR => $attr, GCon::NAME=> $promotypeName,  CardConstant::EXP_ID => $card->exp_id];
-        //                 $promotype = Promotype::create($item);
-        //             }
-        //         } else {
-        //             // プロモタイプが見つからない場合は、デフォルトのプロモタイプを使用
-        //             $promotype = $defaultPromotype;
-        //         }
-
-        //         // 更新処理
-        //         DB::table('card_info')->where(GCon::ID, $card->id)->update([
-        //             GCon::NAME => $cardName,
-        //             CardConstant::PROMO_ID => $promotype->id,
-        //             'updated_at' => now(),
-        //         ]);
-        //         $updatedCount++;
-        //         $bar->advance();
-        //     }
-        // });
-
-        // $bar->finish();
-        // $this->newLine(2);
-        // $this->info("✅ 更新成功件数: {$updatedCount}");
-        // $this->info("⚠️ スキップ件数（プロモタイプが存在しない）: {$skippedCount}");
-
-        // if ($skippedCount > 0) {
-        //     $this->warn("スキップされたカード名一覧:");
-        //     foreach ($skippedList as $skipped) {
-        //         $this->line(" - ID:{$skipped[GCon::ID]}, カード名: {$skipped[GCon::NAME]}");
-        //     }
-        // }
-
-
-        $this->info('注文情報の分割が完了しました。');
-        return self::SUCCESS;
     }
 
     private function isRakuraku(ShiptMethod $method): bool
