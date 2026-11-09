@@ -9,10 +9,13 @@ use Deprecated;
  */
 class ShiptConstant extends StockpileHeader {
     // 出荷CSV(メルカリ)
+    public const TYPE = "type";
     public const ORDER_ID = "order_id";
     public const BUYER = 'buyer_name';
     public const PRODUCT_NAME = "product_name";
+    public const ORDER_PRICE = "order_price";
     public const PRODUCT_PRICE = "product_price";
+    public const SHIPPING_PRICE = 'shipping_price';
     public const SHIPT_DATE = "shipt_date";
     public const PRODUCT_ID = "original_product_id";
     public const POSTAL_CODE = "shipping_postal_code";
@@ -22,7 +25,7 @@ class ShiptConstant extends StockpileHeader {
     public const ADDRESS_2  = "shipping_address_2";
     public const ZIPCODE = "zip_code";
     public const ADDRESS = "address";
-    public const DISCOUNT_AMOUNT = "coupon_discount_amount";
+    public const DISCOUNT_AMOUNT = "order_coupon_discount_amount";
     public const FEE = "shipt_fee";
     public const ITEMS = "items";
     public const SHIPMENT = 'shipment';

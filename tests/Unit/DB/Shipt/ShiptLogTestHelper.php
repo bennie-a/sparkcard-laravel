@@ -2,6 +2,7 @@
 namespace Tests\Unit\DB\Shipt;
 
 use App\Enum\CsvFlowType;
+use App\Enum\Shipt\MercariCsvType;
 use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Exceptions\api\NotFoundException;
@@ -85,6 +86,7 @@ class ShiptLogTestHelper
      */
     public static function createBuyerInfoOnly():array {
         return [
+            SC::TYPE => MercariCsvType::ORDER->value,
             SC::ORDER_ID => self::createOrderId(),
             SC::BUYER => fake()->name(),
             SC::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
@@ -114,7 +116,8 @@ class ShiptLogTestHelper
      */
     public static  function createItemInfo(bool $isFoil, bool $isPromo, int $quantity = 1):array {
         $stock = self::getRandomStock($isFoil, $isPromo, $quantity);
-        return [GC::ID => $stock->id, SC::PRODUCT_NAME => self::product_name($stock),
+        return [SC::TYPE => MercariCsvType::PRODUCT->value, GC::ID => $stock->id,
+                    SC::PRODUCT_NAME => self::product_name($stock),
                     StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
                     SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
     }
@@ -178,10 +181,21 @@ class ShiptLogTestHelper
      */
     public static  function getHeader() {
         $header = [
-                                SC::ORDER_ID, SC::BUYER, SC::POSTAL_CODE, SC::STATE,
-                                SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2,
-                                SC::PRODUCT_ID, SC::PRODUCT_NAME, StockpileHeader::QUANTITY,
-                                SC::PRODUCT_PRICE, SC::DISCOUNT_AMOUNT
+                                SC::TYPE,
+                                 SC::ORDER_ID,
+                                 SC::BUYER,
+                                 SC::PRODUCT_ID,
+                                 SC::PRODUCT_NAME,
+                                 StockpileHeader::QUANTITY,
+                                 SC::ORDER_PRICE,
+                                 SC::PRODUCT_PRICE,
+                                SC::SHIPPING_PRICE,
+                                 SC::DISCOUNT_AMOUNT,
+                                SC::POSTAL_CODE,
+                                SC::STATE,
+                                SC::CITY,
+                                SC::ADDRESS_1,
+                                SC::ADDRESS_2,
                             ];
         return self::arrayToCsvString($header);
     }

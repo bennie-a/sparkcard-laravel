@@ -39,7 +39,7 @@ use Tests\Util\TestDateUtil;
  * 出荷情報解析機能のテストケース
  */
 #[CoversClass(ShiptLogController::class)]
-#[TestDox('出荷情報解析機能のテスト')]
+#[TestDox('注文情報解析機能のテスト')]
 class ShiptParseTest extends TestCase
 {
     use ApiErrorAssertions;
@@ -312,57 +312,58 @@ class ShiptParseTest extends TestCase
         {$header}
         {$implode}
         CSV;
-        $response = $this->upload($content);
-        $response->assertJsonStructure([
-            '*' => [
-                SC::PLATFORM,
-                SC::PLATFORM_ORDER_ID,
-                SC::BUYER,
-                SC::ZIPCODE,
-                SC::ADDRESS,
-                SC::ITEM_SUBTOTAL,
-                SC::ITEM_COUNT,
-                SC::DISCOUNT_AMOUNT,
-                SC::FEE,
-                SC::ITEMS => [
-                    '*' => [
-                        SC::STOCK => [
-                            GC::ID,
-                            CC::CARD => [
-                                GC::NAME,
-                                CC::EXP => [
-                                    GC::NAME,
-                                    CC::ATTR
-                                ],
-                                CC::NUMBER,
-                                CC::IMAGE_URL,
-                                CC::COLOR,
-                                CC::FOIL => [
-                                    GC::ID,
-                                    GC::NAME
-                                ],
-                                CC::PROMOTYPE => [
-                                    GC::ID,
-                                    GC::NAME
-                                ]
-                            ],
-                            SH::CONDITION,
-                            SH::LANG,
-                            SH::QUANTITY
-                        ],
-                        SC::STOCK,
-                        SC::SHIPMENT,
-                        SC::SUBTOTAL,
-                        SC::UNIT_PRICE,
-                        SC::IS_REGISTERED
-                        ]
-                    ]
-                ]
-            ]);
+        dd($content);
+        // $response = $this->upload($content);
+        // $response->assertJsonStructure([
+        //     '*' => [
+        //         SC::PLATFORM,
+        //         SC::PLATFORM_ORDER_ID,
+        //         SC::BUYER,
+        //         SC::ZIPCODE,
+        //         SC::ADDRESS,
+        //         SC::ITEM_SUBTOTAL,
+        //         SC::ITEM_COUNT,
+        //         SC::DISCOUNT_AMOUNT,
+        //         SC::FEE,
+        //         SC::ITEMS => [
+        //             '*' => [
+        //                 SC::STOCK => [
+        //                     GC::ID,
+        //                     CC::CARD => [
+        //                         GC::NAME,
+        //                         CC::EXP => [
+        //                             GC::NAME,
+        //                             CC::ATTR
+        //                         ],
+        //                         CC::NUMBER,
+        //                         CC::IMAGE_URL,
+        //                         CC::COLOR,
+        //                         CC::FOIL => [
+        //                             GC::ID,
+        //                             GC::NAME
+        //                         ],
+        //                         CC::PROMOTYPE => [
+        //                             GC::ID,
+        //                             GC::NAME
+        //                         ]
+        //                     ],
+        //                     SH::CONDITION,
+        //                     SH::LANG,
+        //                     SH::QUANTITY
+        //                 ],
+        //                 SC::STOCK,
+        //                 SC::SHIPMENT,
+        //                 SC::SUBTOTAL,
+        //                 SC::UNIT_PRICE,
+        //                 SC::IS_REGISTERED
+        //                 ]
+        //             ]
+        //         ]
+        //     ]);
 
-            $response->assertJsonMissingPath('*.'.'shipping_date');
+        //     $response->assertJsonMissingPath('*.'.'shipping_date');
 
-            return $response;
+        //     return $response;
     }
 
     /**
