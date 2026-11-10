@@ -31,7 +31,10 @@ class ShiptLogTestHelper
         for ($i=0; $i < $itemCount; $i++) {
             $items[] = self::createItemInfo($isFoil, $isPromo, $quantity);
         }
+
+        $orderPrice = collect($items)->sum(SC::PRODUCT_PRICE);
         $buyerInfo = self::createBuyerInfoOnly();
+        $buyerInfo[SC::ORDER_PRICE] = $orderPrice;
         $buyerInfo[SC::ITEMS] = $items;
         return $buyerInfo;
     }
@@ -89,6 +92,7 @@ class ShiptLogTestHelper
             SC::TYPE => MercariCsvType::ORDER->value,
             SC::ORDER_ID => self::createOrderId(),
             SC::BUYER => fake()->name(),
+            SC::SHIPPING_PRICE => 0,
             SC::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
             SC::STATE => fake()->prefecture(),
             SC::CITY => fake()->city(),
@@ -225,10 +229,10 @@ class ShiptLogTestHelper
     /**
      * 配列を','区切りの文字列に変換する。
      *
-     * @param [type] $array
+     * @param array $array
      * @return string
      */
-    public static function arrayToCsvString($array):string
+    public static function arrayToCsvString(array $array):string
     {
         return implode(',', $array);
     }
@@ -248,6 +252,10 @@ class ShiptLogTestHelper
         };
         logger()->info("Testing shipping date: {$date}");
         return $date;
+    }
+
+    public static function padBlankToArray(array $array, int $length): array {
+        return array_pad($array, count($array) + $length, "");
     }
 
     /**

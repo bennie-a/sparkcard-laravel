@@ -561,15 +561,23 @@ class ShiptParseTest extends TestCase
     private function createCsvLine(array $buyers):string {
         $implode = '';
         foreach($buyers as $buyer) {
-            $items = $buyer[SC::ITEMS];
-            unset($buyer[SC::ITEMS]);
-            $buyerLine = array_values($buyer);
-            foreach($items as $item) {
-                $oneline = $buyerLine;
-                $oneline = array_merge($buyerLine, array_values($item));
-                $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
-                $oneline = [];
-            }
+            $oneline = [
+                $buyer[SC::TYPE], $buyer[SC::ORDER_ID], $buyer[SC::BUYER]];
+            $oneline = ShiptLogTestHelper::padBlankToArray($oneline, 3);
+            array_push($oneline, $buyer[SC::ORDER_PRICE]);
+            $oneline = ShiptLogTestHelper::padBlankToArray($oneline, 1);
+            array_push($oneline, $buyer[SC::SHIPPING_PRICE]);
+            $oneline = ShiptLogTestHelper::padBlankToArray($oneline, 6);
+            // $items = $buyer[SC::ITEMS];
+            // unset($buyer[SC::ITEMS]);
+            // $buyerLine = array_values($buyer);
+            // foreach($items as $item) {
+            //     $oneline = $buyerLine;
+            //     $oneline = array_merge($buyerLine, array_values($item));
+            //     $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
+            //     $oneline = [];
+            // }
+            $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
         }
         return $implode;
     }
