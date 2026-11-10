@@ -15,6 +15,7 @@ use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\ErrorConstant as EC;
 use App\Services\Constant\StockpileHeader as SH;
+use App\Services\Constant\StockpileHeader;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -566,18 +567,20 @@ class ShiptParseTest extends TestCase
             $oneline = ShiptLogTestHelper::padBlankToArray($oneline, 3);
             array_push($oneline, $buyer[SC::ORDER_PRICE]);
             $oneline = ShiptLogTestHelper::padBlankToArray($oneline, 1);
-            array_push($oneline, $buyer[SC::SHIPPING_PRICE]);
+            array_push($oneline, $buyer[SC::SHIPPING_PRICE], $buyer[SC::DISCOUNT_AMOUNT]);
             $oneline = ShiptLogTestHelper::padBlankToArray($oneline, 6);
-            // $items = $buyer[SC::ITEMS];
-            // unset($buyer[SC::ITEMS]);
-            // $buyerLine = array_values($buyer);
-            // foreach($items as $item) {
-            //     $oneline = $buyerLine;
-            //     $oneline = array_merge($buyerLine, array_values($item));
-            //     $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
-            //     $oneline = [];
-            // }
+
+            $items = $buyer[SC::ITEMS];
             $implode .= ShiptLogTestHelper::arrayToCsvString($oneline)."\n";
+            foreach($items as $item) {
+                $itemLine = [$item[SC::TYPE], $buyer[SC::ORDER_ID], ""];
+                array_push($itemLine, $item[GC::ID], $item[SC::PRODUCT_NAME],
+                         $item[StockpileHeader::QUANTITY], "", $item[SC::PRODUCT_PRICE]);
+                $itemLine = ShiptLogTestHelper::padBlankToArray($itemLine, 2);
+                array_push($itemLine, $buyer[SC::POSTAL_CODE], $buyer[SC::STATE], $buyer[SC::CITY],
+                         $buyer[SC::ADDRESS_1], $buyer[SC::ADDRESS_2]);
+                $implode .= ShiptLogTestHelper::arrayToCsvString($itemLine)."\n";
+            }
         }
         return $implode;
     }

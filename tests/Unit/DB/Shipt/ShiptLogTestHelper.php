@@ -32,7 +32,7 @@ class ShiptLogTestHelper
             $items[] = self::createItemInfo($isFoil, $isPromo, $quantity);
         }
 
-        $orderPrice = collect($items)->sum(SC::PRODUCT_PRICE);
+        $orderPrice = collect($items)->sum(SC::SUBTOTAL);
         $buyerInfo = self::createBuyerInfoOnly();
         $buyerInfo[SC::ORDER_PRICE] = $orderPrice;
         $buyerInfo[SC::ITEMS] = $items;
@@ -98,6 +98,7 @@ class ShiptLogTestHelper
             SC::CITY => fake()->city(),
             SC::ADDRESS_1 => fake()->streetAddress(),
             SC::ADDRESS_2 => fake()->secondaryAddress(),
+            SC::DISCOUNT_AMOUNT => 0
         ];
     }
 
@@ -120,10 +121,13 @@ class ShiptLogTestHelper
      */
     public static  function createItemInfo(bool $isFoil, bool $isPromo, int $quantity = 1):array {
         $stock = self::getRandomStock($isFoil, $isPromo, $quantity);
+        $quantity = fake()->numberBetween(1, $stock->quantity);
+        $price = fake()->numberBetween(300, 10000);
         return [SC::TYPE => MercariCsvType::PRODUCT->value, GC::ID => $stock->id,
                     SC::PRODUCT_NAME => self::product_name($stock),
-                    StockpileHeader::QUANTITY => fake()->numberBetween(1, $stock->quantity),
-                    SC::PRODUCT_PRICE => fake()->numberBetween(300, 10000), SC::DISCOUNT_AMOUNT => 0];
+                    StockpileHeader::QUANTITY => $quantity,
+                    SC::PRODUCT_PRICE => $price,
+                    SC::SUBTOTAL => $quantity * $price];
     }
 
     /**
