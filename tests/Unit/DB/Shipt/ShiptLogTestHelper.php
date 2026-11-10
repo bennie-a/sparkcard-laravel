@@ -1,12 +1,10 @@
 <?php
 namespace Tests\Unit\DB\Shipt;
 
-use App\Enum\CsvFlowType;
 use App\Enum\Shipt\MercariCsvType;
 use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Exceptions\api\NotFoundException;
-use App\Models\CsvHeader;
 use App\Models\Stockpile;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Services\Constant\CardConstant as CC;

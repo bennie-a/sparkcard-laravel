@@ -313,8 +313,7 @@ class ShiptParseTest extends TestCase
         {$header}
         {$implode}
         CSV;
-        dd($content);
-        // $response = $this->upload($content);
+        $response = $this->upload($content);
         // $response->assertJsonStructure([
         //     '*' => [
         //         SC::PLATFORM,

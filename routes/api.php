@@ -13,7 +13,8 @@ use App\Http\Controllers\ArrivalController;
 use App\Http\Controllers\Baseshop\BaseApiController;
 use App\Http\Controllers\Baseshop\BaseOAuthController;
 use App\Http\Controllers\PromotypeController;
-use App\Http\Controllers\ShiptLogController;
+use App\Http\Controllers\Shipt\ShiptLogController;
+use App\Http\Controllers\Shipt\ShiptLogCsvController;
 use App\Http\Controllers\VendorTypeController;
 
 /*
@@ -38,7 +39,7 @@ Route::post('upload/card', [CardJsonFileController::class, 'uploadCardFile']);
 Route::resource('scryfall', ScryfallController::class);
 Route::post('stockpile/import', [StockpileController::class,
 'import']);
-Route::post('shipping/parse', [ShiptLogController::class, 'parse']);
+Route::post('shipping/parse', [ShiptLogCsvController::class, 'parse']);
 Route::get('arrival/grouping', [ArrivalController::class, 'grouping']);
 Route::apiResource('arrival', ArrivalController::class);
 Route::apiResource('shipping', ShiptLogController::class);

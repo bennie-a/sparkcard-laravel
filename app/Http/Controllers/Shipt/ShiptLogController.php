@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Shipt;
 
-use App\Exceptions\Api\Csv\CsvInvalidRowException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shipt\ShiptPostRequest;
-use App\Http\Requests\Shipt\ShiptUploadRequest;
 use App\Http\Requests\ShiptLogRequest;
 use App\Http\Requests\ShowApiRequest;
-use App\Http\Resources\Shipt\CsvOrderResource;
 use App\Http\Resources\Shipt\FetchOrderResource;
 use App\Http\Resources\Shipt\OrderResource;
 use App\Services\Constant\GlobalConstant as GC;
@@ -64,21 +61,4 @@ class ShiptLogController extends Controller
         $info = $this->service->show($id);
         return response()->json(new OrderResource($info), Response::HTTP_OK);
     }
-
-    /**
-     * 注文CSVファイルを解析する。
-     *
-     * @param ShiptUploadRequest $request
-     * @return void
-     */
-    public function parse(ShiptUploadRequest $request) {
-        $data = $request->input(GC::DATA);
-        $records = $this->service->parse($data);
-        if ($this->service->hasError()) {
-            throw new CsvInvalidRowException($this->service->getError());
-        }
-
-        return response(CsvOrderResource::collection($records), Response::HTTP_CREATED);
-    }
-
 }
