@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Shipt;
 use App\Exceptions\api\Csv\CsvInvalidRowException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shipt\ShiptUploadRequest;
+use App\Http\Resources\Shipt\CsvOrderResource;
 use App\Services\Shipt\ShiptLogCsvService;
 use Illuminate\Http\Response;
+use App\Services\Constant\GlobalConstant as GC;
 
 /**
  * 注文情報に関するCSVデータのクラス

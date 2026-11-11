@@ -38,7 +38,7 @@ abstract class CsvReader {
         logger()->debug("文字コード：$file_encoding");
 
         // league/csv 9.9対応: SplFileObject を使用
-        $reader = Reader::createFromPath($path, 'r');
+        $reader = Reader::from($path, 'r');
 
         // BOM除去 (もしUTF-8 BOM付きなら)
         $reader->setOutputBOM(Reader::BOM_UTF8);
@@ -74,7 +74,7 @@ abstract class CsvReader {
         }
 
         // バリデーション処理
-        $this->validate($rows);
+        // $this->validate($rows);
 
         return $rows;
     }

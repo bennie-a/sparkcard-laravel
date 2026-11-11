@@ -16,33 +16,25 @@ abstract class AbstractCsvService {
     private $error = [];
 
     // /**
-    //  * CSVファイルの内容をDBに登録する。
-    //  *
-    //  * @param string $path ファイルパス
-    //  * @return void
+    //  * 注文CSVの内容を解析する。
+    //  * @since 5.1.0
+    //  * @param array $records CSV読み込み結果
+    //  * @return array
     //  */
-    // public function import(string $path) {
-    //     $records = $this->read($path);
-    //     // DB登録
-    //     $callback = function($row) {
-    //         $this->store($row);
-    //     };
-    //     $details =
-    //     $this->execute($records, $callback);
-    //     $result = ["total_rows"=>count($records), 'successful_rows' => count($this->success),
-    //                         'failed_rows' => count($this->error), 'failed_details' => $this->error,
-    //                         'skip_rows' => count($this->ignore), 'skip_details' => $this->ignore];
-    //     return $result;
+    // public function parse(array $records) {
+
     // }
+
+    // protected abstract function parseRow(ShiptRow $row);
 
     /**
      * CSVデータに対して処理を実行する。
      *
-     * @param [type] $records
-     * @param [type] $callback
+     * @param array $records
+     * @param callable $callback
      * @return void
      */
-    protected function execute($records, $callback) {
+    protected function execute(array $records, callable $callback) {
         $results = [];
         foreach($records as $key => $row) {
             $rowobj = $this->createRow($key, $row);

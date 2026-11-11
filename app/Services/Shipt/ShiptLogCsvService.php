@@ -4,11 +4,20 @@ namespace App\Services\Shipt;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
 use App\Files\Reader\ShiptLogCsvReader;
 use App\Services\AbstractCsvService;
+use App\Services\Constant\GlobalConstant as GC;
+use App\Services\Constant\ShiptConstant as SC;
+use App\Models\Stockpile;
+use App\Repositories\Api\Shipt\ShiptLogRepository;
+use App\Services\Notion\NotionService;
 
 /**
  * 注文CSVの解析を行うサービスクラス
  */
 class ShiptLogCsvService extends AbstractCsvService {
+
+    public function __construct(private ShiptLogRepository $repo) {
+
+    }
 
     /**
      * 出荷ログ用のCSV読み込みクラスを取得する。
@@ -27,11 +36,14 @@ class ShiptLogCsvService extends AbstractCsvService {
      */
     public function parse(array $records) {
         $orders = [];
+        $orderIds = collect($records)->pluck(SC::ORDER_ID)->unique();
+        logger()->info('注文番号を取得', ['orderIds' => $orderIds->toArray()]);
+        $nService = new NotionService();
         foreach ($records as $index => $r) {
             $row = $this->createRow($index, $r);
             $orderId = $row->order_id();
             try {
-                $this->hasNotionCard($orderId);
+                $nService->hasNotionCard($orderId);
                 if(!isset($orders[$orderId])){
                     // 新規生成
                     $orders[$orderId] = [

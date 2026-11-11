@@ -3,7 +3,6 @@ namespace App\Services\Shipt;
 
 use App\Exceptions\api\NoContentException;
 use App\Exceptions\api\NotFoundException;
-use App\Exceptions\api\Shipt\ShiptNotionException;
 use App\Facades\CardBoard;
 use App\Libs\CarbonFormatUtil;
 use App\Models\Shipt\Orders;
@@ -15,6 +14,7 @@ use FiveamCode\LaravelNotionApi\Entities\Properties\Select;
 use FiveamCode\LaravelNotionApi\Entities\Properties\Text;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
+use App\Services\Notion\NotionService;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -35,7 +35,8 @@ class ShiptLogService {
     public function store(ShiptStoreRow $row):array {
         $orderId = $row->order_id();
         // Notionカードの存在チェック
-        $this->hasNotionCard($orderId);
+        $nService = new NotionService();
+        $nService->hasNotionCard($orderId);
 
         $order = $this->repo->findByOrderId($row->platform(), $orderId);
         if (!$order) {
@@ -102,19 +103,5 @@ class ShiptLogService {
             throw new NoContentException();
         }
         return $order;
-    }
-
-    /**
-     * 注文番号に紐づいたNotionカードが存在する
-     * チェックする。
-     *
-     * @param string $orderId 注文番号
-     * @throws ShiptNotionException
-     */
-    private function hasNotionCard(string $orderId) {
-        $notionCard = CardBoard::findByOrderId($orderId);
-        if ($notionCard->isEmpty()) {
-            throw new ShiptNotionException();
-        }
     }
 }

@@ -17,17 +17,20 @@ class ShiptValidator extends AbstractCsvValidator {
      */
    protected function validationRules():array {
     return [
+        ShiptCon::TYPE => ["required", "in:{MercariCsvType::ORDER->value}, {MercariCsvType::PRODUCT->value}"],
         ShiptCon::ORDER_ID => ['required', new Halfsize()],
         ShiptCon::BUYER => 'required',
-        ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
-        ShiptCon::STATE => ['required', StateRule::rules()],
-        ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
-        ShiptCon::ADDRESS_1 => 'required|string',
         ShiptCon::PRODUCT_ID => 'required|numeric|min:1|exists:stockpile,id',
         ShiptCon::PRODUCT_NAME => 'required',
         Header::QUANTITY => 'required|numeric|min:1',
+        ShiptCon::ORDER_PRICE => 'required|numeric|min:50',
         ShiptCon::PRODUCT_PRICE => 'required|numeric|min:50',
-        ShiptCon::DISCOUNT_AMOUNT => 'required|numeric|min:0'
+        ShiptCon::SHIPPING_PRICE => 'required|numeric|min:85',
+        ShiptCon::DISCOUNT_AMOUNT => 'required|numeric|min:0',
+        ShiptCon::POSTAL_CODE => ['required', PostalCodeRule::rules()],
+        ShiptCon::STATE => ['required', StateRule::rules()],
+        ShiptCon::CITY => 'required|string|regex:/[市区町村郡]/u',
+        ShiptCon::ADDRESS_1 => 'required|string'
     ];
    }
 
