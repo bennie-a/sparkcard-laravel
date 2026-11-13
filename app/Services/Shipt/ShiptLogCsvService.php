@@ -41,24 +41,41 @@ class ShiptLogCsvService extends AbstractCsvService {
         $orderIds = $csvCollect->pluck(SC::ORDER_ID)->unique();
         logger()->info('注文番号を取得', ['orderIds' => $orderIds->toArray()]);
         $nService = new NotionService();
-        $orderIds->each(function($orderId, $index) use ($csvCollect, $orders, $nService) {
-            $orderRow = $csvCollect->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, MercariCsvType::ORDER->value)->sole();
-            $productRows = $csvCollect->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, MercariCsvType::PRODUCT->value);
-            $address = $productRows->map(function ($item) {
-                return [
-                    SC::ZIPCODE => $item[SC::POSTAL_CODE],
-                    SC::STATE => $item[SC::STATE],
-                    SC::CITY => $item[SC::CITY],
-                    SC::ADDRESS_1 => $item[SC::ADDRESS_1],
-                    SC::ADDRESS_2 => $item[SC::ADDRESS_2]
-                ];
-            })->unique()->first();
-            $info = collect(['index' => $index, SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER]]);
-            $info = $info->merge($address);
-            // $productRows->each(function($r, $index) {
 
-            // });
-            $orders->put($orderId, $info);
+        $orderIds->each(function($orderId, $index) use ($csvCollect, $orders, $nService) {
+            try {
+                $nService->hasNotionCard($orderId);
+                $orderRow = $csvCollect->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, MercariCsvType::ORDER->value)->sole();
+                $productRows = $csvCollect->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, MercariCsvType::PRODUCT->value);
+                $address = $productRows->map(function ($item) {
+                    return [
+                        SC::ZIPCODE => $item[SC::POSTAL_CODE],
+                        SC::STATE => $item[SC::STATE],
+                        SC::CITY => $item[SC::CITY],
+                        SC::ADDRESS_1 => $item[SC::ADDRESS_1],
+                        SC::ADDRESS_2 => $item[SC::ADDRESS_2]
+                    ];
+                })->unique()->first();
+
+                $items = $productRows->map(function ($item, $index) {
+                    return [
+                        SC::INDEX => $index,
+                        SC::PRODUCT_ID => $item[SC::PRODUCT_ID],
+                        SC::PRODUCT_NAME => $item[SC::PRODUCT_NAME],
+                        SC::QUANTITY => $item[SC::QUANTITY],
+                        SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                    ];
+                })->values();
+
+                $info = collect([SC::INDEX => $index, SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER]]);
+                $info = $info->merge($address);
+                $info->put(SC::ITEMS, $items);
+                $orders->put($orderId, $info);
+            } catch (ShipmentOrderException $e) {
+                $this->addError($index, $e->getMsg());
+                logger()->error('Notionカードの取得に失敗', ['orderId' => $orderId, 'error' => $e->getMsg()]);
+                return;
+            }
             // $row = $this->createRow($index, $r);
             // $orderId = $row->order_id();
             // try {
@@ -90,8 +107,6 @@ class ShiptLogCsvService extends AbstractCsvService {
             //         continue;
             //     }
         });
-        foreach ($orderIds as $orderId) {
-        }
         logger()->info('注文番号ごとの購入者情報', [ $orders->values()->toArray() ]);
         return $orders->values()->toArray();
     }
