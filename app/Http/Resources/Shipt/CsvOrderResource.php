@@ -30,7 +30,7 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function platform(): string
     {
-        return ShopPlatform::MERCARI->value;
+        return $this[SC::PLATFORM]->value;
     }
 
     #[Override]
@@ -41,22 +41,24 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function zipcode():string
     {
-        $row = $this[GlobalConstant::DATA];
-        return $row->postal_code();
+        return $this[SC::ZIPCODE];
     }
 
     #[Override]
     protected function address():string
     {
-        $row = $this[GlobalConstant::DATA];
-        return $row->address();
+        $address = $this[SC::STATE].$this[SC::CITY].
+                        $this[SC::ADDRESS_1];
+        if (!empty($this[SC::ADDRESS_2])) {
+            $address.= " ". $this[SC::ADDRESS_2];
+        }
+        return $address;
     }
 
     #[Override]
     protected function buyer():string
     {
-        $row = $this[GlobalConstant::DATA];
-        return  $row->buyer();
+        return $this[SC::BUYER];
     }
 
     #[Override]
@@ -85,11 +87,7 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function couponDiscount():int
     {
-        $items = $this[SC::ITEMS];
-        $coupon = $this->collection($items)->sum(function($item) {
-            return $item[SC::DISCOUNT_AMOUNT];
-        });
-        return $coupon;
+        return $this[SC::DISCOUNT_AMOUNT];
     }
 
     #[Override]

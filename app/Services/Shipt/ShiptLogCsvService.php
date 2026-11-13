@@ -2,6 +2,7 @@
 namespace App\Services\Shipt;
 
 use App\Enum\Shipt\MercariCsvType;
+use App\Enum\ShopPlatform;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
 use App\Files\Reader\ShiptLogCsvReader;
 use App\Services\AbstractCsvService;
@@ -9,7 +10,9 @@ use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
 use App\Models\Stockpile;
 use App\Repositories\Api\Shipt\ShiptLogRepository;
+use App\Services\Constant\StockpileHeader;
 use App\Services\Notion\NotionService;
+use Illuminate\Support\Collection;
 
 /**
  * 注文CSVの解析を行うサービスクラス
@@ -45,8 +48,8 @@ class ShiptLogCsvService extends AbstractCsvService {
         $orderIds->each(function($orderId, $index) use ($csvCollect, $orders, $nService) {
             try {
                 $nService->hasNotionCard($orderId);
-                $orderRow = $csvCollect->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, MercariCsvType::ORDER->value)->sole();
-                $productRows = $csvCollect->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, MercariCsvType::PRODUCT->value);
+                $orderRow = $this->findRowByOrderId($orderId, $csvCollect, MercariCsvType::ORDER)->sole();
+                $productRows = $this->findRowByOrderId($orderId, $csvCollect, MercariCsvType::PRODUCT);
                 $address = $productRows->map(function ($item) {
                     return [
                         SC::ZIPCODE => $item[SC::POSTAL_CODE],
@@ -57,17 +60,23 @@ class ShiptLogCsvService extends AbstractCsvService {
                     ];
                 })->unique()->first();
 
-                $items = $productRows->map(function ($item, $index) {
+                $items = $productRows->map(function ($item, $index) use ($orderId) {
+                    $stockId = (int)$item[SC::PRODUCT_ID];
                     return [
                         SC::INDEX => $index,
-                        SC::PRODUCT_ID => $item[SC::PRODUCT_ID],
+                        StockpileHeader::STOCK => Stockpile::find($stockId),
                         SC::PRODUCT_NAME => $item[SC::PRODUCT_NAME],
-                        SC::QUANTITY => $item[SC::QUANTITY],
+                        SC::SHIPMENT => $this->shipment($item[SC::PRODUCT_NAME], $item[SC::QUANTITY]),
+                        SC::IS_REGISTERED => $this->repo->existsItem($orderId, $stockId),
                         SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
                     ];
                 })->values();
 
-                $info = collect([SC::INDEX => $index, SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER]]);
+                $info = collect([SC::INDEX => $index, SC::PLATFORM => ShopPlatform::determine($orderId),
+                                                                     SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER],
+                                                                     SC::ORDER_PRICE => $orderRow[SC::ORDER_PRICE],
+                                                                     SC::SHIPPING_PRICE => $orderRow[SC::SHIPPING_PRICE],
+                                                                     SC::DISCOUNT_AMOUNT => $orderRow[SC::DISCOUNT_AMOUNT]]);
                 $info = $info->merge($address);
                 $info->put(SC::ITEMS, $items);
                 $orders->put($orderId, $info);
@@ -136,4 +145,29 @@ class ShiptLogCsvService extends AbstractCsvService {
         return new ShiptRow($index, $row);
     }
 
+    /**
+     * 注文番号とCSVヘッダーのtypeに該当する行を取得する。
+     *
+     * @param string $orderId
+     * @param Collection $rows
+     * @param MercariCsvType $type
+     * @return Collection
+     */
+    private function findRowByOrderId(string $orderId, Collection $rows, MercariCsvType $type):Collection {
+        return $rows->where(SC::ORDER_ID, $orderId)->where(SC::TYPE, $type->value);
+    }
+
+    /**
+     * 注文枚数を取得する。
+     *
+     * @return int
+     */
+    public function shipment(string $name, int $quantity):int {
+        $shipment = 1;
+        if (preg_match('/(\d+)枚\s*セット/u', $name, $matches)) {
+            $shipment = (int) $matches[1];
+        }
+        return $shipment * $quantity;
+    }
 }
+
