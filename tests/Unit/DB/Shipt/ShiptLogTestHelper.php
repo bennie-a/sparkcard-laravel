@@ -12,6 +12,8 @@ use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
 use Tests\Util\TestDateUtil;
+use Illuminate\Support\Str;
+
 
 /**
  * 注文CSV用テストデータを作成するクラス
@@ -24,7 +26,8 @@ class ShiptLogTestHelper
      * @return array
      */
     public static function createBuyerInfo(int $itemCount,
-                                                            bool $isFoil = false, bool $isPromo = false, int $quantity = 1):array {
+                                                            bool $isFoil = false, bool $isPromo = false,
+                                                             int $quantity = 1, ShopPlatform $platform = ShopPlatform::MERCARI):array {
         $items = [];
         for ($i=0; $i < $itemCount; $i++) {
             $items[] = self::createItemInfo($isFoil, $isPromo, $quantity);
@@ -34,6 +37,7 @@ class ShiptLogTestHelper
         $buyerInfo = self::createBuyerInfoOnly();
         $buyerInfo[SC::ORDER_PRICE] = $orderPrice;
         $buyerInfo[SC::ITEMS] = $items;
+        $buyerInfo[SC::ORDER_ID] = self::generateOrderId($platform);
         return $buyerInfo;
     }
 
@@ -42,15 +46,16 @@ class ShiptLogTestHelper
      * ランダムで作成する。
      *
      * @param integer $itemCount
+     * @param ShopPlatform $platform
      * @return array
      */
-    public static function createStoreRequest($itemCount = 1):array {
-        $buyerInfo = self::createBuyerInfo($itemCount);
+    public static function createStoreRequest($itemCount = 1, ShopPlatform $platform = ShopPlatform::MERCARI):array {
+        $buyerInfo = self::createBuyerInfo($itemCount, false, false, 1, $platform);
         $buyerInfo[SC::ADDRESS] = $buyerInfo[SC::STATE].$buyerInfo[SC::CITY].
                                                                 $buyerInfo[SC::ADDRESS_1].' '.$buyerInfo[SC::ADDRESS_2];
         $buyerInfo[SC::ZIPCODE] = $buyerInfo[SC::POSTAL_CODE];
         $buyerInfo[SC::SHIPT_DATE] = TestDateUtil::formatToday();
-        $buyerInfo[SC::PLATFORM] = fake()->randomElement([ShopPlatform::MERCARI->value, ShopPlatform::BASE->value]);
+        $buyerInfo[SC::PLATFORM] = $platform->value;
         $buyerInfo[SC::ITEM_SUBTOTAL] = rand(1, 20000);
         $buyerInfo[SC::DISCOUNT_AMOUNT] = rand(0, 400);
         $buyerInfo[SC::GRAND_TOTAL] = $buyerInfo[SC::ITEM_SUBTOTAL] - $buyerInfo[SC::DISCOUNT_AMOUNT];
@@ -88,7 +93,7 @@ class ShiptLogTestHelper
     public static function createBuyerInfoOnly():array {
         return [
             SC::TYPE => MercariCsvType::ORDER->value,
-            SC::ORDER_ID => self::createOrderId(),
+            SC::ORDER_ID => self::generateOrderId(ShopPlatform::MERCARI),
             SC::BUYER => fake()->name(),
             SC::SHIPPING_PRICE => 0,
             SC::POSTAL_CODE => fake()->postcode1()."-".fake()->postcode2(),
@@ -158,7 +163,7 @@ class ShiptLogTestHelper
      * @param $isSet true:セット販売、false:単品
      * @return string
      */
-    public static function product_name(Stockpile $stock, bool $isSet = false): string {
+    public static function product_name(Stockpile $stock, bool $isSet = false, int $setSheet = 1): string {
         $card = $stock->cardinfo;
         $exp = $stock->cardinfo->expansion;
         $foil = $stock->cardinfo->foiltype;
@@ -167,17 +172,8 @@ class ShiptLogTestHelper
                 ($foil->id != 1 ? "【{$foil->name}】" : "").
                 "{$card->name}".
                 ($promo->id != 1 ? "≪{$promo->name}≫" : "").
-                ($isSet && $stock->quantity > 1 ? "{$stock->quantity}枚セット" : "").
+                ($isSet && $stock->quantity > 1 ? "{$setSheet}枚セット" : "").
                 "[$stock->language]"."[{$card->color_id}]";
-    }
-
-    /**
-     * 注文番号をランダムで作成する。
-     *
-     * @return string
-     */
-    private static function createOrderId(): string {
-        return uniqid('order_');
     }
 
     /**
@@ -287,5 +283,21 @@ class ShiptLogTestHelper
             SC::FEE.'.'.GlobalConstant::ID => '送料ID',
             default => $key,
         };
+    }
+
+    /**
+     * プラットフォームに応じて注文番号をランダムに生成する。
+     *
+     * @return string
+     */
+    public static function generateOrderId(ShopPlatform $platform): string
+    {
+        if ($platform === ShopPlatform::MERCARI) {
+            return 'order_'.Str::random(22);
+        }
+        if ($platform === ShopPlatform::DIRECT) {
+            return 'd2c_'.Str::random(22);
+        }
+        return Str::upper(Str::random(16));
     }
 }

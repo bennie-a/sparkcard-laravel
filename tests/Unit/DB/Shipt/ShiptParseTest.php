@@ -53,6 +53,17 @@ class ShiptParseTest extends TestCase
         $this->seed(TestStockpileSeeder::class);
      }
 
+     #[Test]
+     #[TestDox('プラットフォームが正しく設定されているか確認する')]
+     #[TestWith([ShopPlatform::MERCARI], 'メルカリ')]
+     #[TestWith([ShopPlatform::BASE], 'BASE')]
+     #[TestWith([ShopPlatform::DIRECT], '手渡し')]
+     public function platform(ShopPlatform $platform): void {
+        $buyerInfo = ShiptLogTestHelper::createBuyerInfo(1, false, false, 1, $platform);
+         $response = $this->uploadOk([$buyerInfo]);
+         $response->assertJsonPath('0.'.SC::PLATFORM, $platform->value);
+     }
+
     #[TestDox('購入者情報が正しく集計されているか確認する')]
     #[TestWith([1, 1], '購入者1人_出荷商品1件')]
     #[TestWith([1, 2], '購入者1人_出荷商品2件')]
@@ -89,37 +100,58 @@ class ShiptParseTest extends TestCase
         }
     }
 
-    #[TestDox('出荷枚数が単品でもセット販売でも正しく設定されているか確認する')]
-    #[TestWith([false, false, false], '単品_通常版[Non-Foil]')]
-    #[TestWith([true, false, false], '単品_通常版[Foil]')]
-    #[TestWith([false, true, false], '単品_特別版[Non-Foil]')]
-    #[TestWith([true, true, false], '単品_特別版[Foil]')]
-    #[TestWith([false, false, true], 'セット販売_通常版[Non-Foil]')]
-    #[TestWith([true, false, true], 'セット販売_通常版[Foil]')]
-    #[TestWith([false, true, true], 'セット販売_特別版[Non-Foil]]')]
-    #[TestWith([true, true, true], 'セット販売_特別版[Foil]]')]
-    public function testOkSingleAndSetcorrect(bool $isFoil, bool $isPromo, bool $isSet): void {
-        $shipment = $isSet ? 2 : 1;
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo(1, $isFoil, $isPromo, $shipment)];
-        $buyerInfos[0][SC::ITEMS] = array_map(function($item) use ($isSet, $shipment) {
+    #[Test]
+    #[TestDox('商品が単品の場合、枚数が正しく設定されているか確認する')]
+    #[TestWith([false, 1], '通常版1枚')]
+    #[TestWith([false, 2], '通常版複数枚')]
+    #[TestWith([true, 1], '特別版1枚')]
+    #[TestWith([true, 2], '特別版複数枚')]
+    public function quantitySingle(bool $isPromo, int $quantity): void {
+        $buyerInfos = ShiptLogTestHelper::createBuyerInfo(1, false, $isPromo, $quantity);
+        $response = $this->uploadOk([$buyerInfos]);
+        $items = $buyerInfos[SC::ITEMS];
+        $this->verifyItems([$items], $response);
+    }
+
+    #[Test]
+    #[TestDox('商品がセット販売の場合、枚数が正しく設定されているか確認する')]
+    #[TestWith([false, false, 1], 'セット販売_通常版1セット[Non-Foil]')]
+    #[TestWith([true, false, 1], 'セット販売_通常版1セット[Foil]')]
+    #[TestWith([false, true, 1], 'セット販売_特別版1セット[Non-Foil]]')]
+    #[TestWith([true, true, 1], 'セット販売_特別版1セット[Foil]]')]
+    #[TestWith([false, false, 2], 'セット販売_通常版2セット[Non-Foil]')]
+    #[TestWith([true, false, 2], 'セット販売_通常版2セット[Foil]')]
+    #[TestWith([false, true, 2], 'セット販売_特別版2セット[Non-Foil]]')]
+    #[TestWith([true, true, 2], 'セット販売_特別版2セット[Foil]]')]
+    public function quantitySetItems(bool $isFoil, bool $isPromo, int $quantity): void {
+        $shipment = 2;
+        $buyerInfos = ShiptLogTestHelper::createBuyerInfo(1, $isFoil, $isPromo, $shipment*$quantity);
+        $buyerInfos[SC::ITEMS] = array_map(function($item) use ($shipment, $quantity) {
             $stock = Stockpile::find((int)$item[GC::ID]);
             // セット販売の商品名に変更
-            $item[SC::PRODUCT_NAME] = ShiptLogTestHelper::product_name($stock, $isSet);
+            $item[SC::PRODUCT_NAME] = ShiptLogTestHelper::product_name($stock, true, $shipment);
             logger()->info($item[SC::PRODUCT_NAME]);
-            $item[SH::QUANTITY] = $isSet ? 1:$shipment;
+            $item[SH::QUANTITY] = $quantity;
             return $item;
-        }, $buyerInfos[0][SC::ITEMS]);
+        }, $buyerInfos[SC::ITEMS]);
 
-        $response = $this->uploadOk($buyerInfos);
-        $items = $buyerInfos[0][SC::ITEMS];
-        foreach ($items as $i => $item) {
-                $response->assertJson(function(AssertableJson $json) use($i, $item) {
-                    $base = "0.".SC::ITEMS.".{$i}.";
-                    $json->whereAll([
-                        $base.SC::SHIPMENT => $this->shipment($item),
-                        $base.SC::STOCK.'.'.GC::ID => $item[GC::ID],
-                    ]);
-            });
+        $response = $this->uploadOk([$buyerInfos]);
+        $items = $buyerInfos[SC::ITEMS];
+        $this->verifyItems([$items], $response);
+    }
+
+    /**
+     * 商品情報について検証する。
+     *
+     * @param array $exItems
+     * @param TestResponse $response
+     * @return void
+     */
+    private function verifyItems(array $exItems, TestResponse $response) {
+        foreach ($exItems as $i => $item) {
+            $base = "0.".SC::ITEMS.".{$i}.";
+            $response->assertJsonPath($base.SC::SHIPMENT, $this->shipment($item[$i]));
+            $response->assertJsonPath($base.SC::STOCK.'.'.GC::ID, $item[$i][GC::ID]);
         }
     }
 
@@ -145,7 +177,7 @@ class ShiptParseTest extends TestCase
     public function shipment(array $item):int {
         $product_name = $item[SC::PRODUCT_NAME];
         if (preg_match('/(\d+)枚\s*セット/u', $product_name, $matches)) {
-            return  (int) $matches[1];
+            return  (int) $matches[1] * (int)$item[SC::QUANTITY];
         }
         return (int)$item[SC::QUANTITY];
     }

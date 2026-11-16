@@ -16,7 +16,6 @@ use App\Services\Constant\StockpileHeader;
 use App\Services\Constant\ShiptConstant as SC;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Tests\Unit\DB\Shipt\ShiptLogTestHelper;
 
@@ -213,13 +212,7 @@ class DivideShippingLogSeeder extends Seeder
      */
     private function generateOrderId(ShopPlatform $platform): string
     {
-        if ($platform === ShopPlatform::MERCARI) {
-            return 'order_'.Str::random(22);
-        }
-        if ($platform === ShopPlatform::DIRECT) {
-            return 'd2c_'.Str::random(22);
-        }
-        return Str::upper(Str::random(16));
+        return ShiptLogTestHelper::generateOrderId($platform);
     }
 
     /**
