@@ -484,10 +484,10 @@ class ShiptParseTest extends TestCase
     }
 
     #[TestDox('不正な商品情報がある場合、行数とメッセージが返ってくるか検証する。')]
-    #[TestWith([SC::ORDER_ID, 'error', 'no-notion'], '注文番号が入力されたNotionカードが存在しない')]
+    #[TestWith([SC::ORDER_ID, 'error', 'no-notion', 2], '注文番号が入力されたNotionカードが存在しない')]
     #[TestWith([SC::QUANTITY, '999', 'excess-shipment'], '出荷枚数が在庫枚数より多い')]
     #[TestWith([GC::ID, '3', 'zero_quantity'], '在庫枚数が無い')]
-    public function testNgItemError(string $key, string $value, string $msg) {
+    public function testNgItemError(string $key, string $value, string $msg, int $row = 3): void {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         if (key_exists($key, $buyerInfo)) {
             $buyerInfo[$key] =$value;
@@ -507,7 +507,7 @@ class ShiptParseTest extends TestCase
         $status = CustomResponse::HTTP_CSV_VALIDATION;
 
         $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, __("$base.$msg.detail"));
+        $this->assertRowError($response,  __("$base.$msg.detail"), $row);
     }
 
     #[TestDox('バリデーションエラーが発生した時のエラー情報を検証する。')]
@@ -526,7 +526,7 @@ class ShiptParseTest extends TestCase
         $this->setMockCardBoard([$buyerInfo[SC::ORDER_ID]]);
         $status = CustomResponse::HTTP_CSV_VALIDATION;
         $response = $this->upload($content, $status);
-        $this->assertRowError($response, $status, '郵便番号は「123-4567」の形式で入力してください。');
+        $this->assertRowError($response, '郵便番号は「123-4567」の形式で入力してください。');
     }
 
     private function calcExSubtotal(array $items):int
@@ -576,12 +576,11 @@ class ShiptParseTest extends TestCase
      * CSVファイルの内容で発生したエラー情報を検証する。
      *
      * @param TestResponse $response
-     * @param integer $status
      * @param string $msg
      * @return void
      */
-    public function assertRowError(TestResponse $response, int $status, string $msg) {
-        $this->assertCsvRowError($response, 'api/shipping/parse', [EC::ROW=> 2, EC::MSG => $msg]);
+    public function assertRowError(TestResponse $response,  string $msg, int $row = 2) {
+        $this->assertCsvRowError($response, 'api/shipping/parse', [EC::ROW=> $row, EC::MSG => $msg]);
     }
 
     /**

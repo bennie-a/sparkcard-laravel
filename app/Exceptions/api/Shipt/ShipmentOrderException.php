@@ -9,11 +9,12 @@ use App\Models\Stockpile;
  */
 class ShipmentOrderException extends ApiException
 {
-    public function __construct(int $status, int $stockId, string $errorkey)
+    public function __construct(int $status, int $stockId, string $errorkey, int $index)
     {
         $this->status = $status;
         $this->stockId = $stockId;
         $this->errorKey = $errorkey;
+        $this->index = $index;
     }
 
     public function getStatusCode(): int
@@ -28,7 +29,7 @@ class ShipmentOrderException extends ApiException
 
     public function getDetail(): string
     {
-        $detail = $this->getMsg($this->errorkey);
+        $detail = $this->getMsg();
         return "在庫ID[{$this->stockId}] : {$detail}";
     }
 
@@ -36,5 +37,15 @@ class ShipmentOrderException extends ApiException
     {
         $detail = __("validation.items.{$this->errorKey}.detail");
         return $detail;
+    }
+
+    /**
+     * 行番号を取得する。
+     *
+     * @return integer
+     */
+    public function getIndex(): int
+    {
+        return $this->index + 2;
     }
 }

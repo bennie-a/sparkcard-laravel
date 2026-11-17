@@ -10,8 +10,8 @@ use Illuminate\Http\Response;
  */
 class ShiptNotionException extends ShipmentOrderException
 {
-    public function __construct()
+    public function __construct(int $index)
     {
-        parent::__construct(Response::HTTP_NOT_FOUND, 0, 'no-notion');
+        parent::__construct(Response::HTTP_NOT_FOUND, 0, 'no-notion', $index);
     }
 }

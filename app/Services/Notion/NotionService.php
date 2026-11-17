@@ -15,12 +15,13 @@ class NotionService
      * チェックする。
      *
      * @param string $orderId 注文番号
+     * @param int $index 行番号
      * @throws ShiptNotionException
      */
-    public function hasNotionCard(string $orderId) {
+    public function hasNotionCard(string $orderId, int $index) {
         $notionCard = CardBoard::findByOrderId($orderId);
         if ($notionCard->isEmpty()) {
-            throw new ShiptNotionException();
+            throw new ShiptNotionException($index);
         }
     }
 }

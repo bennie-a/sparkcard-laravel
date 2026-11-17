@@ -12,6 +12,7 @@ use App\Models\Stockpile;
 use App\Repositories\Api\Shipt\ShiptLogRepository;
 use App\Services\Constant\StockpileHeader;
 use App\Services\Notion\NotionService;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 /**
@@ -47,7 +48,7 @@ class ShiptLogCsvService extends AbstractCsvService {
 
         $orderIds->each(function($orderId, $index) use ($csvCollect, $orders, $nService) {
             try {
-                $nService->hasNotionCard($orderId);
+                $nService->hasNotionCard($orderId, $index);
                 $orderRow = $this->findRowByOrderId($orderId, $csvCollect, MercariCsvType::ORDER)->sole();
                 $productRows = $this->findRowByOrderId($orderId, $csvCollect, MercariCsvType::PRODUCT);
                 $address = $productRows->map(function ($item) {
@@ -72,6 +73,10 @@ class ShiptLogCsvService extends AbstractCsvService {
                     ];
                 })->values();
 
+                foreach ($items as $item) {
+                    $this->checkShipment($item[StockpileHeader::STOCK]->id, $item[SC::SHIPMENT], $item[SC::INDEX]);
+                }
+
                 $info = collect([SC::INDEX => $index, SC::PLATFORM => ShopPlatform::determine($orderId),
                                                                      SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER],
                                                                      SC::ORDER_PRICE => $orderRow[SC::ORDER_PRICE],
@@ -81,8 +86,8 @@ class ShiptLogCsvService extends AbstractCsvService {
                 $info->put(SC::ITEMS, $items);
                 $orders->put($orderId, $info);
             } catch (ShipmentOrderException $e) {
-                $this->addError($index, $e->getMsg());
-                logger()->error('Notionカードの取得に失敗', ['orderId' => $orderId, 'error' => $e->getMsg()]);
+                $this->addError($e->getIndex(), $e->getMsg());
+                logger()->error('解析処理に失敗', ['orderId' => $orderId, 'index' => $e->getIndex(), 'error' => $e->getMsg()]);
                 return;
             }
             // $row = $this->createRow($index, $r);
@@ -126,9 +131,10 @@ class ShiptLogCsvService extends AbstractCsvService {
      *
      * @param int $stockId
      * @param integer $shipment
+     * @param int $index 行番号
      * @throws ShipmentOrderException
      */
-    private function checkShipment(int $stockId, int $shipment) {
+    private function checkShipment(int $stockId, int $shipment, int $index) {
             $errorKey = '';
             $stock = Stockpile::find($stockId);
             if ($stock->quantity == 0) {
@@ -137,7 +143,7 @@ class ShiptLogCsvService extends AbstractCsvService {
                 $errorKey = 'excess-shipment';
             }
             if (!empty($errorKey)) {
-                throw new ShipmentOrderException(HttpResponse::HTTP_BAD_REQUEST, $stockId, $errorKey);
+                throw new ShipmentOrderException(Response::HTTP_BAD_REQUEST, $stockId, $errorKey, $index);
             }
     }
 
