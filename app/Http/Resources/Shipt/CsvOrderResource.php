@@ -77,11 +77,7 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function itemsSubtotal():int
     {
-        $items = $this[SC::ITEMS];
-        $productPrice = $this->collection($items)->sum(function($item) {
-            return $item[SC::PRODUCT_PRICE];
-        });
-        return $productPrice;
+        return $this[SC::ORDER_PRICE] + $this[SC::SHIPPING_PRICE];
     }
 
     #[Override]

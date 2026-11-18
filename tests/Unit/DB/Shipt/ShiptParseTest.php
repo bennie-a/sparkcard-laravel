@@ -182,6 +182,20 @@ class ShiptParseTest extends TestCase
         return (int)$item[SC::QUANTITY];
     }
 
+    #[Test]
+    #[TestDox('CSVデータに入力された送料を元に、送料情報が正しく設定されているか確認する。')]
+    #[TestWith([ShiptMethod::MINI], 'ミニレター')]
+    public function testFee(ShiptMethod $method) {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $exFee = Shipping::findByMethod($method->value);
+        $buyerInfo[SC::SHIPPING_PRICE] = $exFee->price;
+
+        $response = $this->uploadOk([$buyerInfo]);
+        $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
+        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
+        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);
+    }
+
     #[TestWith([1499, ShiptMethod::MINI], '1500円未満_ミニレター')]
     #[TestWith([1500, ShiptMethod::CLICK], '1500円_クリックポスト')]
     #[TestWith([9999, ShiptMethod::CLICK], '9999円_クリックポスト')]
@@ -197,37 +211,45 @@ class ShiptParseTest extends TestCase
         $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $expectedFee->id);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $expectedFee->name);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $expectedFee->price);
+    }
 
-        }
+    #[Test]
+    #[TestDox('商品の合計金額（割引前）が正しく計算されているか確認する')]
+    #[TestWith([true], '送料が¥0')]
+    #[TestWith([false], '送料が¥1以上')]
+    public function calcSubtotal(bool $isIncluded) {
+        $fee = $isIncluded ? 0 : 85;
+        $buyerInfo = ShiptLogTestHelper::createBuyerInfo(2, false, false, 2);
+        $buyerInfo[SC::SHIPPING_PRICE] = $fee;
+        $response = $this->uploadOk([$buyerInfo]);
 
-    #[TestDox('商品の合計金額（割引前）、クーポン割引合計額、最終請求金額が正しく計算されているか確認する')]
+        $exSubtotal = $this->calcExSubtotal($buyerInfo);
+        $response->assertJsonPath('0.'.SC::ITEM_SUBTOTAL, $exSubtotal);
+    }
+
+    #[TestDox('クーポン割引合計額と最終請求金額が正しく計算されているか確認する')]
     #[TestWith([0, 1], '1商品_割引なし')]
     #[TestWith([100, 1], '1商品_割引あり')]
     #[TestWith([0, 2], '2商品_割引なし')]
     #[TestWith([80, 2], '2商品_割引あり')]
     public function testTotalPriceCalc(int $discount, int $itemCount): void {
-        $buyerInfos = [ShiptLogTestHelper::createBuyerInfo($itemCount, false, false, 1)];
-        foreach ($buyerInfos[0][SC::ITEMS] as &$item) {
-            $item[SC::DISCOUNT_AMOUNT] = $discount;
-        }
-        $response = $this->uploadOk($buyerInfos);
-        $items = current($buyerInfos)[SC::ITEMS];
-        $response->assertJson(function(AssertableJson $json) use ($items){
+        $buyerInfo = ShiptLogTestHelper::createBuyerInfo($itemCount, false, false, 1);
+        $buyerInfo[SC::DISCOUNT_AMOUNT] = $discount;
+        $response = $this->uploadOk([$buyerInfo]);
+
+        $response->assertJson(function(AssertableJson $json) use ($buyerInfo, $discount){
             $json->hasAll([
                 '0.'.SC::ITEM_SUBTOTAL,
                 '0.'.SC::DISCOUNT_AMOUNT,
                 '0.'.SC::GRAND_TOTAL
                 ])->etc();
 
-            $exSubtotal = $this->calcExSubtotal($items);
-
-            $exDiscount = array_reduce($items, function($carry, $item) {
-                return $carry + $item[SC::DISCOUNT_AMOUNT];
-            }, 0);
+            $exSubtotal = $this->calcExSubtotal($buyerInfo);
             $json->whereAll([
+                '0.'.SC::PLATFORM_ORDER_ID => $buyerInfo[SC::ORDER_ID],
                 '0.'.SC::ITEM_SUBTOTAL => $exSubtotal,
-                '0.'.SC::DISCOUNT_AMOUNT => $exDiscount,
-                '0.'.SC::GRAND_TOTAL => $exSubtotal - $exDiscount
+                '0.'.SC::DISCOUNT_AMOUNT => $discount,
+                '0.'.SC::GRAND_TOTAL => $exSubtotal - $discount
             ])->etc();
         });
     }
@@ -323,7 +345,6 @@ class ShiptParseTest extends TestCase
             $buyerInfos[0][SC::ITEMS][0][GC::ID] = $orderitem->stock_id;
             $buyerInfos[0][SC::ITEMS][0][ SH::QUANTITY] = $orderitem->quantity;
         }
-
 
         $response = $this->uploadOk($buyerInfos);
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::IS_REGISTERED, $isRegistered);
@@ -529,12 +550,15 @@ class ShiptParseTest extends TestCase
         $this->assertRowError($response, '郵便番号は「123-4567」の形式で入力してください。');
     }
 
-    private function calcExSubtotal(array $items):int
+    /**
+     * 商品の合計金額（割引前）を期待値から計算する。
+     *
+     * @param array $buyerInfo
+     * @return integer
+     */
+    private function calcExSubtotal(array $buyerInfo):int
     {
-        $exSubtotal = array_reduce($items, function($carry, $item) {
-            return $carry + $item[SC::PRODUCT_PRICE];
-        }, 0);
-        return $exSubtotal;
+        return $buyerInfo[SC::ORDER_PRICE] + $buyerInfo[SC::SHIPPING_PRICE];
     }
 
     private function verifyFileError(string $content, string $keyword, string $value = ''): void {
