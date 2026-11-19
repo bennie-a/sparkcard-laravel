@@ -194,6 +194,7 @@ class ShiptParseTest extends TestCase
         $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::UNIT_PRICE, $exFee->price);
     }
 
     #[TestWith([1499, ShiptMethod::MINI], '1500円未満_ミニレター')]

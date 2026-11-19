@@ -77,7 +77,7 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function itemsSubtotal():int
     {
-        return $this[SC::ORDER_PRICE] + $this[SC::SHIPPING_PRICE];
+        return $this[SC::ITEM_SUBTOTAL];
     }
 
     #[Override]
@@ -107,8 +107,7 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function fee():Shipping
     {
-        $shiptFee = ShiptMethod::findByPrice($this->itemsSubtotal());
-        return $shiptFee;
+        return $this[SC::FEE];
     }
 
     #[Override]
@@ -121,7 +120,7 @@ class CsvOrderResource extends OrderResource
         $items = array_map(function($item) use ($feePerItem) {
             $item[SC::PRODUCT_PRICE] -= $feePerItem;
             return $item;
-        }, $this[SC::ITEMS]);
+        }, $this[SC::ITEMS]->toArray());
 
         return CsvOrderItemResource::collection($items);
     }

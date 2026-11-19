@@ -214,6 +214,7 @@ return [
         App\Providers\WisdomServProvider::class,
         App\Providers\ScryfallProvider::class,
         App\Providers\APIHandlerProvider::class,
+        App\Providers\ShiptMethodServiceProvider::class
     ],
 
     /*

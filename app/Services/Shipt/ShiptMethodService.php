@@ -5,6 +5,7 @@ use App\Enum\ShiptMethod;
 use App\Enum\ShopPlatform;
 use App\Exceptions\api\Shipt\NFShiptMethodException;
 use App\Models\CardInfo;
+use App\Models\Shipping;
 use App\Repositories\Api\Shipt\ShiptMethodRepository;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -23,6 +24,17 @@ class ShiptMethodService {
 
     public function __construct(private ShiptMethodRepository $repo) {
 
+    }
+
+    /**
+     * プラットフォームと価格から
+     * @param ShopPlatform $platform
+     * @param int $subtotal
+     * @param integer $price
+     * @return Shipping
+     */
+    public function calcMethod(ShopPlatform $platform, int $subtotal, int $price):Shipping {
+        return $this->repo->findByPrice($price);
     }
 
     /**

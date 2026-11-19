@@ -4,7 +4,9 @@ namespace App\Services\Shipt;
 use App\Enum\Shipt\MercariCsvType;
 use App\Enum\ShopPlatform;
 use App\Exceptions\api\Shipt\ShipmentOrderException;
+use App\Facades\ShiptMethodServ;
 use App\Files\Reader\ShiptLogCsvReader;
+use App\Models\Shipping;
 use App\Services\AbstractCsvService;
 use App\Services\Constant\GlobalConstant as GC;
 use App\Services\Constant\ShiptConstant as SC;
@@ -77,10 +79,14 @@ class ShiptLogCsvService extends AbstractCsvService {
                     $this->checkShipment($item[StockpileHeader::STOCK]->id, $item[SC::SHIPMENT], $item[SC::INDEX]);
                 }
 
+                $platform = ShopPlatform::determine($orderId);
+                $subtotal = $orderRow[SC::ORDER_PRICE] + $orderRow[SC::SHIPPING_PRICE];
+                $fee = ShiptMethodServ::calcMethod($platform, $subtotal, $orderRow[SC::SHIPPING_PRICE]);
+
                 $info = collect([SC::INDEX => $index, SC::PLATFORM => ShopPlatform::determine($orderId),
                                                                      SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER],
-                                                                     SC::ORDER_PRICE => $orderRow[SC::ORDER_PRICE],
-                                                                     SC::SHIPPING_PRICE => $orderRow[SC::SHIPPING_PRICE],
+                                                                     SC::ITEM_SUBTOTAL => $subtotal,
+                                                                     SC::FEE => $fee,
                                                                      SC::DISCOUNT_AMOUNT => $orderRow[SC::DISCOUNT_AMOUNT]]);
                 $info = $info->merge($address);
                 $info->put(SC::ITEMS, $items);
@@ -122,7 +128,7 @@ class ShiptLogCsvService extends AbstractCsvService {
             //     }
         });
         logger()->info('注文番号ごとの購入者情報', [ $orders->values()->toArray() ]);
-        return $orders->values()->toArray();
+        return $orders->values();
     }
 
 
