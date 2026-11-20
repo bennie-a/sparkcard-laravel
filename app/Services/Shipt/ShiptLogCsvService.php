@@ -63,30 +63,39 @@ class ShiptLogCsvService extends AbstractCsvService {
                     ];
                 })->unique()->first();
 
+                $shiptPrice = $orderRow[SC::SHIPPING_PRICE];
+                $platform = ShopPlatform::determine($orderId);
+                $subtotal = $orderRow[SC::ORDER_PRICE] + $shiptPrice;
+                $fee = ShiptMethodServ::calcMethod($platform, $subtotal, $orderRow[SC::SHIPPING_PRICE]);
+
                 $items = $productRows->map(function ($item, $index) use ($orderId) {
                     $stockId = (int)$item[SC::PRODUCT_ID];
+                    $pcsPerSet = $this->extractPerSet($item[SC::PRODUCT_NAME]);
                     return [
                         SC::INDEX => $index,
                         StockpileHeader::STOCK => Stockpile::find($stockId),
                         SC::PRODUCT_NAME => $item[SC::PRODUCT_NAME],
-                        SC::SHIPMENT => $this->shipment($item[SC::PRODUCT_NAME], $item[SC::QUANTITY]),
+                        SC::QUANTITY => $item[SC::QUANTITY],
+                        SC::PCS_PER_SET => $pcsPerSet,
                         SC::IS_REGISTERED => $this->repo->existsItem($orderId, $stockId),
                         SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
+                        SC::IS_SET => $pcsPerSet == 0
                     ];
                 })->values();
 
-                foreach ($items as $item) {
+                foreach ($items as &$item) {
                     $this->checkShipment($item[StockpileHeader::STOCK]->id, $item[SC::SHIPMENT], $item[SC::INDEX]);
+                    $itemSubtotal = $this->calcItemSubtotal($item, $fee->price, count($items), $shiptPrice == 0);
+                    $item[SC::ITEM_SUBTOTAL] = $itemSubtotal;
+                    $item[SC::UNIT_PRICE] = $this->calcUnitPrice($item);
                 }
 
-                $platform = ShopPlatform::determine($orderId);
-                $subtotal = $orderRow[SC::ORDER_PRICE] + $orderRow[SC::SHIPPING_PRICE];
-                $fee = ShiptMethodServ::calcMethod($platform, $subtotal, $orderRow[SC::SHIPPING_PRICE]);
+                $grandTotal = $subtotal - $orderRow[SC::DISCOUNT_AMOUNT];
 
                 $info = collect([SC::INDEX => $index, SC::PLATFORM => ShopPlatform::determine($orderId),
                                                                      SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER],
                                                                      SC::ITEM_SUBTOTAL => $subtotal,
-                                                                     SC::FEE => $fee,
+                                                                     SC::FEE => $fee, SC::GRAND_TOTAL => $grandTotal,
                                                                      SC::DISCOUNT_AMOUNT => $orderRow[SC::DISCOUNT_AMOUNT]]);
                 $info = $info->merge($address);
                 $info->put(SC::ITEMS, $items);
@@ -170,16 +179,48 @@ class ShiptLogCsvService extends AbstractCsvService {
     }
 
     /**
-     * 注文枚数を取得する。
+     * 商品名からセット枚数を抽出する。
      *
      * @return int
      */
-    public function shipment(string $name, int $quantity):int {
-        $shipment = 1;
+    public function extractPerSet(string $name):int {
+        $perSet = 0;
         if (preg_match('/(\d+)枚\s*セット/u', $name, $matches)) {
-            $shipment = (int) $matches[1];
+            $perSet = (int) $matches[1];
         }
-        return $shipment * $quantity;
+        return $perSet;
+    }
+
+    /**
+     * 各商品の小計を算出する。
+     *
+     * @param array $item 商品情報
+     * @param integer $feePrice
+     * @param integer $itemCount
+     * @param boolean $isFreeShipping
+     * @return integer
+     */
+    private function calcItemSubtotal(array $item, int $feePrice, int $itemCount, bool $isFreeShipping):int {
+        $productPrice = $item[SC::PRODUCT_PRICE];
+        $quantity = $item[SC::QUANTITY];
+        if ($isFreeShipping) {
+            $productPrice -= round($feePrice / $itemCount);
+        }
+
+        return $productPrice * $quantity;
+    }
+
+    /**
+     * 1枚あたりの単価を算出する。
+     *
+     * @param array $item
+     * @return int
+     */
+    private function calcUnitPrice(array $item):int {
+        if ($item[SC::IS_SET]) {
+            return round($item[SC::PRODUCT_PRICE] / $item[SC::QUANTITY] * $item[SC::PCS_PER_SET]);
+        }
+        return $item[SC::PRODUCT_PRICE];
     }
 }
 
