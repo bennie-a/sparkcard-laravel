@@ -40,7 +40,7 @@ class ShiptLogCsvService extends AbstractCsvService {
      * @since 5.1.0
      * @param array $records CSV読み込み結果
      * @return array
-     */
+    */
     public function parse(array $records) {
         $orders = collect([]);
         $csvCollect = collect($records);
@@ -60,18 +60,24 @@ class ShiptLogCsvService extends AbstractCsvService {
                         SC::CITY => $item[SC::CITY],
                         SC::ADDRESS_1 => $item[SC::ADDRESS_1],
                         SC::ADDRESS_2 => $item[SC::ADDRESS_2]
-                    ];
+                        ];
                 })->unique()->first();
 
                 $shiptPrice = $orderRow[SC::SHIPPING_PRICE];
                 $platform = ShopPlatform::determine($orderId);
                 $subtotal = $orderRow[SC::ORDER_PRICE] + $shiptPrice;
                 $fee = ShiptMethodServ::calcMethod($platform, $subtotal, $orderRow[SC::SHIPPING_PRICE]);
+                $grandTotal = $subtotal - $orderRow[SC::DISCOUNT_AMOUNT];
 
-                $items = $productRows->map(function ($item, $index) use ($orderId) {
+                $items = collect([]);
+                $productRows->each (function($item, $index) use ($items, $orderId, $fee, $productRows, $shiptPrice){
                     $stockId = (int)$item[SC::PRODUCT_ID];
                     $pcsPerSet = $this->extractPerSet($item[SC::PRODUCT_NAME]);
-                    return [
+                    $this->checkShipment($stockId, $pcsPerSet, $item[SC::QUANTITY], $index);
+
+                    $itemSubtotal = $this->calcItemSubtotal($item, $fee->price, count($productRows), $shiptPrice == 0);
+                    $isSet = $pcsPerSet > 0;
+                    $rows = [
                         SC::INDEX => $index,
                         StockpileHeader::STOCK => Stockpile::find($stockId),
                         SC::PRODUCT_NAME => $item[SC::PRODUCT_NAME],
@@ -79,26 +85,21 @@ class ShiptLogCsvService extends AbstractCsvService {
                         SC::PCS_PER_SET => $pcsPerSet,
                         SC::IS_REGISTERED => $this->repo->existsItem($orderId, $stockId),
                         SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
-                        SC::IS_SET => $pcsPerSet == 0
+                        SC::IS_SET => $isSet,
+                        SC::ITEM_SUBTOTAL => $itemSubtotal,
+                        SC::UNIT_PRICE => $this->calcUnitPrice($item[SC::PRODUCT_PRICE], $isSet, $pcsPerSet),
                     ];
-                })->values();
+                    $items->push($rows);
+                });
 
-                foreach ($items as &$item) {
-                    $this->checkShipment($item[StockpileHeader::STOCK]->id, $item[SC::SHIPMENT], $item[SC::INDEX]);
-                    $itemSubtotal = $this->calcItemSubtotal($item, $fee->price, count($items), $shiptPrice == 0);
-                    $item[SC::ITEM_SUBTOTAL] = $itemSubtotal;
-                    $item[SC::UNIT_PRICE] = $this->calcUnitPrice($item);
-                }
-
-                $grandTotal = $subtotal - $orderRow[SC::DISCOUNT_AMOUNT];
 
                 $info = collect([SC::INDEX => $index, SC::PLATFORM => ShopPlatform::determine($orderId),
                                                                      SC::ORDER_ID => $orderId, SC::BUYER => $orderRow[SC::BUYER],
                                                                      SC::ITEM_SUBTOTAL => $subtotal,
                                                                      SC::FEE => $fee, SC::GRAND_TOTAL => $grandTotal,
-                                                                     SC::DISCOUNT_AMOUNT => $orderRow[SC::DISCOUNT_AMOUNT]]);
+                                                                     SC::DISCOUNT_AMOUNT => $orderRow[SC::DISCOUNT_AMOUNT],
+                                                                     SC::ITEMS => $items]);
                 $info = $info->merge($address);
-                $info->put(SC::ITEMS, $items);
                 $orders->put($orderId, $info);
             } catch (ShipmentOrderException $e) {
                 $this->addError($e->getIndex(), $e->getMsg());
@@ -145,11 +146,13 @@ class ShiptLogCsvService extends AbstractCsvService {
      * 出荷枚数と在庫数のチェックを行う。
      *
      * @param int $stockId
-     * @param integer $shipment
+     * @param int $pcsPerSet
+     * @param integer $lot 個数
      * @param int $index 行番号
      * @throws ShipmentOrderException
      */
-    private function checkShipment(int $stockId, int $shipment, int $index) {
+    private function checkShipment(int $stockId, int $pcsPerSet,  int $lot, int $index) {
+            $shipment = $pcsPerSet == 0 ? $lot : $pcsPerSet * $lot;
             $errorKey = '';
             $stock = Stockpile::find($stockId);
             if ($stock->quantity == 0) {
@@ -213,14 +216,17 @@ class ShiptLogCsvService extends AbstractCsvService {
     /**
      * 1枚あたりの単価を算出する。
      *
-     * @param array $item
+     * @param int $productPrice 商品行の"product_price"の値
+     * @param bool $isSet セット販売フラグ
+     * @param int $lot 個数
+     * @param int $pcsPerSet セット枚数
      * @return int
      */
-    private function calcUnitPrice(array $item):int {
-        if ($item[SC::IS_SET]) {
-            return round($item[SC::PRODUCT_PRICE] / $item[SC::QUANTITY] * $item[SC::PCS_PER_SET]);
+    private function calcUnitPrice(int $productPrice, bool $isSet, int $pcsPerSet):int {
+        if ($isSet) {
+            return round($productPrice / $pcsPerSet);
         }
-        return $item[SC::PRODUCT_PRICE];
+        return $productPrice;
     }
 }
 

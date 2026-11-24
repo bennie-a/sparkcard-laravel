@@ -76,7 +76,7 @@ class ShiptParseTest extends TestCase
         for ($i=0; $i < $buyerCount; $i++) {
             $buyerInfos[] = ShiptLogTestHelper::createBuyerInfo($itemCount, $today);
         }
-
+        $this->assertEquals($itemCount, count($buyerInfos[0][SC::ITEMS]), '期待値側の商品数');
         $response = $this->uploadOk($buyerInfos);
 
        // 購入者数確認
@@ -185,6 +185,11 @@ class ShiptParseTest extends TestCase
     #[Test]
     #[TestDox('CSVデータに入力された送料を元に、送料情報が正しく設定されているか確認する。')]
     #[TestWith([ShiptMethod::MINI], 'ミニレター')]
+    #[TestWith([ShiptMethod::CLICK], 'クリックポスト')]
+    #[TestWith([ShiptMethod::REGISTER_MAIL], '簡易書留')]
+    #[TestWith([ShiptMethod::NEKOPOST], 'ネコポス')]
+    #[TestWith([ShiptMethod::RAKURAKU], 'らくらくメルカリ便')]
+    #[TestWith([ShiptMethod::YUPACKET], 'ゆうパケットポストmini')]
     public function testFee(ShiptMethod $method) {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $exFee = Shipping::findByMethod($method->value);
@@ -194,7 +199,8 @@ class ShiptParseTest extends TestCase
         $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);
-        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::UNIT_PRICE, $exFee->price);
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::SUBTOTAL, $buyerInfo[SC::ITEMS][0][SC::SUBTOTAL]);
+        $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::UNIT_PRICE, $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE]);
     }
 
     #[TestWith([1499, ShiptMethod::MINI], '1500円未満_ミニレター')]

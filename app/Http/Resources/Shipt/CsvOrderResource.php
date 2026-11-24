@@ -113,16 +113,7 @@ class CsvOrderResource extends OrderResource
     #[Override]
     protected function orderItems():AnonymousResourceCollection
     {
-        $itemCount = $this->itemCount();
-        $fee = $this->fee();
-        $feePerItem = $itemCount > 0 ? round($fee->price / $itemCount) : 0;
-
-        $items = array_map(function($item) use ($feePerItem) {
-            $item[SC::PRODUCT_PRICE] -= $feePerItem;
-            return $item;
-        }, $this[SC::ITEMS]->toArray());
-
-        return CsvOrderItemResource::collection($items);
+        return CsvOrderItemResource::collection($this[SC::ITEMS]);
     }
 
 
