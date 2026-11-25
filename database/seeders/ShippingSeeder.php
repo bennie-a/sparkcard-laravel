@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\ShiptMethod;
 use App\Models\Shipping;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -47,7 +48,7 @@ class ShippingSeeder extends Seeder
             'deleted' => false]);
         Shipping::create([
             'notion_id' => 'db4096ad9b934329927816088cd110b0',
-            'name' => 'ネコポス',
+            'name' => ShiptMethod::NEKOPOST->value,
             'price' => 190,
             'deleted' => false]);
         Shipping::create([

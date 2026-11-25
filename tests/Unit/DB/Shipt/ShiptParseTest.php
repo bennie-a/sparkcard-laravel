@@ -183,9 +183,8 @@ class ShiptParseTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('CSVデータに入力された送料を元に、送料情報が正しく設定されているか確認する。')]
+    #[TestDox('送料別の場合、送料情報が正しく設定されているか確認する。')]
     #[TestWith([ShiptMethod::MINI], 'ミニレター')]
-    #[TestWith([ShiptMethod::CLICK], 'クリックポスト')]
     #[TestWith([ShiptMethod::REGISTER_MAIL], '簡易書留')]
     #[TestWith([ShiptMethod::NEKOPOST], 'ネコポス')]
     #[TestWith([ShiptMethod::RAKURAKU], 'らくらくメルカリ便')]
@@ -193,12 +192,16 @@ class ShiptParseTest extends TestCase
     public function testFee(ShiptMethod $method) {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $exFee = Shipping::findByMethod($method->value);
+        if ($method == ShiptMethod::NEKOPOST || $method == ShiptMethod::RAKURAKU) {
+            $buyerInfo[SC::ITEMS][0][SC::SHIPPING_METHOD] = $method->value;
+        }
         $buyerInfo[SC::SHIPPING_PRICE] = $exFee->price;
 
         $response = $this->uploadOk([$buyerInfo]);
         $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);
+        // 商品別の小計と単価は送料が按分されていないことを確認する。
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::SUBTOTAL, $buyerInfo[SC::ITEMS][0][SC::SUBTOTAL]);
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::UNIT_PRICE, $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE]);
     }
@@ -207,7 +210,7 @@ class ShiptParseTest extends TestCase
     #[TestWith([1500, ShiptMethod::CLICK], '1500円_クリックポスト')]
     #[TestWith([9999, ShiptMethod::CLICK], '9999円_クリックポスト')]
     #[TestWith([10000, ShiptMethod::REGISTER_MAIL], '10000円以上_簡易書留')]
-    #[TestDox('送料が正しく設定されているか確認する')]
+    #[TestDox('送料込みの場合、価格に見合った送料が正しく設定されているか確認する')]
     public function testShippingFee(int $productPrice, ShiptMethod $method) {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
         $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE] = $productPrice;
@@ -637,8 +640,8 @@ class ShiptParseTest extends TestCase
                 $itemLine = [$item[SC::TYPE], $buyer[SC::ORDER_ID], ""];
                 array_push($itemLine, $item[GC::ID], $item[SC::PRODUCT_NAME],
                          $item[StockpileHeader::QUANTITY], "", $item[SC::PRODUCT_PRICE]);
-                $itemLine = ShiptLogTestHelper::padBlankToArray($itemLine, 2);
-                array_push($itemLine, $buyer[SC::POSTAL_CODE], $buyer[SC::STATE], $buyer[SC::CITY],
+                $itemLine = ShiptLogTestHelper::padBlankToArray($itemLine, 1);
+                array_push($itemLine, $item[SC::SHIPPING_METHOD], $buyer[SC::POSTAL_CODE], $buyer[SC::STATE], $buyer[SC::CITY],
                          $buyer[SC::ADDRESS_1], $buyer[SC::ADDRESS_2]);
                 $implode .= ShiptLogTestHelper::arrayToCsvString($itemLine)."\n";
             }

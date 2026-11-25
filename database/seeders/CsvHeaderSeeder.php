@@ -20,8 +20,8 @@ class CsvHeaderSeeder extends Seeder
     {
         CsvHeader::truncate();
         $mercari_columns = [SC::TYPE, SC::ORDER_ID, SC::BUYER, SC::PRODUCT_ID, SC::PRODUCT_NAME, SC::QUANTITY,
-                     SC::ORDER_PRICE, SC::PRODUCT_PRICE, SC::SHIPPING_PRICE, SC::DISCOUNT_AMOUNT, SC::POSTAL_CODE, SC::STATE,
-                      SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2];
+                     SC::ORDER_PRICE, SC::PRODUCT_PRICE, SC::SHIPPING_PRICE, SC::DISCOUNT_AMOUNT, SC::SHIPPING_METHOD,
+                     SC::POSTAL_CODE, SC::STATE, SC::CITY, SC::ADDRESS_1, SC::ADDRESS_2];
         for($i = 0; $i < count($mercari_columns); $i++) {
             CsvHeader::create(['shop' => ShopPlatform::MERCARI->value, 'csv_type' => CsvFlowType::SHIPT->value,
                                                  'column' => $mercari_columns[$i], SC::ORDER_ID => $i + 1]);

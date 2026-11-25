@@ -17,7 +17,7 @@ class ShiptMethodRepository
      * @param bool $isDeleted 削除フラグ
      * @return Shipping
      */
-    public function findByMethod(ShiptMethod $method, bool $isDeleted):Shipping | null
+    public function findByMethod(ShiptMethod $method, bool $isDeleted = false):Shipping | null
     {
         return Shipping::where(GC::NAME, $method->value)->where('deleted', $isDeleted)->sole();
     }

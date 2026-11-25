@@ -66,7 +66,8 @@ class ShiptLogCsvService extends AbstractCsvService {
                 $shiptPrice = $orderRow[SC::SHIPPING_PRICE];
                 $platform = ShopPlatform::determine($orderId);
                 $subtotal = $orderRow[SC::ORDER_PRICE] + $shiptPrice;
-                $fee = ShiptMethodServ::calcMethod($platform, $subtotal, $orderRow[SC::SHIPPING_PRICE]);
+
+                $fee = ShiptMethodServ::calcMethod($platform, $orderRow, $productRows);
                 $grandTotal = $subtotal - $orderRow[SC::DISCOUNT_AMOUNT];
 
                 $items = collect([]);

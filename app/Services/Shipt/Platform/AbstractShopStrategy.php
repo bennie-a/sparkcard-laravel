@@ -133,6 +133,16 @@ abstract class AbstractShopStrategy {
     }
 
     /**
+     * ゆうパケットポストminiか判定する。
+     *
+     * @param integer $subtotal
+     * @return boolean
+     */
+    public function isYuPacketPostMini(int $subtotal) {
+        return false;
+    }
+
+    /**
      * 灯争大戦ブースターパックが含まれているか検証する。
      *
      * @param Collection $orderItems

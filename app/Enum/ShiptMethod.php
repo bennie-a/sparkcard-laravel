@@ -15,8 +15,9 @@ enum ShiptMethod: string {
     case REGISTER_MAIL = '簡易書留';
     case RAKURAKU = 'らくらくメルカリ便';
     case DIRECT = '手渡し';
-    case NEKOPOST = 'ネコポス';
+    case NEKOPOST = 'メルカリBiz配送';
     case YUPACKET = 'ゆうパケットポストmini';
+    case TBD = '未定(出品者が手配)';
     case UNDEFINED = '不明';
     /**
      * 金額に応じて発送方法をDBから取得する。

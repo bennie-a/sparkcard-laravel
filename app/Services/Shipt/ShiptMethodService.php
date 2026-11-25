@@ -27,14 +27,43 @@ class ShiptMethodService {
     }
 
     /**
-     * プラットフォームと価格から
+     * プラットフォームと注文情報をもとに配送方法を算出する。
+     *
      * @param ShopPlatform $platform
-     * @param int $subtotal
-     * @param integer $price
+     * @param array $orderRow 購入者情報
+     * @param Collection $productRows 商品情報
      * @return Shipping
      */
-    public function calcMethod(ShopPlatform $platform, int $subtotal, int $price):Shipping {
-        return $this->repo->findByPrice($price);
+    public function calcMethod(ShopPlatform $platform, array $orderRow, Collection $productRows):Shipping {
+        $shiptPrice = $orderRow[SC::SHIPPING_PRICE];
+        if ($shiptPrice > 0) {
+            return $this->repo->findByPrice($shiptPrice);
+        }
+
+        $strategy = $this->getStrategy($platform);
+        $method = $strategy->isYuPacketPostMini($orderRow[SC::ORDER_PRICE]) ?
+                                    ShiptMethod::YUPACKET : $this->findMethodByCsv($productRows);
+        if ($method == ShiptMethod::UNDEFINED) {
+            throw new NFShiptMethodException($orderRow[SC::ORDER_ID]);
+        }
+
+        return $this->repo->findByMethod($method);
+    }
+
+    /**
+     * CSVデータの商品行から配送方法を算出する。
+     *
+     * @param Collection $productRows
+     * @return ShiptMethod
+     */
+    private function findMethodByCsv(Collection $productRows):ShiptMethod {
+        $result = $productRows->pluck(SC::SHIPPING_METHOD);
+        $method = match(true) {
+            $result->contains(ShiptMethod::NEKOPOST->value) => ShiptMethod::NEKOPOST,
+            $result->isNotEmpty() && $result->every(fn ($v) => $v === ShiptMethod::TBD->value) => ShiptMethod::MINI,
+            default => ShiptMethod::UNDEFINED,
+        };
+        return $method;
     }
 
     /**

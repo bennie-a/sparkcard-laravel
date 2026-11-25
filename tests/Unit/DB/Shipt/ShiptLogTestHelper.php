@@ -130,7 +130,7 @@ class ShiptLogTestHelper
                     SC::PRODUCT_NAME => self::product_name($stock),
                     StockpileHeader::QUANTITY => $quantity,
                     SC::PRODUCT_PRICE => $price,
-                    SC::SUBTOTAL => $quantity * $price];
+                    SC::SUBTOTAL => $quantity * $price, SC::SHIPPING_METHOD => ShiptMethod::TBD->value];
     }
 
     /**
@@ -193,6 +193,7 @@ class ShiptLogTestHelper
                                  SC::PRODUCT_PRICE,
                                 SC::SHIPPING_PRICE,
                                  SC::DISCOUNT_AMOUNT,
+                                 SC::SHIPPING_METHOD,
                                 SC::POSTAL_CODE,
                                 SC::STATE,
                                 SC::CITY,
