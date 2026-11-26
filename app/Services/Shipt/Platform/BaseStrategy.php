@@ -28,7 +28,7 @@ class BaseStrategy extends AbstractShopStrategy
 
     #[Override]
     public function isYuPacketPostMini(int $subtotal) {
-        return $subtotal >= 5000;
+        return $subtotal >= 5000 && $subtotal <= 9999;
     }
 
 }

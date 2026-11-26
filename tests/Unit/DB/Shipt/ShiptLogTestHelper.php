@@ -110,8 +110,8 @@ class ShiptLogTestHelper
      *
      * @return array
      */
-    public static  function createTodayOrderInfos(): array {
-        return ShiptLogTestHelper::createBuyerInfo(1);
+    public static  function createTodayOrderInfos(ShopPlatform $platform = ShopPlatform::MERCARI): array {
+        return ShiptLogTestHelper::createBuyerInfo(1, false, false, 1, $platform);
     }
 
 

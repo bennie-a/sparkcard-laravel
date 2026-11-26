@@ -184,13 +184,14 @@ class ShiptParseTest extends TestCase
 
     #[Test]
     #[TestDox('送料別の場合、送料情報が正しく設定されているか確認する。')]
-    #[TestWith([ShiptMethod::MINI], 'ミニレター')]
-    #[TestWith([ShiptMethod::REGISTER_MAIL], '簡易書留')]
-    #[TestWith([ShiptMethod::NEKOPOST], 'ネコポス')]
-    #[TestWith([ShiptMethod::RAKURAKU], 'らくらくメルカリ便')]
-    #[TestWith([ShiptMethod::YUPACKET], 'ゆうパケットポストmini')]
-    public function testFee(ShiptMethod $method) {
-        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+    #[TestWith([ShopPlatform::MERCARI, ShiptMethod::MINI], 'ミニレター')]
+    #[TestWith([ShopPlatform::MERCARI, ShiptMethod::REGISTER_MAIL], 'ショップがメルカリで簡易書留')]
+    #[TestWith([ShopPlatform::BASE, ShiptMethod::REGISTER_MAIL], 'ショップがBASEで簡易書留')]
+    #[TestWith([ShopPlatform::MERCARI, ShiptMethod::NEKOPOST], 'ネコポス')]
+    #[TestWith([ShopPlatform::MERCARI, ShiptMethod::RAKURAKU], 'らくらくメルカリ便')]
+    #[TestWith([ShopPlatform::BASE, ShiptMethod::YUPACKET], 'ゆうパケットポストmini')]
+    public function testFeeExcluded(ShopPlatform $shop, ShiptMethod $method) {
+        $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos($shop);
         $exFee = Shipping::findByMethod($method->value);
         if ($method == ShiptMethod::NEKOPOST || $method == ShiptMethod::RAKURAKU) {
             $buyerInfo[SC::ITEMS][0][SC::SHIPPING_METHOD] = $method->value;
@@ -198,6 +199,10 @@ class ShiptParseTest extends TestCase
         $buyerInfo[SC::SHIPPING_PRICE] = $exFee->price;
 
         $response = $this->uploadOk([$buyerInfo]);
+
+        $exsubtotal = $buyerInfo[SC::ORDER_PRICE] + $exFee->price;
+        $response->assertJsonPath('0.'.SC::ITEM_SUBTOTAL, $exsubtotal);
+        $response->assertJsonPath('0.'.SC::GRAND_TOTAL, $exsubtotal);
         $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
         $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);

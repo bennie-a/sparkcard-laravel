@@ -36,13 +36,20 @@ class ShiptMethodService {
      */
     public function calcMethod(ShopPlatform $platform, array $orderRow, Collection $productRows):Shipping {
         $shiptPrice = $orderRow[SC::SHIPPING_PRICE];
+        $orderPrice = $orderRow[SC::ORDER_PRICE];
         if ($shiptPrice > 0) {
             return $this->repo->findByPrice($shiptPrice);
         }
 
         $strategy = $this->getStrategy($platform);
-        $method = $strategy->isYuPacketPostMini($orderRow[SC::ORDER_PRICE]) ?
-                                    ShiptMethod::YUPACKET : $this->findMethodByCsv($productRows);
+        $method = ShiptMethod::UNDEFINED;
+        if ($strategy->isYuPacketPostMini($orderPrice)) {
+            $method = ShiptMethod::YUPACKET;
+        } else if ($orderPrice >= 10000) {
+            $method = ShiptMethod::REGISTER_MAIL;
+        } else {
+            $method = $this->findMethodByCsv($productRows);
+        }
         if ($method == ShiptMethod::UNDEFINED) {
             throw new NFShiptMethodException($orderRow[SC::ORDER_ID]);
         }
