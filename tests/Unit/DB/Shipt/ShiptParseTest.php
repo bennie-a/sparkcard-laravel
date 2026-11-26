@@ -199,33 +199,46 @@ class ShiptParseTest extends TestCase
         $buyerInfo[SC::SHIPPING_PRICE] = $exFee->price;
 
         $response = $this->uploadOk([$buyerInfo]);
-
         $exsubtotal = $buyerInfo[SC::ORDER_PRICE] + $exFee->price;
-        $response->assertJsonPath('0.'.SC::ITEM_SUBTOTAL, $exsubtotal);
-        $response->assertJsonPath('0.'.SC::GRAND_TOTAL, $exsubtotal);
-        $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
-        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
-        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);
+        $this->verifyFeeInfo($response, $exFee, $exsubtotal);
         // 商品別の小計と単価は送料が按分されていないことを確認する。
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::SUBTOTAL, $buyerInfo[SC::ITEMS][0][SC::SUBTOTAL]);
         $response->assertJsonPath('0.'.SC::ITEMS.'.0.'.SC::UNIT_PRICE, $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE]);
     }
 
-    #[TestWith([1499, ShiptMethod::MINI], '1500円未満_ミニレター')]
-    #[TestWith([1500, ShiptMethod::CLICK], '1500円_クリックポスト')]
-    #[TestWith([9999, ShiptMethod::CLICK], '9999円_クリックポスト')]
-    #[TestWith([10000, ShiptMethod::REGISTER_MAIL], '10000円以上_簡易書留')]
-    #[TestDox('送料込みの場合、価格に見合った送料が正しく設定されているか確認する')]
-    public function testShippingFee(int $productPrice, ShiptMethod $method) {
+    #[TestDox('メルカリShopsで送料込みの場合、価格に見合った送料が正しく設定されているか確認する')]
+    #[TestWith([1499, ShiptMethod::MINI], '1500円未満⇒ミニレター')]
+    #[TestWith([1500, ShiptMethod::NEKOPOST], '1500円⇒ネコポス')]
+    #[TestWith([9999, ShiptMethod::NEKOPOST], '9999円⇒ネコポス')]
+    #[TestWith([10000, ShiptMethod::REGISTER_MAIL], '10000円以上⇒簡易書留')]
+    public function testFeeIncludedFromMercari(int $productPrice, ShiptMethod $method) {
         $buyerInfo = ShiptLogTestHelper::createTodayOrderInfos();
+        $buyerInfo[SC::ORDER_PRICE] = $productPrice;
         $buyerInfo[SC::ITEMS][0][SC::PRODUCT_PRICE] = $productPrice;
-
+        if ($method == ShiptMethod::NEKOPOST) {
+            $buyerInfo[SC::ITEMS][0][SC::SHIPPING_METHOD] = $method->value;
+        }
+        $this->assertEquals(0, $buyerInfo[SC::SHIPPING_PRICE], '送料無料');
         $response = $this->uploadOk([$buyerInfo]);
-        $expectedFee = Shipping::findByMethod($method->value);
 
-        $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $expectedFee->id);
-        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $expectedFee->name);
-        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $expectedFee->price);
+        $exFee = Shipping::findByMethod($method->value);
+        $this->verifyFeeInfo($response, $exFee, $productPrice);
+    }
+
+    /**
+     * 合計金額、最終請求金額、送料情報について検証する。
+     *
+     * @param TestResponse $response
+     * @param Shipping $exFee
+     * @param integer $exsubtotal
+     * @return void
+     */
+    private function verifyFeeInfo(TestResponse $response, Shipping $exFee, int $exsubtotal) {
+        $response->assertJsonPath('0.'.SC::ITEM_SUBTOTAL, $exsubtotal);
+        $response->assertJsonPath('0.'.SC::GRAND_TOTAL, $exsubtotal);
+        $response->assertJsonPath('0.'.SC::FEE.'.'.GC::ID, $exFee->id);
+        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::METHOD, $exFee->name);
+        $response->assertJsonPath('0.'.SC::FEE.'.'.SC::PRICE, $exFee->price);
     }
 
     #[Test]
@@ -645,7 +658,7 @@ class ShiptParseTest extends TestCase
                 $itemLine = [$item[SC::TYPE], $buyer[SC::ORDER_ID], ""];
                 array_push($itemLine, $item[GC::ID], $item[SC::PRODUCT_NAME],
                          $item[StockpileHeader::QUANTITY], "", $item[SC::PRODUCT_PRICE]);
-                $itemLine = ShiptLogTestHelper::padBlankToArray($itemLine, 1);
+                $itemLine = ShiptLogTestHelper::padBlankToArray($itemLine, 2);
                 array_push($itemLine, $item[SC::SHIPPING_METHOD], $buyer[SC::POSTAL_CODE], $buyer[SC::STATE], $buyer[SC::CITY],
                          $buyer[SC::ADDRESS_1], $buyer[SC::ADDRESS_2]);
                 $implode .= ShiptLogTestHelper::arrayToCsvString($itemLine)."\n";
