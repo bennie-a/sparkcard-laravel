@@ -87,8 +87,8 @@ class ShiptLogCsvService extends AbstractCsvService {
                         SC::IS_REGISTERED => $this->repo->existsItem($orderId, $stockId),
                         SC::PRODUCT_PRICE => $item[SC::PRODUCT_PRICE],
                         SC::IS_SET => $isSet,
-                        SC::ITEM_SUBTOTAL => $itemSubtotal,
-                        SC::UNIT_PRICE => $this->calcUnitPrice($item[SC::PRODUCT_PRICE], $isSet, $pcsPerSet),
+                        SC::SUBTOTAL => $itemSubtotal,
+                        SC::UNIT_PRICE => $this->calcUnitPrice($itemSubtotal, $isSet, $pcsPerSet),
                     ];
                     $items->push($rows);
                 });

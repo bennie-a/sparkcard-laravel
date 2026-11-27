@@ -13,7 +13,7 @@ use App\Services\Constant\GlobalConstant;
 use App\Services\Constant\StockpileHeader;
 use Tests\Util\TestDateUtil;
 use Illuminate\Support\Str;
-
+use InvalidArgumentException;
 
 /**
  * 注文CSV用テストデータを作成するクラス
@@ -300,5 +300,52 @@ class ShiptLogTestHelper
             return 'd2c_'.Str::random(22);
         }
         return Str::upper(Str::random(16));
+    }
+
+    /**
+     * 数値をランダムに分割する（整数版）
+     *
+     * @param int $total 分割したい合計値
+     * @param int $count 分割する個数
+     * @param int $minPrice 1個あたりの最低値
+     * @return array 分割した数値
+     */
+    public static function splitNumberRandomly(int $total, int $count, int $minPrice = 100): array
+    {
+        // 安全チェック：全商品に最低金額を配っても合計金額を超えないか確認
+        if ($total < ($count * $minPrice)) {
+            throw new InvalidArgumentException(
+                "金額が不足しています。商品数 {$count} 個で最低金額 {$minPrice} 円の場合、
+                                    合計は最低でも " . ($count * $minPrice) . " 円以上にする必要があります。"
+            );
+        }
+
+        // 1. まず全員に最低金額（$minPrice）を等しく配る
+        $prices = array_fill(0, $count, $minPrice);
+
+        // 2. 残りの金額を計算する（例: 300円 - 3点×1円 = 残り297円）
+        $remainingAmount = $total - ($count * $minPrice);
+
+        // 残り金額がある場合のみ、ランダムに分配する
+        if ($remainingAmount > 0) {
+            // 残り金額を切り分けるための境界点をランダムに選ぶ（0 〜 残り金額 の間から抽出）
+            $points = collect(range(0, $remainingAmount))
+                ->random($count - 1)
+                ->sort()
+                ->values();
+
+            $prev = 0;
+            foreach ($points as $index => $point) {
+                // 分配された差分金額を、最初に配った最低金額に上乗せする
+                $prices[$index] += ($point - $prev);
+                $prev = $point;
+            }
+            // 最後の残りを上乗せ
+            $prices[$count - 1] += ($remainingAmount - $prev);
+        }
+
+        // 3. 配列をシャッフルして、特定の位置だけ金額が高くなる偏りを防ぐ
+        shuffle($prices);
+        return $prices;
     }
 }

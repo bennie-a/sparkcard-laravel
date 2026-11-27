@@ -41,7 +41,7 @@ class CsvOrderItemResource extends OrderItemResource {
     #[Override]
     protected function subtotal():int
     {
-        return $this[SC::ITEM_SUBTOTAL];
+        return $this[SC::SUBTOTAL];
     }
 
     #[Override]
